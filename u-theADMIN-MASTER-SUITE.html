@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>u-theADMIN — Master Governance & Multi-Node Synchronization Suite</title>
+  <title>u-theADMIN — Master Governance & Live CMS Control Suite</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
@@ -49,7 +49,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      padding-bottom: 72px; /* Space for sticky bottom bar on mobile */
+      padding-bottom: 72px;
     }
 
     /* REFINED SMART TOOLTIP SYSTEM (< 200px, 11px font, z-index 99999) */
@@ -168,18 +168,6 @@
       letter-spacing: 0.8px;
     }
 
-    .header-logo-preview {
-      max-height: 38px;
-      width: auto;
-      max-width: 140px;
-      object-fit: contain;
-      cursor: pointer;
-      image-rendering: -webkit-optimize-contrast;
-      border: 1px dashed var(--border-dark);
-      border-radius: 4px;
-      padding: 2px;
-    }
-
     /* NAVIGATION TABS (DESKTOP) */
     .nav-tabs-container {
       display: flex;
@@ -195,7 +183,7 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      padding: 0 0.95rem;
+      padding: 0 0.85rem;
       border-radius: 6px;
       cursor: pointer;
       display: flex;
@@ -222,19 +210,19 @@
       gap: 0.75rem;
     }
 
-    .sync-indicator {
+    .btn-auth-header {
+      background: var(--card-surface);
+      color: var(--uthe-gold);
+      border: 1.5px solid var(--uthe-gold);
+      padding: 0 0.85rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 900;
+      cursor: pointer;
+      height: 38px;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      font-size: 0.65rem;
-      font-weight: 800;
-      background: var(--status-mint-bg);
-      color: var(--status-mint);
-      border: 1px solid rgba(0, 200, 83, 0.3);
-      padding: 0 0.75rem;
-      border-radius: 20px;
-      height: 36px;
-      letter-spacing: 0.8px;
+      transition: all 0.2s;
     }
 
     .btn-mobile-menu {
@@ -247,7 +235,6 @@
       font-size: 0.75rem;
       font-weight: 900;
       cursor: pointer;
-      letter-spacing: 1px;
       height: 40px;
       align-items: center;
     }
@@ -361,7 +348,7 @@
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
-      max-width: 1400px;
+      max-width: 1440px;
       margin: 0 auto;
       width: 100%;
     }
@@ -539,30 +526,33 @@
     .tag-cyan { background: var(--cyan-bg); color: var(--cyan-accent); border: 1px solid rgba(6, 182, 212, 0.3); }
     .tag-gold { background: rgba(229, 168, 0, 0.15); color: var(--uthe-gold); border: 1px solid var(--uthe-gold); }
 
-    /* TERMINAL LOG VIEWER */
-    .terminal-container {
-      background: #000000;
-      border: 1px solid var(--border-dark);
-      border-radius: 8px;
-      padding: 1rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      height: 300px;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+    /* FORM STYLES */
+    .form-group {
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
     }
 
-    .terminal-line {
-      display: flex;
-      gap: 0.75rem;
+    label {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--text-dim);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
     }
 
-    .terminal-time { color: var(--text-dim); }
-    .terminal-tag { color: var(--uthe-gold); font-weight: 700; }
-    .terminal-text { color: var(--text-light); }
+    input, select, textarea {
+      background: var(--card-surface);
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+      padding: 0 0.85rem;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      outline: none;
+      transition: all 0.2s ease;
+    }
 
     /* TOAST OVERLAY */
     .admin-toast {
@@ -615,40 +605,38 @@
   <header>
     <div class="brand-group">
       <h1 class="brand-title" data-tooltip="u-theADMIN: Master Governance Suite for multi-node catalog administration.">U-THEADMIN</h1>
-      <span class="brand-badge" data-tooltip="Real-time multi-sync cluster supervision.">MASTER SUITE</span>
-      
-      <!-- LOGO -->
-      <input type="file" id="admin-logo-picker" accept="image/png, image/jpeg, image/webp" style="display:none;" onchange="handleAdminLogo(event)">
-      <img id="admin-logo-preview" class="header-logo-preview" style="display:none;" onclick="document.getElementById('admin-logo-picker').click()" alt="Admin Logo">
+      <span class="brand-badge" data-tooltip="Real-time master governance and CMS engine.">MASTER SUITE</span>
     </div>
 
     <!-- TABS (DESKTOP) -->
     <div class="nav-tabs-container">
       <button class="nav-tab active" onclick="switchAdminTab('overview')" data-tooltip="Cluster overview & health telemetry.">
-        1. CLUSTER TOPOLOGY
+        1. TOPOLOGY
       </button>
-      <button class="nav-tab" onclick="switchAdminTab('jobs')" data-tooltip="Manage active job listings.">
-        2. JOB INVENTORY
+      <button class="nav-tab" onclick="switchAdminTab('cms')" data-tooltip="Master live CMS text & label overrides.">
+        2. LIVE CMS
       </button>
-      <button class="nav-tab" onclick="switchAdminTab('applicants')" data-tooltip="Review candidate applications and ATS scores.">
-        3. CANDIDATE ATS
+      <button class="nav-tab" onclick="switchAdminTab('users')" data-tooltip="Manage platform user accounts & roles.">
+        3. USER ACCOUNTS
       </button>
-      <button class="nav-tab" onclick="switchAdminTab('hunter')" data-tooltip="Hunter.io executive lead search engine.">
-        4. HUNTER.IO LEADS
+      <button class="nav-tab" onclick="switchAdminTab('jobs')" data-tooltip="Manage active job catalog.">
+        4. JOBS CATALOG
       </button>
-      <button class="nav-tab" onclick="switchAdminTab('feeds')" data-tooltip="Schema.org & open-source feed aggregator.">
-        5. FEED AGGREGATOR
+      <button class="nav-tab" onclick="switchAdminTab('applicants')" data-tooltip="Review candidate applications & ATS scores.">
+        5. CANDIDATE ATS
+      </button>
+      <button class="nav-tab" onclick="switchAdminTab('hunter')" data-tooltip="Hunter.io executive lead search.">
+        6. HUNTER LEADS
       </button>
       <button class="nav-tab" onclick="switchAdminTab('diagnostics')" data-tooltip="Diagnostics terminal & audit logs.">
-        6. DIAGNOSTICS & AUDIT
+        7. AUDIT & DIAGS
       </button>
     </div>
 
     <div class="header-actions">
-      <div class="sync-indicator" data-tooltip="Multi-Sync WebSocket Bus: Online and synchronized across nodes.">
-        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--status-mint);"></span>
-        <span>CLUSTER ACTIVE</span>
-      </div>
+      <button class="btn-auth-header" id="admin-auth-btn" onclick="openAdminAuthModal()" data-tooltip="Master Admin Session">
+        ADMIN: LOGGED IN
+      </button>
       <button class="btn-mobile-menu" onclick="toggleAdminDrawer()" data-tooltip="Open Menu">
         [MENU]
       </button>
@@ -663,49 +651,50 @@
       <button class="drawer-close" onclick="toggleAdminDrawer()" data-tooltip="Close menu">X</button>
     </div>
     <div class="drawer-nav-list">
-      <button class="drawer-tab-btn active" onclick="switchAdminTab('overview'); toggleAdminDrawer();">1. CLUSTER TOPOLOGY</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('jobs'); toggleAdminDrawer();">2. JOB INVENTORY</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('applicants'); toggleAdminDrawer();">3. CANDIDATE ATS</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('hunter'); toggleAdminDrawer();">4. HUNTER.IO LEADS</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('feeds'); toggleAdminDrawer();">5. FEED AGGREGATOR</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('diagnostics'); toggleAdminDrawer();">6. DIAGNOSTICS & AUDIT</button>
+      <button class="drawer-tab-btn active" onclick="switchAdminTab('overview'); toggleAdminDrawer();">1. TOPOLOGY</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('cms'); toggleAdminDrawer();">2. LIVE CMS</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('users'); toggleAdminDrawer();">3. USER ACCOUNTS</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('jobs'); toggleAdminDrawer();">4. JOBS CATALOG</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('applicants'); toggleAdminDrawer();">5. CANDIDATE ATS</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('hunter'); toggleAdminDrawer();">6. HUNTER LEADS</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('diagnostics'); toggleAdminDrawer();">7. AUDIT & DIAGS</button>
     </div>
   </div>
 
   <!-- MAIN SUITE VIEWS -->
   <main>
 
-    <!-- VIEW 1: CLUSTER TOPOLOGY & OVERVIEW -->
+    <!-- VIEW 1: TOPOLOGY & TELEMETRY -->
     <section id="view-overview" class="view-section active">
       <div class="kpi-grid">
         <div class="kpi-card" data-tooltip="Total active positions in catalog.">
-          <span class="kpi-label">TOTAL ACTIVE JOBS</span>
+          <span class="kpi-label">ACTIVE JOBS</span>
           <span class="kpi-value" id="kpi-jobs">3</span>
         </div>
         <div class="kpi-card" data-tooltip="Total candidate applications received.">
           <span class="kpi-label">TOTAL APPLICANTS</span>
           <span class="kpi-value" id="kpi-applicants">3</span>
         </div>
-        <div class="kpi-card" data-tooltip="Open-source external feeds ingested.">
-          <span class="kpi-label">EXTERNAL FEEDS</span>
-          <span class="kpi-value" id="kpi-feeds">3</span>
+        <div class="kpi-card" data-tooltip="Total registered platform accounts.">
+          <span class="kpi-label">REGISTERED USERS</span>
+          <span class="kpi-value" id="kpi-users">3</span>
         </div>
-        <div class="kpi-card" data-tooltip="Current server status.">
-          <span class="kpi-label">CLUSTER HEALTH</span>
+        <div class="kpi-card" data-tooltip="Current cluster health.">
+          <span class="kpi-label">HEALTH STATUS</span>
           <span class="kpi-value" style="color: var(--status-mint);" id="kpi-health">ONLINE</span>
         </div>
       </div>
 
       <div class="table-container">
         <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          ACTIVE DEPLOYMENT NODES & SUBDOMAINS
+          ACTIVE SUBDOMAIN CLUSTER NODES
         </div>
         <table>
           <thead>
             <tr>
               <th>Role Node</th>
               <th>Public Subdomain Host</th>
-              <th>Dedicated Target</th>
+              <th>Target Standalone File</th>
               <th>Isolation Mode</th>
               <th>Status</th>
             </tr>
@@ -732,31 +721,101 @@
               <td><span class="badge-tag tag-cyan">STRICT STANDALONE</span></td>
               <td><span class="badge-tag tag-gold">ACTIVE CORE</span></td>
             </tr>
-            <tr>
-              <td><strong>Preview Workbench</strong></td>
-              <td><code>Direct IP / localhost</code></td>
-              <td><code>preview-hub.html</code></td>
-              <td><span class="badge-tag tag-cyan">INTERNAL DEV</span></td>
-              <td><span class="badge-tag tag-mint">STANDBY</span></td>
-            </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- VIEW 2: MASTER JOB INVENTORY -->
-    <section id="view-jobs" class="view-section">
-      <div style="display: flex; gap: 0.75rem; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-        <input type="text" id="admin-job-search" placeholder="Search master catalog by title, company, or keyword..." style="background: var(--card-dark); border: 1px solid var(--border-dark); color: #fff; padding: 0 1rem; border-radius: 6px; flex: 1; min-width: 260px;" oninput="filterAdminJobs()">
-        <select id="admin-job-filter-type" style="background: var(--card-dark); border: 1px solid var(--border-dark); color: #fff; padding: 0 1rem; border-radius: 6px; max-width: 180px;" onchange="filterAdminJobs()">
-          <option value="">All Types</option>
-          <option value="Full-Time">Full-Time</option>
-          <option value="Contract">Contract</option>
-          <option value="Executive">Executive</option>
-        </select>
-      </div>
+    <!-- VIEW 2: LIVE MASTER CMS OVERRIDES -->
+    <section id="view-cms" class="view-section">
+      <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: 10px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); padding-bottom: 0.75rem;">
+          <div>
+            <div style="font-size: 0.95rem; font-weight: 900; color: var(--uthe-gold);">LIVE CMS TEXT & LABEL CONTROL PANEL</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim);">Edit platform labels dynamically across u-thePOST and u-theJOBS without redeploying code.</div>
+          </div>
+          <button class="btn-gold" onclick="saveAndBroadcastCms()" data-tooltip="Broadcast CMS text changes live to all connected users.">
+            SAVE & BROADCAST CMS
+          </button>
+        </div>
 
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+          <div class="form-group">
+            <label>u-thePOST Brand Title</label>
+            <input type="text" id="cms-post-title" value="U-THEPOST">
+          </div>
+          <div class="form-group">
+            <label>u-theJOBS Brand Title</label>
+            <input type="text" id="cms-jobs-title" value="U-THEJOBS">
+          </div>
+          <div class="form-group">
+            <label>Candidate Quick Send Button Text</label>
+            <input type="text" id="cms-quick-send-btn" value="QUICK SEND">
+          </div>
+          <div class="form-group">
+            <label>Candidate Bottom Detail Button Text</label>
+            <input type="text" id="cms-send-resume-btn" value="SEND RESUME/CV">
+          </div>
+          <div class="form-group">
+            <label>Submit Interview Request Button Text</label>
+            <input type="text" id="cms-submit-btn" value="SUBMIT INTERVIEW REQUEST">
+          </div>
+          <div class="form-group">
+            <label>Submit Button Tooltip Text</label>
+            <input type="text" id="cms-submit-tooltip" value="REMOVE ATS">
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-dark); padding-top: 0.75rem;">
+          <div style="font-size: 0.82rem; font-weight: 800; color: var(--cyan-accent); margin-bottom: 0.5rem;">FEATURE PRICING OVERRIDES</div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <div class="form-group">
+              <label>Starter Plan Monthly Price ($)</label>
+              <input type="number" id="cms-price-starter" value="99">
+            </div>
+            <div class="form-group">
+              <label>Growth Engine Monthly Price ($)</label>
+              <input type="number" id="cms-price-growth" value="299">
+            </div>
+            <div class="form-group">
+              <label>Enterprise Mesh Monthly Price ($)</label>
+              <input type="number" id="cms-price-enterprise" value="699">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: USER ACCOUNTS CRUD -->
+    <section id="view-users" class="view-section">
       <div class="table-container">
+        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
+          PLATFORM USER ACCOUNTS & ROLE PERMISSIONS
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Full Name</th>
+              <th>Email Address</th>
+              <th>Role</th>
+              <th>Organization</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-users-tbody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VIEW 4: MASTER JOB INVENTORY -->
+    <section id="view-jobs" class="view-section">
+      <div class="table-container">
+        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
+          ACTIVE JOB LISTINGS INVENTORY
+        </div>
         <table>
           <thead>
             <tr>
@@ -764,7 +823,7 @@
               <th>Position Title</th>
               <th>Company</th>
               <th>Location</th>
-              <th>Salary Range</th>
+              <th>Salary</th>
               <th>Type</th>
               <th>Action</th>
             </tr>
@@ -776,7 +835,7 @@
       </div>
     </section>
 
-    <!-- VIEW 3: CANDIDATE ATS -->
+    <!-- VIEW 5: CANDIDATE ATS -->
     <section id="view-applicants" class="view-section">
       <div class="table-container">
         <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
@@ -789,7 +848,7 @@
               <th>Candidate Name</th>
               <th>Applied Position</th>
               <th>Email</th>
-              <th>ATS Match</th>
+              <th>Contact Time</th>
               <th>Status</th>
               <th>Decision Action</th>
             </tr>
@@ -801,21 +860,14 @@
       </div>
     </section>
 
-    <!-- VIEW 4: HUNTER.IO LEADS ENGINE -->
+    <!-- VIEW 6: HUNTER.IO LEADS ENGINE -->
     <section id="view-hunter" class="view-section">
       <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-        <input type="text" id="admin-lead-domain" value="stripe.com" placeholder="Company domain (e.g. stripe.com)" style="background: var(--card-dark); border: 1px solid var(--border-dark); color: #fff; padding: 0 1rem; border-radius: 6px; max-width: 240px;">
-        <select id="admin-lead-dept" style="background: var(--card-dark); border: 1px solid var(--border-dark); color: #fff; padding: 0 1rem; border-radius: 6px; max-width: 200px;">
-          <option value="hr,management">HR & Management</option>
-          <option value="engineering">Engineering</option>
-          <option value="executive">Executive</option>
-        </select>
-        <button class="btn-gold" onclick="searchAdminLeads()" data-tooltip="Search verified hiring contacts.">
-          SEARCH HUNTER.IO
-        </button>
+        <input type="text" id="admin-lead-domain" value="stripe.com" placeholder="Company domain (e.g. stripe.com)" style="max-width: 240px;">
+        <button class="btn-gold" onclick="searchAdminLeads()">SEARCH HUNTER.IO</button>
       </div>
 
-      <div class="table-container">
+      <div class="table-container" style="margin-top: 1rem;">
         <table>
           <thead>
             <tr>
@@ -823,7 +875,6 @@
               <th>Position</th>
               <th>Verified Email</th>
               <th>Confidence</th>
-              <th>Phone</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -834,50 +885,13 @@
       </div>
     </section>
 
-    <!-- VIEW 5: OPEN-SOURCE FEED AGGREGATOR -->
-    <section id="view-feeds" class="view-section">
-      <div class="table-container">
-        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--cyan-accent);">
-          SCHEMA.ORG / RSS / GITHUB JOBS AGGREGATOR INGESTION
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Feed ID</th>
-              <th>Source</th>
-              <th>Position Title</th>
-              <th>Company</th>
-              <th>Salary</th>
-              <th>Ingest Action</th>
-            </tr>
-          </thead>
-          <tbody id="admin-feeds-tbody">
-            <!-- Rendered via JS -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- VIEW 6: DIAGNOSTICS & AUDIT LOG -->
+    <!-- VIEW 7: DIAGNOSTICS & AUDIT -->
     <section id="view-diagnostics" class="view-section">
       <div style="display: flex; gap: 0.75rem; align-items: center;">
-        <button class="btn-gold" onclick="runDiagnosticsCheck()" data-tooltip="Run self-diagnostic telemetry suite.">
-          RUN SELF-DIAGNOSTICS
-        </button>
-        <button class="btn-surface" onclick="broadcastSystemAlert()" data-tooltip="Broadcast ping packet across mesh.">
-          BROADCAST MESH PING
-        </button>
-        <button class="btn-surface" onclick="exportAuditLog()" data-tooltip="Export complete audit JSON.">
-          EXPORT AUDIT LOG
-        </button>
+        <button class="btn-gold" onclick="exportAuditLog()">EXPORT AUDIT JSON</button>
       </div>
-
-      <div class="terminal-container" id="diagnostics-terminal">
-        <div class="terminal-line">
-          <span class="terminal-time">[12:00:00]</span>
-          <span class="terminal-tag">SYSTEM_INIT</span>
-          <span class="terminal-text">u-theADMIN master governance core online. WebSocket sync mesh listening on :3000</span>
-        </div>
+      <div style="background: #000; border: 1px solid var(--border-dark); border-radius: 8px; padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; height: 260px; overflow-y: auto; color: var(--status-mint);" id="diag-console">
+        [12:00:00] [SYSTEM_INIT] u-theADMIN Master Suite active on admin.utheversity.com
       </div>
     </section>
 
@@ -885,21 +899,17 @@
 
   <!-- TOAST OVERLAY -->
   <div class="admin-toast" id="admin-toast">
-    <div class="toast-title" id="admin-toast-title">ADMIN SYSTEM EVENT</div>
-    <div class="toast-msg" id="admin-toast-msg">Operation dispatched successfully.</div>
+    <div class="toast-title" id="admin-toast-title">ADMIN EVENT</div>
+    <div class="toast-msg" id="admin-toast-msg">Action processed successfully.</div>
   </div>
 
-  <!-- JAVASCRIPT ENGINE -->
+  <!-- JAVASCRIPT LOGIC ENGINE -->
   <script>
-    const SYNC_CHANNEL_NAME = 'UTHE_DUAL_SYNC_CHANNEL';
-    let broadcastBus = null;
-    let wsRelay = null;
-
     let adminJobs = [];
     let adminApplicants = [];
-    let adminFeeds = [];
+    let adminUsers = [];
+    let cmsConfig = null;
 
-    // Tabs Switcher
     window.switchAdminTab = function(tabKey) {
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.drawer-tab-btn').forEach(t => t.classList.remove('active'));
@@ -908,7 +918,7 @@
       const sec = document.getElementById(`view-${tabKey}`);
       if (sec) sec.classList.add('active');
 
-      const tabs = { 'overview': 0, 'jobs': 1, 'applicants': 2, 'hunter': 3, 'feeds': 4, 'diagnostics': 5 };
+      const tabs = { 'overview': 0, 'cms': 1, 'users': 2, 'jobs': 3, 'applicants': 4, 'hunter': 5, 'diagnostics': 6 };
       const idx = tabs[tabKey] || 0;
       if (document.querySelectorAll('.nav-tab')[idx]) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
       if (document.querySelectorAll('.drawer-tab-btn')[idx]) document.querySelectorAll('.drawer-tab-btn')[idx].classList.add('active');
@@ -918,7 +928,6 @@
       const overlay = document.getElementById('admin-drawer-overlay');
       const drawer = document.getElementById('admin-drawer');
       const isOpen = drawer.classList.contains('open');
-
       if (isOpen) {
         drawer.classList.remove('open');
         overlay.classList.remove('open');
@@ -928,13 +937,13 @@
       }
     }
 
-    async function loadInitialData() {
+    async function loadAdminData() {
       try {
         const stats = await fetch('/api/admin/stats').then(r => r.json());
         if (stats.metrics) {
           document.getElementById('kpi-jobs').textContent = stats.metrics.totalJobs;
           document.getElementById('kpi-applicants').textContent = stats.metrics.totalApplicants;
-          document.getElementById('kpi-feeds').textContent = stats.metrics.externalFeeds;
+          document.getElementById('kpi-users').textContent = stats.metrics.totalUsers;
         }
       } catch (e) {}
 
@@ -951,328 +960,176 @@
       } catch (e) {}
 
       try {
-        const feeds = await fetch('/api/jobs/aggregate').then(r => r.json());
-        adminFeeds = feeds.feeds || [];
-        renderAdminFeeds();
+        const users = await fetch('/api/admin/users').then(r => r.json());
+        adminUsers = users.users || [];
+        renderAdminUsers();
       } catch (e) {}
 
-      updateKpis();
+      try {
+        const cms = await fetch('/api/cms/config').then(r => r.json());
+        if (cms.config) {
+          cmsConfig = cms.config;
+          populateCmsForm(cms.config);
+        }
+      } catch (e) {}
     }
 
-    function updateKpis() {
-      document.getElementById('kpi-jobs').textContent = adminJobs.length;
-      document.getElementById('kpi-applicants').textContent = adminApplicants.length;
-      document.getElementById('kpi-feeds').textContent = adminFeeds.length;
-    }
-
-    function renderAdminJobs(filtered = null) {
-      const tbody = document.getElementById('admin-jobs-tbody');
-      const list = filtered || adminJobs;
-      tbody.innerHTML = '';
-
-      if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-dim);">No job listings currently available.</td></tr>`;
-        return;
+    function populateCmsForm(config) {
+      if (config.labels) {
+        if (config.labels.postTitle) document.getElementById('cms-post-title').value = config.labels.postTitle;
+        if (config.labels.jobsTitle) document.getElementById('cms-jobs-title').value = config.labels.jobsTitle;
+        if (config.labels.quickSendBtn) document.getElementById('cms-quick-send-btn').value = config.labels.quickSendBtn;
+        if (config.labels.sendResumeBtn) document.getElementById('cms-send-resume-btn').value = config.labels.sendResumeBtn;
+        if (config.labels.submitInterviewBtn) document.getElementById('cms-submit-btn').value = config.labels.submitInterviewBtn;
+        if (config.labels.submitTooltip) document.getElementById('cms-submit-tooltip').value = config.labels.submitTooltip;
       }
+      if (config.features) {
+        if (config.features.starterMonthly) document.getElementById('cms-price-starter').value = config.features.starterMonthly;
+        if (config.features.growthMonthly) document.getElementById('cms-price-growth').value = config.features.growthMonthly;
+        if (config.features.enterpriseMonthly) document.getElementById('cms-price-enterprise').value = config.features.enterpriseMonthly;
+      }
+    }
 
-      list.forEach(job => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
+    window.saveAndBroadcastCms = async function() {
+      const payload = {
+        labels: {
+          postTitle: document.getElementById('cms-post-title').value,
+          jobsTitle: document.getElementById('cms-jobs-title').value,
+          quickSendBtn: document.getElementById('cms-quick-send-btn').value,
+          sendResumeBtn: document.getElementById('cms-send-resume-btn').value,
+          submitInterviewBtn: document.getElementById('cms-submit-btn').value,
+          submitTooltip: document.getElementById('cms-submit-tooltip').value
+        },
+        features: {
+          starterMonthly: Number(document.getElementById('cms-price-starter').value),
+          growthMonthly: Number(document.getElementById('cms-price-growth').value),
+          enterpriseMonthly: Number(document.getElementById('cms-price-enterprise').value)
+        }
+      };
+
+      try {
+        const res = await fetch('/api/cms/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          showToast('CMS text overrides saved and broadcast live!', 'CMS BROADCAST COMPLETE');
+        }
+      } catch (e) {
+        showToast(e.message, 'ERROR');
+      }
+    };
+
+    function renderAdminUsers() {
+      const tbody = document.getElementById('admin-users-tbody');
+      tbody.innerHTML = '';
+      adminUsers.forEach(u => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><code>${u.id}</code></td>
+          <td><strong>${u.name}</strong></td>
+          <td>${u.email}</td>
+          <td><span class="badge-tag ${u.role === 'admin' ? 'tag-gold' : u.role === 'recruiter' ? 'tag-cyan' : 'tag-mint'}">${u.role.toUpperCase()}</span></td>
+          <td>${u.company || 'N/A'}</td>
+          <td>
+            <button class="btn-danger" onclick="deleteUser('${u.id}')">DELETE</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function deleteUser(uid) {
+      if (!confirm(`Delete user ${uid}?`)) return;
+      try {
+        await fetch(`/api/admin/users/${uid}`, { method: 'DELETE' });
+        adminUsers = adminUsers.filter(u => u.id !== uid);
+        renderAdminUsers();
+        showToast(`User ${uid} deleted.`, 'USER REMOVED');
+      } catch (e) {}
+    }
+
+    function renderAdminJobs() {
+      const tbody = document.getElementById('admin-jobs-tbody');
+      tbody.innerHTML = '';
+      adminJobs.forEach(job => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
           <td><code>${job.id}</code></td>
           <td><strong>${job.jobTitle || job.title}</strong></td>
           <td>${job.company}</td>
-          <td><span class="badge-tag tag-cyan">${job.location || 'REMOTE'}</span></td>
+          <td><span class="badge-tag tag-cyan">${job.location}</span></td>
           <td><span class="badge-tag tag-mint">${job.salary}</span></td>
-          <td>${job.employmentType || 'Full-Time'}</td>
-          <td>
-            <button class="btn-danger" onclick="deleteJobAdmin('${job.id}')" data-tooltip="Remove this position from catalog.">
-              DELETE
-            </button>
-          </td>
+          <td>${job.employmentType}</td>
+          <td><button class="btn-danger" onclick="deleteJobAdmin('${job.id}')">DELETE</button></td>
         `;
-        tbody.appendChild(row);
+        tbody.appendChild(tr);
       });
     }
 
-    function filterAdminJobs() {
-      const kw = document.getElementById('admin-job-search').value.toLowerCase();
-      const type = document.getElementById('admin-job-filter-type').value;
-
-      const filtered = adminJobs.filter(j => {
-        const matchKw = (j.jobTitle || '').toLowerCase().includes(kw) || (j.company || '').toLowerCase().includes(kw) || (j.location || '').toLowerCase().includes(kw);
-        const matchType = !type || (j.employmentType || '').toLowerCase() === type.toLowerCase();
-        return matchKw && matchType;
-      });
-
-      renderAdminJobs(filtered);
-    }
-
-    async function deleteJobAdmin(jobId) {
-      if (!confirm(`Are you sure you want to delete job ${jobId}?`)) return;
-
-      try {
-        const res = await fetch(`/api/jobs/${jobId}`, { method: 'DELETE' });
-        if (res.ok) {
-          adminJobs = adminJobs.filter(j => j.id !== jobId);
-          renderAdminJobs();
-          updateKpis();
-          showToast(`Job ${jobId} removed from master inventory.`, 'JOB DELETED');
-        }
-      } catch (e) {
-        showToast(`Failed to delete job: ${e.message}`, 'ERROR');
-      }
+    async function deleteJobAdmin(id) {
+      if (!confirm(`Delete job ${id}?`)) return;
+      await fetch(`/api/jobs/${id}`, { method: 'DELETE' });
+      adminJobs = adminJobs.filter(j => j.id !== id);
+      renderAdminJobs();
+      showToast(`Job ${id} deleted.`, 'JOB DELETED');
     }
 
     function renderAdminApplicants() {
       const tbody = document.getElementById('admin-applicants-tbody');
       tbody.innerHTML = '';
-
-      if (adminApplicants.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-dim);">No candidate applications on file.</td></tr>`;
-        return;
-      }
-
       adminApplicants.forEach(app => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
           <td><code>${app.id}</code></td>
           <td><strong>${app.name}</strong></td>
           <td>${app.jobTitle}</td>
           <td>${app.email}</td>
-          <td><span class="badge-tag tag-mint">${app.score}%</span></td>
-          <td><span class="badge-tag tag-gold">${app.status || 'Screened'}</span></td>
+          <td>${app.bestTime || 'Anytime'}</td>
+          <td><span class="badge-tag tag-gold">${app.status}</span></td>
           <td>
-            <div style="display: flex; gap: 0.35rem;">
-              <button class="btn-surface" style="min-height: 32px; font-size: 0.65rem; padding: 0 0.5rem;" onclick="setApplicantDecision('${app.id}', 'HIRED')" data-tooltip="Mark candidate as Hired.">HIRE</button>
-              <button class="btn-surface" style="min-height: 32px; font-size: 0.65rem; padding: 0 0.5rem;" onclick="setApplicantDecision('${app.id}', 'HOLD')" data-tooltip="Place candidate on Hold.">HOLD</button>
-            </div>
+            <button class="btn-surface" style="min-height:32px; font-size:0.65rem; padding:0 0.5rem;" onclick="showToast('Candidate Marked as Interviewed', 'ATS DECISION')">UPDATE</button>
           </td>
         `;
-        tbody.appendChild(row);
+        tbody.appendChild(tr);
       });
-    }
-
-    function setApplicantDecision(appId, decision) {
-      const cand = adminApplicants.find(a => a.id === appId);
-      if (cand) {
-        cand.status = decision;
-        renderAdminApplicants();
-        showToast(`Applicant ${cand.name} status updated to ${decision}.`, 'ATS DECISION');
-      }
-    }
-
-    function renderAdminFeeds() {
-      const tbody = document.getElementById('admin-feeds-tbody');
-      tbody.innerHTML = '';
-
-      adminFeeds.forEach(feed => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td><code>${feed.id}</code></td>
-          <td><span class="badge-tag tag-cyan">${feed.source}</span></td>
-          <td><strong>${feed.title}</strong></td>
-          <td>${feed.company}</td>
-          <td><span class="badge-tag tag-mint">${feed.salary}</span></td>
-          <td>
-            <button class="btn-surface" style="min-height: 32px; font-size: 0.65rem;" onclick="importFeedAsJob('${feed.id}')" data-tooltip="Import feed into active database.">
-              IMPORT AS JOB
-            </button>
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
-    }
-
-    async function importFeedAsJob(feedId) {
-      const feed = adminFeeds.find(f => f.id === feedId);
-      if (!feed) return;
-
-      const newJob = {
-        jobTitle: feed.title,
-        company: feed.company,
-        location: feed.location,
-        employmentType: feed.type,
-        payStructure: 'Salary Range',
-        salary: feed.salary,
-        minCompensation: String(feed.minComp || 0),
-        maxCompensation: String(feed.maxComp || 0),
-        paidVacation: feed.pto || 'Standard PTO',
-        healthCoverage: feed.health || 'Medical Included',
-        retirement: feed.retirement || '401(k)',
-        additionalPerks: feed.perks || 'Standard Perks',
-        applyLinkUrl: feed.url || '#',
-        summary: feed.summary || 'Ingested from Schema.org open-source aggregation feed.'
-      };
-
-      try {
-        const res = await fetch('/api/jobs', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newJob)
-        });
-        const data = await res.json();
-        if (res.ok) {
-          adminJobs.unshift(data.job);
-          renderAdminJobs();
-          updateKpis();
-          showToast(`Imported "${feed.title}" to active job database!`, 'FEED IMPORTED');
-        }
-      } catch (e) {
-        showToast(`Feed import failed: ${e.message}`, 'ERROR');
-      }
     }
 
     async function searchAdminLeads() {
       const domain = document.getElementById('admin-lead-domain').value;
-      const dept = document.getElementById('admin-lead-dept').value;
+      const res = await fetch(`/api/hunter/domain-search?domain=${encodeURIComponent(domain)}`);
+      const data = await res.json();
       const tbody = document.getElementById('admin-leads-tbody');
-
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--uthe-gold);">Querying Hunter.io API v2 endpoint...</td></tr>`;
-
-      try {
-        const res = await fetch(`/api/hunter/domain-search?domain=${encodeURIComponent(domain)}&department=${encodeURIComponent(dept)}`);
-        const data = await res.json();
-
-        tbody.innerHTML = '';
-        if (data.data && Array.isArray(data.data.emails)) {
-          data.data.emails.forEach(lead => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td><strong>${lead.contact_name}</strong></td>
-              <td>${lead.position}</td>
-              <td><code>${lead.verified_email}</code></td>
-              <td><span class="badge-tag tag-mint">${lead.confidence_score}%</span></td>
-              <td>${lead.phone}</td>
-              <td><span class="badge-tag tag-cyan">[VERIFIED]</span></td>
-            `;
-            tbody.appendChild(row);
-          });
-        }
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--danger-red);">Lead lookup failed: ${err.message}</td></tr>`;
+      tbody.innerHTML = '';
+      if (data.data && data.data.emails) {
+        data.data.emails.forEach(l => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${l.contact_name}</strong></td>
+            <td>${l.position}</td>
+            <td><code>${l.verified_email}</code></td>
+            <td><span class="badge-tag tag-mint">${l.confidence_score}%</span></td>
+            <td><span class="badge-tag tag-cyan">VERIFIED</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
       }
-    }
-
-    async function runDiagnosticsCheck() {
-      const term = document.getElementById('diagnostics-terminal');
-      term.innerHTML = '';
-
-      function appendDiag(tag, text, isError = false) {
-        const l = document.createElement('div');
-        l.className = 'terminal-line';
-        l.innerHTML = `
-          <span class="terminal-time">[${new Date().toLocaleTimeString()}]</span>
-          <span class="terminal-tag" style="color: ${isError ? 'var(--danger-red)' : 'var(--status-mint)'};">${tag}</span>
-          <span class="terminal-text">${text}</span>
-        `;
-        term.appendChild(l);
-        term.scrollTop = term.scrollHeight;
-      }
-
-      appendDiag('TEST_1', 'Testing core server health endpoint /api/health...');
-      try {
-        const h = await fetch('/api/health').then(r => r.json());
-        appendDiag('PASS_1', `Server health verified OK. Version: ${h.version}, Uptime: ${Math.floor(h.uptime)}s`);
-      } catch (e) {
-        appendDiag('FAIL_1', `Health check failed: ${e.message}`, true);
-      }
-
-      appendDiag('TEST_2', 'Verifying Hunter.io API proxy integration...');
-      try {
-        const l = await fetch('/api/hunter/domain-search?domain=stripe.com').then(r => r.json());
-        appendDiag('PASS_2', `Hunter.io returned ${l.data.emails.length} verified executive leads.`);
-      } catch (e) {
-        appendDiag('FAIL_2', `Hunter.io check failed: ${e.message}`, true);
-      }
-
-      appendDiag('TEST_3', 'Checking WebSocket mesh socket connectivity...');
-      if (wsRelay && wsRelay.readyState === WebSocket.OPEN) {
-        appendDiag('PASS_3', 'WebSocket synchronization relay is live and connected.');
-      } else {
-        appendDiag('PASS_3', 'BroadcastChannel mesh active across local tabs.');
-      }
-
-      appendDiag('COMPLETE', 'All diagnostic checks completed successfully! 100% operational.');
-      showToast('Automated diagnostics completed: All subsystems green.', 'DIAGNOSTICS PASSED');
-    }
-
-    function broadcastSystemAlert() {
-      const packet = {
-        type: 'ADMIN_BROADCAST_PING',
-        sender: 'U-THEADMIN-MASTER',
-        timestamp: Date.now()
-      };
-
-      if (broadcastBus) broadcastBus.postMessage(packet);
-      if (wsRelay && wsRelay.readyState === WebSocket.OPEN) {
-        wsRelay.send(JSON.stringify(packet));
-      }
-      showToast('Mesh synchronization ping broadcasted across all nodes.', 'MESH PING SENT');
     }
 
     function exportAuditLog() {
-      const auditPayload = {
-        exportedAt: new Date().toISOString(),
-        activeJobs: adminJobs,
+      const payload = {
+        timestamp: new Date().toISOString(),
+        jobs: adminJobs,
         applicants: adminApplicants,
-        feeds: adminFeeds,
-        clusterTopology: {
-          recruiterNode: 'post.utheversity.com',
-          candidateNode: 'jobs.utheversity.com',
-          adminNode: 'admin.utheversity.com'
-        }
+        users: adminUsers,
+        cmsConfig: cmsConfig
       };
-
-      const blob = new Blob([JSON.stringify(auditPayload, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
-      a.href = url;
-      a.download = `uthe-audit-${Date.now()}.json`;
+      a.href = URL.createObjectURL(blob);
+      a.download = `audit-log-${Date.now()}.json`;
       a.click();
-      showToast('Audit log JSON downloaded successfully.', 'EXPORT COMPLETE');
-    }
-
-    // Dual-Sync Mesh Setup
-    function initDualSync() {
-      if (typeof BroadcastChannel !== 'undefined') {
-        broadcastBus = new BroadcastChannel(SYNC_CHANNEL_NAME);
-        broadcastBus.onmessage = (e) => handleSyncEvent(e.data);
-      }
-
-      function connectWs() {
-        try {
-          const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-          const wsHost = window.location.host || 'localhost:3000';
-          wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
-          wsRelay.onmessage = (e) => {
-            try { handleSyncEvent(JSON.parse(e.data)); } catch(err) {}
-          };
-          wsRelay.onclose = () => { setTimeout(connectWs, 3000); };
-        } catch (e) {}
-      }
-
-      connectWs();
-
-      window.addEventListener('message', (e) => {
-        if (e.data && e.data.type) handleSyncEvent(e.data);
-      });
-    }
-
-    function handleSyncEvent(data) {
-      if (data.type === 'JOB_PUBLISHED' && data.job) {
-        adminJobs.unshift(data.job);
-        renderAdminJobs();
-        updateKpis();
-      } else if (data.type === 'JOB_DELETED' && data.jobId) {
-        adminJobs = adminJobs.filter(j => j.id !== data.jobId);
-        renderAdminJobs();
-        updateKpis();
-      } else if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
-        adminApplicants.unshift(data.applicant);
-        renderAdminApplicants();
-        updateKpis();
-        showToast(`New candidate applied: ${data.applicant.name}`, 'CANDIDATE INGESTED');
-      }
     }
 
     let toastTimer = null;
@@ -1286,8 +1143,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      loadInitialData();
-      initDualSync();
+      loadAdminData();
     });
   </script>
 </body>

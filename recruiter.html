@@ -3,30 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>u-thePOST — Recruiter Workspace & Omni-Channel Publishing Engine</title>
+  <title>u-thePOST — Recruiter Workspace & Omni-Channel Campaign Engine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-canvas: #F8F9FA;
-      --card-surface: #FFFFFF;
-      --text-main: #0F172A;
-      --text-muted: #64748B;
+      --bg-dark: #080C14;
+      --card-dark: #0F172A;
+      --card-surface: #1E293B;
+      --text-light: #F8FAFC;
+      --text-dim: #94A3B8;
+      --border-dark: #334155;
       --uthe-gold: #E5A800;
       --uthe-gold-light: #FFF8E6;
-      --uthe-charcoal: #111111;
-      --border-color: #E2E8F0;
+      --uthe-gold-glow: rgba(229, 168, 0, 0.25);
       --status-mint: #00C853;
-      --status-mint-bg: #E8F8F0;
-      --danger-red: #DC2626;
-      --danger-bg: #FEF2F2;
-      --blue-accent: #2563EB;
-      --blue-bg: #EFF6FF;
-      --purple-accent: #7C3AED;
-      --purple-bg: #F5F3FF;
-      --gloss-shadow: 0 10px 30px -4px rgba(8, 12, 20, 0.05), 0 2px 6px rgba(0, 0, 0, 0.02);
-      --subtle-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --status-mint-bg: rgba(0, 200, 83, 0.12);
+      --cyan-accent: #06B6D4;
+      --cyan-bg: rgba(6, 182, 212, 0.12);
+      --purple-accent: #A855F7;
+      --purple-bg: rgba(168, 85, 247, 0.12);
+      --danger-red: #EF4444;
+      --danger-bg: rgba(239, 68, 68, 0.15);
     }
 
     * {
@@ -39,8 +38,8 @@
     html, body {
       width: 100%;
       min-height: 100%;
-      background-color: var(--bg-canvas);
-      color: var(--text-main);
+      background-color: var(--bg-dark);
+      color: var(--text-light);
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -50,7 +49,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      padding-bottom: 76px; /* Space for sticky bottom bar on mobile */
+      padding-bottom: 72px;
     }
 
     /* REFINED SMART TOOLTIP SYSTEM (< 200px, 11px font, z-index 99999) */
@@ -64,15 +63,15 @@
       bottom: calc(100% + 6px);
       left: 50%;
       transform: translateX(-50%);
-      background: #111827;
-      color: #F9FAFB;
+      background: #0F172A;
+      color: #F8FAFC;
       font-size: 11px;
       font-weight: 500;
       line-height: 1.3;
       padding: 0.35rem 0.55rem;
       border-radius: 5px;
       border: 1px solid var(--uthe-gold);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
       white-space: normal;
       width: max-content;
       max-width: 200px;
@@ -127,19 +126,19 @@
       outline-offset: 2px;
     }
 
-    /* TOP STICKY NAVIGATION HEADER (RESTRICTED TO 4 CUSTOMER TABS) */
+    /* MASTER TOP HEADER (RESTRICTED TO 4 TABS) */
     header {
       position: sticky;
       top: 0;
       z-index: 1000;
       height: 64px;
-      background: #FFFFFF;
+      background: var(--card-dark);
       border-bottom: 2.5px solid var(--uthe-gold);
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 1.25rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
 
     .brand-group {
@@ -148,17 +147,11 @@
       gap: 0.85rem;
     }
 
-    .brand-logo-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
     .brand-title {
       font-size: 1.15rem;
       font-weight: 900;
       letter-spacing: 2px;
-      color: var(--uthe-charcoal);
+      color: var(--uthe-gold);
       text-transform: uppercase;
       white-space: nowrap;
     }
@@ -166,8 +159,8 @@
     .brand-badge {
       font-size: 0.6rem;
       font-weight: 800;
-      background: var(--uthe-gold-light);
-      color: #92400E;
+      background: rgba(229, 168, 0, 0.15);
+      color: var(--uthe-gold);
       border: 1px solid var(--uthe-gold);
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
@@ -175,70 +168,17 @@
       letter-spacing: 0.8px;
     }
 
-    /* 8K PNG LOGO REPLACEMENT CONTAINER */
-    .btn-upload-logo {
-      background: #FFFFFF;
-      border: 1.5px solid var(--border-color);
-      color: var(--uthe-charcoal);
-      font-weight: 800;
-      font-size: 0.68rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
-      padding: 0 0.95rem;
-      border-radius: 20px;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      height: 40px;
-    }
-
-    .btn-upload-logo:hover {
-      border-color: var(--uthe-gold);
-      box-shadow: 0 2px 10px rgba(229, 168, 0, 0.2);
-    }
-
-    .header-logo-container {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      max-height: 42px;
-      padding: 2px;
-      border: 1px dashed var(--border-color);
-      border-radius: 6px;
-      background: #FFFFFF;
-      transition: all 0.2s ease;
-    }
-
-    .header-logo-container:hover {
-      border-color: var(--uthe-gold);
-      box-shadow: 0 2px 8px rgba(229, 168, 0, 0.25);
-    }
-
-    .header-logo-preview {
-      max-height: 38px;
-      width: auto;
-      max-width: 140px;
-      object-fit: contain;
-      image-rendering: -webkit-optimize-contrast;
-    }
-
-    /* 4 CUSTOMER NAVIGATION TABS */
+    /* RESTRICTED 4 CENTER TABS */
     .header-center-tabs {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 0 0.5rem;
+      gap: 0.35rem;
     }
 
-    .nav-tab {
+    .nav-tab-btn {
       background: transparent;
-      border: none;
-      color: var(--text-muted);
+      border: 1px solid transparent;
+      color: var(--text-dim);
       font-size: 0.72rem;
       font-weight: 800;
       text-transform: uppercase;
@@ -246,22 +186,22 @@
       padding: 0 0.95rem;
       border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
       display: flex;
       align-items: center;
+      transition: all 0.2s ease;
       height: 40px;
     }
 
-    .nav-tab:hover {
-      background: #F1F5F9;
-      color: var(--text-main);
+    .nav-tab-btn:hover {
+      background: var(--card-surface);
+      color: var(--text-light);
     }
 
-    .nav-tab.active {
-      background: var(--uthe-charcoal);
-      color: #FFFFFF;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    .nav-tab-btn.active {
+      background: var(--uthe-gold);
+      color: #000000;
+      font-weight: 900;
+      box-shadow: 0 0 12px var(--uthe-gold-glow);
     }
 
     .header-actions {
@@ -270,51 +210,33 @@
       gap: 0.75rem;
     }
 
-    .sync-status-indicator {
-      display: flex;
-      align-items: center;
-      font-size: 0.65rem;
-      font-weight: 800;
-      background: var(--status-mint-bg);
-      color: #065F46;
-      border: 1px solid #A7F3D0;
-      padding: 0 0.75rem;
+    .btn-auth-header {
+      background: var(--card-surface);
+      color: var(--uthe-gold);
+      border: 1.5px solid var(--uthe-gold);
+      padding: 0 0.95rem;
       border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 900;
       letter-spacing: 0.8px;
       text-transform: uppercase;
       cursor: pointer;
-      height: 36px;
-    }
-
-    .btn-save {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border: 1.5px solid var(--uthe-gold);
-      padding: 0 1.25rem;
-      border-radius: 20px;
-      font-weight: 900;
-      font-size: 0.72rem;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(17, 17, 17, 0.15);
-      transition: all 0.2s ease;
+      height: 38px;
       display: flex;
       align-items: center;
-      height: 38px;
+      transition: all 0.2s ease;
     }
 
-    .btn-save:hover {
+    .btn-auth-header:hover {
       background: var(--uthe-gold);
-      color: var(--uthe-charcoal);
-      box-shadow: 0 4px 16px rgba(229, 168, 0, 0.4);
+      color: #000000;
     }
 
     .btn-mobile-menu {
       display: none;
-      background: #F1F5F9;
-      border: 1px solid var(--border-color);
-      color: var(--uthe-charcoal);
+      background: var(--card-surface);
+      border: 1px solid var(--border-dark);
+      color: var(--uthe-gold);
       padding: 0 0.85rem;
       border-radius: 6px;
       font-size: 0.75rem;
@@ -325,12 +247,12 @@
       align-items: center;
     }
 
-    /* MOBILE SLIDE-IN NAVIGATION DRAWER (4 TABS) */
+    /* MOBILE DRAWER NAVIGATION */
     .mobile-drawer-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(3px);
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
       z-index: 2000;
       display: none;
       opacity: 0;
@@ -347,10 +269,10 @@
       top: 0;
       right: 0;
       bottom: 0;
-      width: 290px;
+      width: 280px;
       max-width: 85%;
-      background: #FFFFFF;
-      border-left: 2.5px solid var(--uthe-gold);
+      background: var(--card-dark);
+      border-left: 2px solid var(--uthe-gold);
       z-index: 2001;
       display: flex;
       flex-direction: column;
@@ -358,7 +280,7 @@
       gap: 0.85rem;
       transform: translateX(100%);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.25);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.6);
     }
 
     .mobile-drawer.open {
@@ -369,14 +291,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-dark);
       padding-bottom: 0.75rem;
     }
 
     .drawer-title {
       font-size: 0.85rem;
       font-weight: 900;
-      color: var(--uthe-charcoal);
+      color: var(--uthe-gold);
       letter-spacing: 1.5px;
       text-transform: uppercase;
     }
@@ -384,7 +306,7 @@
     .drawer-close {
       background: none;
       border: none;
-      color: var(--text-muted);
+      color: var(--text-dim);
       font-size: 1.2rem;
       font-weight: 900;
       cursor: pointer;
@@ -404,9 +326,9 @@
     }
 
     .drawer-tab-btn {
-      background: #F8FAFC;
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
+      background: var(--card-surface);
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
       font-size: 0.78rem;
       font-weight: 800;
       text-align: left;
@@ -421,65 +343,66 @@
     }
 
     .drawer-tab-btn.active {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
+      background: var(--uthe-gold);
+      color: #000000;
       border-color: var(--uthe-gold);
       font-weight: 900;
     }
 
-    /* MAIN CONTAINER & WORKSPACES */
+    /* MAIN RECRUITER WORKSPACE */
     main {
       flex: 1;
       padding: 1.25rem;
       display: flex;
       flex-direction: column;
+      gap: 1.25rem;
       max-width: 1440px;
       margin: 0 auto;
       width: 100%;
     }
 
-    .workspace-view {
+    .tab-view {
       display: none;
-      flex: 1;
-    }
-
-    .workspace-view.active {
-      display: flex;
       flex-direction: column;
       gap: 1.25rem;
     }
 
-    /* TAB 1: 2-COLUMN PRIMARY RECRUITER STUDIO */
+    .tab-view.active {
+      display: flex;
+    }
+
+    /* 2-COLUMN JOB STUDIO LAYOUT */
     .studio-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.25rem;
-      flex: 1;
-      align-items: start;
     }
 
-    .panel {
-      background: var(--card-surface);
-      border: 1px solid var(--border-color);
+    .panel-card {
+      background: var(--card-dark);
+      border: 1px solid var(--border-dark);
       border-radius: 10px;
       padding: 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
-      box-shadow: var(--gloss-shadow);
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
-    .panel-title {
-      font-size: 0.78rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--uthe-charcoal);
-      border-bottom: 2px solid var(--uthe-gold);
-      padding-bottom: 0.45rem;
+    .panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1.5px solid var(--border-dark);
+      padding-bottom: 0.75rem;
+    }
+
+    .panel-title {
+      font-size: 0.85rem;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      color: var(--uthe-gold);
+      text-transform: uppercase;
     }
 
     .form-group {
@@ -491,15 +414,15 @@
     label {
       font-size: 0.65rem;
       font-weight: 800;
-      color: var(--text-muted);
+      color: var(--text-dim);
+      letter-spacing: 0.8px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     input, select, textarea {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
+      background: var(--card-surface);
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
       padding: 0 0.85rem;
       border-radius: 6px;
       font-family: inherit;
@@ -515,7 +438,7 @@
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--uthe-gold);
-      box-shadow: 0 0 0 3px rgba(229, 168, 0, 0.15);
+      box-shadow: 0 0 0 2px var(--uthe-gold-glow);
     }
 
     .grid-2 {
@@ -524,453 +447,348 @@
       gap: 0.75rem;
     }
 
-    /* ACTION BUTTONS */
-    .button-group-row {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 0.75rem;
-      margin-top: 0.5rem;
+    /* SOCIAL MEDIA ACCOUNTS LINKING BLOCK (FOR OMNI-CHANNEL ROUTING) */
+    .social-media-block {
+      background: var(--card-surface);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
     }
 
-    .btn-publish {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border: 1.5px solid var(--uthe-gold);
-      padding: 0 1.25rem;
-      border-radius: 8px;
+    .social-media-title {
+      font-size: 0.68rem;
       font-weight: 900;
-      font-size: 0.78rem;
+      color: var(--cyan-accent);
+      letter-spacing: 1px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(17, 17, 17, 0.2);
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      height: 48px;
-    }
-
-    .btn-publish:hover {
-      background: var(--uthe-gold);
-      color: var(--uthe-charcoal);
-      box-shadow: 0 8px 24px rgba(229, 168, 0, 0.45);
-    }
-
-    .btn-omni-broadcast {
-      background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
-      color: #FFFFFF;
-      border: 1.5px solid var(--uthe-gold);
-      padding: 0 1.25rem;
-      border-radius: 8px;
-      font-weight: 900;
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.25);
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      height: 48px;
-    }
-
-    .btn-omni-broadcast:hover {
-      background: #E5A800;
-      color: #080C14;
-      box-shadow: 0 8px 24px rgba(229, 168, 0, 0.5);
-    }
-
-    /* RIGHT COLUMN STACKED VIEW */
-    .stacked-right {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    /* LIVE PREVIEW CARD */
-    .preview-card {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 0.45rem;
-      box-shadow: var(--gloss-shadow);
-      position: relative;
-    }
-
-    .preview-card::before {
-      content: "LIVE CANDIDATE PREVIEW";
-      position: absolute;
-      top: 0.5rem;
-      right: 0.75rem;
-      font-size: 0.55rem;
-      font-weight: 800;
-      color: #92400E;
-      background: var(--uthe-gold-light);
-      border: 1px solid var(--uthe-gold);
-      padding: 0.1rem 0.4rem;
-      border-radius: 3px;
-      letter-spacing: 0.8px;
-    }
-
-    .preview-company { font-size: 1.05rem; font-weight: 800; color: var(--text-main); }
-    .preview-meta-row { display: flex; gap: 0.5rem; align-items: center; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    .preview-salary { font-size: 0.92rem; font-weight: 800; color: #065F46; background: var(--status-mint-bg); border: 1px solid #A7F3D0; padding: 0.2rem 0.6rem; border-radius: 4px; margin-top: 0.2rem; }
-    .preview-title { font-size: 1.25rem; font-weight: 900; color: var(--uthe-charcoal); margin-top: 0.2rem; }
-    .preview-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; max-height: 60px; overflow: hidden; text-overflow: ellipsis; margin-top: 0.2rem; }
-
-    .preview-tags-container { display: flex; gap: 0.35rem; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem; }
-    .preview-tag { background: #F1F5F9; border: 1px solid var(--border-color); color: var(--text-main); padding: 0.25rem 0.55rem; border-radius: 4px; font-size: 0.65rem; font-weight: 700; }
-
-    .btn-preview-apply {
-      width: 100%;
-      max-width: 160px;
-      background: #FFFFFF;
-      border: 1.5px solid var(--uthe-gold);
-      color: var(--uthe-charcoal);
-      padding: 0 0.85rem;
-      border-radius: 6px;
-      font-weight: 800;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      cursor: pointer;
-      margin-top: 0.6rem;
-      transition: all 0.2s ease;
-      letter-spacing: 0.8px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-preview-apply:hover {
-      background: var(--uthe-gold);
-      color: var(--uthe-charcoal);
-      box-shadow: 0 4px 12px rgba(229, 168, 0, 0.3);
-    }
-
-    /* ACTIVE JOB LISTINGS PANEL */
-    .active-listings-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 0.85rem;
-      max-height: 380px;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-right: 0.25rem;
-    }
-
-    .job-card-item {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      position: relative;
-      box-shadow: var(--subtle-shadow);
-      transition: all 0.2s ease;
-    }
-
-    .job-card-item:hover {
-      border-color: var(--uthe-gold);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-    }
-
-    .card-role { font-size: 0.9rem; font-weight: 800; color: var(--uthe-charcoal); padding-right: 2.2rem; }
-    .card-company { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
-    .card-location { font-size: 0.65rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
-    
-    .card-bottom-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 0.35rem;
-      padding-top: 0.35rem;
-      border-top: 1px solid #F1F5F9;
     }
 
-    .card-salary-badge { font-size: 0.68rem; font-weight: 800; color: #065F46; background: var(--status-mint-bg); border: 1px solid #A7F3D0; padding: 0.15rem 0.45rem; border-radius: 3px; }
-    .card-live-dot { font-size: 0.65rem; font-weight: 800; color: #059669; text-transform: uppercase; letter-spacing: 0.5px; }
+    .social-pills-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.4rem;
+    }
 
-    .btn-delete-card {
-      position: absolute;
-      top: 0.75rem;
-      right: 0.75rem;
-      background: var(--danger-bg);
-      color: var(--danger-red);
-      border: 1px solid #FECACA;
-      padding: 0 0.55rem;
-      border-radius: 4px;
+    .social-pill {
+      background: #0B0F19;
+      border: 1px solid var(--border-dark);
+      color: var(--text-dim);
+      border-radius: 6px;
+      padding: 0.4rem 0.2rem;
       font-size: 0.62rem;
       font-weight: 800;
+      text-align: center;
       cursor: pointer;
-      height: 32px;
+      transition: all 0.2s ease;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      transition: all 0.2s ease;
+      gap: 0.15rem;
     }
 
-    .btn-delete-card:hover {
-      background: var(--danger-red);
-      color: #FFFFFF;
+    .social-pill.linked {
+      border-color: var(--status-mint);
+      color: var(--status-mint);
+      background: var(--status-mint-bg);
     }
 
-    /* TAB 2: OMNICHANNEL OUTREACH CRM */
-    .omnichannel-grid {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 1.25rem;
-    }
-
-    .channel-inbox-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      max-height: 600px;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .channel-item-row {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
-
-    .channel-item-row:hover, .channel-item-row.active {
-      border-color: var(--uthe-gold);
-      background: var(--uthe-gold-light);
-    }
-
-    .channel-badge {
-      font-size: 0.58rem;
-      font-weight: 800;
+    /* ACTION BUTTONS */
+    .btn-gold-action {
+      background: var(--uthe-gold);
+      color: #000000;
+      border: none;
+      font-weight: 900;
+      font-size: 0.78rem;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
-      padding: 0.1rem 0.4rem;
-      border-radius: 3px;
-      width: fit-content;
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 0 1.25rem;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
     }
 
-    .ch-gmail { background: #FEE2E2; color: #991B1B; }
-    .ch-linkedin { background: #DBEAFE; color: #1E40AF; }
-    .ch-tiktok { background: #000000; color: #FFFFFF; }
-    .ch-facebook { background: #EFF6FF; color: #1D4ED8; }
-    .ch-instagram { background: #FCE7F3; color: #9D174D; }
-    .ch-x { background: #0F172A; color: #F8FAFC; }
+    .btn-gold-action:hover {
+      box-shadow: 0 0 15px var(--uthe-gold-glow);
+    }
 
-    .template-editor-box {
+    .btn-surface-action {
+      background: var(--card-surface);
+      color: var(--text-light);
+      border: 1px solid var(--border-dark);
+      font-weight: 800;
+      font-size: 0.75rem;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 0 1rem;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-surface-action:hover {
+      border-color: var(--uthe-gold);
+      color: var(--uthe-gold);
+    }
+
+    /* PREVIEW CARD */
+    .preview-sheet {
       background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
+      color: #0F172A;
+      border-radius: 8px;
       padding: 1.25rem;
       display: flex;
       flex-direction: column;
       gap: 0.85rem;
-      box-shadow: var(--subtle-shadow);
+      border: 2px solid var(--uthe-gold);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
 
-    .token-chips-bar {
+    .pv-header {
       display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-      align-items: center;
-      padding: 0.5rem;
-      background: #F8FAFC;
-      border-radius: 6px;
-      border: 1px dashed var(--border-color);
-    }
-
-    .token-chip {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      font-weight: 700;
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      padding: 0.2rem 0.45rem;
-      border-radius: 4px;
-      color: var(--purple-accent);
-      cursor: pointer;
-    }
-
-    .action-pill-btn {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      padding: 0 0.85rem;
-      border-radius: 6px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      cursor: pointer;
-      height: 38px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .action-pill-btn:hover {
-      border-color: var(--blue-accent);
-      color: var(--blue-accent);
-      background: var(--blue-bg);
-    }
-
-    .btn-action-charcoal {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border: 1px solid var(--uthe-gold);
-      padding: 0 1.2rem;
-      border-radius: 6px;
-      font-weight: 800;
-      font-size: 0.75rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-action-charcoal:hover {
-      background: var(--uthe-gold);
-      color: var(--uthe-charcoal);
-    }
-
-    /* TAB 3: ATS KANBAN BOARD WITH MOBILE TOUCH DRAG & DROP */
-    .kanban-board {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 0.85rem;
-      align-items: start;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--uthe-gold);
       padding-bottom: 0.5rem;
     }
 
+    .pv-title {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #111111;
+      line-height: 1.2;
+    }
+
+    .pv-company {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #64748B;
+    }
+
+    .pv-salary-badge {
+      background: #E8F8F0;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    /* ATS MOBILE TOUCH KANBAN BOARD */
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      -webkit-overflow-scrolling: touch;
+    }
+
     .kanban-col {
-      background: #F1F5F9;
+      background: var(--card-dark);
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-width: 260px;
+      min-height: 480px;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .kanban-col.drop-target-hover {
+      background: rgba(229, 168, 0, 0.12);
+      border-color: var(--uthe-gold);
+    }
+
+    .col-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-dark);
+      padding-bottom: 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .col-count {
+      background: var(--card-surface);
+      padding: 0.15rem 0.45rem;
+      border-radius: 10px;
+      font-size: 0.65rem;
+      color: var(--uthe-gold);
+    }
+
+    .candidate-card {
+      background: var(--card-surface);
+      border: 1px solid var(--border-dark);
       border-radius: 8px;
       padding: 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      min-height: 480px;
-      min-width: 200px;
-      transition: background 0.2s, border 0.2s;
-    }
-
-    .kanban-col.drop-target-hover {
-      background: #FEF3C7;
-      border: 2px dashed var(--uthe-gold);
-    }
-
-    .kanban-col-header {
-      font-size: 0.72rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--uthe-charcoal);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 0.35rem;
-      border-bottom: 2px solid var(--border-color);
-    }
-
-    .candidate-card {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 0.85rem;
-      display: flex;
-      flex-direction: column;
       gap: 0.4rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
       cursor: grab;
-      touch-action: none; /* Crucial for native touch drag on mobile */
       user-select: none;
-      transition: transform 0.15s, box-shadow 0.15s;
+      touch-action: none;
       position: relative;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
-    .candidate-card:hover {
-      border-color: var(--uthe-gold);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transform: translateY(-1px);
+    .candidate-card:active {
+      cursor: grabbing;
     }
 
     .candidate-card.touch-dragging {
-      opacity: 0.88;
-      transform: scale(1.04);
-      border: 2px solid var(--uthe-gold);
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
-      z-index: 10000;
+      opacity: 0.9;
+      transform: scale(1.03);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+      border-color: var(--uthe-gold);
+      z-index: 1000;
     }
 
-    .cand-name { font-size: 0.85rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; justify-content: space-between; }
-    .cand-role { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); }
-    .cand-match { font-size: 0.65rem; font-weight: 800; color: #065F46; background: var(--status-mint-bg); padding: 0.12rem 0.35rem; border-radius: 3px; width: fit-content; }
-    .grab-handle-icon { font-size: 0.6rem; color: #94A3B8; letter-spacing: 1px; font-weight: 900; }
-
-    /* TAB 4: PERFORMANCE & PLANS */
-    .data-table-container {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      box-shadow: var(--subtle-shadow);
+    .cand-grab-handle {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.78rem;
-      min-width: 600px;
-    }
-
-    th {
-      background: #F8FAFC;
-      color: var(--text-muted);
+    .cand-name {
+      font-size: 0.88rem;
       font-weight: 800;
-      text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    .cand-role {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .cand-score {
       font-size: 0.65rem;
-      letter-spacing: 0.8px;
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--border-color);
+      font-weight: 800;
+      color: var(--status-mint);
+      background: var(--status-mint-bg);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      width: fit-content;
     }
 
-    td {
-      padding: 0.85rem 1rem;
-      border-bottom: 1px solid #F1F5F9;
-      vertical-align: middle;
+    /* OMNICHANNEL & PERFORMANCE PRICING ENGINE */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
     }
 
-    /* MODAL OVERLAYS & TOAST */
+    .pricing-card {
+      background: var(--card-dark);
+      border: 1.5px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--uthe-gold);
+      box-shadow: 0 0 25px var(--uthe-gold-glow);
+    }
+
+    .pricing-tier-name {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: var(--uthe-gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .pricing-amount {
+      font-size: 2rem;
+      font-weight: 900;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-light);
+    }
+
+    .channel-toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-dark);
+      font-size: 0.78rem;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #334155;
+      transition: .2s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--uthe-gold);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+      background-color: #000000;
+    }
+
+    /* SCHEDULE QUEUE CALENDAR MODAL */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
       z-index: 2000;
       align-items: center;
       justify-content: center;
@@ -978,105 +796,75 @@
     }
 
     .modal-card {
-      background: #FFFFFF;
+      background: var(--card-dark);
       border: 2px solid var(--uthe-gold);
       border-radius: 12px;
-      width: 580px;
+      width: 520px;
       max-width: 95%;
       padding: 1.5rem;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-dark);
       padding-bottom: 0.5rem;
     }
 
     .modal-title {
       font-size: 0.95rem;
       font-weight: 900;
-      color: var(--uthe-charcoal);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .btn-close-modal {
-      background: none;
-      border: none;
-      font-size: 1.3rem;
-      cursor: pointer;
-      color: var(--text-muted);
-      min-height: 44px;
-      min-width: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* STICKY BOTTOM ACTION BAR (MOBILE) */
-    .mobile-bottom-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 64px;
-      background: #FFFFFF;
-      border-top: 2px solid var(--uthe-gold);
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      padding: 0 0.75rem;
-      z-index: 999;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-bottom-mobile {
-      background: #F1F5F9;
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      font-size: 0.65rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 0 0.65rem;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      margin: 0 0.25rem;
-      height: 48px;
-    }
-
-    .btn-bottom-mobile.primary {
-      background: var(--uthe-charcoal);
       color: var(--uthe-gold);
-      border: 1px solid var(--uthe-gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .time-slot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+
+    .time-slot-btn {
+      background: var(--card-surface);
+      border: 1px solid var(--border-dark);
+      color: var(--text-light);
+      font-size: 0.72rem;
+      font-weight: 800;
+      border-radius: 6px;
+      padding: 0.5rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .time-slot-btn.active, .time-slot-btn:hover {
+      background: var(--uthe-gold);
+      color: #000000;
+      border-color: var(--uthe-gold);
       font-weight: 900;
     }
 
     /* PLATFORM FOOTER & SECRET ADMIN ACCESS */
     footer.platform-footer {
-      background: #FFFFFF;
-      border-top: 1px solid var(--border-color);
+      background: var(--card-dark);
+      border-top: 1px solid var(--border-dark);
       padding: 0.75rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 0.65rem;
-      color: var(--text-muted);
+      color: var(--text-dim);
       margin-top: auto;
     }
 
     .footer-secret-link {
-      color: #CBD5E1;
+      color: #475569;
       text-decoration: none;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.6rem;
@@ -1088,19 +876,19 @@
       color: var(--uthe-gold);
     }
 
-    /* TOAST OVERLAY NOTIFICATION */
-    .toast-overlay {
+    /* TOAST OVERLAY */
+    .recruiter-toast {
       position: fixed;
       bottom: 80px;
       right: 1.25rem;
       z-index: 999999;
       display: none;
-      background: var(--uthe-charcoal);
+      background: var(--card-dark);
       border: 1.5px solid var(--uthe-gold);
       color: #FFFFFF;
       padding: 0.85rem 1.25rem;
       border-radius: 8px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
       max-width: 380px;
     }
 
@@ -1119,781 +907,551 @@
       line-height: 1.4;
     }
 
-    /* RESPONSIVE BREAKPOINTS */
+    /* RESPONSIVE */
     @media (max-width: 1024px) {
       .header-center-tabs { display: none; }
       .btn-mobile-menu { display: flex; }
       .studio-grid { grid-template-columns: 1fr; }
-      .omnichannel-grid { grid-template-columns: 1fr; }
-      .kanban-board { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 768px) {
-      body { padding-bottom: 76px; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .button-group-row { grid-template-columns: 1fr; }
-      .kanban-board { grid-template-columns: 1fr; }
-      header { padding: 0 0.85rem; }
-      main { padding: 0.85rem; }
-    }
-
-    @media (min-width: 1025px) {
-      .mobile-bottom-bar { display: none; }
-      body { padding-bottom: 0; }
+      .pricing-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- STICKY HEADER WITH 4 CUSTOMER TABS -->
+  <!-- MASTER TOP HEADER (RESTRICTED TO 4 TABS) -->
   <header>
     <div class="brand-group">
-      <div class="brand-logo-wrap">
-        <h1 class="brand-title" data-tooltip="u-thePOST: Your central hiring dashboard for posting jobs and reaching candidates.">U-THEPOST</h1>
-        <span class="brand-badge" data-tooltip="Enterprise edition with real-time candidate synchronization.">RECRUITER WORKSPACE</span>
-      </div>
-      
-      <!-- 8K PNG LOGO REPLACEMENT IN-PLACE -->
-      <input type="file" id="logo-file-picker" accept="image/png, image/jpeg, image/webp" style="display:none;" onchange="handleLogoSelect(event)">
-      <button class="btn-upload-logo" id="btn-upload-logo-container" onclick="document.getElementById('logo-file-picker').click()" data-tooltip="Upload your company logo. Supports high-resolution 8K PNG files.">
-        UPLOAD LOGO
-      </button>
-      <div id="header-logo-container" class="header-logo-container" onclick="document.getElementById('logo-file-picker').click()" data-tooltip="Click your logo at any time to upload a new one.">
-        <img id="header-logo-preview" class="header-logo-preview" alt="Company Logo">
-      </div>
+      <h1 class="brand-title" id="cms-brand-title" data-tooltip="u-thePOST: Enterprise Job Publishing & Candidate Pipeline Engine.">U-THEPOST</h1>
+      <span class="brand-badge" data-tooltip="Real-time multi-channel recruitment suite.">RECRUITER WORKSPACE</span>
     </div>
 
-    <!-- 4 CUSTOMER NAVIGATION TABS -->
+    <!-- 4 EXCLUSIVE CUSTOMER TABS -->
     <div class="header-center-tabs">
-      <button class="nav-tab active" onclick="switchTab('studio')" data-tooltip="Create, preview, and publish job listings to candidates.">
+      <button class="nav-tab-btn active" onclick="switchRecruiterTab('studio')" data-tooltip="Design and launch new job postings.">
         1. JOB STUDIO
       </button>
-      <button class="nav-tab" onclick="switchTab('crm')" data-tooltip="Send tailored hiring proposals across Gmail, LinkedIn, TikTok, and social platforms.">
+      <button class="nav-tab-btn" onclick="switchRecruiterTab('crm')" data-tooltip="Omnichannel CRM & automated outreach.">
         2. OMNICHANNEL CRM
       </button>
-      <button class="nav-tab" onclick="switchTab('ats')" data-tooltip="Track applicants through screening, interviews, offers, and hiring stages.">
+      <button class="nav-tab-btn" onclick="switchRecruiterTab('ats')" data-tooltip="Manage applicant kanban and hiring decisions.">
         3. APPLICANT TRACKER
       </button>
-      <button class="nav-tab" onclick="switchTab('monetization')" data-tooltip="Review job view statistics, channel results, and feature boost plans.">
+      <button class="nav-tab-btn" onclick="switchRecruiterTab('plans')" data-tooltip="Review omnichannel features & subscription plans.">
         4. PERFORMANCE & PLANS
       </button>
     </div>
 
     <div class="header-actions">
-      <div class="sync-status-indicator" id="sync-pill" data-tooltip="Real-time link is active. Any changes appear immediately on candidate boards.">
-        <span id="sync-text">SYNC ACTIVE</span>
-      </div>
-      <button class="btn-save" onclick="handleSaveDraft()" data-tooltip="Saves your current form progress to your browser.">
-        SAVE DRAFT
+      <button class="btn-auth-header" id="btn-auth-status" onclick="openAuthModal()" data-tooltip="Account Authentication & Organization Profile.">
+        LOGIN / SIGN UP
       </button>
-      <button class="btn-mobile-menu" onclick="toggleRecruiterDrawer()" data-tooltip="Open navigation menu">
+      <button class="btn-mobile-menu" onclick="toggleDrawer()" data-tooltip="Open mobile menu">
         [MENU]
       </button>
     </div>
   </header>
 
-  <!-- MOBILE NAVIGATION DRAWER (4 TABS) -->
-  <div class="mobile-drawer-overlay" id="recruiter-drawer-overlay" onclick="toggleRecruiterDrawer()"></div>
-  <div class="mobile-drawer" id="recruiter-drawer">
+  <!-- MOBILE SLIDE-OUT DRAWER -->
+  <div class="mobile-drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
+  <div class="mobile-drawer" id="mobile-drawer">
     <div class="drawer-header">
-      <span class="drawer-title">RECRUITER WORKSPACES</span>
-      <button class="drawer-close" onclick="toggleRecruiterDrawer()" data-tooltip="Close menu">X</button>
+      <span class="drawer-title">PORTAL NAVIGATION</span>
+      <button class="drawer-close" onclick="toggleDrawer()" data-tooltip="Close menu">X</button>
     </div>
     <div class="drawer-nav-list">
-      <button class="drawer-tab-btn active" onclick="switchTab('studio'); toggleRecruiterDrawer();">1. JOB STUDIO</button>
-      <button class="drawer-tab-btn" onclick="switchTab('crm'); toggleRecruiterDrawer();">2. OMNICHANNEL CRM</button>
-      <button class="drawer-tab-btn" onclick="switchTab('ats'); toggleRecruiterDrawer();">3. APPLICANT TRACKER</button>
-      <button class="drawer-tab-btn" onclick="switchTab('monetization'); toggleRecruiterDrawer();">4. PERFORMANCE & PLANS</button>
+      <button class="drawer-tab-btn active" onclick="switchRecruiterTab('studio'); toggleDrawer();">1. JOB STUDIO</button>
+      <button class="drawer-tab-btn" onclick="switchRecruiterTab('crm'); toggleDrawer();">2. OMNICHANNEL CRM</button>
+      <button class="drawer-tab-btn" onclick="switchRecruiterTab('ats'); toggleDrawer();">3. APPLICANT TRACKER</button>
+      <button class="drawer-tab-btn" onclick="switchRecruiterTab('plans'); toggleDrawer();">4. PERFORMANCE & PLANS</button>
     </div>
   </div>
 
-  <!-- MAIN WORKSPACES -->
+  <!-- MAIN WORKSPACE VIEWS -->
   <main>
 
-    <!-- VIEW 1: RECRUITER JOB POSTING STUDIO -->
-    <section id="view-studio" class="workspace-view active">
+    <!-- TAB 1: JOB STUDIO (INPUT FORM + LIVE PREVIEW) -->
+    <section id="view-studio" class="tab-view active">
       <div class="studio-grid">
-        
-        <!-- LEFT PANEL: 1. EMPLOYER JOB LISTING -->
-        <div class="panel">
-          <div class="panel-title">
-            <span>1. Employer Job Listing</span>
-            <span style="font-size: 0.65rem; color: var(--text-muted);">INPUT FORM</span>
+
+        <!-- CARD 1: EMPLOYER JOB LISTING FORM -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span class="panel-title">1. EMPLOYER JOB LISTING</span>
+            <span style="font-size: 0.65rem; color: var(--text-dim);">PUBLISH SPECIFICATION</span>
           </div>
 
           <div class="form-group">
-            <label data-tooltip="The official position title that job seekers will see.">Official Job Title</label>
-            <input type="text" id="job-title" placeholder="e.g. Senior Software Engineer" value="Senior Full-Stack Engineer">
+            <label>Position Title</label>
+            <input type="text" id="inp-title" value="Senior Full-Stack Engineer" oninput="updateLivePreview()" data-tooltip="Enter the public job role title.">
           </div>
 
           <div class="grid-2">
             <div class="form-group">
-              <label data-tooltip="The legal or public name of your company.">Company / Organization</label>
-              <input type="text" id="company-name" placeholder="e.g. Quantum Technologies" value="Quantum Technologies Corp">
+              <label>Company Name</label>
+              <input type="text" id="inp-company" value="Quantum Technologies Corp" oninput="updateLivePreview()">
             </div>
             <div class="form-group">
-              <label data-tooltip="The workplace city and state, or Remote.">Location (City, State)</label>
-              <input type="text" id="job-location" placeholder="e.g. Austin, TX (Remote)" value="Austin, TX (Remote)">
+              <label>Location & Mode</label>
+              <input type="text" id="inp-location" value="AUSTIN, TX (REMOTE)" oninput="updateLivePreview()">
             </div>
           </div>
 
           <div class="grid-2">
             <div class="form-group">
-              <label data-tooltip="Select the work schedule commitment for this role.">Employment Type</label>
-              <select id="job-type">
+              <label>Employment Commitment</label>
+              <select id="inp-type" onchange="updateLivePreview()">
                 <option value="Full-Time" selected>Full-Time</option>
                 <option value="Part-Time">Part-Time</option>
                 <option value="Contract">Contract</option>
-                <option value="Executive">Executive</option>
+                <option value="Seasonal">Seasonal</option>
               </select>
             </div>
             <div class="form-group">
-              <label data-tooltip="How compensation is calculated: annual salary or hourly rate.">Pay Structure</label>
-              <select id="pay-type">
-                <option value="Salary Range" selected>Salary Range</option>
-                <option value="Hourly Rate">Hourly Rate</option>
-                <option value="Base + Equity">Base + Equity</option>
-              </select>
+              <label>Salary Range Display</label>
+              <input type="text" id="inp-salary" value="$135,000 - $175,000" oninput="updateLivePreview()">
             </div>
           </div>
 
-          <div class="grid-2">
-            <div class="form-group">
-              <label data-tooltip="Minimum compensation offered.">Min Compensation ($)</label>
-              <input type="number" id="salary-min" placeholder="90000" value="135000">
+          <!-- LINK SOCIAL MEDIA ACCOUNTS (OMNI-CHANNEL ROUTING) -->
+          <div class="social-media-block">
+            <div class="social-media-title">
+              <span>LINK SOCIAL MEDIA ACCOUNTS</span>
+              <small style="color: var(--uthe-gold); font-size: 0.6rem;">OMNI-CHANNEL SYNDICATION</small>
             </div>
-            <div class="form-group">
-              <label data-tooltip="Maximum compensation offered.">Max Compensation ($)</label>
-              <input type="number" id="salary-max" placeholder="120000" value="175000">
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div class="form-group">
-              <label data-tooltip="Vacation policy details.">Paid Vacation & PTO</label>
-              <input type="text" id="job-pto" placeholder="e.g. Unlimited PTO" value="Unlimited PTO">
-            </div>
-            <div class="form-group">
-              <label data-tooltip="Medical, dental, and vision health coverage provided.">Health & Medical Coverage</label>
-              <input type="text" id="job-health" placeholder="e.g. Premium Medical, Dental" value="Premium Medical, Dental, Vision">
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div class="form-group">
-              <label data-tooltip="Retirement savings plan details.">Retirement / 401(k)</label>
-              <input type="text" id="job-retirement" placeholder="e.g. 401(k) 5% Match" value="401(k) 5% Match">
-            </div>
-            <div class="form-group">
-              <label data-tooltip="Extra benefits or equipment budget.">Additional Perks</label>
-              <input type="text" id="job-perks" placeholder="e.g. $3k WFH Budget" value="$3,000 Home Office Stipend + Equity">
+            <div class="social-pills-row">
+              <div class="social-pill linked" id="soc-linkedin" onclick="toggleSocialLink('soc-linkedin', 'LinkedIn')" data-tooltip="LinkedIn InMail & Post Feed">
+                <span>&#128188;</span><span>LINKEDIN</span>
+              </div>
+              <div class="social-pill linked" id="soc-x" onclick="toggleSocialLink('soc-x', 'X / Twitter')" data-tooltip="X / Twitter Executive Stream">
+                <span>&#120143;</span><span>X (TWITTER)</span>
+              </div>
+              <div class="social-pill" id="soc-tiktok" onclick="toggleSocialLink('soc-tiktok', 'TikTok')" data-tooltip="TikTok Short-Form Video Recruitment">
+                <span>&#127916;</span><span>TIKTOK</span>
+              </div>
+              <div class="social-pill linked" id="soc-fb" onclick="toggleSocialLink('soc-fb', 'Facebook')" data-tooltip="Facebook Jobs & Meta Business Network">
+                <span>&#127760;</span><span>FACEBOOK</span>
+              </div>
+              <div class="social-pill" id="soc-ig" onclick="toggleSocialLink('soc-ig', 'Instagram')" data-tooltip="Instagram Stories & Talent Showcase">
+                <span>&#128248;</span><span>INSTAGRAM</span>
+              </div>
             </div>
           </div>
 
           <div class="form-group">
-            <label data-tooltip="Link to your company career page.">Company Application Link / URL</label>
-            <input type="url" id="apply-url" placeholder="https://careers.company.com/apply" value="https://careers.quantumtech.io/apply/101">
+            <label>Job Description & Key Responsibilities</label>
+            <textarea id="inp-desc" rows="4" oninput="updateLivePreview()">Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.</textarea>
           </div>
 
           <div class="form-group">
-            <label data-tooltip="Overview of position responsibilities and requirements.">Job Specification Summary</label>
-            <textarea id="job-desc" rows="3" placeholder="Provide overview of key responsibilities and qualifications...">Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.</textarea>
+            <label>Perks, PTO & Benefits</label>
+            <input type="text" id="inp-perks" value="$3,000 Home Office Stipend + Equity | Unlimited PTO | 401(k) 5% Match" oninput="updateLivePreview()">
           </div>
 
-          <!-- DUAL PUBLISH TRIGGERS -->
-          <div class="button-group-row">
-            <button class="btn-publish" id="publish-btn" onclick="handlePublishJob()" data-tooltip="Publish this job directly to candidate boards in real time.">
-              PUBLISH JOB LIVE
+          <div style="display: flex; gap: 0.75rem;">
+            <button class="btn-gold-action" style="flex: 1;" onclick="publishJobLive()" data-tooltip="Publish position live to u-theJOBS candidate board.">
+              PUBLISH POSITION LIVE
             </button>
-            <button class="btn-omni-broadcast" id="omni-broadcast-btn" onclick="handleOmniBroadcast()" data-tooltip="Broadcast across all connected channels simultaneously.">
-              BROADCAST EVERYWHERE (OMNI-CHANNEL)
+            <button class="btn-surface-action" onclick="resetStudioForm()" data-tooltip="Clear form fields.">
+              RESET
             </button>
           </div>
         </div>
 
-        <!-- RIGHT STACKED VIEW: 2. LIVE PREVIEW & 3. ACTIVE LISTINGS -->
-        <div class="stacked-right">
-          
-          <!-- 2. LIVE POST PREVIEW -->
-          <div class="panel">
-            <div class="panel-title">
-              <span>2. Live Post Preview</span>
-              <span style="font-size: 0.65rem; color: var(--uthe-gold); font-weight: 800;">REAL-TIME REACTIVE</span>
-            </div>
-
-            <div class="preview-card" data-tooltip="Shows exactly how your listing appears to candidates.">
-              <div class="preview-company" id="pv-company">Quantum Technologies Corp</div>
-              <div class="preview-meta-row">
-                <span id="pv-location">AUSTIN, TX (REMOTE)</span>
-                <span>•</span>
-                <span id="pv-type">FULL-TIME</span>
-              </div>
-              <div class="preview-salary" id="pv-salary">$135,000 - $175,000</div>
-              <div class="preview-title" id="pv-title">Senior Full-Stack Engineer</div>
-              <div class="preview-desc" id="pv-desc">Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.</div>
-              
-              <div class="preview-tags-container">
-                <span class="preview-tag" id="pv-tag-pto">Unlimited PTO</span>
-                <span class="preview-tag" id="pv-tag-health">Premium Medical</span>
-                <span class="preview-tag" id="pv-tag-retirement">401(k) 5% Match</span>
-              </div>
-
-              <button class="btn-preview-apply" onclick="showToast('Candidate application drawer simulation opened.', 'QUICK SEND')">
-                QUICK SEND
-              </button>
-            </div>
+        <!-- CARD 2: LIVE POST PREVIEW -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <span class="panel-title">2. LIVE POST PREVIEW</span>
+            <span style="font-size: 0.65rem; color: var(--status-mint);">CANDIDATE VIEWPORT</span>
           </div>
 
-          <!-- 3. YOUR ACTIVE JOB LISTINGS -->
-          <div class="panel">
-            <div class="panel-title">
-              <span>3. Your Active Job Listings</span>
-              <span style="font-size: 0.65rem; color: var(--status-mint); font-weight: 900;" id="job-count-badge">ACTIVE OPENINGS (3)</span>
+          <div class="preview-sheet" id="preview-sheet">
+            <div class="pv-header">
+              <div>
+                <div class="pv-title" id="pv-title">Senior Full-Stack Engineer</div>
+                <div class="pv-company" id="pv-company">Quantum Technologies Corp</div>
+                <div style="font-size: 0.72rem; color: #64748B; font-weight: 700; margin-top: 0.2rem;">
+                  <span id="pv-location">AUSTIN, TX (REMOTE)</span> • <span id="pv-type">FULL-TIME</span>
+                </div>
+              </div>
+              <span class="pv-salary-badge" id="pv-salary">$135,000 - $175,000</span>
             </div>
 
-            <div class="active-listings-grid" id="active-jobs-feed">
-              <!-- Rendered via JS -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+              <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
+                <strong style="display:block; color:#64748B;">PTO</strong> Unlimited PTO
+              </div>
+              <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
+                <strong style="display:block; color:#64748B;">HEALTH</strong> Premium Medical
+              </div>
+              <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
+                <strong style="display:block; color:#64748B;">401(K)</strong> 5% Match
+              </div>
             </div>
+
+            <div style="font-size: 0.85rem; line-height: 1.5; color: #334155;" id="pv-desc">
+              Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.
+            </div>
+
+            <button style="background:#111827; color:var(--uthe-gold); border:1.5px solid var(--uthe-gold); font-weight:900; font-size:0.78rem; padding:0.75rem; border-radius:6px; letter-spacing:1px; cursor:default;">
+              QUICK SEND / SUBMIT INTERVIEW REQUEST
+            </button>
           </div>
-
         </div>
 
       </div>
     </section>
 
-    <!-- VIEW 2: OMNICHANNEL OUTREACH CRM -->
-    <section id="view-crm" class="workspace-view">
-      <div class="omnichannel-grid">
-        <div class="panel">
-          <div class="panel-title">
-            <span>Outreach Channels</span>
-            <span style="font-size: 0.65rem; color: var(--blue-accent);">6 PLATFORMS</span>
-          </div>
+    <!-- TAB 2: OMNICHANNEL CRM & OUTREACH -->
+    <section id="view-crm" class="tab-view">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-title">OMNICHANNEL CAMPAIGN & TALENT OUTREACH</span>
+          <button class="btn-gold-action" style="height: 38px; font-size: 0.7rem;" onclick="openScheduleQueueModal()" data-tooltip="Schedule outreach queue with calendar time slots.">
+            SCHEDULE QUEUE
+          </button>
+        </div>
 
-          <div class="channel-inbox-list" id="channel-inbox">
-            <div class="channel-item-row active" onclick="selectChannelTemplate('gmail')" data-tooltip="Professional cold email template for prospective hiring managers.">
-              <span class="channel-badge ch-gmail">GMAIL (COLD EMAIL)</span>
-              <strong>Recruiter Job Distribution Proposal</strong>
-              <small style="color: var(--text-muted);">High-deliverability hiring outreach</small>
-            </div>
-            <div class="channel-item-row" onclick="selectChannelTemplate('linkedin')" data-tooltip="Direct LinkedIn InMail pitch highlighting candidate velocity.">
-              <span class="channel-badge ch-linkedin">LINKEDIN (INMAIL)</span>
-              <strong>Executive Candidate Pipeline</strong>
-              <small style="color: var(--text-muted);">High-conversion talent search</small>
-            </div>
-            <div class="channel-item-row" onclick="selectChannelTemplate('tiktok')" data-tooltip="Engaging short-form pitch for modern tech teams.">
-              <span class="channel-badge ch-tiktok">TIKTOK (DM)</span>
-              <strong>Modern Employer Branding</strong>
-              <small style="color: var(--text-muted);">Creative hiring outreach</small>
-            </div>
-            <div class="channel-item-row" onclick="selectChannelTemplate('facebook')" data-tooltip="Targeted regional hiring proposal for business managers.">
-              <span class="channel-badge ch-facebook">FACEBOOK (BUSINESS)</span>
-              <strong>Regional Talent Sourcing</strong>
-              <small style="color: var(--text-muted);">Localized hiring manager proposal</small>
-            </div>
-            <div class="channel-item-row" onclick="selectChannelTemplate('instagram')" data-tooltip="Visual employer showcase spotlight for Instagram stories and DMs.">
-              <span class="channel-badge ch-instagram">INSTAGRAM (DM)</span>
-              <strong>Visual Brand Spotlight</strong>
-              <small style="color: var(--text-muted);">Featured position spotlight</small>
-            </div>
-            <div class="channel-item-row" onclick="selectChannelTemplate('x')" data-tooltip="Concise message with direct calendar booking link.">
-              <span class="channel-badge ch-x">X / TWITTER (DM)</span>
-              <strong>Direct Executive Calendar Link</strong>
-              <small style="color: var(--text-muted);">Short-form high-signal pitch</small>
-            </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Campaign Sequence Target</label>
+            <input type="text" value="Staff & Senior Distributed Systems Engineers (Austin / Remote)">
+          </div>
+          <div class="form-group">
+            <label>Outreach Template</label>
+            <select>
+              <option>Direct Executive Outreach - Personalized Pitch</option>
+              <option>Fast-Track Technical Interview Invitation</option>
+              <option>Cold Pipeline Nurture (48-hour follow-up)</option>
+            </select>
           </div>
         </div>
 
-        <div class="template-editor-box">
-          <div class="panel-title">
-            <span id="template-title">GMAIL (COLD EMAIL) — OUTREACH TEMPLATE</span>
-            <button class="action-pill-btn" onclick="copyActiveTemplate()" data-tooltip="Copy this message to your clipboard.">COPY TEMPLATE</button>
-          </div>
+        <div class="form-group">
+          <label>Automated Message Body (Supports {candidate_name}, {role}, {company})</label>
+          <textarea rows="4">Hi {candidate_name}, I saw your background in distributed systems and WebSockets. We are expanding Quantum Tech's sync engine and would love to invite you for a fast-track interview.</textarea>
+        </div>
 
-          <div class="token-chips-bar" data-tooltip="Click any variable tag below to insert it into your message.">
-            <span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted);">DYNAMIC TAGS:</span>
-            <span class="token-chip" onclick="insertToken('{{contact_name}}')">{{contact_name}}</span>
-            <span class="token-chip" onclick="insertToken('{{company_name}}')">{{company_name}}</span>
-            <span class="token-chip" onclick="insertToken('{{job_title}}')">{{job_title}}</span>
-            <span class="token-chip" onclick="insertToken('{{salary_range}}')">{{salary_range}}</span>
-            <span class="token-chip" onclick="insertToken('{{booking_link}}')">{{booking_link}}</span>
-          </div>
-
-          <div class="form-group">
-            <label>Subject Line</label>
-            <input type="text" id="tpl-subject" value="Exclusive Talent Pipeline for {{company_name}} — {{job_title}}">
-          </div>
-
-          <div class="form-group">
-            <label>Campaign Message Body</label>
-            <textarea id="tpl-body" rows="9" style="font-family: inherit; font-size: 0.85rem; line-height: 1.5;"></textarea>
-          </div>
-
-          <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
-            <button class="action-pill-btn" style="background:#F1F5F9;" onclick="testSendCampaign()" data-tooltip="Schedule this message in automated queue.">Schedule Queue</button>
-            <button class="btn-action-charcoal" onclick="dispatchLiveCampaign()" data-tooltip="Send this personalized campaign immediately.">DISPATCH CAMPAIGN</button>
-          </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn-gold-action" onclick="dispatchOmniCampaign()" data-tooltip="Broadcast across linked LinkedIn, Email, and Social channels.">
+            LAUNCH OMNICHANNEL OUTREACH
+          </button>
+          <button class="btn-surface-action" onclick="openScheduleQueueModal()" data-tooltip="Set calendar schedule.">
+            SCHEDULE CALENDAR QUEUE
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- VIEW 3: ATS KANBAN BOARD WITH NATIVE MOBILE TOUCH DRAG & DROP -->
-    <section id="view-ats" class="workspace-view">
+    <!-- TAB 3: APPLICANT TRACKER (MOBILE TOUCH ATS) -->
+    <section id="view-ats" class="tab-view">
       <div class="kanban-board" id="kanban-board">
-        
-        <div class="kanban-col" id="col-applied-box" data-status="Applied" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Applied')">
-          <div class="kanban-col-header">
-            <span data-tooltip="Candidates who have submitted interview requests.">1. Applied</span>
-            <span id="count-applied">1</span>
+
+        <!-- COLUMN 1: APPLIED -->
+        <div class="kanban-col" data-col="Applied" id="col-applied">
+          <div class="col-header">
+            <span>1. APPLIED</span>
+            <span class="col-count" id="count-applied">1</span>
           </div>
-          <div class="kanban-cards-wrap" id="col-applied"></div>
+          <div class="candidate-card" id="card-701" draggable="true" data-id="APP-701">
+            <div class="cand-grab-handle">
+              <span>APP-701</span>
+              <span>:::</span>
+            </div>
+            <div class="cand-name">Marcus Vance</div>
+            <div class="cand-role">Senior Full-Stack Engineer</div>
+            <div class="cand-score">94% MATCH</div>
+          </div>
         </div>
 
-        <div class="kanban-col" id="col-screened-box" data-status="Screened" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Screened')">
-          <div class="kanban-col-header">
-            <span data-tooltip="Candidates who have passed initial review.">2. Screened</span>
-            <span id="count-screened">1</span>
+        <!-- COLUMN 2: SCREENED -->
+        <div class="kanban-col" data-col="Screened" id="col-screened">
+          <div class="col-header">
+            <span>2. SCREENED</span>
+            <span class="col-count" id="count-screened">1</span>
           </div>
-          <div class="kanban-cards-wrap" id="col-screened"></div>
+          <div class="candidate-card" id="card-702" draggable="true" data-id="APP-702">
+            <div class="cand-grab-handle">
+              <span>APP-702</span>
+              <span>:::</span>
+            </div>
+            <div class="cand-name">Elena Rostova</div>
+            <div class="cand-role">Senior Full-Stack Engineer</div>
+            <div class="cand-score">88% MATCH</div>
+          </div>
         </div>
 
-        <div class="kanban-col" id="col-interviewing-box" data-status="Interviewing" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Interviewing')">
-          <div class="kanban-col-header">
-            <span data-tooltip="Candidates in the interview process.">3. Interviewing</span>
-            <span id="count-interviewing">1</span>
+        <!-- COLUMN 3: INTERVIEWING -->
+        <div class="kanban-col" data-col="Interviewing" id="col-interviewing">
+          <div class="col-header">
+            <span>3. INTERVIEWING</span>
+            <span class="col-count" id="count-interviewing">1</span>
           </div>
-          <div class="kanban-cards-wrap" id="col-interviewing"></div>
+          <div class="candidate-card" id="card-703" draggable="true" data-id="APP-703">
+            <div class="cand-grab-handle">
+              <span>APP-703</span>
+              <span>:::</span>
+            </div>
+            <div class="cand-name">David K. Mercer</div>
+            <div class="cand-role">VP of Engineering</div>
+            <div class="cand-score">97% MATCH</div>
+          </div>
         </div>
 
-        <div class="kanban-col" id="col-offer-box" data-status="Offer" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Offer')">
-          <div class="kanban-col-header">
-            <span data-tooltip="Candidates who have received offers.">4. Offer</span>
-            <span id="count-offer">1</span>
+        <!-- COLUMN 4: OFFER / HIRED -->
+        <div class="kanban-col" data-col="Offer" id="col-offer">
+          <div class="col-header">
+            <span>4. OFFER / HIRED</span>
+            <span class="col-count" id="count-offer">0</span>
           </div>
-          <div class="kanban-cards-wrap" id="col-offer"></div>
-        </div>
-
-        <div class="kanban-col" id="col-hired-box" data-status="Hired" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Hired')">
-          <div class="kanban-col-header">
-            <span data-tooltip="Candidates who have completed hiring.">5. Hired</span>
-            <span id="count-hired">0</span>
-          </div>
-          <div class="kanban-cards-wrap" id="col-hired"></div>
         </div>
 
       </div>
     </section>
 
-    <!-- VIEW 4: PERFORMANCE & PLANS -->
-    <section id="view-monetization" class="workspace-view">
-      <div class="grid-2">
-        <div class="panel">
-          <div class="panel-title">
-            <span>Recruiting Performance & Channel Reach</span>
-            <span style="color: #065F46; font-size: 0.65rem;">LIVE METRICS</span>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; text-align: center;">
-            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Total views across all channels.">
-              <div style="font-size: 0.6rem; color: var(--text-muted); font-weight: 800;">TOTAL VIEWS</div>
-              <div style="font-size: 1.25rem; font-weight: 900; color: var(--uthe-charcoal);">128.4K</div>
-            </div>
-            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Candidates who clicked into job details.">
-              <div style="font-size: 0.6rem; color: var(--text-muted); font-weight: 800;">CLICKS</div>
-              <div style="font-size: 1.25rem; font-weight: 900; color: var(--blue-accent);">14.2K (11.1%)</div>
-            </div>
-            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Total submitted candidate interview requests.">
-              <div style="font-size: 0.6rem; color: var(--text-muted); font-weight: 800;">APPLICATIONS</div>
-              <div style="font-size: 1.25rem; font-weight: 900; color: #065F46;">842</div>
-            </div>
-            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Estimated cost per completed application.">
-              <div style="font-size: 0.6rem; color: var(--text-muted); font-weight: 800;">COST / APPLICANT</div>
-              <div style="font-size: 1.25rem; font-weight: 900; color: #92400E;">$18.40</div>
-            </div>
-          </div>
-
-          <div class="data-table-container" style="margin-top: 0.5rem;">
-            <table>
-              <thead>
-                <tr>
-                  <th>Channel Source</th>
-                  <th>Impressions</th>
-                  <th>Clicks</th>
-                  <th>Click Rate</th>
-                  <th>Applications</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>LinkedIn InMail</td><td>48,200</td><td>6,100</td><td>12.6%</td><td>384</td></tr>
-                <tr><td>Direct Outreach</td><td>32,400</td><td>3,950</td><td>12.2%</td><td>218</td></tr>
-                <tr><td>X / Twitter Network</td><td>24,100</td><td>2,420</td><td>10.0%</td><td>122</td></tr>
-                <tr><td>TikTok Employer Spotlight</td><td>23,700</td><td>1,730</td><td>7.3%</td><td>118</td></tr>
-              </tbody>
-            </table>
+    <!-- TAB 4: PERFORMANCE & PLANS (INTERACTIVE PRICING ENGINE) -->
+    <section id="view-plans" class="tab-view">
+      <div class="panel-card" style="margin-bottom: 1.25rem;">
+        <div class="panel-header">
+          <span class="panel-title">OMNI-CHANNEL FEATURES & CHANNEL SYNDICATION ENGINE</span>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 0.72rem; font-weight: 800; color: var(--text-dim);">BILLING FREQUENCY:</span>
+            <button class="btn-surface-action" id="btn-billing-toggle" style="height: 36px; font-size: 0.68rem;" onclick="toggleBillingFrequency()">
+              MONTHLY BILLING
+            </button>
           </div>
         </div>
 
-        <div class="panel">
-          <div class="panel-title">
-            <span>Membership Plans & Job Spotlights</span>
-            <span style="color: var(--uthe-gold); font-size: 0.65rem;">SUBSCRIPTION TIERS</span>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.65rem;">
-            <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center;" data-tooltip="For small teams hiring up to 3 positions.">
-              <div style="font-weight: 800; font-size: 0.8rem;">STARTER</div>
-              <div style="font-size: 1.35rem; font-weight: 900; margin: 0.25rem 0;">$99<small style="font-size: 0.65rem;">/mo</small></div>
-              <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.75rem;">3 Active Jobs & Standard Sync</div>
-              <button class="action-pill-btn" style="width: 100%;" onclick="simulateStripeCheckout('Starter Plan ($99/mo)')">Subscribe</button>
-            </div>
-            <div style="border: 2px solid var(--uthe-gold); background: var(--uthe-gold-light); border-radius: 8px; padding: 1rem; text-align: center;" data-tooltip="For growing teams with up to 15 openings.">
-              <div style="font-weight: 800; font-size: 0.8rem; color: #92400E;">GROWTH</div>
-              <div style="font-size: 1.35rem; font-weight: 900; margin: 0.25rem 0; color: #92400E;">$299<small style="font-size: 0.65rem;">/mo</small></div>
-              <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.75rem;">15 Active Jobs + Candidate Matcher</div>
-              <button class="btn-action-charcoal" style="width: 100%; height: 38px; font-size: 0.65rem;" onclick="simulateStripeCheckout('Growth Plan ($299/mo)')">UPGRADE</button>
-            </div>
-            <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center;" data-tooltip="Full enterprise capacity with unlimited openings.">
-              <div style="font-weight: 800; font-size: 0.8rem;">ENTERPRISE</div>
-              <div style="font-size: 1.35rem; font-weight: 900; margin: 0.25rem 0;">$699<small style="font-size: 0.65rem;">/mo</small></div>
-              <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.75rem;">Unlimited Jobs + Multi-Sync</div>
-              <button class="action-pill-btn" style="width: 100%;" onclick="simulateStripeCheckout('Enterprise Plan ($699/mo)')">Contact Sales</button>
-            </div>
-          </div>
-
-          <div style="margin-top: 0.5rem; background: #F8FAFC; border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;" data-tooltip="Pins your job listing to top of candidate board for 14 days.">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+          <div class="channel-toggle-row">
             <div>
-              <div style="font-size: 0.75rem; font-weight: 800;">FEATURED SPOTLIGHT BOOST ($49 / post)</div>
-              <div style="font-size: 0.65rem; color: var(--text-muted);">Pin current job to top of candidate board for 14 days</div>
+              <strong>LinkedIn InMail & Posts</strong>
+              <div style="font-size: 0.65rem; color: var(--text-dim);">Auto InMail & 1st-degree syndication</div>
             </div>
-            <button class="btn-action-charcoal" style="height: 38px; font-size: 0.65rem;" onclick="simulateStripeCheckout('Featured Spotlight Boost ($49)')">BOOST POST</button>
+            <label class="toggle-switch">
+              <input type="checkbox" id="chk-linkedin" checked onchange="recalculatePricing()">
+              <span class="slider"></span>
+            </label>
           </div>
+
+          <div class="channel-toggle-row">
+            <div>
+              <strong>Direct Cold Email Mesh</strong>
+              <div style="font-size: 0.65rem; color: var(--text-dim);">Verified deliverability inbox routing</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="chk-email" checked onchange="recalculatePricing()">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="channel-toggle-row">
+            <div>
+              <strong>TikTok Talent Spotlight</strong>
+              <div style="font-size: 0.65rem; color: var(--text-dim);">Short-form video recruitment blast</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="chk-tiktok" onchange="recalculatePricing()">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="channel-toggle-row">
+            <div>
+              <strong>X / Twitter Executive Stream</strong>
+              <div style="font-size: 0.65rem; color: var(--text-dim);">Tech founder & developer broadcast</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="chk-x" checked onchange="recalculatePricing()">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="channel-toggle-row">
+            <div>
+              <strong>Instagram Stories Showcase</strong>
+              <div style="font-size: 0.65rem; color: var(--text-dim);">Company culture & perks spotlight</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="chk-ig" onchange="recalculatePricing()">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="channel-toggle-row">
+            <div>
+              <strong>Job Board Network Feed</strong>
+              <div style="font-size: 0.65rem; color: var(--text-dim);">Schema.org & Google Jobs indexing</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="chk-network" checked onchange="recalculatePricing()">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRICING TIERS -->
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-tier-name">STARTER PLAN</div>
+          <div class="pricing-amount" id="price-starter">$99<span style="font-size: 0.9rem; color: var(--text-dim);">/mo</span></div>
+          <p style="font-size: 0.78rem; color: var(--text-dim);">Ideal for early-stage companies and boutique hiring.</p>
+          <ul style="font-size: 0.75rem; color: var(--text-light); line-height: 1.8; list-style: none;">
+            <li>✓ 3 Active Job Postings</li>
+            <li>✓ Direct Candidate Quick Send</li>
+            <li>✓ Standard ATS Kanban</li>
+          </ul>
+          <button class="btn-surface-action" style="margin-top: auto;" onclick="showToast('Starter Plan Selected.', 'PLAN SUBSCRIBED')">CHOOSE STARTER</button>
+        </div>
+
+        <div class="pricing-card featured">
+          <div style="display: flex; justify-content: space-between;">
+            <div class="pricing-tier-name">GROWTH ENGINE</div>
+            <span class="brand-badge" style="background:var(--uthe-gold); color:#000;">POPULAR</span>
+          </div>
+          <div class="pricing-amount" id="price-growth">$299<span style="font-size: 0.9rem; color: var(--text-dim);">/mo</span></div>
+          <p style="font-size: 0.78rem; color: var(--text-dim);">High-velocity recruitment with active omnichannel routing.</p>
+          <ul style="font-size: 0.75rem; color: var(--text-light); line-height: 1.8; list-style: none;">
+            <li>✓ 15 Active Job Postings</li>
+            <li>✓ Active Omni-Channel Syndication</li>
+            <li>✓ Hunter.io Verified Lead Engine</li>
+            <li>✓ Automated Schedule Queue</li>
+          </ul>
+          <button class="btn-gold-action" style="margin-top: auto;" onclick="showToast('Growth Engine Plan Selected.', 'PLAN SUBSCRIBED')">CHOOSE GROWTH</button>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-tier-name">ENTERPRISE MESH</div>
+          <div class="pricing-amount" id="price-enterprise">$699<span style="font-size: 0.9rem; color: var(--text-dim);">/mo</span></div>
+          <p style="font-size: 0.78rem; color: var(--text-dim);">Unlimited scale with dedicated multi-node routing.</p>
+          <ul style="font-size: 0.75rem; color: var(--text-light); line-height: 1.8; list-style: none;">
+            <li>✓ Unlimited Active Postings</li>
+            <li>✓ Full Omni-Channel Blast</li>
+            <li>✓ Custom Subdomain Domain Branding</li>
+            <li>✓ 24/7 Dedicated Account Manager</li>
+          </ul>
+          <button class="btn-surface-action" style="margin-top: auto;" onclick="showToast('Enterprise Plan Selected.', 'PLAN SUBSCRIBED')">CONTACT ENTERPRISE</button>
         </div>
       </div>
     </section>
 
   </main>
 
+  <!-- SCHEDULE QUEUE CALENDAR MODAL -->
+  <div class="modal-overlay" id="schedule-calendar-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-title">SCHEDULE OUTREACH QUEUE</span>
+        <button class="drawer-close" onclick="closeModal('schedule-calendar-modal')" data-tooltip="Close modal">X</button>
+      </div>
+
+      <div class="form-group">
+        <label>Select Launch Date</label>
+        <input type="date" id="sched-date" value="2026-08-27">
+      </div>
+
+      <div class="form-group">
+        <label>Select Preferred Time Slot (EST)</label>
+        <div class="time-slot-grid">
+          <div class="time-slot-btn active" onclick="selectTimeSlot(this, '9:00 AM')">9:00 AM</div>
+          <div class="time-slot-btn" onclick="selectTimeSlot(this, '11:30 AM')">11:30 AM</div>
+          <div class="time-slot-btn" onclick="selectTimeSlot(this, '2:00 PM')">2:00 PM</div>
+          <div class="time-slot-btn" onclick="selectTimeSlot(this, '4:30 PM')">4:30 PM</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Cadence & Follow-Up Rule</label>
+        <select id="sched-cadence">
+          <option value="once">Single Dispatch Blast</option>
+          <option value="48h" selected>Auto Follow-Up if Unopened in 48 Hours</option>
+          <option value="drip">3-Touch Dynamic Outreach Sequence</option>
+        </select>
+      </div>
+
+      <button class="btn-gold-action" onclick="confirmScheduleQueue()" data-tooltip="Lock in outreach schedule.">
+        CONFIRM & SCHEDULE QUEUE
+      </button>
+    </div>
+  </div>
+
+  <!-- AUTHENTICATION & ACCOUNT MODAL -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <span class="modal-title" id="auth-modal-title">RECRUITER AUTHENTICATION</span>
+        <button class="drawer-close" onclick="closeModal('auth-modal')">X</button>
+      </div>
+
+      <div style="display: flex; border-bottom: 1px solid var(--border-dark); margin-bottom: 0.5rem;">
+        <button class="drawer-tab-btn active" id="tab-auth-login" style="flex:1; text-align:center; height:38px;" onclick="switchAuthTab('login')">LOGIN</button>
+        <button class="drawer-tab-btn" id="tab-auth-signup" style="flex:1; text-align:center; height:38px;" onclick="switchAuthTab('signup')">SIGN UP</button>
+        <button class="drawer-tab-btn" id="tab-auth-reset" style="flex:1; text-align:center; height:38px;" onclick="switchAuthTab('reset')">RESET</button>
+      </div>
+
+      <div id="auth-form-body">
+        <div class="form-group" id="auth-group-name" style="display:none;">
+          <label>Hiring Manager / Team Name</label>
+          <input type="text" id="auth-name" placeholder="Quantum Recruiting Lead">
+        </div>
+
+        <div class="form-group">
+          <label>Work Email</label>
+          <input type="email" id="auth-email" placeholder="recruiter@quantumtech.io">
+        </div>
+
+        <div class="form-group" id="auth-group-pass">
+          <label>Password</label>
+          <input type="password" id="auth-password" placeholder="••••••••••••">
+        </div>
+
+        <button class="btn-gold-action" style="width:100%; margin-top:0.5rem;" id="auth-submit-btn" onclick="handleAuthSubmit()">
+          SIGN IN TO WORKSPACE
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- PLATFORM FOOTER & SECRET ADMIN ACCESS -->
   <footer class="platform-footer">
-    <span>&copy; 2026 UTHEVERSITY Inc. — Enterprise Talent Mesh</span>
+    <span>&copy; 2026 UTHEVERSITY Inc. — Enterprise Recruitment Mesh</span>
     <span class="footer-secret-link" onclick="handleAdminShortcut()" data-tooltip="Master Governance Suite (Shortcut: Ctrl+Shift+A)">[ADMIN]</span>
   </footer>
 
-  <!-- STICKY MOBILE BOTTOM ACTION BAR -->
-  <div class="mobile-bottom-bar">
-    <button class="btn-bottom-mobile" onclick="switchTab('studio')" data-tooltip="Studio">STUDIO</button>
-    <button class="btn-bottom-mobile primary" onclick="handlePublishJob()" data-tooltip="Publish Live">PUBLISH</button>
-    <button class="btn-bottom-mobile" onclick="handleSaveDraft()" data-tooltip="Save Draft">SAVE</button>
-    <button class="btn-bottom-mobile" onclick="switchTab('ats')" data-tooltip="ATS">ATS</button>
-  </div>
-
-  <!-- OMNI-CHANNEL BROADCAST MODAL -->
-  <div class="modal-overlay" id="omni-modal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <span class="modal-title">OMNI-CHANNEL BROADCAST IN PROGRESS</span>
-        <button class="btn-close-modal" onclick="closeModal('omni-modal')" data-tooltip="Close modal">X</button>
-      </div>
-
-      <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
-        Broadcasting <strong id="omni-job-name" style="color: var(--uthe-charcoal);">Senior Full-Stack Engineer</strong> across all connected candidate channels:
-      </div>
-
-      <div style="display: flex; flex-direction: column; gap: 0.5rem;" id="omni-channel-progress-list">
-        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
-          <span>Candidate Board</span>
-          <span style="color: #059669; font-weight: 800;">PUBLISHED LIVE</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
-          <span>LinkedIn InMail & Network Feed</span>
-          <span style="color: #059669; font-weight: 800;">BROADCASTED</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
-          <span>Gmail Candidate Outreach Queue</span>
-          <span style="color: #059669; font-weight: 800;">NOTIFIED</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
-          <span>X / Twitter Recruiter Stream</span>
-          <span style="color: #059669; font-weight: 800;">BROADCASTED</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
-          <span>TikTok & Instagram Spotlights</span>
-          <span style="color: #059669; font-weight: 800;">SYNDICATED</span>
-        </div>
-      </div>
-
-      <button class="btn-publish" style="margin-top: 0.5rem; width: 100%;" onclick="closeModal('omni-modal')">
-        DONE
-      </button>
-    </div>
-  </div>
-
-  <!-- SCORECARD EVALUATION MODAL -->
-  <div class="modal-overlay" id="scorecard-modal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <span class="modal-title" id="scorecard-applicant-name">EVALUATION SCORECARD</span>
-        <button class="btn-close-modal" onclick="closeModal('scorecard-modal')" data-tooltip="Close scorecard">X</button>
-      </div>
-
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Technical Competency (1-5)</label>
-          <select id="sc-tech">
-            <option value="5">5 - Exceptional / Exceeds Bar</option>
-            <option value="4" selected>4 - Strong Competency</option>
-            <option value="3">3 - Meets Requirements</option>
-            <option value="2">2 - Needs Development</option>
-            <option value="1">1 - Unsatisfactory</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Communication & Clarity (1-5)</label>
-          <select id="sc-comm">
-            <option value="5">5 - Articulate & Concise</option>
-            <option value="4" selected>4 - Clear & Responsive</option>
-            <option value="3">3 - Adequate</option>
-            <option value="2">2 - Unclear</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Culture & Collaboration (1-5)</label>
-        <select id="sc-culture">
-          <option value="5" selected>5 - Outstanding Cultural Catalyst</option>
-          <option value="4">4 - Highly Collaborative</option>
-          <option value="3">3 - Neutral Fit</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Interviewer Evaluation Notes</label>
-        <textarea id="sc-notes" rows="3" placeholder="Provide feedback on candidate strengths and qualifications...">Strong background in high-throughput real-time systems and WebSocket architectures.</textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Hiring Decision</label>
-        <select id="sc-decision">
-          <option value="Strong Hire" selected>Strong Hire</option>
-          <option value="Hire">Hire</option>
-          <option value="Hold">Hold / Re-evaluate</option>
-          <option value="Reject">Reject</option>
-        </select>
-      </div>
-
-      <button class="btn-publish" style="margin-top: 0.25rem; width: 100%;" onclick="saveScorecard()">
-        SAVE SCORECARD & PROGRESS CANDIDATE
-      </button>
-    </div>
-  </div>
-
   <!-- TOAST OVERLAY -->
-  <div class="toast-overlay" id="toast-overlay">
-    <div class="toast-title" id="toast-title">SYSTEM NOTICE</div>
-    <div class="toast-msg" id="toast-msg">Operation completed successfully.</div>
+  <div class="recruiter-toast" id="recruiter-toast">
+    <div class="toast-title" id="toast-title">RECRUITER SYSTEM NOTICE</div>
+    <div class="toast-msg" id="toast-msg">Operation completed.</div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC ENGINE -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    // System State
     const SYNC_CHANNEL_NAME = 'UTHE_DUAL_SYNC_CHANNEL';
     let broadcastBus = null;
     let wsRelay = null;
-    let selectedCandidateId = null;
+    let isYearlyBilling = false;
+    let selectedTimeSlot = '9:00 AM';
+    let currentUser = null;
+    let authMode = 'login';
 
-    // Touch Dragging State for Mobile
-    let touchDraggingCard = null;
-    let touchStartPos = { x: 0, y: 0 };
-    let currentHighlightedCol = null;
+    // 4-Tab Recruiter Navigation Switcher
+    window.switchRecruiterTab = function(tabName) {
+      document.querySelectorAll('.nav-tab-btn').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.drawer-tab-btn').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
 
-    // In-memory Database
-    let publishedJobs = [
-      {
-        id: 'JOB-101',
-        jobTitle: 'Senior Full-Stack Engineer',
-        company: 'Quantum Technologies Corp',
-        location: 'AUSTIN, TX (REMOTE)',
-        employmentType: 'Full-Time',
-        payStructure: 'Salary Range',
-        minCompensation: '135000',
-        maxCompensation: '175000',
-        salary: '$135,000 - $175,000',
-        paidVacation: 'Unlimited PTO',
-        healthCoverage: 'Premium Medical, Dental, Vision',
-        retirement: '401(k) 5% Match',
-        additionalPerks: '$3,000 Home Office Stipend + Equity',
-        applyLinkUrl: 'https://careers.quantumtech.io/apply/101',
-        summary: 'Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.',
-        logo: '',
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: 'JOB-102',
-        jobTitle: 'VP of Engineering',
-        company: 'Apex Cloud Systems',
-        location: 'SAN FRANCISCO, CA (HYBRID)',
-        employmentType: 'Full-Time',
-        payStructure: 'Salary Range',
-        minCompensation: '220000',
-        maxCompensation: '290000',
-        salary: '$220,000 - $290,000',
-        paidVacation: '25 Days PTO',
-        healthCoverage: '100% Covered Platinum Health',
-        retirement: '401(k) Matching',
-        additionalPerks: 'Annual Executive Retreats & Relocation',
-        applyLinkUrl: 'https://apexcloud.com/careers/vp-eng',
-        summary: 'Lead an engineering organization of 45+ distributed developers building high-throughput data pipelines and cloud infra.',
-        logo: '',
-        createdAt: new Date().toISOString()
-      },
-      {
-        id: 'JOB-103',
-        jobTitle: 'AI Prompt & Integration Engineer',
-        company: 'NeuralFlow Labs',
-        location: 'NEW YORK, NY (REMOTE)',
-        employmentType: 'Contract',
-        payStructure: 'Hourly Rate',
-        minCompensation: '95',
-        maxCompensation: '130',
-        salary: '$95 - $130 / hr',
-        paidVacation: 'Flexible Schedule',
-        healthCoverage: 'Health Stipend',
-        retirement: 'Optional SEP-IRA',
-        additionalPerks: 'Latest M3 Max Hardware & Cloud Credits',
-        applyLinkUrl: 'https://neuralflow.ai/jobs/prompt-eng',
-        summary: 'Design and deploy multi-agent cognitive architectures and autonomous reasoning pipelines for enterprise customers.',
-        logo: '',
-        createdAt: new Date().toISOString()
-      }
-    ];
+      const target = document.getElementById(`view-${tabName}`);
+      if (target) target.classList.add('active');
 
-    let applicants = [
-      {
-        id: 'APP-701',
-        jobId: 'JOB-101',
-        jobTitle: 'Senior Full-Stack Engineer',
-        name: 'Marcus Vance',
-        email: 'marcus.vance@techdev.io',
-        phone: '+1 (512) 555-0192',
-        status: 'Screened',
-        score: 94,
-        skills: ['TypeScript', 'WebSockets', 'React', 'Node.js', 'PostgreSQL'],
-        resumeSummary: '8+ years full stack architect specialized in reactive client-side state engines and distributed WebSockets.'
-      },
-      {
-        id: 'APP-702',
-        jobId: 'JOB-101',
-        jobTitle: 'Senior Full-Stack Engineer',
-        name: 'Elena Rostova',
-        email: 'elena.rostova@cloudscale.net',
-        phone: '+1 (415) 555-0844',
-        status: 'Interviewing',
-        score: 88,
-        skills: ['Go', 'Node.js', 'Distributed Systems', 'Vue', 'Docker'],
-        resumeSummary: '6 years scaling high-availability microservices and real-time frontend streaming protocols.'
-      },
-      {
-        id: 'APP-703',
-        jobId: 'JOB-102',
-        jobTitle: 'VP of Engineering',
-        name: 'David K. Mercer',
-        email: 'd.mercer@executiveleads.com',
-        phone: '+1 (206) 555-0331',
-        status: 'Offer',
-        score: 97,
-        skills: ['Executive Leadership', 'Hiring', 'Cloud Architecture', 'Agile Scale'],
-        resumeSummary: 'Former Director of Engineering at Series C fintech. Scaled engineering org from 15 to 85 engineers.'
-      }
-    ];
-
-    // Templates Database
-    const outreachTemplates = {
-      gmail: {
-        title: "GMAIL (COLD EMAIL) — JOB DISTRIBUTION PROPOSAL",
-        subject: "Exclusive Talent Pipeline for {{company_name}} — {{job_title}}",
-        body: "Hi {{contact_name}},\n\nI noticed {{company_name}} is currently expanding its technical team for the {{job_title}} role. Our talent network has active, pre-vetted engineers with deep expertise in distributed architectures.\n\nWe would love to feature your opening across our enterprise syndicate offering an estimated reach of 120,000+ engineers.\n\nWould you be open to a 10-minute intro call this Thursday to review our matched candidate roster?\n\nDirect Calendar: {{booking_link}}\n\nBest regards,\nExecutive Sourcing Team | u-thePOST"
-      },
-      linkedin: {
-        title: "LINKEDIN (INMAIL) — EXECUTIVE CANDIDATE PIPELINE",
-        subject: "Top Candidate Matches for {{job_title}} at {{company_name}}",
-        body: "Hello {{contact_name}},\n\nImpressive growth at {{company_name}}. We specialize in matching top-tier talent with fast-growing engineering teams.\n\nWe have 3 candidates currently in the {{salary_range}} bracket who match 92%+ of your requirements for {{job_title}}.\n\nLet's connect or schedule a brief briefing here: {{booking_link}}\n\nBest,\nu-thePOST Talent Partners"
-      },
-      tiktok: {
-        title: "TIKTOK (DIRECT MESSAGE) — MODERN EMPLOYER BRANDING",
-        subject: "Creative Spotlight Opportunity for {{company_name}}",
-        body: "Hello {{contact_name}}, we noticed {{company_name}}'s recent product updates. We feature top tech workplaces on our recruiter feed reaching 500K+ monthly job seekers.\n\nWe would love to produce a 30-second feature for your {{job_title}} opening. Let's connect: {{booking_link}}"
-      },
-      facebook: {
-        title: "FACEBOOK (BUSINESS MESSAGE) — REGIONAL TALENT SOURCING",
-        subject: "Local Talent Reach for {{company_name}}",
-        body: "Hi {{contact_name}}, are you currently sourcing talent for {{job_title}}? We connect regional employers directly with pre-screened professionals in your market.\n\nReview candidate profiles or book a demo: {{booking_link}}"
-      },
-      instagram: {
-        title: "INSTAGRAM (DIRECT MESSAGE) — VISUAL EMPLOYER BRANDING",
-        subject: "Featured Employer Showcase: {{company_name}}",
-        body: "Hi {{contact_name}}, we love the culture you are building at {{company_name}}. We would love to feature your {{job_title}} position on our stories and feed.\n\nDetails here: {{booking_link}}"
-      },
-      x: {
-        title: "X / TWITTER (DIRECT MESSAGE) — DIRECT EXECUTIVE CALENDAR LINK",
-        subject: "{{company_name}} x u-thePOST",
-        body: "Hello {{contact_name}}, we saw your team is hiring a {{job_title}}. We have matched candidates ready to interview this week. Pick a quick 10-minute slot: {{booking_link}}"
-      }
+      const tabs = { 'studio': 0, 'crm': 1, 'ats': 2, 'plans': 3 };
+      const idx = tabs[tabName] || 0;
+      if (document.querySelectorAll('.nav-tab-btn')[idx]) document.querySelectorAll('.nav-tab-btn')[idx].classList.add('active');
+      if (document.querySelectorAll('.drawer-tab-btn')[idx]) document.querySelectorAll('.drawer-tab-btn')[idx].classList.add('active');
     };
 
-    // DOM Elements
-    const jobTitleInput = document.getElementById('job-title');
-    const companyInput = document.getElementById('company-name');
-    const locationInput = document.getElementById('job-location');
-    const typeInput = document.getElementById('job-type');
-    const payTypeInput = document.getElementById('pay-type');
-    const minSalaryInput = document.getElementById('salary-min');
-    const maxSalaryInput = document.getElementById('salary-max');
-    const ptoInput = document.getElementById('job-pto');
-    const healthInput = document.getElementById('job-health');
-    const retirementInput = document.getElementById('job-retirement');
-    const perksInput = document.getElementById('job-perks');
-    const applyUrlInput = document.getElementById('apply-url');
-    const descInput = document.getElementById('job-desc');
-
-    const pvTitle = document.getElementById('pv-title');
-    const pvCompany = document.getElementById('pv-company');
-    const pvLocation = document.getElementById('pv-location');
-    const pvType = document.getElementById('pv-type');
-    const pvSalary = document.getElementById('pv-salary');
-    const pvDesc = document.getElementById('pv-desc');
-    const pvTagPto = document.getElementById('pv-tag-pto');
-    const pvTagHealth = document.getElementById('pv-tag-health');
-    const pvTagRetirement = document.getElementById('pv-tag-retirement');
-    const activeJobsFeed = document.getElementById('active-jobs-feed');
-    const jobCountBadge = document.getElementById('job-count-badge');
-
-    // 4 Customer Tabs Switcher
-    window.switchTab = function(tabId) {
-      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.workspace-view').forEach(v => v.classList.remove('active'));
-
-      const targetView = document.getElementById(`view-${tabId}`);
-      if (targetView) targetView.classList.add('active');
-
-      const tabs = {
-        'studio': 0, 'crm': 1, 'ats': 2, 'monetization': 3
-      };
-      const tabBtns = document.querySelectorAll('.nav-tab');
-      if (tabBtns[tabs[tabId]]) tabBtns[tabs[tabId]].classList.add('active');
-
-      const drawerBtns = document.querySelectorAll('.drawer-tab-btn');
-      if (drawerBtns[tabs[tabId]]) drawerBtns[tabs[tabId]].classList.add('active');
-
-      if (tabId === 'ats') {
-        renderKanban();
-      }
-    };
-
-    function toggleRecruiterDrawer() {
-      const overlay = document.getElementById('recruiter-drawer-overlay');
-      const drawer = document.getElementById('recruiter-drawer');
+    function toggleDrawer() {
+      const overlay = document.getElementById('drawer-overlay');
+      const drawer = document.getElementById('mobile-drawer');
       const isOpen = drawer.classList.contains('open');
 
       if (isOpen) {
@@ -1905,101 +1463,51 @@
       }
     }
 
-    // Live Reactive Preview Formatter
-    function syncLivePreview() {
-      pvTitle.textContent = jobTitleInput.value || 'Senior Full-Stack Engineer';
-      pvCompany.textContent = companyInput.value || 'Quantum Technologies Corp';
-      pvLocation.textContent = (locationInput.value || 'AUSTIN, TX (REMOTE)').toUpperCase();
-      pvType.textContent = (typeInput.value || 'FULL-TIME').toUpperCase();
-      pvDesc.textContent = descInput.value || 'Position specification overview.';
+    // Live Post Preview Synchronization
+    function updateLivePreview() {
+      const title = document.getElementById('inp-title').value;
+      const company = document.getElementById('inp-company').value;
+      const loc = document.getElementById('inp-location').value;
+      const type = document.getElementById('inp-type').value;
+      const salary = document.getElementById('inp-salary').value;
+      const desc = document.getElementById('inp-desc').value;
 
-      const minVal = parseInt(minSalaryInput.value || 0);
-      const maxVal = parseInt(maxSalaryInput.value || 0);
-
-      if (payTypeInput.value === "Hourly Rate") {
-        pvSalary.textContent = (minVal && maxVal) ? `$${minVal} - $${maxVal} / hr` : '$95 - $130 / hr';
-      } else {
-        pvSalary.textContent = (minVal && maxVal) ? `$${minVal.toLocaleString()} - $${maxVal.toLocaleString()}` : '$135,000 - $175,000';
-      }
-
-      pvTagPto.textContent = ptoInput.value || 'Unlimited PTO';
-      pvTagHealth.textContent = healthInput.value || 'Premium Medical';
-      pvTagRetirement.textContent = retirementInput.value || '401(k) 5% Match';
+      document.getElementById('pv-title').textContent = title || 'Position Title';
+      document.getElementById('pv-company').textContent = company || 'Company Name';
+      document.getElementById('pv-location').textContent = (loc || 'REMOTE').toUpperCase();
+      document.getElementById('pv-type').textContent = (type || 'FULL-TIME').toUpperCase();
+      document.getElementById('pv-salary').textContent = salary || '$0,000 - $0,000';
+      document.getElementById('pv-desc').textContent = desc || 'Job description preview.';
     }
 
-    [jobTitleInput, companyInput, locationInput, typeInput, payTypeInput, minSalaryInput, maxSalaryInput, ptoInput, healthInput, retirementInput, perksInput, applyUrlInput, descInput].forEach(elem => {
-      elem.addEventListener('input', syncLivePreview);
-      elem.addEventListener('change', syncLivePreview);
-    });
-
-    // Active Jobs Feed Renderer
-    function renderActiveJobs() {
-      activeJobsFeed.innerHTML = '';
-      jobCountBadge.textContent = `ACTIVE OPENINGS (${publishedJobs.length})`;
-
-      publishedJobs.forEach((job, index) => {
-        const card = document.createElement('div');
-        card.className = 'job-card-item';
-        card.innerHTML = `
-          <button class="btn-delete-card" onclick="deleteJobListing('${job.id}', ${index})" data-tooltip="Permanently delete this active opening.">Delete</button>
-          <div class="card-role">${job.jobTitle || job.title}</div>
-          <div class="card-company">${job.company}</div>
-          <div class="card-location">${job.location || 'REMOTE'}</div>
-          <div class="card-bottom-row">
-            <span class="card-salary-badge">${job.salary}</span>
-            <span class="card-live-dot">LIVE</span>
-          </div>
-        `;
-        activeJobsFeed.appendChild(card);
-      });
+    function toggleSocialLink(id, name) {
+      const el = document.getElementById(id);
+      el.classList.toggle('linked');
+      const isLinked = el.classList.contains('linked');
+      showToast(`${name} ${isLinked ? 'connected for auto-syndication' : 'disconnected'}.`, 'SOCIAL SYNDICATION');
     }
 
-    // Load jobs from server
-    async function loadServerJobs() {
-      try {
-        const res = await fetch('/api/jobs');
-        const data = await res.json();
-        if (data.jobs && data.jobs.length > 0) {
-          publishedJobs = data.jobs;
-          renderActiveJobs();
-        }
-      } catch (e) {}
-
-      try {
-        const resApps = await fetch('/api/applicants');
-        const dataApps = await resApps.json();
-        if (dataApps.applicants && dataApps.applicants.length > 0) {
-          applicants = dataApps.applicants;
-          renderKanban();
-        }
-      } catch (e) {}
+    function resetStudioForm() {
+      document.getElementById('inp-title').value = '';
+      document.getElementById('inp-company').value = '';
+      document.getElementById('inp-location').value = '';
+      document.getElementById('inp-salary').value = '';
+      document.getElementById('inp-desc').value = '';
+      document.getElementById('inp-perks').value = '';
+      updateLivePreview();
     }
 
-    // Publish Execution
-    window.handlePublishJob = async function() {
-      const minVal = parseInt(minSalaryInput.value || 0);
-      const maxVal = parseInt(maxSalaryInput.value || 0);
-      const salaryStr = (payTypeInput.value === "Hourly Rate")
-        ? `$${minVal} - $${maxVal} / hr`
-        : `$${minVal.toLocaleString()} - $${maxVal.toLocaleString()}`;
-
+    // Publish Job to Server & WebSocket Mesh
+    async function publishJobLive() {
       const newJob = {
         id: `JOB-${Math.floor(100 + Math.random() * 900)}`,
-        jobTitle: jobTitleInput.value,
-        company: companyInput.value,
-        location: locationInput.value.toUpperCase(),
-        employmentType: typeInput.value,
-        payStructure: payTypeInput.value,
-        minCompensation: minSalaryInput.value,
-        maxCompensation: maxSalaryInput.value,
-        salary: salaryStr,
-        paidVacation: ptoInput.value,
-        healthCoverage: healthInput.value,
-        retirement: retirementInput.value,
-        additionalPerks: perksInput.value,
-        applyLinkUrl: applyUrlInput.value,
-        summary: descInput.value,
-        logo: document.getElementById('header-logo-preview').src || '',
+        jobTitle: document.getElementById('inp-title').value,
+        company: document.getElementById('inp-company').value,
+        location: document.getElementById('inp-location').value,
+        employmentType: document.getElementById('inp-type').value,
+        salary: document.getElementById('inp-salary').value,
+        summary: document.getElementById('inp-desc').value,
+        additionalPerks: document.getElementById('inp-perks').value,
         createdAt: new Date().toISOString()
       };
 
@@ -2011,48 +1519,148 @@
         });
       } catch (e) {}
 
-      publishedJobs.unshift(newJob);
-      renderActiveJobs();
+      broadcastSyncEvent('JOB_PUBLISHED', { job: newJob });
+      showToast(`Position "${newJob.jobTitle}" published live to u-theJOBS board!`, 'JOB PUBLISHED');
+    }
 
-      // Transmit to dual-system sync bus
-      broadcastSyncEvent('JOB_PUBLISHED', { job: newJob, total: publishedJobs.length });
-      showToast(`"${newJob.jobTitle}" published live and synced to candidate board!`, "PUBLISHED LIVE");
+    // Pricing Calculation Engine
+    function recalculatePricing() {
+      let addOn = 0;
+      if (document.getElementById('chk-linkedin').checked) addOn += 30;
+      if (document.getElementById('chk-email').checked) addOn += 20;
+      if (document.getElementById('chk-tiktok').checked) addOn += 45;
+      if (document.getElementById('chk-x').checked) addOn += 25;
+      if (document.getElementById('chk-ig').checked) addOn += 25;
+      if (document.getElementById('chk-network').checked) addOn += 35;
+
+      const discountMultiplier = isYearlyBilling ? 0.8 : 1.0;
+      const starterTotal = Math.round((99 + addOn * 0.4) * discountMultiplier);
+      const growthTotal = Math.round((299 + addOn * 0.8) * discountMultiplier);
+      const enterpriseTotal = Math.round((699 + addOn * 1.2) * discountMultiplier);
+
+      const period = isYearlyBilling ? '/yr (billed annually)' : '/mo';
+      document.getElementById('price-starter').innerHTML = `$${starterTotal}<span style="font-size:0.9rem; color:var(--text-dim);">${period}</span>`;
+      document.getElementById('price-growth').innerHTML = `$${growthTotal}<span style="font-size:0.9rem; color:var(--text-dim);">${period}</span>`;
+      document.getElementById('price-enterprise').innerHTML = `$${enterpriseTotal}<span style="font-size:0.9rem; color:var(--text-dim);">${period}</span>`;
+    }
+
+    function toggleBillingFrequency() {
+      isYearlyBilling = !isYearlyBilling;
+      const btn = document.getElementById('btn-billing-toggle');
+      btn.textContent = isYearlyBilling ? 'YEARLY BILLING (20% OFF)' : 'MONTHLY BILLING';
+      btn.style.color = isYearlyBilling ? 'var(--status-mint)' : 'var(--text-light)';
+      btn.style.borderColor = isYearlyBilling ? 'var(--status-mint)' : 'var(--border-dark)';
+      recalculatePricing();
+    }
+
+    // Schedule Queue Modal
+    window.openScheduleQueueModal = function() {
+      document.getElementById('schedule-calendar-modal').style.display = 'flex';
     };
 
-    // 1-Click Omni-Channel Publishing
-    window.handleOmniBroadcast = function() {
-      handlePublishJob();
-      document.getElementById('omni-job-name').textContent = jobTitleInput.value || 'Senior Full-Stack Engineer';
-      document.getElementById('omni-modal').style.display = 'flex';
-      
-      broadcastSyncEvent('OMNI_CHANNEL_BROADCAST', {
-        jobTitle: jobTitleInput.value,
-        company: companyInput.value,
-        channels: ['CandidateBoard', 'LinkedIn', 'Gmail', 'X', 'TikTok', 'Instagram']
+    window.closeModal = function(id) {
+      document.getElementById(id).style.display = 'none';
+    };
+
+    window.selectTimeSlot = function(btn, slot) {
+      document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedTimeSlot = slot;
+    };
+
+    window.confirmScheduleQueue = function() {
+      const date = document.getElementById('sched-date').value;
+      const cadence = document.getElementById('sched-cadence').value;
+      closeModal('schedule-calendar-modal');
+      showToast(`Outreach queue scheduled for ${date} at ${selectedTimeSlot} (${cadence})!`, 'QUEUE SCHEDULED');
+    };
+
+    function dispatchOmniCampaign() {
+      showToast('Omnichannel outreach broadcast initiated across linked accounts.', 'CAMPAIGN DISPATCHED');
+    }
+
+    // Mobile ATS Native Touch Drag & Drop
+    function setupMobileTouchAts() {
+      const cards = document.querySelectorAll('.candidate-card');
+      const columns = document.querySelectorAll('.kanban-col');
+
+      cards.forEach(card => {
+        // Desktop dragstart
+        card.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', card.id);
+        });
+
+        // Mobile touch drag
+        let startX, startY, activeCol = null;
+
+        card.addEventListener('touchstart', (e) => {
+          const touch = e.touches[0];
+          startX = touch.clientX;
+          startY = touch.clientY;
+          card.classList.add('touch-dragging');
+        }, { passive: true });
+
+        card.addEventListener('touchmove', (e) => {
+          const touch = e.touches[0];
+          const targetElem = document.elementFromPoint(touch.clientX, touch.clientY);
+          const col = targetElem ? targetElem.closest('.kanban-col') : null;
+
+          columns.forEach(c => c.classList.remove('drop-target-hover'));
+          if (col) {
+            col.classList.add('drop-target-hover');
+            activeCol = col;
+          }
+        }, { passive: false });
+
+        card.addEventListener('touchend', () => {
+          card.classList.remove('touch-dragging');
+          columns.forEach(c => c.classList.remove('drop-target-hover'));
+
+          if (activeCol) {
+            activeCol.appendChild(card);
+            updateKanbanCounters();
+            showToast(`Candidate moved to ${activeCol.getAttribute('data-col')}.`, 'ATS UPDATED');
+          }
+          activeCol = null;
+        });
       });
 
-      showToast(`Broadcasting "${jobTitleInput.value}" across all connected channels.`, "OMNI-CHANNEL BROADCAST");
-    };
+      columns.forEach(col => {
+        col.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          col.classList.add('drop-target-hover');
+        });
 
-    window.deleteJobListing = async function(jobId, index) {
-      try {
-        await fetch(`/api/jobs/${jobId}`, { method: 'DELETE' });
-      } catch (e) {}
+        col.addEventListener('dragleave', () => {
+          col.classList.remove('drop-target-hover');
+        });
 
-      publishedJobs.splice(index, 1);
-      renderActiveJobs();
+        col.addEventListener('drop', (e) => {
+          e.preventDefault();
+          col.classList.remove('drop-target-hover');
+          const cardId = e.dataTransfer.getData('text/plain');
+          const card = document.getElementById(cardId);
+          if (card) {
+            col.appendChild(card);
+            updateKanbanCounters();
+            showToast(`Candidate moved to ${col.getAttribute('data-col')}.`, 'ATS UPDATED');
+          }
+        });
+      });
+    }
 
-      broadcastSyncEvent('JOB_DELETED', { jobId: jobId, total: publishedJobs.length });
-      showToast("Listing permanently removed from active board.", "LISTING DELETED");
-    };
+    function updateKanbanCounters() {
+      document.getElementById('count-applied').textContent = document.getElementById('col-applied').querySelectorAll('.candidate-card').length;
+      document.getElementById('count-screened').textContent = document.getElementById('col-screened').querySelectorAll('.candidate-card').length;
+      document.getElementById('count-interviewing').textContent = document.getElementById('col-interviewing').querySelectorAll('.candidate-card').length;
+      document.getElementById('count-offer').textContent = document.getElementById('col-offer').querySelectorAll('.candidate-card').length;
+    }
 
-    // Dual-Sync Event Bus Handler with Auto-Reconnect
-    function initDualSyncBus() {
+    // Dual Sync Bus
+    function initDualSync() {
       if (typeof BroadcastChannel !== 'undefined') {
         broadcastBus = new BroadcastChannel(SYNC_CHANNEL_NAME);
-        broadcastBus.onmessage = (event) => {
-          handleIncomingSyncPacket(event.data);
-        };
+        broadcastBus.onmessage = (e) => handleSyncEvent(e.data);
       }
 
       function connectWs() {
@@ -2060,32 +1668,17 @@
           const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
           const wsHost = window.location.host || 'localhost:3000';
           wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
-
-          wsRelay.onopen = () => {
-            document.getElementById('sync-text').textContent = 'SYNC ACTIVE';
+          wsRelay.onmessage = (e) => {
+            try { handleSyncEvent(JSON.parse(e.data)); } catch (err) {}
           };
-
-          wsRelay.onmessage = (event) => {
-            try {
-              const data = JSON.parse(event.data);
-              handleIncomingSyncPacket(data);
-            } catch(e) {}
-          };
-
-          wsRelay.onclose = () => {
-            setTimeout(connectWs, 3000); // Auto reconnect
-          };
-        } catch (err) {
-          console.log('WebSocket running in client broadcast mode');
-        }
+          wsRelay.onclose = () => { setTimeout(connectWs, 3000); };
+        } catch (e) {}
       }
 
       connectWs();
 
-      window.addEventListener('message', (event) => {
-        if (event.data && event.data.type) {
-          handleIncomingSyncPacket(event.data);
-        }
+      window.addEventListener('message', (e) => {
+        if (e.data && e.data.type) handleSyncEvent(e.data);
       });
     }
 
@@ -2104,243 +1697,143 @@
       window.parent.postMessage(packet, '*');
     }
 
-    function handleIncomingSyncPacket(data) {
-      if (data.type === 'INITIAL_STATE') {
-        if (data.jobs) { publishedJobs = data.jobs; renderActiveJobs(); }
-        if (data.applicants) { applicants = data.applicants; renderKanban(); }
-      } else if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
-        applicants.unshift(data.applicant);
-        renderKanban();
-        showToast(`New interview request: ${data.applicant.name} for ${data.applicant.jobTitle}`, "INTERVIEW REQUEST");
+    function handleSyncEvent(data) {
+      if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
+        const col = document.getElementById('col-applied');
+        const card = document.createElement('div');
+        card.className = 'candidate-card';
+        card.id = `card-${data.applicant.id}`;
+        card.setAttribute('draggable', 'true');
+        card.innerHTML = `
+          <div class="cand-grab-handle">
+            <span>${data.applicant.id}</span>
+            <span>:::</span>
+          </div>
+          <div class="cand-name">${data.applicant.name}</div>
+          <div class="cand-role">${data.applicant.jobTitle}</div>
+          <div class="cand-score">${data.applicant.score}% MATCH</div>
+        `;
+        col.appendChild(card);
+        updateKanbanCounters();
+        setupMobileTouchAts();
+        showToast(`New candidate applied: ${data.applicant.name}!`, 'APPLICANT INGESTED');
+      } else if (data.type === 'CMS_CONFIG_UPDATED' && data.config) {
+        if (data.config.labels && data.config.labels.postTitle) {
+          document.getElementById('cms-brand-title').textContent = data.config.labels.postTitle;
+        }
       }
     }
 
-    // 8K PNG / High-Res Logo In-Place Replacement Handler
-    window.handleLogoSelect = function(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-          const previewEl = document.getElementById('header-logo-preview');
-          previewEl.src = e.target.result;
-
-          document.getElementById('btn-upload-logo-container').style.display = 'none';
-          const logoContainer = document.getElementById('header-logo-container');
-          logoContainer.style.display = 'flex';
-
-          showToast("Company logo uploaded and scaled with zero distortion.", "LOGO REPLACED");
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    };
-
-    // Save Draft Progress
-    window.handleSaveDraft = function() {
-      const draft = {
-        jobTitle: jobTitleInput.value,
-        companyName: companyInput.value,
-        location: locationInput.value,
-        jobType: typeInput.value,
-        payType: payTypeInput.value,
-        salaryMin: minSalaryInput.value,
-        salaryMax: maxSalaryInput.value,
-        pto: ptoInput.value,
-        health: healthInput.value,
-        retirement: retirementInput.value,
-        perks: perksInput.value,
-        applyUrl: applyUrlInput.value,
-        desc: descInput.value,
-        logoSrc: document.getElementById('header-logo-preview').src
-      };
-
-      localStorage.setItem('UTHE_POST_DRAFT', JSON.stringify(draft));
-      broadcastSyncEvent('SAVE_DRAFT_PROGRESS', { draft });
-      showToast("Draft progress saved to browser.", "PROGRESS SAVED");
-    };
-
-    // Omnichannel Template Selector
-    window.selectChannelTemplate = function(channelKey, overrides = {}) {
-      document.querySelectorAll('.channel-item-row').forEach(r => r.classList.remove('active'));
-      const tpl = outreachTemplates[channelKey] || outreachTemplates.gmail;
-      
-      document.getElementById('template-title').textContent = tpl.title;
-      const contact = overrides.contactName || 'Hiring Manager';
-      const company = overrides.companyName || companyInput.value || 'Tech Solutions';
-      const role = jobTitleInput.value || 'Senior Software Engineer';
-      const salary = pvSalary.textContent || '$135,000 - $175,000';
-      const booking = 'https://calendly.com/uthe-talent-interviews/15min';
-
-      let renderedBody = tpl.body
-        .replace(/\{\{contact_name\}\}/g, contact)
-        .replace(/\{\{company_name\}\}/g, company)
-        .replace(/\{\{job_title\}\}/g, role)
-        .replace(/\{\{salary_range\}\}/g, salary)
-        .replace(/\{\{booking_link\}\}/g, booking);
-
-      document.getElementById('tpl-body').value = renderedBody;
-    };
-
-    window.insertToken = function(token) {
-      const textarea = document.getElementById('tpl-body');
-      textarea.value += ` ${token} `;
-    };
-
-    window.copyActiveTemplate = function() {
-      const body = document.getElementById('tpl-body').value;
-      navigator.clipboard.writeText(body);
-      showToast("Template copied to clipboard.", "COPIED");
-    };
-
-    window.dispatchLiveCampaign = function() {
-      showToast("Campaign message sent to outreach queue.", "CAMPAIGN SENT");
-    };
-
-    window.testSendCampaign = function() {
-      showToast("Follow-up sequence scheduled in queue.", "QUEUE SCHEDULED");
-    };
-
-    // ATS Kanban Pipeline & Native Mobile Touch Drag & Drop
-    function renderKanban() {
-      const stages = ['Applied', 'Screened', 'Interviewing', 'Offer', 'Hired'];
-      stages.forEach(st => {
-        const colEl = document.getElementById(`col-${st.toLowerCase()}`);
-        const countEl = document.getElementById(`count-${st.toLowerCase()}`);
-        if (!colEl) return;
-        colEl.innerHTML = '';
-
-        const stageApplicants = applicants.filter(a => a.status.toLowerCase() === st.toLowerCase());
-        if (countEl) countEl.textContent = stageApplicants.length;
-
-        stageApplicants.forEach(cand => {
-          const card = document.createElement('div');
-          card.className = 'candidate-card';
-          card.draggable = true;
-          card.dataset.candId = cand.id;
-          card.setAttribute('data-tooltip', 'Click to open scorecard, or drag/touch-drag between columns.');
-
-          card.innerHTML = `
-            <div class="cand-name">
-              <span>${cand.name}</span>
-              <span class="grab-handle-icon">:::</span>
-            </div>
-            <div class="cand-role">${cand.jobTitle}</div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
-              <span class="cand-match">${cand.score}% MATCH</span>
-              <small style="color:var(--text-muted); font-size:0.6rem;">${cand.id}</small>
-            </div>
-          `;
-
-          // Desktop HTML5 drag
-          card.ondragstart = (e) => { e.dataTransfer.setData('candId', cand.id); };
-          card.onclick = () => { openScorecardModal(cand.id); };
-
-          // Native Mobile Touch Drag & Drop
-          attachTouchDragListeners(card, cand.id);
-
-          colEl.appendChild(card);
-        });
-      });
-    }
-
-    function attachTouchDragListeners(card, candId) {
-      card.addEventListener('touchstart', (e) => {
-        touchDraggingCard = card;
-        touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        card.classList.add('touch-dragging');
-      }, { passive: false });
-
-      card.addEventListener('touchmove', (e) => {
-        if (!touchDraggingCard) return;
-        e.preventDefault(); // Prevent accidental page scrolling while moving card
-
-        const touch = e.touches[0];
-        // Identify which column the finger is currently over
-        const elemUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
-        const colBox = elemUnderFinger ? elemUnderFinger.closest('.kanban-col') : null;
-
-        document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drop-target-hover'));
-        if (colBox) {
-          colBox.classList.add('drop-target-hover');
-          currentHighlightedCol = colBox;
-        } else {
-          currentHighlightedCol = null;
+    // Auth Engine Handlers
+    window.openAuthModal = function() {
+      if (currentUser) {
+        if (confirm(`Logged in as ${currentUser.name} (${currentUser.email}). Log out?`)) {
+          fetch('/api/auth/logout', { method: 'POST' }).then(() => {
+            currentUser = null;
+            updateAuthHeaderUi();
+            showToast('Logged out.', 'LOGGED OUT');
+          });
         }
-      }, { passive: false });
+        return;
+      }
+      document.getElementById('auth-modal').style.display = 'flex';
+      switchAuthTab('login');
+    };
 
-      card.addEventListener('touchend', (e) => {
-        if (!touchDraggingCard) return;
-        card.classList.remove('touch-dragging');
-        document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drop-target-hover'));
+    window.switchAuthTab = function(mode) {
+      authMode = mode;
+      document.querySelectorAll('#auth-modal .drawer-tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`tab-auth-${mode}`).classList.add('active');
 
-        if (currentHighlightedCol) {
-          const targetStatus = currentHighlightedCol.dataset.status;
-          const cand = applicants.find(a => a.id === candId);
-          if (cand && targetStatus && cand.status !== targetStatus) {
-            cand.status = targetStatus;
-            renderKanban();
-            showToast(`${cand.name} moved to ${targetStatus} stage.`, "STAGE UPDATED");
-            broadcastSyncEvent('CANDIDATE_STATUS_UPDATED', { applicantId: cand.id, newStatus: targetStatus });
+      const nameGroup = document.getElementById('auth-group-name');
+      const passGroup = document.getElementById('auth-group-pass');
+      const submitBtn = document.getElementById('auth-submit-btn');
+
+      if (mode === 'signup') {
+        nameGroup.style.display = 'flex';
+        passGroup.style.display = 'flex';
+        submitBtn.textContent = 'CREATE RECRUITER ACCOUNT';
+      } else if (mode === 'login') {
+        nameGroup.style.display = 'none';
+        passGroup.style.display = 'flex';
+        submitBtn.textContent = 'SIGN IN TO WORKSPACE';
+      } else if (mode === 'reset') {
+        nameGroup.style.display = 'none';
+        passGroup.style.display = 'none';
+        submitBtn.textContent = 'SEND RESET LINK';
+      }
+    };
+
+    window.handleAuthSubmit = async function() {
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const name = document.getElementById('auth-name').value;
+
+      if (!email) return showToast('Email required.', 'ERROR');
+
+      if (authMode === 'login') {
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (res.ok && data.user) {
+            currentUser = data.user;
+            closeModal('auth-modal');
+            updateAuthHeaderUi();
+            showToast(`Recruiter authenticated: ${data.user.name}`, 'LOGGED IN');
+          } else {
+            showToast(data.error || 'Login failed', 'AUTH ERROR');
           }
-        }
+        } catch (e) { showToast(e.message, 'ERROR'); }
+      } else if (authMode === 'signup') {
+        try {
+          const res = await fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password, name, role: 'recruiter' })
+          });
+          const data = await res.json();
+          if (res.ok && data.user) {
+            currentUser = data.user;
+            closeModal('auth-modal');
+            updateAuthHeaderUi();
+            showToast(`Recruiter account created!`, 'SIGN UP SUCCESS');
+          } else {
+            showToast(data.error || 'Signup failed', 'AUTH ERROR');
+          }
+        } catch (e) { showToast(e.message, 'ERROR'); }
+      } else if (authMode === 'reset') {
+        showToast(`Reset instructions dispatched to ${email}.`, 'RESET SENT');
+        closeModal('auth-modal');
+      }
+    };
 
-        touchDraggingCard = null;
-        currentHighlightedCol = null;
-      });
+    function updateAuthHeaderUi() {
+      const btn = document.getElementById('btn-auth-status');
+      if (currentUser) {
+        btn.textContent = `${currentUser.name.toUpperCase()} (LOGOUT)`;
+        btn.style.borderColor = 'var(--status-mint)';
+      } else {
+        btn.textContent = 'LOGIN / SIGN UP';
+        btn.style.borderColor = 'var(--uthe-gold)';
+      }
     }
 
-    window.allowDrop = function(ev) { ev.preventDefault(); };
-    window.dropCandidate = function(ev, targetStatus) {
-      ev.preventDefault();
-      const candId = ev.dataTransfer.getData('candId');
-      const cand = applicants.find(a => a.id === candId);
-      if (cand) {
-        cand.status = targetStatus;
-        renderKanban();
-        showToast(`${cand.name} moved to ${targetStatus} stage.`, "STAGE UPDATED");
-        broadcastSyncEvent('CANDIDATE_STATUS_UPDATED', { applicantId: cand.id, newStatus: targetStatus });
-      }
-    };
+    async function checkCurrentSession() {
+      try {
+        const res = await fetch('/api/auth/me');
+        const data = await res.json();
+        if (data.authenticated && data.user) {
+          currentUser = data.user;
+          updateAuthHeaderUi();
+        }
+      } catch (e) {}
+    }
 
-    window.openScorecardModal = function(candId) {
-      selectedCandidateId = candId;
-      const cand = applicants.find(a => a.id === candId);
-      if (!cand) return;
-      document.getElementById('scorecard-applicant-name').textContent = `EVALUATION: ${cand.name.toUpperCase()} (${cand.score}% MATCH)`;
-      document.getElementById('scorecard-modal').style.display = 'flex';
-    };
-
-    window.saveScorecard = function() {
-      const cand = applicants.find(a => a.id === selectedCandidateId);
-      if (cand) {
-        cand.scorecard = {
-          tech: document.getElementById('sc-tech').value,
-          comm: document.getElementById('sc-comm').value,
-          culture: document.getElementById('sc-culture').value,
-          notes: document.getElementById('sc-notes').value,
-          decision: document.getElementById('sc-decision').value
-        };
-        showToast(`Scorecard saved for ${cand.name}: ${cand.scorecard.decision}.`, "SCORECARD SAVED");
-      }
-      closeModal('scorecard-modal');
-    };
-
-    window.closeModal = function(id) {
-      document.getElementById(id).style.display = 'none';
-    };
-
-    // Stripe Checkout Simulation
-    window.simulateStripeCheckout = function(planName) {
-      showToast(`Opening checkout for ${planName}...`, "CHECKOUT");
-      setTimeout(() => {
-        showToast(`Payment confirmed for ${planName}. Plan is active on your account.`, "ACTIVE PLAN");
-      }, 1200);
-    };
-
-    // Admin Secret Shortcut Handler (Ctrl + Shift + A)
+    // Admin Shortcut Handler (Ctrl + Shift + A)
     window.handleAdminShortcut = function() {
       window.location.href = '/admin.html';
     };
@@ -2352,42 +1845,21 @@
       }
     });
 
-    // Toast Notification Utility
     let toastTimer = null;
-    function showToast(msg, title = "SYSTEM NOTICE") {
-      const toast = document.getElementById('toast-overlay');
+    function showToast(msg, title = "RECRUITER SYSTEM NOTICE") {
+      const t = document.getElementById('recruiter-toast');
       document.getElementById('toast-title').textContent = title;
       document.getElementById('toast-msg').textContent = msg;
-      toast.style.display = 'block';
+      t.style.display = 'block';
       if (toastTimer) clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => { toast.style.display = 'none'; }, 4000);
+      toastTimer = setTimeout(() => { t.style.display = 'none'; }, 4000);
     }
 
-    // Auto-Initialization on Load
     window.addEventListener('DOMContentLoaded', () => {
-      syncLivePreview();
-      renderActiveJobs();
-      renderKanban();
-      initDualSyncBus();
-      selectChannelTemplate('gmail');
-      loadServerJobs();
-
-      // Restore saved draft
-      const draft = JSON.parse(localStorage.getItem('UTHE_POST_DRAFT'));
-      if (draft) {
-        if (draft.jobTitle) jobTitleInput.value = draft.jobTitle;
-        if (draft.companyName) companyInput.value = draft.companyName;
-        if (draft.location) locationInput.value = draft.location;
-        if (draft.salaryMin) minSalaryInput.value = draft.salaryMin;
-        if (draft.salaryMax) maxSalaryInput.value = draft.salaryMax;
-        if (draft.logoSrc) {
-          const previewEl = document.getElementById('header-logo-preview');
-          previewEl.src = draft.logoSrc;
-          document.getElementById('btn-upload-logo-container').style.display = 'none';
-          document.getElementById('header-logo-container').style.display = 'flex';
-        }
-        syncLivePreview();
-      }
+      setupMobileTouchAts();
+      initDualSync();
+      recalculatePricing();
+      checkCurrentSession();
     });
   </script>
 </body>

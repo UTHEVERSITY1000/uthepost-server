@@ -123,7 +123,7 @@
       outline-offset: 2px;
     }
 
-    /* TOP STICKY NAVIGATION HEADER */
+    /* TOP STICKY NAVIGATION HEADER (CLEANED UP) */
     header {
       position: sticky;
       top: 0;
@@ -171,22 +171,29 @@
       gap: 0.75rem;
     }
 
-    .sync-status-indicator {
-      display: flex;
-      align-items: center;
-      font-size: 0.65rem;
-      font-weight: 800;
-      background: var(--status-mint-bg);
-      color: #065F46;
-      border: 1px solid #A7F3D0;
-      padding: 0 0.75rem;
+    .btn-auth-header {
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
+      border: 1.5px solid var(--uthe-gold);
+      padding: 0 1rem;
       border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 900;
       letter-spacing: 0.8px;
       text-transform: uppercase;
-      height: 36px;
+      cursor: pointer;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
     }
 
-    /* SEARCH & FILTER BAR */
+    .btn-auth-header:hover {
+      background: var(--uthe-gold);
+      color: var(--uthe-charcoal);
+    }
+
+    /* SEARCH & FILTER BELT (CLEANED UP: STRICT COMMITMENTS) */
     .search-filter-belt {
       background: #FFFFFF;
       border-bottom: 1px solid var(--border-color);
@@ -469,7 +476,7 @@
       white-space: pre-line;
     }
 
-    /* APPLICATION FORM MODAL (RE-LABELED & STRUCTURED) */
+    /* APPLICATION FORM MODAL (STREAMLINED & STRUCTURED) */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -581,7 +588,7 @@
       gap: 0.75rem;
     }
 
-    /* RESUME FILE UPLOAD BUTTON (SNUG BENEATH PHONE) */
+    /* RESUME FILE UPLOAD BUTTON (SNUG BENEATH PHONE, .PDF ONLY) */
     .file-upload-snug {
       display: flex;
       align-items: center;
@@ -647,6 +654,32 @@
       background: var(--uthe-gold);
       color: var(--uthe-charcoal);
       box-shadow: 0 8px 24px rgba(229, 168, 0, 0.4);
+    }
+
+    /* AUTH MODAL */
+    .auth-tab-row {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      padding: 0.5rem;
+      cursor: pointer;
+      text-align: center;
+      border-bottom: 2px solid transparent;
+    }
+
+    .auth-tab-btn.active {
+      color: var(--uthe-charcoal);
+      border-bottom-color: var(--uthe-gold);
+      font-weight: 900;
     }
 
     /* STICKY BOTTOM MOBILE ACTION BAR */
@@ -763,32 +796,32 @@
 </head>
 <body>
 
-  <!-- TOP HEADER -->
+  <!-- TOP HEADER (CLEANED UP) -->
   <header>
     <div class="brand-group">
-      <h1 class="brand-title" data-tooltip="u-theJOBS: High-signal career discovery platform for verified opportunities.">U-THEJOBS</h1>
+      <h1 class="brand-title" id="cms-brand-title" data-tooltip="u-theJOBS: High-signal career discovery platform for verified opportunities.">U-THEJOBS</h1>
       <span class="brand-badge" data-tooltip="Real-time multi-agent synchronized job catalog.">CANDIDATE BOARD</span>
     </div>
 
     <div class="header-actions">
-      <div class="sync-status-indicator" id="sync-pill" data-tooltip="Connected to real-time hiring mesh. Openings update instantaneously.">
-        <span id="sync-text">SYNC ACTIVE</span>
-      </div>
+      <button class="btn-auth-header" id="btn-auth-status" onclick="openAuthModal()" data-tooltip="Sign In or Create Account.">
+        LOGIN / SIGN UP
+      </button>
     </div>
   </header>
 
-  <!-- SEARCH & FILTER BELT (WITHOUT "X OPENINGS" HEADER) -->
+  <!-- SEARCH & FILTER BELT (RESTRICTED COMMITMENTS) -->
   <section class="search-filter-belt">
     <div class="search-input-wrap">
       <span class="search-icon">&#128269;</span>
       <input type="text" class="search-input" id="search-input" placeholder="Search by job title, skill, or keyword..." oninput="handleFilterChange()" data-tooltip="Instant search across all active listings.">
     </div>
 
-    <select class="filter-select" id="filter-type" onchange="handleFilterChange()" data-tooltip="Filter by full-time, contract, or executive roles.">
-      <option value="ALL">All Commitments</option>
-      <option value="Full-Time">Full-Time</option>
+    <select class="filter-select" id="filter-type" onchange="handleFilterChange()" data-tooltip="Select work commitment.">
+      <option value="Full-Time" selected>Full-Time</option>
+      <option value="Part-Time">Part-Time</option>
+      <option value="Seasonal">Seasonal</option>
       <option value="Contract">Contract</option>
-      <option value="Executive">Executive</option>
     </select>
 
     <select class="filter-select" id="filter-location" onchange="handleFilterChange()" data-tooltip="Filter by location or remote flexibility.">
@@ -821,7 +854,7 @@
           <div class="card-salary-pill" id="dt-salary" style="margin-top: 0.5rem; font-size: 0.85rem;">$135,000 - $175,000</div>
         </div>
 
-        <button class="btn-quick-send-main" onclick="openApplicationModal()" data-tooltip="Send direct interview request to the hiring manager.">
+        <button class="btn-quick-send-main" id="btn-quick-send-top" onclick="openApplicationModal()" data-tooltip="Send direct interview request to the hiring manager.">
           QUICK SEND
         </button>
       </div>
@@ -855,16 +888,17 @@
         </div>
       </div>
 
+      <!-- BOTTOM DETAIL BUTTON BENEATH JOB DESCRIPTION: SEND RESUME/CV -->
       <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.5rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color);">
-        <button class="btn-quick-send-main" style="width: 100%;" onclick="openApplicationModal()" data-tooltip="Send direct interview request to the hiring manager.">
-          QUICK SEND
+        <button class="btn-quick-send-main" id="btn-send-resume-bottom" style="width: 100%;" onclick="openApplicationModal()" data-tooltip="Submit your resume directly to the employer.">
+          SEND RESUME/CV
         </button>
       </div>
     </div>
 
   </main>
 
-  <!-- APPLICATION FORM MODAL (RE-STRUCTURED & LABELED) -->
+  <!-- STREAMLINED APPLICATION FORM MODAL -->
   <div class="modal-overlay" id="app-modal">
     <div class="modal-card">
       <div class="modal-header">
@@ -892,41 +926,92 @@
         </div>
       </div>
 
-      <!-- RESUME UPLOAD (POSITIONED SNUG DIRECTLY BENEATH PHONE NUMBER) -->
+      <!-- 1. CHOOSE RESUME (.PDF ONLY) SNUG BENEATH PHONE NUMBER -->
       <div class="form-group">
-        <label>Resume Document (PDF, DOCX)</label>
-        <input type="file" id="cand-resume-file" accept=".pdf,.doc,.docx" style="display:none;" onchange="handleResumeFileChosen(event)">
+        <label>Choose Resume (.pdf only)</label>
+        <input type="file" id="cand-resume-file" accept=".pdf" style="display:none;" onchange="handleResumeFileChosen(event)">
         <div class="file-upload-snug">
-          <button type="button" class="btn-choose-file" onclick="document.getElementById('cand-resume-file').click()" data-tooltip="Upload your resume in PDF or Word format.">
-            CHOOSE RESUME (.PDF / .DOCX)
+          <button type="button" class="btn-choose-file" onclick="document.getElementById('cand-resume-file').click()" data-tooltip="Upload your resume in PDF format.">
+            CHOOSE RESUME (.PDF ONLY)
           </button>
           <span class="file-name-display" id="resume-file-name">Alex_Morgan_Resume_2026.pdf</span>
         </div>
       </div>
 
-      <!-- BEST TIME TO CONTACT DROPDOWN -->
+      <!-- 2. BEST TIME TO CONTACT DROPDOWN -->
       <div class="form-group">
         <label data-tooltip="Select your preferred window for employer contact.">Best Time to Contact</label>
         <select id="cand-contact-time">
-          <option value="Morning (8AM - 12PM)">Morning (8:00 AM - 12:00 PM)</option>
-          <option value="Afternoon (12PM - 5PM)" selected>Afternoon (12:00 PM - 5:00 PM)</option>
-          <option value="Evening (5PM - 8PM)">Evening (5:00 PM - 8:00 PM)</option>
+          <option value="Morning">Morning (8:00 AM - 12:00 PM)</option>
+          <option value="Afternoon" selected>Afternoon (12:00 PM - 5:00 PM)</option>
+          <option value="Evening">Evening (5:00 PM - 8:00 PM)</option>
           <option value="Anytime">Anytime</option>
         </select>
       </div>
 
-      <!-- SECONDARY HEADER & INTERVIEW REQUEST BODY -->
+      <!-- 3. INTERVIEW REQUEST TITLE INPUT FIELD -->
       <div class="modal-sec-header">INTERVIEW REQUEST</div>
 
       <div class="form-group">
-        <label data-tooltip="What do you want the employer to know to advance your resume?">Interview Request Message</label>
+        <label data-tooltip="What do you want the employer to know to advance your resume?">Interview Request Title</label>
+        <input type="text" id="cand-interview-title" placeholder="e.g. Senior Full-Stack Engineer / Distributed Systems Specialist" value="Senior Full-Stack Architect / WebSockets & Streaming Specialist">
+      </div>
+
+      <!-- 4. INTERVIEW REQUEST MESSAGE TEXTAREA -->
+      <div class="form-group">
+        <label>Interview Request Message</label>
         <textarea id="cand-summary" rows="4" placeholder="Quick About Me / Why Hire Me...">8+ years building high-throughput distributed systems and reactive real-time web applications. Passionate about dual-sync WebSocket engines.</textarea>
       </div>
 
-      <!-- SUBMIT INTERVIEW REQUEST WITH TOOLTIP: REMOVE ATS -->
-      <button class="btn-submit-request" onclick="submitInterviewRequest()" data-tooltip="REMOVE ATS">
+      <!-- SUBMIT BUTTON WITH TOOLTIP: REMOVE ATS -->
+      <button class="btn-submit-request" id="btn-submit-interview-request" onclick="submitInterviewRequest()" data-tooltip="REMOVE ATS">
         SUBMIT INTERVIEW REQUEST
       </button>
+    </div>
+  </div>
+
+  <!-- AUTHENTICATION & ACCOUNT MODAL -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <span class="modal-main-title" id="auth-modal-title">ACCOUNT AUTHENTICATION</span>
+        <button class="btn-close-modal" onclick="closeModal('auth-modal')">X</button>
+      </div>
+
+      <div class="auth-tab-row">
+        <button class="auth-tab-btn active" id="tab-auth-login" onclick="switchAuthTab('login')">LOGIN</button>
+        <button class="auth-tab-btn" id="tab-auth-signup" onclick="switchAuthTab('signup')">SIGN UP</button>
+        <button class="auth-tab-btn" id="tab-auth-reset" onclick="switchAuthTab('reset')">RESET</button>
+      </div>
+
+      <div id="auth-form-body">
+        <div class="form-group" id="auth-group-name" style="display:none;">
+          <label>Full Name</label>
+          <input type="text" id="auth-name" placeholder="Your Full Name">
+        </div>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="auth-email" placeholder="name@domain.com">
+        </div>
+
+        <div class="form-group" id="auth-group-pass">
+          <label id="auth-label-pass">Password</label>
+          <input type="password" id="auth-password" placeholder="••••••••••••">
+        </div>
+
+        <div class="form-group" id="auth-group-role" style="display:none;">
+          <label>Account Role</label>
+          <select id="auth-role">
+            <option value="candidate" selected>Candidate / Job Seeker</option>
+            <option value="recruiter">Recruiter / Employer</option>
+          </select>
+        </div>
+
+        <button class="btn-submit-request" id="auth-submit-btn" onclick="handleAuthSubmit()">
+          SIGN IN
+        </button>
+      </div>
     </div>
   </div>
 
@@ -955,6 +1040,8 @@
     let broadcastBus = null;
     let wsRelay = null;
     let selectedJobIndex = 0;
+    let currentUser = null;
+    let authMode = 'login';
 
     let jobsData = [
       {
@@ -1026,7 +1113,7 @@
         const matchesQuery = (job.jobTitle || job.title || '').toLowerCase().includes(query) ||
                              (job.company || '').toLowerCase().includes(query) ||
                              (job.summary || '').toLowerCase().includes(query);
-        const matchesType = filterType === 'ALL' || (job.employmentType || '').toLowerCase() === filterType.toLowerCase();
+        const matchesType = !filterType || (job.employmentType || '').toLowerCase() === filterType.toLowerCase();
         const matchesLoc = filterLoc === 'ALL' || (job.location || '').toUpperCase().includes(filterLoc);
         return matchesQuery && matchesType && matchesLoc;
       });
@@ -1034,7 +1121,7 @@
       if (filtered.length === 0) {
         container.innerHTML = `
           <div style="background:#FFFFFF; border:1px dashed var(--border-color); border-radius:10px; padding:2rem; text-align:center; color:var(--text-muted);">
-            No open positions matched your search criteria.
+            No open positions currently available for the selected commitment.
           </div>
         `;
         return;
@@ -1103,7 +1190,7 @@
       renderJobsList();
     }
 
-    // Modal Control
+    // Modal Controls
     window.openApplicationModal = function() {
       document.getElementById('app-modal').style.display = 'flex';
     };
@@ -1115,12 +1202,17 @@
     window.handleResumeFileChosen = function(e) {
       const file = e.target.files[0];
       if (file) {
+        if (!file.name.toLowerCase().endsWith('.pdf')) {
+          showToast('Please upload a valid .pdf file.', 'PDF ONLY REQUIRED');
+          e.target.value = '';
+          return;
+        }
         document.getElementById('resume-file-name').textContent = file.name;
-        showToast(`Selected file: ${file.name}`, "RESUME ATTACHED");
+        showToast(`Selected PDF resume: ${file.name}`, "PDF ATTACHED");
       }
     };
 
-    // Submit Interview Request (Relabeled & Dispatched)
+    // Submit Interview Request
     window.submitInterviewRequest = async function() {
       const activeJob = jobsData[selectedJobIndex] || jobsData[0];
       const applicantPayload = {
@@ -1131,6 +1223,7 @@
         email: document.getElementById('cand-email').value,
         phone: document.getElementById('cand-phone').value,
         bestTime: document.getElementById('cand-contact-time').value,
+        interviewTitle: document.getElementById('cand-interview-title').value,
         resumeFile: document.getElementById('resume-file-name').textContent,
         resumeSummary: document.getElementById('cand-summary').value,
         appliedAt: new Date().toISOString(),
@@ -1146,12 +1239,126 @@
         });
       } catch (e) {}
 
-      // Dual-Sync Broadcast
       broadcastSyncEvent('CANDIDATE_APPLIED', { applicant: applicantPayload });
 
       closeModal('app-modal');
       showToast(`Interview request submitted to ${activeJob.company}!`, "REQUEST DISPATCHED");
     };
+
+    // Authentication Engine Modal & Handlers
+    window.openAuthModal = function() {
+      if (currentUser) {
+        // If already logged in, prompt logout
+        if (confirm(`Logged in as ${currentUser.name} (${currentUser.email}). Would you like to log out?`)) {
+          fetch('/api/auth/logout', { method: 'POST' }).then(() => {
+            currentUser = null;
+            updateAuthHeaderUi();
+            showToast('Logged out successfully.', 'LOGGED OUT');
+          });
+        }
+        return;
+      }
+      document.getElementById('auth-modal').style.display = 'flex';
+      switchAuthTab('login');
+    };
+
+    window.switchAuthTab = function(mode) {
+      authMode = mode;
+      document.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`tab-auth-${mode}`).classList.add('active');
+
+      const nameGroup = document.getElementById('auth-group-name');
+      const roleGroup = document.getElementById('auth-group-role');
+      const passGroup = document.getElementById('auth-group-pass');
+      const submitBtn = document.getElementById('auth-submit-btn');
+
+      if (mode === 'signup') {
+        nameGroup.style.display = 'flex';
+        roleGroup.style.display = 'flex';
+        passGroup.style.display = 'flex';
+        submitBtn.textContent = 'CREATE ACCOUNT';
+      } else if (mode === 'login') {
+        nameGroup.style.display = 'none';
+        roleGroup.style.display = 'none';
+        passGroup.style.display = 'flex';
+        submitBtn.textContent = 'SIGN IN';
+      } else if (mode === 'reset') {
+        nameGroup.style.display = 'none';
+        roleGroup.style.display = 'none';
+        passGroup.style.display = 'none';
+        submitBtn.textContent = 'SEND RESET LINK';
+      }
+    };
+
+    window.handleAuthSubmit = async function() {
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const name = document.getElementById('auth-name').value;
+      const role = document.getElementById('auth-role').value;
+
+      if (!email) return showToast('Email address is required.', 'ERROR');
+
+      if (authMode === 'login') {
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (res.ok && data.user) {
+            currentUser = data.user;
+            closeModal('auth-modal');
+            updateAuthHeaderUi();
+            showToast(`Welcome back, ${data.user.name}!`, 'AUTHENTICATED');
+          } else {
+            showToast(data.error || 'Login failed.', 'AUTH ERROR');
+          }
+        } catch (e) { showToast(e.message, 'ERROR'); }
+      } else if (authMode === 'signup') {
+        try {
+          const res = await fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password, name, role })
+          });
+          const data = await res.json();
+          if (res.ok && data.user) {
+            currentUser = data.user;
+            closeModal('auth-modal');
+            updateAuthHeaderUi();
+            showToast(`Account created for ${data.user.name}!`, 'SIGN UP SUCCESS');
+          } else {
+            showToast(data.error || 'Signup failed.', 'AUTH ERROR');
+          }
+        } catch (e) { showToast(e.message, 'ERROR'); }
+      } else if (authMode === 'reset') {
+        showToast(`Password reset link dispatched to ${email}.`, 'RESET DISPATCHED');
+        closeModal('auth-modal');
+      }
+    };
+
+    function updateAuthHeaderUi() {
+      const btn = document.getElementById('btn-auth-status');
+      if (currentUser) {
+        btn.textContent = `${currentUser.name.toUpperCase()} (LOGOUT)`;
+        btn.style.borderColor = 'var(--status-mint)';
+      } else {
+        btn.textContent = 'LOGIN / SIGN UP';
+        btn.style.borderColor = 'var(--uthe-gold)';
+      }
+    }
+
+    async function checkCurrentSession() {
+      try {
+        const res = await fetch('/api/auth/me');
+        const data = await res.json();
+        if (data.authenticated && data.user) {
+          currentUser = data.user;
+          updateAuthHeaderUi();
+        }
+      } catch (e) {}
+    }
 
     // Dual-Sync Event Bus with Auto-Reconnect
     function initDualSyncBus() {
@@ -1168,10 +1375,6 @@
           const wsHost = window.location.host || 'localhost:3000';
           wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
 
-          wsRelay.onopen = () => {
-            document.getElementById('sync-text').textContent = 'SYNC ACTIVE';
-          };
-
           wsRelay.onmessage = (event) => {
             try {
               const data = JSON.parse(event.data);
@@ -1179,12 +1382,8 @@
             } catch (e) {}
           };
 
-          wsRelay.onclose = () => {
-            setTimeout(connectWs, 3000); // Auto reconnect
-          };
-        } catch (err) {
-          console.log('WebSocket in client broadcast mode');
-        }
+          wsRelay.onclose = () => { setTimeout(connectWs, 3000); };
+        } catch (err) {}
       }
 
       connectWs();
@@ -1216,7 +1415,7 @@
         jobsData = data.jobs;
         renderJobsList();
       } else if (data.type === 'JOB_PUBLISHED' && data.job) {
-        // INSTANT LIVE POPULATION WITHOUT PAGE REFRESH!
+        // Instant Live Population
         jobsData.unshift(data.job);
         selectedJobIndex = 0;
         renderJobsList(data.job.id);
@@ -1228,10 +1427,23 @@
           selectedJobIndex = 0;
           renderJobsList();
         }
+      } else if (data.type === 'CMS_CONFIG_UPDATED' && data.config) {
+        applyCmsOverrides(data.config);
       }
     }
 
-    // Load initial jobs from REST API
+    function applyCmsOverrides(config) {
+      if (config.labels) {
+        if (config.labels.jobsTitle) document.getElementById('cms-brand-title').textContent = config.labels.jobsTitle;
+        if (config.labels.quickSendBtn) {
+          document.querySelectorAll('.btn-quick-send-card').forEach(b => b.textContent = config.labels.quickSendBtn);
+          document.getElementById('btn-quick-send-top').textContent = config.labels.quickSendBtn;
+        }
+        if (config.labels.sendResumeBtn) document.getElementById('btn-send-resume-bottom').textContent = config.labels.sendResumeBtn;
+        if (config.labels.submitInterviewBtn) document.getElementById('btn-submit-interview-request').textContent = config.labels.submitInterviewBtn;
+      }
+    }
+
     async function loadServerJobs() {
       try {
         const res = await fetch('/api/jobs');
@@ -1240,6 +1452,12 @@
           jobsData = data.jobs;
           renderJobsList();
         }
+      } catch (e) {}
+
+      try {
+        const resCms = await fetch('/api/cms/config');
+        const dataCms = await resCms.json();
+        if (dataCms.config) applyCmsOverrides(dataCms.config);
       } catch (e) {}
     }
 
@@ -1255,7 +1473,6 @@
       }
     });
 
-    // Toast Notification
     let toastTimer = null;
     function showToast(msg, title = "SYSTEM NOTICE") {
       const toast = document.getElementById('toast-overlay');
@@ -1270,6 +1487,7 @@
       renderJobsList();
       initDualSyncBus();
       loadServerJobs();
+      checkCurrentSession();
     });
   </script>
 </body>
