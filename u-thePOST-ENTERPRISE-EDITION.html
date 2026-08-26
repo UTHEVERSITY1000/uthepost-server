@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>u-thePOST — Recruiter Portal & Omni-Channel Publishing Engine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-canvas: #F8F9FA;
@@ -29,24 +29,37 @@
       --subtle-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    body {
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    html, body {
+      width: 100%;
+      min-height: 100%;
       background-color: var(--bg-canvas);
       color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* BUILT-IN PLAIN-ENGLISH TOOLTIP SYSTEM */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-bottom: 76px; /* Space for sticky bottom bar on mobile */
+    }
+
+    /* PLAIN-ENGLISH TOOLTIP SYSTEM */
     [data-tooltip] {
       position: relative;
     }
 
-    [data-tooltip]:hover::after {
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus-visible::after {
       content: attr(data-tooltip);
       position: absolute;
       bottom: calc(100% + 8px);
@@ -73,7 +86,8 @@
       animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    [data-tooltip]:hover::before {
+    [data-tooltip]:hover::before,
+    [data-tooltip]:focus-visible::before {
       content: '';
       position: absolute;
       bottom: calc(100% + 2px);
@@ -92,31 +106,48 @@
       to { opacity: 1; transform: translate(-50%, 0); }
     }
 
-    /* TOP DECK STICKY NAVIGATION HEADER */
+    /* 48PX MINIMUM TOUCH TARGETS & PRESS FEEDBACK */
+    button, input, select, textarea, .touch-target {
+      min-height: 48px;
+      touch-action: manipulation;
+      font-family: inherit;
+    }
+
+    button:active, .btn-touch:active {
+      transform: scale(0.97);
+      transition: transform 0.1s ease;
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--uthe-gold);
+      outline-offset: 2px;
+    }
+
+    /* TOP STICKY NAVIGATION HEADER */
     header {
       position: sticky;
       top: 0;
       z-index: 1000;
-      height: 60px;
+      height: 64px;
       background: #FFFFFF;
       border-bottom: 2.5px solid var(--uthe-gold);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 1.5rem;
+      padding: 0 1.25rem;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
     }
 
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.85rem;
     }
 
     .brand-logo-wrap {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
     }
 
     .brand-title {
@@ -150,16 +181,18 @@
       letter-spacing: 1px;
       text-transform: uppercase;
       cursor: pointer;
-      padding: 0.45rem 0.95rem;
+      padding: 0 0.95rem;
       border-radius: 20px;
       transition: all 0.2s ease;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      height: 40px;
     }
 
     .btn-upload-logo:hover {
       border-color: var(--uthe-gold);
       box-shadow: 0 2px 10px rgba(229, 168, 0, 0.2);
-      transform: translateY(-1px);
     }
 
     .header-logo-container {
@@ -167,7 +200,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      max-height: 38px;
+      max-height: 42px;
       padding: 2px;
       border: 1px dashed var(--border-color);
       border-radius: 6px;
@@ -181,7 +214,7 @@
     }
 
     .header-logo-preview {
-      max-height: 34px;
+      max-height: 38px;
       width: auto;
       max-width: 140px;
       object-fit: contain;
@@ -193,6 +226,7 @@
       align-items: center;
       gap: 0.35rem;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       padding: 0 0.5rem;
     }
 
@@ -201,14 +235,17 @@
       border: none;
       color: var(--text-muted);
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      padding: 0.5rem 0.85rem;
+      padding: 0 0.85rem;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      height: 40px;
     }
 
     .nav-tab:hover {
@@ -236,18 +273,19 @@
       background: var(--status-mint-bg);
       color: #065F46;
       border: 1px solid #A7F3D0;
-      padding: 0.35rem 0.75rem;
+      padding: 0 0.75rem;
       border-radius: 20px;
       letter-spacing: 0.8px;
       text-transform: uppercase;
       cursor: pointer;
+      height: 36px;
     }
 
     .btn-save {
       background: var(--uthe-charcoal);
       color: var(--uthe-gold);
       border: 1.5px solid var(--uthe-gold);
-      padding: 0.45rem 1.25rem;
+      padding: 0 1.25rem;
       border-radius: 20px;
       font-weight: 900;
       font-size: 0.72rem;
@@ -256,13 +294,132 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(17, 17, 17, 0.15);
       transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      height: 38px;
     }
 
     .btn-save:hover {
       background: var(--uthe-gold);
       color: var(--uthe-charcoal);
       box-shadow: 0 4px 16px rgba(229, 168, 0, 0.4);
-      transform: translateY(-1px);
+    }
+
+    .btn-mobile-menu {
+      display: none;
+      background: #F1F5F9;
+      border: 1px solid var(--border-color);
+      color: var(--uthe-charcoal);
+      padding: 0 0.85rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 900;
+      cursor: pointer;
+      letter-spacing: 1px;
+      height: 40px;
+      align-items: center;
+    }
+
+    /* MOBILE SLIDE-IN NAVIGATION DRAWER */
+    .mobile-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(3px);
+      z-index: 2000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .mobile-drawer-overlay.open {
+      display: block;
+      opacity: 1;
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 290px;
+      max-width: 85%;
+      background: #FFFFFF;
+      border-left: 2.5px solid var(--uthe-gold);
+      z-index: 2001;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      gap: 0.85rem;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .mobile-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+
+    .drawer-title {
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: var(--uthe-charcoal);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drawer-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .drawer-tab-btn {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-align: left;
+      padding: 0 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      height: 48px;
+    }
+
+    .drawer-tab-btn.active {
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
+      border-color: var(--uthe-gold);
+      font-weight: 900;
     }
 
     /* MAIN CONTAINER & WORKSPACES */
@@ -271,6 +428,9 @@
       padding: 1.25rem;
       display: flex;
       flex-direction: column;
+      max-width: 1440px;
+      margin: 0 auto;
+      width: 100%;
     }
 
     .workspace-view {
@@ -320,7 +480,7 @@
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.35rem;
     }
 
     label {
@@ -335,13 +495,17 @@
       background: #FFFFFF;
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 0.6rem 0.75rem;
+      padding: 0 0.85rem;
       border-radius: 6px;
       font-family: inherit;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 500;
       outline: none;
       transition: all 0.2s ease;
+    }
+
+    textarea {
+      padding: 0.75rem 0.85rem;
     }
 
     input:focus, select:focus, textarea:focus {
@@ -367,7 +531,7 @@
       background: var(--uthe-charcoal);
       color: var(--uthe-gold);
       border: 1.5px solid var(--uthe-gold);
-      padding: 0.85rem 1.25rem;
+      padding: 0 1.25rem;
       border-radius: 8px;
       font-weight: 900;
       font-size: 0.78rem;
@@ -380,20 +544,20 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+      height: 48px;
     }
 
     .btn-publish:hover {
       background: var(--uthe-gold);
       color: var(--uthe-charcoal);
       box-shadow: 0 8px 24px rgba(229, 168, 0, 0.45);
-      transform: translateY(-2px);
     }
 
     .btn-omni-broadcast {
       background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
       color: #FFFFFF;
       border: 1.5px solid var(--uthe-gold);
-      padding: 0.85rem 1.25rem;
+      padding: 0 1.25rem;
       border-radius: 8px;
       font-weight: 900;
       font-size: 0.78rem;
@@ -406,13 +570,13 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+      height: 48px;
     }
 
     .btn-omni-broadcast:hover {
       background: #E5A800;
       color: #080C14;
       box-shadow: 0 8px 24px rgba(229, 168, 0, 0.5);
-      transform: translateY(-2px);
     }
 
     /* RIGHT COLUMN STACKED VIEW */
@@ -467,7 +631,7 @@
       background: #FFFFFF;
       border: 1.5px solid var(--uthe-gold);
       color: var(--uthe-charcoal);
-      padding: 0.55rem 0.85rem;
+      padding: 0 0.85rem;
       border-radius: 6px;
       font-weight: 800;
       font-size: 0.72rem;
@@ -476,6 +640,10 @@
       margin-top: 0.6rem;
       transition: all 0.2s ease;
       letter-spacing: 0.8px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .btn-preview-apply:hover {
@@ -491,6 +659,7 @@
       gap: 0.85rem;
       max-height: 380px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       padding-right: 0.25rem;
     }
 
@@ -535,11 +704,14 @@
       background: var(--danger-bg);
       color: var(--danger-red);
       border: 1px solid #FECACA;
-      padding: 0.2rem 0.45rem;
+      padding: 0 0.55rem;
       border-radius: 4px;
       font-size: 0.62rem;
       font-weight: 800;
       cursor: pointer;
+      height: 32px;
+      display: flex;
+      align-items: center;
       transition: all 0.2s ease;
     }
 
@@ -565,7 +737,7 @@
       background: var(--uthe-charcoal);
       color: var(--uthe-gold);
       border: 1px solid var(--uthe-gold);
-      padding: 0.65rem 1.2rem;
+      padding: 0 1.2rem;
       border-radius: 6px;
       font-weight: 800;
       font-size: 0.75rem;
@@ -574,7 +746,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
-      height: 38px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -589,7 +761,8 @@
       background: #FFFFFF;
       border: 1px solid var(--border-color);
       border-radius: 10px;
-      overflow: hidden;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       box-shadow: var(--subtle-shadow);
     }
 
@@ -598,6 +771,7 @@
       border-collapse: collapse;
       text-align: left;
       font-size: 0.78rem;
+      min-width: 600px;
     }
 
     th {
@@ -636,11 +810,15 @@
     .action-pill-btn {
       background: #FFFFFF;
       border: 1px solid var(--border-color);
-      padding: 0.35rem 0.65rem;
-      border-radius: 4px;
-      font-size: 0.65rem;
-      font-weight: 700;
+      padding: 0 0.85rem;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 800;
       cursor: pointer;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: all 0.2s;
     }
 
@@ -663,6 +841,7 @@
       gap: 0.5rem;
       max-height: 600px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .channel-item-row {
@@ -739,6 +918,8 @@
       gap: 0.85rem;
       align-items: start;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 0.5rem;
     }
 
     .kanban-col {
@@ -749,6 +930,7 @@
       flex-direction: column;
       gap: 0.75rem;
       min-height: 480px;
+      min-width: 200px;
     }
 
     .kanban-col-header {
@@ -832,22 +1014,70 @@
     .btn-close-modal {
       background: none;
       border: none;
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       cursor: pointer;
       color: var(--text-muted);
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* STICKY BOTTOM ACTION BAR (MOBILE) */
+    .mobile-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: #FFFFFF;
+      border-top: 2px solid var(--uthe-gold);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 0.75rem;
+      z-index: 999;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-bottom-mobile {
+      background: #F1F5F9;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      margin: 0 0.25rem;
+      height: 48px;
+    }
+
+    .btn-bottom-mobile.primary {
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
+      border: 1px solid var(--uthe-gold);
+      font-weight: 900;
     }
 
     /* TOAST OVERLAY NOTIFICATION */
     .toast-overlay {
       position: fixed;
-      bottom: 2rem;
-      right: 2rem;
+      bottom: 80px;
+      right: 1.25rem;
       z-index: 3000;
       display: none;
       background: var(--uthe-charcoal);
       border: 1.5px solid var(--uthe-gold);
       color: #FFFFFF;
-      padding: 1rem 1.35rem;
+      padding: 0.85rem 1.25rem;
       border-radius: 8px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.3);
       max-width: 380px;
@@ -868,12 +1098,28 @@
       line-height: 1.4;
     }
 
-    /* RESPONSIVE */
+    /* RESPONSIVE BREAKPOINTS */
     @media (max-width: 1024px) {
+      .header-center-tabs { display: none; }
+      .btn-mobile-menu { display: flex; }
       .studio-grid { grid-template-columns: 1fr; }
       .omnichannel-grid { grid-template-columns: 1fr; }
       .kanban-board { grid-template-columns: repeat(2, 1fr); }
-      .module-toolbar { grid-template-columns: 1fr 1fr; }
+      .module-toolbar { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      body { padding-bottom: 76px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .button-group-row { grid-template-columns: 1fr; }
+      .kanban-board { grid-template-columns: 1fr; }
+      header { padding: 0 0.85rem; }
+      main { padding: 0.85rem; }
+    }
+
+    @media (min-width: 1025px) {
+      .mobile-bottom-bar { display: none; }
+      body { padding-bottom: 0; }
     }
   </style>
 </head>
@@ -897,6 +1143,7 @@
       </div>
     </div>
 
+    <!-- DESKTOP CENTER TABS -->
     <div class="header-center-tabs">
       <button class="nav-tab active" onclick="switchTab('studio')" data-tooltip="Create, preview, and publish job listings to candidates.">
         1. JOB STUDIO
@@ -928,8 +1175,29 @@
       <button class="btn-save" onclick="handleSaveDraft()" data-tooltip="Saves your current form progress to your browser so you never lose your draft.">
         SAVE DRAFT
       </button>
+      <button class="btn-mobile-menu" onclick="toggleRecruiterDrawer()" data-tooltip="Open navigation menu">
+        [MENU]
+      </button>
     </div>
   </header>
+
+  <!-- MOBILE NAVIGATION DRAWER -->
+  <div class="mobile-drawer-overlay" id="recruiter-drawer-overlay" onclick="toggleRecruiterDrawer()"></div>
+  <div class="mobile-drawer" id="recruiter-drawer">
+    <div class="drawer-header">
+      <span class="drawer-title">RECRUITER WORKSPACES</span>
+      <button class="drawer-close" onclick="toggleRecruiterDrawer()" data-tooltip="Close menu">X</button>
+    </div>
+    <div class="drawer-nav-list">
+      <button class="drawer-tab-btn active" onclick="switchTab('studio'); toggleRecruiterDrawer();">1. JOB STUDIO</button>
+      <button class="drawer-tab-btn" onclick="switchTab('hunter'); toggleRecruiterDrawer();">2. B2B LEAD ENGINE</button>
+      <button class="drawer-tab-btn" onclick="switchTab('crm'); toggleRecruiterDrawer();">3. OMNICHANNEL CRM</button>
+      <button class="drawer-tab-btn" onclick="switchTab('aggregator'); toggleRecruiterDrawer();">4. JOB AGGREGATOR</button>
+      <button class="drawer-tab-btn" onclick="switchTab('ats'); toggleRecruiterDrawer();">5. APPLICANT TRACKER</button>
+      <button class="drawer-tab-btn" onclick="switchTab('monetization'); toggleRecruiterDrawer();">6. PERFORMANCE & PLANS</button>
+      <button class="drawer-tab-btn" onclick="switchTab('diagnostics'); toggleRecruiterDrawer();">7. SYSTEM DIAGNOSTICS</button>
+    </div>
+  </div>
 
   <!-- MAIN WORKSPACES -->
   <main>
@@ -1363,7 +1631,7 @@
               <div style="font-weight: 800; font-size: 0.8rem; color: #92400E;">GROWTH</div>
               <div style="font-size: 1.35rem; font-weight: 900; margin: 0.25rem 0; color: #92400E;">$299<small style="font-size: 0.65rem;">/mo</small></div>
               <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.75rem;">15 Active Jobs + Candidate Matcher</div>
-              <button class="btn-action-charcoal" style="width: 100%; height: 32px; font-size: 0.65rem;" onclick="simulateStripeCheckout('Growth Plan ($299/mo)')">UPGRADE</button>
+              <button class="btn-action-charcoal" style="width: 100%; height: 38px; font-size: 0.65rem;" onclick="simulateStripeCheckout('Growth Plan ($299/mo)')">UPGRADE</button>
             </div>
             <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center;" data-tooltip="Full enterprise capacity with unlimited openings and multi-sync.">
               <div style="font-weight: 800; font-size: 0.8rem;">ENTERPRISE</div>
@@ -1378,7 +1646,7 @@
               <div style="font-size: 0.75rem; font-weight: 800;">FEATURED SPOTLIGHT BOOST ($49 / post)</div>
               <div style="font-size: 0.65rem; color: var(--text-muted);">Pin current job to the top of u-theJOBS board for 14 days</div>
             </div>
-            <button class="btn-action-charcoal" style="height: 32px; font-size: 0.65rem;" onclick="simulateStripeCheckout('Featured Spotlight Boost ($49)')">BOOST POST</button>
+            <button class="btn-action-charcoal" style="height: 38px; font-size: 0.65rem;" onclick="simulateStripeCheckout('Featured Spotlight Boost ($49)')">BOOST POST</button>
           </div>
         </div>
       </div>
@@ -1394,7 +1662,7 @@
           </button>
         </div>
 
-        <div id="test-runner-console" style="background: #0F172A; color: #38BDF8; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 1rem; border-radius: 8px; min-height: 280px; overflow-y: auto; line-height: 1.6;">
+        <div id="test-runner-console" style="background: #0F172A; color: #38BDF8; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 1rem; border-radius: 8px; min-height: 280px; overflow-y: auto; line-height: 1.6; -webkit-overflow-scrolling: touch;">
           <div style="color: #94A3B8;">[System Ready] Click 'RUN ALL TESTS' to verify all connections and data feeds...</div>
         </div>
       </div>
@@ -1402,12 +1670,20 @@
 
   </main>
 
+  <!-- STICKY MOBILE BOTTOM ACTION BAR -->
+  <div class="mobile-bottom-bar">
+    <button class="btn-bottom-mobile" onclick="switchTab('studio')" data-tooltip="Studio">STUDIO</button>
+    <button class="btn-bottom-mobile primary" onclick="handlePublishJob()" data-tooltip="Publish Live">PUBLISH</button>
+    <button class="btn-bottom-mobile" onclick="handleSaveDraft()" data-tooltip="Save Draft">SAVE</button>
+    <button class="btn-bottom-mobile" onclick="switchTab('ats')" data-tooltip="ATS">ATS</button>
+  </div>
+
   <!-- OMNI-CHANNEL BROADCAST MODAL -->
   <div class="modal-overlay" id="omni-modal">
     <div class="modal-card">
       <div class="modal-header">
         <span class="modal-title">OMNI-CHANNEL BROADCAST IN PROGRESS</span>
-        <button class="btn-close-modal" onclick="closeModal('omni-modal')">×</button>
+        <button class="btn-close-modal" onclick="closeModal('omni-modal')" data-tooltip="Close modal">X</button>
       </div>
 
       <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
@@ -1441,7 +1717,7 @@
         </div>
       </div>
 
-      <button class="btn-publish" style="margin-top: 0.5rem;" onclick="closeModal('omni-modal')">
+      <button class="btn-publish" style="margin-top: 0.5rem; width: 100%;" onclick="closeModal('omni-modal')">
         DONE
       </button>
     </div>
@@ -1452,7 +1728,7 @@
     <div class="modal-card">
       <div class="modal-header">
         <span class="modal-title" id="scorecard-applicant-name">EVALUATION SCORECARD</span>
-        <button class="btn-close-modal" onclick="closeModal('scorecard-modal')">×</button>
+        <button class="btn-close-modal" onclick="closeModal('scorecard-modal')" data-tooltip="Close scorecard">X</button>
       </div>
 
       <div class="grid-2">
@@ -1501,7 +1777,7 @@
         </select>
       </div>
 
-      <button class="btn-publish" style="margin-top: 0.25rem;" onclick="saveScorecard()">
+      <button class="btn-publish" style="margin-top: 0.25rem; width: 100%;" onclick="saveScorecard()">
         SAVE SCORECARD & PROGRESS CANDIDATE
       </button>
     </div>
@@ -1522,7 +1798,7 @@
     let selectedCandidateId = null;
 
     // In-memory Database initialized from LocalStorage or server defaults
-    let publishedJobs = JSON.parse(localStorage.getItem('UTHE_POST_JOBS')) || [
+    let publishedJobs = [
       {
         id: 'JOB-101',
         jobTitle: 'Senior Full-Stack Engineer',
@@ -1579,7 +1855,7 @@
       }
     ];
 
-    let applicants = JSON.parse(localStorage.getItem('UTHE_APPLICANTS')) || [
+    let applicants = [
       {
         id: 'APP-701',
         jobId: 'JOB-101',
@@ -1618,7 +1894,7 @@
       }
     ];
 
-    // Templates Database (No emojis)
+    // Templates Database
     const outreachTemplates = {
       gmail: {
         title: "GMAIL (COLD EMAIL) — JOB DISTRIBUTION PROPOSAL",
@@ -1682,6 +1958,7 @@
     // Tab Switcher
     window.switchTab = function(tabId) {
       document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.workspace-view').forEach(v => v.classList.remove('active'));
 
       const targetView = document.getElementById(`view-${tabId}`);
@@ -1693,6 +1970,9 @@
       const tabBtns = document.querySelectorAll('.nav-tab');
       if (tabBtns[tabs[tabId]]) tabBtns[tabs[tabId]].classList.add('active');
 
+      const drawerBtns = document.querySelectorAll('.drawer-tab-btn');
+      if (drawerBtns[tabs[tabId]]) drawerBtns[tabs[tabId]].classList.add('active');
+
       if (tabId === 'hunter' && document.getElementById('hunter-results-body').children.length === 0) {
         searchHunterLeads();
       } else if (tabId === 'aggregator' && document.getElementById('aggregator-results-body').children.length === 0) {
@@ -1701,6 +1981,20 @@
         renderKanban();
       }
     };
+
+    function toggleRecruiterDrawer() {
+      const overlay = document.getElementById('recruiter-drawer-overlay');
+      const drawer = document.getElementById('recruiter-drawer');
+      const isOpen = drawer.classList.contains('open');
+
+      if (isOpen) {
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+      } else {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+      }
+    }
 
     // Live Reactive Preview Formatter
     function syncLivePreview() {
@@ -1751,8 +2045,29 @@
       });
     }
 
+    // Load jobs from server
+    async function loadServerJobs() {
+      try {
+        const res = await fetch('/api/jobs');
+        const data = await res.json();
+        if (data.jobs && data.jobs.length > 0) {
+          publishedJobs = data.jobs;
+          renderActiveJobs();
+        }
+      } catch (e) {}
+
+      try {
+        const resApps = await fetch('/api/applicants');
+        const dataApps = await resApps.json();
+        if (dataApps.applicants && dataApps.applicants.length > 0) {
+          applicants = dataApps.applicants;
+          renderKanban();
+        }
+      } catch (e) {}
+    }
+
     // Publish Execution
-    window.handlePublishJob = function() {
+    window.handlePublishJob = async function() {
       const minVal = parseInt(minSalaryInput.value || 0);
       const maxVal = parseInt(maxSalaryInput.value || 0);
       const salaryStr = (payTypeInput.value === "Hourly Rate")
@@ -1779,13 +2094,19 @@
         createdAt: new Date().toISOString()
       };
 
+      try {
+        await fetch('/api/jobs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newJob)
+        });
+      } catch (e) {}
+
       publishedJobs.unshift(newJob);
-      localStorage.setItem('UTHE_POST_JOBS', JSON.stringify(publishedJobs));
       renderActiveJobs();
 
       // Transmit to dual-system sync bus
       broadcastSyncEvent('JOB_PUBLISHED', { job: newJob, total: publishedJobs.length });
-
       showToast(`"${newJob.jobTitle}" is published live and synced to u-theJOBS candidate board.`, "PUBLISHED LIVE");
     };
 
@@ -1804,9 +2125,12 @@
       showToast(`Broadcasting "${jobTitleInput.value}" across all 7 connected channels simultaneously.`, "OMNI-CHANNEL BROADCAST");
     };
 
-    window.deleteJobListing = function(jobId, index) {
+    window.deleteJobListing = async function(jobId, index) {
+      try {
+        await fetch(`/api/jobs/${jobId}`, { method: 'DELETE' });
+      } catch (e) {}
+
       publishedJobs.splice(index, 1);
-      localStorage.setItem('UTHE_POST_JOBS', JSON.stringify(publishedJobs));
       renderActiveJobs();
 
       broadcastSyncEvent('JOB_DELETED', { jobId: jobId, total: publishedJobs.length });
@@ -1864,9 +2188,11 @@
     }
 
     function handleIncomingSyncPacket(data) {
-      if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
+      if (data.type === 'INITIAL_STATE') {
+        if (data.jobs) { publishedJobs = data.jobs; renderActiveJobs(); }
+        if (data.applicants) { applicants = data.applicants; renderKanban(); }
+      } else if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
         applicants.unshift(data.applicant);
-        localStorage.setItem('UTHE_APPLICANTS', JSON.stringify(applicants));
         renderKanban();
         showToast(`New candidate applied: ${data.applicant.name} for ${data.applicant.jobTitle}`, "CANDIDATE APPLICATION");
       }
@@ -1884,7 +2210,6 @@
           const previewEl = document.getElementById('header-logo-preview');
           previewEl.src = e.target.result;
 
-          // Directly replace the button in-place
           document.getElementById('btn-upload-logo-container').style.display = 'none';
           const logoContainer = document.getElementById('header-logo-container');
           logoContainer.style.display = 'flex';
@@ -2097,7 +2422,6 @@
       const cand = applicants.find(a => a.id === candId);
       if (cand) {
         cand.status = targetStatus;
-        localStorage.setItem('UTHE_APPLICANTS', JSON.stringify(applicants));
         renderKanban();
         showToast(`${cand.name} moved to ${targetStatus} stage.`, "STAGE UPDATED");
       }
@@ -2165,7 +2489,7 @@
         log('  FAIL: Hunter API request error: ' + e.message, '#F87171');
       }
 
-      // Test 2: UI Reactivity & Currency Masking
+      // Test 2: UI Reactivity
       log('> TEST 2: UI Live Preview DOM Reactivity...');
       const prevTitle = jobTitleInput.value;
       jobTitleInput.value = 'Diagnostics Test Engineer';
@@ -2225,6 +2549,7 @@
       renderKanban();
       initDualSyncBus();
       selectChannelTemplate('gmail');
+      loadServerJobs();
 
       // Restore saved draft
       const draft = JSON.parse(localStorage.getItem('UTHE_POST_DRAFT'));

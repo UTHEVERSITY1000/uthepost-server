@@ -1,7 +1,6 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const url = require('url');
 
 const PORT = process.env.PORT || 3000;
 
@@ -185,10 +184,10 @@ const openSourceFeeds = [
 ];
 
 // Hunter.io Lead Engine Simulated & Proxy Engine
-function handleHunterDomainSearch(query) {
-  const domain = (query.domain || 'google.com').toLowerCase().trim();
-  const department = query.department || 'hr,management';
-  const seniority = query.seniority || 'executive,senior';
+function handleHunterDomainSearch(params) {
+  const domain = (params.get('domain') || 'google.com').toLowerCase().trim();
+  const department = params.get('department') || 'hr,management';
+  const seniority = params.get('seniority') || 'executive,senior';
 
   const companyName = domain.split('.')[0].toUpperCase() + (domain.includes('.io') ? ' Labs' : ' Inc');
   
@@ -270,8 +269,8 @@ function handleHunterDomainSearch(query) {
   };
 }
 
-function handleHunterEmailVerify(query) {
-  const email = (query.email || 'recruiter@company.com').toLowerCase().trim();
+function handleHunterEmailVerify(params) {
+  const email = (params.get('email') || 'recruiter@company.com').toLowerCase().trim();
   const domain = email.split('@')[1] || 'company.com';
   return {
     data: {
@@ -295,7 +294,7 @@ function handleHunterEmailVerify(query) {
 
 // HTTP Server
 const server = http.createServer((req, res) => {
-  const parsedUrl = url.parse(req.url, true);
+  const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost:3000'}`);
   const pathname = parsedUrl.pathname;
 
   // CORS headers
@@ -326,14 +325,14 @@ const server = http.createServer((req, res) => {
 
   // Hunter.io API Endpoints
   if (pathname === '/api/hunter/domain-search' || pathname === '/v2/domain-search') {
-    const result = handleHunterDomainSearch(parsedUrl.query);
+    const result = handleHunterDomainSearch(parsedUrl.searchParams);
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(result));
     return;
   }
 
   if (pathname === '/api/hunter/email-verifier' || pathname === '/v2/email-verifier') {
-    const result = handleHunterEmailVerify(parsedUrl.query);
+    const result = handleHunterEmailVerify(parsedUrl.searchParams);
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(result));
     return;
@@ -503,25 +502,27 @@ function initWebSocket() {
 
     wss.on('connection', (ws, req) => {
       connectedClients.add(ws);
-      console.log(`[WebSocket Bus] Client connected. Total active clients: ${connectedClients.size}`);
 
       // Send initial state snapshot
-      ws.send(JSON.stringify({
-        type: 'INITIAL_STATE',
-        jobs: globalJobDatabase,
-        applicants: applicantsStore,
-        timestamp: new Date().toISOString()
-      }));
+      try {
+        ws.send(JSON.stringify({
+          type: 'INITIAL_STATE',
+          jobs: globalJobDatabase,
+          applicants: applicantsStore,
+          timestamp: new Date().toISOString()
+        }));
+      } catch (err) {}
 
       ws.on('message', (message) => {
         try {
           const data = JSON.parse(message.toString());
-          console.log(`[WebSocket Bus] Event received: ${data.type}`);
 
           // Broadcast to all other clients
           for (const client of connectedClients) {
             if (client !== ws && client.readyState === wsModule.OPEN) {
-              client.send(JSON.stringify(data));
+              try {
+                client.send(JSON.stringify(data));
+              } catch (e) {}
             }
           }
 
@@ -554,18 +555,19 @@ function initWebSocket() {
           } else if (data.type === 'APPLY_JOB' && data.applicant) {
             applicantsStore.unshift(data.applicant);
           }
-        } catch (e) {
-          console.error('[WebSocket Bus] Error processing message:', e);
-        }
+        } catch (e) {}
       });
 
       ws.on('close', () => {
         connectedClients.delete(ws);
-        console.log(`[WebSocket Bus] Client disconnected. Active clients: ${connectedClients.size}`);
+      });
+
+      ws.on('error', () => {
+        connectedClients.delete(ws);
       });
     });
   } catch (err) {
-    console.log('[WebSocket Bus] ws package initialized in fallback mode:', err.message);
+    console.log('[WebSocket Bus] ws initialized with notice:', err.message);
   }
 }
 
@@ -579,10 +581,17 @@ function broadcastWebSocketEvent(type, payload) {
 
   connectedClients.forEach(client => {
     if (client.readyState === 1) { // OPEN
-      client.send(message);
+      try {
+        client.send(message);
+      } catch (e) {}
     }
   });
 }
+
+// Process error catching to prevent unexpected exits
+process.on('uncaughtException', (err) => {
+  console.error('[Process Error Caught]', err.message);
+});
 
 server.listen(PORT, () => {
   console.log(`================================================================`);

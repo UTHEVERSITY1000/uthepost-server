@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>u-thePOST x u-theJOBS — Dual-System Staging Environment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>u-thePOST x u-theJOBS x u-theADMIN — 3-Role Dual-Sync Staging Environment</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-hub: #0B0F19;
@@ -21,25 +21,35 @@
       --cyan-accent: #06B6D4;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    html, body {
+      width: 100%;
+      height: 100%;
       background-color: var(--bg-hub);
       color: var(--text-light);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* TOOLTIP SYSTEM */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* PLAIN-ENGLISH TOOLTIP SYSTEM */
     [data-tooltip] {
       position: relative;
     }
 
-    [data-tooltip]:hover::after {
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus-visible::after {
       content: attr(data-tooltip);
       position: absolute;
       bottom: calc(100% + 8px);
@@ -48,12 +58,12 @@
       background: #111827;
       color: #F9FAFB;
       font-size: 0.72rem;
-      font-weight: 500;
+      font-weight: 600;
       line-height: 1.4;
       padding: 0.5rem 0.75rem;
       border-radius: 6px;
       border: 1px solid var(--uthe-gold);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
       white-space: normal;
       width: max-content;
       max-width: 260px;
@@ -66,7 +76,8 @@
       animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    [data-tooltip]:hover::before {
+    [data-tooltip]:hover::before,
+    [data-tooltip]:focus-visible::before {
       content: '';
       position: absolute;
       bottom: calc(100% + 2px);
@@ -85,9 +96,26 @@
       to { opacity: 1; transform: translate(-50%, 0); }
     }
 
+    /* 48PX MINIMUM TOUCH TARGETS & PRESS FEEDBACK */
+    button, .touch-target {
+      min-height: 48px;
+      touch-action: manipulation;
+      font-family: inherit;
+    }
+
+    button:active {
+      transform: scale(0.97);
+      transition: transform 0.1s ease;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--uthe-gold);
+      outline-offset: 2px;
+    }
+
     /* TOP MASTER STAGING CONTROLLER */
     .master-header {
-      height: 54px;
+      height: 64px;
       background: var(--panel-dark);
       border-bottom: 2px solid var(--uthe-gold);
       display: flex;
@@ -95,6 +123,9 @@
       align-items: center;
       padding: 0 1.25rem;
       z-index: 100;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
 
     .brand-title {
@@ -114,22 +145,28 @@
       background: #0B0F19;
       border: 1px solid var(--border-dark);
       border-radius: 6px;
-      padding: 2px;
-      gap: 2px;
+      padding: 3px;
+      gap: 3px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .btn-mode {
       background: transparent;
       border: none;
       color: var(--text-dim);
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 0.4rem 0.85rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0 0.85rem;
       border-radius: 4px;
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       transition: all 0.2s;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      height: 40px;
     }
 
     .btn-mode.active, .btn-mode:hover {
@@ -139,6 +176,7 @@
 
     .btn-mode.active {
       color: var(--uthe-gold);
+      font-weight: 900;
     }
 
     .header-metrics {
@@ -155,23 +193,27 @@
       background: var(--status-mint-bg);
       color: var(--status-mint);
       border: 1px solid rgba(0, 200, 83, 0.4);
-      padding: 0.25rem 0.75rem;
+      padding: 0 0.75rem;
       border-radius: 20px;
       letter-spacing: 0.8px;
+      height: 36px;
     }
 
     .btn-run-tests {
       background: var(--uthe-gold);
       color: #000000;
       border: none;
-      padding: 0.45rem 1rem;
+      padding: 0 1rem;
       border-radius: 4px;
       font-weight: 900;
-      font-size: 0.68rem;
+      font-size: 0.72rem;
       letter-spacing: 0.8px;
       text-transform: uppercase;
       cursor: pointer;
       transition: all 0.2s;
+      height: 40px;
+      display: flex;
+      align-items: center;
     }
 
     .btn-run-tests:hover {
@@ -179,7 +221,7 @@
       box-shadow: 0 0 12px rgba(229, 168, 0, 0.5);
     }
 
-    /* DUAL SPLIT-SCREEN WORKBENCH */
+    /* 3-ROLE STAGING CANVAS */
     .staging-canvas {
       flex: 1;
       display: grid;
@@ -200,14 +242,14 @@
     }
 
     .pane-header-bar {
-      height: 30px;
+      height: 36px;
       background: #1E293B;
       color: #94A3B8;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 0.85rem;
-      font-size: 0.62rem;
+      font-size: 0.65rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.8px;
@@ -224,7 +266,7 @@
 
     /* BOTTOM EVENT BUS TERMINAL */
     .bus-terminal-panel {
-      height: 160px;
+      height: 150px;
       background: #080C14;
       border-top: 1px solid var(--border-dark);
       display: flex;
@@ -233,13 +275,13 @@
     }
 
     .bus-terminal-header {
-      height: 28px;
+      height: 32px;
       background: #0F172A;
       padding: 0 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.62rem;
+      font-size: 0.65rem;
       font-weight: 800;
       color: var(--uthe-gold);
       letter-spacing: 1px;
@@ -251,8 +293,9 @@
       flex: 1;
       padding: 0.5rem 1rem;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
@@ -266,32 +309,40 @@
     }
 
     .log-time { color: #64748B; min-width: 75px; }
-    .log-type { color: var(--uthe-gold); font-weight: 700; min-width: 160px; }
-    .log-payload { color: #38BDF8; }
+    .log-type { color: var(--uthe-gold); font-weight: 700; min-width: 170px; }
+    .log-payload { color: #38BDF8; word-break: break-all; }
     .log-latency { color: var(--status-mint); margin-left: auto; font-weight: 700; }
+
+    @media (max-width: 900px) {
+      .master-header { height: auto; padding: 0.75rem; }
+      .hub-mode-buttons { width: 100%; }
+      .staging-canvas { grid-template-columns: 1fr; }
+      .bus-terminal-panel { height: 120px; }
+    }
   </style>
 </head>
 <body>
 
   <!-- MASTER CONTROLLER HEADER -->
   <header class="master-header">
-    <div class="brand-title" data-tooltip="Side-by-side staging hub to test employer publishing and candidate discovery in real time.">
-      <span>U-THEPOST <span class="brand-gold">x</span> U-THEJOBS</span>
-      <span style="font-size: 0.6rem; background: #1F2937; color: #94A3B8; padding: 0.15rem 0.45rem; border-radius: 4px; font-weight: 700;">STAGING HUB</span>
+    <div class="brand-title" data-tooltip="Side-by-side staging hub to test employer publishing, candidate discovery, and master admin in real time.">
+      <span>U-THEPOST <span class="brand-gold">x</span> U-THEJOBS <span class="brand-gold">x</span> U-THEADMIN</span>
+      <span style="font-size: 0.6rem; background: #1F2937; color: #94A3B8; padding: 0.15rem 0.45rem; border-radius: 4px; font-weight: 700;">3-ROLE STAGING HUB</span>
     </div>
 
     <div class="hub-mode-buttons">
       <button class="btn-mode active" onclick="setCanvasMode('split')" data-tooltip="View employer portal and candidate board side-by-side.">50 / 50 Split View</button>
       <button class="btn-mode" onclick="setCanvasMode('post')" data-tooltip="Focus exclusively on the recruiter job posting dashboard.">u-thePOST (Recruiter)</button>
       <button class="btn-mode" onclick="setCanvasMode('jobs')" data-tooltip="Focus exclusively on the candidate application board.">u-theJOBS (Applicant)</button>
+      <button class="btn-mode" onclick="setCanvasMode('admin')" data-tooltip="Focus exclusively on the master governance suite.">u-theADMIN (Master Suite)</button>
     </div>
 
     <div class="header-metrics">
-      <div class="sync-badge" data-tooltip="Real-time connection is live between both portals.">
-        <span id="bus-status-text">WEBSOCKET & BUS LIVE</span>
+      <div class="sync-badge" data-tooltip="Real-time WebSocket connection is live between all portals.">
+        <span id="bus-status-text">WEBSOCKET MESH LIVE</span>
       </div>
-      <div style="font-size: 0.65rem; color: #94A3B8; font-family: 'JetBrains Mono', monospace;" data-tooltip="Measured transfer latency between recruiter publish and candidate receipt.">
-        LATENCY: <span id="metric-latency" style="color: var(--status-mint); font-weight: 800;">< 3ms</span>
+      <div style="font-size: 0.65rem; color: #94A3B8; font-family: 'JetBrains Mono', monospace;" data-tooltip="Measured transfer latency across sync bus.">
+        LATENCY: <span id="metric-latency" style="color: var(--status-mint); font-weight: 800;">&lt; 3ms</span>
       </div>
       <button class="btn-run-tests" onclick="triggerStagingTests()" data-tooltip="Run the full automated diagnostic test suite.">
         RUN TEST SUITE
@@ -306,7 +357,7 @@
     <div class="pane-container" id="pane-post">
       <div class="pane-header-bar">
         <span style="color: var(--uthe-gold);">RECRUITER CORE: U-THEPOST (ENTERPRISE EDITION)</span>
-        <span>PORT 3000 / HOST NODE</span>
+        <span>PORT 3000 / post.utheversity.com</span>
       </div>
       <iframe class="pane-iframe" id="iframe-post" src="/u-thePOST-ENTERPRISE-EDITION.html"></iframe>
     </div>
@@ -315,9 +366,18 @@
     <div class="pane-container" id="pane-jobs">
       <div class="pane-header-bar">
         <span style="color: var(--cyan-accent);">APPLICANT BOARD: U-THEJOBS (LIVE SYNC NODE)</span>
-        <span>AUTO-REACTIVE CONSUMER</span>
+        <span>AUTO-REACTIVE / jobs.utheversity.com</span>
       </div>
       <iframe class="pane-iframe" id="iframe-jobs" src="/u-theJOBS-ENTERPRISE-SYNC.html"></iframe>
+    </div>
+
+    <!-- PANE 3: U-THEADMIN (HIDDEN BY DEFAULT IN SPLIT MODE) -->
+    <div class="pane-container" id="pane-admin" style="display: none;">
+      <div class="pane-header-bar">
+        <span style="color: var(--uthe-gold);">MASTER GOVERNANCE: U-THEADMIN</span>
+        <span>TELEMETRY CORE / admin.utheversity.com</span>
+      </div>
+      <iframe class="pane-iframe" id="iframe-admin" src="/u-theADMIN-MASTER-SUITE.html"></iframe>
     </div>
 
   </div>
@@ -325,14 +385,14 @@
   <!-- BOTTOM EVENT BUS PACKET TERMINAL -->
   <div class="bus-terminal-panel" id="terminal-panel">
     <div class="bus-terminal-header">
-      <span>Live Event Inspector & Synchronization Relay</span>
-      <span style="font-size: 0.58rem; color: #64748B;">CHANNEL: UTHE_DUAL_SYNC_CHANNEL</span>
+      <span>Live Event Inspector &amp; Synchronization Relay</span>
+      <span style="font-size: 0.6rem; color: #64748B;">CHANNEL: UTHE_DUAL_SYNC_CHANNEL</span>
     </div>
     <div class="bus-logs-scroll" id="bus-logs">
       <div class="log-line">
         <span class="log-time">[READY]</span>
         <span class="log-type">NODE_INITIALIZED</span>
-        <span class="log-payload">Dual-system synchronization mesh established across Recruiter and Applicant nodes.</span>
+        <span class="log-payload">3-Role synchronization mesh established across Recruiter, Applicant, and Admin nodes.</span>
         <span class="log-latency">0.0ms</span>
       </div>
     </div>
@@ -349,21 +409,31 @@
       const canvas = document.getElementById('staging-canvas');
       const panePost = document.getElementById('pane-post');
       const paneJobs = document.getElementById('pane-jobs');
+      const paneAdmin = document.getElementById('pane-admin');
 
       if (mode === 'split') {
         canvas.style.gridTemplateColumns = '1fr 1fr';
         panePost.style.display = 'flex';
         paneJobs.style.display = 'flex';
+        paneAdmin.style.display = 'none';
         event.target.classList.add('active');
       } else if (mode === 'post') {
         canvas.style.gridTemplateColumns = '1fr';
         panePost.style.display = 'flex';
         paneJobs.style.display = 'none';
+        paneAdmin.style.display = 'none';
         event.target.classList.add('active');
       } else if (mode === 'jobs') {
         canvas.style.gridTemplateColumns = '1fr';
         panePost.style.display = 'none';
         paneJobs.style.display = 'flex';
+        paneAdmin.style.display = 'none';
+        event.target.classList.add('active');
+      } else if (mode === 'admin') {
+        canvas.style.gridTemplateColumns = '1fr';
+        panePost.style.display = 'none';
+        paneJobs.style.display = 'none';
+        paneAdmin.style.display = 'flex';
         event.target.classList.add('active');
       }
     }
@@ -409,7 +479,9 @@
       if (iframePost && iframePost.contentWindow && iframePost.contentWindow.switchTab) {
         iframePost.contentWindow.switchTab('diagnostics');
         setTimeout(() => {
-          iframePost.contentWindow.runAutomatedTests();
+          if (iframePost.contentWindow.runAutomatedTests) {
+            iframePost.contentWindow.runAutomatedTests();
+          }
         }, 300);
       }
     }

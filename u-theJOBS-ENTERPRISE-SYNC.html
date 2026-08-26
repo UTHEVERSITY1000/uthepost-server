@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>u-theJOBS — Candidate Discovery & Application Board</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-light: #F8FAFC;
@@ -20,28 +20,42 @@
       --emerald-green: #059669;
       --emerald-bg: #ECFDF5;
       --airy-grey: #F1F5F9;
+      --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    body {
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    html, body {
+      width: 100%;
+      min-height: 100%;
       background-color: var(--bg-light);
       color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      padding: 1.25rem;
-      gap: 1rem;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* TOOLTIP SYSTEM */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 1rem;
+      gap: 1rem;
+      padding-bottom: 76px; /* Space for sticky bottom bar on mobile */
+    }
+
+    /* PLAIN-ENGLISH TOOLTIP SYSTEM */
     [data-tooltip] {
       position: relative;
     }
 
-    [data-tooltip]:hover::after {
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus-visible::after {
       content: attr(data-tooltip);
       position: absolute;
       bottom: calc(100% + 8px);
@@ -68,7 +82,8 @@
       animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    [data-tooltip]:hover::before {
+    [data-tooltip]:hover::before,
+    [data-tooltip]:focus-visible::before {
       content: '';
       position: absolute;
       bottom: calc(100% + 2px);
@@ -87,6 +102,23 @@
       to { opacity: 1; transform: translate(-50%, 0); }
     }
 
+    /* 48PX MINIMUM TOUCH TARGETS & PRESS FEEDBACK */
+    button, input, select, textarea, .touch-target {
+      min-height: 48px;
+      touch-action: manipulation;
+      font-family: inherit;
+    }
+
+    button:active, .btn-touch:active {
+      transform: scale(0.97);
+      transition: transform 0.1s ease;
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--uthe-gold);
+      outline-offset: 2px;
+    }
+
     /* TOP HEADER BAR */
     .top-header {
       display: flex;
@@ -95,17 +127,74 @@
       background: #FFFFFF;
       border-radius: 8px;
       border: 1px solid var(--border-color);
-      border-bottom: 2px solid var(--uthe-gold);
+      border-bottom: 2.5px solid var(--uthe-gold);
       padding: 0.75rem 1.25rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .brand-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 900;
       letter-spacing: 2px;
       color: var(--uthe-black);
       text-transform: uppercase;
+    }
+
+    .badge-sub {
+      font-size: 0.62rem;
+      font-weight: 800;
+      background: var(--airy-grey);
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    /* 8K PNG LOGO CONTAINER */
+    .header-logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-logo-upload {
+      background: var(--airy-grey);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0 0.85rem;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .btn-logo-upload:hover {
+      border-color: var(--uthe-gold);
+      color: var(--uthe-gold);
+    }
+
+    .header-logo-preview {
+      display: none;
+      max-height: 38px;
+      width: auto;
+      max-width: 140px;
+      object-fit: contain;
+      cursor: pointer;
+      image-rendering: -webkit-optimize-contrast;
+      border: 1px dashed var(--border-color);
+      border-radius: 4px;
+      padding: 2px;
     }
 
     .sync-status {
@@ -116,10 +205,11 @@
       background: var(--emerald-bg);
       color: #065F46;
       border: 1px solid #A7F3D0;
-      padding: 0.25rem 0.65rem;
+      padding: 0 0.75rem;
       border-radius: 20px;
       text-transform: uppercase;
       letter-spacing: 0.8px;
+      height: 36px;
     }
 
     /* SEARCH BELT */
@@ -127,22 +217,22 @@
       background: #FFFFFF;
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 0.85rem 1.25rem;
+      padding: 1rem 1.25rem;
       display: grid;
       grid-template-columns: 2fr 1.5fr 1fr auto;
-      gap: 0.75rem;
+      gap: 0.85rem;
       align-items: end;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      box-shadow: var(--shadow-subtle);
     }
 
     .search-input-group {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.35rem;
     }
 
     .search-label {
-      font-size: 0.62rem;
+      font-size: 0.65rem;
       font-weight: 800;
       color: var(--uthe-black);
       text-transform: uppercase;
@@ -152,8 +242,8 @@
     .search-input, .search-select {
       background: var(--airy-grey);
       border: 1px solid var(--border-color);
-      border-radius: 4px;
-      padding: 0.55rem 0.75rem;
+      border-radius: 6px;
+      padding: 0 0.85rem;
       font-size: 0.82rem;
       font-weight: 600;
       color: var(--text-main);
@@ -164,22 +254,24 @@
     .search-input:focus, .search-select:focus {
       border-color: var(--uthe-gold);
       background: #FFFFFF;
-      box-shadow: 0 0 0 2px rgba(229, 168, 0, 0.15);
+      box-shadow: 0 0 0 2px rgba(229, 168, 0, 0.2);
     }
 
     .btn-search {
       background: var(--uthe-black);
       color: var(--uthe-gold);
       border: 1px solid var(--uthe-gold);
-      padding: 0.55rem 1.25rem;
-      border-radius: 4px;
-      font-weight: 800;
-      font-size: 0.72rem;
+      padding: 0 1.5rem;
+      border-radius: 6px;
+      font-weight: 900;
+      font-size: 0.75rem;
       letter-spacing: 1px;
       text-transform: uppercase;
       cursor: pointer;
-      height: 36px;
       transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .btn-search:hover {
@@ -187,10 +279,10 @@
       color: var(--uthe-black);
     }
 
-    /* MAIN BOARD GRID */
+    /* MAIN BOARD GRID (DESKTOP & MOBILE FLUID STACK) */
     .board-grid {
       display: grid;
-      grid-template-columns: 420px 1fr;
+      grid-template-columns: 400px 1fr;
       gap: 1.25rem;
       flex: 1;
       min-height: 580px;
@@ -205,18 +297,19 @@
       flex-direction: column;
       gap: 0.75rem;
       overflow-y: auto;
-      max-height: 700px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      -webkit-overflow-scrolling: touch;
+      max-height: 720px;
+      box-shadow: var(--shadow-subtle);
     }
 
     .belt-title {
-      font-size: 0.75rem;
-      font-weight: 800;
+      font-size: 0.78rem;
+      font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 1.2px;
       color: var(--uthe-black);
       border-bottom: 2px solid var(--uthe-gold);
-      padding-bottom: 0.4rem;
+      padding-bottom: 0.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -226,10 +319,10 @@
       background: #FFFFFF;
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 0.85rem;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.4rem;
       cursor: pointer;
       transition: all 0.2s ease;
       position: relative;
@@ -237,7 +330,7 @@
 
     .job-item-card:hover, .job-item-card.selected {
       border-color: var(--uthe-gold);
-      box-shadow: 0 4px 12px rgba(229, 168, 0, 0.15);
+      box-shadow: 0 4px 14px rgba(229, 168, 0, 0.18);
       background: #FFFDF5;
     }
 
@@ -250,11 +343,11 @@
       100% { border-color: var(--border-color); box-shadow: none; background: #FFFFFF; }
     }
 
-    .item-role { font-size: 0.9rem; font-weight: 800; color: var(--uthe-black); }
-    .item-company { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+    .item-role { font-size: 0.92rem; font-weight: 900; color: var(--uthe-black); }
+    .item-company { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); }
     
-    .item-meta { display: flex; gap: 0.35rem; margin-top: 0.2rem; flex-wrap: wrap; }
-    .badge-pill { font-size: 0.62rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 3px; text-transform: uppercase; }
+    .item-meta { display: flex; gap: 0.4rem; margin-top: 0.25rem; flex-wrap: wrap; }
+    .badge-pill { font-size: 0.65rem; font-weight: 800; padding: 0.2rem 0.5rem; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
     .pill-loc { background: #F1F5F9; color: var(--text-main); }
     .pill-pay { background: var(--emerald-bg); color: var(--emerald-green); border: 1px solid #A7F3D0; }
     .pill-time { background: #FAF5FF; color: #7C3AED; border: 1px solid #E9D5FF; }
@@ -267,10 +360,11 @@
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      gap: 1.25rem;
+      box-shadow: var(--shadow-subtle);
       overflow-y: auto;
-      max-height: 700px;
+      -webkit-overflow-scrolling: touch;
+      max-height: 720px;
     }
 
     .detail-header {
@@ -279,23 +373,28 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      gap: 1rem;
     }
 
-    .detail-title { font-size: 1.35rem; font-weight: 900; color: var(--uthe-black); }
-    .detail-company { font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin-top: 0.2rem; }
+    .detail-title { font-size: 1.4rem; font-weight: 900; color: var(--uthe-black); }
+    .detail-company { font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin-top: 0.25rem; }
 
     .btn-apply-main {
       background: var(--uthe-black);
       color: var(--uthe-gold);
       border: 1.5px solid var(--uthe-gold);
-      padding: 0.75rem 1.5rem;
+      padding: 0 1.75rem;
       border-radius: 6px;
       font-weight: 900;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
+      font-size: 0.82rem;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
 
     .btn-apply-main:hover {
@@ -307,21 +406,21 @@
     .benefits-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.65rem;
+      gap: 0.85rem;
       background: #F8FAFC;
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 0.85rem;
+      padding: 1rem;
     }
 
     .benefit-item {
       display: flex;
       flex-direction: column;
-      gap: 0.15rem;
+      gap: 0.2rem;
     }
 
-    .benefit-lbl { font-size: 0.58rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
-    .benefit-val { font-size: 0.75rem; font-weight: 700; color: var(--text-main); }
+    .benefit-lbl { font-size: 0.62rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .benefit-val { font-size: 0.8rem; font-weight: 700; color: var(--text-main); }
 
     /* APPLY MODAL */
     .modal-overlay {
@@ -345,7 +444,7 @@
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
+      gap: 1rem;
       box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
 
@@ -354,52 +453,127 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--border-color);
-      padding-bottom: 0.4rem;
+      padding-bottom: 0.5rem;
     }
 
-    .modal-title { font-size: 0.85rem; font-weight: 900; color: var(--uthe-black); text-transform: uppercase; letter-spacing: 1px; }
-    .btn-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); }
+    .modal-title { font-size: 0.9rem; font-weight: 900; color: var(--uthe-black); text-transform: uppercase; letter-spacing: 1px; }
+    .btn-close { background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted); font-weight: 800; min-height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center; }
 
-    .form-group { display: flex; flex-direction: column; gap: 0.25rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
     .form-group label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
     .form-group input, .form-group textarea {
-      padding: 0.55rem 0.75rem;
+      padding: 0 0.85rem;
       border: 1px solid var(--border-color);
-      border-radius: 4px;
-      font-size: 0.8rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
       outline: none;
+      font-family: inherit;
+    }
+    .form-group textarea { padding: 0.75rem 0.85rem; }
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--uthe-gold);
+      box-shadow: 0 0 0 2px rgba(229, 168, 0, 0.2);
+    }
+
+    /* STICKY BOTTOM ACTION BAR (MOBILE) */
+    .mobile-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: #FFFFFF;
+      border-top: 2px solid var(--uthe-gold);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 0.75rem;
+      z-index: 999;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-bottom-mobile {
+      background: var(--airy-grey);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 0 0.85rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      margin: 0 0.25rem;
+      height: 48px;
+    }
+
+    .btn-bottom-mobile.primary {
+      background: var(--uthe-black);
+      color: var(--uthe-gold);
+      border: 1px solid var(--uthe-gold);
+      font-weight: 900;
     }
 
     /* TOAST */
     .toast-overlay {
       position: fixed;
-      bottom: 2rem;
-      right: 2rem;
+      bottom: 80px;
+      right: 1.25rem;
       z-index: 3000;
       display: none;
       background: var(--uthe-black);
       border: 1.5px solid var(--uthe-gold);
       color: #FFFFFF;
-      padding: 1rem 1.25rem;
+      padding: 0.85rem 1.25rem;
       border-radius: 8px;
       box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-      max-width: 380px;
+      max-width: 360px;
     }
 
     .toast-title { color: var(--uthe-gold); font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
     .toast-msg { font-size: 0.8rem; font-weight: 600; margin-top: 0.2rem; line-height: 1.4; }
+
+    /* RESPONSIVE BREAKPOINTS */
+    @media (max-width: 768px) {
+      body { padding: 0.75rem; }
+      .search-belt { grid-template-columns: 1fr; }
+      .board-grid { grid-template-columns: 1fr; }
+      .benefits-grid { grid-template-columns: repeat(2, 1fr); }
+      .detail-header { flex-direction: column; }
+      .top-header { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+      .sync-status { width: 100%; justify-content: center; }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-bottom-bar { display: none; }
+      body { padding-bottom: 1rem; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- TOP HEADER BAR -->
   <div class="top-header">
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-      <span class="brand-title" data-tooltip="u-theJOBS: The live applicant discovery board connected to u-thePOST.">U-THEJOBS</span>
-      <span style="font-size: 0.65rem; font-weight: 800; background: var(--airy-grey); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--text-muted);">CANDIDATE PORTAL</span>
+    <div class="brand-wrap">
+      <span class="brand-title" data-tooltip="u-theJOBS: The live applicant discovery board synchronized with u-thePOST and u-theADMIN.">U-THEJOBS</span>
+      <span class="badge-sub">CANDIDATE BOARD</span>
+
+      <!-- 8K PNG LOGO CONTAINER -->
+      <div class="header-logo-container">
+        <input type="file" id="jobs-logo-picker" accept="image/png, image/jpeg, image/webp" style="display:none;" onchange="handleJobsLogo(event)">
+        <button class="btn-logo-upload" id="btn-jobs-logo-upload" onclick="document.getElementById('jobs-logo-picker').click()" data-tooltip="Upload an official high-resolution 8K PNG company logo.">
+          UPLOAD LOGO
+        </button>
+        <img id="jobs-logo-preview" class="header-logo-preview" alt="Jobs Logo" onclick="document.getElementById('jobs-logo-picker').click()" data-tooltip="Click to update logo.">
+      </div>
     </div>
-    <div class="sync-status" data-tooltip="This portal updates immediately when recruiters post or edit jobs.">
-      <span id="sync-label">SYNCED WITH RECRUITER PORTAL</span>
+
+    <div class="sync-status" data-tooltip="This board receives live real-time updates when jobs are posted or edited by recruiters.">
+      <span id="sync-label">[LIVE SYNC CONNECTED]</span>
     </div>
   </div>
 
@@ -420,19 +594,20 @@
         <option value="Full-Time">Full-Time</option>
         <option value="Part-Time">Part-Time</option>
         <option value="Contract">Contract</option>
+        <option value="Executive">Executive</option>
       </select>
     </div>
-    <button class="btn-search" onclick="filterJobListings()" data-tooltip="Apply these filters to search open positions.">Search</button>
+    <button class="btn-search" onclick="filterJobListings()" data-tooltip="Apply these filters to search open positions.">SEARCH</button>
   </div>
 
-  <!-- MAIN BOARD -->
+  <!-- MAIN BOARD GRID -->
   <div class="board-grid">
     
     <!-- LEFT LISTING BELT -->
     <div class="vertical-belt">
       <div class="belt-title">
         <span>Active Opportunities</span>
-        <span style="color: var(--emerald-green); font-size: 0.65rem;" id="board-count">3 OPENINGS</span>
+        <span style="color: var(--emerald-green); font-size: 0.68rem;" id="board-count">3 OPENINGS</span>
       </div>
       <div id="jobs-list" style="display: flex; flex-direction: column; gap: 0.65rem;"></div>
     </div>
@@ -444,7 +619,7 @@
           <div class="detail-title" id="dt-title">Senior Full-Stack Engineer</div>
           <div class="detail-company" id="dt-company">Quantum Technologies Corp • <span id="dt-location">AUSTIN, TX (REMOTE)</span></div>
         </div>
-        <button class="btn-apply-main" onclick="openApplyModal()" data-tooltip="Open the 1-click candidate application form.">Apply Now</button>
+        <button class="btn-apply-main" onclick="openApplyModal()" data-tooltip="Open the 1-click candidate application form.">APPLY NOW</button>
       </div>
 
       <div class="benefits-grid">
@@ -453,7 +628,7 @@
           <span class="benefit-val" id="dt-salary" style="color: var(--emerald-green); font-weight: 800;">$135,000 - $175,000</span>
         </div>
         <div class="benefit-item" data-tooltip="Paid time off and vacation days included with this role.">
-          <span class="benefit-lbl">PTO & Vacation</span>
+          <span class="benefit-lbl">PTO &amp; Vacation</span>
           <span class="benefit-val" id="dt-pto">Unlimited PTO</span>
         </div>
         <div class="benefit-item" data-tooltip="Medical, dental, and health coverage provided to employees.">
@@ -466,21 +641,21 @@
         </div>
       </div>
 
-      <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem;">
-        <span class="benefit-lbl">Additional Perks & Equipment</span>
-        <div class="benefit-val" id="dt-perks" style="margin-top: 0.2rem;">$3,000 Home Office Stipend + Equity Options</div>
+      <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.85rem;">
+        <span class="benefit-lbl">Additional Perks &amp; Equipment</span>
+        <div class="benefit-val" id="dt-perks" style="margin-top: 0.25rem;">$3,000 Home Office Stipend + Equity Options</div>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-        <span class="search-label">Job Specification & Requirements</span>
-        <div id="dt-desc" style="font-size: 0.85rem; line-height: 1.6; color: var(--text-main);">
+        <span class="search-label">Job Specification &amp; Requirements</span>
+        <div id="dt-desc" style="font-size: 0.88rem; line-height: 1.6; color: var(--text-main);">
           Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.
         </div>
       </div>
 
-      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
         <span style="font-size: 0.68rem; color: var(--text-muted);" id="dt-apply-link">Direct Application URL: https://careers.quantumtech.io/apply/101</span>
-        <button class="btn-apply-main" onclick="openApplyModal()">Submit Application</button>
+        <button class="btn-apply-main" onclick="openApplyModal()" data-tooltip="Submit your candidate resume directly to the employer ATS.">SUBMIT APPLICATION</button>
       </div>
     </div>
 
@@ -491,7 +666,7 @@
     <div class="modal-card">
       <div class="modal-header">
         <span class="modal-title" id="apply-modal-title">SUBMIT CANDIDATE APPLICATION</span>
-        <button class="btn-close" onclick="closeApplyModal()">×</button>
+        <button class="btn-close" onclick="closeApplyModal()" data-tooltip="Close form.">X</button>
       </div>
 
       <div class="form-group">
@@ -510,14 +685,21 @@
       </div>
 
       <div class="form-group">
-        <label>Resume & Background Summary</label>
+        <label>Resume &amp; Background Summary</label>
         <textarea id="cand-summary" rows="3" placeholder="Highlight your relevant experience...">7+ years senior software engineer specialized in real-time WebSockets, TypeScript, and high-concurrency systems.</textarea>
       </div>
 
-      <button class="btn-apply-main" style="margin-top: 0.5rem;" onclick="submitApplication()">
+      <button class="btn-apply-main" style="margin-top: 0.5rem; width: 100%; height: 48px;" onclick="submitApplication()">
         SUBMIT APPLICATION
       </button>
     </div>
+  </div>
+
+  <!-- STICKY MOBILE BOTTOM ACTION BAR -->
+  <div class="mobile-bottom-bar">
+    <button class="btn-bottom-mobile" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" data-tooltip="Scroll to Top">SEARCH</button>
+    <button class="btn-bottom-mobile" onclick="document.getElementById('jobs-list').scrollIntoView({behavior: 'smooth'})" data-tooltip="View List">LISTINGS</button>
+    <button class="btn-bottom-mobile primary" onclick="openApplyModal()" data-tooltip="Apply to Selected Job">APPLY NOW</button>
   </div>
 
   <!-- TOAST NOTIFICATION -->
@@ -532,7 +714,7 @@
     let wsRelay = null;
     let selectedJobIndex = 0;
 
-    let jobsData = JSON.parse(localStorage.getItem('UTHE_POST_JOBS')) || [
+    let jobsData = [
       {
         id: 'JOB-101',
         jobTitle: 'Senior Full-Stack Engineer',
@@ -580,6 +762,33 @@
       }
     ];
 
+    function handleJobsLogo(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const preview = document.getElementById('jobs-logo-preview');
+        const uploadBtn = document.getElementById('btn-jobs-logo-upload');
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        uploadBtn.style.display = 'none';
+        showToast('8K PNG Logo uploaded successfully.', 'LOGO UPDATED');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function loadServerJobs() {
+      try {
+        const res = await fetch('/api/jobs');
+        const data = await res.json();
+        if (data.jobs && data.jobs.length > 0) {
+          jobsData = data.jobs;
+          renderJobsList();
+        }
+      } catch (e) {}
+    }
+
     function renderJobsList(filtered = null, highlightId = null) {
       const listEl = document.getElementById('jobs-list');
       const list = filtered || jobsData;
@@ -593,6 +802,9 @@
           selectedJobIndex = index;
           renderDetailView(job);
           renderJobsList(filtered);
+          if (window.innerWidth < 768) {
+            document.getElementById('detail-panel').scrollIntoView({ behavior: 'smooth' });
+          }
         };
         card.setAttribute('data-tooltip', 'Click to view full position details and apply.');
 
@@ -664,7 +876,10 @@
     }
 
     function handleSyncPacket(data) {
-      if (data.type === 'JOB_PUBLISHED' && data.job) {
+      if (data.type === 'INITIAL_STATE' && data.jobs) {
+        jobsData = data.jobs;
+        renderJobsList();
+      } else if (data.type === 'JOB_PUBLISHED' && data.job) {
         jobsData.unshift(data.job);
         selectedJobIndex = 0;
         renderJobsList(null, data.job.id);
@@ -679,7 +894,8 @@
 
     function openApplyModal() {
       const currentJob = jobsData[selectedJobIndex] || jobsData[0];
-      document.getElementById('apply-modal-title').textContent = `APPLY: ${currentJob.jobTitle.toUpperCase()}`;
+      if (!currentJob) return;
+      document.getElementById('apply-modal-title').textContent = `APPLY: ${(currentJob.jobTitle || currentJob.title).toUpperCase()}`;
       document.getElementById('apply-modal').style.display = 'flex';
     }
 
@@ -687,22 +903,32 @@
       document.getElementById('apply-modal').style.display = 'none';
     }
 
-    function submitApplication() {
+    async function submitApplication() {
       const currentJob = jobsData[selectedJobIndex] || jobsData[0];
       const applicant = {
         id: `APP-${Math.floor(700 + Math.random() * 200)}`,
         jobId: currentJob.id,
-        jobTitle: currentJob.jobTitle,
+        jobTitle: currentJob.jobTitle || currentJob.title,
         name: document.getElementById('cand-name').value,
         email: document.getElementById('cand-email').value,
         phone: document.getElementById('cand-phone').value,
         status: 'Applied',
         score: Math.floor(88 + Math.random() * 10),
+        skills: ['TypeScript', 'System Design', 'Communication'],
         resumeSummary: document.getElementById('cand-summary').value,
         appliedAt: new Date().toISOString()
       };
 
-      // Broadcast to u-thePOST ATS Kanban
+      // Send to server API
+      try {
+        await fetch('/api/applicants', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(applicant)
+        });
+      } catch (e) {}
+
+      // Broadcast to u-thePOST ATS Kanban & u-theADMIN
       const packet = {
         type: 'CANDIDATE_APPLIED',
         applicant: applicant,
@@ -731,6 +957,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       renderJobsList();
+      loadServerJobs();
       initDualSync();
     });
   </script>

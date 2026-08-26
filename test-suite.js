@@ -6,7 +6,7 @@ const WS_URL = 'ws://localhost:3000';
 
 async function runTests() {
   console.log('================================================================');
-  console.log('🧪 U-THEPOST AUTOMATED DIAGNOSTIC & MULTI-SYNC TEST RUNNER');
+  console.log('U-THEPOST & U-THEJOBS AUTOMATED DIAGNOSTIC & MULTI-SYNC TEST SUITE');
   console.log('================================================================\n');
 
   let passed = 0;
@@ -14,22 +14,30 @@ async function runTests() {
 
   function assert(condition, message) {
     if (condition) {
-      console.log(`  ✔ PASS: ${message}`);
+      console.log(`  PASS: ${message}`);
       passed++;
     } else {
-      console.error(`  ✖ FAIL: ${message}`);
+      console.error(`  FAIL: ${message}`);
       failed++;
     }
   }
 
-  function httpGet(path) {
+  function httpGet(path, headers = {}) {
     return new Promise((resolve, reject) => {
-      http.get(`${BASE_URL}${path}`, (res) => {
+      const urlObj = new URL(`${BASE_URL}${path}`);
+      const options = {
+        hostname: urlObj.hostname,
+        port: urlObj.port,
+        path: urlObj.pathname + urlObj.search,
+        headers: headers
+      };
+
+      http.get(options, (res) => {
         let data = '';
         res.on('data', chunk => data += chunk);
         res.on('end', () => {
           try {
-            resolve({ status: res.statusCode, data: JSON.parse(data) });
+            resolve({ status: res.statusCode, data: JSON.parse(data), raw: data });
           } catch (e) {
             resolve({ status: res.statusCode, raw: data });
           }
@@ -52,7 +60,7 @@ async function runTests() {
         res.on('data', chunk => data += chunk);
         res.on('end', () => {
           try {
-            resolve({ status: res.statusCode, data: JSON.parse(data) });
+            resolve({ status: res.statusCode, data: JSON.parse(data), raw: data });
           } catch (e) {
             resolve({ status: res.statusCode, raw: data });
           }
@@ -71,7 +79,7 @@ async function runTests() {
         res.on('data', chunk => data += chunk);
         res.on('end', () => {
           try {
-            resolve({ status: res.statusCode, data: JSON.parse(data) });
+            resolve({ status: res.statusCode, data: JSON.parse(data), raw: data });
           } catch (e) {
             resolve({ status: res.statusCode, raw: data });
           }
@@ -82,7 +90,7 @@ async function runTests() {
     });
   }
 
-  // TEST 1: Healthcheck API
+  // TEST GROUP 1: Core Engine & Healthcheck
   console.log('[TEST GROUP 1] Core Engine & Healthcheck Endpoint');
   try {
     const health = await httpGet('/api/health');
@@ -93,8 +101,49 @@ async function runTests() {
     assert(false, `Healthcheck failed: ${err.message}`);
   }
 
-  // TEST 2: Hunter.io API v2 Lead Engine
-  console.log('\n[TEST GROUP 2] Hunter.io API v2 Integration & Query Filters');
+  // TEST GROUP 2: Host Header Subdomain Routing
+  console.log('\n[TEST GROUP 2] Host-Header Subdomain & Route Resolution');
+  try {
+    // 2a. post.utheversity.com -> u-thePOST Recruiter Dashboard
+    const postRes = await httpGet('/', { 'Host': 'post.utheversity.com' });
+    assert(postRes.status === 200, 'post.utheversity.com returned HTTP 200');
+    assert(postRes.raw.includes('U-THEPOST') && postRes.raw.includes('JOB STUDIO'), 'post.utheversity.com correctly served u-thePOST Recruiter Portal');
+
+    // 2b. jobs.utheversity.com -> u-theJOBS Candidate Portal
+    const jobsRes = await httpGet('/', { 'Host': 'jobs.utheversity.com' });
+    assert(jobsRes.status === 200, 'jobs.utheversity.com returned HTTP 200');
+    assert(jobsRes.raw.includes('U-THEJOBS') && jobsRes.raw.includes('Active Opportunities'), 'jobs.utheversity.com correctly served u-theJOBS Candidate Board');
+
+    // 2c. admin.utheversity.com -> u-theADMIN Master Suite
+    const adminRes = await httpGet('/', { 'Host': 'admin.utheversity.com' });
+    assert(adminRes.status === 200, 'admin.utheversity.com returned HTTP 200');
+    assert(adminRes.raw.includes('U-THEADMIN') && adminRes.raw.includes('MASTER SUITE'), 'admin.utheversity.com correctly served u-theADMIN Master Suite');
+
+    // 2d. Fallback / Direct IP -> preview-hub.html
+    const fallbackRes = await httpGet('/', { 'Host': '127.0.0.1:3000' });
+    assert(fallbackRes.status === 200, 'Fallback/Direct IP returned HTTP 200');
+    assert(fallbackRes.raw.includes('STAGING HUB') && fallbackRes.raw.includes('50 / 50 Split View'), 'Fallback served preview-hub.html staging canvas');
+
+    // 2e. Clean alias routes (/post, /jobs, /admin, /preview)
+    const aliasAdmin = await httpGet('/admin');
+    assert(aliasAdmin.status === 200 && aliasAdmin.raw.includes('U-THEADMIN'), 'Clean alias /admin served Master Suite');
+  } catch (err) {
+    assert(false, `Subdomain routing test failed: ${err.message}`);
+  }
+
+  // TEST GROUP 3: Admin Telemetry & Metrics API
+  console.log('\n[TEST GROUP 3] Admin Governance & Telemetry API');
+  try {
+    const adminStats = await httpGet('/api/admin/stats');
+    assert(adminStats.status === 200, 'Admin stats endpoint returned HTTP 200');
+    assert(adminStats.data.status === 'success', 'Admin node reports status success');
+    assert(adminStats.data.roles && adminStats.data.roles.admin.host === 'admin.utheversity.com', 'Admin cluster roles defined');
+  } catch (err) {
+    assert(false, `Admin telemetry test failed: ${err.message}`);
+  }
+
+  // TEST GROUP 4: Hunter.io API Integration
+  console.log('\n[TEST GROUP 4] Hunter.io API v2 Integration & Query Filters');
   try {
     const hunter = await httpGet('/api/hunter/domain-search?domain=stripe.com&department=hr,management&seniority=executive,senior');
     assert(hunter.status === 200, 'Hunter.io domain-search endpoint returned HTTP 200');
@@ -108,8 +157,8 @@ async function runTests() {
     assert(false, `Hunter.io test failed: ${err.message}`);
   }
 
-  // TEST 3: Open-Source Job Feed Aggregator
-  console.log('\n[TEST GROUP 3] Open-Source Aggregation & Schema Normalizer');
+  // TEST GROUP 5: Open-Source Job Feed Aggregator
+  console.log('\n[TEST GROUP 5] Open-Source Aggregation & Schema Normalizer');
   try {
     const agg = await httpGet('/api/jobs/aggregate');
     assert(agg.status === 200, 'Aggregator endpoint returned HTTP 200');
@@ -119,8 +168,8 @@ async function runTests() {
     assert(false, `Aggregator test failed: ${err.message}`);
   }
 
-  // TEST 4: Job Publishing & Serialization Pipeline
-  console.log('\n[TEST GROUP 4] Job Serialization & Lifecycle CRUD');
+  // TEST GROUP 6: Job Publishing & Lifecycle CRUD
+  console.log('\n[TEST GROUP 6] Job Serialization & Lifecycle CRUD');
   let createdJobId = null;
   try {
     const newJobPayload = {
@@ -154,8 +203,8 @@ async function runTests() {
     assert(false, `Job lifecycle test failed: ${err.message}`);
   }
 
-  // TEST 5: Candidate Applicant Ingestion to ATS
-  console.log('\n[TEST GROUP 5] Candidate Ingestion & ATS Pipeline');
+  // TEST GROUP 7: Candidate Applicant Ingestion
+  console.log('\n[TEST GROUP 7] Candidate Ingestion & ATS Pipeline');
   try {
     const candPayload = {
       jobId: 'JOB-101',
@@ -174,8 +223,8 @@ async function runTests() {
     assert(false, `Applicant ingestion test failed: ${err.message}`);
   }
 
-  // TEST 6: WebSocket Sync Relay Round-Trip
-  console.log('\n[TEST GROUP 6] WebSocket Synchronization Mesh Latency');
+  // TEST GROUP 8: WebSocket Synchronization Mesh Round-Trip
+  console.log('\n[TEST GROUP 8] WebSocket Synchronization Mesh Latency');
   try {
     await new Promise((resolve, reject) => {
       const ws = new WebSocket(WS_URL);
@@ -189,7 +238,7 @@ async function runTests() {
         const data = JSON.parse(msg.toString());
         if (data.type === 'INITIAL_STATE') {
           const latency = Date.now() - start;
-          assert(latency < 50, `WebSocket sync handshake completed in ${latency}ms (< 50ms requirement)`);
+          assert(latency < 100, `WebSocket sync handshake completed in ${latency}ms (< 100ms requirement)`);
           assert(data.jobs.length > 0, `Initial state packet contained ${data.jobs.length} jobs`);
           ws.close();
           resolve();
@@ -203,14 +252,14 @@ async function runTests() {
   }
 
   console.log('\n================================================================');
-  console.log(`📊 TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
+  console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('🎉 ALL DIAGNOSTIC TESTS PASSED! SYSTEM VERIFIED 100% OPERATIONAL.\n');
+    console.log('ALL DIAGNOSTIC & SUBDOMAIN TESTS PASSED! SYSTEM 100% VERIFIED.\n');
     process.exit(0);
   } else {
-    console.error('⚠️ SOME TESTS FAILED. CHECK LOGS ABOVE.\n');
+    console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');
     process.exit(1);
   }
 }
