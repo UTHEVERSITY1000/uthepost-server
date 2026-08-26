@@ -297,7 +297,7 @@ function resolveTargetFileForHost(req, parsedUrl) {
   const pathname = parsedUrl.pathname;
   const cleanPath = pathname.toLowerCase().replace(/\/+$/, '');
 
-  // 1. Explicit clean route aliases or legacy direct filenames
+  // 1. Explicit clean route aliases or direct HTML filenames
   if (cleanPath === '/recruiter' || cleanPath === '/recruiter.html' || cleanPath === '/post' || cleanPath === '/u-thepost-enterprise-edition.html') {
     return 'recruiter.html';
   }
@@ -327,22 +327,22 @@ function resolveTargetFileForHost(req, parsedUrl) {
 
   const subQuery = (parsedUrl.searchParams.get('subdomain') || parsedUrl.searchParams.get('role') || '').toLowerCase().trim();
 
-  // Post / Recruiter subdomain
+  // Post / Recruiter subdomain -> Serves ONLY recruiter.html
   if (host === 'post.utheversity.com' || host.startsWith('post.') || host.includes('recruiter.') || subQuery === 'post' || subQuery === 'recruiter') {
     return 'recruiter.html';
   }
 
-  // Jobs / Candidate subdomain
+  // Jobs / Candidate subdomain -> Serves ONLY candidate.html
   if (host === 'jobs.utheversity.com' || host.startsWith('jobs.') || host.includes('candidate.') || subQuery === 'jobs' || subQuery === 'candidate') {
     return 'candidate.html';
   }
 
-  // Admin subdomain
+  // Admin subdomain -> Serves ONLY admin.html
   if (host === 'admin.utheversity.com' || host.startsWith('admin.') || subQuery === 'admin') {
     return 'admin.html';
   }
 
-  // Direct IP / Localhost / Fallback
+  // Direct IP / Localhost / Fallback -> Serves preview-hub.html (staging workbench)
   return 'preview-hub.html';
 }
 
@@ -464,6 +464,7 @@ const server = http.createServer((req, res) => {
         };
 
         globalJobDatabase.unshift(newJob);
+        // Instant WebSocket broadcast to ALL connected candidate and recruiter clients
         broadcastWebSocketEvent('JOB_PUBLISHED', { job: newJob, total: globalJobDatabase.length });
 
         res.writeHead(201, { 'Content-Type': 'application/json' });
@@ -499,16 +500,18 @@ const server = http.createServer((req, res) => {
       try {
         const payload = JSON.parse(body);
         const newApplicant = {
-          id: `APP-${Math.floor(700 + Math.random() * 200)}`,
+          id: payload.id || `APP-${Math.floor(700 + Math.random() * 200)}`,
           jobId: payload.jobId || 'JOB-101',
           jobTitle: payload.jobTitle || 'General Position',
           name: payload.name || 'Candidate Applicant',
           email: payload.email || 'candidate@domain.com',
           phone: payload.phone || '+1 (555) 000-0000',
-          status: 'Applied',
-          score: Math.floor(82 + Math.random() * 16),
+          bestTime: payload.bestTime || 'Anytime',
+          resumeFile: payload.resumeFile || 'resume.pdf',
+          status: payload.status || 'Applied',
+          score: payload.score || Math.floor(82 + Math.random() * 16),
           skills: payload.skills || ['JavaScript', 'System Design', 'Communication'],
-          resumeSummary: payload.resumeSummary || 'Experienced software professional with passion for distributed engineering.',
+          resumeSummary: payload.resumeSummary || 'Experienced candidate seeking interview opportunity.',
           appliedAt: new Date().toISOString(),
           scorecard: {
             technical: 0,
@@ -520,6 +523,7 @@ const server = http.createServer((req, res) => {
         };
 
         applicantsStore.unshift(newApplicant);
+        // Instant WebSocket broadcast to recruiter and admin ATS boards
         broadcastWebSocketEvent('CANDIDATE_APPLIED', { applicant: newApplicant });
 
         res.writeHead(201, { 'Content-Type': 'application/json' });
@@ -597,7 +601,7 @@ function initWebSocket() {
         try {
           const data = JSON.parse(message.toString());
 
-          // Broadcast to all other clients
+          // Broadcast to all other clients immediately
           for (const client of connectedClients) {
             if (client !== ws && client.readyState === wsModule.OPEN) {
               try {
@@ -606,9 +610,9 @@ function initWebSocket() {
             }
           }
 
-          // Handle server-side data mutations
-          if (data.type === 'SUBMIT_JOB' && data.jobPayload) {
-            const p = data.jobPayload;
+          // Handle server-side data mutations for WebSocket-originated actions
+          if ((data.type === 'SUBMIT_JOB' || data.type === 'JOB_PUBLISHED') && (data.jobPayload || data.job)) {
+            const p = data.jobPayload || data.job;
             const newJob = {
               id: p.id || `JOB-${Math.floor(100 + Math.random() * 900)}`,
               jobTitle: p.jobTitle,
@@ -628,12 +632,16 @@ function initWebSocket() {
               logo: p.logo,
               createdAt: new Date().toISOString()
             };
-            globalJobDatabase.unshift(newJob);
+            if (!globalJobDatabase.some(j => j.id === newJob.id)) {
+              globalJobDatabase.unshift(newJob);
+            }
+            broadcastWebSocketEvent('JOB_PUBLISHED', { job: newJob, total: globalJobDatabase.length });
           } else if (data.type === 'DELETE_JOB' && data.jobId) {
             const idx = globalJobDatabase.findIndex(j => j.id === data.jobId);
             if (idx !== -1) globalJobDatabase.splice(idx, 1);
           } else if (data.type === 'APPLY_JOB' && data.applicant) {
             applicantsStore.unshift(data.applicant);
+            broadcastWebSocketEvent('CANDIDATE_APPLIED', { applicant: data.applicant });
           }
         } catch (e) {}
       });
@@ -646,6 +654,18 @@ function initWebSocket() {
         connectedClients.delete(ws);
       });
     });
+
+    // Heartbeat to prevent proxy timeouts
+    setInterval(() => {
+      connectedClients.forEach(client => {
+        if (client.readyState === 1) { // OPEN
+          try {
+            client.send(JSON.stringify({ type: 'HEARTBEAT', timestamp: Date.now() }));
+          } catch (e) {}
+        }
+      });
+    }, 25000);
+
   } catch (err) {
     console.log('[WebSocket Bus] ws notice:', err.message);
   }

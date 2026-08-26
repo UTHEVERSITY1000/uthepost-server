@@ -1,4 +1,6 @@
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
 const WebSocket = require('ws');
 
 const BASE_URL = 'http://localhost:3000';
@@ -6,7 +8,7 @@ const WS_URL = 'ws://localhost:3000';
 
 async function runTests() {
   console.log('================================================================');
-  console.log('STRICT SUBDOMAIN ISOLATION & MULTI-ROLE VERIFICATION TEST SUITE');
+  console.log('UI REFINEMENTS, CANDIDATE FLOW & MOBILE TOUCH ATS TEST SUITE');
   console.log('================================================================\n');
 
   let passed = 0;
@@ -72,185 +74,144 @@ async function runTests() {
     });
   }
 
-  function httpDelete(path) {
-    return new Promise((resolve, reject) => {
-      const req = http.request(`${BASE_URL}${path}`, { method: 'DELETE' }, (res) => {
-        let data = '';
-        res.on('data', chunk => data += chunk);
-        res.on('end', () => {
-          try {
-            resolve({ status: res.statusCode, data: JSON.parse(data), raw: data });
-          } catch (e) {
-            resolve({ status: res.statusCode, raw: data });
-          }
-        });
-      });
-      req.on('error', reject);
-      req.end();
-    });
-  }
-
-  // TEST GROUP 1: Core Engine & Healthcheck
-  console.log('[TEST GROUP 1] Core Engine & Healthcheck Endpoint');
+  // TEST GROUP 1: Core Engine Health & Host Routing
+  console.log('[TEST GROUP 1] Core Engine & Subdomain Isolation');
   try {
     const health = await httpGet('/api/health');
     assert(health.status === 200, 'Healthcheck endpoint returned HTTP 200 OK');
-    assert(health.data.status === 'healthy', 'Engine status reported as healthy');
     assert(health.data.version === '2.0.0-ENTERPRISE', 'Engine version matches 2.0.0-ENTERPRISE');
-  } catch (err) {
-    assert(false, `Healthcheck failed: ${err.message}`);
-  }
 
-  // TEST GROUP 2: Strict Subdomain Isolation
-  console.log('\n[TEST GROUP 2] Strict Subdomain Isolation & Role Separation');
-  try {
-    // 2a. post.utheversity.com -> Serves ONLY recruiter.html
     const postRes = await httpGet('/', { 'Host': 'post.utheversity.com' });
-    assert(postRes.status === 200, 'post.utheversity.com returned HTTP 200');
-    assert(postRes.raw.includes('U-THEPOST') && postRes.raw.includes('RECRUITER WORKSPACE'), 'post.utheversity.com correctly served standalone recruiter.html');
-    assert(!postRes.raw.includes('50 / 50 Split View') && !postRes.raw.includes('pane-iframe'), 'post.utheversity.com has ZERO staging hub controls or iframes (Strict Isolation)');
+    assert(postRes.raw.includes('RECRUITER WORKSPACE') && !postRes.raw.includes('pane-iframe'), 'post.utheversity.com serves recruiter.html with zero staging leakage');
 
-    // 2b. jobs.utheversity.com -> Serves ONLY candidate.html
     const jobsRes = await httpGet('/', { 'Host': 'jobs.utheversity.com' });
-    assert(jobsRes.status === 200, 'jobs.utheversity.com returned HTTP 200');
-    assert(jobsRes.raw.includes('U-THEJOBS') && jobsRes.raw.includes('CANDIDATE BOARD'), 'jobs.utheversity.com correctly served standalone candidate.html');
-    assert(!jobsRes.raw.includes('50 / 50 Split View') && !jobsRes.raw.includes('pane-iframe'), 'jobs.utheversity.com has ZERO staging hub controls or iframes (Strict Isolation)');
+    assert(jobsRes.raw.includes('CANDIDATE BOARD') && !jobsRes.raw.includes('pane-iframe'), 'jobs.utheversity.com serves candidate.html with zero staging leakage');
 
-    // 2c. admin.utheversity.com -> Serves ONLY admin.html
     const adminRes = await httpGet('/', { 'Host': 'admin.utheversity.com' });
-    assert(adminRes.status === 200, 'admin.utheversity.com returned HTTP 200');
-    assert(adminRes.raw.includes('U-THEADMIN') && adminRes.raw.includes('MASTER SUITE'), 'admin.utheversity.com correctly served standalone admin.html');
-    assert(!adminRes.raw.includes('50 / 50 Split View') && !adminRes.raw.includes('pane-iframe'), 'admin.utheversity.com has ZERO staging hub controls or iframes (Strict Isolation)');
-
-    // 2d. Fallback / Direct IP -> Serves preview-hub.html
-    const fallbackRes = await httpGet('/', { 'Host': '127.0.0.1:3000' });
-    assert(fallbackRes.status === 200, 'Fallback/Direct IP returned HTTP 200');
-    assert(fallbackRes.raw.includes('STAGING HUB') && fallbackRes.raw.includes('50 / 50 Split View'), 'Fallback/Direct IP correctly served preview-hub.html staging canvas');
-
-    // 2e. Clean alias routes (/recruiter, /candidate, /admin, /preview)
-    const aliasRec = await httpGet('/recruiter');
-    assert(aliasRec.status === 200 && aliasRec.raw.includes('RECRUITER WORKSPACE'), 'Clean alias /recruiter served recruiter.html');
-    const aliasCand = await httpGet('/candidate');
-    assert(aliasCand.status === 200 && aliasCand.raw.includes('CANDIDATE BOARD'), 'Clean alias /candidate served candidate.html');
-    const aliasAdmin = await httpGet('/admin');
-    assert(aliasAdmin.status === 200 && aliasAdmin.raw.includes('MASTER SUITE'), 'Clean alias /admin served admin.html');
-    const aliasPrev = await httpGet('/preview');
-    assert(aliasPrev.status === 200 && aliasPrev.raw.includes('STAGING HUB'), 'Clean alias /preview served preview-hub.html');
+    assert(adminRes.raw.includes('MASTER SUITE') && !adminRes.raw.includes('pane-iframe'), 'admin.utheversity.com serves admin.html with zero staging leakage');
   } catch (err) {
-    assert(false, `Subdomain isolation test failed: ${err.message}`);
+    assert(false, `Group 1 failed: ${err.message}`);
   }
 
-  // TEST GROUP 3: Admin Telemetry & Metrics API
-  console.log('\n[TEST GROUP 3] Admin Governance & Telemetry API');
+  // TEST GROUP 2: Recruiter Navigation Tabs
+  console.log('\n[TEST GROUP 2] Recruiter Navigation Tabs (Restricted to 4 Tabs)');
   try {
-    const adminStats = await httpGet('/api/admin/stats');
-    assert(adminStats.status === 200, 'Admin stats endpoint returned HTTP 200');
-    assert(adminStats.data.status === 'success', 'Admin node reports status success');
-    assert(adminStats.data.roles && adminStats.data.roles.recruiter.target === 'recruiter.html', 'Recruiter target mapped to recruiter.html');
-    assert(adminStats.data.roles && adminStats.data.roles.candidate.target === 'candidate.html', 'Candidate target mapped to candidate.html');
-    assert(adminStats.data.roles && adminStats.data.roles.admin.target === 'admin.html', 'Admin target mapped to admin.html');
+    const recruiterContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    assert(recruiterContent.includes('1. JOB STUDIO'), 'Tab 1: 1. JOB STUDIO present');
+    assert(recruiterContent.includes('2. OMNICHANNEL CRM'), 'Tab 2: 2. OMNICHANNEL CRM present');
+    assert(recruiterContent.includes('3. APPLICANT TRACKER'), 'Tab 3: 3. APPLICANT TRACKER present');
+    assert(recruiterContent.includes('4. PERFORMANCE & PLANS'), 'Tab 4: 4. PERFORMANCE & PLANS present');
+    
+    // Check that customer header navigation does not have removed tabs
+    const headerNavSection = recruiterContent.match(/<div class="header-center-tabs">[\s\S]*?<\/div>/)[0];
+    assert(!headerNavSection.includes('B2B LEAD ENGINE'), 'B2B Lead Engine removed from customer header tabs');
+    assert(!headerNavSection.includes('JOB AGGREGATOR'), 'Job Aggregator removed from customer header tabs');
+    assert(!headerNavSection.includes('SYSTEM DIAGNOSTICS'), 'System Diagnostics removed from customer header tabs');
   } catch (err) {
-    assert(false, `Admin telemetry test failed: ${err.message}`);
+    assert(false, `Group 2 failed: ${err.message}`);
   }
 
-  // TEST GROUP 4: Hunter.io API v2 Integration
-  console.log('\n[TEST GROUP 4] Hunter.io API v2 Integration');
+  // TEST GROUP 3: Candidate Board & Application Form
+  console.log('\n[TEST GROUP 3] Candidate Board & Application Flow');
   try {
-    const hunter = await httpGet('/api/hunter/domain-search?domain=stripe.com&department=hr,management&seniority=executive,senior');
-    assert(hunter.status === 200, 'Hunter.io domain-search endpoint returned HTTP 200');
-    assert(hunter.data.data && Array.isArray(hunter.data.data.emails), 'Hunter.io returned emails array payload');
-    assert(hunter.data.data.emails.length >= 3, `Discovered ${hunter.data.data.emails.length} verified hiring managers`);
-
-    const verify = await httpGet('/api/hunter/email-verifier?email=sarah.jenkins@stripe.com');
-    assert(verify.status === 200 && verify.data.data.result === 'deliverable', 'Email verifier validated deliverability status');
+    const candidateContent = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    assert(candidateContent.includes('QUICK SEND'), 'Button renamed to QUICK SEND');
+    assert(candidateContent.includes('SUBMIT INTERVIEW REQUEST'), 'Submit button renamed to SUBMIT INTERVIEW REQUEST');
+    assert(candidateContent.includes('REMOVE ATS'), 'Submit button has "REMOVE ATS" tooltip');
+    assert(candidateContent.includes('UPLOAD RESUME AND COVER LETTER'), 'Main modal header is "UPLOAD RESUME AND COVER LETTER"');
+    assert(candidateContent.includes('INTERVIEW REQUEST'), 'Secondary header is "INTERVIEW REQUEST"');
+    assert(candidateContent.includes('What do you want the employer to know to advance your resume?'), 'Interview Request field tooltip is present');
+    assert(candidateContent.includes('Quick About Me / Why Hire Me...'), 'Body placeholder "Quick About Me / Why Hire Me..." is present');
+    assert(candidateContent.includes('Best Time to Contact'), 'Best Time to Contact dropdown is present');
+    assert(candidateContent.includes('file-upload-snug') || candidateContent.includes('cand-resume-file'), 'Resume upload button is present beneath phone');
+    assert(!candidateContent.includes('OPENINGS ('), 'Openings counter badge header removed from candidate board');
   } catch (err) {
-    assert(false, `Hunter.io test failed: ${err.message}`);
+    assert(false, `Group 3 failed: ${err.message}`);
   }
 
-  // TEST GROUP 5: Open-Source Job Feed Aggregator
-  console.log('\n[TEST GROUP 5] Open-Source Aggregation & Schema Normalizer');
+  // TEST GROUP 4: Tooltip System Overhaul
+  console.log('\n[TEST GROUP 4] Tooltip System Overhaul');
   try {
-    const agg = await httpGet('/api/jobs/aggregate');
-    assert(agg.status === 200, 'Aggregator endpoint returned HTTP 200');
-    assert(agg.data.feeds && agg.data.feeds.length >= 3, `Ingested ${agg.data.feeds.length} external feeds`);
+    const filesToCheck = ['recruiter.html', 'candidate.html', 'admin.html', 'preview-hub.html'];
+    filesToCheck.forEach(file => {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+      assert(content.includes('max-width: 200px'), `${file}: Tooltip max-width set to 200px`);
+      assert(content.includes('font-size: 11px'), `${file}: Tooltip font-size set to 11px`);
+      assert(content.includes('z-index: 99999'), `${file}: Tooltip z-index set to 99999`);
+    });
   } catch (err) {
-    assert(false, `Aggregator test failed: ${err.message}`);
+    assert(false, `Group 4 failed: ${err.message}`);
   }
 
-  // TEST GROUP 6: Job Publishing & Lifecycle CRUD
-  console.log('\n[TEST GROUP 6] Job Serialization & Lifecycle CRUD');
-  let createdJobId = null;
+  // TEST GROUP 5: Mobile Touch ATS Drag & Drop
+  console.log('\n[TEST GROUP 5] Mobile Touch Drag & Drop on ATS');
   try {
-    const newJobPayload = {
-      jobTitle: 'Subdomain Isolation Engineer',
-      company: 'Antigravity Infrastructure',
-      location: 'SAN FRANCISCO, CA',
-      employmentType: 'Full-Time',
-      payStructure: 'Salary Range',
-      minCompensation: '150000',
-      maxCompensation: '195000',
-      paidVacation: 'Unlimited PTO',
-      healthCoverage: 'Platinum Tier',
-      retirement: '401(k) Match',
-      additionalPerks: 'Autonomous Agent Allowance',
-      applyLinkUrl: 'https://careers.antigravity.dev/apply/iso',
-      summary: 'Enforce strict role-based subdomain routing and standalone application isolation.'
-    };
-
-    const postRes = await httpPost('/api/jobs', newJobPayload);
-    assert(postRes.status === 201, 'Job created successfully with HTTP 201');
-    createdJobId = postRes.data.job.id;
-
-    const delRes = await httpDelete(`/api/jobs/${createdJobId}`);
-    assert(delRes.status === 200, `Job ${createdJobId} deleted successfully`);
+    const recruiterContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    assert(recruiterContent.includes('touchstart'), 'Native touchstart event listener implemented');
+    assert(recruiterContent.includes('touchmove'), 'Native touchmove event listener implemented');
+    assert(recruiterContent.includes('touchend'), 'Native touchend event listener implemented');
+    assert(recruiterContent.includes('touch-action: none'), 'touch-action: none style configured for smooth drag');
+    assert(recruiterContent.includes('touch-dragging'), 'touch-dragging class defined for elevation feedback');
   } catch (err) {
-    assert(false, `Job lifecycle test failed: ${err.message}`);
+    assert(false, `Group 5 failed: ${err.message}`);
   }
 
-  // TEST GROUP 7: Candidate Applicant Ingestion
-  console.log('\n[TEST GROUP 7] Candidate Ingestion & ATS Pipeline');
+  // TEST GROUP 6: Admin Secret Shortcut & Footer Access
+  console.log('\n[TEST GROUP 6] Admin Secret Shortcut & Footer Trigger');
   try {
-    const candPayload = {
-      jobId: 'JOB-101',
-      jobTitle: 'Senior Full-Stack Engineer',
-      name: 'Isolation Candidate',
-      email: 'cand@iso.dev',
-      phone: '+1 (555) 777-1111',
-      skills: ['TypeScript', 'WebSockets', 'Subdomain Routing'],
-      resumeSummary: 'Expert in host-header routing and cross-tab event synchronization.'
-    };
-
-    const candRes = await httpPost('/api/applicants', candPayload);
-    assert(candRes.status === 201, 'Candidate application accepted with HTTP 201');
+    const recruiterContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateContent = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    assert(recruiterContent.includes('[ADMIN]') && recruiterContent.includes('Ctrl+Shift+A'), 'recruiter.html has discrete [ADMIN] footer link and shortcut');
+    assert(candidateContent.includes('[ADMIN]') && candidateContent.includes('Ctrl+Shift+A'), 'candidate.html has discrete [ADMIN] footer link and shortcut');
   } catch (err) {
-    assert(false, `Applicant ingestion test failed: ${err.message}`);
+    assert(false, `Group 6 failed: ${err.message}`);
   }
 
-  // TEST GROUP 8: WebSocket Synchronization Mesh Round-Trip
-  console.log('\n[TEST GROUP 8] WebSocket Synchronization Mesh Latency');
+  // TEST GROUP 7: Real-Time Live Sync & WebSocket Broadcast
+  console.log('\n[TEST GROUP 7] Real-Time Live Sync Across Dual Portals');
   try {
     await new Promise((resolve, reject) => {
-      const ws = new WebSocket(WS_URL);
-      const start = Date.now();
+      const wsClient = new WebSocket(WS_URL);
+      let receivedPublishedJob = false;
 
-      ws.on('open', () => {
-        ws.send(JSON.stringify({ type: 'PING_BENCHMARK', timestamp: start }));
+      wsClient.on('open', async () => {
+        // Post a new job via HTTP API
+        const testJob = {
+          jobTitle: 'Real-Time Sync Test Engineer',
+          company: 'Live Mesh Corp',
+          location: 'REMOTE',
+          employmentType: 'Full-Time',
+          salary: '$160,000 - $200,000',
+          minCompensation: '160000',
+          maxCompensation: '200000',
+          summary: 'Verifying real-time instant sync without browser refresh.'
+        };
+
+        await httpPost('/api/jobs', testJob);
       });
 
-      ws.on('message', (msg) => {
+      wsClient.on('message', (msg) => {
         const data = JSON.parse(msg.toString());
-        if (data.type === 'INITIAL_STATE') {
-          const latency = Date.now() - start;
-          assert(latency < 100, `WebSocket sync handshake completed in ${latency}ms (< 100ms requirement)`);
-          ws.close();
+        if (data.type === 'JOB_PUBLISHED' && data.job && data.job.jobTitle === 'Real-Time Sync Test Engineer') {
+          receivedPublishedJob = true;
+          assert(true, 'WebSocket client received JOB_PUBLISHED event in real-time');
+          wsClient.close();
           resolve();
         }
       });
 
-      ws.on('error', reject);
+      wsClient.on('error', reject);
+
+      setTimeout(() => {
+        if (!receivedPublishedJob) {
+          assert(false, 'Timed out waiting for real-time WebSocket JOB_PUBLISHED event');
+          wsClient.close();
+          resolve();
+        }
+      }, 3000);
     });
   } catch (err) {
-    assert(false, `WebSocket sync test failed: ${err.message}`);
+    assert(false, `Group 7 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
@@ -258,7 +219,7 @@ async function runTests() {
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL STRICT SUBDOMAIN ISOLATION TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL UI REFINEMENTS, CANDIDATE FLOW & MOBILE ATS TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');

@@ -52,60 +52,64 @@
       padding-bottom: 72px; /* Space for sticky bottom bar on mobile */
     }
 
-    /* PLAIN-ENGLISH TOOLTIP SYSTEM */
+    /* REFINED SMART TOOLTIP SYSTEM (< 200px, 11px font, z-index 99999) */
     [data-tooltip] {
       position: relative;
     }
 
-    [data-tooltip]:hover::after,
-    [data-tooltip]:focus-visible::after {
+    [data-tooltip]::after {
       content: attr(data-tooltip);
       position: absolute;
-      bottom: calc(100% + 8px);
+      bottom: calc(100% + 6px);
       left: 50%;
       transform: translateX(-50%);
       background: #0F172A;
       color: #F8FAFC;
-      font-size: 0.72rem;
-      font-weight: 600;
-      line-height: 1.4;
-      padding: 0.5rem 0.75rem;
-      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.3;
+      padding: 0.35rem 0.55rem;
+      border-radius: 5px;
       border: 1px solid var(--uthe-gold);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
       white-space: normal;
       width: max-content;
-      max-width: 280px;
-      z-index: 9999;
+      max-width: 200px;
+      z-index: 99999;
       pointer-events: none;
-      opacity: 1;
+      opacity: 0;
+      visibility: hidden;
       text-transform: none;
       letter-spacing: normal;
       text-align: center;
-      animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.15s ease, transform 0.15s ease;
     }
 
-    [data-tooltip]:hover::before,
-    [data-tooltip]:focus-visible::before {
+    [data-tooltip]::before {
       content: '';
       position: absolute;
-      bottom: calc(100% + 2px);
+      bottom: calc(100% + 1px);
       left: 50%;
       transform: translateX(-50%);
-      border-width: 6px 6px 0 6px;
+      border-width: 5px 5px 0 5px;
       border-style: solid;
       border-color: var(--uthe-gold) transparent transparent transparent;
-      z-index: 9999;
+      z-index: 99999;
       pointer-events: none;
-      animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease;
     }
 
-    @keyframes tooltipFade {
-      from { opacity: 0; transform: translate(-50%, 4px); }
-      to { opacity: 1; transform: translate(-50%, 0); }
+    [data-tooltip]:hover::after,
+    [data-tooltip]:hover::before,
+    [data-tooltip]:focus-visible::after,
+    [data-tooltip]:focus-visible::before {
+      opacity: 1;
+      visibility: visible;
     }
 
-    /* 48PX MINIMUM TOUCH TARGETS & PRESS FEEDBACK */
+    /* 48PX MINIMUM TOUCH TARGETS */
     button, input, select, textarea, .touch-target {
       min-height: 48px;
       touch-action: manipulation;
@@ -122,14 +126,14 @@
       outline-offset: 2px;
     }
 
-    /* HEADER */
-    .admin-header {
+    /* MASTER TOP HEADER */
+    header {
       position: sticky;
       top: 0;
       z-index: 1000;
       height: 64px;
       background: var(--card-dark);
-      border-bottom: 2px solid var(--uthe-gold);
+      border-bottom: 2.5px solid var(--uthe-gold);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -137,63 +141,34 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
 
-    .brand-section {
+    .brand-group {
       display: flex;
       align-items: center;
       gap: 0.85rem;
     }
 
     .brand-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 900;
       letter-spacing: 2px;
-      color: #FFFFFF;
+      color: var(--uthe-gold);
       text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+      white-space: nowrap;
     }
 
-    .badge-admin {
-      font-size: 0.62rem;
+    .brand-badge {
+      font-size: 0.6rem;
       font-weight: 800;
       background: rgba(229, 168, 0, 0.15);
       color: var(--uthe-gold);
       border: 1px solid var(--uthe-gold);
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
-      letter-spacing: 1px;
-    }
-
-    /* 8K PNG LOGO CONTAINER */
-    .header-logo-wrap {
-      display: flex;
-      align-items: center;
-    }
-
-    .btn-logo-upload {
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: var(--text-light);
-      padding: 0 0.85rem;
-      border-radius: 6px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      letter-spacing: 0.8px;
       text-transform: uppercase;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      transition: all 0.2s;
-    }
-
-    .btn-logo-upload:hover {
-      border-color: var(--uthe-gold);
-      color: var(--uthe-gold);
+      letter-spacing: 0.8px;
     }
 
     .header-logo-preview {
-      display: none;
       max-height: 38px;
       width: auto;
       max-width: 140px;
@@ -226,6 +201,7 @@
       display: flex;
       align-items: center;
       transition: all 0.2s ease;
+      height: 40px;
     }
 
     .nav-tab:hover {
@@ -272,6 +248,8 @@
       font-weight: 900;
       cursor: pointer;
       letter-spacing: 1px;
+      height: 40px;
+      align-items: center;
     }
 
     /* MOBILE DRAWER NAVIGATION */
@@ -366,6 +344,7 @@
       align-items: center;
       text-transform: uppercase;
       letter-spacing: 0.8px;
+      height: 48px;
     }
 
     .drawer-tab-btn.active {
@@ -398,7 +377,7 @@
     }
 
     /* KPI TELEMETRY METRICS GRID */
-    .kpi-metrics-grid {
+    .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
@@ -407,114 +386,57 @@
     .kpi-card {
       background: var(--card-dark);
       border: 1px solid var(--border-dark);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.35rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
-    .kpi-card::before {
+    .kpi-card::after {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      height: 3px;
-      background: var(--border-dark);
+      height: 2.5px;
+      background: var(--uthe-gold);
     }
-
-    .kpi-card.gold::before { background: var(--uthe-gold); }
-    .kpi-card.mint::before { background: var(--status-mint); }
-    .kpi-card.cyan::before { background: var(--cyan-accent); }
-    .kpi-card.purple::before { background: var(--purple-accent); }
 
     .kpi-label {
       font-size: 0.65rem;
       font-weight: 800;
       color: var(--text-dim);
-      text-transform: uppercase;
       letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     .kpi-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.6rem;
+      font-size: 1.65rem;
       font-weight: 900;
+      font-family: 'JetBrains Mono', monospace;
       color: var(--text-light);
     }
 
-    .kpi-sub {
-      font-size: 0.68rem;
-      color: var(--text-dim);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    /* CONTROL PANEL CARDS */
-    .control-card {
+    /* DATA TABLES */
+    .table-container {
       background: var(--card-dark);
       border: 1px solid var(--border-dark);
-      border-radius: 8px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .card-title-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border-dark);
-      padding-bottom: 0.65rem;
-    }
-
-    .card-heading {
-      font-size: 0.85rem;
-      font-weight: 900;
-      color: var(--text-light);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .badge-tag {
-      font-size: 0.6rem;
-      font-weight: 800;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-
-    .tag-gold { background: rgba(229, 168, 0, 0.15); color: var(--uthe-gold); border: 1px solid var(--uthe-gold); }
-    .tag-mint { background: var(--status-mint-bg); color: var(--status-mint); border: 1px solid rgba(0, 200, 83, 0.4); }
-    .tag-cyan { background: var(--cyan-bg); color: var(--cyan-accent); border: 1px solid rgba(6, 182, 212, 0.4); }
-
-    /* DATA TABLES WITH TOUCH MOMENTUM SCROLLING */
-    .table-responsive-wrapper {
-      width: 100%;
+      border-radius: 10px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border: 1px solid var(--border-dark);
-      border-radius: 6px;
-      background: var(--card-dark);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.78rem;
-      min-width: 650px;
+      font-size: 0.8rem;
+      min-width: 700px;
     }
 
     th {
@@ -531,12 +453,8 @@
     td {
       padding: 0.85rem 1rem;
       border-bottom: 1px solid #1E293B;
-      vertical-align: middle;
       color: var(--text-light);
-    }
-
-    tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
+      vertical-align: middle;
     }
 
     /* ACTION BUTTONS */
@@ -544,21 +462,21 @@
       background: var(--uthe-gold);
       color: #000000;
       border: none;
-      font-size: 0.72rem;
       font-weight: 900;
-      text-transform: uppercase;
+      font-size: 0.72rem;
       letter-spacing: 1px;
-      padding: 0 1.25rem;
+      text-transform: uppercase;
       border-radius: 6px;
       cursor: pointer;
+      padding: 0 1rem;
+      height: 48px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
 
     .btn-gold:hover {
-      background: #FACC15;
       box-shadow: 0 0 15px var(--uthe-gold-glow);
     }
 
@@ -566,17 +484,18 @@
       background: var(--card-surface);
       color: var(--text-light);
       border: 1px solid var(--border-dark);
-      font-size: 0.72rem;
       font-weight: 800;
-      text-transform: uppercase;
+      font-size: 0.72rem;
       letter-spacing: 0.8px;
-      padding: 0 1rem;
+      text-transform: uppercase;
       border-radius: 6px;
       cursor: pointer;
+      padding: 0 0.85rem;
+      height: 48px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
 
     .btn-surface:hover {
@@ -588,15 +507,16 @@
       background: var(--danger-bg);
       color: var(--danger-red);
       border: 1px solid rgba(239, 68, 68, 0.4);
-      font-size: 0.68rem;
       font-weight: 800;
+      font-size: 0.7rem;
       text-transform: uppercase;
       padding: 0 0.75rem;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
-      min-height: 36px;
+      height: 36px;
       display: inline-flex;
       align-items: center;
+      transition: all 0.2s ease;
     }
 
     .btn-danger:hover {
@@ -604,532 +524,399 @@
       color: #FFFFFF;
     }
 
-    /* FORM INPUTS */
-    .form-row-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0.85rem;
-      align-items: end;
-    }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-    }
-
-    .input-label {
+    /* BADGES */
+    .badge-tag {
       font-size: 0.65rem;
       font-weight: 800;
-      color: var(--text-dim);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.5px;
+      display: inline-block;
     }
 
-    .admin-input, .admin-select {
-      background: var(--card-surface);
+    .tag-mint { background: var(--status-mint-bg); color: var(--status-mint); border: 1px solid rgba(0, 200, 83, 0.3); }
+    .tag-cyan { background: var(--cyan-bg); color: var(--cyan-accent); border: 1px solid rgba(6, 182, 212, 0.3); }
+    .tag-gold { background: rgba(229, 168, 0, 0.15); color: var(--uthe-gold); border: 1px solid var(--uthe-gold); }
+
+    /* TERMINAL LOG VIEWER */
+    .terminal-container {
+      background: #000000;
       border: 1px solid var(--border-dark);
-      color: var(--text-light);
-      padding: 0 0.85rem;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      outline: none;
-      transition: all 0.2s;
-    }
-
-    .admin-input:focus, .admin-select:focus {
-      border-color: var(--uthe-gold);
-      box-shadow: 0 0 0 2px var(--uthe-gold-glow);
-    }
-
-    /* LOGS TERMINAL */
-    .logs-terminal-box {
-      background: #04060A;
-      border: 1px solid var(--border-dark);
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 1rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      color: #38BDF8;
-      max-height: 320px;
+      font-size: 0.75rem;
+      height: 300px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
-      -webkit-overflow-scrolling: touch;
     }
 
     .terminal-line {
       display: flex;
       gap: 0.75rem;
-      align-items: center;
     }
 
-    .terminal-time { color: var(--text-dim); min-width: 80px; }
-    .terminal-tag { color: var(--uthe-gold); font-weight: 800; min-width: 140px; }
-    .terminal-text { color: var(--text-light); word-break: break-all; }
+    .terminal-time { color: var(--text-dim); }
+    .terminal-tag { color: var(--uthe-gold); font-weight: 700; }
+    .terminal-text { color: var(--text-light); }
 
-    /* STICKY BOTTOM ACTION BAR (MOBILE) */
-    .mobile-bottom-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 64px;
-      background: var(--card-dark);
-      border-top: 2px solid var(--uthe-gold);
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      padding: 0 0.75rem;
-      z-index: 999;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
-    }
-
-    .btn-bottom-action {
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: var(--text-light);
-      font-size: 0.65rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 0 0.75rem;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      margin: 0 0.25rem;
-      height: 48px;
-    }
-
-    .btn-bottom-action.highlight {
-      background: var(--uthe-gold);
-      color: #000000;
-      border-color: var(--uthe-gold);
-      font-weight: 900;
-    }
-
-    /* TOAST NOTIFICATION */
-    .toast-panel {
+    /* TOAST OVERLAY */
+    .admin-toast {
       position: fixed;
       bottom: 80px;
       right: 1.25rem;
-      z-index: 3000;
+      z-index: 999999;
       display: none;
       background: var(--card-dark);
       border: 1.5px solid var(--uthe-gold);
-      color: var(--text-light);
+      color: #FFFFFF;
       padding: 0.85rem 1.25rem;
       border-radius: 8px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-      max-width: 360px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      max-width: 380px;
     }
 
-    .toast-title { color: var(--uthe-gold); font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-    .toast-desc { font-size: 0.8rem; font-weight: 600; margin-top: 0.2rem; line-height: 1.4; }
+    .toast-title {
+      color: var(--uthe-gold);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
 
-    /* RESPONSIVE BREAKPOINTS */
-    @media (max-width: 900px) {
-      .kpi-metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .toast-msg {
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
       .nav-tabs-container { display: none; }
       .btn-mobile-menu { display: flex; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    @media (max-width: 600px) {
-      .kpi-metrics-grid { grid-template-columns: 1fr; }
-      .brand-title { font-size: 0.95rem; }
-      .badge-admin { display: none; }
-      .admin-header { padding: 0 0.85rem; }
+    @media (max-width: 768px) {
+      .kpi-grid { grid-template-columns: 1fr; }
       main { padding: 0.85rem; }
-    }
-
-    @media (min-width: 901px) {
-      .mobile-bottom-bar { display: none; }
-      body { padding-bottom: 0; }
+      header { padding: 0 0.85rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ADMIN HEADER -->
-  <header class="admin-header">
-    <div class="brand-section">
-      <div class="brand-title" data-tooltip="u-theADMIN: Master oversight and synchronized governance across all hiring nodes.">
-        <span>U-THEADMIN</span>
-        <span class="badge-admin">MASTER SUITE</span>
-      </div>
-
-      <!-- 8K PNG LOGO CONTAINER -->
-      <div class="header-logo-wrap">
-        <input type="file" id="logo-picker" accept="image/png, image/jpeg, image/webp" style="display:none;" onchange="handleAdminLogo(event)">
-        <button class="btn-logo-upload" id="btn-logo-upload" onclick="document.getElementById('logo-picker').click()" data-tooltip="Upload an official high-resolution 8K PNG company logo.">
-          UPLOAD LOGO
-        </button>
-        <img id="admin-logo-preview" class="header-logo-preview" alt="Admin Logo" onclick="document.getElementById('logo-picker').click()" data-tooltip="Click to change your header logo.">
-      </div>
+  <!-- MASTER TOP HEADER -->
+  <header>
+    <div class="brand-group">
+      <h1 class="brand-title" data-tooltip="u-theADMIN: Master Governance Suite for multi-node catalog administration.">U-THEADMIN</h1>
+      <span class="brand-badge" data-tooltip="Real-time multi-sync cluster supervision.">MASTER SUITE</span>
+      
+      <!-- LOGO -->
+      <input type="file" id="admin-logo-picker" accept="image/png, image/jpeg, image/webp" style="display:none;" onchange="handleAdminLogo(event)">
+      <img id="admin-logo-preview" class="header-logo-preview" style="display:none;" onclick="document.getElementById('admin-logo-picker').click()" alt="Admin Logo">
     </div>
 
-    <!-- DESKTOP WORKSPACE TABS -->
-    <nav class="nav-tabs-container">
-      <button class="nav-tab active" onclick="switchAdminTab('overview')" data-tooltip="View global system telemetry, node connectivity, and real-time event logs.">
-        1. SYSTEM OVERVIEW
+    <!-- TABS (DESKTOP) -->
+    <div class="nav-tabs-container">
+      <button class="nav-tab active" onclick="switchAdminTab('overview')" data-tooltip="Cluster overview & health telemetry.">
+        1. CLUSTER TOPOLOGY
       </button>
-      <button class="nav-tab" onclick="switchAdminTab('jobs')" data-tooltip="Review and manage all active job postings across recruiter and candidate nodes.">
+      <button class="nav-tab" onclick="switchAdminTab('jobs')" data-tooltip="Manage active job listings.">
         2. JOB INVENTORY
       </button>
-      <button class="nav-tab" onclick="switchAdminTab('applicants')" data-tooltip="Inspect candidate applications, screening scores, and hiring decisions.">
-        3. APPLICANT ATS
+      <button class="nav-tab" onclick="switchAdminTab('applicants')" data-tooltip="Review candidate applications and ATS scores.">
+        3. CANDIDATE ATS
       </button>
-      <button class="nav-tab" onclick="switchAdminTab('leads')" data-tooltip="Monitor Hunter.io domain lead discovery queries and verified contacts.">
-        4. LEAD ENGINE
+      <button class="nav-tab" onclick="switchAdminTab('hunter')" data-tooltip="Hunter.io executive lead search engine.">
+        4. HUNTER.IO LEADS
       </button>
-      <button class="nav-tab" onclick="switchAdminTab('feeds')" data-tooltip="Configure external open-source job feed aggregators and ingestion schemas.">
+      <button class="nav-tab" onclick="switchAdminTab('feeds')" data-tooltip="Schema.org & open-source feed aggregator.">
         5. FEED AGGREGATOR
       </button>
-      <button class="nav-tab" onclick="switchAdminTab('maintenance')" data-tooltip="Execute automated test suites, purge caches, and export telemetry audits.">
+      <button class="nav-tab" onclick="switchAdminTab('diagnostics')" data-tooltip="Diagnostics terminal & audit logs.">
         6. DIAGNOSTICS & AUDIT
       </button>
-    </nav>
+    </div>
 
-    <!-- HEADER ACTIONS -->
     <div class="header-actions">
-      <div class="sync-indicator" data-tooltip="Real-time WebSocket synchronization mesh is fully active.">
-        <span id="admin-sync-status">MESH CONNECTED</span>
+      <div class="sync-indicator" data-tooltip="Multi-Sync WebSocket Bus: Online and synchronized across nodes.">
+        <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--status-mint);"></span>
+        <span>CLUSTER ACTIVE</span>
       </div>
-      <button class="btn-mobile-menu" onclick="toggleMobileDrawer()" data-tooltip="Open mobile navigation drawer.">
+      <button class="btn-mobile-menu" onclick="toggleAdminDrawer()" data-tooltip="Open Menu">
         [MENU]
       </button>
     </div>
   </header>
 
-  <!-- MOBILE SLIDE-IN NAVIGATION DRAWER -->
-  <div class="mobile-drawer-overlay" id="drawer-overlay" onclick="toggleMobileDrawer()"></div>
-  <div class="mobile-drawer" id="mobile-drawer">
+  <!-- MOBILE NAVIGATION DRAWER -->
+  <div class="mobile-drawer-overlay" id="admin-drawer-overlay" onclick="toggleAdminDrawer()"></div>
+  <div class="mobile-drawer" id="admin-drawer">
     <div class="drawer-header">
       <span class="drawer-title">ADMIN GOVERNANCE</span>
-      <button class="drawer-close" onclick="toggleMobileDrawer()" data-tooltip="Close menu.">X</button>
+      <button class="drawer-close" onclick="toggleAdminDrawer()" data-tooltip="Close menu">X</button>
     </div>
     <div class="drawer-nav-list">
-      <button class="drawer-tab-btn active" onclick="switchAdminTab('overview'); toggleMobileDrawer();">1. SYSTEM OVERVIEW</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('jobs'); toggleMobileDrawer();">2. JOB INVENTORY</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('applicants'); toggleMobileDrawer();">3. APPLICANT ATS</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('leads'); toggleMobileDrawer();">4. LEAD ENGINE</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('feeds'); toggleMobileDrawer();">5. FEED AGGREGATOR</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('maintenance'); toggleMobileDrawer();">6. DIAGNOSTICS & AUDIT</button>
+      <button class="drawer-tab-btn active" onclick="switchAdminTab('overview'); toggleAdminDrawer();">1. CLUSTER TOPOLOGY</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('jobs'); toggleAdminDrawer();">2. JOB INVENTORY</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('applicants'); toggleAdminDrawer();">3. CANDIDATE ATS</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('hunter'); toggleAdminDrawer();">4. HUNTER.IO LEADS</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('feeds'); toggleAdminDrawer();">5. FEED AGGREGATOR</button>
+      <button class="drawer-tab-btn" onclick="switchAdminTab('diagnostics'); toggleAdminDrawer();">6. DIAGNOSTICS & AUDIT</button>
     </div>
   </div>
 
-  <!-- MAIN WORKSPACE VIEWS -->
+  <!-- MAIN SUITE VIEWS -->
   <main>
 
-    <!-- SECTION 1: SYSTEM OVERVIEW -->
-    <section id="tab-overview" class="view-section active">
-      <div class="kpi-metrics-grid">
-        <div class="kpi-card gold" data-tooltip="Total verified job positions synchronized across all ecosystem nodes.">
-          <span class="kpi-label">Active Job Openings</span>
+    <!-- VIEW 1: CLUSTER TOPOLOGY & OVERVIEW -->
+    <section id="view-overview" class="view-section active">
+      <div class="kpi-grid">
+        <div class="kpi-card" data-tooltip="Total active positions in catalog.">
+          <span class="kpi-label">TOTAL ACTIVE JOBS</span>
           <span class="kpi-value" id="kpi-jobs">3</span>
-          <span class="kpi-sub"><span class="badge-tag tag-gold">[SYNC 100%]</span> Live in candidate portal</span>
         </div>
-        <div class="kpi-card mint" data-tooltip="Total candidate applications received into ATS pipeline.">
-          <span class="kpi-label">Total Applicants Ingested</span>
+        <div class="kpi-card" data-tooltip="Total candidate applications received.">
+          <span class="kpi-label">TOTAL APPLICANTS</span>
           <span class="kpi-value" id="kpi-applicants">3</span>
-          <span class="kpi-sub"><span class="badge-tag tag-mint">[MATCH 92% AVG]</span> Automated scoring active</span>
         </div>
-        <div class="kpi-card cyan" data-tooltip="Connected active clients on the WebSocket synchronization bus.">
-          <span class="kpi-label">Active Mesh Connections</span>
-          <span class="kpi-value" id="kpi-clients">1</span>
-          <span class="kpi-sub"><span class="badge-tag tag-cyan">[LATENCY &lt; 5MS]</span> Zero-loss event bus</span>
-        </div>
-        <div class="kpi-card purple" data-tooltip="Normalized job feeds ingested from external Schema.org and RSS sources.">
-          <span class="kpi-label">External Ingestion Feeds</span>
+        <div class="kpi-card" data-tooltip="Open-source external feeds ingested.">
+          <span class="kpi-label">EXTERNAL FEEDS</span>
           <span class="kpi-value" id="kpi-feeds">3</span>
-          <span class="kpi-sub"><span class="badge-tag tag-gold">[CANONICAL]</span> Schema.org &amp; JSON-LD</span>
+        </div>
+        <div class="kpi-card" data-tooltip="Current server status.">
+          <span class="kpi-label">CLUSTER HEALTH</span>
+          <span class="kpi-value" style="color: var(--status-mint);" id="kpi-health">ONLINE</span>
         </div>
       </div>
 
-      <!-- NODE HEALTH TOPOLOGY -->
-      <div class="control-card">
-        <div class="card-title-bar">
-          <span class="card-heading">3-Role Host Routing &amp; Cluster Topology</span>
-          <button class="btn-surface" onclick="refreshAdminTelemetry()" data-tooltip="Query server endpoints to refresh health and latency metrics.">REFRESH STATUS</button>
+      <div class="table-container">
+        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
+          ACTIVE DEPLOYMENT NODES & SUBDOMAINS
         </div>
-        <div class="table-responsive-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Role / Ecosystem Node</th>
-                <th>Subdomain Host Header</th>
-                <th>Target View File</th>
-                <th>Protocol &amp; Mesh</th>
-                <th>Cluster Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Recruiter Dashboard</strong></td>
-                <td><code>post.utheversity.com</code></td>
-                <td><code>recruiter.html</code></td>
-                <td>HTTP/2 + WebSocket Sync</td>
-                <td><span class="badge-tag tag-mint">[ONLINE]</span></td>
-              </tr>
-              <tr>
-                <td><strong>Candidate Board</strong></td>
-                <td><code>jobs.utheversity.com</code></td>
-                <td><code>candidate.html</code></td>
-                <td>HTTP/2 + Auto-Reactive Consumer</td>
-                <td><span class="badge-tag tag-mint">[ONLINE]</span></td>
-              </tr>
-              <tr>
-                <td><strong>Master Governance Suite</strong></td>
-                <td><code>admin.utheversity.com</code></td>
-                <td><code>admin.html</code></td>
-                <td>Telemetry Bus + Control Relay</td>
-                <td><span class="badge-tag tag-gold">[ACTIVE CORE]</span></td>
-              </tr>
-              <tr>
-                <td><strong>Staging Fallback Hub</strong></td>
-                <td><code>* (Direct IP / Preview)</code></td>
-                <td><code>preview-hub.html</code></td>
-                <td>Dual Split-Screen Workbench</td>
-                <td><span class="badge-tag tag-cyan">[STANDBY]</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- LIVE EVENT STREAM -->
-      <div class="control-card">
-        <div class="card-title-bar">
-          <span class="card-heading">Live Telemetry &amp; Event Relay Stream</span>
-          <span class="badge-tag tag-gold">REAL-TIME INSPECTOR</span>
-        </div>
-        <div class="logs-terminal-box" id="admin-logs">
-          <div class="terminal-line">
-            <span class="terminal-time">[INITIALIZED]</span>
-            <span class="terminal-tag">SYSTEM_READY</span>
-            <span class="terminal-text">u-theADMIN Master Suite initialized. Synchronized with server mesh on port 3000.</span>
-          </div>
-        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Role Node</th>
+              <th>Public Subdomain Host</th>
+              <th>Dedicated Target</th>
+              <th>Isolation Mode</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>u-thePOST (Recruiter)</strong></td>
+              <td><code>post.utheversity.com</code></td>
+              <td><code>recruiter.html</code></td>
+              <td><span class="badge-tag tag-cyan">STRICT STANDALONE</span></td>
+              <td><span class="badge-tag tag-mint">ONLINE</span></td>
+            </tr>
+            <tr>
+              <td><strong>u-theJOBS (Candidate)</strong></td>
+              <td><code>jobs.utheversity.com</code></td>
+              <td><code>candidate.html</code></td>
+              <td><span class="badge-tag tag-cyan">STRICT STANDALONE</span></td>
+              <td><span class="badge-tag tag-mint">ONLINE</span></td>
+            </tr>
+            <tr>
+              <td><strong>u-theADMIN (Master)</strong></td>
+              <td><code>admin.utheversity.com</code></td>
+              <td><code>admin.html</code></td>
+              <td><span class="badge-tag tag-cyan">STRICT STANDALONE</span></td>
+              <td><span class="badge-tag tag-gold">ACTIVE CORE</span></td>
+            </tr>
+            <tr>
+              <td><strong>Preview Workbench</strong></td>
+              <td><code>Direct IP / localhost</code></td>
+              <td><code>preview-hub.html</code></td>
+              <td><span class="badge-tag tag-cyan">INTERNAL DEV</span></td>
+              <td><span class="badge-tag tag-mint">STANDBY</span></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- SECTION 2: JOB INVENTORY -->
-    <section id="tab-jobs" class="view-section">
-      <div class="control-card">
-        <div class="card-title-bar">
-          <span class="card-heading">Master Job Catalog Oversight</span>
-          <button class="btn-gold" onclick="openNewJobModal()" data-tooltip="Create and broadcast a new job opening across all portals.">NEW JOB OPENING</button>
-        </div>
-        <div class="form-row-grid">
-          <div class="input-group">
-            <label class="input-label">Filter by Keyword or Title</label>
-            <input type="text" id="admin-job-search" class="admin-input" placeholder="e.g. Senior, Lead, Austin" oninput="filterAdminJobs()">
-          </div>
-          <div class="input-group">
-            <label class="input-label">Employment Type</label>
-            <select id="admin-job-filter-type" class="admin-select" onchange="filterAdminJobs()">
-              <option value="">All Employment Types</option>
-              <option value="Full-Time">Full-Time</option>
-              <option value="Contract">Contract</option>
-              <option value="Executive">Executive</option>
-            </select>
-          </div>
-        </div>
-        <div class="table-responsive-wrapper">
-          <table id="admin-jobs-table">
-            <thead>
-              <tr>
-                <th>Job Identifier</th>
-                <th>Position Title</th>
-                <th>Organization</th>
-                <th>Location</th>
-                <th>Compensation</th>
-                <th>Type</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="admin-jobs-tbody"></tbody>
-          </table>
-        </div>
+    <!-- VIEW 2: MASTER JOB INVENTORY -->
+    <section id="view-jobs" class="view-section">
+      <div style="display: flex; gap: 0.75rem; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <input type="text" id="admin-job-search" placeholder="Search master catalog by title, company, or keyword..." style="background: var(--card-dark); border: 1px solid var(--border-dark); color: #fff; padding: 0 1rem; border-radius: 6px; flex: 1; min-width: 260px;" oninput="filterAdminJobs()">
+        <select id="admin-job-filter-type" style="background: var(--card-dark); border: 1px solid var(--border-dark); color: #fff; padding: 0 1rem; border-radius: 6px; max-width: 180px;" onchange="filterAdminJobs()">
+          <option value="">All Types</option>
+          <option value="Full-Time">Full-Time</option>
+          <option value="Contract">Contract</option>
+          <option value="Executive">Executive</option>
+        </select>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Position Title</th>
+              <th>Company</th>
+              <th>Location</th>
+              <th>Salary Range</th>
+              <th>Type</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-jobs-tbody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- SECTION 3: APPLICANT ATS -->
-    <section id="tab-applicants" class="view-section">
-      <div class="control-card">
-        <div class="card-title-bar">
-          <span class="card-heading">Candidate Ingestion &amp; ATS Scorecards</span>
-          <span class="badge-tag tag-mint">TWO-WAY AI MATCHING</span>
+    <!-- VIEW 3: CANDIDATE ATS -->
+    <section id="view-applicants" class="view-section">
+      <div class="table-container">
+        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
+          CANDIDATE INTERVIEW REQUESTS & ATS INGESTION PIPELINE
         </div>
-        <div class="table-responsive-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Applicant ID</th>
-                <th>Candidate Name</th>
-                <th>Position Applied</th>
-                <th>Contact</th>
-                <th>Match Score</th>
-                <th>Status</th>
-                <th>Decision / Actions</th>
-              </tr>
-            </thead>
-            <tbody id="admin-applicants-tbody"></tbody>
-          </table>
-        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Candidate Name</th>
+              <th>Applied Position</th>
+              <th>Email</th>
+              <th>ATS Match</th>
+              <th>Status</th>
+              <th>Decision Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-applicants-tbody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- SECTION 4: LEAD ENGINE -->
-    <section id="tab-leads" class="view-section">
-      <div class="control-card">
-        <div class="card-title-bar">
-          <span class="card-heading">B2B Hiring Manager Lead Engine (Hunter.io)</span>
-          <span class="badge-tag tag-cyan">API V2 VERIFIED</span>
-        </div>
-        <div class="form-row-grid">
-          <div class="input-group">
-            <label class="input-label">Company Domain Name</label>
-            <input type="text" id="admin-lead-domain" class="admin-input" placeholder="e.g. stripe.com, google.com" value="stripe.com">
-          </div>
-          <div class="input-group">
-            <label class="input-label">Department Filter</label>
-            <select id="admin-lead-dept" class="admin-select">
-              <option value="hr,management" selected>Human Resources &amp; Management</option>
-              <option value="executive">Executive &amp; Founders</option>
-              <option value="engineering">Engineering Leadership</option>
-            </select>
-          </div>
-          <button class="btn-gold" onclick="searchAdminLeads()" data-tooltip="Query the Hunter.io API proxy to retrieve verified decision-maker emails.">
-            SEARCH LEADS
-          </button>
-        </div>
-        <div class="table-responsive-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Contact Name</th>
-                <th>Position / Title</th>
-                <th>Verified Email</th>
-                <th>Confidence Score</th>
-                <th>Phone</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="admin-leads-tbody">
-              <tr>
-                <td colspan="6" style="text-align: center; color: var(--text-dim);">Enter a company domain above and click Search Leads.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <!-- VIEW 4: HUNTER.IO LEADS ENGINE -->
+    <section id="view-hunter" class="view-section">
+      <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+        <input type="text" id="admin-lead-domain" value="stripe.com" placeholder="Company domain (e.g. stripe.com)" style="background: var(--card-dark); border: 1px solid var(--border-dark); color: #fff; padding: 0 1rem; border-radius: 6px; max-width: 240px;">
+        <select id="admin-lead-dept" style="background: var(--card-dark); border: 1px solid var(--border-dark); color: #fff; padding: 0 1rem; border-radius: 6px; max-width: 200px;">
+          <option value="hr,management">HR & Management</option>
+          <option value="engineering">Engineering</option>
+          <option value="executive">Executive</option>
+        </select>
+        <button class="btn-gold" onclick="searchAdminLeads()" data-tooltip="Search verified hiring contacts.">
+          SEARCH HUNTER.IO
+        </button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Contact Name</th>
+              <th>Position</th>
+              <th>Verified Email</th>
+              <th>Confidence</th>
+              <th>Phone</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="admin-leads-tbody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- SECTION 5: FEED AGGREGATOR -->
-    <section id="tab-feeds" class="view-section">
-      <div class="control-card">
-        <div class="card-title-bar">
-          <span class="card-heading">External Open-Source Job Feed Aggregator</span>
-          <button class="btn-surface" onclick="refreshAdminFeeds()" data-tooltip="Fetch latest feeds from Schema.org and GitHub jobs APIs.">PULL FEEDS NOW</button>
+    <!-- VIEW 5: OPEN-SOURCE FEED AGGREGATOR -->
+    <section id="view-feeds" class="view-section">
+      <div class="table-container">
+        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--cyan-accent);">
+          SCHEMA.ORG / RSS / GITHUB JOBS AGGREGATOR INGESTION
         </div>
-        <div class="table-responsive-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Feed Identifier</th>
-                <th>Source Feed Provider</th>
-                <th>Position Title</th>
-                <th>Organization</th>
-                <th>Normalized Salary</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="admin-feeds-tbody"></tbody>
-          </table>
-        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Feed ID</th>
+              <th>Source</th>
+              <th>Position Title</th>
+              <th>Company</th>
+              <th>Salary</th>
+              <th>Ingest Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-feeds-tbody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
       </div>
     </section>
 
-    <!-- SECTION 6: DIAGNOSTICS & AUDIT -->
-    <section id="tab-maintenance" class="view-section">
-      <div class="control-card">
-        <div class="card-title-bar">
-          <span class="card-heading">Automated Diagnostics &amp; Telemetry Audits</span>
-          <span class="badge-tag tag-gold">HEALTH CHECK ENGINE</span>
-        </div>
-        <div class="form-row-grid">
-          <button class="btn-gold" onclick="runDiagnosticsCheck()" data-tooltip="Execute comprehensive HTTP, WebSocket, and CRUD diagnostic checks.">
-            RUN FULL DIAGNOSTICS
-          </button>
-          <button class="btn-surface" onclick="broadcastSystemAlert()" data-tooltip="Broadcast a synchronization ping packet to all connected candidate and recruiter clients.">
-            BROADCAST MESH PING
-          </button>
-          <button class="btn-surface" onclick="exportAuditLog()" data-tooltip="Download an audit trail JSON snapshot of all system events.">
-            EXPORT AUDIT JSON
-          </button>
-        </div>
-        <div class="logs-terminal-box" id="diagnostics-terminal">
-          <div class="terminal-line">
-            <span class="terminal-time">[READY]</span>
-            <span class="terminal-tag">STANDBY</span>
-            <span class="terminal-text">Diagnostic subsystem standing by. Click "Run Full Diagnostics" to execute.</span>
-          </div>
+    <!-- VIEW 6: DIAGNOSTICS & AUDIT LOG -->
+    <section id="view-diagnostics" class="view-section">
+      <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <button class="btn-gold" onclick="runDiagnosticsCheck()" data-tooltip="Run self-diagnostic telemetry suite.">
+          RUN SELF-DIAGNOSTICS
+        </button>
+        <button class="btn-surface" onclick="broadcastSystemAlert()" data-tooltip="Broadcast ping packet across mesh.">
+          BROADCAST MESH PING
+        </button>
+        <button class="btn-surface" onclick="exportAuditLog()" data-tooltip="Export complete audit JSON.">
+          EXPORT AUDIT LOG
+        </button>
+      </div>
+
+      <div class="terminal-container" id="diagnostics-terminal">
+        <div class="terminal-line">
+          <span class="terminal-time">[12:00:00]</span>
+          <span class="terminal-tag">SYSTEM_INIT</span>
+          <span class="terminal-text">u-theADMIN master governance core online. WebSocket sync mesh listening on :3000</span>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- STICKY MOBILE BOTTOM ACTION BAR -->
-  <div class="mobile-bottom-bar">
-    <button class="btn-bottom-action highlight" onclick="switchAdminTab('overview')" data-tooltip="Switch to Overview">OVERVIEW</button>
-    <button class="btn-bottom-action" onclick="switchAdminTab('jobs')" data-tooltip="Manage Openings">JOBS</button>
-    <button class="btn-bottom-action" onclick="switchAdminTab('applicants')" data-tooltip="Review Candidates">APPLICANTS</button>
-    <button class="btn-bottom-action" onclick="runDiagnosticsCheck()" data-tooltip="Run System Tests">DIAGNOSTICS</button>
+  <!-- TOAST OVERLAY -->
+  <div class="admin-toast" id="admin-toast">
+    <div class="toast-title" id="admin-toast-title">ADMIN SYSTEM EVENT</div>
+    <div class="toast-msg" id="admin-toast-msg">Operation dispatched successfully.</div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
-  <div class="toast-panel" id="admin-toast">
-    <div class="toast-title" id="admin-toast-title">GOVERNANCE ALERT</div>
-    <div class="toast-desc" id="admin-toast-msg">Action performed successfully.</div>
-  </div>
-
+  <!-- JAVASCRIPT ENGINE -->
   <script>
     const SYNC_CHANNEL_NAME = 'UTHE_DUAL_SYNC_CHANNEL';
     let broadcastBus = null;
     let wsRelay = null;
+
     let adminJobs = [];
     let adminApplicants = [];
     let adminFeeds = [];
 
-    // Tab Switching
-    function switchAdminTab(tabId) {
+    // Tabs Switcher
+    window.switchAdminTab = function(tabKey) {
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.drawer-tab-btn').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
 
-      const targetTab = document.getElementById(`tab-${tabId}`);
-      if (targetTab) targetTab.classList.add('active');
+      const sec = document.getElementById(`view-${tabKey}`);
+      if (sec) sec.classList.add('active');
 
-      const desktopBtn = Array.from(document.querySelectorAll('.nav-tab')).find(b => b.getAttribute('onclick')?.includes(tabId));
-      if (desktopBtn) desktopBtn.classList.add('active');
+      const tabs = { 'overview': 0, 'jobs': 1, 'applicants': 2, 'hunter': 3, 'feeds': 4, 'diagnostics': 5 };
+      const idx = tabs[tabKey] || 0;
+      if (document.querySelectorAll('.nav-tab')[idx]) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+      if (document.querySelectorAll('.drawer-tab-btn')[idx]) document.querySelectorAll('.drawer-tab-btn')[idx].classList.add('active');
+    };
 
-      const drawerBtn = Array.from(document.querySelectorAll('.drawer-tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabId));
-      if (drawerBtn) drawerBtn.classList.add('active');
-
-      logAdminEvent('NAVIGATION_CHANGED', `Switched active workspace view to: ${tabId.toUpperCase()}`);
-    }
-
-    function toggleMobileDrawer() {
-      const overlay = document.getElementById('drawer-overlay');
-      const drawer = document.getElementById('mobile-drawer');
+    function toggleAdminDrawer() {
+      const overlay = document.getElementById('admin-drawer-overlay');
+      const drawer = document.getElementById('admin-drawer');
       const isOpen = drawer.classList.contains('open');
 
       if (isOpen) {
@@ -1141,58 +928,35 @@
       }
     }
 
-    // Logo Handling (8K PNG)
-    function handleAdminLogo(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const preview = document.getElementById('admin-logo-preview');
-        const uploadBtn = document.getElementById('btn-logo-upload');
-        preview.src = e.target.result;
-        preview.style.display = 'block';
-        uploadBtn.style.display = 'none';
-        showToast('8K PNG Logo uploaded and scaled across admin suite.', 'LOGO UPDATED');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // Logging & Terminal Helper
-    function logAdminEvent(type, message) {
-      const container = document.getElementById('admin-logs');
-      if (!container) return;
-      const line = document.createElement('div');
-      line.className = 'terminal-line';
-      line.innerHTML = `
-        <span class="terminal-time">[${new Date().toLocaleTimeString()}]</span>
-        <span class="terminal-tag">${type}</span>
-        <span class="terminal-text">${message}</span>
-      `;
-      container.appendChild(line);
-      container.scrollTop = container.scrollHeight;
-    }
-
-    // Fetch initial data
     async function loadInitialData() {
       try {
-        const [jobsRes, appsRes, feedsRes] = await Promise.all([
-          fetch('/api/jobs').then(r => r.json()).catch(() => ({ jobs: [] })),
-          fetch('/api/applicants').then(r => r.json()).catch(() => ({ applicants: [] })),
-          fetch('/api/jobs/aggregate').then(r => r.json()).catch(() => ({ feeds: [] }))
-        ]);
+        const stats = await fetch('/api/admin/stats').then(r => r.json());
+        if (stats.metrics) {
+          document.getElementById('kpi-jobs').textContent = stats.metrics.totalJobs;
+          document.getElementById('kpi-applicants').textContent = stats.metrics.totalApplicants;
+          document.getElementById('kpi-feeds').textContent = stats.metrics.externalFeeds;
+        }
+      } catch (e) {}
 
-        adminJobs = jobsRes.jobs || [];
-        adminApplicants = appsRes.applicants || [];
-        adminFeeds = feedsRes.feeds || [];
-
+      try {
+        const jobs = await fetch('/api/jobs').then(r => r.json());
+        adminJobs = jobs.jobs || [];
         renderAdminJobs();
+      } catch (e) {}
+
+      try {
+        const apps = await fetch('/api/applicants').then(r => r.json());
+        adminApplicants = apps.applicants || [];
         renderAdminApplicants();
+      } catch (e) {}
+
+      try {
+        const feeds = await fetch('/api/jobs/aggregate').then(r => r.json());
+        adminFeeds = feeds.feeds || [];
         renderAdminFeeds();
-        updateKpis();
-      } catch (err) {
-        logAdminEvent('FETCH_ERROR', `Failed to load initial snapshot: ${err.message}`);
-      }
+      } catch (e) {}
+
+      updateKpis();
     }
 
     function updateKpis() {
@@ -1221,7 +985,7 @@
           <td><span class="badge-tag tag-mint">${job.salary}</span></td>
           <td>${job.employmentType || 'Full-Time'}</td>
           <td>
-            <button class="btn-danger" onclick="deleteJobAdmin('${job.id}')" data-tooltip="Remove this position from the catalog across all nodes.">
+            <button class="btn-danger" onclick="deleteJobAdmin('${job.id}')" data-tooltip="Remove this position from catalog.">
               DELETE
             </button>
           </td>
@@ -1253,7 +1017,6 @@
           renderAdminJobs();
           updateKpis();
           showToast(`Job ${jobId} removed from master inventory.`, 'JOB DELETED');
-          logAdminEvent('JOB_DELETED', `Admin removed listing identifier: ${jobId}`);
         }
       } catch (e) {
         showToast(`Failed to delete job: ${e.message}`, 'ERROR');
@@ -1295,7 +1058,6 @@
         cand.status = decision;
         renderAdminApplicants();
         showToast(`Applicant ${cand.name} status updated to ${decision}.`, 'ATS DECISION');
-        logAdminEvent('APPLICANT_STATUS', `Updated applicant ${appId} status to: ${decision}`);
       }
     }
 
@@ -1312,7 +1074,7 @@
           <td>${feed.company}</td>
           <td><span class="badge-tag tag-mint">${feed.salary}</span></td>
           <td>
-            <button class="btn-surface" style="min-height: 32px; font-size: 0.65rem;" onclick="importFeedAsJob('${feed.id}')" data-tooltip="Publish this feed item as an official active opening.">
+            <button class="btn-surface" style="min-height: 32px; font-size: 0.65rem;" onclick="importFeedAsJob('${feed.id}')" data-tooltip="Import feed into active database.">
               IMPORT AS JOB
             </button>
           </td>
@@ -1354,7 +1116,6 @@
           renderAdminJobs();
           updateKpis();
           showToast(`Imported "${feed.title}" to active job database!`, 'FEED IMPORTED');
-          logAdminEvent('FEED_IMPORTED', `Feed item ${feedId} converted to active job ${data.job.id}`);
         }
       } catch (e) {
         showToast(`Feed import failed: ${e.message}`, 'ERROR');
@@ -1386,7 +1147,6 @@
             `;
             tbody.appendChild(row);
           });
-          logAdminEvent('HUNTER_SEARCH', `Retrieved ${data.data.emails.length} verified hiring managers for domain: ${domain}`);
         }
       } catch (err) {
         tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--danger-red);">Lead lookup failed: ${err.message}</td></tr>`;
@@ -1448,7 +1208,6 @@
         wsRelay.send(JSON.stringify(packet));
       }
       showToast('Mesh synchronization ping broadcasted across all nodes.', 'MESH PING SENT');
-      logAdminEvent('MESH_PING', 'Broadcasted synchronization ping packet to all nodes.');
     }
 
     function exportAuditLog() {
@@ -1480,14 +1239,19 @@
         broadcastBus.onmessage = (e) => handleSyncEvent(e.data);
       }
 
-      try {
-        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsHost = window.location.host || 'localhost:3000';
-        wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
-        wsRelay.onmessage = (e) => {
-          try { handleSyncEvent(JSON.parse(e.data)); } catch(err) {}
-        };
-      } catch (e) {}
+      function connectWs() {
+        try {
+          const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+          const wsHost = window.location.host || 'localhost:3000';
+          wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
+          wsRelay.onmessage = (e) => {
+            try { handleSyncEvent(JSON.parse(e.data)); } catch(err) {}
+          };
+          wsRelay.onclose = () => { setTimeout(connectWs, 3000); };
+        } catch (e) {}
+      }
+
+      connectWs();
 
       window.addEventListener('message', (e) => {
         if (e.data && e.data.type) handleSyncEvent(e.data);
@@ -1499,17 +1263,14 @@
         adminJobs.unshift(data.job);
         renderAdminJobs();
         updateKpis();
-        logAdminEvent('SYNC_JOB_PUBLISHED', `New job published by recruiter: "${data.job.jobTitle}"`);
       } else if (data.type === 'JOB_DELETED' && data.jobId) {
         adminJobs = adminJobs.filter(j => j.id !== data.jobId);
         renderAdminJobs();
         updateKpis();
-        logAdminEvent('SYNC_JOB_DELETED', `Job listing removed: ${data.jobId}`);
       } else if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
         adminApplicants.unshift(data.applicant);
         renderAdminApplicants();
         updateKpis();
-        logAdminEvent('SYNC_CANDIDATE_APPLIED', `Candidate application ingested: "${data.applicant.name}"`);
         showToast(`New candidate applied: ${data.applicant.name}`, 'CANDIDATE INGESTED');
       }
     }

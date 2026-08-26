@@ -48,47 +48,56 @@
       position: relative;
     }
 
-    [data-tooltip]:hover::after,
-    [data-tooltip]:focus-visible::after {
+    [data-tooltip]::after {
       content: attr(data-tooltip);
       position: absolute;
-      bottom: calc(100% + 8px);
+      bottom: calc(100% + 6px);
       left: 50%;
       transform: translateX(-50%);
       background: #111827;
       color: #F9FAFB;
-      font-size: 0.72rem;
-      font-weight: 600;
-      line-height: 1.4;
-      padding: 0.5rem 0.75rem;
-      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.3;
+      padding: 0.35rem 0.55rem;
+      border-radius: 5px;
       border: 1px solid var(--uthe-gold);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
       white-space: normal;
       width: max-content;
-      max-width: 260px;
-      z-index: 9999;
+      max-width: 200px;
+      z-index: 99999;
       pointer-events: none;
-      opacity: 1;
+      opacity: 0;
+      visibility: hidden;
       text-transform: none;
       letter-spacing: normal;
       text-align: center;
-      animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.15s ease, transform 0.15s ease;
     }
 
-    [data-tooltip]:hover::before,
-    [data-tooltip]:focus-visible::before {
+    [data-tooltip]::before {
       content: '';
       position: absolute;
-      bottom: calc(100% + 2px);
+      bottom: calc(100% + 1px);
       left: 50%;
       transform: translateX(-50%);
-      border-width: 6px 6px 0 6px;
+      border-width: 5px 5px 0 5px;
       border-style: solid;
       border-color: var(--uthe-gold) transparent transparent transparent;
-      z-index: 9999;
+      z-index: 99999;
       pointer-events: none;
-      animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease;
+    }
+
+    [data-tooltip]:hover::after,
+    [data-tooltip]:hover::before,
+    [data-tooltip]:focus-visible::after,
+    [data-tooltip]:focus-visible::before {
+      opacity: 1;
+      visibility: visible;
     }
 
     @keyframes tooltipFade {
@@ -356,28 +365,28 @@
     <!-- LEFT PANE: U-THEPOST RECRUITER -->
     <div class="pane-container" id="pane-post">
       <div class="pane-header-bar">
-        <span style="color: var(--uthe-gold);">RECRUITER CORE: U-THEPOST</span>
-        <span>STANDALONE / post.utheversity.com</span>
+        <span style="color: var(--uthe-gold);">RECRUITER CORE: U-THEPOST (ENTERPRISE EDITION)</span>
+        <span>PORT 3000 / post.utheversity.com</span>
       </div>
-      <iframe class="pane-iframe" id="iframe-post" src="/recruiter.html"></iframe>
+      <iframe class="pane-iframe" id="iframe-post" src="/u-thePOST-ENTERPRISE-EDITION.html"></iframe>
     </div>
 
     <!-- RIGHT PANE: U-THEJOBS APPLICANT -->
     <div class="pane-container" id="pane-jobs">
       <div class="pane-header-bar">
-        <span style="color: var(--cyan-accent);">APPLICANT BOARD: U-THEJOBS</span>
-        <span>STANDALONE / jobs.utheversity.com</span>
+        <span style="color: var(--cyan-accent);">APPLICANT BOARD: U-THEJOBS (LIVE SYNC NODE)</span>
+        <span>AUTO-REACTIVE / jobs.utheversity.com</span>
       </div>
-      <iframe class="pane-iframe" id="iframe-jobs" src="/candidate.html"></iframe>
+      <iframe class="pane-iframe" id="iframe-jobs" src="/u-theJOBS-ENTERPRISE-SYNC.html"></iframe>
     </div>
 
     <!-- PANE 3: U-THEADMIN (HIDDEN BY DEFAULT IN SPLIT MODE) -->
     <div class="pane-container" id="pane-admin" style="display: none;">
       <div class="pane-header-bar">
         <span style="color: var(--uthe-gold);">MASTER GOVERNANCE: U-THEADMIN</span>
-        <span>STANDALONE / admin.utheversity.com</span>
+        <span>TELEMETRY CORE / admin.utheversity.com</span>
       </div>
-      <iframe class="pane-iframe" id="iframe-admin" src="/admin.html"></iframe>
+      <iframe class="pane-iframe" id="iframe-admin" src="/u-theADMIN-MASTER-SUITE.html"></iframe>
     </div>
 
   </div>

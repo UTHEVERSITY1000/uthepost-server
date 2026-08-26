@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>u-thePOST — Recruiter Portal & Omni-Channel Publishing Engine</title>
+  <title>u-thePOST — Recruiter Workspace & Omni-Channel Publishing Engine</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
@@ -53,57 +53,61 @@
       padding-bottom: 76px; /* Space for sticky bottom bar on mobile */
     }
 
-    /* PLAIN-ENGLISH TOOLTIP SYSTEM */
+    /* REFINED SMART TOOLTIP SYSTEM (< 200px, 11px font, z-index 99999) */
     [data-tooltip] {
       position: relative;
     }
 
-    [data-tooltip]:hover::after,
-    [data-tooltip]:focus-visible::after {
+    [data-tooltip]::after {
       content: attr(data-tooltip);
       position: absolute;
-      bottom: calc(100% + 8px);
+      bottom: calc(100% + 6px);
       left: 50%;
       transform: translateX(-50%);
       background: #111827;
       color: #F9FAFB;
-      font-size: 0.72rem;
+      font-size: 11px;
       font-weight: 500;
-      line-height: 1.4;
-      padding: 0.5rem 0.75rem;
-      border-radius: 6px;
+      line-height: 1.3;
+      padding: 0.35rem 0.55rem;
+      border-radius: 5px;
       border: 1px solid var(--uthe-gold);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       white-space: normal;
       width: max-content;
-      max-width: 260px;
-      z-index: 9999;
+      max-width: 200px;
+      z-index: 99999;
       pointer-events: none;
-      opacity: 1;
+      opacity: 0;
+      visibility: hidden;
       text-transform: none;
       letter-spacing: normal;
       text-align: center;
-      animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.15s ease, transform 0.15s ease;
     }
 
-    [data-tooltip]:hover::before,
-    [data-tooltip]:focus-visible::before {
+    [data-tooltip]::before {
       content: '';
       position: absolute;
-      bottom: calc(100% + 2px);
+      bottom: calc(100% + 1px);
       left: 50%;
       transform: translateX(-50%);
-      border-width: 6px 6px 0 6px;
+      border-width: 5px 5px 0 5px;
       border-style: solid;
       border-color: var(--uthe-gold) transparent transparent transparent;
-      z-index: 9999;
+      z-index: 99999;
       pointer-events: none;
-      animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease;
     }
 
-    @keyframes tooltipFade {
-      from { opacity: 0; transform: translate(-50%, 4px); }
-      to { opacity: 1; transform: translate(-50%, 0); }
+    [data-tooltip]:hover::after,
+    [data-tooltip]:hover::before,
+    [data-tooltip]:focus-visible::after,
+    [data-tooltip]:focus-visible::before {
+      opacity: 1;
+      visibility: visible;
     }
 
     /* 48PX MINIMUM TOUCH TARGETS & PRESS FEEDBACK */
@@ -123,7 +127,7 @@
       outline-offset: 2px;
     }
 
-    /* TOP STICKY NAVIGATION HEADER */
+    /* TOP STICKY NAVIGATION HEADER (RESTRICTED TO 4 CUSTOMER TABS) */
     header {
       position: sticky;
       top: 0;
@@ -221,10 +225,11 @@
       image-rendering: -webkit-optimize-contrast;
     }
 
+    /* 4 CUSTOMER NAVIGATION TABS */
     .header-center-tabs {
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       padding: 0 0.5rem;
@@ -238,7 +243,7 @@
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      padding: 0 0.85rem;
+      padding: 0 0.95rem;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -320,7 +325,7 @@
       align-items: center;
     }
 
-    /* MOBILE SLIDE-IN NAVIGATION DRAWER */
+    /* MOBILE SLIDE-IN NAVIGATION DRAWER (4 TABS) */
     .mobile-drawer-overlay {
       position: fixed;
       inset: 0;
@@ -720,115 +725,7 @@
       color: #FFFFFF;
     }
 
-    /* MODULE 2: B2B LEAD ENGINE (HUNTER.IO) */
-    .module-toolbar {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 1.25rem;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1.5fr auto;
-      gap: 0.75rem;
-      align-items: end;
-      box-shadow: var(--subtle-shadow);
-    }
-
-    .btn-action-charcoal {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border: 1px solid var(--uthe-gold);
-      padding: 0 1.2rem;
-      border-radius: 6px;
-      font-weight: 800;
-      font-size: 0.75rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-action-charcoal:hover {
-      background: var(--uthe-gold);
-      color: var(--uthe-charcoal);
-    }
-
-    .data-table-container {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      box-shadow: var(--subtle-shadow);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.78rem;
-      min-width: 600px;
-    }
-
-    th {
-      background: #F8FAFC;
-      color: var(--text-muted);
-      font-weight: 800;
-      text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 0.8px;
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    td {
-      padding: 0.85rem 1rem;
-      border-bottom: 1px solid #F1F5F9;
-      vertical-align: middle;
-    }
-
-    tr:hover td {
-      background: #FAF5FF;
-    }
-
-    .confidence-badge {
-      display: inline-flex;
-      align-items: center;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 0.15rem 0.5rem;
-      border-radius: 20px;
-      background: var(--status-mint-bg);
-      color: #065F46;
-      border: 1px solid #A7F3D0;
-    }
-
-    .action-pill-btn {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      padding: 0 0.85rem;
-      border-radius: 6px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      cursor: pointer;
-      height: 38px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .action-pill-btn:hover {
-      border-color: var(--blue-accent);
-      color: var(--blue-accent);
-      background: var(--blue-bg);
-    }
-
-    /* MODULE 3: OMNICHANNEL OUTREACH CRM */
+    /* TAB 2: OMNICHANNEL OUTREACH CRM */
     .omnichannel-grid {
       display: grid;
       grid-template-columns: 320px 1fr;
@@ -911,7 +808,52 @@
       cursor: pointer;
     }
 
-    /* MODULE 5: ATS KANBAN BOARD */
+    .action-pill-btn {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      padding: 0 0.85rem;
+      border-radius: 6px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      cursor: pointer;
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .action-pill-btn:hover {
+      border-color: var(--blue-accent);
+      color: var(--blue-accent);
+      background: var(--blue-bg);
+    }
+
+    .btn-action-charcoal {
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
+      border: 1px solid var(--uthe-gold);
+      padding: 0 1.2rem;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-action-charcoal:hover {
+      background: var(--uthe-gold);
+      color: var(--uthe-charcoal);
+    }
+
+    /* TAB 3: ATS KANBAN BOARD WITH MOBILE TOUCH DRAG & DROP */
     .kanban-board {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -931,6 +873,12 @@
       gap: 0.75rem;
       min-height: 480px;
       min-width: 200px;
+      transition: background 0.2s, border 0.2s;
+    }
+
+    .kanban-col.drop-target-hover {
+      background: #FEF3C7;
+      border: 2px dashed var(--uthe-gold);
     }
 
     .kanban-col-header {
@@ -956,7 +904,10 @@
       gap: 0.4rem;
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
       cursor: grab;
-      transition: all 0.2s;
+      touch-action: none; /* Crucial for native touch drag on mobile */
+      user-select: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
     }
 
     .candidate-card:hover {
@@ -965,10 +916,54 @@
       transform: translateY(-1px);
     }
 
-    .cand-name { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
+    .candidate-card.touch-dragging {
+      opacity: 0.88;
+      transform: scale(1.04);
+      border: 2px solid var(--uthe-gold);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+      z-index: 10000;
+    }
+
+    .cand-name { font-size: 0.85rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; justify-content: space-between; }
     .cand-role { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); }
     .cand-match { font-size: 0.65rem; font-weight: 800; color: #065F46; background: var(--status-mint-bg); padding: 0.12rem 0.35rem; border-radius: 3px; width: fit-content; }
-    
+    .grab-handle-icon { font-size: 0.6rem; color: #94A3B8; letter-spacing: 1px; font-weight: 900; }
+
+    /* TAB 4: PERFORMANCE & PLANS */
+    .data-table-container {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      box-shadow: var(--subtle-shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.78rem;
+      min-width: 600px;
+    }
+
+    th {
+      background: #F8FAFC;
+      color: var(--text-muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 0.8px;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid #F1F5F9;
+      vertical-align: middle;
+    }
+
     /* MODAL OVERLAYS & TOAST */
     .modal-overlay {
       display: none;
@@ -1067,12 +1062,38 @@
       font-weight: 900;
     }
 
+    /* PLATFORM FOOTER & SECRET ADMIN ACCESS */
+    footer.platform-footer {
+      background: #FFFFFF;
+      border-top: 1px solid var(--border-color);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: auto;
+    }
+
+    .footer-secret-link {
+      color: #CBD5E1;
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .footer-secret-link:hover {
+      color: var(--uthe-gold);
+    }
+
     /* TOAST OVERLAY NOTIFICATION */
     .toast-overlay {
       position: fixed;
       bottom: 80px;
       right: 1.25rem;
-      z-index: 3000;
+      z-index: 999999;
       display: none;
       background: var(--uthe-charcoal);
       border: 1.5px solid var(--uthe-gold);
@@ -1105,7 +1126,6 @@
       .studio-grid { grid-template-columns: 1fr; }
       .omnichannel-grid { grid-template-columns: 1fr; }
       .kanban-board { grid-template-columns: repeat(2, 1fr); }
-      .module-toolbar { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
@@ -1125,17 +1145,17 @@
 </head>
 <body>
 
-  <!-- STICKY HEADER -->
+  <!-- STICKY HEADER WITH 4 CUSTOMER TABS -->
   <header>
     <div class="brand-group">
       <div class="brand-logo-wrap">
         <h1 class="brand-title" data-tooltip="u-thePOST: Your central hiring dashboard for posting jobs and reaching candidates.">U-THEPOST</h1>
-        <span class="brand-badge" data-tooltip="Enterprise edition with real-time candidate synchronization.">ENTERPRISE EDITION</span>
+        <span class="brand-badge" data-tooltip="Enterprise edition with real-time candidate synchronization.">RECRUITER WORKSPACE</span>
       </div>
       
       <!-- 8K PNG LOGO REPLACEMENT IN-PLACE -->
       <input type="file" id="logo-file-picker" accept="image/png, image/jpeg, image/webp" style="display:none;" onchange="handleLogoSelect(event)">
-      <button class="btn-upload-logo" id="btn-upload-logo-container" onclick="document.getElementById('logo-file-picker').click()" data-tooltip="Upload your company logo. Supports high-resolution 8K PNG files with zero distortion.">
+      <button class="btn-upload-logo" id="btn-upload-logo-container" onclick="document.getElementById('logo-file-picker').click()" data-tooltip="Upload your company logo. Supports high-resolution 8K PNG files.">
         UPLOAD LOGO
       </button>
       <div id="header-logo-container" class="header-logo-container" onclick="document.getElementById('logo-file-picker').click()" data-tooltip="Click your logo at any time to upload a new one.">
@@ -1143,36 +1163,27 @@
       </div>
     </div>
 
-    <!-- DESKTOP CENTER TABS -->
+    <!-- 4 CUSTOMER NAVIGATION TABS -->
     <div class="header-center-tabs">
       <button class="nav-tab active" onclick="switchTab('studio')" data-tooltip="Create, preview, and publish job listings to candidates.">
         1. JOB STUDIO
       </button>
-      <button class="nav-tab" onclick="switchTab('hunter')" data-tooltip="Search verified emails and direct contact details for hiring managers.">
-        2. B2B LEAD ENGINE
-      </button>
       <button class="nav-tab" onclick="switchTab('crm')" data-tooltip="Send tailored hiring proposals across Gmail, LinkedIn, TikTok, and social platforms.">
-        3. OMNICHANNEL CRM
-      </button>
-      <button class="nav-tab" onclick="switchTab('aggregator')" data-tooltip="Import and standardize job postings from open-source web feeds with one click.">
-        4. JOB AGGREGATOR
+        2. OMNICHANNEL CRM
       </button>
       <button class="nav-tab" onclick="switchTab('ats')" data-tooltip="Track applicants through screening, interviews, offers, and hiring stages.">
-        5. APPLICANT TRACKER
+        3. APPLICANT TRACKER
       </button>
       <button class="nav-tab" onclick="switchTab('monetization')" data-tooltip="Review job view statistics, channel results, and feature boost plans.">
-        6. PERFORMANCE & PLANS
-      </button>
-      <button class="nav-tab" onclick="switchTab('diagnostics')" data-tooltip="Run automatic health and speed tests on your hiring system.">
-        7. SYSTEM DIAGNOSTICS
+        4. PERFORMANCE & PLANS
       </button>
     </div>
 
     <div class="header-actions">
-      <div class="sync-status-indicator" id="sync-pill" data-tooltip="Real-time link is active. Any changes you make appear immediately on the candidate board.">
+      <div class="sync-status-indicator" id="sync-pill" data-tooltip="Real-time link is active. Any changes appear immediately on candidate boards.">
         <span id="sync-text">SYNC ACTIVE</span>
       </div>
-      <button class="btn-save" onclick="handleSaveDraft()" data-tooltip="Saves your current form progress to your browser so you never lose your draft.">
+      <button class="btn-save" onclick="handleSaveDraft()" data-tooltip="Saves your current form progress to your browser.">
         SAVE DRAFT
       </button>
       <button class="btn-mobile-menu" onclick="toggleRecruiterDrawer()" data-tooltip="Open navigation menu">
@@ -1181,7 +1192,7 @@
     </div>
   </header>
 
-  <!-- MOBILE NAVIGATION DRAWER -->
+  <!-- MOBILE NAVIGATION DRAWER (4 TABS) -->
   <div class="mobile-drawer-overlay" id="recruiter-drawer-overlay" onclick="toggleRecruiterDrawer()"></div>
   <div class="mobile-drawer" id="recruiter-drawer">
     <div class="drawer-header">
@@ -1190,12 +1201,9 @@
     </div>
     <div class="drawer-nav-list">
       <button class="drawer-tab-btn active" onclick="switchTab('studio'); toggleRecruiterDrawer();">1. JOB STUDIO</button>
-      <button class="drawer-tab-btn" onclick="switchTab('hunter'); toggleRecruiterDrawer();">2. B2B LEAD ENGINE</button>
-      <button class="drawer-tab-btn" onclick="switchTab('crm'); toggleRecruiterDrawer();">3. OMNICHANNEL CRM</button>
-      <button class="drawer-tab-btn" onclick="switchTab('aggregator'); toggleRecruiterDrawer();">4. JOB AGGREGATOR</button>
-      <button class="drawer-tab-btn" onclick="switchTab('ats'); toggleRecruiterDrawer();">5. APPLICANT TRACKER</button>
-      <button class="drawer-tab-btn" onclick="switchTab('monetization'); toggleRecruiterDrawer();">6. PERFORMANCE & PLANS</button>
-      <button class="drawer-tab-btn" onclick="switchTab('diagnostics'); toggleRecruiterDrawer();">7. SYSTEM DIAGNOSTICS</button>
+      <button class="drawer-tab-btn" onclick="switchTab('crm'); toggleRecruiterDrawer();">2. OMNICHANNEL CRM</button>
+      <button class="drawer-tab-btn" onclick="switchTab('ats'); toggleRecruiterDrawer();">3. APPLICANT TRACKER</button>
+      <button class="drawer-tab-btn" onclick="switchTab('monetization'); toggleRecruiterDrawer();">4. PERFORMANCE & PLANS</button>
     </div>
   </div>
 
@@ -1206,7 +1214,7 @@
     <section id="view-studio" class="workspace-view active">
       <div class="studio-grid">
         
-        <!-- LEFT 50% PANEL: 1. EMPLOYER JOB LISTING -->
+        <!-- LEFT PANEL: 1. EMPLOYER JOB LISTING -->
         <div class="panel">
           <div class="panel-title">
             <span>1. Employer Job Listing</span>
@@ -1220,11 +1228,11 @@
 
           <div class="grid-2">
             <div class="form-group">
-              <label data-tooltip="The legal or public name of your company or organization.">Company / Organization</label>
+              <label data-tooltip="The legal or public name of your company.">Company / Organization</label>
               <input type="text" id="company-name" placeholder="e.g. Quantum Technologies" value="Quantum Technologies Corp">
             </div>
             <div class="form-group">
-              <label data-tooltip="The primary workplace city and state, or Remote if employees can work from home.">Location (City, State)</label>
+              <label data-tooltip="The workplace city and state, or Remote.">Location (City, State)</label>
               <input type="text" id="job-location" placeholder="e.g. Austin, TX (Remote)" value="Austin, TX (Remote)">
             </div>
           </div>
@@ -1240,7 +1248,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label data-tooltip="How compensation is calculated: annual salary or hourly wage.">Pay Structure</label>
+              <label data-tooltip="How compensation is calculated: annual salary or hourly rate.">Pay Structure</label>
               <select id="pay-type">
                 <option value="Salary Range" selected>Salary Range</option>
                 <option value="Hourly Rate">Hourly Rate</option>
@@ -1251,18 +1259,18 @@
 
           <div class="grid-2">
             <div class="form-group">
-              <label data-tooltip="Minimum yearly or hourly compensation offered.">Min Compensation ($)</label>
+              <label data-tooltip="Minimum compensation offered.">Min Compensation ($)</label>
               <input type="number" id="salary-min" placeholder="90000" value="135000">
             </div>
             <div class="form-group">
-              <label data-tooltip="Maximum yearly or hourly compensation offered.">Max Compensation ($)</label>
+              <label data-tooltip="Maximum compensation offered.">Max Compensation ($)</label>
               <input type="number" id="salary-max" placeholder="120000" value="175000">
             </div>
           </div>
 
           <div class="grid-2">
             <div class="form-group">
-              <label data-tooltip="Vacation policy details, such as 20 Days PTO or Unlimited Vacation.">Paid Vacation & PTO</label>
+              <label data-tooltip="Vacation policy details.">Paid Vacation & PTO</label>
               <input type="text" id="job-pto" placeholder="e.g. Unlimited PTO" value="Unlimited PTO">
             </div>
             <div class="form-group">
@@ -1273,31 +1281,31 @@
 
           <div class="grid-2">
             <div class="form-group">
-              <label data-tooltip="Retirement savings plan, such as 401(k) with company match.">Retirement / 401(k)</label>
+              <label data-tooltip="Retirement savings plan details.">Retirement / 401(k)</label>
               <input type="text" id="job-retirement" placeholder="e.g. 401(k) 5% Match" value="401(k) 5% Match">
             </div>
             <div class="form-group">
-              <label data-tooltip="Extra perks such as home office budget, wellness allowance, or equity.">Additional Perks</label>
+              <label data-tooltip="Extra benefits or equipment budget.">Additional Perks</label>
               <input type="text" id="job-perks" placeholder="e.g. $3k WFH Budget" value="$3,000 Home Office Stipend + Equity">
             </div>
           </div>
 
           <div class="form-group">
-            <label data-tooltip="Link to your company career page or external applicant form.">Company Application Link / URL</label>
+            <label data-tooltip="Link to your company career page.">Company Application Link / URL</label>
             <input type="url" id="apply-url" placeholder="https://careers.company.com/apply" value="https://careers.quantumtech.io/apply/101">
           </div>
 
           <div class="form-group">
-            <label data-tooltip="Overview of position responsibilities, team culture, and requirements.">Job Specification Summary</label>
+            <label data-tooltip="Overview of position responsibilities and requirements.">Job Specification Summary</label>
             <textarea id="job-desc" rows="3" placeholder="Provide overview of key responsibilities and qualifications...">Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.</textarea>
           </div>
 
           <!-- DUAL PUBLISH TRIGGERS -->
           <div class="button-group-row">
-            <button class="btn-publish" id="publish-btn" onclick="handlePublishJob()" data-tooltip="Publish this job directly to the u-theJOBS candidate board in real time.">
+            <button class="btn-publish" id="publish-btn" onclick="handlePublishJob()" data-tooltip="Publish this job directly to candidate boards in real time.">
               PUBLISH JOB LIVE
             </button>
-            <button class="btn-omni-broadcast" id="omni-broadcast-btn" onclick="handleOmniBroadcast()" data-tooltip="One-click publish across all channels: u-theJOBS, LinkedIn, Gmail, X, TikTok, Instagram, and Open-Source feeds simultaneously.">
+            <button class="btn-omni-broadcast" id="omni-broadcast-btn" onclick="handleOmniBroadcast()" data-tooltip="Broadcast across all connected channels simultaneously.">
               BROADCAST EVERYWHERE (OMNI-CHANNEL)
             </button>
           </div>
@@ -1313,7 +1321,7 @@
               <span style="font-size: 0.65rem; color: var(--uthe-gold); font-weight: 800;">REAL-TIME REACTIVE</span>
             </div>
 
-            <div class="preview-card" data-tooltip="This card shows exactly how your job listing appears to candidates.">
+            <div class="preview-card" data-tooltip="Shows exactly how your listing appears to candidates.">
               <div class="preview-company" id="pv-company">Quantum Technologies Corp</div>
               <div class="preview-meta-row">
                 <span id="pv-location">AUSTIN, TX (REMOTE)</span>
@@ -1330,8 +1338,8 @@
                 <span class="preview-tag" id="pv-tag-retirement">401(k) 5% Match</span>
               </div>
 
-              <button class="btn-preview-apply" onclick="showToast('Candidate application drawer simulation opened.', 'APPLY ACTION')">
-                APPLY NOW
+              <button class="btn-preview-apply" onclick="showToast('Candidate application drawer simulation opened.', 'QUICK SEND')">
+                QUICK SEND
               </button>
             </div>
           </div>
@@ -1353,57 +1361,7 @@
       </div>
     </section>
 
-    <!-- VIEW 2: B2B LEAD ENGINE (HUNTER.IO INTEGRATION) -->
-    <section id="view-hunter" class="workspace-view">
-      <div class="module-toolbar">
-        <div class="form-group">
-          <label data-tooltip="Enter any company domain to search for hiring managers and team leaders.">Target Domain / Organization</label>
-          <input type="text" id="hunter-domain" placeholder="e.g. stripe.com, google.com, quantumtech.io" value="quantumtech.io">
-        </div>
-        <div class="form-group">
-          <label data-tooltip="Filter leads by company department.">Department</label>
-          <select id="hunter-dept">
-            <option value="hr,management" selected>HR & Management</option>
-            <option value="executive">Executive Only</option>
-            <option value="engineering">Engineering</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label data-tooltip="Filter leads by organizational seniority level.">Seniority</label>
-          <select id="hunter-seniority">
-            <option value="executive,senior" selected>Executive & Senior</option>
-            <option value="all">All Levels</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label data-tooltip="Optional: Enter your Hunter.io API key or leave blank to use the built-in demo engine.">Hunter.io API Key (Optional)</label>
-          <input type="password" id="hunter-key" placeholder="Live Key (or use Demo Engine)">
-        </div>
-        <button class="btn-action-charcoal" onclick="searchHunterLeads()" data-tooltip="Search verified contacts matching your filters.">
-          SEARCH LEADS
-        </button>
-      </div>
-
-      <div class="data-table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Contact Name & Role</th>
-              <th>Organization</th>
-              <th>Verified Email</th>
-              <th>Verification Confidence</th>
-              <th>Department</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="hunter-results-body">
-            <!-- Populated by JS -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- VIEW 3: OMNICHANNEL OUTREACH CRM -->
+    <!-- VIEW 2: OMNICHANNEL OUTREACH CRM -->
     <section id="view-crm" class="workspace-view">
       <div class="omnichannel-grid">
         <div class="panel">
@@ -1418,17 +1376,17 @@
               <strong>Recruiter Job Distribution Proposal</strong>
               <small style="color: var(--text-muted);">High-deliverability hiring outreach</small>
             </div>
-            <div class="channel-item-row" onclick="selectChannelTemplate('linkedin')" data-tooltip="Direct LinkedIn InMail pitch highlighting pre-vetted candidate velocity.">
+            <div class="channel-item-row" onclick="selectChannelTemplate('linkedin')" data-tooltip="Direct LinkedIn InMail pitch highlighting candidate velocity.">
               <span class="channel-badge ch-linkedin">LINKEDIN (INMAIL)</span>
               <strong>Executive Candidate Pipeline</strong>
               <small style="color: var(--text-muted);">High-conversion talent search</small>
             </div>
-            <div class="channel-item-row" onclick="selectChannelTemplate('tiktok')" data-tooltip="Engaging short-form pitch for modern creative and tech teams.">
+            <div class="channel-item-row" onclick="selectChannelTemplate('tiktok')" data-tooltip="Engaging short-form pitch for modern tech teams.">
               <span class="channel-badge ch-tiktok">TIKTOK (DM)</span>
               <strong>Modern Employer Branding</strong>
               <small style="color: var(--text-muted);">Creative hiring outreach</small>
             </div>
-            <div class="channel-item-row" onclick="selectChannelTemplate('facebook')" data-tooltip="Targeted regional hiring proposal for local business managers.">
+            <div class="channel-item-row" onclick="selectChannelTemplate('facebook')" data-tooltip="Targeted regional hiring proposal for business managers.">
               <span class="channel-badge ch-facebook">FACEBOOK (BUSINESS)</span>
               <strong>Regional Talent Sourcing</strong>
               <small style="color: var(--text-muted);">Localized hiring manager proposal</small>
@@ -1438,7 +1396,7 @@
               <strong>Visual Brand Spotlight</strong>
               <small style="color: var(--text-muted);">Featured position spotlight</small>
             </div>
-            <div class="channel-item-row" onclick="selectChannelTemplate('x')" data-tooltip="Concise, high-signal direct message with calendar booking link.">
+            <div class="channel-item-row" onclick="selectChannelTemplate('x')" data-tooltip="Concise message with direct calendar booking link.">
               <span class="channel-badge ch-x">X / TWITTER (DM)</span>
               <strong>Direct Executive Calendar Link</strong>
               <small style="color: var(--text-muted);">Short-form high-signal pitch</small>
@@ -1449,7 +1407,7 @@
         <div class="template-editor-box">
           <div class="panel-title">
             <span id="template-title">GMAIL (COLD EMAIL) — OUTREACH TEMPLATE</span>
-            <button class="action-pill-btn" onclick="copyActiveTemplate()" data-tooltip="Copy this personalized message body to your clipboard.">COPY TEMPLATE</button>
+            <button class="action-pill-btn" onclick="copyActiveTemplate()" data-tooltip="Copy this message to your clipboard.">COPY TEMPLATE</button>
           </div>
 
           <div class="token-chips-bar" data-tooltip="Click any variable tag below to insert it into your message.">
@@ -1472,91 +1430,52 @@
           </div>
 
           <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
-            <button class="action-pill-btn" style="background:#F1F5F9;" onclick="testSendCampaign()" data-tooltip="Schedule this message in your automated follow-up queue.">Schedule Queue</button>
-            <button class="btn-action-charcoal" onclick="dispatchLiveCampaign()" data-tooltip="Send this personalized campaign to the selected contact immediately.">DISPATCH CAMPAIGN</button>
+            <button class="action-pill-btn" style="background:#F1F5F9;" onclick="testSendCampaign()" data-tooltip="Schedule this message in automated queue.">Schedule Queue</button>
+            <button class="btn-action-charcoal" onclick="dispatchLiveCampaign()" data-tooltip="Send this personalized campaign immediately.">DISPATCH CAMPAIGN</button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- VIEW 4: OPEN-SOURCE JOB AGGREGATOR -->
-    <section id="view-aggregator" class="workspace-view">
-      <div class="module-toolbar" style="grid-template-columns: 2fr 1fr auto;">
-        <div class="form-group">
-          <label data-tooltip="Select the type of public job feed you want to import.">Public Feed Source</label>
-          <select id="agg-feed-source">
-            <option value="schema_org">Schema.org JobPosting Standard Format</option>
-            <option value="github_api">GitHub / GitLab Public Tech Listings</option>
-            <option value="tech_rss">Tech Industry RSS Job Feed</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label data-tooltip="Web address of the public job posting feed.">Target Feed URL</label>
-          <input type="text" id="agg-url" value="https://opencore.dev/api/jobs/schema.json">
-        </div>
-        <button class="btn-action-charcoal" onclick="fetchAggregatedJobs()" data-tooltip="Fetch external job postings and format them into standard recruiter fields.">
-          IMPORT & STANDARDIZE
-        </button>
-      </div>
-
-      <div class="data-table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Feed Source</th>
-              <th>Position Title</th>
-              <th>Company</th>
-              <th>Location</th>
-              <th>Standardized Salary</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="aggregator-results-body">
-            <!-- Populated by JS -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- VIEW 5: ATS KANBAN & AI CANDIDATE MATCHING -->
+    <!-- VIEW 3: ATS KANBAN BOARD WITH NATIVE MOBILE TOUCH DRAG & DROP -->
     <section id="view-ats" class="workspace-view">
       <div class="kanban-board" id="kanban-board">
         
-        <div class="kanban-col" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Applied')">
+        <div class="kanban-col" id="col-applied-box" data-status="Applied" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Applied')">
           <div class="kanban-col-header">
-            <span data-tooltip="Candidates who have recently submitted their applications.">1. Applied</span>
+            <span data-tooltip="Candidates who have submitted interview requests.">1. Applied</span>
             <span id="count-applied">1</span>
           </div>
           <div class="kanban-cards-wrap" id="col-applied"></div>
         </div>
 
-        <div class="kanban-col" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Screened')">
+        <div class="kanban-col" id="col-screened-box" data-status="Screened" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Screened')">
           <div class="kanban-col-header">
-            <span data-tooltip="Candidates who have passed initial qualifications screening.">2. Screened</span>
+            <span data-tooltip="Candidates who have passed initial review.">2. Screened</span>
             <span id="count-screened">1</span>
           </div>
           <div class="kanban-cards-wrap" id="col-screened"></div>
         </div>
 
-        <div class="kanban-col" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Interviewing')">
+        <div class="kanban-col" id="col-interviewing-box" data-status="Interviewing" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Interviewing')">
           <div class="kanban-col-header">
-            <span data-tooltip="Candidates currently in the interview and evaluation process.">3. Interviewing</span>
+            <span data-tooltip="Candidates in the interview process.">3. Interviewing</span>
             <span id="count-interviewing">1</span>
           </div>
           <div class="kanban-cards-wrap" id="col-interviewing"></div>
         </div>
 
-        <div class="kanban-col" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Offer')">
+        <div class="kanban-col" id="col-offer-box" data-status="Offer" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Offer')">
           <div class="kanban-col-header">
-            <span data-tooltip="Candidates who have received a formal employment offer.">4. Offer</span>
+            <span data-tooltip="Candidates who have received offers.">4. Offer</span>
             <span id="count-offer">1</span>
           </div>
           <div class="kanban-cards-wrap" id="col-offer"></div>
         </div>
 
-        <div class="kanban-col" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Hired')">
+        <div class="kanban-col" id="col-hired-box" data-status="Hired" ondragover="allowDrop(event)" ondrop="dropCandidate(event, 'Hired')">
           <div class="kanban-col-header">
-            <span data-tooltip="Candidates who have accepted offers and completed hiring.">5. Hired</span>
+            <span data-tooltip="Candidates who have completed hiring.">5. Hired</span>
             <span id="count-hired">0</span>
           </div>
           <div class="kanban-cards-wrap" id="col-hired"></div>
@@ -1565,7 +1484,7 @@
       </div>
     </section>
 
-    <!-- VIEW 6: PERFORMANCE, CALENDAR & PLANS -->
+    <!-- VIEW 4: PERFORMANCE & PLANS -->
     <section id="view-monetization" class="workspace-view">
       <div class="grid-2">
         <div class="panel">
@@ -1575,19 +1494,19 @@
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; text-align: center;">
-            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Total number of times job seekers have viewed your postings.">
+            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Total views across all channels.">
               <div style="font-size: 0.6rem; color: var(--text-muted); font-weight: 800;">TOTAL VIEWS</div>
               <div style="font-size: 1.25rem; font-weight: 900; color: var(--uthe-charcoal);">128.4K</div>
             </div>
-            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Number of candidates who clicked into your job details.">
+            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Candidates who clicked into job details.">
               <div style="font-size: 0.6rem; color: var(--text-muted); font-weight: 800;">CLICKS</div>
               <div style="font-size: 1.25rem; font-weight: 900; color: var(--blue-accent);">14.2K (11.1%)</div>
             </div>
-            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Total submitted candidate resumes across all channels.">
+            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Total submitted candidate interview requests.">
               <div style="font-size: 0.6rem; color: var(--text-muted); font-weight: 800;">APPLICATIONS</div>
               <div style="font-size: 1.25rem; font-weight: 900; color: #065F46;">842</div>
             </div>
-            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Average estimated cost per completed candidate application.">
+            <div style="background:#F8FAFC; padding: 0.75rem; border-radius: 6px;" data-tooltip="Estimated cost per completed application.">
               <div style="font-size: 0.6rem; color: var(--text-muted); font-weight: 800;">COST / APPLICANT</div>
               <div style="font-size: 1.25rem; font-weight: 900; color: #92400E;">$18.40</div>
             </div>
@@ -1606,7 +1525,7 @@
               </thead>
               <tbody>
                 <tr><td>LinkedIn InMail</td><td>48,200</td><td>6,100</td><td>12.6%</td><td>384</td></tr>
-                <tr><td>Hunter.io Outreach</td><td>32,400</td><td>3,950</td><td>12.2%</td><td>218</td></tr>
+                <tr><td>Direct Outreach</td><td>32,400</td><td>3,950</td><td>12.2%</td><td>218</td></tr>
                 <tr><td>X / Twitter Network</td><td>24,100</td><td>2,420</td><td>10.0%</td><td>122</td></tr>
                 <tr><td>TikTok Employer Spotlight</td><td>23,700</td><td>1,730</td><td>7.3%</td><td>118</td></tr>
               </tbody>
@@ -1621,19 +1540,19 @@
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.65rem;">
-            <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center;" data-tooltip="Ideal for small businesses hiring for up to 3 positions.">
+            <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center;" data-tooltip="For small teams hiring up to 3 positions.">
               <div style="font-weight: 800; font-size: 0.8rem;">STARTER</div>
               <div style="font-size: 1.35rem; font-weight: 900; margin: 0.25rem 0;">$99<small style="font-size: 0.65rem;">/mo</small></div>
               <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.75rem;">3 Active Jobs & Standard Sync</div>
               <button class="action-pill-btn" style="width: 100%;" onclick="simulateStripeCheckout('Starter Plan ($99/mo)')">Subscribe</button>
             </div>
-            <div style="border: 2px solid var(--uthe-gold); background: var(--uthe-gold-light); border-radius: 8px; padding: 1rem; text-align: center;" data-tooltip="Most popular plan for growing teams with up to 15 openings.">
+            <div style="border: 2px solid var(--uthe-gold); background: var(--uthe-gold-light); border-radius: 8px; padding: 1rem; text-align: center;" data-tooltip="For growing teams with up to 15 openings.">
               <div style="font-weight: 800; font-size: 0.8rem; color: #92400E;">GROWTH</div>
               <div style="font-size: 1.35rem; font-weight: 900; margin: 0.25rem 0; color: #92400E;">$299<small style="font-size: 0.65rem;">/mo</small></div>
               <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.75rem;">15 Active Jobs + Candidate Matcher</div>
               <button class="btn-action-charcoal" style="width: 100%; height: 38px; font-size: 0.65rem;" onclick="simulateStripeCheckout('Growth Plan ($299/mo)')">UPGRADE</button>
             </div>
-            <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center;" data-tooltip="Full enterprise capacity with unlimited openings and multi-sync.">
+            <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; text-align: center;" data-tooltip="Full enterprise capacity with unlimited openings.">
               <div style="font-weight: 800; font-size: 0.8rem;">ENTERPRISE</div>
               <div style="font-size: 1.35rem; font-weight: 900; margin: 0.25rem 0;">$699<small style="font-size: 0.65rem;">/mo</small></div>
               <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.75rem;">Unlimited Jobs + Multi-Sync</div>
@@ -1641,10 +1560,10 @@
             </div>
           </div>
 
-          <div style="margin-top: 0.5rem; background: #F8FAFC; border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;" data-tooltip="Pins your job listing to the very top of the candidate board for 14 days.">
+          <div style="margin-top: 0.5rem; background: #F8FAFC; border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;" data-tooltip="Pins your job listing to top of candidate board for 14 days.">
             <div>
               <div style="font-size: 0.75rem; font-weight: 800;">FEATURED SPOTLIGHT BOOST ($49 / post)</div>
-              <div style="font-size: 0.65rem; color: var(--text-muted);">Pin current job to the top of u-theJOBS board for 14 days</div>
+              <div style="font-size: 0.65rem; color: var(--text-muted);">Pin current job to top of candidate board for 14 days</div>
             </div>
             <button class="btn-action-charcoal" style="height: 38px; font-size: 0.65rem;" onclick="simulateStripeCheckout('Featured Spotlight Boost ($49)')">BOOST POST</button>
           </div>
@@ -1652,23 +1571,13 @@
       </div>
     </section>
 
-    <!-- VIEW 7: SYSTEM DIAGNOSTICS & TEST SUITE -->
-    <section id="view-diagnostics" class="workspace-view">
-      <div class="panel">
-        <div class="panel-title">
-          <span>Automated Health & Verification Tests</span>
-          <button class="btn-action-charcoal" onclick="runAutomatedTests()" data-tooltip="Run all 5 automatic tests to verify system speed, synchronization, and databases.">
-            RUN ALL TESTS
-          </button>
-        </div>
-
-        <div id="test-runner-console" style="background: #0F172A; color: #38BDF8; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 1rem; border-radius: 8px; min-height: 280px; overflow-y: auto; line-height: 1.6; -webkit-overflow-scrolling: touch;">
-          <div style="color: #94A3B8;">[System Ready] Click 'RUN ALL TESTS' to verify all connections and data feeds...</div>
-        </div>
-      </div>
-    </section>
-
   </main>
+
+  <!-- PLATFORM FOOTER & SECRET ADMIN ACCESS -->
+  <footer class="platform-footer">
+    <span>&copy; 2026 UTHEVERSITY Inc. — Enterprise Talent Mesh</span>
+    <span class="footer-secret-link" onclick="handleAdminShortcut()" data-tooltip="Master Governance Suite (Shortcut: Ctrl+Shift+A)">[ADMIN]</span>
+  </footer>
 
   <!-- STICKY MOBILE BOTTOM ACTION BAR -->
   <div class="mobile-bottom-bar">
@@ -1692,7 +1601,7 @@
 
       <div style="display: flex; flex-direction: column; gap: 0.5rem;" id="omni-channel-progress-list">
         <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
-          <span>u-theJOBS Candidate Portal</span>
+          <span>Candidate Board</span>
           <span style="color: #059669; font-weight: 800;">PUBLISHED LIVE</span>
         </div>
         <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
@@ -1701,19 +1610,15 @@
         </div>
         <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
           <span>Gmail Candidate Outreach Queue</span>
-          <span style="color: #059669; font-weight: 800;">42 RECRUITERS NOTIFIED</span>
+          <span style="color: #059669; font-weight: 800;">NOTIFIED</span>
         </div>
         <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
           <span>X / Twitter Recruiter Stream</span>
           <span style="color: #059669; font-weight: 800;">BROADCASTED</span>
         </div>
         <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
-          <span>TikTok & Instagram Employer Spotlights</span>
+          <span>TikTok & Instagram Spotlights</span>
           <span style="color: #059669; font-weight: 800;">SYNDICATED</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #F8FAFC; border-radius: 6px;">
-          <span>Open-Source Schema.org Job Feeds</span>
-          <span style="color: #059669; font-weight: 800;">DISTRIBUTED</span>
         </div>
       </div>
 
@@ -1797,7 +1702,12 @@
     let wsRelay = null;
     let selectedCandidateId = null;
 
-    // In-memory Database initialized from LocalStorage or server defaults
+    // Touch Dragging State for Mobile
+    let touchDraggingCard = null;
+    let touchStartPos = { x: 0, y: 0 };
+    let currentHighlightedCol = null;
+
+    // In-memory Database
     let publishedJobs = [
       {
         id: 'JOB-101',
@@ -1815,7 +1725,8 @@
         additionalPerks: '$3,000 Home Office Stipend + Equity',
         applyLinkUrl: 'https://careers.quantumtech.io/apply/101',
         summary: 'Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.',
-        logo: ''
+        logo: '',
+        createdAt: new Date().toISOString()
       },
       {
         id: 'JOB-102',
@@ -1833,7 +1744,8 @@
         additionalPerks: 'Annual Executive Retreats & Relocation',
         applyLinkUrl: 'https://apexcloud.com/careers/vp-eng',
         summary: 'Lead an engineering organization of 45+ distributed developers building high-throughput data pipelines and cloud infra.',
-        logo: ''
+        logo: '',
+        createdAt: new Date().toISOString()
       },
       {
         id: 'JOB-103',
@@ -1851,7 +1763,8 @@
         additionalPerks: 'Latest M3 Max Hardware & Cloud Credits',
         applyLinkUrl: 'https://neuralflow.ai/jobs/prompt-eng',
         summary: 'Design and deploy multi-agent cognitive architectures and autonomous reasoning pipelines for enterprise customers.',
-        logo: ''
+        logo: '',
+        createdAt: new Date().toISOString()
       }
     ];
 
@@ -1955,7 +1868,7 @@
     const activeJobsFeed = document.getElementById('active-jobs-feed');
     const jobCountBadge = document.getElementById('job-count-badge');
 
-    // Tab Switcher
+    // 4 Customer Tabs Switcher
     window.switchTab = function(tabId) {
       document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.drawer-tab-btn').forEach(b => b.classList.remove('active'));
@@ -1965,7 +1878,7 @@
       if (targetView) targetView.classList.add('active');
 
       const tabs = {
-        'studio': 0, 'hunter': 1, 'crm': 2, 'aggregator': 3, 'ats': 4, 'monetization': 5, 'diagnostics': 6
+        'studio': 0, 'crm': 1, 'ats': 2, 'monetization': 3
       };
       const tabBtns = document.querySelectorAll('.nav-tab');
       if (tabBtns[tabs[tabId]]) tabBtns[tabs[tabId]].classList.add('active');
@@ -1973,11 +1886,7 @@
       const drawerBtns = document.querySelectorAll('.drawer-tab-btn');
       if (drawerBtns[tabs[tabId]]) drawerBtns[tabs[tabId]].classList.add('active');
 
-      if (tabId === 'hunter' && document.getElementById('hunter-results-body').children.length === 0) {
-        searchHunterLeads();
-      } else if (tabId === 'aggregator' && document.getElementById('aggregator-results-body').children.length === 0) {
-        fetchAggregatedJobs();
-      } else if (tabId === 'ats') {
+      if (tabId === 'ats') {
         renderKanban();
       }
     };
@@ -2015,7 +1924,7 @@
 
       pvTagPto.textContent = ptoInput.value || 'Unlimited PTO';
       pvTagHealth.textContent = healthInput.value || 'Premium Medical';
-      pvTagRetirement.textContent = retirementInput.value || '401(k) Match';
+      pvTagRetirement.textContent = retirementInput.value || '401(k) 5% Match';
     }
 
     [jobTitleInput, companyInput, locationInput, typeInput, payTypeInput, minSalaryInput, maxSalaryInput, ptoInput, healthInput, retirementInput, perksInput, applyUrlInput, descInput].forEach(elem => {
@@ -2107,7 +2016,7 @@
 
       // Transmit to dual-system sync bus
       broadcastSyncEvent('JOB_PUBLISHED', { job: newJob, total: publishedJobs.length });
-      showToast(`"${newJob.jobTitle}" is published live and synced to u-theJOBS candidate board.`, "PUBLISHED LIVE");
+      showToast(`"${newJob.jobTitle}" published live and synced to candidate board!`, "PUBLISHED LIVE");
     };
 
     // 1-Click Omni-Channel Publishing
@@ -2119,10 +2028,10 @@
       broadcastSyncEvent('OMNI_CHANNEL_BROADCAST', {
         jobTitle: jobTitleInput.value,
         company: companyInput.value,
-        channels: ['u-theJOBS', 'LinkedIn', 'Gmail', 'X', 'TikTok', 'Instagram', 'OpenSourceFeeds']
+        channels: ['CandidateBoard', 'LinkedIn', 'Gmail', 'X', 'TikTok', 'Instagram']
       });
 
-      showToast(`Broadcasting "${jobTitleInput.value}" across all 7 connected channels simultaneously.`, "OMNI-CHANNEL BROADCAST");
+      showToast(`Broadcasting "${jobTitleInput.value}" across all connected channels.`, "OMNI-CHANNEL BROADCAST");
     };
 
     window.deleteJobListing = async function(jobId, index) {
@@ -2137,7 +2046,7 @@
       showToast("Listing permanently removed from active board.", "LISTING DELETED");
     };
 
-    // Dual-Sync Event Bus Handler
+    // Dual-Sync Event Bus Handler with Auto-Reconnect
     function initDualSyncBus() {
       if (typeof BroadcastChannel !== 'undefined') {
         broadcastBus = new BroadcastChannel(SYNC_CHANNEL_NAME);
@@ -2146,24 +2055,32 @@
         };
       }
 
-      try {
-        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsHost = window.location.host || 'localhost:3000';
-        wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
+      function connectWs() {
+        try {
+          const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+          const wsHost = window.location.host || 'localhost:3000';
+          wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
 
-        wsRelay.onopen = () => {
-          document.getElementById('sync-text').textContent = 'SYNC ACTIVE';
-        };
+          wsRelay.onopen = () => {
+            document.getElementById('sync-text').textContent = 'SYNC ACTIVE';
+          };
 
-        wsRelay.onmessage = (event) => {
-          try {
-            const data = JSON.parse(event.data);
-            handleIncomingSyncPacket(data);
-          } catch(e) {}
-        };
-      } catch (err) {
-        console.log('WebSocket running in client-side broadcast mode');
+          wsRelay.onmessage = (event) => {
+            try {
+              const data = JSON.parse(event.data);
+              handleIncomingSyncPacket(data);
+            } catch(e) {}
+          };
+
+          wsRelay.onclose = () => {
+            setTimeout(connectWs, 3000); // Auto reconnect
+          };
+        } catch (err) {
+          console.log('WebSocket running in client broadcast mode');
+        }
       }
+
+      connectWs();
 
       window.addEventListener('message', (event) => {
         if (event.data && event.data.type) {
@@ -2176,7 +2093,7 @@
       const packet = {
         type: type,
         timestamp: Date.now(),
-        source: 'u-thePOST-ENTERPRISE',
+        source: 'u-thePOST-RECRUITER',
         ...payload
       };
 
@@ -2194,7 +2111,7 @@
       } else if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
         applicants.unshift(data.applicant);
         renderKanban();
-        showToast(`New candidate applied: ${data.applicant.name} for ${data.applicant.jobTitle}`, "CANDIDATE APPLICATION");
+        showToast(`New interview request: ${data.applicant.name} for ${data.applicant.jobTitle}`, "INTERVIEW REQUEST");
       }
     }
 
@@ -2245,53 +2162,6 @@
       showToast("Draft progress saved to browser.", "PROGRESS SAVED");
     };
 
-    // Hunter.io Lead Engine Search
-    window.searchHunterLeads = async function() {
-      const domain = document.getElementById('hunter-domain').value || 'quantumtech.io';
-      const dept = document.getElementById('hunter-dept').value;
-      const seniority = document.getElementById('hunter-seniority').value;
-      const tbody = document.getElementById('hunter-results-body');
-
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 2rem;">Searching verified contacts for ${domain}...</td></tr>`;
-
-      try {
-        const resp = await fetch(`/api/hunter/domain-search?domain=${encodeURIComponent(domain)}&department=${encodeURIComponent(dept)}&seniority=${encodeURIComponent(seniority)}`);
-        const result = await resp.json();
-        const emails = (result && result.data && result.data.emails) || [];
-
-        tbody.innerHTML = '';
-        emails.forEach(lead => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>
-              <strong>${lead.contact_name}</strong><br>
-              <small style="color: var(--text-muted);">${lead.position}</small>
-            </td>
-            <td><strong>${lead.company_name}</strong><br><small style="color: var(--text-muted);">${lead.domain}</small></td>
-            <td><code>${lead.verified_email}</code></td>
-            <td><span class="confidence-badge">${lead.confidence_score}% VERIFIED</span></td>
-            <td><span class="channel-badge" style="background:#F1F5F9; color:var(--text-main);">${lead.department}</span></td>
-            <td>
-              <button class="action-pill-btn" onclick="populateOutreachLead('${lead.contact_name}', '${lead.company_name}', '${lead.verified_email}')" data-tooltip="Send this contact directly to your outreach CRM message composer.">
-                Send to CRM
-              </button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-        showToast(`Found ${emails.length} verified contacts for ${domain}.`, "CONTACTS FOUND");
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--danger-red);">Error loading verified contacts.</td></tr>`;
-      }
-    };
-
-    window.populateOutreachLead = function(contactName, companyName, email) {
-      switchTab('crm');
-      document.getElementById('tpl-subject').value = `Exclusive Talent Pipeline for ${companyName} — ${jobTitleInput.value}`;
-      selectChannelTemplate('gmail', { contactName, companyName });
-      showToast(`Contact ${contactName} loaded into message editor.`, "CRM READY");
-    };
-
     // Omnichannel Template Selector
     window.selectChannelTemplate = function(channelKey, overrides = {}) {
       document.querySelectorAll('.channel-item-row').forEach(r => r.classList.remove('active'));
@@ -2333,57 +2203,7 @@
       showToast("Follow-up sequence scheduled in queue.", "QUEUE SCHEDULED");
     };
 
-    // Open-Source Aggregator Feeds
-    window.fetchAggregatedJobs = async function() {
-      const tbody = document.getElementById('aggregator-results-body');
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 2rem;">Importing external job feeds...</td></tr>`;
-
-      try {
-        const resp = await fetch('/api/jobs/aggregate');
-        const data = await resp.json();
-        const feeds = data.feeds || [];
-
-        tbody.innerHTML = '';
-        feeds.forEach(item => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td><span class="channel-badge" style="background:#F1F5F9; color:var(--text-main);">${item.source}</span></td>
-            <td><strong>${item.title}</strong></td>
-            <td>${item.company}</td>
-            <td>${item.location}</td>
-            <td><span class="card-salary-badge">${item.salary}</span></td>
-            <td>
-              <button class="action-pill-btn" onclick="importAggregatedJob(${JSON.stringify(item).replace(/"/g, '&quot;')})" data-tooltip="Copy this job directly into your input form for editing and publishing.">
-                Import to Studio
-              </button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch (e) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Loaded fallback local feeds.</td></tr>`;
-      }
-    };
-
-    window.importAggregatedJob = function(job) {
-      jobTitleInput.value = job.title;
-      companyInput.value = job.company;
-      locationInput.value = job.location;
-      minSalaryInput.value = job.minComp;
-      maxSalaryInput.value = job.maxComp;
-      ptoInput.value = job.pto;
-      healthInput.value = job.health;
-      retirementInput.value = job.retirement;
-      perksInput.value = job.perks;
-      applyUrlInput.value = job.url;
-      descInput.value = job.summary;
-
-      syncLivePreview();
-      switchTab('studio');
-      showToast(`Imported "${job.title}" into Job Studio form.`, "JOB IMPORTED");
-    };
-
-    // ATS Kanban Pipeline
+    // ATS Kanban Pipeline & Native Mobile Touch Drag & Drop
     function renderKanban() {
       const stages = ['Applied', 'Screened', 'Interviewing', 'Offer', 'Hired'];
       stages.forEach(st => {
@@ -2399,19 +2219,76 @@
           const card = document.createElement('div');
           card.className = 'candidate-card';
           card.draggable = true;
-          card.ondragstart = (e) => { e.dataTransfer.setData('candId', cand.id); };
-          card.onclick = () => { openScorecardModal(cand.id); };
-          card.setAttribute('data-tooltip', 'Click to open candidate evaluation scorecard, or drag to move to another stage.');
+          card.dataset.candId = cand.id;
+          card.setAttribute('data-tooltip', 'Click to open scorecard, or drag/touch-drag between columns.');
+
           card.innerHTML = `
-            <div class="cand-name">${cand.name}</div>
+            <div class="cand-name">
+              <span>${cand.name}</span>
+              <span class="grab-handle-icon">:::</span>
+            </div>
             <div class="cand-role">${cand.jobTitle}</div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.25rem;">
               <span class="cand-match">${cand.score}% MATCH</span>
               <small style="color:var(--text-muted); font-size:0.6rem;">${cand.id}</small>
             </div>
           `;
+
+          // Desktop HTML5 drag
+          card.ondragstart = (e) => { e.dataTransfer.setData('candId', cand.id); };
+          card.onclick = () => { openScorecardModal(cand.id); };
+
+          // Native Mobile Touch Drag & Drop
+          attachTouchDragListeners(card, cand.id);
+
           colEl.appendChild(card);
         });
+      });
+    }
+
+    function attachTouchDragListeners(card, candId) {
+      card.addEventListener('touchstart', (e) => {
+        touchDraggingCard = card;
+        touchStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        card.classList.add('touch-dragging');
+      }, { passive: false });
+
+      card.addEventListener('touchmove', (e) => {
+        if (!touchDraggingCard) return;
+        e.preventDefault(); // Prevent accidental page scrolling while moving card
+
+        const touch = e.touches[0];
+        // Identify which column the finger is currently over
+        const elemUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+        const colBox = elemUnderFinger ? elemUnderFinger.closest('.kanban-col') : null;
+
+        document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drop-target-hover'));
+        if (colBox) {
+          colBox.classList.add('drop-target-hover');
+          currentHighlightedCol = colBox;
+        } else {
+          currentHighlightedCol = null;
+        }
+      }, { passive: false });
+
+      card.addEventListener('touchend', (e) => {
+        if (!touchDraggingCard) return;
+        card.classList.remove('touch-dragging');
+        document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drop-target-hover'));
+
+        if (currentHighlightedCol) {
+          const targetStatus = currentHighlightedCol.dataset.status;
+          const cand = applicants.find(a => a.id === candId);
+          if (cand && targetStatus && cand.status !== targetStatus) {
+            cand.status = targetStatus;
+            renderKanban();
+            showToast(`${cand.name} moved to ${targetStatus} stage.`, "STAGE UPDATED");
+            broadcastSyncEvent('CANDIDATE_STATUS_UPDATED', { applicantId: cand.id, newStatus: targetStatus });
+          }
+        }
+
+        touchDraggingCard = null;
+        currentHighlightedCol = null;
       });
     }
 
@@ -2424,6 +2301,7 @@
         cand.status = targetStatus;
         renderKanban();
         showToast(`${cand.name} moved to ${targetStatus} stage.`, "STAGE UPDATED");
+        broadcastSyncEvent('CANDIDATE_STATUS_UPDATED', { applicantId: cand.id, newStatus: targetStatus });
       }
     };
 
@@ -2456,80 +2334,23 @@
 
     // Stripe Checkout Simulation
     window.simulateStripeCheckout = function(planName) {
-      showToast(`Opening secure checkout for ${planName}...`, "CHECKOUT");
+      showToast(`Opening checkout for ${planName}...`, "CHECKOUT");
       setTimeout(() => {
         showToast(`Payment confirmed for ${planName}. Plan is active on your account.`, "ACTIVE PLAN");
       }, 1200);
     };
 
-    // Automated Diagnostic Test Suite Runner
-    window.runAutomatedTests = async function() {
-      const con = document.getElementById('test-runner-console');
-      con.innerHTML = `<div>[Starting Diagnostic Test Suite at ${new Date().toLocaleTimeString()}...]</div>`;
-
-      const log = (msg, color = '#38BDF8') => {
-        const line = document.createElement('div');
-        line.style.color = color;
-        line.textContent = msg;
-        con.appendChild(line);
-        con.scrollTop = con.scrollHeight;
-      };
-
-      // Test 1: Hunter.io API Connector
-      log('> TEST 1: Hunter.io API Connector & Domain Search...');
-      try {
-        const resp = await fetch('/api/hunter/domain-search?domain=stripe.com');
-        const data = await resp.json();
-        if (data && data.data && data.data.emails.length > 0) {
-          log('  PASS: Hunter.io domain search returned ' + data.data.emails.length + ' leads.', '#4ADE80');
-        } else {
-          log('  FAIL: Hunter API returned unexpected schema.', '#F87171');
-        }
-      } catch (e) {
-        log('  FAIL: Hunter API request error: ' + e.message, '#F87171');
-      }
-
-      // Test 2: UI Reactivity
-      log('> TEST 2: UI Live Preview DOM Reactivity...');
-      const prevTitle = jobTitleInput.value;
-      jobTitleInput.value = 'Diagnostics Test Engineer';
-      syncLivePreview();
-      if (pvTitle.textContent === 'Diagnostics Test Engineer') {
-        log('  PASS: Reactive state synchronization passed.', '#4ADE80');
-      } else {
-        log('  FAIL: Preview DOM node did not reflect input change.', '#F87171');
-      }
-      jobTitleInput.value = prevTitle;
-      syncLivePreview();
-
-      // Test 3: Dual-System Sync Bus
-      log('> TEST 3: BroadcastChannel / WebSocket Sync Latency Test...');
-      const start = performance.now();
-      broadcastSyncEvent('PING_TEST', { timestamp: start });
-      const elapsed = (performance.now() - start).toFixed(2);
-      log(`  PASS: Sync packet dispatched in ${elapsed}ms (< 15ms target).`, '#4ADE80');
-
-      // Test 4: Open-Source Job Aggregator Normalization
-      log('> TEST 4: Open-Source Schema.org Feed Aggregator...');
-      try {
-        const aggResp = await fetch('/api/jobs/aggregate');
-        const aggData = await aggResp.json();
-        if (aggData.feeds && aggData.feeds.length > 0) {
-          log(`  PASS: Ingested and normalized ${aggData.feeds.length} external feeds.`, '#4ADE80');
-        }
-      } catch (e) {
-        log('  FAIL: Aggregator error: ' + e.message, '#F87171');
-      }
-
-      // Test 5: ATS State Persistence
-      log('> TEST 5: ATS Kanban & Candidate Scoring Integrity...');
-      if (applicants.length >= 3 && applicants[0].score >= 80) {
-        log(`  PASS: ${applicants.length} candidate profiles active with two-way vector scores.`, '#4ADE80');
-      }
-
-      log('====================================================', '#E5A800');
-      log('ALL 5 DIAGNOSTIC SUITES PASSED WITH ZERO ERRORS (100% OPERATIONAL)', '#4ADE80');
+    // Admin Secret Shortcut Handler (Ctrl + Shift + A)
+    window.handleAdminShortcut = function() {
+      window.location.href = '/admin.html';
     };
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        handleAdminShortcut();
+      }
+    });
 
     // Toast Notification Utility
     let toastTimer = null;
