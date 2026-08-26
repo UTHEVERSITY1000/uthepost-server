@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>u-theJOBS — UTHEVERSITY Candidate Board</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --bg-light: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --uthe-gold: #e2b714;
+      --uthe-black: #080c14;
+      --border-color: #e2e8f0;
+      --emerald-green: #059669;
+      --airy-grey: #f1f5f9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      gap: 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .search-belt {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .search-input-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .search-label {
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: var(--uthe-black);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .search-input {
+      background: var(--airy-grey);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus, .search-input:hover {
+      border-color: var(--uthe-gold);
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(226, 183, 20, 0.15);
+    }
+
+    .btn-search {
+      background: transparent;
+      color: var(--uthe-black);
+      border: 1px solid var(--uthe-black);
+      padding: 0.5rem 1.25rem;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      align-self: flex-end;
+      transition: all 0.25s ease;
+    }
+
+    .btn-search:hover {
+      color: var(--emerald-green);
+      border-color: var(--emerald-green);
+      box-shadow: 0 0 12px rgba(5, 150, 105, 0.3);
+      background: rgba(5, 150, 105, 0.04);
+    }
+
+    .board-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 1rem;
+      height: 600px;
+    }
+
+    .vertical-belt {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      overflow-y: auto;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .belt-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--uthe-black);
+      border-bottom: 2px solid var(--uthe-gold);
+      padding-bottom: 0.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .job-item-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .job-item-card:hover, .job-item-card.selected {
+      border-color: var(--uthe-gold);
+      box-shadow: 0 4px 12px rgba(226, 183, 20, 0.12);
+      background: #fffdf5;
+    }
+
+    .item-role { font-size: 0.9rem; font-weight: 800; color: var(--uthe-black); }
+    .item-company { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+    
+    .item-meta { display: flex; gap: 0.35rem; margin-top: 0.2rem; flex-wrap: wrap; }
+    .badge-pill { font-size: 0.62rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 3px; text-transform: uppercase; }
+    .pill-loc { background: #f1f5f9; color: var(--text-main); }
+    .pill-pay { background: #ecfdf5; color: var(--emerald-green); border: 1px solid #a7f3d0; }
+
+    .details-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      height: 100%;
+    }
+
+    .details-header {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .details-title { font-size: 1.3rem; font-weight: 900; color: var(--uthe-black); }
+    .details-company { font-size: 0.9rem; font-weight: 700; color: var(--text-muted); }
+
+    .company-logo-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 6px;
+      border: 1px solid var(--uthe-gold);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .company-logo-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .details-body {
+      flex: 1;
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text-main);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .perks-grid {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .perk-tag {
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+    }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 2px solid var(--uthe-gold);
+    }
+
+    .btn-action-site {
+      background: transparent;
+      color: var(--uthe-black);
+      border: 1px solid var(--uthe-black);
+      padding: 0.55rem 0.75rem;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-site:hover {
+      background: var(--uthe-black);
+      color: #ffffff;
+    }
+
+    .btn-action-instant {
+      background: transparent;
+      color: var(--uthe-gold);
+      border: 1px solid var(--uthe-black);
+      padding: 0.55rem 0.75rem;
+      border-radius: 4px;
+      font-weight: 900;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action-instant:hover {
+      background: var(--uthe-black);
+      border-color: var(--uthe-gold);
+      box-shadow: 0 2px 10px rgba(226, 183, 20, 0.2);
+    }
+
+    /* UTHEVERSITY Toast Overlay Card */
+    .uthe-toast-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 12, 20, 0.75);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .uthe-toast-card {
+      background: var(--uthe-black);
+      border: 2px solid var(--uthe-gold);
+      border-radius: 8px;
+      width: 420px;
+      max-width: 90%;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .uthe-toast-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(226, 183, 20, 0.3);
+      padding-bottom: 0.4rem;
+    }
+
+    .uthe-toast-title { font-size: 0.75rem; font-weight: 900; color: var(--uthe-gold); text-transform: uppercase; letter-spacing: 1.5px; }
+    .uthe-toast-close { background: none; border: none; font-size: 1rem; cursor: pointer; font-weight: 800; color: var(--uthe-gold); }
+    .uthe-toast-body { font-size: 0.82rem; font-weight: 600; color: #ffffff; line-height: 1.4; padding: 0.4rem 0; }
+    .uthe-toast-hint { font-size: 0.62rem; font-weight: 700; color: var(--uthe-gold); letter-spacing: 0.8px; text-transform: uppercase; opacity: 0.8; }
+
+    .resume-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 12, 20, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .resume-card {
+      background: #ffffff;
+      border: 2px solid var(--uthe-gold);
+      border-radius: 8px;
+      width: 420px;
+      max-width: 90%;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .btn-modal-close {
+      background: none;
+      border: none;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- UTHEVERSITY Toast Card Overlay -->
+  <div class="uthe-toast-overlay" id="uthe-toast-overlay" onclick="dismissToast()">
+    <div class="uthe-toast-card">
+      <div class="uthe-toast-header">
+        <span class="uthe-toast-title" id="toast-title">UTHEVERSITY SYSTEM NOTICE</span>
+        <button class="uthe-toast-close" onclick="dismissToast()">✕</button>
+      </div>
+      <div class="uthe-toast-body" id="toast-message">Notice message goes here...</div>
+      <div class="uthe-toast-hint">CLICK TO DISMISS</div>
+    </div>
+  </div>
+
+  <div class="search-belt">
+    <div class="search-input-group">
+      <span class="search-label">Job Title / Skill</span>
+      <input type="text" class="search-input" id="search-title" placeholder="e.g. Software Engineer">
+    </div>
+
+    <div class="search-input-group">
+      <span class="search-label">Location / City</span>
+      <input type="text" class="search-input" id="search-loc" placeholder="e.g. San Francisco, CA">
+    </div>
+
+    <div class="search-input-group" style="max-width: 140px;">
+      <span class="search-label">Work Type</span>
+      <select class="search-input" id="search-type">
+        <option value="ALL">All Types</option>
+        <option value="FULL TIME">Full Time</option>
+        <option value="PART TIME">Part Time</option>
+        <option value="CONTRACT">Contract</option>
+      </select>
+    </div>
+
+    <button class="btn-search" onclick="filterJobs()">SEARCH</button>
+  </div>
+
+  <div class="board-grid">
+    <div class="vertical-belt">
+      <div class="belt-title">
+        <span>Active Openings</span>
+        <span style="font-size: 0.65rem; color: var(--emerald-green); font-weight: 800;" id="job-count">0 OPENINGS ●</span>
+      </div>
+
+      <div id="job-list-container" style="display: flex; flex-direction: column; gap: 0.6rem;"></div>
+    </div>
+
+    <div class="vertical-belt details-panel" id="details-panel">
+      <div class="details-header">
+        <div>
+          <div class="details-title" id="dt-title">Select a Position</div>
+          <div class="details-company" id="dt-company">Choose from active openings</div>
+          <div class="item-meta" style="margin-top: 0.5rem;">
+            <span class="badge-pill pill-pay" id="dt-salary">$0</span>
+            <span class="badge-pill pill-loc" id="dt-type">FULL TIME</span>
+          </div>
+        </div>
+
+        <div class="company-logo-badge">
+          <img id="dt-logo" src="https://www.utheversity.com/_static/images/utheversity-logo.png" alt="Company Logo" onerror="this.style.display='none'">
+        </div>
+      </div>
+
+      <div class="details-body">
+        <div id="dt-perks-container" class="perks-grid"></div>
+        <div id="dt-desc">Select a job position from the active openings belt on the left to review position requirements and dispatch your application directly.</div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-action-site" id="btn-apply-site" onclick="openExternalSite()">APPLY ON COMPANY SITE</button>
+        <button class="btn-action-instant" onclick="openResumeModal()">AVAILABLE NOW! SUBMIT RESUME</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="resume-modal" id="resume-modal">
+    <div class="resume-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--uthe-gold); padding-bottom: 0.4rem;">
+        <h3 style="font-size: 0.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">UTHEVERSITY Direct Dispatch</h3>
+        <button class="btn-modal-close" onclick="closeResumeModal()">CLOSE</button>
+      </div>
+
+      <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">
+        Submit your application directly to UTHEVERSITY routing. Your resume will be processed and dispatched directly to the employer's executive talent inbox.
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <input type="text" id="cand-name" placeholder="Full Candidate Name" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.78rem;">
+        <input type="email" id="cand-email" placeholder="Work/Personal Email" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.78rem;">
+        <input type="file" id="cand-file" accept=".pdf,.doc,.docx" style="font-size: 0.72rem;">
+      </div>
+
+      <button onclick="submitResume()" style="padding: 0.55rem; background: var(--uthe-black); color: var(--uthe-gold); border: 1px solid var(--uthe-gold); border-radius: 4px; font-weight: 900; font-size: 0.72rem; text-transform: uppercase; cursor: pointer; margin-top: 0.25rem;">
+        Dispatch Resume To Employer
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let activeJobs = [];
+    let selectedJob = null;
+
+    // Toast Overlay Controller
+    const toastOverlay = document.getElementById('uthe-toast-overlay');
+    const toastTitle = document.getElementById('toast-title');
+    const toastMessage = document.getElementById('toast-message');
+    let toastTimer = null;
+
+    function showUtheToast(msg, title = "UTHEVERSITY SYSTEM NOTICE") {
+      toastTitle.textContent = title;
+      toastMessage.textContent = msg;
+      toastOverlay.style.display = 'flex';
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { dismissToast(); }, 8000);
+    }
+
+    function dismissToast() {
+      toastOverlay.style.display = 'none';
+      if (toastTimer) clearTimeout(toastTimer);
+    }
+
+    // Receive live jobs from Wix Page Code
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'LOAD_LIVE_JOBS') {
+        if (event.data.jobs && event.data.jobs.length > 0) {
+          activeJobs = event.data.jobs;
+          selectedJob = activeJobs[0];
+          renderFeed(activeJobs);
+          selectJob(selectedJob);
+        } else {
+          renderFeed([]);
+        }
+      }
+    });
+
+    function renderFeed(jobs) {
+      const listContainer = document.getElementById('job-list-container');
+      const countElem = document.getElementById('job-count');
+      listContainer.innerHTML = '';
+
+      if (countElem) countElem.textContent = `${jobs.length} OPENINGS ●`;
+
+      if (jobs.length === 0) {
+        listContainer.innerHTML = '<div style="font-size:0.75rem; color:#64748b; padding:1rem;">No active openings available in database.</div>';
+        return;
+      }
+
+      jobs.forEach((job) => {
+        const card = document.createElement('div');
+        card.className = `job-item-card ${selectedJob && selectedJob.id === job.id ? 'selected' : ''}`;
+        card.onclick = () => selectJob(job);
+        card.innerHTML = `
+          <div class="item-role">${job.title}</div>
+          <div class="item-company">${job.company} • ${job.location}</div>
+          <div class="item-meta">
+            <span class="badge-pill pill-pay">${job.salary}</span>
+            <span class="badge-pill pill-loc">${job.type}</span>
+          </div>
+        `;
+        listContainer.appendChild(card);
+      });
+    }
+
+    function selectJob(job) {
+      if (!job) return;
+      selectedJob = job;
+
+      document.getElementById('dt-title').textContent = job.title;
+      document.getElementById('dt-company').textContent = `${job.company} — ${job.location}`;
+      document.getElementById('dt-salary').textContent = job.salary;
+      document.getElementById('dt-type').textContent = job.type;
+      document.getElementById('dt-desc').textContent = job.desc;
+
+      const logoElem = document.getElementById('dt-logo');
+      if (job.logo) {
+        logoElem.src = job.logo;
+        logoElem.style.display = 'block';
+      } else {
+        logoElem.style.display = 'none';
+      }
+
+      const perksContainer = document.getElementById('dt-perks-container');
+      perksContainer.innerHTML = '';
+      [job.pto, job.health, job.retirement, job.perks].filter(Boolean).forEach(tagText => {
+        const tag = document.createElement('span');
+        tag.className = 'perk-tag';
+        tag.textContent = tagText;
+        perksContainer.appendChild(tag);
+      });
+
+      renderFeed(activeJobs);
+    }
+
+    function filterJobs() {
+      const qTitle = document.getElementById('search-title').value.toLowerCase();
+      const qLoc = document.getElementById('search-loc').value.toLowerCase();
+      const qType = document.getElementById('search-type').value;
+
+      const filtered = activeJobs.filter(job => {
+        const matchTitle = !qTitle || job.title.toLowerCase().includes(qTitle);
+        const matchLoc = !qLoc || job.location.toLowerCase().includes(qLoc);
+        const matchType = qType === 'ALL' || job.type === qType;
+        return matchTitle && matchLoc && matchType;
+      });
+
+      renderFeed(filtered);
+    }
+
+    function openExternalSite() {
+      if (selectedJob && selectedJob.url) {
+        window.open(selectedJob.url, '_blank');
+      } else {
+        showUtheToast("No external link specified for this position. Please submit via Direct Dispatch.", "EXTERNAL LINK UNAVAILABLE");
+      }
+    }
+
+    const resumeModal = document.getElementById('resume-modal');
+    function openResumeModal() { resumeModal.style.display = 'flex'; }
+    function closeResumeModal() { resumeModal.style.display = 'none'; }
+
+    function submitResume() {
+      const name = document.getElementById('cand-name').value;
+      if (!name) return showUtheToast("Please enter your full candidate name before submitting.", "INPUT REQUIRED");
+      
+      closeResumeModal();
+      showUtheToast(`Thank you, ${name}! Your resume has been dispatched to UTHEVERSITY executive candidate routing.`, "DISPATCH SUCCESSFUL");
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
+    });
+  </script>
+</body>
+</html>

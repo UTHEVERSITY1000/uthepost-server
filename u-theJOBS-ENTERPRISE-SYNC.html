@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>u-theJOBS — Candidate Discovery & Application Board</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --uthe-gold: #E5A800;
+      --uthe-gold-light: #FFF8E6;
+      --uthe-black: #080C14;
+      --border-color: #E2E8F0;
+      --emerald-green: #059669;
+      --emerald-bg: #ECFDF5;
+      --airy-grey: #F1F5F9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      gap: 1rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TOOLTIP SYSTEM */
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111827;
+      color: #F9FAFB;
+      font-size: 0.72rem;
+      font-weight: 500;
+      line-height: 1.4;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid var(--uthe-gold);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      white-space: normal;
+      width: max-content;
+      max-width: 260px;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      text-align: center;
+      animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-tooltip]:hover::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% + 2px);
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px 6px 0 6px;
+      border-style: solid;
+      border-color: var(--uthe-gold) transparent transparent transparent;
+      z-index: 9999;
+      pointer-events: none;
+      animation: tooltipFade 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes tooltipFade {
+      from { opacity: 0; transform: translate(-50%, 4px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    /* TOP HEADER BAR */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #FFFFFF;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      border-bottom: 2px solid var(--uthe-gold);
+      padding: 0.75rem 1.25rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--uthe-black);
+      text-transform: uppercase;
+    }
+
+    .sync-status {
+      display: flex;
+      align-items: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+      background: var(--emerald-bg);
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+      padding: 0.25rem 0.65rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* SEARCH BELT */
+    .search-belt {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.85rem 1.25rem;
+      display: grid;
+      grid-template-columns: 2fr 1.5fr 1fr auto;
+      gap: 0.75rem;
+      align-items: end;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .search-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .search-label {
+      font-size: 0.62rem;
+      font-weight: 800;
+      color: var(--uthe-black);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .search-input, .search-select {
+      background: var(--airy-grey);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus, .search-select:focus {
+      border-color: var(--uthe-gold);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 2px rgba(229, 168, 0, 0.15);
+    }
+
+    .btn-search {
+      background: var(--uthe-black);
+      color: var(--uthe-gold);
+      border: 1px solid var(--uthe-gold);
+      padding: 0.55rem 1.25rem;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      height: 36px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-search:hover {
+      background: var(--uthe-gold);
+      color: var(--uthe-black);
+    }
+
+    /* MAIN BOARD GRID */
+    .board-grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 1.25rem;
+      flex: 1;
+      min-height: 580px;
+    }
+
+    .vertical-belt {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      overflow-y: auto;
+      max-height: 700px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .belt-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--uthe-black);
+      border-bottom: 2px solid var(--uthe-gold);
+      padding-bottom: 0.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .job-item-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .job-item-card:hover, .job-item-card.selected {
+      border-color: var(--uthe-gold);
+      box-shadow: 0 4px 12px rgba(229, 168, 0, 0.15);
+      background: #FFFDF5;
+    }
+
+    .job-item-card.new-arrival {
+      animation: highlightNew 3s ease forwards;
+    }
+
+    @keyframes highlightNew {
+      0% { border-color: var(--emerald-green); box-shadow: 0 0 16px rgba(5, 150, 105, 0.4); background: #ECFDF5; }
+      100% { border-color: var(--border-color); box-shadow: none; background: #FFFFFF; }
+    }
+
+    .item-role { font-size: 0.9rem; font-weight: 800; color: var(--uthe-black); }
+    .item-company { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+    
+    .item-meta { display: flex; gap: 0.35rem; margin-top: 0.2rem; flex-wrap: wrap; }
+    .badge-pill { font-size: 0.62rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 3px; text-transform: uppercase; }
+    .pill-loc { background: #F1F5F9; color: var(--text-main); }
+    .pill-pay { background: var(--emerald-bg); color: var(--emerald-green); border: 1px solid #A7F3D0; }
+    .pill-time { background: #FAF5FF; color: #7C3AED; border: 1px solid #E9D5FF; }
+
+    /* DETAIL VIEW PANEL */
+    .detail-panel {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      overflow-y: auto;
+      max-height: 700px;
+    }
+
+    .detail-header {
+      border-bottom: 2px solid var(--uthe-gold);
+      padding-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .detail-title { font-size: 1.35rem; font-weight: 900; color: var(--uthe-black); }
+    .detail-company { font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin-top: 0.2rem; }
+
+    .btn-apply-main {
+      background: var(--uthe-black);
+      color: var(--uthe-gold);
+      border: 1.5px solid var(--uthe-gold);
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      font-weight: 900;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-apply-main:hover {
+      background: var(--uthe-gold);
+      color: var(--uthe-black);
+      box-shadow: 0 4px 16px rgba(229, 168, 0, 0.35);
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.65rem;
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.85rem;
+    }
+
+    .benefit-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .benefit-lbl { font-size: 0.58rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+    .benefit-val { font-size: 0.75rem; font-weight: 700; color: var(--text-main); }
+
+    /* APPLY MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 12, 20, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-card {
+      background: #FFFFFF;
+      border: 2px solid var(--uthe-gold);
+      border-radius: 10px;
+      width: 520px;
+      max-width: 95%;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.4rem;
+    }
+
+    .modal-title { font-size: 0.85rem; font-weight: 900; color: var(--uthe-black); text-transform: uppercase; letter-spacing: 1px; }
+    .btn-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.25rem; }
+    .form-group label { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+    .form-group input, .form-group textarea {
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    /* TOAST */
+    .toast-overlay {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 3000;
+      display: none;
+      background: var(--uthe-black);
+      border: 1.5px solid var(--uthe-gold);
+      color: #FFFFFF;
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+      max-width: 380px;
+    }
+
+    .toast-title { color: var(--uthe-gold); font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+    .toast-msg { font-size: 0.8rem; font-weight: 600; margin-top: 0.2rem; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="top-header">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <span class="brand-title" data-tooltip="u-theJOBS: The live applicant discovery board connected to u-thePOST.">U-THEJOBS</span>
+      <span style="font-size: 0.65rem; font-weight: 800; background: var(--airy-grey); padding: 0.2rem 0.5rem; border-radius: 4px; color: var(--text-muted);">CANDIDATE PORTAL</span>
+    </div>
+    <div class="sync-status" data-tooltip="This portal updates immediately when recruiters post or edit jobs.">
+      <span id="sync-label">SYNCED WITH RECRUITER PORTAL</span>
+    </div>
+  </div>
+
+  <!-- SEARCH BELT -->
+  <div class="search-belt">
+    <div class="search-input-group">
+      <label class="search-label" data-tooltip="Search for specific job titles, skills, or company names.">Job Title or Keyword</label>
+      <input type="text" id="filter-keyword" class="search-input" placeholder="e.g. Engineer, Manager, Designer" oninput="filterJobListings()">
+    </div>
+    <div class="search-input-group">
+      <label class="search-label" data-tooltip="Filter opportunities by city, state, or Remote.">Location</label>
+      <input type="text" id="filter-location" class="search-input" placeholder="e.g. Austin, Remote, CA" oninput="filterJobListings()">
+    </div>
+    <div class="search-input-group">
+      <label class="search-label" data-tooltip="Filter positions by full-time, part-time, or contract.">Employment Type</label>
+      <select id="filter-type" class="search-select" onchange="filterJobListings()">
+        <option value="">All Types</option>
+        <option value="Full-Time">Full-Time</option>
+        <option value="Part-Time">Part-Time</option>
+        <option value="Contract">Contract</option>
+      </select>
+    </div>
+    <button class="btn-search" onclick="filterJobListings()" data-tooltip="Apply these filters to search open positions.">Search</button>
+  </div>
+
+  <!-- MAIN BOARD -->
+  <div class="board-grid">
+    
+    <!-- LEFT LISTING BELT -->
+    <div class="vertical-belt">
+      <div class="belt-title">
+        <span>Active Opportunities</span>
+        <span style="color: var(--emerald-green); font-size: 0.65rem;" id="board-count">3 OPENINGS</span>
+      </div>
+      <div id="jobs-list" style="display: flex; flex-direction: column; gap: 0.65rem;"></div>
+    </div>
+
+    <!-- RIGHT DETAIL VIEW -->
+    <div class="detail-panel" id="detail-panel">
+      <div class="detail-header">
+        <div>
+          <div class="detail-title" id="dt-title">Senior Full-Stack Engineer</div>
+          <div class="detail-company" id="dt-company">Quantum Technologies Corp • <span id="dt-location">AUSTIN, TX (REMOTE)</span></div>
+        </div>
+        <button class="btn-apply-main" onclick="openApplyModal()" data-tooltip="Open the 1-click candidate application form.">Apply Now</button>
+      </div>
+
+      <div class="benefits-grid">
+        <div class="benefit-item" data-tooltip="Total annual or hourly compensation range offered for this position.">
+          <span class="benefit-lbl">Compensation</span>
+          <span class="benefit-val" id="dt-salary" style="color: var(--emerald-green); font-weight: 800;">$135,000 - $175,000</span>
+        </div>
+        <div class="benefit-item" data-tooltip="Paid time off and vacation days included with this role.">
+          <span class="benefit-lbl">PTO & Vacation</span>
+          <span class="benefit-val" id="dt-pto">Unlimited PTO</span>
+        </div>
+        <div class="benefit-item" data-tooltip="Medical, dental, and health coverage provided to employees.">
+          <span class="benefit-lbl">Health Coverage</span>
+          <span class="benefit-val" id="dt-health">Premium Medical</span>
+        </div>
+        <div class="benefit-item" data-tooltip="Retirement savings plan and company matching.">
+          <span class="benefit-lbl">Retirement</span>
+          <span class="benefit-val" id="dt-retirement">401(k) 5% Match</span>
+        </div>
+      </div>
+
+      <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem;">
+        <span class="benefit-lbl">Additional Perks & Equipment</span>
+        <div class="benefit-val" id="dt-perks" style="margin-top: 0.2rem;">$3,000 Home Office Stipend + Equity Options</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <span class="search-label">Job Specification & Requirements</span>
+        <div id="dt-desc" style="font-size: 0.85rem; line-height: 1.6; color: var(--text-main);">
+          Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.
+        </div>
+      </div>
+
+      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 0.68rem; color: var(--text-muted);" id="dt-apply-link">Direct Application URL: https://careers.quantumtech.io/apply/101</span>
+        <button class="btn-apply-main" onclick="openApplyModal()">Submit Application</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- APPLY MODAL -->
+  <div class="modal-overlay" id="apply-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-title" id="apply-modal-title">SUBMIT CANDIDATE APPLICATION</span>
+        <button class="btn-close" onclick="closeApplyModal()">×</button>
+      </div>
+
+      <div class="form-group">
+        <label>Full Legal Name</label>
+        <input type="text" id="cand-name" placeholder="e.g. Alex Morgan" value="Alex Morgan">
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="cand-email" placeholder="e.g. alex.morgan@dev.io" value="alex.morgan@dev.io">
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="cand-phone" placeholder="e.g. +1 (555) 321-9876" value="+1 (555) 321-9876">
+      </div>
+
+      <div class="form-group">
+        <label>Resume & Background Summary</label>
+        <textarea id="cand-summary" rows="3" placeholder="Highlight your relevant experience...">7+ years senior software engineer specialized in real-time WebSockets, TypeScript, and high-concurrency systems.</textarea>
+      </div>
+
+      <button class="btn-apply-main" style="margin-top: 0.5rem;" onclick="submitApplication()">
+        SUBMIT APPLICATION
+      </button>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-overlay" id="toast">
+    <div class="toast-title" id="toast-title">APPLICATION NOTICE</div>
+    <div class="toast-msg" id="toast-msg">Candidate profile submitted to recruiter ATS Kanban.</div>
+  </div>
+
+  <script>
+    const SYNC_CHANNEL_NAME = 'UTHE_DUAL_SYNC_CHANNEL';
+    let broadcastBus = null;
+    let wsRelay = null;
+    let selectedJobIndex = 0;
+
+    let jobsData = JSON.parse(localStorage.getItem('UTHE_POST_JOBS')) || [
+      {
+        id: 'JOB-101',
+        jobTitle: 'Senior Full-Stack Engineer',
+        company: 'Quantum Technologies Corp',
+        location: 'AUSTIN, TX (REMOTE)',
+        employmentType: 'Full-Time',
+        payStructure: 'Salary Range',
+        salary: '$135,000 - $175,000',
+        paidVacation: 'Unlimited PTO',
+        healthCoverage: 'Premium Medical, Dental, Vision',
+        retirement: '401(k) 5% Match',
+        additionalPerks: '$3,000 Home Office Stipend + Equity',
+        applyLinkUrl: 'https://careers.quantumtech.io/apply/101',
+        summary: 'Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.'
+      },
+      {
+        id: 'JOB-102',
+        jobTitle: 'VP of Engineering',
+        company: 'Apex Cloud Systems',
+        location: 'SAN FRANCISCO, CA (HYBRID)',
+        employmentType: 'Full-Time',
+        payStructure: 'Salary Range',
+        salary: '$220,000 - $290,000',
+        paidVacation: '25 Days PTO',
+        healthCoverage: '100% Covered Platinum Health',
+        retirement: '401(k) Matching',
+        additionalPerks: 'Annual Executive Retreats & Relocation',
+        applyLinkUrl: 'https://apexcloud.com/careers/vp-eng',
+        summary: 'Lead an engineering organization of 45+ distributed developers building high-throughput data pipelines and cloud infra.'
+      },
+      {
+        id: 'JOB-103',
+        jobTitle: 'AI Prompt & Integration Engineer',
+        company: 'NeuralFlow Labs',
+        location: 'NEW YORK, NY (REMOTE)',
+        employmentType: 'Contract',
+        payStructure: 'Hourly Rate',
+        salary: '$95 - $130 / hr',
+        paidVacation: 'Flexible Schedule',
+        healthCoverage: 'Health Stipend',
+        retirement: 'Optional SEP-IRA',
+        additionalPerks: 'Latest M3 Max Hardware & Cloud Credits',
+        applyLinkUrl: 'https://neuralflow.ai/jobs/prompt-eng',
+        summary: 'Design and deploy multi-agent cognitive architectures and autonomous reasoning pipelines for enterprise customers.'
+      }
+    ];
+
+    function renderJobsList(filtered = null, highlightId = null) {
+      const listEl = document.getElementById('jobs-list');
+      const list = filtered || jobsData;
+      listEl.innerHTML = '';
+      document.getElementById('board-count').textContent = `${list.length} OPENINGS`;
+
+      list.forEach((job, index) => {
+        const card = document.createElement('div');
+        card.className = `job-item-card ${index === selectedJobIndex ? 'selected' : ''} ${job.id === highlightId ? 'new-arrival' : ''}`;
+        card.onclick = () => {
+          selectedJobIndex = index;
+          renderDetailView(job);
+          renderJobsList(filtered);
+        };
+        card.setAttribute('data-tooltip', 'Click to view full position details and apply.');
+
+        card.innerHTML = `
+          <div class="item-role">${job.jobTitle || job.title}</div>
+          <div class="item-company">${job.company}</div>
+          <div class="item-meta">
+            <span class="badge-pill pill-loc">${job.location || 'REMOTE'}</span>
+            <span class="badge-pill pill-pay">${job.salary}</span>
+            <span class="badge-pill pill-time">${job.employmentType || 'FULL-TIME'}</span>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+
+      if (list.length > 0 && !filtered) {
+        renderDetailView(list[selectedJobIndex] || list[0]);
+      }
+    }
+
+    function renderDetailView(job) {
+      if (!job) return;
+      document.getElementById('dt-title').textContent = job.jobTitle || job.title;
+      document.getElementById('dt-company').textContent = job.company;
+      document.getElementById('dt-location').textContent = job.location || 'REMOTE';
+      document.getElementById('dt-salary').textContent = job.salary || 'Competitive';
+      document.getElementById('dt-pto').textContent = job.paidVacation || 'Standard PTO';
+      document.getElementById('dt-health').textContent = job.healthCoverage || 'Medical Included';
+      document.getElementById('dt-retirement').textContent = job.retirement || '401(k)';
+      document.getElementById('dt-perks').textContent = job.additionalPerks || 'Standard Benefits';
+      document.getElementById('dt-desc').textContent = job.summary || 'Specification provided by employer.';
+      document.getElementById('dt-apply-link').textContent = `Direct URL: ${job.applyLinkUrl || '#'}`;
+    }
+
+    function filterJobListings() {
+      const kw = document.getElementById('filter-keyword').value.toLowerCase();
+      const loc = document.getElementById('filter-location').value.toLowerCase();
+      const type = document.getElementById('filter-type').value;
+
+      const filtered = jobsData.filter(j => {
+        const titleMatch = (j.jobTitle || j.title || '').toLowerCase().includes(kw) || (j.company || '').toLowerCase().includes(kw);
+        const locMatch = (j.location || '').toLowerCase().includes(loc);
+        const typeMatch = !type || (j.employmentType || '').toLowerCase() === type.toLowerCase();
+        return titleMatch && locMatch && typeMatch;
+      });
+
+      renderJobsList(filtered);
+    }
+
+    // Dual-Sync Setup
+    function initDualSync() {
+      if (typeof BroadcastChannel !== 'undefined') {
+        broadcastBus = new BroadcastChannel(SYNC_CHANNEL_NAME);
+        broadcastBus.onmessage = (e) => handleSyncPacket(e.data);
+      }
+
+      try {
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsHost = window.location.host || 'localhost:3000';
+        wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
+        wsRelay.onmessage = (e) => {
+          try { handleSyncPacket(JSON.parse(e.data)); } catch(err) {}
+        };
+      } catch (e) {}
+
+      window.addEventListener('message', (e) => {
+        if (e.data && e.data.type) handleSyncPacket(e.data);
+      });
+    }
+
+    function handleSyncPacket(data) {
+      if (data.type === 'JOB_PUBLISHED' && data.job) {
+        jobsData.unshift(data.job);
+        selectedJobIndex = 0;
+        renderJobsList(null, data.job.id);
+        showToast(`New Job Synced Live: "${data.job.jobTitle}" at ${data.job.company}.`, "LIVE SYNC UPDATE");
+      } else if (data.type === 'JOB_DELETED' && data.jobId) {
+        jobsData = jobsData.filter(j => j.id !== data.jobId);
+        selectedJobIndex = 0;
+        renderJobsList();
+        showToast("A listing was updated or removed by the recruiter.", "CATALOG SYNC");
+      }
+    }
+
+    function openApplyModal() {
+      const currentJob = jobsData[selectedJobIndex] || jobsData[0];
+      document.getElementById('apply-modal-title').textContent = `APPLY: ${currentJob.jobTitle.toUpperCase()}`;
+      document.getElementById('apply-modal').style.display = 'flex';
+    }
+
+    function closeApplyModal() {
+      document.getElementById('apply-modal').style.display = 'none';
+    }
+
+    function submitApplication() {
+      const currentJob = jobsData[selectedJobIndex] || jobsData[0];
+      const applicant = {
+        id: `APP-${Math.floor(700 + Math.random() * 200)}`,
+        jobId: currentJob.id,
+        jobTitle: currentJob.jobTitle,
+        name: document.getElementById('cand-name').value,
+        email: document.getElementById('cand-email').value,
+        phone: document.getElementById('cand-phone').value,
+        status: 'Applied',
+        score: Math.floor(88 + Math.random() * 10),
+        resumeSummary: document.getElementById('cand-summary').value,
+        appliedAt: new Date().toISOString()
+      };
+
+      // Broadcast to u-thePOST ATS Kanban
+      const packet = {
+        type: 'CANDIDATE_APPLIED',
+        applicant: applicant,
+        timestamp: Date.now()
+      };
+
+      if (broadcastBus) broadcastBus.postMessage(packet);
+      if (wsRelay && wsRelay.readyState === WebSocket.OPEN) {
+        wsRelay.send(JSON.stringify(packet));
+      }
+      window.parent.postMessage(packet, '*');
+
+      closeApplyModal();
+      showToast(`Application submitted to recruiter for ${currentJob.company}.`, "APPLICATION SENT");
+    }
+
+    let toastTimer = null;
+    function showToast(msg, title = "SYSTEM NOTICE") {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-title').textContent = title;
+      document.getElementById('toast-msg').textContent = msg;
+      t.style.display = 'block';
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { t.style.display = 'none'; }, 4000);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderJobsList();
+      initDualSync();
+    });
+  </script>
+</body>
+</html>

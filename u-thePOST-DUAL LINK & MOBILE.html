@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>u-thePOST — UTHEVERSITY Recruiter Portal</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --bg-studio: radial-gradient(130% 130% at 50% -10%, #ffffff 0%, #f1f5f9 65%, #e2e8f0 100%);
+      --card-studio: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --uthe-gold: #e2b714;
+      --uthe-black: #080c14;
+      --border-color: rgba(226, 232, 240, 0.9);
+      --emerald-green: #059669;
+      --gloss-shadow: 0 12px 32px -4px rgba(8, 12, 20, 0.06), 0 2px 8px rgba(0, 0, 0, 0.02), inset 0 1px 0 #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-studio);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* TOP DECK HEADER — HIGH GLOSS STUDIO FINISH */
+    header {
+      height: 58px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border-bottom: 2px solid var(--uthe-gold);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1.5rem;
+      color: var(--uthe-black);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), inset 0 1px 0 #ffffff;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    h1 {
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing: 2.5px;
+      color: var(--uthe-black);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .btn-upload-logo {
+      background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+      border: 1.5px solid var(--border-color);
+      color: var(--uthe-black);
+      font-weight: 800;
+      font-size: 0.68rem;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0.45rem 1rem;
+      border-radius: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04), inset 0 1px 0 #ffffff;
+      transition: all 0.25s ease;
+    }
+
+    .btn-upload-logo:hover {
+      border-color: var(--uthe-gold);
+      color: var(--uthe-black);
+      background: #ffffff;
+      box-shadow: 0 4px 14px rgba(226, 183, 20, 0.25), inset 0 1px 0 #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    /* SLEEK EXECUTIVE SAVE BUTTON */
+    .btn-save {
+      background: linear-gradient(135deg, #0f172a 0%, #080c14 100%);
+      color: var(--uthe-gold);
+      border: 1.5px solid var(--uthe-gold);
+      padding: 0.45rem 1.35rem;
+      border-radius: 20px;
+      font-weight: 900;
+      font-size: 0.72rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(8, 12, 20, 0.2);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-save:hover {
+      background: var(--uthe-gold);
+      color: var(--uthe-black);
+      box-shadow: 0 6px 18px rgba(226, 183, 20, 0.45);
+      transform: translateY(-1px);
+    }
+
+    /* UTHEVERSITY Toast Overlay */
+    .uthe-toast-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 12, 20, 0.75);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .uthe-toast-card {
+      background: var(--uthe-black);
+      border: 2px solid var(--uthe-gold);
+      border-radius: 10px;
+      width: 440px;
+      max-width: 90%;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .uthe-toast-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(226, 183, 20, 0.3);
+      padding-bottom: 0.4rem;
+    }
+
+    .uthe-toast-title { font-size: 0.78rem; font-weight: 900; color: var(--uthe-gold); text-transform: uppercase; letter-spacing: 1.5px; }
+    .uthe-toast-close { background: none; border: none; font-size: 1rem; cursor: pointer; font-weight: 800; color: var(--uthe-gold); }
+    .uthe-toast-body { font-size: 0.85rem; font-weight: 600; color: #ffffff; line-height: 1.5; padding: 0.5rem 0; }
+    .uthe-toast-hint { font-size: 0.62rem; font-weight: 700; color: var(--uthe-gold); letter-spacing: 0.8px; text-transform: uppercase; opacity: 0.85; }
+
+    /* Main Grid Layout (DESKTOP DEFAULT — UNTOUCHED) */
+    .main-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 1.25rem;
+      padding: 1.25rem;
+      overflow: hidden;
+    }
+
+    .panel {
+      background: var(--card-studio);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      overflow-y: auto;
+      box-shadow: var(--gloss-shadow);
+    }
+
+    .form-belt-track {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .panel-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--uthe-black);
+      border-bottom: 2px solid var(--uthe-gold);
+      padding-bottom: 0.35rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.25rem; }
+    label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+
+    input, select, textarea {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.6rem 0.75rem;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 500;
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(255, 255, 255, 0.8);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--uthe-gold);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(226, 183, 20, 0.18), inset 0 1px 1px rgba(0, 0, 0, 0.01);
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+
+    .preview-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.4rem;
+      box-shadow: var(--gloss-shadow);
+    }
+
+    .preview-company { font-size: 1rem; font-weight: 800; color: var(--text-main); }
+    .preview-location, .preview-type { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .preview-salary { font-size: 0.85rem; font-weight: 800; color: var(--text-main); }
+    .preview-title { font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-top: 0.15rem; }
+
+    .preview-tags-container { display: flex; gap: 0.35rem; flex-wrap: wrap; justify-content: center; margin-top: 0.35rem; }
+    .preview-tag { background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%); border: 1px solid var(--border-color); color: var(--text-main); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.65rem; font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+
+    .btn-wix-apply {
+      width: 100%; max-width: 140px; background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); border: 1px solid var(--uthe-gold); color: var(--uthe-black);
+      padding: 0.45rem 0.75rem; border-radius: 6px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; cursor: pointer; margin-top: 0.5rem; box-shadow: 0 2px 6px rgba(0,0,0,0.03); transition: all 0.2s ease;
+    }
+
+    .btn-wix-apply:hover { background: var(--uthe-gold); color: var(--uthe-black); box-shadow: 0 4px 12px rgba(226, 183, 20, 0.3); }
+
+    /* HIGH-END EXECUTIVE PUBLISH BUTTON */
+    .btn-publish {
+      background: linear-gradient(135deg, #080c14 0%, #1e293b 100%);
+      color: var(--uthe-gold);
+      border: 1.5px solid var(--uthe-gold);
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 900;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      margin-top: 0.35rem;
+      box-shadow: 0 6px 20px rgba(8, 12, 20, 0.25);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-publish:hover {
+      background: linear-gradient(135deg, #e2b714 0%, #facc15 100%);
+      color: var(--uthe-black);
+      box-shadow: 0 8px 24px rgba(226, 183, 20, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .mobile-only-publish {
+      display: none !important;
+    }
+
+    .right-deck-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      overflow-y: auto;
+    }
+
+    .flowbite-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.85rem; }
+
+    .flowbite-job-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      position: relative;
+      box-shadow: var(--gloss-shadow);
+    }
+
+    .card-role { font-size: 0.88rem; font-weight: 800; color: var(--uthe-black); padding-right: 2rem; }
+    .card-company { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+    .card-meta { font-size: 0.65rem; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 0.12rem 0.4rem; border-radius: 3px; }
+
+    .btn-delete-card {
+      position: absolute; top: 0.65rem; right: 0.65rem; background: rgba(239, 68, 68, 0.06); color: #dc2626;
+      border: 1px solid #fca5a5; padding: 0.15rem 0.35rem; border-radius: 3px; font-size: 0.6rem; font-weight: 700; cursor: pointer;
+    }
+
+    /* ========================================================= */
+    /* MOBILE OPTIMIZATION ONLY (EXCLUSIVELY <= 768PX)           */
+    /* ========================================================= */
+    @media (max-width: 768px) {
+      header {
+        padding: 0 0.75rem;
+        height: 44px;
+      }
+
+      h1 { font-size: 0.85rem; letter-spacing: 1px; }
+      .btn-upload-logo { padding: 0.25rem 0.55rem; font-size: 0.55rem; }
+      .btn-save { padding: 0.25rem 0.65rem; font-size: 0.6rem; }
+
+      .desktop-only-btn {
+        display: none !important;
+      }
+
+      .mobile-only-publish {
+        display: flex !important;
+        width: 100%;
+        margin-top: 0.35rem;
+        padding: 0.45rem 0.65rem;
+        font-size: 0.68rem;
+        letter-spacing: 1px;
+      }
+
+      .main-grid {
+        display: flex;
+        flex-direction: column;
+        padding: 0.4rem;
+        gap: 0.4rem;
+        overflow-y: auto;
+      }
+
+      /* CARD 1: ULTRA-SNUG HORIZONTAL BELT TRACK */
+      .panel:first-child {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0.45rem 0.6rem;
+        height: auto;
+        min-height: auto;
+        max-height: none;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .panel-title {
+        padding-bottom: 0.15rem;
+        font-size: 0.65rem;
+      }
+
+      .form-belt-track {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 0.2rem;
+        margin-bottom: 0;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+      }
+
+      /* Gold Backup Horizontal Scrollbar */
+      .form-belt-track::-webkit-scrollbar {
+        height: 3px;
+      }
+      .form-belt-track::-webkit-scrollbar-track {
+        background: #e2e8f0;
+        border-radius: 2px;
+      }
+      .form-belt-track::-webkit-scrollbar-thumb {
+        background: var(--uthe-gold);
+        border-radius: 2px;
+      }
+
+      .grid-2 {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+      }
+
+      .form-group {
+        min-width: 170px;
+        max-width: 170px;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        gap: 0.1rem;
+      }
+
+      .form-group label {
+        font-size: 0.58rem;
+      }
+
+      .form-group input, .form-group select, .form-group textarea {
+        padding: 0.3rem 0.45rem;
+        font-size: 0.72rem;
+        border-radius: 4px;
+        height: 28px;
+      }
+
+      .form-group textarea {
+        height: 28px;
+        resize: none;
+      }
+
+      /* CARD 2: LIVE PREVIEW + RELOCATED PUBLISH BUTTON */
+      .right-deck-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+
+      .right-deck-container .panel:first-child {
+        padding: 0.45rem 0.6rem;
+        gap: 0.25rem;
+      }
+
+      .preview-card {
+        padding: 0.5rem;
+        gap: 0.15rem;
+        border-radius: 6px;
+      }
+
+      .preview-company { font-size: 0.75rem; }
+      .preview-location, .preview-type { font-size: 0.58rem; }
+      .preview-salary { font-size: 0.72rem; }
+      .preview-title { font-size: 0.88rem; margin-top: 0; }
+
+      .preview-tags-container {
+        gap: 0.15rem;
+        margin-top: 0.15rem;
+      }
+
+      .preview-tag {
+        padding: 0.15rem 0.35rem;
+        font-size: 0.55rem;
+      }
+
+      .btn-wix-apply {
+        padding: 0.25rem 0.45rem;
+        font-size: 0.6rem;
+        margin-top: 0.25rem;
+      }
+
+      /* CARD 3: ACTIVE LISTINGS VERTICAL BELT */
+      .active-listings-panel {
+        padding: 0.45rem 0.6rem;
+        max-height: 190px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .flowbite-card-grid {
+        grid-template-columns: 1fr;
+        gap: 0.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hidden File Input for Image Upload -->
+  <input type="file" id="logo-file-picker" accept="image/*" style="display: none;" onchange="handleLogoSelect(event)">
+
+  <!-- Top Deck Header -->
+  <header>
+    <div class="brand-container">
+      <h1>u-thePOST</h1>
+      <img id="header-logo-preview" src="https://www.utheversity.com/_static/images/utheversity-logo.png" alt="Company Logo" style="display: none;">
+      <button class="btn-upload-logo" onclick="triggerLogoUpload()">Upload Logo</button>
+    </div>
+
+    <!-- Far Right Header Actions -->
+    <div class="header-actions">
+      <button class="btn-save" onclick="handleSaveProgress()">SAVE</button>
+    </div>
+  </header>
+
+  <!-- UTHEVERSITY Toast Overlay -->
+  <div class="uthe-toast-overlay" id="uthe-toast-overlay" onmouseenter="dismissToast()">
+    <div class="uthe-toast-card" onclick="dismissToast()">
+      <div class="uthe-toast-header">
+        <span class="uthe-toast-title" id="toast-title">UTHEVERSITY SYSTEM NOTICE</span>
+        <button class="uthe-toast-close" onclick="dismissToast()">✕</button>
+      </div>
+      <div class="uthe-toast-body" id="toast-message">Notice message goes here...</div>
+      <div class="uthe-toast-hint">HOVER OR CLICK TO DISMISS</div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    
+    <!-- CARD 1: Left Employer Form (Tight Horizontal Belt Track on Mobile) -->
+    <div class="panel">
+      <div class="panel-title"><span>1. Employer Job Listing</span></div>
+
+      <div class="form-belt-track">
+        <div class="form-group">
+          <label for="job-title">Official Job Title</label>
+          <input type="text" id="job-title" value="Software Engineer">
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="company-name">Company / Organization</label>
+            <input type="text" id="company-name" value="Tech Solutions Inc.">
+          </div>
+
+          <div class="form-group">
+            <label for="job-location">Location (City, State)</label>
+            <input type="text" id="job-location" value="San Francisco, CA">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="job-type">Employment Type</label>
+            <input list="job-type-list" id="job-type" value="FULL TIME" placeholder="Select or type...">
+            <datalist id="job-type-list">
+              <option value="FULL TIME">
+              <option value="PART TIME">
+              <option value="CONTRACT">
+              <option value="HYBRID">
+              <option value="FLEXIBLE">
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label for="pay-type">Pay Structure</label>
+            <input list="pay-type-list" id="pay-type" value="Annual Salary" placeholder="Select or type...">
+            <datalist id="pay-type-list">
+              <option value="Annual Salary">
+              <option value="Hourly Rate">
+              <option value="Project / Stipend">
+              <option value="Commission Only">
+            </datalist>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="salary-min">Min Compensation ($)</label>
+            <input list="salary-min-list" id="salary-min" value="90000" placeholder="Select or type amount...">
+            <datalist id="salary-min-list">
+              <option value="15">
+              <option value="20">
+              <option value="25">
+              <option value="30">
+              <option value="35">
+              <option value="40">
+              <option value="45">
+              <option value="50">
+              <option value="40000">
+              <option value="50000">
+              <option value="60000">
+              <option value="70000">
+              <option value="80000">
+              <option value="90000">
+              <option value="100000">
+              <option value="120000">
+              <option value="150000">
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label for="salary-max">Max Compensation ($)</label>
+            <input list="salary-max-list" id="salary-max" value="120000" placeholder="Select or type amount...">
+            <datalist id="salary-max-list">
+              <option value="25">
+              <option value="30">
+              <option value="35">
+              <option value="40">
+              <option value="50">
+              <option value="60">
+              <option value="60000">
+              <option value="75000">
+              <option value="90000">
+              <option value="100000">
+              <option value="120000">
+              <option value="140000">
+              <option value="160000">
+              <option value="180000">
+              <option value="200000">
+              <option value="250000">
+            </datalist>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="job-pto">Paid Vacation & PTO</label>
+            <input list="job-pto-list" id="job-pto" value="3 Weeks Paid Vacation + Holidays" placeholder="Select or type PTO policy...">
+            <datalist id="job-pto-list">
+              <option value="3 Weeks Paid Vacation + Holidays">
+              <option value="2 Weeks Paid Vacation + Holidays">
+              <option value="4 Weeks Paid Vacation + Holidays">
+              <option value="Unlimited Paid Time Off (PTO)">
+              <option value="Flexible PTO Policy">
+              <option value="Accrued Paid Leave">
+              <option value="Paid Holidays Only">
+              <option value="No Paid PTO Offered">
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label for="job-health">Health & Medical Coverage</label>
+            <input list="job-health-list" id="job-health" value="100% Medical, Dental, Vision" placeholder="Select or type health plan...">
+            <datalist id="job-health-list">
+              <option value="100% Medical, Dental, Vision">
+              <option value="Medical, Dental & Vision Coverage">
+              <option value="Medical & Dental Insurance">
+              <option value="Health Savings Account (HSA) Plan">
+              <option value="Health & Wellness Stipend">
+              <option value="No Health Insurance Offered">
+            </datalist>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="job-retirement">Retirement / 401(k)</label>
+            <input list="job-retirement-list" id="job-retirement" value="401(k) with 4% Matching" placeholder="Select or type retirement plan...">
+            <datalist id="job-retirement-list">
+              <option value="401(k) with 4% Matching">
+              <option value="401(k) with Company Match">
+              <option value="Standard 401(k) Retirement Plan">
+              <option value="401(k) + Roth 401(k) Options">
+              <option value="Pension & Retirement Plan">
+              <option value="No Retirement Plan Offered">
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label for="job-perks">Additional Perks</label>
+            <input list="job-perks-list" id="job-perks" value="Remote Stipend, Gym & Education" placeholder="Select or type perks...">
+            <datalist id="job-perks-list">
+              <option value="Remote Stipend, Gym & Education">
+              <option value="Flexible Working Hours">
+              <option value="Remote Work Options">
+              <option value="Tuition Reimbursement">
+              <option value="Performance Bonuses & Commission">
+              <option value="Paid Parental Leave">
+              <option value="Standard Company Benefits">
+            </datalist>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="apply-url">Company Application Link / URL</label>
+          <input type="url" id="apply-url" placeholder="https://company.com/careers/apply" value="https://company.com/careers">
+        </div>
+
+        <div class="form-group">
+          <label for="job-desc">Job Specification Summary</label>
+          <textarea id="job-desc" rows="3">We are looking for a Software Engineer to join Tech Solutions Inc. to engineer client-side applications and high-availability digital architectures.</textarea>
+        </div>
+
+        <button class="btn-publish desktop-only-btn" id="publish-btn">✦ Publish Job Live</button>
+      </div>
+    </div>
+
+    <!-- Right Live Preview & Active Feed Deck -->
+    <div class="right-deck-container">
+      
+      <!-- CARD 2: LIVE POST PREVIEW (Relocated Publish Button directly beneath Apply Now) -->
+      <div class="panel">
+        <div class="panel-title"><span>2. LIVE POST PREVIEW</span></div>
+
+        <div class="preview-card">
+          <div class="preview-company" id="pv-company">Tech Solutions Inc.</div>
+          <div class="preview-location" id="pv-location">SAN FRANCISCO, CA</div>
+          <div class="preview-type" id="pv-type">FULL TIME</div>
+          <div class="preview-salary" id="pv-salary">$90,000 - $120,000</div>
+          <div class="preview-title" id="pv-title">Software Engineer</div>
+
+          <div class="preview-tags-container">
+            <span class="preview-tag" id="pv-tag-pto">3 Weeks Paid Vacation + Holidays</span>
+            <span class="preview-tag" id="pv-tag-health">100% Medical, Dental, Vision</span>
+            <span class="preview-tag" id="pv-tag-retirement">401(k) with 4% Matching</span>
+          </div>
+
+          <button class="btn-wix-apply" onclick="showUtheToast('Candidate application portal opened!', 'CANDIDATE PORTAL')">Apply Now</button>
+          
+          <!-- Mobile Relocated Publish Button directly beneath Apply Now -->
+          <button class="btn-publish mobile-only-publish" id="publish-btn-mobile">✦ Publish Job Live</button>
+        </div>
+      </div>
+
+      <!-- CARD 3: ACTIVE JOB LISTINGS (Vertical Belt below Card 2) -->
+      <div class="panel active-listings-panel">
+        <div class="panel-title">
+          <span>3. Your Active Job Listings</span>
+          <span style="font-size: 0.65rem; color: #059669; font-weight: 800;" id="job-count">ACTIVE OPENING ●</span>
+        </div>
+
+        <div class="flowbite-card-grid" id="flowbite-feed"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Toast Overlay Controller (Persistent for 12 seconds)
+    const toastOverlay = document.getElementById('uthe-toast-overlay');
+    const toastTitle = document.getElementById('toast-title');
+    const toastMessage = document.getElementById('toast-message');
+    let toastTimer = null;
+
+    function showUtheToast(msg, title = "UTHEVERSITY SYSTEM NOTICE") {
+      toastTitle.textContent = title;
+      toastMessage.textContent = msg;
+      toastOverlay.style.display = 'flex';
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { dismissToast(); }, 12000);
+    }
+
+    function dismissToast() {
+      toastOverlay.style.display = 'none';
+      if (toastTimer) clearTimeout(toastTimer);
+    }
+
+    // Header Logo File Picker Handler
+    function triggerLogoUpload() {
+      document.getElementById('logo-file-picker').click();
+    }
+
+    function handleLogoSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxDim = 128;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          document.getElementById('header-logo-preview').src = compressedDataUrl;
+          showUtheToast("Corporate logo uploaded, optimized, and saved to header!", "LOGO UPDATED");
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Save Draft Progress & Logo
+    function handleSaveProgress() {
+      const draftData = {
+        jobTitle: document.getElementById('job-title').value,
+        companyName: document.getElementById('company-name').value,
+        location: document.getElementById('job-location').value,
+        jobType: document.getElementById('job-type').value,
+        payType: document.getElementById('pay-type').value,
+        salaryMin: document.getElementById('salary-min').value,
+        salaryMax: document.getElementById('salary-max').value,
+        pto: document.getElementById('job-pto').value,
+        health: document.getElementById('job-health').value,
+        retirement: document.getElementById('job-retirement').value,
+        perks: document.getElementById('job-perks').value,
+        applyUrl: document.getElementById('apply-url').value,
+        desc: document.getElementById('job-desc').value,
+        logoSrc: document.getElementById('header-logo-preview').src
+      };
+
+      localStorage.setItem('UTHE_POST_DRAFT', JSON.stringify(draftData));
+
+      window.parent.postMessage({
+        type: "SAVE_DRAFT_PROGRESS",
+        draft: draftData
+      }, "*");
+
+      showUtheToast("Your logo, company details, compensation structure, and draft form progress have been successfully saved to your account!", "SAVE CONFIRMED");
+    }
+
+    // Auto-Restore Draft on Page Load
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedDraft = JSON.parse(localStorage.getItem('UTHE_POST_DRAFT'));
+      if (savedDraft) {
+        if (savedDraft.jobTitle) document.getElementById('job-title').value = savedDraft.jobTitle;
+        if (savedDraft.companyName) document.getElementById('company-name').value = savedDraft.companyName;
+        if (savedDraft.location) document.getElementById('job-location').value = savedDraft.location;
+        if (savedDraft.jobType) document.getElementById('job-type').value = savedDraft.jobType;
+        if (savedDraft.payType) document.getElementById('pay-type').value = savedDraft.payType;
+        if (savedDraft.salaryMin) document.getElementById('salary-min').value = savedDraft.salaryMin;
+        if (savedDraft.salaryMax) document.getElementById('salary-max').value = savedDraft.salaryMax;
+        if (savedDraft.pto) document.getElementById('job-pto').value = savedDraft.pto;
+        if (savedDraft.health) document.getElementById('job-health').value = savedDraft.health;
+        if (savedDraft.retirement) document.getElementById('job-retirement').value = savedDraft.retirement;
+        if (savedDraft.perks) document.getElementById('job-perks').value = savedDraft.perks;
+        if (savedDraft.applyUrl) document.getElementById('apply-url').value = savedDraft.applyUrl;
+        if (savedDraft.desc) document.getElementById('job-desc').value = savedDraft.desc;
+        if (savedDraft.logoSrc) document.getElementById('header-logo-preview').src = savedDraft.logoSrc;
+        syncPreview();
+      }
+    });
+
+    // Listen for Messages from Wix Page Code
+    window.addEventListener('message', function(event) {
+      if (!event.data) return;
+
+      if (event.data.type === "TOAST") {
+        showUtheToast(event.data.message, event.data.title);
+      } else if (event.data.type === "JOB_PUBLISHED_SUCCESS") {
+        if (event.data.item && event.data.item._id && publishedJobs.length > 0) {
+          publishedJobs[0].id = event.data.item._id;
+          localStorage.setItem('UTHE_POST_JOBS', JSON.stringify(publishedJobs));
+        }
+        showUtheToast("Job successfully saved and published live to JobsBoard CMS database!", "PUBLISHED LIVE");
+      } else if (event.data.type === "JOB_PUBLISHED_ERROR") {
+        showUtheToast("Failed to save job: " + event.data.error, "SYSTEM ERROR");
+      } else if (event.data.type === "JOB_DELETED_SUCCESS") {
+        showUtheToast("Listing permanently removed from JobsBoard database!", "DELETED FROM CMS");
+      }
+    });
+
+    // Dynamic Form Elements & Live Preview Bindings
+    const jobTitle = document.getElementById('job-title');
+    const companyName = document.getElementById('company-name');
+    const jobLocation = document.getElementById('job-location');
+    const jobType = document.getElementById('job-type');
+    const payType = document.getElementById('pay-type');
+    const salaryMin = document.getElementById('salary-min');
+    const salaryMax = document.getElementById('salary-max');
+    const jobPto = document.getElementById('job-pto');
+    const jobHealth = document.getElementById('job-health');
+    const jobRetirement = document.getElementById('job-retirement');
+    const jobPerks = document.getElementById('job-perks');
+    const applyUrl = document.getElementById('apply-url');
+    const jobDesc = document.getElementById('job-desc');
+
+    const pvTitle = document.getElementById('pv-title');
+    const pvCompany = document.getElementById('pv-company');
+    const pvLocation = document.getElementById('pv-location');
+    const pvSalary = document.getElementById('pv-salary');
+    const pvType = document.getElementById('pv-type');
+    const pvTagPto = document.getElementById('pv-tag-pto');
+    const pvTagHealth = document.getElementById('pv-tag-health');
+    const pvTagRetirement = document.getElementById('pv-tag-retirement');
+    const flowbiteFeed = document.getElementById('flowbite-feed');
+
+    let publishedJobs = JSON.parse(localStorage.getItem('UTHE_POST_JOBS')) || [
+      { id: 'JOB-101', title: 'Software Engineer', company: 'Tech Solutions Inc.', salary: '$90,000 - $120,000' },
+      { id: 'JOB-102', title: 'Marketing Manager', company: 'Bright Media', salary: '$70,000 - $95,000' },
+      { id: 'JOB-103', title: 'Data Analyst', company: 'Insight Analytics', salary: '$65,000 - $85,000' }
+    ];
+
+    function syncPreview() {
+      pvTitle.textContent = jobTitle.value || 'Software Engineer';
+      pvCompany.textContent = companyName.value || 'Company Name';
+      pvLocation.textContent = (jobLocation.value || 'LOCATION').toUpperCase();
+
+      const minVal = parseInt(salaryMin.value || 0);
+      const maxVal = parseInt(salaryMax.value || 0);
+
+      if (payType.value === "Hourly Rate" || (payType.value && payType.value.toLowerCase().includes('hr'))) {
+        pvSalary.textContent = (minVal && maxVal) ? `$${minVal} - $${maxVal} / hr` : (salaryMin.value || 'Compensation TBD');
+      } else {
+        pvSalary.textContent = (minVal && maxVal) ? `$${minVal.toLocaleString()} - $${maxVal.toLocaleString()}` : (salaryMin.value || 'Compensation TBD');
+      }
+
+      pvType.textContent = (jobType.value || 'FULL TIME').toUpperCase();
+
+      pvTagPto.textContent = jobPto.value || 'Paid PTO';
+      pvTagHealth.textContent = jobHealth.value || 'Medical';
+      pvTagRetirement.textContent = jobRetirement.value || '401(k)';
+    }
+
+    [jobTitle, companyName, jobLocation, jobType, payType, salaryMin, salaryMax, jobPto, jobHealth, jobRetirement, jobPerks, applyUrl, jobDesc].forEach(elem => {
+      elem.addEventListener('change', syncPreview);
+      elem.addEventListener('input', syncPreview);
+    });
+
+    syncPreview();
+
+    function renderFeed() {
+      flowbiteFeed.innerHTML = '';
+      publishedJobs.forEach((job, index) => {
+        const card = document.createElement('div');
+        card.className = 'flowbite-job-card';
+        card.innerHTML = `
+          <button class="btn-delete-card" onclick="removeJob(${index})">Delete</button>
+          <div class="card-role">${job.title}</div>
+          <div class="card-company">${job.company}</div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <span class="card-meta">${job.salary}</span>
+            <span style="font-size: 0.65rem; font-weight: 700; color: #059669;">● LIVE</span>
+          </div>
+        `;
+        flowbiteFeed.appendChild(card);
+      });
+    }
+
+    renderFeed();
+
+    window.removeJob = function(index) {
+      const jobToDelete = publishedJobs[index];
+
+      if (jobToDelete && jobToDelete.id && !jobToDelete.id.startsWith('JOB-')) {
+        window.parent.postMessage({
+          type: "DELETE_JOB",
+          jobId: jobToDelete.id
+        }, "*");
+      }
+
+      publishedJobs.splice(index, 1);
+      localStorage.setItem('UTHE_POST_JOBS', JSON.stringify(publishedJobs));
+      renderFeed();
+      showUtheToast("Listing removed from active view & database.", "LISTING DELETED");
+    };
+
+    // Shared Publish Execution Handler (Desktop & Mobile)
+    async function handlePublishJob() {
+      const jobPayload = {
+        jobTitle: jobTitle.value,
+        company: companyName.value,
+        location: jobLocation.value.toUpperCase(),
+        employmentType: jobType.value,
+        payStructure: payType.value,
+        minCompensation: salaryMin.value,
+        maxCompensation: salaryMax.value,
+        paidVacation: jobPto.value,
+        healthCoverage: jobHealth.value,
+        retirement: jobRetirement.value,
+        additionalPerks: jobPerks.value,
+        applyLinkUrl: applyUrl.value,
+        summary: jobDesc.value,
+        logo: document.getElementById('header-logo-preview').src || ''
+      };
+
+      window.parent.postMessage({
+        type: "SUBMIT_JOB",
+        jobPayload: jobPayload
+      }, "*");
+
+      const minVal = parseInt(jobPayload.minCompensation || 0);
+      const maxVal = parseInt(jobPayload.maxCompensation || 0);
+      const salaryDisplay = (jobPayload.payStructure === "Hourly Rate")
+        ? `$${minVal} - $${maxVal} / hr`
+        : `$${minVal.toLocaleString()} - $${maxVal.toLocaleString()}`;
+
+      publishedJobs.unshift({
+        id: `JOB-${Math.floor(100 + Math.random() * 900)}`,
+        title: jobPayload.jobTitle,
+        company: jobPayload.company,
+        salary: salaryDisplay
+      });
+
+      localStorage.setItem('UTHE_POST_JOBS', JSON.stringify(publishedJobs));
+      renderFeed();
+      showUtheToast(`"${jobPayload.jobTitle}" is publishing live to UTHEVERSITY...`, "JOB PUBLISHING");
+    }
+
+    const publishBtnDesktop = document.getElementById('publish-btn');
+    if (publishBtnDesktop) publishBtnDesktop.addEventListener('click', handlePublishJob);
+
+    const publishBtnMobile = document.getElementById('publish-btn-mobile');
+    if (publishBtnMobile) publishBtnMobile.addEventListener('click', handlePublishJob);
+  </script>
+</body>
+</html>
