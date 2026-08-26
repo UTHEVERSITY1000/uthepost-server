@@ -122,81 +122,81 @@ const applicantsStore = [
       technical: 5,
       communication: 5,
       culture: 5,
-      notes: 'Proven track record of building and mentoring high-velocity engineering teams.',
-      decision: 'Strong Hire'
+      notes: 'Proven track record scaling organizations from 15 to 85+ developers.',
+      decision: 'Offer Extended'
     }
   }
 ];
 
-// Open Source Aggregation Feeds Pool
+// Open-Source Job Feed Aggregator Mock Sources
 const openSourceFeeds = [
   {
-    source: 'Schema.org JSON-LD Ingestion Feed',
-    id: 'OS-801',
+    id: 'FEED-SCHEMA-01',
+    source: 'Schema.org JobPosting Ingestion',
     title: 'Lead Distributed Systems Architect',
-    company: 'OpenCore Mesh',
-    location: 'SEATTLE, WA (REMOTE)',
+    company: 'Nexus Scale Labs',
+    location: 'Remote (US/EU)',
     type: 'Full-Time',
-    salary: '$160,000 - $210,000',
+    minComp: 185000,
+    maxComp: 240000,
+    salary: '$185,000 - $240,000',
+    pto: 'Unlimited PTO + Sabbatical',
+    health: '100% Premium Covered',
+    retirement: '401(k) 6% Match',
+    perks: '$5,000 Hardware Setup Allowance',
+    url: 'https://nexusscale.io/careers/lead-architect',
+    summary: 'Lead next-gen distributed messaging broker with raft consensus and real-time WebSocket multiplexing.'
+  },
+  {
+    id: 'FEED-GITHUB-02',
+    source: 'GitHub Jobs Schema Ingestion',
+    title: 'Staff Frontend Engineer (TypeScript & Canvas)',
+    company: 'Vector Canvas Corp',
+    location: 'Austin, TX',
+    type: 'Full-Time',
     minComp: 160000,
     maxComp: 210000,
-    pto: 'Unlimited PTO',
-    health: 'Comprehensive Medical',
-    retirement: '401(k) Match',
-    perks: 'Open Source Contribution Bonus',
-    url: 'https://opencore.dev/careers/lead-architect',
-    summary: 'Design zero-copy distributed event protocols and peer-to-peer sync layers. Strong knowledge of WebSockets and low-latency serialization.'
+    salary: '$160,000 - $210,000',
+    pto: '25 Days PTO',
+    health: 'Comprehensive PPO',
+    retirement: '401(k) Matching',
+    perks: 'Annual Conference & Travel Budget',
+    url: 'https://vectorcanvas.dev/jobs/staff-fe',
+    summary: 'Design high-performance 60fps web application canvases, rendering engines, and real-time collaborative state.'
   },
   {
-    source: 'GitHub Public Jobs API',
-    id: 'OS-802',
-    title: 'DevOps & Site Reliability Engineer',
-    company: 'Kubernetes Cloud Labs',
-    location: 'DENVER, CO',
-    type: 'Full-Time',
-    salary: '$140,000 - $180,000',
-    minComp: 140000,
-    maxComp: 180000,
-    pto: '20 Days PTO',
-    health: 'Gold Health + Dental',
-    retirement: '401(k) 4% Match',
-    perks: 'Home Office + Wellness Budget',
-    url: 'https://k8s-cloudlabs.io/careers/sre',
-    summary: 'Maintain high availability multi-region Kubernetes clusters, Prometheus metrics, and automated deployment pipelines.'
-  },
-  {
-    source: 'Tech RSS Job Feed',
-    id: 'OS-803',
-    title: 'Frontend UI/UX Performance Specialist',
-    company: 'PixelCraft Studio',
-    location: 'LOS ANGELES, CA (REMOTE)',
+    id: 'FEED-RSS-03',
+    source: 'TechCareers Open RSS Aggregator',
+    title: 'Senior DevOps & Reliability Engineer',
+    company: 'Kubernetes Cloud Network',
+    location: 'Remote',
     type: 'Contract',
-    salary: '$80 - $115 / hr',
-    minComp: 80,
-    maxComp: 115,
+    minComp: 90,
+    maxComp: 125,
+    salary: '$90 - $125 / hr',
     pto: 'Flexible Hours',
-    health: 'Monthly Health Allowance',
-    retirement: 'N/A',
-    perks: 'Conference Sponsorship & Equipment',
-    url: 'https://pixelcraft.design/jobs/ui-perf',
-    summary: 'Optimize Core Web Vitals, micro-interactions, responsive design grids, and real-time DOM hydration.'
+    health: 'Health Insurance Stipend',
+    retirement: 'SEP-IRA Eligible',
+    perks: 'Full Remote Freedom',
+    url: 'https://k8scloud.net/openings/sr-sre',
+    summary: 'Manage multi-region Kubernetes clusters, automated zero-downtime canary pipelines, and edge network routing.'
   }
 ];
 
-// Hunter.io Lead Engine Simulated & Proxy Engine
+// Hunter.io Lead Engine Search Simulation
 function handleHunterDomainSearch(params) {
-  const domain = (params.get('domain') || 'google.com').toLowerCase().trim();
+  const domain = (params.get('domain') || 'stripe.com').toLowerCase().trim();
   const department = params.get('department') || 'hr,management';
   const seniority = params.get('seniority') || 'executive,senior';
 
-  const companyName = domain.split('.')[0].toUpperCase() + (domain.includes('.io') ? ' Labs' : ' Inc');
-  
+  const companyName = domain.split('.')[0].toUpperCase();
+
   const leads = [
     {
       company_name: companyName,
       domain: domain,
       contact_name: 'Sarah Jenkins',
-      position: 'Head of Talent Acquisition & People',
+      position: 'Head of Global Talent Acquisition',
       department: 'human_resources',
       seniority: 'senior',
       verified_email: `sarah.jenkins@${domain}`,
@@ -292,6 +292,60 @@ function handleHunterEmailVerify(params) {
   };
 }
 
+// Strict Host-Header Subdomain Resolver
+function resolveTargetFileForHost(req, parsedUrl) {
+  const pathname = parsedUrl.pathname;
+  const cleanPath = pathname.toLowerCase().replace(/\/+$/, '');
+
+  // 1. Explicit clean route aliases or legacy direct filenames
+  if (cleanPath === '/recruiter' || cleanPath === '/recruiter.html' || cleanPath === '/post' || cleanPath === '/u-thepost-enterprise-edition.html') {
+    return 'recruiter.html';
+  }
+  if (cleanPath === '/candidate' || cleanPath === '/candidate.html' || cleanPath === '/jobs' || cleanPath === '/u-thejobs-enterprise-sync.html') {
+    return 'candidate.html';
+  }
+  if (cleanPath === '/admin' || cleanPath === '/admin.html' || cleanPath === '/u-theadmin-master-suite.html') {
+    return 'admin.html';
+  }
+  if (cleanPath === '/preview' || cleanPath === '/preview-hub.html' || cleanPath === '/hub') {
+    return 'preview-hub.html';
+  }
+
+  // If asking for a specific non-root static asset on disk (e.g. css, js, png)
+  if (cleanPath !== '' && cleanPath !== '/' && cleanPath !== '/index.html') {
+    const rawFile = pathname.replace(/^\//, '');
+    const candidatePath = path.join(__dirname, decodeURIComponent(rawFile));
+    if (fs.existsSync(candidatePath) && !fs.statSync(candidatePath).isDirectory()) {
+      return rawFile;
+    }
+  }
+
+  // 2. Strict Host-Header Subdomain Resolution for root / index requests
+  const rawHost = req.headers['x-forwarded-host'] || req.headers.host || '';
+  const firstHost = rawHost.split(',')[0].trim().toLowerCase();
+  const host = firstHost.split(':')[0].trim();
+
+  const subQuery = (parsedUrl.searchParams.get('subdomain') || parsedUrl.searchParams.get('role') || '').toLowerCase().trim();
+
+  // Post / Recruiter subdomain
+  if (host === 'post.utheversity.com' || host.startsWith('post.') || host.includes('recruiter.') || subQuery === 'post' || subQuery === 'recruiter') {
+    return 'recruiter.html';
+  }
+
+  // Jobs / Candidate subdomain
+  if (host === 'jobs.utheversity.com' || host.startsWith('jobs.') || host.includes('candidate.') || subQuery === 'jobs' || subQuery === 'candidate') {
+    return 'candidate.html';
+  }
+
+  // Admin subdomain
+  if (host === 'admin.utheversity.com' || host.startsWith('admin.') || subQuery === 'admin') {
+    return 'admin.html';
+  }
+
+  // Direct IP / Localhost / Fallback
+  return 'preview-hub.html';
+}
+
 // HTTP Server
 const server = http.createServer((req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost:3000'}`);
@@ -318,38 +372,65 @@ const server = http.createServer((req, res) => {
       uptime: process.uptime(),
       activeJobs: globalJobDatabase.length,
       activeApplicants: applicantsStore.length,
+      meshConnectedClients: connectedClients.size,
       timestamp: new Date().toISOString()
     }));
     return;
   }
 
-  // Hunter.io API Endpoints
-  if (pathname === '/api/hunter/domain-search' || pathname === '/v2/domain-search') {
-    const result = handleHunterDomainSearch(parsedUrl.searchParams);
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(result));
-    return;
-  }
-
-  if (pathname === '/api/hunter/email-verifier' || pathname === '/v2/email-verifier') {
-    const result = handleHunterEmailVerify(parsedUrl.searchParams);
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(result));
-    return;
-  }
-
-  // Open-Source Job Feed Aggregation Endpoint
-  if (pathname === '/api/jobs/aggregate') {
+  // Admin Telemetry & Metrics API
+  if (pathname === '/api/admin/stats') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       status: 'success',
-      totalFeeds: openSourceFeeds.length,
-      feeds: openSourceFeeds
+      node: 'u-theADMIN Master Telemetry Core',
+      timestamp: new Date().toISOString(),
+      metrics: {
+        totalJobs: globalJobDatabase.length,
+        totalApplicants: applicantsStore.length,
+        externalFeeds: openSourceFeeds.length,
+        activeWsClients: connectedClients.size,
+        uptimeSeconds: Math.floor(process.uptime()),
+        memoryUsageMb: Math.round(process.memoryUsage().heapUsed / 1024 / 1024)
+      },
+      roles: {
+        recruiter: { host: 'post.utheversity.com', target: 'recruiter.html', status: 'ONLINE' },
+        candidate: { host: 'jobs.utheversity.com', target: 'candidate.html', status: 'ONLINE' },
+        admin: { host: 'admin.utheversity.com', target: 'admin.html', status: 'ACTIVE CORE' },
+        fallback: { host: '*', target: 'preview-hub.html', status: 'STANDBY' }
+      }
     }));
     return;
   }
 
-  // Job CRUD API
+  // Hunter.io Lead Engine API Proxy
+  if (pathname === '/api/hunter/domain-search') {
+    const payload = handleHunterDomainSearch(parsedUrl.searchParams);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(payload));
+    return;
+  }
+
+  if (pathname === '/api/hunter/email-verifier') {
+    const payload = handleHunterEmailVerify(parsedUrl.searchParams);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(payload));
+    return;
+  }
+
+  // Open-Source Job Feed Aggregator API
+  if (pathname === '/api/jobs/aggregate') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      status: 'success',
+      count: openSourceFeeds.length,
+      feeds: openSourceFeeds,
+      ingestedAt: new Date().toISOString()
+    }));
+    return;
+  }
+
+  // REST API: Jobs CRUD
   if (pathname === '/api/jobs' && req.method === 'GET') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ jobs: globalJobDatabase }));
@@ -364,19 +445,19 @@ const server = http.createServer((req, res) => {
         const payload = JSON.parse(body);
         const newJob = {
           id: payload.id || `JOB-${Math.floor(100 + Math.random() * 900)}`,
-          jobTitle: payload.jobTitle || 'New Position',
-          company: payload.company || 'Enterprise Partner',
-          location: (payload.location || 'REMOTE').toUpperCase(),
+          jobTitle: payload.jobTitle || 'Untitled Position',
+          company: payload.company || 'Confidential Company',
+          location: payload.location || 'Remote',
           employmentType: payload.employmentType || 'Full-Time',
           payStructure: payload.payStructure || 'Salary Range',
           minCompensation: payload.minCompensation || '0',
           maxCompensation: payload.maxCompensation || '0',
-          salary: payload.salary || (payload.minCompensation ? `$${Number(payload.minCompensation).toLocaleString()} - $${Number(payload.maxCompensation).toLocaleString()}` : '$90,000 - $120,000'),
+          salary: payload.salary || `$${Number(payload.minCompensation || 0).toLocaleString()} - $${Number(payload.maxCompensation || 0).toLocaleString()}`,
           paidVacation: payload.paidVacation || 'Standard PTO',
           healthCoverage: payload.healthCoverage || 'Medical Included',
           retirement: payload.retirement || '401(k)',
-          additionalPerks: payload.additionalPerks || 'Standard Benefits',
-          applyLinkUrl: payload.applyLinkUrl || '#',
+          additionalPerks: payload.additionalPerks || 'Standard Perks',
+          applyLinkUrl: payload.applyLinkUrl || 'https://careers.company.com',
           summary: payload.summary || '',
           logo: payload.logo || '',
           createdAt: new Date().toISOString()
@@ -395,7 +476,6 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Delete Job Endpoint
   if (pathname.startsWith('/api/jobs/') && req.method === 'DELETE') {
     const jobId = pathname.split('/')[3];
     const index = globalJobDatabase.findIndex(j => j.id === jobId);
@@ -411,7 +491,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Applicant Submission API (From u-theJOBS to u-thePOST)
+  // Applicant Submission API
   if (pathname === '/api/applicants' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
@@ -458,10 +538,10 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Static File Serving
-  let requestedFile = pathname === '/' ? 'preview-hub.html' : pathname.replace(/^\//, '');
-  let filePath = path.join(__dirname, decodeURIComponent(requestedFile));
-  
+  // Static File Serving with Strict Host-Header Subdomain Resolution
+  const targetFileName = resolveTargetFileForHost(req, parsedUrl);
+  const filePath = path.join(__dirname, decodeURIComponent(targetFileName));
+
   // Extension check
   const extname = path.extname(filePath);
   let contentType = 'text/html';
@@ -567,7 +647,7 @@ function initWebSocket() {
       });
     });
   } catch (err) {
-    console.log('[WebSocket Bus] ws initialized with notice:', err.message);
+    console.log('[WebSocket Bus] ws notice:', err.message);
   }
 }
 
@@ -595,12 +675,14 @@ process.on('uncaughtException', (err) => {
 
 server.listen(PORT, () => {
   console.log(`================================================================`);
-  console.log(`🚀 U-THEPOST ENTERPRISE MULTI-SYNC ENGINE ACTIVE`);
-  console.log(`📡 Local HTTP Server: http://localhost:${PORT}`);
-  console.log(`⚡ WebSocket Sync Bus: ws://localhost:${PORT}`);
-  console.log(`🖥️  Interactive Preview Hub: http://localhost:${PORT}/preview-hub.html`);
-  console.log(`🏢 Recruiter Portal: http://localhost:${PORT}/u-thePOST-ENTERPRISE-EDITION.html`);
-  console.log(`👥 Applicant Board: http://localhost:${PORT}/u-theJOBS-ENTERPRISE-SYNC.html`);
+  console.log(`U-THEPOST & U-THEJOBS ENTERPRISE MULTI-SYNC ENGINE ACTIVE`);
+  console.log(`Local HTTP Server: http://localhost:${PORT}`);
+  console.log(`WebSocket Sync Mesh: ws://localhost:${PORT}`);
+  console.log(`Strict Subdomain Routing:`);
+  console.log(`  post.utheversity.com  -> recruiter.html (u-thePOST Standalone)`);
+  console.log(`  jobs.utheversity.com  -> candidate.html (u-theJOBS Standalone)`);
+  console.log(`  admin.utheversity.com -> admin.html (u-theADMIN Master Suite)`);
+  console.log(`  Direct / Fallback     -> preview-hub.html (Staging Workbench)`);
   console.log(`================================================================`);
   initWebSocket();
 });
