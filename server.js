@@ -156,6 +156,63 @@ const usersDatabase = [
 // MASTER ZERO-CODE CMS CONFIGURATION STORE
 // ----------------------------------------------------
 let cmsConfig = {
+  postStudio: {
+    card1Title: "CARD 1: EMPLOYER JOB LISTING & CONNECTED ACCOUNTS",
+    jobTitleLabel: "Job Title",
+    companyNameLabel: "Company / Organization Name",
+    locationLabel: "Location (e.g. Austin, TX or Remote)",
+    employmentOptions: "Full-Time, Contract, Part-Time, Temporary",
+    salaryLabel: "Estimated Compensation / Salary Range",
+    emailFieldLabel: "Employer Contact Email",
+    phoneFieldLabel: "Employer Phone Number",
+    socialHeader: "Link Social Media Accounts",
+    socialInstructions: "Connect your social accounts once. When you publish a position, it automatically formats and broadcasts across your linked networks in one click.",
+    linkedinPlaceholder: "LinkedIn Page URL...",
+    xPlaceholder: "X Profile URL...",
+    tiktokPlaceholder: "TikTok Handle URL...",
+    facebookPlaceholder: "Facebook Business Page URL...",
+    instagramPlaceholder: "Instagram Profile URL...",
+    card2Title: "CARD 2: LIVE JOB CARD PREVIEW",
+    previewBadge: "LIVE PREVIEW",
+    benefitSummaryLabel: "Selected Compensation & Benefits",
+    primaryActionBtn: "QUICK SEND / APPLY NOW",
+    card3Title: "CARD 3: LIVE ACTIVE JOB LISTINGS",
+    colJobId: "Job ID",
+    colTitle: "Position Title",
+    colCompany: "Company",
+    colLocation: "Location",
+    colSalary: "Compensation",
+    colStatus: "Status",
+    btnEditJob: "EDIT",
+    btnPauseJob: "PAUSE",
+    btnDeleteJob: "DELETE",
+    publishHeader: "PUBLISHING & DISTRIBUTION SETTINGS",
+    perksLabel: "Perks & Executive Benefits Summary",
+    seniorityOptions: "Entry-Level, Mid-Level, Senior, Executive",
+    distributionTitle: "Multi-Platform Distribution Channels",
+    publishBtnText: "PUBLISH & BROADCAST POSITION"
+  },
+  jobsBoard: {
+    boardTitle: "U-THEJOBS",
+    searchPlaceholder: "Search positions, verified companies, locations, or skills...",
+    commitmentOptions: "All Commitments, Full-Time, Contract, Part-Time",
+    locationOptions: "All Locations, Remote Only, Hybrid, On-Site",
+    quickSendBtn: "QUICK SEND",
+    sendResumeBtn: "SEND RESUME/CV",
+    salaryBadgeLabel: "COMPENSATION",
+    locationBadgeLabel: "LOCATION",
+    modalHeader: "UPLOAD RESUME AND COVER LETTER",
+    resumeUploadLabel: "Choose Resume (.pdf only)",
+    contactTimeOptions: "Morning, Afternoon, Evening, Anytime",
+    interviewReqTitle: "Interview Request Title",
+    interviewReqTooltip: "What do you want the employer to know to advance your resume?",
+    interviewReqPlaceholder: "Quick About Me / Why Hire Me...",
+    submitBtnText: "SUBMIT INTERVIEW REQUEST",
+    submitTooltip: "DOUBLE CHECK CONTACT INFO ON RESUME",
+    messageDrawerHeader: "DIRECT RECRUITER MESSAGES",
+    quickReplies: "1. I'M INTERESTED — LET'S TALK | 2. ACCEPTED INTERVIEW TIME | 3. PLEASE SEND MORE DETAILS",
+    profileTabName: "MY PROFILE"
+  },
   labels: {
     postTitle: "U-THEPOST",
     jobsTitle: "U-THEJOBS",
@@ -163,13 +220,9 @@ let cmsConfig = {
     quickSendBtn: "QUICK SEND",
     sendResumeBtn: "SEND RESUME/CV",
     submitInterviewBtn: "SUBMIT INTERVIEW REQUEST",
-    submitTooltip: "REMOVE ATS",
-    interviewReqTitle: "Interview Request Title",
-    interviewReqTooltip: "What do you want the employer to know to advance your resume?",
-    interviewReqPlaceholder: "Quick About Me / Why Hire Me...",
+    submitTooltip: "DOUBLE CHECK CONTACT INFO ON RESUME",
     palTierName: "u-thePAL",
-    palTierDesc: "Free member tier allowing 1 active posting distributed through Email Only.",
-    socialInstructions: "Connect your social accounts once. When you publish a position, it automatically formats and broadcasts across your linked networks in one click."
+    palTierDesc: "Free member tier allowing 1 active posting distributed through Email Only."
   },
   pricing: {
     palMonthly: 0,
@@ -634,6 +687,8 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/cms/config' && (req.method === 'POST' || req.method === 'PUT')) {
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON' });
+      if (body.postStudio) cmsConfig.postStudio = { ...cmsConfig.postStudio, ...body.postStudio };
+      if (body.jobsBoard) cmsConfig.jobsBoard = { ...cmsConfig.jobsBoard, ...body.jobsBoard };
       if (body.labels) cmsConfig.labels = { ...cmsConfig.labels, ...body.labels };
       if (body.pricing) cmsConfig.pricing = { ...cmsConfig.pricing, ...body.pricing };
       if (body.addOns) cmsConfig.addOns = { ...cmsConfig.addOns, ...body.addOns };
