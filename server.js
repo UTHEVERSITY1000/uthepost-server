@@ -724,6 +724,8 @@ const server = http.createServer((req, res) => {
         retirement: payload.retirement || '401(k)',
         additionalPerks: payload.additionalPerks || 'Standard Perks',
         applyLinkUrl: payload.applyLinkUrl || 'https://careers.company.com',
+        recruiterEmail: payload.recruiterEmail || '',
+        socialChannels: payload.socialChannels || {},
         summary: payload.summary || '',
         logo: payload.logo || '',
         createdAt: new Date().toISOString()

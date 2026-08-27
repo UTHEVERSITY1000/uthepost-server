@@ -8,7 +8,7 @@ const WS_URL = 'ws://localhost:3000';
 
 async function runTests() {
   console.log('================================================================');
-  console.log('UTHEVERSITY MASTER PLATFORM OVERHAUL & ZERO-CODE CMS TEST SUITE');
+  console.log('UTHEVERSITY PHASE 1 & MASTER PLATFORM OVERHAUL TEST SUITE');
   console.log('================================================================\n');
 
   let passed = 0;
@@ -118,9 +118,6 @@ async function runTests() {
     const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
     assert(recContent.includes('1. JOB STUDIO') && recContent.includes('5. MY PROFILE'), '5 tabs including "5. MY PROFILE" implemented');
     assert(recContent.includes('u-thePAL') && recContent.includes('$0'), 'u-thePAL $0/mo free member tier present with Email Only distribution');
-    assert(recContent.includes('LINK SOCIAL MEDIA ACCOUNTS') && recContent.includes('How Multi-Platform Posting Works'), 'Social media accounts block with plain-English instructions present');
-    assert(recContent.includes('ITEMIZED FEATURES & ADD-ONS') && recContent.includes('Top-of-Page Spotlight Placement'), 'Itemized Features & Add-Ons list present with pricing');
-    assert(recContent.includes('schedule-calendar-modal') && recContent.includes('sched-date'), 'Schedule Queue calendar popup modal present');
     assert(recContent.includes('touchstart') && recContent.includes('touchmove') && recContent.includes('touch-action: none'), 'Mobile ATS touch drag-and-drop handles configured');
   } catch (err) {
     assert(false, `Group 3 failed: ${err.message}`);
@@ -229,12 +226,41 @@ async function runTests() {
     assert(false, `Group 7 failed: ${err.message}`);
   }
 
+  // ----------------------------------------------------
+  // TEST GROUP 8: Phase 1 u-thePOST (recruiter.html) Updates
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 8] Phase 1 u-thePOST Brand, Card 1/3, CRM & Dynamic Add-Ons');
+  try {
+    const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Header Branding & Logo Ownership
+    assert(recContent.includes('employer-logo-badge') && recContent.includes('openLogoUploadModal') && recContent.includes('UPLOAD LOGO'), 'Header live Upload Logo component implemented');
+
+    // 2. Card 1 & Card 3 Refinements
+    assert(recContent.includes('inp-recruiter-email'), 'Card 1 dedicated Employer Contact Email input implemented');
+    assert(recContent.includes('inp-soc-linkedin') && recContent.includes('inp-soc-x') && recContent.includes('inp-soc-tiktok') && recContent.includes('inp-soc-fb') && recContent.includes('inp-soc-ig'), 'Card 1 connected social accounts inputs (LinkedIn, X, TikTok, Facebook, IG) implemented');
+    assert(recContent.includes('3. PUBLISHING & DISTRIBUTION SETTINGS') && recContent.includes('dist-channel-box') && recContent.includes('BROADCAST TO CONNECTED CHANNELS'), 'Card 3 publishing & distribution settings and immediate broadcast triggers active');
+
+    // 3. Omnichannel CRM Tab Revisions
+    assert(!recContent.includes('openScheduleQueueModal()'), 'Schedule Queue button removed from CRM header');
+    assert(recContent.includes('crm-template-select') && recContent.includes('CRM_TEMPLATES') && recContent.includes('linkedin_dm'), 'Outreach templates aligned with connected social and email accounts');
+    assert(recContent.includes('CAMPAIGN DATE TRACKER') && recContent.includes('crm-campaign-tracker-tbody') && recContent.includes('Launch Timestamp'), 'Campaign Date Tracker table with launch timestamps (Date & Time) active');
+
+    // 4. Performance & Plans (ADD-ONS & Dynamic Pricing)
+    assert(recContent.includes('ADD-ONS'), 'Itemized Features renamed to ADD-ONS');
+    assert(recContent.includes('toggle-switch') && recContent.includes('toggle-slider'), 'Interactive ON/OFF toggle switches implemented across plan features and add-ons');
+    assert(recContent.includes('calc-total-amount') && recContent.includes('recalculateMembershipTotal'), 'Dynamic membership pricing recalculation in real time implemented');
+    assert(recContent.includes('SOCIAL CHANNELS ADD-ON') && recContent.includes('toggle-social-bundle') && recContent.includes('5-CHANNEL BUNDLE ($19.99/mo)') && recContent.includes('$5.99'), 'Social Channels Add-On card with $5.99 each and $19.99 5-channel bundle implemented');
+  } catch (err) {
+    assert(false, `Group 8 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL MASTER PLATFORM OVERHAUL & ZERO-CODE CMS TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL PHASE 1 & MASTER PLATFORM TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');
