@@ -326,6 +326,20 @@ const applicantsStore = [
   }
 ];
 
+// In-Memory Message Store for Two-Way Recruiter <-> Candidate Communication
+const globalMessageStore = [
+  {
+    id: 'MSG-101',
+    applicantId: 'APP-701',
+    senderRole: 'recruiter',
+    senderName: 'Quantum Talent Acquisition',
+    company: 'Quantum Retail Corp',
+    jobTitle: 'Sales Manager',
+    text: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
+    timestamp: new Date(Date.now() - 3600000).toISOString()
+  }
+];
+
 // Hunter.io Lead Search Simulation
 function handleHunterDomainSearch(params) {
   const domain = (params.get('domain') || 'stripe.com').toLowerCase().trim();
@@ -787,6 +801,47 @@ const server = http.createServer((req, res) => {
   }
 
   // ----------------------------------------------------
+  // TWO-WAY CANDIDATE & RECRUITER MESSAGING
+  // ----------------------------------------------------
+  if (pathname === '/api/messages' && req.method === 'GET') {
+    const applicantId = parsedUrl.searchParams ? parsedUrl.searchParams.get('applicantId') : null;
+    if (applicantId) {
+      const filtered = globalMessageStore.filter(m => m.applicantId === applicantId);
+      sendJson(200, { messages: filtered });
+    } else {
+      sendJson(200, { messages: globalMessageStore });
+    }
+    return;
+  }
+
+  if (pathname === '/api/messages' && req.method === 'POST') {
+    readBody((err, payload) => {
+      if (err) return sendJson(400, { error: err.message });
+      const newMsg = {
+        id: payload.id || `MSG-${Math.floor(1000 + Math.random() * 9000)}`,
+        applicantId: payload.applicantId || 'APP-701',
+        senderRole: payload.senderRole || 'candidate', // 'candidate' | 'recruiter'
+        senderName: payload.senderName || (payload.senderRole === 'recruiter' ? 'Quantum Talent Acquisition' : 'Marcus Vance'),
+        company: payload.company || 'Quantum Retail Corp',
+        jobTitle: payload.jobTitle || 'Sales Manager',
+        text: payload.text || '',
+        timestamp: new Date().toISOString()
+      };
+
+      globalMessageStore.push(newMsg);
+
+      if (newMsg.senderRole === 'recruiter') {
+        broadcastWebSocketEvent('RECRUITER_MESSAGE_SENT', { message: newMsg });
+      } else {
+        broadcastWebSocketEvent('CANDIDATE_MESSAGE_SENT', { message: newMsg });
+      }
+
+      sendJson(201, { status: 'sent', message: newMsg });
+    });
+    return;
+  }
+
+  // ----------------------------------------------------
   // STATIC FILE SERVING & SUBDOMAIN ROUTING
   // ----------------------------------------------------
   const targetFileName = resolveTargetFileForHost(req, parsedUrl);
@@ -885,9 +940,14 @@ function initWebSocket() {
           } else if (data.type === 'DELETE_JOB' && data.jobId) {
             const idx = globalJobDatabase.findIndex(j => j.id === data.jobId);
             if (idx !== -1) globalJobDatabase.splice(idx, 1);
-          } else if (data.type === 'APPLY_JOB' && data.applicant) {
+          } else if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
             applicantsStore.unshift(data.applicant);
             broadcastWebSocketEvent('CANDIDATE_APPLIED', { applicant: data.applicant });
+          }
+
+          if ((data.type === 'CANDIDATE_MESSAGE_SENT' || data.type === 'RECRUITER_MESSAGE_SENT') && data.message) {
+            const exists = globalMessageStore.some(m => m.id === data.message.id);
+            if (!exists) globalMessageStore.push(data.message);
           }
         } catch (e) {}
       });

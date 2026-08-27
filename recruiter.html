@@ -2594,10 +2594,12 @@
       document.getElementById('ats-direct-msg-input').value = parsed;
     };
 
-    window.sendAtsDirectMessage = function() {
+    window.sendAtsDirectMessage = async function() {
       const input = document.getElementById('ats-direct-msg-input');
       const text = input.value.trim();
       if (!text) return showCustomModalAlert('Empty Message', 'Please enter a message or choose a 1-click template.');
+
+      const cand = CANDIDATES_DATA[activeCandidateId] || { name: 'Marcus Vance', role: 'Sales Manager' };
 
       const chatLog = document.getElementById('applicant-chat-log');
       const bubble = document.createElement('div');
@@ -2610,6 +2612,25 @@
       chatLog.scrollTop = chatLog.scrollHeight;
       input.value = '';
 
+      const msgPayload = {
+        applicantId: activeCandidateId,
+        senderRole: 'recruiter',
+        senderName: 'Quantum Talent Acquisition',
+        company: 'Quantum Retail Corp',
+        jobTitle: cand.role,
+        text: text,
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        await fetch('/api/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(msgPayload)
+        });
+      } catch (e) {}
+
+      broadcastSyncEvent('RECRUITER_MESSAGE_SENT', { message: msgPayload });
       showCustomModalAlert('Direct Message Sent', `Message dispatched to candidate inbox.`);
     };
 
@@ -2961,6 +2982,19 @@
         updateKanbanCounters();
         setupMobileTouchAts();
         showCustomModalAlert('New Applicant Received', `Candidate ${data.applicant.name} applied for ${data.applicant.jobTitle}.`);
+      } else if (data.type === 'CANDIDATE_MESSAGE_SENT' && data.message) {
+        const chatLog = document.getElementById('applicant-chat-log');
+        if (chatLog) {
+          const bubble = document.createElement('div');
+          bubble.className = 'chat-bubble chat-bubble-applicant';
+          bubble.innerHTML = `
+            <strong>Candidate (${data.message.senderName || 'Applicant'}):</strong> ${data.message.text}
+            <div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Just Now</div>
+          `;
+          chatLog.appendChild(bubble);
+          chatLog.scrollTop = chatLog.scrollHeight;
+        }
+        showCustomModalAlert('Candidate Reply Received', `New reply from ${data.message.senderName || 'Candidate'}: "${data.message.text}"`);
       } else if (data.type === 'CMS_CONFIG_UPDATED' && data.config) {
         if (data.config.labels && data.config.labels.postTitle) {
           document.getElementById('cms-brand-title').textContent = data.config.labels.postTitle;

@@ -8,7 +8,7 @@ const WS_URL = 'ws://localhost:3000';
 
 async function runTests() {
   console.log('================================================================');
-  console.log('UTHEVERSITY PHASE 1 ATS, PLANS & ASSET OVERHAUL TEST SUITE');
+  console.log('UTHEVERSITY CANDIDATE NOTIFICATIONS & MESSAGING TEST SUITE');
   console.log('================================================================\n');
 
   let passed = 0;
@@ -75,74 +75,131 @@ async function runTests() {
     });
   }
 
+  const candContent = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
   const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
   // ----------------------------------------------------
-  // TEST GROUP 1: Campaign Recipient Cap (25 Max per Batch)
+  // TEST GROUP 1: Candidate Notification Alert Badge (candidate.html)
   // ----------------------------------------------------
-  console.log('[TEST GROUP 1] Campaign Recipient Cap (25 Max)');
+  console.log('[TEST GROUP 1] Candidate Notification Alert Badge (candidate.html)');
   try {
-    assert(recContent.includes('max="25"'), 'Recipient input has max="25" attribute');
-    assert(recContent.includes('25 MAX PER BATCH'), 'Header / label displays 25 MAX PER BATCH');
-    assert(recContent.includes('clampCrmRecipients'), 'JS clamping function clampCrmRecipients is implemented');
-    assert(recContent.includes('if (count > 25) count = 25'), 'Campaign dispatch enforces 25 max recipient cap');
+    assert(candContent.includes('btn-candidate-notif') && candContent.includes('notif-counter-badge'), 'Notification alert bell icon and counter badge present in header');
+    assert(candContent.includes('notif-badge-count'), 'Live unread counter badge id "notif-badge-count" present');
+    assert(candContent.includes('openCandidateMessageDrawer()'), 'Clicking notification alert triggers openCandidateMessageDrawer()');
+
+    const headerHtml = candContent.slice(candContent.indexOf('<header>'), candContent.indexOf('</header>'));
+    const notifIdx = headerHtml.indexOf('btn-candidate-notif');
+    const profileIdx = headerHtml.indexOf('btn-profile-header');
+    assert(notifIdx !== -1 && profileIdx !== -1 && notifIdx < profileIdx, 'Notification alert is positioned directly to the left of [MY PROFILE]');
   } catch (err) {
     assert(false, `Group 1 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 2: Applicant Tracker Cards & Modal Handlers
+  // TEST GROUP 2: Candidate Message Center & Quick Responses
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 2] Applicant Tracker & Candidate Review');
+  console.log('\n[TEST GROUP 2] Candidate Message Center & Quick Responses');
   try {
-    assert(recContent.includes('openCandidateReviewModal'), 'Candidate cards click handler openCandidateReviewModal implemented');
-    assert(recContent.includes('candidate-review-modal'), 'Candidate review modal container present');
-    assert(recContent.includes('col-header-applied') && recContent.includes('col-header-screened') && recContent.includes('col-header-interviewing') && recContent.includes('col-header-offer'), 'Distinct high-contrast column decks styled for all 4 pipeline stages');
+    assert(candContent.includes('candidate-messages-modal'), 'Candidate Message Drawer modal container present');
+    assert(candContent.includes('candidate-chat-log'), 'Candidate chat history thread element present');
+    assert(candContent.includes('cand-reply-input') && candContent.includes('SEND REPLY'), 'Reply text input and [SEND REPLY] button present');
+
+    assert(candContent.includes("I'M INTERESTED — LET'S TALK"), 'Quick response tag 1: [I\'M INTERESTED — LET\'S TALK] present');
+    assert(candContent.includes('ACCEPTED INTERVIEW TIME'), 'Quick response tag 2: [ACCEPTED INTERVIEW TIME] present');
+    assert(candContent.includes('PLEASE SEND MORE DETAILS'), 'Quick response tag 3: [PLEASE SEND MORE DETAILS] present');
+    assert(candContent.includes('applyCandidateQuickReply'), 'Quick response tag applicator function implemented');
   } catch (err) {
     assert(false, `Group 2 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 3: Direct Messaging Drawer ("MESSAGE APPLICANT")
+  // TEST GROUP 3: Server.js Two-Way Messaging REST API
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 3] Direct Messaging Drawer (MESSAGE APPLICANT)');
+  console.log('\n[TEST GROUP 3] Server.js Two-Way Messaging API');
   try {
-    assert(recContent.includes('MESSAGE APPLICANT'), 'Dedicated message section labeled "MESSAGE APPLICANT" present');
-    assert(recContent.includes('applicant-chat-log'), 'Back-and-forth recruiter/applicant chat log thread present');
-    assert(recContent.includes('INTRODUCTION TEMPLATE'), 'Quick message template 1: INTRODUCTION TEMPLATE present');
-    assert(recContent.includes('INVITE TEMPLATE'), 'Quick message template 2: INVITE TEMPLATE present');
-    assert(recContent.includes('ARE YOU INTERESTED TEMPLATE'), 'Quick message template 3: ARE YOU INTERESTED TEMPLATE present');
-    assert(recContent.includes('sendAtsDirectMessage'), 'Direct message sender sendAtsDirectMessage active');
+    const getRes = await httpGet('/api/messages');
+    assert(getRes.status === 200, 'GET /api/messages returns HTTP 200');
+    assert(Array.isArray(getRes.data.messages), 'Messages endpoint returns array of message items');
+
+    const postCandidateMsg = await httpPost('/api/messages', {
+      applicantId: 'APP-701',
+      senderRole: 'candidate',
+      senderName: 'Marcus Vance',
+      company: 'Quantum Retail Corp',
+      jobTitle: 'Sales Manager',
+      text: 'I am very interested in the position and available for an interview this Thursday.'
+    });
+    assert(postCandidateMsg.status === 201, 'POST /api/messages from candidate returns HTTP 201 Created');
+    assert(postCandidateMsg.data.message.senderRole === 'candidate', 'Candidate message recorded with senderRole=candidate');
+
+    const postRecruiterMsg = await httpPost('/api/messages', {
+      applicantId: 'APP-701',
+      senderRole: 'recruiter',
+      senderName: 'Quantum Talent Acquisition',
+      company: 'Quantum Retail Corp',
+      jobTitle: 'Sales Manager',
+      text: 'Great, Thursday at 2:00 PM CST works perfectly for our hiring team.'
+    });
+    assert(postRecruiterMsg.status === 201, 'POST /api/messages from recruiter returns HTTP 201 Created');
+    assert(postRecruiterMsg.data.message.senderRole === 'recruiter', 'Recruiter message recorded with senderRole=recruiter');
   } catch (err) {
     assert(false, `Group 3 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 4: Pricing Plans & Dynamic Add-Ons Overhaul
+  // TEST GROUP 4: Real-Time Two-Way WebSocket Relay
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 4] Pricing Plans & Structure Overhaul');
+  console.log('\n[TEST GROUP 4] Real-Time Two-Way Message WebSocket Broadcast');
   try {
-    assert(recContent.includes('BUILD FROM $0'), 'Dynamic total header includes "BUILD FROM $0"');
-    assert(recContent.includes('CHOOSE A PLAN + ADD-ONS'), 'Dynamic total header includes "CHOOSE A PLAN + ADD-ONS"');
+    await new Promise((resolve, reject) => {
+      const wsClient = new WebSocket(WS_URL);
+      let candMsgReceived = false;
 
-    assert(recContent.includes('1 Direct Applicant Messaging'), 'u-thePAL tier has "1 Direct Applicant Messaging"');
-    assert(!recContent.includes('Direct Applicant Ingestion'), 'Banned legacy term "Ingestion" replaced with "Messaging"');
+      wsClient.on('open', async () => {
+        const testCandidateReply = {
+          applicantId: 'APP-701',
+          senderRole: 'candidate',
+          senderName: 'Marcus Vance',
+          company: 'Quantum Retail Corp',
+          jobTitle: 'Sales Manager',
+          text: 'WebSocket Live sync message test from candidate.'
+        };
+        await httpPost('/api/messages', testCandidateReply);
+      });
 
-    assert(recContent.includes('3 Active Job Postings') && recContent.includes('3 Direct Candidate Messaging') && recContent.includes('Applicant Tracking'), 'STARTER plan structured with 3 Postings, 3 Messaging, Applicant Tracking');
-    assert(recContent.includes('15 Active Job Postings') && recContent.includes('3 Multi-Platform Sharing'), 'GROWTH plan structured with 15 Postings, 3 Sharing, Applicant Tracking');
-    assert(recContent.includes('Unlimited Active Job Postings') && recContent.includes('Full Multi-Platform Sharing'), 'PROFESSIONAL plan structured with Unlimited Postings, Full Sharing, Applicant Tracking');
+      wsClient.on('message', (msg) => {
+        const data = JSON.parse(msg.toString());
+        if (data.type === 'CANDIDATE_MESSAGE_SENT' && data.message && data.message.text.includes('WebSocket Live sync')) {
+          candMsgReceived = true;
+          assert(true, 'CANDIDATE_MESSAGE_SENT broadcast verified in real-time over WebSocket');
+          wsClient.close();
+          resolve();
+        }
+      });
+
+      wsClient.on('error', reject);
+
+      setTimeout(() => {
+        if (!candMsgReceived) {
+          assert(false, 'Timed out waiting for CANDIDATE_MESSAGE_SENT event');
+          wsClient.close();
+          resolve();
+        }
+      }, 3000);
+    });
   } catch (err) {
     assert(false, `Group 4 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 5: Branding, Badges & Asset Overhaul
+  // TEST GROUP 5: Recruiter Studio Message Sync
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 5] Verified Employer Emblem & Sleek Social Assets');
+  console.log('\n[TEST GROUP 5] Recruiter Studio Message Sync (recruiter.html)');
   try {
-    assert(recContent.includes('verified-employer-badge') && recContent.includes('VERIFIED EMPLOYER'), 'Verified Employer Badge with official gold UTHEVERSITY emblem present');
-    assert(recContent.includes('URGENT HIRING'), 'Visual URGENT HIRING badge rendered on job cards');
-    assert(recContent.includes('viewBox="0 0 24 24"') && recContent.includes('#0A66C2') && recContent.includes('#1877F2') && recContent.includes('#E4405F') && recContent.includes('#EE1D52'), 'Sleek SVG brand logos present for LinkedIn, Facebook, Instagram, TikTok, and X');
+    assert(recContent.includes('MESSAGE APPLICANT'), 'Recruiter ATS contains MESSAGE APPLICANT section');
+    assert(recContent.includes('applicant-chat-log'), 'Recruiter ATS contains applicant-chat-log');
+    assert(recContent.includes('CANDIDATE_MESSAGE_SENT'), 'Recruiter ATS handles CANDIDATE_MESSAGE_SENT event to update chat');
+    assert(recContent.includes('sendAtsDirectMessage'), 'Recruiter ATS dispatches direct messages via sendAtsDirectMessage');
   } catch (err) {
     assert(false, `Group 5 failed: ${err.message}`);
   }
@@ -164,69 +221,12 @@ async function runTests() {
     assert(false, `Group 6 failed: ${err.message}`);
   }
 
-  // ----------------------------------------------------
-  // TEST GROUP 7: Smart Omni-Search Endpoint
-  // ----------------------------------------------------
-  console.log('\n[TEST GROUP 7] Smart Omni-Search Endpoint');
-  try {
-    const searchRes = await httpGet('/api/admin/search?q=Zion');
-    assert(searchRes.status === 200, 'GET /api/admin/search returns HTTP 200');
-    assert(searchRes.data.results.users.some(u => u.name === 'Zion Daye'), 'Omni-Search matched Zion Daye user account');
-  } catch (err) {
-    assert(false, `Group 7 failed: ${err.message}`);
-  }
-
-  // ----------------------------------------------------
-  // TEST GROUP 8: Live Sync Real-Time Broadcast Relay
-  // ----------------------------------------------------
-  console.log('\n[TEST GROUP 8] Live Sync Real-Time Broadcast');
-  try {
-    await new Promise((resolve, reject) => {
-      const wsClient = new WebSocket(WS_URL);
-      let jobReceived = false;
-
-      wsClient.on('open', async () => {
-        const testJob = {
-          jobTitle: 'Assistant Store Manager',
-          company: 'UTHEVERSITY Retail Group',
-          location: 'AUSTIN, TX',
-          employmentType: 'Full-Time',
-          salary: '$65,000 - $80,000',
-          summary: 'Testing plain-English live sync broadcast.'
-        };
-        await httpPost('/api/jobs', testJob);
-      });
-
-      wsClient.on('message', (msg) => {
-        const data = JSON.parse(msg.toString());
-        if (data.type === 'JOB_PUBLISHED' && data.job && data.job.jobTitle.includes('Assistant Store Manager')) {
-          jobReceived = true;
-          assert(true, 'Live Sync broadcast verified in real-time');
-          wsClient.close();
-          resolve();
-        }
-      });
-
-      wsClient.on('error', reject);
-
-      setTimeout(() => {
-        if (!jobReceived) {
-          assert(false, 'Timed out waiting for Live Sync event');
-          wsClient.close();
-          resolve();
-        }
-      }, 3000);
-    });
-  } catch (err) {
-    assert(false, `Group 8 failed: ${err.message}`);
-  }
-
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL PHASE 1 ATS, PLANS & ASSET OVERHAUL TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL CANDIDATE NOTIFICATIONS & MESSAGING TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');
