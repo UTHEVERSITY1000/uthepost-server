@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>u-theADMIN — Master Governance & Live CMS Control Suite</title>
+  <title>u-theADMIN — Master Governance & Zero-Code CMS Suite</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
@@ -17,15 +17,13 @@
       --border-dark: #334155;
       --uthe-gold: #E5A800;
       --uthe-gold-light: #FFF8E6;
-      --uthe-gold-glow: rgba(229, 168, 0, 0.2);
+      --uthe-gold-glow: rgba(229, 168, 0, 0.25);
       --status-mint: #00C853;
       --status-mint-bg: rgba(0, 200, 83, 0.12);
       --danger-red: #EF4444;
       --danger-bg: rgba(239, 68, 68, 0.15);
       --cyan-accent: #06B6D4;
       --cyan-bg: rgba(6, 182, 212, 0.12);
-      --purple-accent: #A855F7;
-      --purple-bg: rgba(168, 85, 247, 0.12);
     }
 
     * {
@@ -168,7 +166,6 @@
       letter-spacing: 0.8px;
     }
 
-    /* NAVIGATION TABS (DESKTOP) */
     .nav-tabs-container {
       display: flex;
       align-items: center;
@@ -210,135 +207,48 @@
       gap: 0.75rem;
     }
 
-    .btn-auth-header {
-      background: var(--card-surface);
-      color: var(--uthe-gold);
-      border: 1.5px solid var(--uthe-gold);
-      padding: 0 0.85rem;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 900;
-      cursor: pointer;
-      height: 38px;
-      display: flex;
-      align-items: center;
-      transition: all 0.2s;
-    }
-
-    .btn-mobile-menu {
-      display: none;
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: var(--uthe-gold);
-      padding: 0 0.85rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 900;
-      cursor: pointer;
-      height: 40px;
-      align-items: center;
-    }
-
-    /* MOBILE DRAWER NAVIGATION */
-    .mobile-drawer-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
-      z-index: 2000;
-      display: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .mobile-drawer-overlay.open {
-      display: block;
-      opacity: 1;
-    }
-
-    .mobile-drawer {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 280px;
-      max-width: 85%;
-      background: var(--card-dark);
-      border-left: 2px solid var(--uthe-gold);
-      z-index: 2001;
-      display: flex;
-      flex-direction: column;
-      padding: 1.25rem;
-      gap: 0.85rem;
-      transform: translateX(100%);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.6);
-    }
-
-    .mobile-drawer.open {
-      transform: translateX(0);
-    }
-
-    .drawer-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border-dark);
-      padding-bottom: 0.75rem;
-    }
-
-    .drawer-title {
-      font-size: 0.85rem;
-      font-weight: 900;
-      color: var(--uthe-gold);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-
-    .drawer-close {
-      background: none;
-      border: none;
-      color: var(--text-dim);
-      font-size: 1.2rem;
-      font-weight: 900;
-      cursor: pointer;
-      min-height: 44px;
-      min-width: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .drawer-nav-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .drawer-tab-btn {
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: var(--text-light);
-      font-size: 0.78rem;
+    .owner-badge {
+      font-size: 0.68rem;
       font-weight: 800;
-      text-align: left;
-      padding: 0 1rem;
-      border-radius: 6px;
-      cursor: pointer;
+      background: var(--card-surface);
+      color: var(--uthe-gold);
+      border: 1px solid var(--border-dark);
+      padding: 0 0.75rem;
+      border-radius: 20px;
+      height: 36px;
       display: flex;
       align-items: center;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      height: 48px;
+      gap: 0.4rem;
     }
 
-    .drawer-tab-btn.active {
-      background: var(--uthe-gold);
-      color: #000000;
-      border-color: var(--uthe-gold);
-      font-weight: 900;
+    /* SMART OMNI-SEARCH BAR */
+    .omni-search-belt {
+      background: var(--card-dark);
+      border-bottom: 1px solid var(--border-dark);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      position: sticky;
+      top: 64px;
+      z-index: 900;
+    }
+
+    .omni-search-input {
+      flex: 1;
+      background: var(--card-surface);
+      border: 1px solid var(--border-dark);
+      color: #FFFFFF;
+      padding: 0 1rem 0 2.5rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .search-icon-pos {
+      position: absolute;
+      left: 2rem;
+      color: var(--uthe-gold);
+      font-size: 0.9rem;
     }
 
     /* MAIN WORKSPACE */
@@ -363,7 +273,6 @@
       display: flex;
     }
 
-    /* KPI TELEMETRY METRICS GRID */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -408,7 +317,6 @@
       color: var(--text-light);
     }
 
-    /* DATA TABLES */
     .table-container {
       background: var(--card-dark);
       border: 1px solid var(--border-dark);
@@ -444,7 +352,6 @@
       vertical-align: middle;
     }
 
-    /* ACTION BUTTONS */
     .btn-gold {
       background: var(--uthe-gold);
       color: #000000;
@@ -485,11 +392,6 @@
       transition: all 0.2s ease;
     }
 
-    .btn-surface:hover {
-      border-color: var(--uthe-gold);
-      color: var(--uthe-gold);
-    }
-
     .btn-danger {
       background: var(--danger-bg);
       color: var(--danger-red);
@@ -503,22 +405,14 @@
       height: 36px;
       display: inline-flex;
       align-items: center;
-      transition: all 0.2s ease;
     }
 
-    .btn-danger:hover {
-      background: var(--danger-red);
-      color: #FFFFFF;
-    }
-
-    /* BADGES */
     .badge-tag {
       font-size: 0.65rem;
       font-weight: 800;
       padding: 0.15rem 0.45rem;
       border-radius: 4px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
       display: inline-block;
     }
 
@@ -526,7 +420,6 @@
     .tag-cyan { background: var(--cyan-bg); color: var(--cyan-accent); border: 1px solid rgba(6, 182, 212, 0.3); }
     .tag-gold { background: rgba(229, 168, 0, 0.15); color: var(--uthe-gold); border: 1px solid var(--uthe-gold); }
 
-    /* FORM STYLES */
     .form-group {
       display: flex;
       flex-direction: column;
@@ -554,48 +447,50 @@
       transition: all 0.2s ease;
     }
 
-    /* TOAST OVERLAY */
-    .admin-toast {
-      position: fixed;
-      bottom: 80px;
-      right: 1.25rem;
-      z-index: 999999;
+    /* CUSTOM MODAL ALERT */
+    .custom-modal-alert {
       display: none;
-      background: var(--card-dark);
-      border: 1.5px solid var(--uthe-gold);
-      color: #FFFFFF;
-      padding: 0.85rem 1.25rem;
-      border-radius: 8px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-      max-width: 380px;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
     }
 
-    .toast-title {
-      color: var(--uthe-gold);
-      font-size: 0.72rem;
+    .custom-alert-card {
+      background: var(--card-dark);
+      border: 2px solid var(--uthe-gold);
+      border-radius: 12px;
+      width: 420px;
+      max-width: 95%;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    .alert-card-title {
+      font-size: 0.95rem;
       font-weight: 900;
+      color: var(--uthe-gold);
       letter-spacing: 1px;
       text-transform: uppercase;
-      margin-bottom: 0.2rem;
     }
 
-    .toast-msg {
-      font-size: 0.8rem;
-      font-weight: 600;
-      line-height: 1.4;
+    .alert-card-msg {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      line-height: 1.5;
     }
 
-    /* RESPONSIVE */
     @media (max-width: 1024px) {
       .nav-tabs-container { display: none; }
-      .btn-mobile-menu { display: flex; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 768px) {
-      .kpi-grid { grid-template-columns: 1fr; }
-      main { padding: 0.85rem; }
-      header { padding: 0 0.85rem; }
     }
   </style>
 </head>
@@ -604,82 +499,53 @@
   <!-- MASTER TOP HEADER -->
   <header>
     <div class="brand-group">
-      <h1 class="brand-title" data-tooltip="u-theADMIN: Master Governance Suite for multi-node catalog administration.">U-THEADMIN</h1>
-      <span class="brand-badge" data-tooltip="Real-time master governance and CMS engine.">MASTER SUITE</span>
+      <h1 class="brand-title" data-tooltip="u-theADMIN: Master Governance Suite for Zion Daye.">U-THEADMIN</h1>
+      <span class="brand-badge">MASTER CMS</span>
     </div>
 
-    <!-- TABS (DESKTOP) -->
+    <!-- TABS -->
     <div class="nav-tabs-container">
-      <button class="nav-tab active" onclick="switchAdminTab('overview')" data-tooltip="Cluster overview & health telemetry.">
-        1. TOPOLOGY
-      </button>
-      <button class="nav-tab" onclick="switchAdminTab('cms')" data-tooltip="Master live CMS text & label overrides.">
-        2. LIVE CMS
-      </button>
-      <button class="nav-tab" onclick="switchAdminTab('users')" data-tooltip="Manage platform user accounts & roles.">
-        3. USER ACCOUNTS
-      </button>
-      <button class="nav-tab" onclick="switchAdminTab('jobs')" data-tooltip="Manage active job catalog.">
-        4. JOBS CATALOG
-      </button>
-      <button class="nav-tab" onclick="switchAdminTab('applicants')" data-tooltip="Review candidate applications & ATS scores.">
-        5. CANDIDATE ATS
-      </button>
-      <button class="nav-tab" onclick="switchAdminTab('hunter')" data-tooltip="Hunter.io executive lead search.">
-        6. HUNTER LEADS
-      </button>
-      <button class="nav-tab" onclick="switchAdminTab('diagnostics')" data-tooltip="Diagnostics terminal & audit logs.">
-        7. AUDIT & DIAGS
-      </button>
+      <button class="nav-tab active" onclick="switchAdminTab('overview')">1. TOPOLOGY</button>
+      <button class="nav-tab" onclick="switchAdminTab('cms')">2. ZERO-CODE CMS</button>
+      <button class="nav-tab" onclick="switchAdminTab('users')">3. USER ACCOUNTS</button>
+      <button class="nav-tab" onclick="switchAdminTab('jobs')">4. JOBS CATALOG</button>
+      <button class="nav-tab" onclick="switchAdminTab('applicants')">5. CANDIDATE ATS</button>
+      <button class="nav-tab" onclick="switchAdminTab('hunter')">6. HUNTER LEADS</button>
+      <button class="nav-tab" onclick="switchAdminTab('diagnostics')">7. AUDIT & DIAGS</button>
     </div>
 
     <div class="header-actions">
-      <button class="btn-auth-header" id="admin-auth-btn" onclick="openAdminAuthModal()" data-tooltip="Master Admin Session">
-        ADMIN: LOGGED IN
-      </button>
-      <button class="btn-mobile-menu" onclick="toggleAdminDrawer()" data-tooltip="Open Menu">
-        [MENU]
-      </button>
+      <div class="owner-badge">
+        <span>👑</span><span>ZION DAYE (815-980-4272)</span>
+      </div>
     </div>
   </header>
 
-  <!-- MOBILE NAVIGATION DRAWER -->
-  <div class="mobile-drawer-overlay" id="admin-drawer-overlay" onclick="toggleAdminDrawer()"></div>
-  <div class="mobile-drawer" id="admin-drawer">
-    <div class="drawer-header">
-      <span class="drawer-title">ADMIN GOVERNANCE</span>
-      <button class="drawer-close" onclick="toggleAdminDrawer()" data-tooltip="Close menu">X</button>
-    </div>
-    <div class="drawer-nav-list">
-      <button class="drawer-tab-btn active" onclick="switchAdminTab('overview'); toggleAdminDrawer();">1. TOPOLOGY</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('cms'); toggleAdminDrawer();">2. LIVE CMS</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('users'); toggleAdminDrawer();">3. USER ACCOUNTS</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('jobs'); toggleAdminDrawer();">4. JOBS CATALOG</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('applicants'); toggleAdminDrawer();">5. CANDIDATE ATS</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('hunter'); toggleAdminDrawer();">6. HUNTER LEADS</button>
-      <button class="drawer-tab-btn" onclick="switchAdminTab('diagnostics'); toggleAdminDrawer();">7. AUDIT & DIAGS</button>
-    </div>
-  </div>
+  <!-- SMART OMNI-SEARCH BAR -->
+  <section class="omni-search-belt">
+    <span class="search-icon-pos">&#128269;</span>
+    <input type="text" class="omni-search-input" id="omni-search-input" placeholder="Smart Omni-Search: Filter candidate names, employer accounts, phone numbers, emails, job IDs, or logs..." oninput="handleOmniSearch(this.value)">
+  </section>
 
   <!-- MAIN SUITE VIEWS -->
   <main>
 
-    <!-- VIEW 1: TOPOLOGY & TELEMETRY -->
+    <!-- VIEW 1: TOPOLOGY -->
     <section id="view-overview" class="view-section active">
       <div class="kpi-grid">
-        <div class="kpi-card" data-tooltip="Total active positions in catalog.">
+        <div class="kpi-card">
           <span class="kpi-label">ACTIVE JOBS</span>
           <span class="kpi-value" id="kpi-jobs">3</span>
         </div>
-        <div class="kpi-card" data-tooltip="Total candidate applications received.">
-          <span class="kpi-label">TOTAL APPLICANTS</span>
+        <div class="kpi-card">
+          <span class="kpi-label">APPLICANTS</span>
           <span class="kpi-value" id="kpi-applicants">3</span>
         </div>
-        <div class="kpi-card" data-tooltip="Total registered platform accounts.">
+        <div class="kpi-card">
           <span class="kpi-label">REGISTERED USERS</span>
           <span class="kpi-value" id="kpi-users">3</span>
         </div>
-        <div class="kpi-card" data-tooltip="Current cluster health.">
+        <div class="kpi-card">
           <span class="kpi-label">HEALTH STATUS</span>
           <span class="kpi-value" style="color: var(--status-mint);" id="kpi-health">ONLINE</span>
         </div>
@@ -687,7 +553,7 @@
 
       <div class="table-container">
         <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          ACTIVE SUBDOMAIN CLUSTER NODES
+          ACTIVE SUBDOMAIN HOST NODES
         </div>
         <table>
           <thead>
@@ -718,23 +584,23 @@
               <td><strong>u-theADMIN (Master)</strong></td>
               <td><code>admin.utheversity.com</code></td>
               <td><code>admin.html</code></td>
-              <td><span class="badge-tag tag-cyan">STRICT STANDALONE</span></td>
-              <td><span class="badge-tag tag-gold">ACTIVE CORE</span></td>
+              <td><span class="badge-tag tag-gold">MASTER CORE</span></td>
+              <td><span class="badge-tag tag-mint">ACTIVE</span></td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- VIEW 2: LIVE MASTER CMS OVERRIDES -->
+    <!-- VIEW 2: ZERO-CODE CMS CONTROLS -->
     <section id="view-cms" class="view-section">
       <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: 10px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); padding-bottom: 0.75rem;">
           <div>
-            <div style="font-size: 0.95rem; font-weight: 900; color: var(--uthe-gold);">LIVE CMS TEXT & LABEL CONTROL PANEL</div>
-            <div style="font-size: 0.72rem; color: var(--text-dim);">Edit platform labels dynamically across u-thePOST and u-theJOBS without redeploying code.</div>
+            <div style="font-size: 0.95rem; font-weight: 900; color: var(--uthe-gold);">ZERO-CODE LIVE CMS CONTROL PANEL (ZION DAYE)</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim);">Edit every label, button phrase, and pricing rate across u-thePOST and u-theJOBS in real time.</div>
           </div>
-          <button class="btn-gold" onclick="saveAndBroadcastCms()" data-tooltip="Broadcast CMS text changes live to all connected users.">
+          <button class="btn-gold" onclick="saveAndBroadcastCms()">
             SAVE & BROADCAST CMS
           </button>
         </div>
@@ -767,19 +633,23 @@
         </div>
 
         <div style="border-top: 1px solid var(--border-dark); padding-top: 0.75rem;">
-          <div style="font-size: 0.82rem; font-weight: 800; color: var(--cyan-accent); margin-bottom: 0.5rem;">FEATURE PRICING OVERRIDES</div>
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+          <div style="font-size: 0.82rem; font-weight: 800; color: var(--cyan-accent); margin-bottom: 0.5rem;">TIER & ADD-ON PRICING OVERRIDES</div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
             <div class="form-group">
-              <label>Starter Plan Monthly Price ($)</label>
+              <label>u-thePAL Monthly Price ($)</label>
+              <input type="number" id="cms-price-pal" value="0">
+            </div>
+            <div class="form-group">
+              <label>Starter Monthly Price ($)</label>
               <input type="number" id="cms-price-starter" value="99">
             </div>
             <div class="form-group">
-              <label>Growth Engine Monthly Price ($)</label>
+              <label>Growth Monthly Price ($)</label>
               <input type="number" id="cms-price-growth" value="299">
             </div>
             <div class="form-group">
-              <label>Enterprise Mesh Monthly Price ($)</label>
-              <input type="number" id="cms-price-enterprise" value="699">
+              <label>Professional Monthly Price ($)</label>
+              <input type="number" id="cms-price-pro" value="699">
             </div>
           </div>
         </div>
@@ -790,7 +660,7 @@
     <section id="view-users" class="view-section">
       <div class="table-container">
         <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          PLATFORM USER ACCOUNTS & ROLE PERMISSIONS
+          REGISTERED USER ACCOUNTS & APPROVALS
         </div>
         <table>
           <thead>
@@ -798,14 +668,12 @@
               <th>ID</th>
               <th>Full Name</th>
               <th>Email Address</th>
+              <th>Phone</th>
               <th>Role</th>
-              <th>Organization</th>
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="admin-users-tbody">
-            <!-- Rendered via JS -->
-          </tbody>
+          <tbody id="admin-users-tbody"></tbody>
         </table>
       </div>
     </section>
@@ -814,7 +682,7 @@
     <section id="view-jobs" class="view-section">
       <div class="table-container">
         <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          ACTIVE JOB LISTINGS INVENTORY
+          ACTIVE JOB LISTINGS
         </div>
         <table>
           <thead>
@@ -824,13 +692,10 @@
               <th>Company</th>
               <th>Location</th>
               <th>Salary</th>
-              <th>Type</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="admin-jobs-tbody">
-            <!-- Rendered via JS -->
-          </tbody>
+          <tbody id="admin-jobs-tbody"></tbody>
         </table>
       </div>
     </section>
@@ -839,7 +704,7 @@
     <section id="view-applicants" class="view-section">
       <div class="table-container">
         <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          CANDIDATE INTERVIEW REQUESTS & ATS INGESTION PIPELINE
+          CANDIDATE APPLICATIONS & ATS DECISIONS
         </div>
         <table>
           <thead>
@@ -848,25 +713,21 @@
               <th>Candidate Name</th>
               <th>Applied Position</th>
               <th>Email</th>
-              <th>Contact Time</th>
               <th>Status</th>
-              <th>Decision Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="admin-applicants-tbody">
-            <!-- Rendered via JS -->
-          </tbody>
+          <tbody id="admin-applicants-tbody"></tbody>
         </table>
       </div>
     </section>
 
-    <!-- VIEW 6: HUNTER.IO LEADS ENGINE -->
+    <!-- VIEW 6: HUNTER LEADS -->
     <section id="view-hunter" class="view-section">
-      <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-        <input type="text" id="admin-lead-domain" value="stripe.com" placeholder="Company domain (e.g. stripe.com)" style="max-width: 240px;">
+      <div style="display: flex; gap: 0.75rem; align-items: center;">
+        <input type="text" id="admin-lead-domain" value="stripe.com" style="max-width: 240px;">
         <button class="btn-gold" onclick="searchAdminLeads()">SEARCH HUNTER.IO</button>
       </div>
-
       <div class="table-container" style="margin-top: 1rem;">
         <table>
           <thead>
@@ -874,13 +735,10 @@
               <th>Contact Name</th>
               <th>Position</th>
               <th>Verified Email</th>
-              <th>Confidence</th>
               <th>Status</th>
             </tr>
           </thead>
-          <tbody id="admin-leads-tbody">
-            <!-- Rendered via JS -->
-          </tbody>
+          <tbody id="admin-leads-tbody"></tbody>
         </table>
       </div>
     </section>
@@ -891,19 +749,24 @@
         <button class="btn-gold" onclick="exportAuditLog()">EXPORT AUDIT JSON</button>
       </div>
       <div style="background: #000; border: 1px solid var(--border-dark); border-radius: 8px; padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; height: 260px; overflow-y: auto; color: var(--status-mint);" id="diag-console">
-        [12:00:00] [SYSTEM_INIT] u-theADMIN Master Suite active on admin.utheversity.com
+        [12:00:00] [SYSTEM_INIT] u-theADMIN Master Suite active for Zion Daye on admin.utheversity.com
       </div>
     </section>
 
   </main>
 
-  <!-- TOAST OVERLAY -->
-  <div class="admin-toast" id="admin-toast">
-    <div class="toast-title" id="admin-toast-title">ADMIN EVENT</div>
-    <div class="toast-msg" id="admin-toast-msg">Action processed successfully.</div>
+  <!-- SIGNATURE CUSTOM MODAL ALERT (NO BROWSER ALERT) -->
+  <div class="custom-modal-alert" id="custom-modal-alert">
+    <div class="custom-alert-card">
+      <div class="alert-card-title" id="custom-alert-title">ADMIN EVENT</div>
+      <div class="alert-card-msg" id="custom-alert-msg">Action processed successfully.</div>
+      <button class="btn-gold" onclick="closeCustomAlert()" style="height: 40px; margin-top: 0.5rem;">
+        OK, GOT IT
+      </button>
+    </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC ENGINE -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
     let adminJobs = [];
     let adminApplicants = [];
@@ -912,7 +775,6 @@
 
     window.switchAdminTab = function(tabKey) {
       document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.drawer-tab-btn').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
 
       const sec = document.getElementById(`view-${tabKey}`);
@@ -921,21 +783,7 @@
       const tabs = { 'overview': 0, 'cms': 1, 'users': 2, 'jobs': 3, 'applicants': 4, 'hunter': 5, 'diagnostics': 6 };
       const idx = tabs[tabKey] || 0;
       if (document.querySelectorAll('.nav-tab')[idx]) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
-      if (document.querySelectorAll('.drawer-tab-btn')[idx]) document.querySelectorAll('.drawer-tab-btn')[idx].classList.add('active');
     };
-
-    function toggleAdminDrawer() {
-      const overlay = document.getElementById('admin-drawer-overlay');
-      const drawer = document.getElementById('admin-drawer');
-      const isOpen = drawer.classList.contains('open');
-      if (isOpen) {
-        drawer.classList.remove('open');
-        overlay.classList.remove('open');
-      } else {
-        drawer.classList.add('open');
-        overlay.classList.add('open');
-      }
-    }
 
     async function loadAdminData() {
       try {
@@ -983,10 +831,11 @@
         if (config.labels.submitInterviewBtn) document.getElementById('cms-submit-btn').value = config.labels.submitInterviewBtn;
         if (config.labels.submitTooltip) document.getElementById('cms-submit-tooltip').value = config.labels.submitTooltip;
       }
-      if (config.features) {
-        if (config.features.starterMonthly) document.getElementById('cms-price-starter').value = config.features.starterMonthly;
-        if (config.features.growthMonthly) document.getElementById('cms-price-growth').value = config.features.growthMonthly;
-        if (config.features.enterpriseMonthly) document.getElementById('cms-price-enterprise').value = config.features.enterpriseMonthly;
+      if (config.pricing) {
+        if (config.pricing.palMonthly !== undefined) document.getElementById('cms-price-pal').value = config.pricing.palMonthly;
+        if (config.pricing.starterMonthly) document.getElementById('cms-price-starter').value = config.pricing.starterMonthly;
+        if (config.pricing.growthMonthly) document.getElementById('cms-price-growth').value = config.pricing.growthMonthly;
+        if (config.pricing.proMonthly) document.getElementById('cms-price-pro').value = config.pricing.proMonthly;
       }
     }
 
@@ -1000,60 +849,79 @@
           submitInterviewBtn: document.getElementById('cms-submit-btn').value,
           submitTooltip: document.getElementById('cms-submit-tooltip').value
         },
-        features: {
+        pricing: {
+          palMonthly: Number(document.getElementById('cms-price-pal').value),
           starterMonthly: Number(document.getElementById('cms-price-starter').value),
           growthMonthly: Number(document.getElementById('cms-price-growth').value),
-          enterpriseMonthly: Number(document.getElementById('cms-price-enterprise').value)
+          proMonthly: Number(document.getElementById('cms-price-pro').value)
         }
       };
 
       try {
-        const res = await fetch('/api/cms/config', {
+        await fetch('/api/cms/config', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        if (res.ok) {
-          showToast('CMS text overrides saved and broadcast live!', 'CMS BROADCAST COMPLETE');
-        }
+        showCustomModalAlert('Zero-Code CMS Broadcast Complete', 'All label, button, and pricing overrides were broadcast live across all subdomains.');
       } catch (e) {
-        showToast(e.message, 'ERROR');
+        showCustomModalAlert('Error', e.message);
       }
     };
 
-    function renderAdminUsers() {
+    // Smart Omni-Search
+    async function handleOmniSearch(query) {
+      if (!query.trim()) {
+        renderAdminUsers();
+        renderAdminJobs();
+        renderAdminApplicants();
+        return;
+      }
+      try {
+        const res = await fetch(`/api/admin/search?q=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        if (data.results) {
+          renderAdminUsers(data.results.users);
+          renderAdminJobs(data.results.jobs);
+          renderAdminApplicants(data.results.applicants);
+        }
+      } catch (e) {}
+    }
+
+    function renderAdminUsers(list = null) {
       const tbody = document.getElementById('admin-users-tbody');
       tbody.innerHTML = '';
-      adminUsers.forEach(u => {
+      (list || adminUsers).forEach(u => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><code>${u.id}</code></td>
           <td><strong>${u.name}</strong></td>
           <td>${u.email}</td>
+          <td>${u.phone || 'N/A'}</td>
           <td><span class="badge-tag ${u.role === 'admin' ? 'tag-gold' : u.role === 'recruiter' ? 'tag-cyan' : 'tag-mint'}">${u.role.toUpperCase()}</span></td>
-          <td>${u.company || 'N/A'}</td>
-          <td>
-            <button class="btn-danger" onclick="deleteUser('${u.id}')">DELETE</button>
-          </td>
+          <td><button class="btn-danger" onclick="deleteUser('${u.id}')">DELETE</button></td>
         `;
         tbody.appendChild(tr);
       });
     }
 
     async function deleteUser(uid) {
-      if (!confirm(`Delete user ${uid}?`)) return;
+      if (uid === 'USR-ZION-001') {
+        showCustomModalAlert('Protected Account', 'The Master Owner account (Zion Daye) cannot be deleted.');
+        return;
+      }
       try {
         await fetch(`/api/admin/users/${uid}`, { method: 'DELETE' });
         adminUsers = adminUsers.filter(u => u.id !== uid);
         renderAdminUsers();
-        showToast(`User ${uid} deleted.`, 'USER REMOVED');
+        showCustomModalAlert('User Removed', `User account ${uid} was removed.`);
       } catch (e) {}
     }
 
-    function renderAdminJobs() {
+    function renderAdminJobs(list = null) {
       const tbody = document.getElementById('admin-jobs-tbody');
       tbody.innerHTML = '';
-      adminJobs.forEach(job => {
+      (list || adminJobs).forEach(job => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><code>${job.id}</code></td>
@@ -1061,7 +929,6 @@
           <td>${job.company}</td>
           <td><span class="badge-tag tag-cyan">${job.location}</span></td>
           <td><span class="badge-tag tag-mint">${job.salary}</span></td>
-          <td>${job.employmentType}</td>
           <td><button class="btn-danger" onclick="deleteJobAdmin('${job.id}')">DELETE</button></td>
         `;
         tbody.appendChild(tr);
@@ -1069,28 +936,24 @@
     }
 
     async function deleteJobAdmin(id) {
-      if (!confirm(`Delete job ${id}?`)) return;
       await fetch(`/api/jobs/${id}`, { method: 'DELETE' });
       adminJobs = adminJobs.filter(j => j.id !== id);
       renderAdminJobs();
-      showToast(`Job ${id} deleted.`, 'JOB DELETED');
+      showCustomModalAlert('Job Removed', `Position ${id} removed from catalog.`);
     }
 
-    function renderAdminApplicants() {
+    function renderAdminApplicants(list = null) {
       const tbody = document.getElementById('admin-applicants-tbody');
       tbody.innerHTML = '';
-      adminApplicants.forEach(app => {
+      (list || adminApplicants).forEach(app => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><code>${app.id}</code></td>
           <td><strong>${app.name}</strong></td>
           <td>${app.jobTitle}</td>
           <td>${app.email}</td>
-          <td>${app.bestTime || 'Anytime'}</td>
           <td><span class="badge-tag tag-gold">${app.status}</span></td>
-          <td>
-            <button class="btn-surface" style="min-height:32px; font-size:0.65rem; padding:0 0.5rem;" onclick="showToast('Candidate Marked as Interviewed', 'ATS DECISION')">UPDATE</button>
-          </td>
+          <td><button class="btn-surface" style="min-height:32px; font-size:0.65rem;" onclick="showCustomModalAlert('Applicant Reviewed', 'Applicant profile marked as reviewed.')">UPDATE</button></td>
         `;
         tbody.appendChild(tr);
       });
@@ -1109,8 +972,7 @@
             <td><strong>${l.contact_name}</strong></td>
             <td>${l.position}</td>
             <td><code>${l.verified_email}</code></td>
-            <td><span class="badge-tag tag-mint">${l.confidence_score}%</span></td>
-            <td><span class="badge-tag tag-cyan">VERIFIED</span></td>
+            <td><span class="badge-tag tag-mint">VERIFIED</span></td>
           `;
           tbody.appendChild(tr);
         });
@@ -1119,6 +981,7 @@
 
     function exportAuditLog() {
       const payload = {
+        owner: 'Zion Daye (contact@utheversity.com | 815-980-4272)',
         timestamp: new Date().toISOString(),
         jobs: adminJobs,
         applicants: adminApplicants,
@@ -1128,19 +991,19 @@
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `audit-log-${Date.now()}.json`;
+      a.download = `utheversity-audit-log-${Date.now()}.json`;
       a.click();
     }
 
-    let toastTimer = null;
-    function showToast(msg, title = "ADMIN NOTIFICATION") {
-      const t = document.getElementById('admin-toast');
-      document.getElementById('admin-toast-title').textContent = title;
-      document.getElementById('admin-toast-msg').textContent = msg;
-      t.style.display = 'block';
-      if (toastTimer) clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => { t.style.display = 'none'; }, 4000);
-    }
+    window.showCustomModalAlert = function(title, msg) {
+      document.getElementById('custom-alert-title').textContent = title;
+      document.getElementById('custom-alert-msg').textContent = msg;
+      document.getElementById('custom-modal-alert').style.display = 'flex';
+    };
+
+    window.closeCustomAlert = function() {
+      document.getElementById('custom-modal-alert').style.display = 'none';
+    };
 
     window.addEventListener('DOMContentLoaded', () => {
       loadAdminData();

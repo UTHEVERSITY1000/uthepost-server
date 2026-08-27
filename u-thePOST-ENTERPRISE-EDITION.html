@@ -3,29 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>u-thePOST — Recruiter Workspace & Omni-Channel Campaign Engine</title>
+  <title>u-thePOST — Recruiter Studio & Multi-Platform Hiring Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #080C14;
-      --card-dark: #0F172A;
-      --card-surface: #1E293B;
-      --text-light: #F8FAFC;
-      --text-dim: #94A3B8;
-      --border-dark: #334155;
+      --bg-studio: #F8F9FA;
+      --card-white: #FFFFFF;
+      --card-subtle: #F1F5F9;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --border-strong: #CBD5E1;
       --uthe-gold: #E5A800;
       --uthe-gold-light: #FFF8E6;
       --uthe-gold-glow: rgba(229, 168, 0, 0.25);
+      --uthe-charcoal: #111827;
       --status-mint: #00C853;
-      --status-mint-bg: rgba(0, 200, 83, 0.12);
-      --cyan-accent: #06B6D4;
-      --cyan-bg: rgba(6, 182, 212, 0.12);
-      --purple-accent: #A855F7;
-      --purple-bg: rgba(168, 85, 247, 0.12);
+      --status-mint-bg: #E8F8F0;
+      --cyan-accent: #0284C7;
+      --cyan-bg: #E0F2FE;
       --danger-red: #EF4444;
-      --danger-bg: rgba(239, 68, 68, 0.15);
+      --danger-bg: #FEE2E2;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 30px -4px rgba(8, 12, 20, 0.06), 0 2px 6px rgba(0, 0, 0, 0.02);
+      --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
     }
 
     * {
@@ -38,8 +41,8 @@
     html, body {
       width: 100%;
       min-height: 100%;
-      background-color: var(--bg-dark);
-      color: var(--text-light);
+      background-color: var(--bg-studio);
+      color: var(--text-main);
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -63,7 +66,7 @@
       bottom: calc(100% + 6px);
       left: 50%;
       transform: translateX(-50%);
-      background: #0F172A;
+      background: #111827;
       color: #F8FAFC;
       font-size: 11px;
       font-weight: 500;
@@ -71,7 +74,7 @@
       padding: 0.35rem 0.55rem;
       border-radius: 5px;
       border: 1px solid var(--uthe-gold);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
       white-space: normal;
       width: max-content;
       max-width: 200px;
@@ -109,7 +112,7 @@
       visibility: visible;
     }
 
-    /* 48PX MINIMUM TOUCH TARGETS & PRESS FEEDBACK */
+    /* 48PX MINIMUM TOUCH TARGETS */
     button, input, select, textarea, .touch-target {
       min-height: 48px;
       touch-action: manipulation;
@@ -126,19 +129,19 @@
       outline-offset: 2px;
     }
 
-    /* MASTER TOP HEADER (RESTRICTED TO 4 TABS) */
+    /* MASTER TOP HEADER (5 EXCLUSIVE TABS) */
     header {
       position: sticky;
       top: 0;
       z-index: 1000;
       height: 64px;
-      background: var(--card-dark);
+      background: var(--card-white);
       border-bottom: 2.5px solid var(--uthe-gold);
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 1.25rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: var(--shadow-sm);
     }
 
     .brand-group {
@@ -151,7 +154,7 @@
       font-size: 1.15rem;
       font-weight: 900;
       letter-spacing: 2px;
-      color: var(--uthe-gold);
+      color: var(--uthe-charcoal);
       text-transform: uppercase;
       white-space: nowrap;
     }
@@ -159,8 +162,8 @@
     .brand-badge {
       font-size: 0.6rem;
       font-weight: 800;
-      background: rgba(229, 168, 0, 0.15);
-      color: var(--uthe-gold);
+      background: var(--uthe-gold-light);
+      color: #92400E;
       border: 1px solid var(--uthe-gold);
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
@@ -168,7 +171,7 @@
       letter-spacing: 0.8px;
     }
 
-    /* RESTRICTED 4 CENTER TABS */
+    /* 5 EXCLUSIVE TABS */
     .header-center-tabs {
       display: flex;
       align-items: center;
@@ -178,12 +181,12 @@
     .nav-tab-btn {
       background: transparent;
       border: 1px solid transparent;
-      color: var(--text-dim);
+      color: var(--text-muted);
       font-size: 0.72rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      padding: 0 0.95rem;
+      padding: 0 0.85rem;
       border-radius: 6px;
       cursor: pointer;
       display: flex;
@@ -193,15 +196,15 @@
     }
 
     .nav-tab-btn:hover {
-      background: var(--card-surface);
-      color: var(--text-light);
+      background: var(--card-subtle);
+      color: var(--text-main);
     }
 
     .nav-tab-btn.active {
-      background: var(--uthe-gold);
-      color: #000000;
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
+      border-color: var(--uthe-gold);
       font-weight: 900;
-      box-shadow: 0 0 12px var(--uthe-gold-glow);
     }
 
     .header-actions {
@@ -211,9 +214,9 @@
     }
 
     .btn-auth-header {
-      background: var(--card-surface);
-      color: var(--uthe-gold);
-      border: 1.5px solid var(--uthe-gold);
+      background: var(--card-white);
+      color: var(--uthe-charcoal);
+      border: 1.5px solid var(--border-strong);
       padding: 0 0.95rem;
       border-radius: 20px;
       font-size: 0.72rem;
@@ -228,21 +231,20 @@
     }
 
     .btn-auth-header:hover {
-      background: var(--uthe-gold);
-      color: #000000;
+      border-color: var(--uthe-gold);
+      color: var(--uthe-charcoal);
     }
 
     .btn-mobile-menu {
       display: none;
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: var(--uthe-gold);
+      background: var(--card-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--uthe-charcoal);
       padding: 0 0.85rem;
       border-radius: 6px;
       font-size: 0.75rem;
       font-weight: 900;
       cursor: pointer;
-      letter-spacing: 1px;
       height: 40px;
       align-items: center;
     }
@@ -251,7 +253,7 @@
     .mobile-drawer-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(4px);
       z-index: 2000;
       display: none;
@@ -271,8 +273,8 @@
       bottom: 0;
       width: 280px;
       max-width: 85%;
-      background: var(--card-dark);
-      border-left: 2px solid var(--uthe-gold);
+      background: var(--card-white);
+      border-left: 2.5px solid var(--uthe-gold);
       z-index: 2001;
       display: flex;
       flex-direction: column;
@@ -280,7 +282,7 @@
       gap: 0.85rem;
       transform: translateX(100%);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.6);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
     }
 
     .mobile-drawer.open {
@@ -291,14 +293,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-color);
       padding-bottom: 0.75rem;
     }
 
     .drawer-title {
       font-size: 0.85rem;
       font-weight: 900;
-      color: var(--uthe-gold);
+      color: var(--uthe-charcoal);
       letter-spacing: 1.5px;
       text-transform: uppercase;
     }
@@ -306,7 +308,7 @@
     .drawer-close {
       background: none;
       border: none;
-      color: var(--text-dim);
+      color: var(--text-muted);
       font-size: 1.2rem;
       font-weight: 900;
       cursor: pointer;
@@ -326,9 +328,9 @@
     }
 
     .drawer-tab-btn {
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: var(--text-light);
+      background: var(--card-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
       font-size: 0.78rem;
       font-weight: 800;
       text-align: left;
@@ -343,8 +345,8 @@
     }
 
     .drawer-tab-btn.active {
-      background: var(--uthe-gold);
-      color: #000000;
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
       border-color: var(--uthe-gold);
       font-weight: 900;
     }
@@ -379,29 +381,29 @@
     }
 
     .panel-card {
-      background: var(--card-dark);
-      border: 1px solid var(--border-dark);
-      border-radius: 10px;
-      padding: 1.25rem;
+      background: var(--card-white);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow-md);
     }
 
     .panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1.5px solid var(--border-dark);
+      border-bottom: 1.5px solid var(--border-color);
       padding-bottom: 0.75rem;
     }
 
     .panel-title {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 900;
       letter-spacing: 1.2px;
-      color: var(--uthe-gold);
+      color: var(--uthe-charcoal);
       text-transform: uppercase;
     }
 
@@ -414,15 +416,15 @@
     label {
       font-size: 0.65rem;
       font-weight: 800;
-      color: var(--text-dim);
+      color: var(--text-muted);
       letter-spacing: 0.8px;
       text-transform: uppercase;
     }
 
     input, select, textarea {
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: var(--text-light);
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
       padding: 0 0.85rem;
       border-radius: 6px;
       font-family: inherit;
@@ -438,7 +440,7 @@
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--uthe-gold);
-      box-shadow: 0 0 0 2px var(--uthe-gold-glow);
+      box-shadow: 0 0 0 3px var(--uthe-gold-glow);
     }
 
     .grid-2 {
@@ -447,21 +449,21 @@
       gap: 0.75rem;
     }
 
-    /* SOCIAL MEDIA ACCOUNTS LINKING BLOCK (FOR OMNI-CHANNEL ROUTING) */
+    /* SOCIAL MEDIA ACCOUNTS BLOCK (CARD 1) */
     .social-media-block {
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
+      background: var(--card-subtle);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 0.85rem;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
       gap: 0.65rem;
     }
 
     .social-media-title {
-      font-size: 0.68rem;
+      font-size: 0.72rem;
       font-weight: 900;
-      color: var(--cyan-accent);
+      color: var(--uthe-charcoal);
       letter-spacing: 1px;
       text-transform: uppercase;
       display: flex;
@@ -469,19 +471,26 @@
       align-items: center;
     }
 
+    .social-instructions-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
     .social-pills-row {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 0.4rem;
+      margin-top: 0.25rem;
     }
 
     .social-pill {
-      background: #0B0F19;
-      border: 1px solid var(--border-dark);
-      color: var(--text-dim);
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
       border-radius: 6px;
-      padding: 0.4rem 0.2rem;
-      font-size: 0.62rem;
+      padding: 0.45rem 0.2rem;
+      font-size: 0.65rem;
       font-weight: 800;
       text-align: center;
       cursor: pointer;
@@ -489,20 +498,20 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.15rem;
+      gap: 0.2rem;
     }
 
     .social-pill.linked {
       border-color: var(--status-mint);
-      color: var(--status-mint);
+      color: #065F46;
       background: var(--status-mint-bg);
     }
 
     /* ACTION BUTTONS */
     .btn-gold-action {
-      background: var(--uthe-gold);
-      color: #000000;
-      border: none;
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
+      border: 1.5px solid var(--uthe-gold);
       font-weight: 900;
       font-size: 0.78rem;
       letter-spacing: 1.2px;
@@ -518,13 +527,15 @@
     }
 
     .btn-gold-action:hover {
+      background: var(--uthe-gold);
+      color: var(--uthe-charcoal);
       box-shadow: 0 0 15px var(--uthe-gold-glow);
     }
 
     .btn-surface-action {
-      background: var(--card-surface);
-      color: var(--text-light);
-      border: 1px solid var(--border-dark);
+      background: #FFFFFF;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
       font-weight: 800;
       font-size: 0.75rem;
       letter-spacing: 0.8px;
@@ -541,7 +552,7 @@
 
     .btn-surface-action:hover {
       border-color: var(--uthe-gold);
-      color: var(--uthe-gold);
+      color: var(--uthe-charcoal);
     }
 
     /* PREVIEW CARD */
@@ -554,7 +565,7 @@
       flex-direction: column;
       gap: 0.85rem;
       border: 2px solid var(--uthe-gold);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--shadow-sm);
     }
 
     .pv-header {
@@ -599,8 +610,8 @@
     }
 
     .kanban-col {
-      background: var(--card-dark);
-      border: 1px solid var(--border-dark);
+      background: var(--card-white);
+      border: 1px solid var(--border-color);
       border-radius: 10px;
       padding: 1rem;
       display: flex;
@@ -608,11 +619,12 @@
       gap: 0.75rem;
       min-width: 260px;
       min-height: 480px;
+      box-shadow: var(--shadow-sm);
       transition: background-color 0.2s ease, border-color 0.2s ease;
     }
 
     .kanban-col.drop-target-hover {
-      background: rgba(229, 168, 0, 0.12);
+      background: var(--uthe-gold-light);
       border-color: var(--uthe-gold);
     }
 
@@ -620,7 +632,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-color);
       padding-bottom: 0.5rem;
       font-size: 0.72rem;
       font-weight: 900;
@@ -629,16 +641,17 @@
     }
 
     .col-count {
-      background: var(--card-surface);
+      background: var(--card-subtle);
       padding: 0.15rem 0.45rem;
       border-radius: 10px;
       font-size: 0.65rem;
-      color: var(--uthe-gold);
+      color: var(--uthe-charcoal);
+      font-weight: 800;
     }
 
     .candidate-card {
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 0.85rem;
       display: flex;
@@ -647,7 +660,7 @@
       cursor: grab;
       user-select: none;
       touch-action: none;
-      position: relative;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
@@ -656,16 +669,16 @@
     }
 
     .candidate-card.touch-dragging {
-      opacity: 0.9;
+      opacity: 0.95;
       transform: scale(1.03);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--shadow-lg);
       border-color: var(--uthe-gold);
       z-index: 1000;
     }
 
     .cand-grab-handle {
       font-size: 0.7rem;
-      color: var(--text-dim);
+      color: var(--text-muted);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -674,120 +687,92 @@
     .cand-name {
       font-size: 0.88rem;
       font-weight: 800;
-      color: var(--text-light);
+      color: var(--text-main);
     }
 
     .cand-role {
       font-size: 0.72rem;
-      color: var(--text-dim);
+      color: var(--text-muted);
     }
 
     .cand-score {
       font-size: 0.65rem;
       font-weight: 800;
-      color: var(--status-mint);
+      color: #065F46;
       background: var(--status-mint-bg);
       padding: 0.1rem 0.4rem;
       border-radius: 4px;
       width: fit-content;
     }
 
-    /* OMNICHANNEL & PERFORMANCE PRICING ENGINE */
+    /* PRICING PLANS & ITEMIZE ADD-ONS */
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
     }
 
     .pricing-card {
-      background: var(--card-dark);
-      border: 1.5px solid var(--border-dark);
+      background: var(--card-white);
+      border: 1.5px solid var(--border-color);
       border-radius: 12px;
-      padding: 1.5rem;
+      padding: 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.85rem;
+      box-shadow: var(--shadow-sm);
       position: relative;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .pricing-card.featured {
       border-color: var(--uthe-gold);
-      box-shadow: 0 0 25px var(--uthe-gold-glow);
+      box-shadow: var(--shadow-md);
+      background: var(--uthe-gold-light);
     }
 
     .pricing-tier-name {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 900;
-      color: var(--uthe-gold);
+      color: var(--uthe-charcoal);
       letter-spacing: 1px;
       text-transform: uppercase;
     }
 
     .pricing-amount {
-      font-size: 2rem;
+      font-size: 1.85rem;
       font-weight: 900;
       font-family: 'JetBrains Mono', monospace;
-      color: var(--text-light);
+      color: var(--text-main);
     }
 
-    .channel-toggle-row {
+    /* ITEMIZE ADD-ONS LIST */
+    .addons-list-card {
+      background: var(--card-white);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      margin-top: 1rem;
+    }
+
+    .addon-item-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid var(--border-dark);
-      font-size: 0.78rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
     }
 
-    .toggle-switch {
-      position: relative;
-      width: 44px;
-      height: 24px;
+    .addon-item-row:last-child {
+      border-bottom: none;
     }
 
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      inset: 0;
-      background-color: #334155;
-      transition: .2s;
-      border-radius: 24px;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .2s;
-      border-radius: 50%;
-    }
-
-    input:checked + .slider {
-      background-color: var(--uthe-gold);
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(20px);
-      background-color: #000000;
-    }
-
-    /* SCHEDULE QUEUE CALENDAR MODAL */
+    /* MODAL OVERLAYS */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(5px);
       z-index: 2000;
       align-items: center;
@@ -796,7 +781,7 @@
     }
 
     .modal-card {
-      background: var(--card-dark);
+      background: #FFFFFF;
       border: 2px solid var(--uthe-gold);
       border-radius: 12px;
       width: 520px;
@@ -805,21 +790,21 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--shadow-lg);
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-color);
       padding-bottom: 0.5rem;
     }
 
     .modal-title {
       font-size: 0.95rem;
       font-weight: 900;
-      color: var(--uthe-gold);
+      color: var(--uthe-charcoal);
       letter-spacing: 1px;
       text-transform: uppercase;
     }
@@ -831,9 +816,9 @@
     }
 
     .time-slot-btn {
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: var(--text-light);
+      background: var(--card-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
       font-size: 0.72rem;
       font-weight: 800;
       border-radius: 6px;
@@ -844,27 +829,49 @@
     }
 
     .time-slot-btn.active, .time-slot-btn:hover {
-      background: var(--uthe-gold);
-      color: #000000;
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
       border-color: var(--uthe-gold);
       font-weight: 900;
     }
 
+    /* AUTH PASSWORD TOGGLE & METER */
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-toggle-icon {
+      position: absolute;
+      right: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .pass-meter-text {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
     /* PLATFORM FOOTER & SECRET ADMIN ACCESS */
     footer.platform-footer {
-      background: var(--card-dark);
-      border-top: 1px solid var(--border-dark);
+      background: #FFFFFF;
+      border-top: 1px solid var(--border-color);
       padding: 0.75rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 0.65rem;
-      color: var(--text-dim);
+      color: var(--text-muted);
       margin-top: auto;
     }
 
     .footer-secret-link {
-      color: #475569;
+      color: #94A3B8;
       text-decoration: none;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.6rem;
@@ -876,35 +883,45 @@
       color: var(--uthe-gold);
     }
 
-    /* TOAST OVERLAY */
-    .recruiter-toast {
-      position: fixed;
-      bottom: 80px;
-      right: 1.25rem;
-      z-index: 999999;
+    /* CUSTOM NOTIFICATION MODAL CARD (NO STANDARD ALERT) */
+    .custom-modal-alert {
       display: none;
-      background: var(--card-dark);
-      border: 1.5px solid var(--uthe-gold);
-      color: #FFFFFF;
-      padding: 0.85rem 1.25rem;
-      border-radius: 8px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-      max-width: 380px;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(5px);
+      z-index: 3000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
     }
 
-    .toast-title {
-      color: var(--uthe-gold);
-      font-size: 0.72rem;
+    .custom-alert-card {
+      background: #FFFFFF;
+      border: 2px solid var(--uthe-gold);
+      border-radius: 12px;
+      width: 420px;
+      max-width: 95%;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+
+    .alert-card-title {
+      font-size: 0.95rem;
       font-weight: 900;
+      color: var(--uthe-charcoal);
       letter-spacing: 1px;
       text-transform: uppercase;
-      margin-bottom: 0.2rem;
     }
 
-    .toast-msg {
-      font-size: 0.8rem;
-      font-weight: 600;
-      line-height: 1.4;
+    .alert-card-msg {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
     }
 
     /* RESPONSIVE */
@@ -912,32 +929,40 @@
       .header-center-tabs { display: none; }
       .btn-mobile-menu { display: flex; }
       .studio-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
       .pricing-grid { grid-template-columns: 1fr; }
+      .social-pills-row { grid-template-columns: repeat(3, 1fr); }
     }
   </style>
 </head>
 <body>
 
-  <!-- MASTER TOP HEADER (RESTRICTED TO 4 TABS) -->
+  <!-- MASTER TOP HEADER (5 EXCLUSIVE TABS) -->
   <header>
     <div class="brand-group">
-      <h1 class="brand-title" id="cms-brand-title" data-tooltip="u-thePOST: Enterprise Job Publishing & Candidate Pipeline Engine.">U-THEPOST</h1>
-      <span class="brand-badge" data-tooltip="Real-time multi-channel recruitment suite.">RECRUITER WORKSPACE</span>
+      <h1 class="brand-title" id="cms-brand-title" data-tooltip="u-thePOST: Recruiter Studio & Multi-Platform Hiring Hub.">U-THEPOST</h1>
+      <span class="brand-badge" data-tooltip="Clean White Studio recruiter interface.">RECRUITER STUDIO</span>
     </div>
 
-    <!-- 4 EXCLUSIVE CUSTOMER TABS -->
+    <!-- 5 EXCLUSIVE CUSTOMER TABS -->
     <div class="header-center-tabs">
       <button class="nav-tab-btn active" onclick="switchRecruiterTab('studio')" data-tooltip="Design and launch new job postings.">
         1. JOB STUDIO
       </button>
-      <button class="nav-tab-btn" onclick="switchRecruiterTab('crm')" data-tooltip="Omnichannel CRM & automated outreach.">
+      <button class="nav-tab-btn" onclick="switchRecruiterTab('crm')" data-tooltip="Multi-channel candidate outreach & scheduling.">
         2. OMNICHANNEL CRM
       </button>
-      <button class="nav-tab-btn" onclick="switchRecruiterTab('ats')" data-tooltip="Manage applicant kanban and hiring decisions.">
+      <button class="nav-tab-btn" onclick="switchRecruiterTab('ats')" data-tooltip="Applicant tracker & hiring stages.">
         3. APPLICANT TRACKER
       </button>
-      <button class="nav-tab-btn" onclick="switchRecruiterTab('plans')" data-tooltip="Review omnichannel features & subscription plans.">
+      <button class="nav-tab-btn" onclick="switchRecruiterTab('plans')" data-tooltip="Subscription tiers & itemized add-on features.">
         4. PERFORMANCE & PLANS
+      </button>
+      <button class="nav-tab-btn" onclick="switchRecruiterTab('profile')" data-tooltip="Employer brand assets, logo, and organization details.">
+        5. MY PROFILE
       </button>
     </div>
 
@@ -945,7 +970,7 @@
       <button class="btn-auth-header" id="btn-auth-status" onclick="openAuthModal()" data-tooltip="Account Authentication & Organization Profile.">
         LOGIN / SIGN UP
       </button>
-      <button class="btn-mobile-menu" onclick="toggleDrawer()" data-tooltip="Open mobile menu">
+      <button class="btn-mobile-menu" onclick="toggleDrawer()" data-tooltip="Open mobile navigation">
         [MENU]
       </button>
     </div>
@@ -963,6 +988,7 @@
       <button class="drawer-tab-btn" onclick="switchRecruiterTab('crm'); toggleDrawer();">2. OMNICHANNEL CRM</button>
       <button class="drawer-tab-btn" onclick="switchRecruiterTab('ats'); toggleDrawer();">3. APPLICANT TRACKER</button>
       <button class="drawer-tab-btn" onclick="switchRecruiterTab('plans'); toggleDrawer();">4. PERFORMANCE & PLANS</button>
+      <button class="drawer-tab-btn" onclick="switchRecruiterTab('profile'); toggleDrawer();">5. MY PROFILE</button>
     </div>
   </div>
 
@@ -977,7 +1003,7 @@
         <div class="panel-card">
           <div class="panel-header">
             <span class="panel-title">1. EMPLOYER JOB LISTING</span>
-            <span style="font-size: 0.65rem; color: var(--text-dim);">PUBLISH SPECIFICATION</span>
+            <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800;">PUBLISH SPECIFICATION</span>
           </div>
 
           <div class="form-group">
@@ -1012,34 +1038,37 @@
             </div>
           </div>
 
-          <!-- LINK SOCIAL MEDIA ACCOUNTS (OMNI-CHANNEL ROUTING) -->
+          <!-- LINK SOCIAL MEDIA ACCOUNTS (CARD 1) -->
           <div class="social-media-block">
             <div class="social-media-title">
               <span>LINK SOCIAL MEDIA ACCOUNTS</span>
-              <small style="color: var(--uthe-gold); font-size: 0.6rem;">OMNI-CHANNEL SYNDICATION</small>
+              <small style="color: #92400E; font-size: 0.65rem; font-weight: 800;">MULTI-PLATFORM POSTING</small>
+            </div>
+            <div class="social-instructions-text" id="cms-social-instructions">
+              How Multi-Platform Posting Works: Connect your accounts once. When you publish a position, it automatically formats and broadcasts across your linked networks in one click.
             </div>
             <div class="social-pills-row">
               <div class="social-pill linked" id="soc-linkedin" onclick="toggleSocialLink('soc-linkedin', 'LinkedIn')" data-tooltip="LinkedIn InMail & Post Feed">
-                <span>&#128188;</span><span>LINKEDIN</span>
+                <span>💼</span><span>LINKEDIN</span>
               </div>
               <div class="social-pill linked" id="soc-x" onclick="toggleSocialLink('soc-x', 'X / Twitter')" data-tooltip="X / Twitter Executive Stream">
-                <span>&#120143;</span><span>X (TWITTER)</span>
+                <span>𝕏</span><span>X (TWITTER)</span>
               </div>
               <div class="social-pill" id="soc-tiktok" onclick="toggleSocialLink('soc-tiktok', 'TikTok')" data-tooltip="TikTok Short-Form Video Recruitment">
-                <span>&#127916;</span><span>TIKTOK</span>
+                <span>🎬</span><span>TIKTOK</span>
               </div>
               <div class="social-pill linked" id="soc-fb" onclick="toggleSocialLink('soc-fb', 'Facebook')" data-tooltip="Facebook Jobs & Meta Business Network">
-                <span>&#127760;</span><span>FACEBOOK</span>
+                <span>🌐</span><span>FACEBOOK</span>
               </div>
               <div class="social-pill" id="soc-ig" onclick="toggleSocialLink('soc-ig', 'Instagram')" data-tooltip="Instagram Stories & Talent Showcase">
-                <span>&#128248;</span><span>INSTAGRAM</span>
+                <span>📸</span><span>INSTAGRAM</span>
               </div>
             </div>
           </div>
 
           <div class="form-group">
             <label>Job Description & Key Responsibilities</label>
-            <textarea id="inp-desc" rows="4" oninput="updateLivePreview()">Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.</textarea>
+            <textarea id="inp-desc" rows="4" oninput="updateLivePreview()">Lead our next-generation live multi-agent sync tool and professional web infrastructure. Modern TypeScript, WebSockets, high-performance UI.</textarea>
           </div>
 
           <div class="form-group">
@@ -1061,7 +1090,7 @@
         <div class="panel-card">
           <div class="panel-header">
             <span class="panel-title">2. LIVE POST PREVIEW</span>
-            <span style="font-size: 0.65rem; color: var(--status-mint);">CANDIDATE VIEWPORT</span>
+            <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">CANDIDATE VIEWPORT</span>
           </div>
 
           <div class="preview-sheet" id="preview-sheet">
@@ -1089,7 +1118,7 @@
             </div>
 
             <div style="font-size: 0.85rem; line-height: 1.5; color: #334155;" id="pv-desc">
-              Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.
+              Lead our next-generation live multi-agent sync tool and professional web infrastructure. Modern TypeScript, WebSockets, high-performance UI.
             </div>
 
             <button style="background:#111827; color:var(--uthe-gold); border:1.5px solid var(--uthe-gold); font-weight:900; font-size:0.78rem; padding:0.75rem; border-radius:6px; letter-spacing:1px; cursor:default;">
@@ -1105,7 +1134,7 @@
     <section id="view-crm" class="tab-view">
       <div class="panel-card">
         <div class="panel-header">
-          <span class="panel-title">OMNICHANNEL CAMPAIGN & TALENT OUTREACH</span>
+          <span class="panel-title">MULTI-PLATFORM CAMPAIGN & TALENT OUTREACH</span>
           <button class="btn-gold-action" style="height: 38px; font-size: 0.7rem;" onclick="openScheduleQueueModal()" data-tooltip="Schedule outreach queue with calendar time slots.">
             SCHEDULE QUEUE
           </button>
@@ -1113,8 +1142,8 @@
 
         <div class="grid-2">
           <div class="form-group">
-            <label>Campaign Sequence Target</label>
-            <input type="text" value="Staff & Senior Distributed Systems Engineers (Austin / Remote)">
+            <label>Campaign Target</label>
+            <input type="text" value="Senior & Staff Engineers (Austin / Remote)">
           </div>
           <div class="form-group">
             <label>Outreach Template</label>
@@ -1127,15 +1156,15 @@
         </div>
 
         <div class="form-group">
-          <label>Automated Message Body (Supports {candidate_name}, {role}, {company})</label>
-          <textarea rows="4">Hi {candidate_name}, I saw your background in distributed systems and WebSockets. We are expanding Quantum Tech's sync engine and would love to invite you for a fast-track interview.</textarea>
+          <label>Personalized Outreach Message Body</label>
+          <textarea rows="4">Hi {candidate_name}, I saw your background in distributed systems and modern web technologies. We are expanding Quantum Tech's live team and would love to invite you for a fast-track interview.</textarea>
         </div>
 
         <div style="display: flex; gap: 0.75rem;">
-          <button class="btn-gold-action" onclick="dispatchOmniCampaign()" data-tooltip="Broadcast across linked LinkedIn, Email, and Social channels.">
-            LAUNCH OMNICHANNEL OUTREACH
+          <button class="btn-gold-action" onclick="showCustomModalAlert('Campaign Dispatched', 'Multi-platform talent outreach broadcast initiated successfully.')">
+            LAUNCH MULTI-PLATFORM OUTREACH
           </button>
-          <button class="btn-surface-action" onclick="openScheduleQueueModal()" data-tooltip="Set calendar schedule.">
+          <button class="btn-surface-action" onclick="openScheduleQueueModal()">
             SCHEDULE CALENDAR QUEUE
           </button>
         </div>
@@ -1146,7 +1175,6 @@
     <section id="view-ats" class="tab-view">
       <div class="kanban-board" id="kanban-board">
 
-        <!-- COLUMN 1: APPLIED -->
         <div class="kanban-col" data-col="Applied" id="col-applied">
           <div class="col-header">
             <span>1. APPLIED</span>
@@ -1163,7 +1191,6 @@
           </div>
         </div>
 
-        <!-- COLUMN 2: SCREENED -->
         <div class="kanban-col" data-col="Screened" id="col-screened">
           <div class="col-header">
             <span>2. SCREENED</span>
@@ -1180,7 +1207,6 @@
           </div>
         </div>
 
-        <!-- COLUMN 3: INTERVIEWING -->
         <div class="kanban-col" data-col="Interviewing" id="col-interviewing">
           <div class="col-header">
             <span>3. INTERVIEWING</span>
@@ -1197,7 +1223,6 @@
           </div>
         </div>
 
-        <!-- COLUMN 4: OFFER / HIRED -->
         <div class="kanban-col" data-col="Offer" id="col-offer">
           <div class="col-header">
             <span>4. OFFER / HIRED</span>
@@ -1208,130 +1233,167 @@
       </div>
     </section>
 
-    <!-- TAB 4: PERFORMANCE & PLANS (INTERACTIVE PRICING ENGINE) -->
+    <!-- TAB 4: PERFORMANCE & PLANS (PRICING + ITEMIZED ADD-ONS) -->
     <section id="view-plans" class="tab-view">
-      <div class="panel-card" style="margin-bottom: 1.25rem;">
-        <div class="panel-header">
-          <span class="panel-title">OMNI-CHANNEL FEATURES & CHANNEL SYNDICATION ENGINE</span>
-          <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <span style="font-size: 0.72rem; font-weight: 800; color: var(--text-dim);">BILLING FREQUENCY:</span>
-            <button class="btn-surface-action" id="btn-billing-toggle" style="height: 36px; font-size: 0.68rem;" onclick="toggleBillingFrequency()">
-              MONTHLY BILLING
-            </button>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
-          <div class="channel-toggle-row">
-            <div>
-              <strong>LinkedIn InMail & Posts</strong>
-              <div style="font-size: 0.65rem; color: var(--text-dim);">Auto InMail & 1st-degree syndication</div>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="chk-linkedin" checked onchange="recalculatePricing()">
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <div class="channel-toggle-row">
-            <div>
-              <strong>Direct Cold Email Mesh</strong>
-              <div style="font-size: 0.65rem; color: var(--text-dim);">Verified deliverability inbox routing</div>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="chk-email" checked onchange="recalculatePricing()">
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <div class="channel-toggle-row">
-            <div>
-              <strong>TikTok Talent Spotlight</strong>
-              <div style="font-size: 0.65rem; color: var(--text-dim);">Short-form video recruitment blast</div>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="chk-tiktok" onchange="recalculatePricing()">
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <div class="channel-toggle-row">
-            <div>
-              <strong>X / Twitter Executive Stream</strong>
-              <div style="font-size: 0.65rem; color: var(--text-dim);">Tech founder & developer broadcast</div>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="chk-x" checked onchange="recalculatePricing()">
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <div class="channel-toggle-row">
-            <div>
-              <strong>Instagram Stories Showcase</strong>
-              <div style="font-size: 0.65rem; color: var(--text-dim);">Company culture & perks spotlight</div>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="chk-ig" onchange="recalculatePricing()">
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <div class="channel-toggle-row">
-            <div>
-              <strong>Job Board Network Feed</strong>
-              <div style="font-size: 0.65rem; color: var(--text-dim);">Schema.org & Google Jobs indexing</div>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="chk-network" checked onchange="recalculatePricing()">
-              <span class="slider"></span>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <!-- PRICING TIERS -->
       <div class="pricing-grid">
+
+        <!-- u-thePAL FREE MEMBER TIER -->
         <div class="pricing-card">
-          <div class="pricing-tier-name">STARTER PLAN</div>
-          <div class="pricing-amount" id="price-starter">$99<span style="font-size: 0.9rem; color: var(--text-dim);">/mo</span></div>
-          <p style="font-size: 0.78rem; color: var(--text-dim);">Ideal for early-stage companies and boutique hiring.</p>
-          <ul style="font-size: 0.75rem; color: var(--text-light); line-height: 1.8; list-style: none;">
+          <div class="pricing-tier-name">u-thePAL</div>
+          <div class="pricing-amount">$0<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Free tier for registered members.</p>
+          <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
+            <li>✓ 1 Active Job Posting</li>
+            <li>✓ Email Only Distribution</li>
+            <li>✓ Direct Applicant Ingestion</li>
+          </ul>
+          <button class="btn-surface-action" style="margin-top: auto;" onclick="showCustomModalAlert('u-thePAL Plan Active', 'Your free member tier is active.')">
+            SELECT u-thePAL
+          </button>
+        </div>
+
+        <!-- STARTER PLAN -->
+        <div class="pricing-card">
+          <div class="pricing-tier-name">STARTER</div>
+          <div class="pricing-amount" id="price-starter">$99<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Boutique hiring and early growth.</p>
+          <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
             <li>✓ 3 Active Job Postings</li>
             <li>✓ Direct Candidate Quick Send</li>
-            <li>✓ Standard ATS Kanban</li>
+            <li>✓ Standard Applicant Tracker</li>
           </ul>
-          <button class="btn-surface-action" style="margin-top: auto;" onclick="showToast('Starter Plan Selected.', 'PLAN SUBSCRIBED')">CHOOSE STARTER</button>
+          <button class="btn-surface-action" style="margin-top: auto;" onclick="showCustomModalAlert('Starter Plan Selected', 'Proceeding to subscription checkout.')">
+            CHOOSE STARTER
+          </button>
         </div>
 
+        <!-- GROWTH ENGINE -->
         <div class="pricing-card featured">
           <div style="display: flex; justify-content: space-between;">
-            <div class="pricing-tier-name">GROWTH ENGINE</div>
+            <div class="pricing-tier-name">GROWTH</div>
             <span class="brand-badge" style="background:var(--uthe-gold); color:#000;">POPULAR</span>
           </div>
-          <div class="pricing-amount" id="price-growth">$299<span style="font-size: 0.9rem; color: var(--text-dim);">/mo</span></div>
-          <p style="font-size: 0.78rem; color: var(--text-dim);">High-velocity recruitment with active omnichannel routing.</p>
-          <ul style="font-size: 0.75rem; color: var(--text-light); line-height: 1.8; list-style: none;">
+          <div class="pricing-amount" id="price-growth">$299<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">High-velocity hiring across networks.</p>
+          <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
             <li>✓ 15 Active Job Postings</li>
-            <li>✓ Active Omni-Channel Syndication</li>
+            <li>✓ Multi-Platform Social Syndication</li>
             <li>✓ Hunter.io Verified Lead Engine</li>
             <li>✓ Automated Schedule Queue</li>
           </ul>
-          <button class="btn-gold-action" style="margin-top: auto;" onclick="showToast('Growth Engine Plan Selected.', 'PLAN SUBSCRIBED')">CHOOSE GROWTH</button>
+          <button class="btn-gold-action" style="margin-top: auto;" onclick="showCustomModalAlert('Growth Plan Selected', 'Proceeding to subscription checkout.')">
+            CHOOSE GROWTH
+          </button>
         </div>
 
+        <!-- PROFESSIONAL -->
         <div class="pricing-card">
-          <div class="pricing-tier-name">ENTERPRISE MESH</div>
-          <div class="pricing-amount" id="price-enterprise">$699<span style="font-size: 0.9rem; color: var(--text-dim);">/mo</span></div>
-          <p style="font-size: 0.78rem; color: var(--text-dim);">Unlimited scale with dedicated multi-node routing.</p>
-          <ul style="font-size: 0.75rem; color: var(--text-light); line-height: 1.8; list-style: none;">
+          <div class="pricing-tier-name">PROFESSIONAL</div>
+          <div class="pricing-amount" id="price-pro">$699<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Unlimited scale and custom branding.</p>
+          <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
             <li>✓ Unlimited Active Postings</li>
-            <li>✓ Full Omni-Channel Blast</li>
-            <li>✓ Custom Subdomain Domain Branding</li>
-            <li>✓ 24/7 Dedicated Account Manager</li>
+            <li>✓ Full Multi-Platform Broadcast</li>
+            <li>✓ Dedicated Subdomain Branding</li>
+            <li>✓ 24/7 Account Representative</li>
           </ul>
-          <button class="btn-surface-action" style="margin-top: auto;" onclick="showToast('Enterprise Plan Selected.', 'PLAN SUBSCRIBED')">CONTACT ENTERPRISE</button>
+          <button class="btn-surface-action" style="margin-top: auto;" onclick="showCustomModalAlert('Professional Plan Selected', 'Contacting enterprise representative.')">
+            CONTACT SALES
+          </button>
         </div>
+
+      </div>
+
+      <!-- ITEMIZED FEATURES & ADD-ONS LIST -->
+      <div class="addons-list-card">
+        <div style="font-size: 0.88rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.75rem; border-bottom: 1.5px solid var(--border-color); padding-bottom: 0.5rem;">
+          ITEMIZED FEATURES & ADD-ONS
+        </div>
+
+        <div class="addon-item-row">
+          <div>
+            <strong>Top-of-Page Spotlight Placement</strong>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Pin your job posting at the top of candidate search results.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);">$49/mo</span>
+            <button class="btn-surface-action" style="height: 36px; font-size: 0.68rem;" onclick="showCustomModalAlert('Add-On Enabled', 'Top-of-Page Spotlight added.')" data-tooltip="Feature: Pin post to the top of all search results.">ADD TO PLAN</button>
+          </div>
+        </div>
+
+        <div class="addon-item-row">
+          <div>
+            <strong>Urgent Hiring Badges</strong>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Highlight urgent open positions with bright badge accents.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);">$29/mo</span>
+            <button class="btn-surface-action" style="height: 36px; font-size: 0.68rem;" onclick="showCustomModalAlert('Add-On Enabled', 'Urgent Hiring Badge added.')" data-tooltip="Feature: Display Urgent Hiring badge on job cards.">ADD TO PLAN</button>
+          </div>
+        </div>
+
+        <div class="addon-item-row">
+          <div>
+            <strong>Direct Hiring Messages (Candidate InMail)</strong>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Send direct interview invitations to candidate inboxes.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);">$19/mo</span>
+            <button class="btn-surface-action" style="height: 36px; font-size: 0.68rem;" onclick="showCustomModalAlert('Add-On Enabled', 'Direct Messages credit added.')" data-tooltip="Feature: Direct InMail messages to candidate talent pool.">ADD TO PLAN</button>
+          </div>
+        </div>
+
+        <div class="addon-item-row">
+          <div>
+            <strong>Verified Employer Shield</strong>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Display official verified badge on company profile and job cards.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);">$39/mo</span>
+            <button class="btn-surface-action" style="height: 36px; font-size: 0.68rem;" onclick="showCustomModalAlert('Add-On Enabled', 'Verified Employer Shield added.')" data-tooltip="Feature: Official Verified Employer badge.">ADD TO PLAN</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: MY PROFILE (EMPLOYER BRAND ASSETS & SETTINGS) -->
+    <section id="view-profile" class="tab-view">
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="panel-title">5. EMPLOYER BRAND PROFILE & ASSETS</span>
+          <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800;">ORGANIZATION SETTINGS</span>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Organization Legal Name</label>
+            <input type="text" id="prof-company" value="Quantum Technologies Corp">
+          </div>
+          <div class="form-group">
+            <label>Contact Lead Name</label>
+            <input type="text" id="prof-name" value="Quantum Talent Team">
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Work Email Address</label>
+            <input type="email" id="prof-email" value="recruiter@quantumtech.io" readonly style="background: var(--card-subtle);">
+          </div>
+          <div class="form-group">
+            <label>Contact Phone Number</label>
+            <input type="tel" id="prof-phone" value="+1 (555) 019-2831">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Company Bio & Hiring Philosophy</label>
+          <textarea id="prof-bio" rows="3">High-growth technology organization pioneering live real-time state synchronizations and distributed architectures.</textarea>
+        </div>
+
+        <button class="btn-gold-action" style="align-self: flex-start;" onclick="saveEmployerProfile()" data-tooltip="Save your brand details and organization profile.">
+          SAVE BRAND PROFILE
+        </button>
       </div>
     </section>
 
@@ -1351,7 +1413,7 @@
       </div>
 
       <div class="form-group">
-        <label>Select Preferred Time Slot (EST)</label>
+        <label>Select Preferred Time Slot</label>
         <div class="time-slot-grid">
           <div class="time-slot-btn active" onclick="selectTimeSlot(this, '9:00 AM')">9:00 AM</div>
           <div class="time-slot-btn" onclick="selectTimeSlot(this, '11:30 AM')">11:30 AM</div>
@@ -1360,16 +1422,7 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Cadence & Follow-Up Rule</label>
-        <select id="sched-cadence">
-          <option value="once">Single Dispatch Blast</option>
-          <option value="48h" selected>Auto Follow-Up if Unopened in 48 Hours</option>
-          <option value="drip">3-Touch Dynamic Outreach Sequence</option>
-        </select>
-      </div>
-
-      <button class="btn-gold-action" onclick="confirmScheduleQueue()" data-tooltip="Lock in outreach schedule.">
+      <button class="btn-gold-action" onclick="confirmScheduleQueue()" data-tooltip="Confirm and schedule outreach.">
         CONFIRM & SCHEDULE QUEUE
       </button>
     </div>
@@ -1383,7 +1436,7 @@
         <button class="drawer-close" onclick="closeModal('auth-modal')">X</button>
       </div>
 
-      <div style="display: flex; border-bottom: 1px solid var(--border-dark); margin-bottom: 0.5rem;">
+      <div style="display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
         <button class="drawer-tab-btn active" id="tab-auth-login" style="flex:1; text-align:center; height:38px;" onclick="switchAuthTab('login')">LOGIN</button>
         <button class="drawer-tab-btn" id="tab-auth-signup" style="flex:1; text-align:center; height:38px;" onclick="switchAuthTab('signup')">SIGN UP</button>
         <button class="drawer-tab-btn" id="tab-auth-reset" style="flex:1; text-align:center; height:38px;" onclick="switchAuthTab('reset')">RESET</button>
@@ -1391,7 +1444,7 @@
 
       <div id="auth-form-body">
         <div class="form-group" id="auth-group-name" style="display:none;">
-          <label>Hiring Manager / Team Name</label>
+          <label>Organization / Recruiter Name</label>
           <input type="text" id="auth-name" placeholder="Quantum Recruiting Lead">
         </div>
 
@@ -1402,39 +1455,53 @@
 
         <div class="form-group" id="auth-group-pass">
           <label>Password</label>
-          <input type="password" id="auth-password" placeholder="••••••••••••">
+          <div class="password-wrap">
+            <input type="password" id="auth-password" placeholder="••••••••••••" oninput="checkPassLength(this.value)">
+            <span class="password-toggle-icon" onclick="togglePassVisibility('auth-password')">👁️</span>
+          </div>
+          <div class="pass-meter-text" id="pass-meter-text">Minimum 8 characters required.</div>
         </div>
 
-        <button class="btn-gold-action" style="width:100%; margin-top:0.5rem;" id="auth-submit-btn" onclick="handleAuthSubmit()">
+        <!-- RECAPTCHA / ANTI-SPAM PROTECTION -->
+        <div style="background: var(--card-subtle); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+          <input type="checkbox" id="auth-recaptcha" checked style="min-height: 20px; width: 20px;">
+          <span style="font-size: 0.72rem; color: var(--text-muted);">Protected by UTHEVERSITY Anti-Spam Security</span>
+        </div>
+
+        <button class="btn-gold-action" style="width:100%; margin-top:0.75rem;" id="auth-submit-btn" onclick="handleAuthSubmit()">
           SIGN IN TO WORKSPACE
         </button>
       </div>
     </div>
   </div>
 
+  <!-- SIGNATURE CUSTOM MODAL ALERT (NO DEFAULT BROWSER ALERT) -->
+  <div class="custom-modal-alert" id="custom-modal-alert">
+    <div class="custom-alert-card">
+      <div class="alert-card-title" id="custom-alert-title">SYSTEM NOTIFICATION</div>
+      <div class="alert-card-msg" id="custom-alert-msg">Action processed successfully.</div>
+      <button class="btn-gold-action" onclick="closeCustomAlert()" style="height: 40px; margin-top: 0.5rem;">
+        OK, GOT IT
+      </button>
+    </div>
+  </div>
+
   <!-- PLATFORM FOOTER & SECRET ADMIN ACCESS -->
   <footer class="platform-footer">
-    <span>&copy; 2026 UTHEVERSITY Inc. — Enterprise Recruitment Mesh</span>
+    <span>&copy; 2026 UTHEVERSITY Inc. — Professional Talent Network</span>
     <span class="footer-secret-link" onclick="handleAdminShortcut()" data-tooltip="Master Governance Suite (Shortcut: Ctrl+Shift+A)">[ADMIN]</span>
   </footer>
-
-  <!-- TOAST OVERLAY -->
-  <div class="recruiter-toast" id="recruiter-toast">
-    <div class="toast-title" id="toast-title">RECRUITER SYSTEM NOTICE</div>
-    <div class="toast-msg" id="toast-msg">Operation completed.</div>
-  </div>
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
     const SYNC_CHANNEL_NAME = 'UTHE_DUAL_SYNC_CHANNEL';
     let broadcastBus = null;
     let wsRelay = null;
-    let isYearlyBilling = false;
     let selectedTimeSlot = '9:00 AM';
     let currentUser = null;
     let authMode = 'login';
 
-    // 4-Tab Recruiter Navigation Switcher
+    // 5-Tab Recruiter Navigation Switcher
     window.switchRecruiterTab = function(tabName) {
       document.querySelectorAll('.nav-tab-btn').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.drawer-tab-btn').forEach(t => t.classList.remove('active'));
@@ -1443,7 +1510,7 @@
       const target = document.getElementById(`view-${tabName}`);
       if (target) target.classList.add('active');
 
-      const tabs = { 'studio': 0, 'crm': 1, 'ats': 2, 'plans': 3 };
+      const tabs = { 'studio': 0, 'crm': 1, 'ats': 2, 'plans': 3, 'profile': 4 };
       const idx = tabs[tabName] || 0;
       if (document.querySelectorAll('.nav-tab-btn')[idx]) document.querySelectorAll('.nav-tab-btn')[idx].classList.add('active');
       if (document.querySelectorAll('.drawer-tab-btn')[idx]) document.querySelectorAll('.drawer-tab-btn')[idx].classList.add('active');
@@ -1463,7 +1530,6 @@
       }
     }
 
-    // Live Post Preview Synchronization
     function updateLivePreview() {
       const title = document.getElementById('inp-title').value;
       const company = document.getElementById('inp-company').value;
@@ -1484,7 +1550,7 @@
       const el = document.getElementById(id);
       el.classList.toggle('linked');
       const isLinked = el.classList.contains('linked');
-      showToast(`${name} ${isLinked ? 'connected for auto-syndication' : 'disconnected'}.`, 'SOCIAL SYNDICATION');
+      showCustomModalAlert('Social Account Updated', `${name} is now ${isLinked ? 'connected for automatic multi-platform posting' : 'disconnected'}.`);
     }
 
     function resetStudioForm() {
@@ -1497,7 +1563,6 @@
       updateLivePreview();
     }
 
-    // Publish Job to Server & WebSocket Mesh
     async function publishJobLive() {
       const newJob = {
         id: `JOB-${Math.floor(100 + Math.random() * 900)}`,
@@ -1520,37 +1585,26 @@
       } catch (e) {}
 
       broadcastSyncEvent('JOB_PUBLISHED', { job: newJob });
-      showToast(`Position "${newJob.jobTitle}" published live to u-theJOBS board!`, 'JOB PUBLISHED');
+      showCustomModalAlert('Position Published Live', `Your position "${newJob.jobTitle}" is now live and synchronized on the u-theJOBS candidate board.`);
     }
 
-    // Pricing Calculation Engine
-    function recalculatePricing() {
-      let addOn = 0;
-      if (document.getElementById('chk-linkedin').checked) addOn += 30;
-      if (document.getElementById('chk-email').checked) addOn += 20;
-      if (document.getElementById('chk-tiktok').checked) addOn += 45;
-      if (document.getElementById('chk-x').checked) addOn += 25;
-      if (document.getElementById('chk-ig').checked) addOn += 25;
-      if (document.getElementById('chk-network').checked) addOn += 35;
+    async function saveEmployerProfile() {
+      const payload = {
+        company: document.getElementById('prof-company').value,
+        name: document.getElementById('prof-name').value,
+        phone: document.getElementById('prof-phone').value,
+        bio: document.getElementById('prof-bio').value
+      };
 
-      const discountMultiplier = isYearlyBilling ? 0.8 : 1.0;
-      const starterTotal = Math.round((99 + addOn * 0.4) * discountMultiplier);
-      const growthTotal = Math.round((299 + addOn * 0.8) * discountMultiplier);
-      const enterpriseTotal = Math.round((699 + addOn * 1.2) * discountMultiplier);
+      try {
+        await fetch('/api/auth/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {}
 
-      const period = isYearlyBilling ? '/yr (billed annually)' : '/mo';
-      document.getElementById('price-starter').innerHTML = `$${starterTotal}<span style="font-size:0.9rem; color:var(--text-dim);">${period}</span>`;
-      document.getElementById('price-growth').innerHTML = `$${growthTotal}<span style="font-size:0.9rem; color:var(--text-dim);">${period}</span>`;
-      document.getElementById('price-enterprise').innerHTML = `$${enterpriseTotal}<span style="font-size:0.9rem; color:var(--text-dim);">${period}</span>`;
-    }
-
-    function toggleBillingFrequency() {
-      isYearlyBilling = !isYearlyBilling;
-      const btn = document.getElementById('btn-billing-toggle');
-      btn.textContent = isYearlyBilling ? 'YEARLY BILLING (20% OFF)' : 'MONTHLY BILLING';
-      btn.style.color = isYearlyBilling ? 'var(--status-mint)' : 'var(--text-light)';
-      btn.style.borderColor = isYearlyBilling ? 'var(--status-mint)' : 'var(--border-dark)';
-      recalculatePricing();
+      showCustomModalAlert('Profile Saved', 'Your employer brand profile and assets were saved successfully.');
     }
 
     // Schedule Queue Modal
@@ -1570,33 +1624,22 @@
 
     window.confirmScheduleQueue = function() {
       const date = document.getElementById('sched-date').value;
-      const cadence = document.getElementById('sched-cadence').value;
       closeModal('schedule-calendar-modal');
-      showToast(`Outreach queue scheduled for ${date} at ${selectedTimeSlot} (${cadence})!`, 'QUEUE SCHEDULED');
+      showCustomModalAlert('Outreach Queue Scheduled', `Outreach campaign locked in for ${date} at ${selectedTimeSlot}.`);
     };
 
-    function dispatchOmniCampaign() {
-      showToast('Omnichannel outreach broadcast initiated across linked accounts.', 'CAMPAIGN DISPATCHED');
-    }
-
-    // Mobile ATS Native Touch Drag & Drop
+    // Mobile Touch ATS Setup
     function setupMobileTouchAts() {
       const cards = document.querySelectorAll('.candidate-card');
       const columns = document.querySelectorAll('.kanban-col');
 
       cards.forEach(card => {
-        // Desktop dragstart
         card.addEventListener('dragstart', (e) => {
           e.dataTransfer.setData('text/plain', card.id);
         });
 
-        // Mobile touch drag
-        let startX, startY, activeCol = null;
-
-        card.addEventListener('touchstart', (e) => {
-          const touch = e.touches[0];
-          startX = touch.clientX;
-          startY = touch.clientY;
+        let activeCol = null;
+        card.addEventListener('touchstart', () => {
           card.classList.add('touch-dragging');
         }, { passive: true });
 
@@ -1615,11 +1658,10 @@
         card.addEventListener('touchend', () => {
           card.classList.remove('touch-dragging');
           columns.forEach(c => c.classList.remove('drop-target-hover'));
-
           if (activeCol) {
             activeCol.appendChild(card);
             updateKanbanCounters();
-            showToast(`Candidate moved to ${activeCol.getAttribute('data-col')}.`, 'ATS UPDATED');
+            showCustomModalAlert('Applicant Status Updated', `Candidate moved to ${activeCol.getAttribute('data-col')}.`);
           }
           activeCol = null;
         });
@@ -1630,11 +1672,9 @@
           e.preventDefault();
           col.classList.add('drop-target-hover');
         });
-
         col.addEventListener('dragleave', () => {
           col.classList.remove('drop-target-hover');
         });
-
         col.addEventListener('drop', (e) => {
           e.preventDefault();
           col.classList.remove('drop-target-hover');
@@ -1643,7 +1683,7 @@
           if (card) {
             col.appendChild(card);
             updateKanbanCounters();
-            showToast(`Candidate moved to ${col.getAttribute('data-col')}.`, 'ATS UPDATED');
+            showCustomModalAlert('Applicant Status Updated', `Candidate moved to ${col.getAttribute('data-col')}.`);
           }
         });
       });
@@ -1656,84 +1696,21 @@
       document.getElementById('count-offer').textContent = document.getElementById('col-offer').querySelectorAll('.candidate-card').length;
     }
 
-    // Dual Sync Bus
-    function initDualSync() {
-      if (typeof BroadcastChannel !== 'undefined') {
-        broadcastBus = new BroadcastChannel(SYNC_CHANNEL_NAME);
-        broadcastBus.onmessage = (e) => handleSyncEvent(e.data);
-      }
+    // Custom Modal Alert System
+    window.showCustomModalAlert = function(title, msg) {
+      document.getElementById('custom-alert-title').textContent = title;
+      document.getElementById('custom-alert-msg').textContent = msg;
+      document.getElementById('custom-modal-alert').style.display = 'flex';
+    };
 
-      function connectWs() {
-        try {
-          const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-          const wsHost = window.location.host || 'localhost:3000';
-          wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
-          wsRelay.onmessage = (e) => {
-            try { handleSyncEvent(JSON.parse(e.data)); } catch (err) {}
-          };
-          wsRelay.onclose = () => { setTimeout(connectWs, 3000); };
-        } catch (e) {}
-      }
-
-      connectWs();
-
-      window.addEventListener('message', (e) => {
-        if (e.data && e.data.type) handleSyncEvent(e.data);
-      });
-    }
-
-    function broadcastSyncEvent(type, payload) {
-      const packet = {
-        type: type,
-        timestamp: Date.now(),
-        source: 'u-thePOST-RECRUITER',
-        ...payload
-      };
-
-      if (broadcastBus) broadcastBus.postMessage(packet);
-      if (wsRelay && wsRelay.readyState === WebSocket.OPEN) {
-        wsRelay.send(JSON.stringify(packet));
-      }
-      window.parent.postMessage(packet, '*');
-    }
-
-    function handleSyncEvent(data) {
-      if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
-        const col = document.getElementById('col-applied');
-        const card = document.createElement('div');
-        card.className = 'candidate-card';
-        card.id = `card-${data.applicant.id}`;
-        card.setAttribute('draggable', 'true');
-        card.innerHTML = `
-          <div class="cand-grab-handle">
-            <span>${data.applicant.id}</span>
-            <span>:::</span>
-          </div>
-          <div class="cand-name">${data.applicant.name}</div>
-          <div class="cand-role">${data.applicant.jobTitle}</div>
-          <div class="cand-score">${data.applicant.score}% MATCH</div>
-        `;
-        col.appendChild(card);
-        updateKanbanCounters();
-        setupMobileTouchAts();
-        showToast(`New candidate applied: ${data.applicant.name}!`, 'APPLICANT INGESTED');
-      } else if (data.type === 'CMS_CONFIG_UPDATED' && data.config) {
-        if (data.config.labels && data.config.labels.postTitle) {
-          document.getElementById('cms-brand-title').textContent = data.config.labels.postTitle;
-        }
-      }
-    }
+    window.closeCustomAlert = function() {
+      document.getElementById('custom-modal-alert').style.display = 'none';
+    };
 
     // Auth Engine Handlers
     window.openAuthModal = function() {
       if (currentUser) {
-        if (confirm(`Logged in as ${currentUser.name} (${currentUser.email}). Log out?`)) {
-          fetch('/api/auth/logout', { method: 'POST' }).then(() => {
-            currentUser = null;
-            updateAuthHeaderUi();
-            showToast('Logged out.', 'LOGGED OUT');
-          });
-        }
+        showCustomModalAlert('Account Session', `Logged in as ${currentUser.name} (${currentUser.email}).`);
         return;
       }
       document.getElementById('auth-modal').style.display = 'flex';
@@ -1764,12 +1741,28 @@
       }
     };
 
+    function togglePassVisibility(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function checkPassLength(val) {
+      const meter = document.getElementById('pass-meter-text');
+      if (val.length >= 8) {
+        meter.textContent = `✓ Strong password length (${val.length} chars)`;
+        meter.style.color = '#065F46';
+      } else {
+        meter.textContent = `Minimum 8 characters required (${val.length}/8)`;
+        meter.style.color = 'var(--text-muted)';
+      }
+    }
+
     window.handleAuthSubmit = async function() {
       const email = document.getElementById('auth-email').value;
       const password = document.getElementById('auth-password').value;
       const name = document.getElementById('auth-name').value;
 
-      if (!email) return showToast('Email required.', 'ERROR');
+      if (!email) return showCustomModalAlert('Missing Field', 'Please enter your work email.');
 
       if (authMode === 'login') {
         try {
@@ -1783,11 +1776,11 @@
             currentUser = data.user;
             closeModal('auth-modal');
             updateAuthHeaderUi();
-            showToast(`Recruiter authenticated: ${data.user.name}`, 'LOGGED IN');
+            showCustomModalAlert('Welcome Back', `Logged in as ${data.user.name}.`);
           } else {
-            showToast(data.error || 'Login failed', 'AUTH ERROR');
+            showCustomModalAlert('Login Failed', data.error || 'Invalid credentials.');
           }
-        } catch (e) { showToast(e.message, 'ERROR'); }
+        } catch (e) { showCustomModalAlert('Error', e.message); }
       } else if (authMode === 'signup') {
         try {
           const res = await fetch('/api/auth/signup', {
@@ -1800,13 +1793,13 @@
             currentUser = data.user;
             closeModal('auth-modal');
             updateAuthHeaderUi();
-            showToast(`Recruiter account created!`, 'SIGN UP SUCCESS');
+            showCustomModalAlert('Account Created', 'Your recruiter studio account is now active.');
           } else {
-            showToast(data.error || 'Signup failed', 'AUTH ERROR');
+            showCustomModalAlert('Signup Failed', data.error || 'Unable to register.');
           }
-        } catch (e) { showToast(e.message, 'ERROR'); }
+        } catch (e) { showCustomModalAlert('Error', e.message); }
       } else if (authMode === 'reset') {
-        showToast(`Reset instructions dispatched to ${email}.`, 'RESET SENT');
+        showCustomModalAlert('Reset Link Dispatched', `Password reset instructions sent to ${email}.`);
         closeModal('auth-modal');
       }
     };
@@ -1814,23 +1807,75 @@
     function updateAuthHeaderUi() {
       const btn = document.getElementById('btn-auth-status');
       if (currentUser) {
-        btn.textContent = `${currentUser.name.toUpperCase()} (LOGOUT)`;
-        btn.style.borderColor = 'var(--status-mint)';
+        btn.textContent = `${currentUser.name.toUpperCase()} (PROFILE)`;
+        btn.style.borderColor = 'var(--uthe-gold)';
       } else {
         btn.textContent = 'LOGIN / SIGN UP';
-        btn.style.borderColor = 'var(--uthe-gold)';
+        btn.style.borderColor = 'var(--border-strong)';
       }
     }
 
-    async function checkCurrentSession() {
-      try {
-        const res = await fetch('/api/auth/me');
-        const data = await res.json();
-        if (data.authenticated && data.user) {
-          currentUser = data.user;
-          updateAuthHeaderUi();
+    // Live Sync
+    function initDualSync() {
+      if (typeof BroadcastChannel !== 'undefined') {
+        broadcastBus = new BroadcastChannel(SYNC_CHANNEL_NAME);
+        broadcastBus.onmessage = (e) => handleSyncEvent(e.data);
+      }
+
+      function connectWs() {
+        try {
+          const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+          const wsHost = window.location.host || 'localhost:3000';
+          wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
+          wsRelay.onmessage = (e) => {
+            try { handleSyncEvent(JSON.parse(e.data)); } catch (err) {}
+          };
+          wsRelay.onclose = () => { setTimeout(connectWs, 3000); };
+        } catch (e) {}
+      }
+
+      connectWs();
+    }
+
+    function broadcastSyncEvent(type, payload) {
+      const packet = {
+        type: type,
+        timestamp: Date.now(),
+        source: 'u-thePOST-RECRUITER',
+        ...payload
+      };
+
+      if (broadcastBus) broadcastBus.postMessage(packet);
+      if (wsRelay && wsRelay.readyState === WebSocket.OPEN) {
+        wsRelay.send(JSON.stringify(packet));
+      }
+    }
+
+    function handleSyncEvent(data) {
+      if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
+        const col = document.getElementById('col-applied');
+        const card = document.createElement('div');
+        card.className = 'candidate-card';
+        card.id = `card-${data.applicant.id}`;
+        card.setAttribute('draggable', 'true');
+        card.innerHTML = `
+          <div class="cand-grab-handle">
+            <span>${data.applicant.id}</span>
+            <span>:::</span>
+          </div>
+          <div class="cand-name">${data.applicant.name}</div>
+          <div class="cand-role">${data.applicant.jobTitle}</div>
+          <div class="cand-score">${data.applicant.score}% MATCH</div>
+        `;
+        col.appendChild(card);
+        updateKanbanCounters();
+        setupMobileTouchAts();
+        showCustomModalAlert('New Applicant Received', `Candidate ${data.applicant.name} applied for ${data.applicant.jobTitle}.`);
+      } else if (data.type === 'CMS_CONFIG_UPDATED' && data.config) {
+        if (data.config.labels && data.config.labels.postTitle) {
+          document.getElementById('cms-brand-title').textContent = data.config.labels.postTitle;
         }
-      } catch (e) {}
+      }
     }
 
     // Admin Shortcut Handler (Ctrl + Shift + A)
@@ -1845,21 +1890,9 @@
       }
     });
 
-    let toastTimer = null;
-    function showToast(msg, title = "RECRUITER SYSTEM NOTICE") {
-      const t = document.getElementById('recruiter-toast');
-      document.getElementById('toast-title').textContent = title;
-      document.getElementById('toast-msg').textContent = msg;
-      t.style.display = 'block';
-      if (toastTimer) clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => { t.style.display = 'none'; }, 4000);
-    }
-
     window.addEventListener('DOMContentLoaded', () => {
       setupMobileTouchAts();
       initDualSync();
-      recalculatePricing();
-      checkCurrentSession();
     });
   </script>
 </body>

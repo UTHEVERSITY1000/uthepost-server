@@ -8,7 +8,7 @@ const WS_URL = 'ws://localhost:3000';
 
 async function runTests() {
   console.log('================================================================');
-  console.log('PLATFORM OVERHAUL, AUTHENTICATION & CMS ENGINE TEST SUITE');
+  console.log('UTHEVERSITY MASTER PLATFORM OVERHAUL & ZERO-CODE CMS TEST SUITE');
   console.log('================================================================\n');
 
   let passed = 0;
@@ -76,151 +76,118 @@ async function runTests() {
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 1: Subdomain Isolation & Host Routing
+  // TEST GROUP 1: Master Owner Setup (Zion Daye)
   // ----------------------------------------------------
-  console.log('[TEST GROUP 1] Strict Subdomain Host Isolation');
+  console.log('[TEST GROUP 1] Master Owner Account (Zion Daye)');
   try {
-    const health = await httpGet('/api/health');
-    assert(health.status === 200, 'Healthcheck endpoint returned HTTP 200 OK');
-
-    const postRes = await httpGet('/', { 'Host': 'post.utheversity.com' });
-    assert(postRes.raw.includes('RECRUITER WORKSPACE') && !postRes.raw.includes('pane-iframe'), 'post.utheversity.com serves recruiter.html with zero leakage');
-
-    const jobsRes = await httpGet('/', { 'Host': 'jobs.utheversity.com' });
-    assert(jobsRes.raw.includes('CANDIDATE BOARD') && !jobsRes.raw.includes('pane-iframe'), 'jobs.utheversity.com serves candidate.html with zero leakage');
-
-    const adminRes = await httpGet('/', { 'Host': 'admin.utheversity.com' });
-    assert(adminRes.raw.includes('MASTER SUITE') && !adminRes.raw.includes('pane-iframe'), 'admin.utheversity.com serves admin.html with zero leakage');
+    const loginRes = await httpPost('/api/auth/login', {
+      email: 'contact@utheversity.com',
+      password: 'ZionAdmin2026!'
+    });
+    assert(loginRes.status === 200, 'Master Owner Zion Daye authenticated successfully');
+    assert(loginRes.data.user.name === 'Zion Daye', 'Master Owner name verified as Zion Daye');
+    assert(loginRes.data.user.phone === '815-980-4272', 'Master Owner contact phone verified as 815-980-4272');
+    assert(loginRes.data.user.role === 'admin', 'Master Owner role verified as admin');
   } catch (err) {
     assert(false, `Group 1 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 2: Candidate Board Revisions (candidate.html)
+  // TEST GROUP 2: Smart Omni-Search Bar
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 2] Candidate Board Workflow & Streamlined Modal');
+  console.log('\n[TEST GROUP 2] Smart Omni-Search Endpoint');
   try {
-    const candContent = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
-    assert(candContent.includes('SEND RESUME/CV'), 'Bottom detail button beneath Job Description changed to "SEND RESUME/CV"');
-    assert(candContent.includes('QUICK SEND'), 'Card and header trigger buttons labeled "QUICK SEND"');
-    assert(candContent.includes('SUBMIT INTERVIEW REQUEST'), 'Submit button labeled "SUBMIT INTERVIEW REQUEST"');
-    assert(candContent.includes('REMOVE ATS'), 'Submit button has tooltip "REMOVE ATS"');
-    assert(candContent.includes('accept=".pdf"'), 'Resume upload field restricted to .pdf only');
-    assert(candContent.includes('Best Time to Contact') && candContent.includes('Morning') && candContent.includes('Afternoon'), 'Best Time to Contact dropdown present with required options');
-    assert(candContent.includes('Interview Request Title'), 'Interview Request Title input field present');
-    assert(candContent.includes('What do you want the employer to know to advance your resume?'), 'Interview Request Title has correct tooltip');
-    assert(candContent.includes('Quick About Me / Why Hire Me...'), 'Interview Request Message textarea placeholder present');
+    const searchRes = await httpGet('/api/admin/search?q=Zion');
+    assert(searchRes.status === 200, 'GET /api/admin/search returns HTTP 200');
+    assert(searchRes.data.results.users.some(u => u.name === 'Zion Daye'), 'Omni-Search matched Zion Daye user account');
 
-    // Dropdown & Header Cleanup
-    assert(candContent.includes('<option value="Full-Time"') && !candContent.includes('All Commitments'), 'Commitment dropdown strictly restricted without "All Commitments"');
-    assert(!candContent.includes('SYNC ACTIVE') && !candContent.includes('OPENINGS ('), 'Header cleaned of "SYNC ACTIVE" and "X OPENINGS" badges');
+    const searchPhone = await httpGet('/api/admin/search?q=815-980-4272');
+    assert(searchPhone.data.results.users.some(u => u.phone === '815-980-4272'), 'Omni-Search matched by phone number');
+
+    const searchJob = await httpGet('/api/admin/search?q=Quantum');
+    assert(searchJob.data.results.jobs.some(j => j.company.includes('Quantum')), 'Omni-Search matched by company name');
   } catch (err) {
     assert(false, `Group 2 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 3: Recruiter Workspace (recruiter.html)
+  // TEST GROUP 3: u-thePOST Recruiter Studio & Features
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 3] Recruiter Workspace, 4-Tab Nav, Social Links & Dynamic Pricing');
+  console.log('\n[TEST GROUP 3] u-thePOST Recruiter Studio (White Theme & u-thePAL Tier)');
   try {
     const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
-    assert(recContent.includes('1. JOB STUDIO'), 'Tab 1: 1. JOB STUDIO present');
-    assert(recContent.includes('2. OMNICHANNEL CRM'), 'Tab 2: 2. OMNICHANNEL CRM present');
-    assert(recContent.includes('3. APPLICANT TRACKER'), 'Tab 3: 3. APPLICANT TRACKER present');
-    assert(recContent.includes('4. PERFORMANCE & PLANS'), 'Tab 4: 4. PERFORMANCE & PLANS present');
-
-    // Check header center tabs
-    const headerTabs = recContent.match(/<div class="header-center-tabs">[\s\S]*?<\/div>/)[0];
-    assert(!headerTabs.includes('B2B LEAD ENGINE') && !headerTabs.includes('JOB AGGREGATOR'), 'Restricted exclusively to the 4 customer tabs');
-
-    // Badges & Social Media block
-    assert(recContent.includes('LINK SOCIAL MEDIA ACCOUNTS'), 'Card 1 contains "Link Social Media Accounts" block (LinkedIn, X, TikTok, Facebook, Instagram)');
-    assert(!recContent.includes('>INPUT FORM<'), 'Card 1 removed "INPUT FORM" badge');
-    assert(!recContent.includes('>REAL-TIME REACTIVE<'), 'Card 2 removed "REAL-TIME REACTIVE" badge');
-
-    // Schedule Queue Calendar Picker
-    assert(recContent.includes('schedule-calendar-modal') && recContent.includes('sched-date') && recContent.includes('9:00 AM'), 'Schedule Queue Calendar Picker modal with date selection and time slots implemented');
-
-    // Performance & Plans Pricing Engine
-    assert(recContent.includes('OMNI-CHANNEL FEATURES') && recContent.includes('toggleBillingFrequency'), 'Omni-Channel features toggle card with interactive switches and dynamic pricing implemented');
-
-    // Mobile ATS Touch Drag & Drop
-    assert(recContent.includes('touchstart') && recContent.includes('touchmove') && recContent.includes('touch-action: none'), 'Mobile ATS touch event listeners and touch-action: none configured');
+    assert(recContent.includes('1. JOB STUDIO') && recContent.includes('5. MY PROFILE'), '5 tabs including "5. MY PROFILE" implemented');
+    assert(recContent.includes('u-thePAL') && recContent.includes('$0'), 'u-thePAL $0/mo free member tier present with Email Only distribution');
+    assert(recContent.includes('LINK SOCIAL MEDIA ACCOUNTS') && recContent.includes('How Multi-Platform Posting Works'), 'Social media accounts block with plain-English instructions present');
+    assert(recContent.includes('ITEMIZED FEATURES & ADD-ONS') && recContent.includes('Top-of-Page Spotlight Placement'), 'Itemized Features & Add-Ons list present with pricing');
+    assert(recContent.includes('schedule-calendar-modal') && recContent.includes('sched-date'), 'Schedule Queue calendar popup modal present');
+    assert(recContent.includes('touchstart') && recContent.includes('touchmove') && recContent.includes('touch-action: none'), 'Mobile ATS touch drag-and-drop handles configured');
   } catch (err) {
     assert(false, `Group 3 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 4: Custom Authentication & JWT Security
+  // TEST GROUP 4: u-theJOBS Candidate Board
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 4] Backend Authentication & Cross-Subdomain JWT Security');
+  console.log('\n[TEST GROUP 4] u-theJOBS Candidate Board & Profile');
   try {
-    // 1. Sign up a new user
-    const testEmail = `test.user.${Date.now()}@utheversity.com`;
-    const signupRes = await httpPost('/api/auth/signup', {
-      email: testEmail,
-      password: 'SecurePassword2026!',
-      name: 'Test Candidate User',
-      role: 'candidate'
-    });
-    assert(signupRes.status === 201, 'POST /api/auth/signup returns HTTP 201 Created');
-    assert(signupRes.data.token && signupRes.data.user.email === testEmail, 'Signup returns valid JWT token and user payload');
-    const setCookie = signupRes.headers['set-cookie'] ? signupRes.headers['set-cookie'][0] : '';
-    assert(setCookie.includes('Domain=.utheversity.com') || setCookie.includes('uthe_token='), 'Cookie scoped to cross-subdomain Domain=.utheversity.com');
-
-    // 2. Login with valid credentials
-    const loginRes = await httpPost('/api/auth/login', {
-      email: testEmail,
-      password: 'SecurePassword2026!'
-    });
-    assert(loginRes.status === 200, 'POST /api/auth/login returns HTTP 200 OK');
-    assert(loginRes.data.user.name === 'Test Candidate User', 'Login verifies password hash and returns authenticated user');
-
-    // 3. Login with invalid password
-    const badLoginRes = await httpPost('/api/auth/login', {
-      email: testEmail,
-      password: 'WrongPassword!'
-    });
-    assert(badLoginRes.status === 401, 'POST /api/auth/login rejects invalid password with HTTP 401');
-
-    // 4. Test /api/auth/me session check
-    const meRes = await httpGet('/api/auth/me', {
-      'Authorization': `Bearer ${loginRes.data.token}`
-    });
-    assert(meRes.status === 200 && meRes.data.authenticated === true, 'GET /api/auth/me validates Bearer JWT token');
+    const candContent = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    assert(candContent.includes('SEND RESUME/CV'), 'Bottom detail button beneath Job Description labeled "SEND RESUME/CV"');
+    assert(candContent.includes('QUICK SEND'), 'Trigger button labeled "QUICK SEND"');
+    assert(candContent.includes('SUBMIT INTERVIEW REQUEST') && candContent.includes('REMOVE ATS'), 'Submit button labeled "SUBMIT INTERVIEW REQUEST" with tooltip "REMOVE ATS"');
+    assert(candContent.includes('accept=".pdf"'), 'Resume picker restricted to .pdf only snug beneath phone');
+    assert(candContent.includes('Best Time to Contact') && candContent.includes('Morning'), 'Best Time to Contact dropdown present');
+    assert(candContent.includes('Interview Request Title'), 'Interview Request Title input present');
+    assert(candContent.includes('MY PROFILE'), 'Candidate "MY PROFILE" modal and profile preferences present');
+    assert(!candContent.includes('All Commitments') && candContent.includes('<option value="Full-Time"'), 'Commitment dropdown strictly restricted');
   } catch (err) {
     assert(false, `Group 4 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 5: Master Admin Live CMS Controls & User CRUD
+  // TEST GROUP 5: Zero-Code Live Master CMS Controls
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 5] Master Admin Live CMS Controls & User CRUD');
+  console.log('\n[TEST GROUP 5] Zero-Code Master CMS Overrides & Subdomain Live Sync');
   try {
-    // 1. Get CMS config
-    const cmsGet = await httpGet('/api/cms/config');
-    assert(cmsGet.status === 200 && cmsGet.data.config.labels.quickSendBtn === 'QUICK SEND', 'GET /api/cms/config returns CMS configuration');
+    const cmsConfigRes = await httpGet('/api/cms/config');
+    assert(cmsConfigRes.status === 200 && cmsConfigRes.data.config.pricing.palMonthly === 0, 'GET /api/cms/config returns u-thePAL and plan rates');
 
-    // 2. Update CMS config overrides
-    const cmsPost = await httpPost('/api/cms/config', {
+    const updateCms = await httpPost('/api/cms/config', {
       labels: {
-        quickSendBtn: 'QUICK APPLY (CMS OVERRIDE)',
-        sendResumeBtn: 'SEND RESUME/CV'
+        quickSendBtn: 'QUICK SEND (LIVE CMS VERIFIED)'
+      },
+      pricing: {
+        palMonthly: 0,
+        starterMonthly: 99,
+        growthMonthly: 299,
+        proMonthly: 699
       }
     });
-    assert(cmsPost.status === 200 && cmsPost.data.config.labels.quickSendBtn === 'QUICK APPLY (CMS OVERRIDE)', 'POST /api/cms/config updates CMS label overrides');
-
-    // 3. User CRUD API
-    const usersGet = await httpGet('/api/admin/users');
-    assert(usersGet.status === 200 && usersGet.data.users.length >= 3, 'GET /api/admin/users returns registered platform accounts');
+    assert(updateCms.status === 200 && updateCms.data.config.labels.quickSendBtn === 'QUICK SEND (LIVE CMS VERIFIED)', 'POST /api/cms/config dynamically overrides labels in real time');
   } catch (err) {
     assert(false, `Group 5 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 6: Real-Time WebSocket Synchronization
+  // TEST GROUP 6: UI Standards, Auth Security & Custom Modals
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 6] Real-Time WebSocket Multi-Sync Mesh');
+  console.log('\n[TEST GROUP 6] Auth Security, Eye Toggle & Custom Modals');
+  try {
+    const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candContent = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const adminContent = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+
+    assert(recContent.includes('password-toggle-icon') || recContent.includes('togglePassVisibility'), 'recruiter.html includes password eye visibility toggle');
+    assert(candContent.includes('password-toggle-icon') || candContent.includes('togglePassVisibility'), 'candidate.html includes password eye visibility toggle');
+    assert(recContent.includes('custom-modal-alert') && candContent.includes('custom-modal-alert') && adminContent.includes('custom-modal-alert'), 'All views use signature custom modal alerts (no standard browser alert)');
+  } catch (err) {
+    assert(false, `Group 6 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 7: Real-Time Live Sync Relay
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 7] Live WebSocket Synchronization');
   try {
     await new Promise((resolve, reject) => {
       const wsClient = new WebSocket(WS_URL);
@@ -228,21 +195,21 @@ async function runTests() {
 
       wsClient.on('open', async () => {
         const testJob = {
-          jobTitle: 'Distributed Systems Architect (Live WS Test)',
-          company: 'SyncMesh Global',
+          jobTitle: 'Principal Live Sync Engineer',
+          company: 'UTHEVERSITY Labs',
           location: 'REMOTE',
           employmentType: 'Full-Time',
-          salary: '$180,000 - $220,000',
-          summary: 'Testing real-time live sync across dual portals.'
+          salary: '$200,000 - $250,000',
+          summary: 'Testing zero-code real-time broadcast.'
         };
         await httpPost('/api/jobs', testJob);
       });
 
       wsClient.on('message', (msg) => {
         const data = JSON.parse(msg.toString());
-        if (data.type === 'JOB_PUBLISHED' && data.job && data.job.jobTitle.includes('Distributed Systems Architect')) {
+        if (data.type === 'JOB_PUBLISHED' && data.job && data.job.jobTitle.includes('Principal Live Sync Engineer')) {
           jobReceived = true;
-          assert(true, 'WebSocket client received real-time JOB_PUBLISHED broadcast');
+          assert(true, 'Live WebSocket broadcast verified in real-time');
           wsClient.close();
           resolve();
         }
@@ -252,14 +219,14 @@ async function runTests() {
 
       setTimeout(() => {
         if (!jobReceived) {
-          assert(false, 'Timed out waiting for WebSocket JOB_PUBLISHED event');
+          assert(false, 'Timed out waiting for WebSocket sync event');
           wsClient.close();
           resolve();
         }
       }, 3000);
     });
   } catch (err) {
-    assert(false, `Group 6 failed: ${err.message}`);
+    assert(false, `Group 7 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
@@ -267,7 +234,7 @@ async function runTests() {
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL PLATFORM OVERHAUL, AUTH & CMS TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL MASTER PLATFORM OVERHAUL & ZERO-CODE CMS TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');

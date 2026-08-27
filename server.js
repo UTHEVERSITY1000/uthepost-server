@@ -4,10 +4,10 @@ const path = require('path');
 const crypto = require('crypto');
 
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'utheversity-enterprise-jwt-secret-key-2026-secure';
+const JWT_SECRET = process.env.JWT_SECRET || 'utheversity-professional-jwt-secret-key-2026-secure';
 
 // ----------------------------------------------------
-// NATIVE CRYPTO AUTH ENGINE (Zero-Dependency JWT & Hash)
+// NATIVE CRYPTO AUTH TOOL (Zero-Dependency JWT & Hash)
 // ----------------------------------------------------
 function hashPassword(password, salt = null) {
   if (!salt) salt = crypto.randomBytes(16).toString('hex');
@@ -72,7 +72,7 @@ function verifyJwt(token) {
   try {
     const payload = JSON.parse(base64UrlDecode(encodedPayload));
     if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
-      return null; // Expired
+      return null;
     }
     return payload;
   } catch (e) {
@@ -111,26 +111,31 @@ function getAuthenticatedUser(req) {
 
 // ----------------------------------------------------
 // IN-MEMORY USER & ACCOUNT DATABASE
+// Pre-configured Master Owner: Zion Daye
 // ----------------------------------------------------
 const usersDatabase = [
   {
-    id: 'USR-001',
-    email: 'admin@utheversity.com',
-    passwordHash: hashPassword('AdminPass2026!'),
-    name: 'Master Administrator',
+    id: 'USR-ZION-001',
+    email: 'contact@utheversity.com',
+    passwordHash: hashPassword('ZionAdmin2026!'),
+    name: 'Zion Daye',
     role: 'admin',
-    company: 'UTHEVERSITY Inc.',
-    phone: '+1 (555) 000-0001',
+    company: 'UTHEVERSITY Global Inc.',
+    phone: '815-980-4272',
+    bio: 'Platform Founder & Master System Administrator.',
+    approved: true,
     createdAt: new Date().toISOString()
   },
   {
     id: 'USR-002',
     email: 'recruiter@quantumtech.io',
     passwordHash: hashPassword('Recruiter2026!'),
-    name: 'Quantum Hiring Team',
+    name: 'Quantum Talent Team',
     role: 'recruiter',
     company: 'Quantum Technologies Corp',
     phone: '+1 (555) 019-2831',
+    bio: 'High-growth technology hiring team.',
+    approved: true,
     createdAt: new Date().toISOString()
   },
   {
@@ -141,12 +146,14 @@ const usersDatabase = [
     role: 'candidate',
     company: 'Independent Professional',
     phone: '+1 (555) 448-9102',
+    bio: 'Senior Full-Stack Architect with 8+ years experience.',
+    approved: true,
     createdAt: new Date().toISOString()
   }
 ];
 
 // ----------------------------------------------------
-// MASTER CMS CONFIGURATION STORE
+// MASTER ZERO-CODE CMS CONFIGURATION STORE
 // ----------------------------------------------------
 let cmsConfig = {
   labels: {
@@ -159,27 +166,36 @@ let cmsConfig = {
     submitTooltip: "REMOVE ATS",
     interviewReqTitle: "Interview Request Title",
     interviewReqTooltip: "What do you want the employer to know to advance your resume?",
-    interviewReqPlaceholder: "Quick About Me / Why Hire Me..."
+    interviewReqPlaceholder: "Quick About Me / Why Hire Me...",
+    palTierName: "u-thePAL",
+    palTierDesc: "Free member tier allowing 1 active posting distributed through Email Only.",
+    socialInstructions: "Connect your social accounts once. When you publish a position, it automatically formats and broadcasts across your linked networks in one click."
   },
-  features: {
-    omnichannelEnabled: true,
-    spotlightPricing: 49,
+  pricing: {
+    palMonthly: 0,
     starterMonthly: 99,
     growthMonthly: 299,
-    enterpriseMonthly: 699,
-    channels: {
-      linkedin: { name: "LinkedIn InMail", enabled: true, rate: 0.12 },
-      gmail: { name: "Direct Cold Email", enabled: true, rate: 0.10 },
-      tiktok: { name: "TikTok Spotlight", enabled: true, rate: 0.08 },
-      facebook: { name: "Facebook Business", enabled: true, rate: 0.06 },
-      instagram: { name: "Instagram Showcase", enabled: true, rate: 0.07 },
-      x: { name: "X / Twitter Stream", enabled: true, rate: 0.09 }
-    }
+    proMonthly: 699,
+    yearlyDiscountPct: 20
+  },
+  addOns: {
+    topSpotlight: 49,
+    urgentBadge: 29,
+    directMessages: 19,
+    verifiedEmployer: 39
+  },
+  channels: {
+    linkedin: { name: "LinkedIn InMail & Posts", enabled: true },
+    email: { name: "Direct Cold Email", enabled: true },
+    tiktok: { name: "TikTok Video Spotlight", enabled: true },
+    x: { name: "X / Twitter Executive Stream", enabled: true },
+    facebook: { name: "Facebook Business Network", enabled: true },
+    instagram: { name: "Instagram Stories Showcase", enabled: true }
   }
 };
 
 // ----------------------------------------------------
-// IN-MEMORY JOB & APPLICANT STORES
+// IN-MEMORY JOB CATALOG & APPLICANTS DATABASE
 // ----------------------------------------------------
 const globalJobDatabase = [
   {
@@ -197,7 +213,7 @@ const globalJobDatabase = [
     retirement: '401(k) 5% Match',
     additionalPerks: '$3,000 Home Office Stipend + Equity',
     applyLinkUrl: 'https://careers.quantumtech.io/apply/101',
-    summary: 'Lead our next-generation real-time multi-agent sync engine and enterprise web infrastructure. Modern TypeScript, WebSockets, high-performance UI.',
+    summary: 'Lead our next-generation live multi-agent sync tool and professional web infrastructure. Modern TypeScript, high-performance UI.',
     logo: '',
     createdAt: new Date().toISOString()
   },
@@ -216,7 +232,7 @@ const globalJobDatabase = [
     retirement: '401(k) Matching',
     additionalPerks: 'Annual Executive Retreats & Relocation',
     applyLinkUrl: 'https://apexcloud.com/careers/vp-eng',
-    summary: 'Lead an engineering organization of 45+ distributed developers building high-throughput data pipelines and cloud infra.',
+    summary: 'Lead an engineering organization of 45+ distributed developers building high-throughput data systems and cloud infrastructure.',
     logo: '',
     createdAt: new Date().toISOString()
   },
@@ -235,7 +251,7 @@ const globalJobDatabase = [
     retirement: 'Optional SEP-IRA',
     additionalPerks: 'Latest M3 Max Hardware & Cloud Credits',
     applyLinkUrl: 'https://neuralflow.ai/jobs/prompt-eng',
-    summary: 'Design and deploy multi-agent cognitive architectures and autonomous reasoning pipelines for enterprise customers.',
+    summary: 'Design and deploy cognitive architectures and autonomous reasoning pipelines for professional customers.',
     logo: '',
     createdAt: new Date().toISOString()
   }
@@ -250,17 +266,17 @@ const applicantsStore = [
     email: 'marcus.vance@techdev.io',
     phone: '+1 (512) 555-0192',
     bestTime: 'Afternoon',
-    interviewTitle: 'Senior Full-Stack Architect / WebSockets & Streaming',
+    interviewTitle: 'Senior Full-Stack Architect / Real-Time Systems Specialist',
     status: 'Screened',
     score: 94,
-    skills: ['TypeScript', 'WebSockets', 'React', 'Node.js', 'PostgreSQL'],
-    resumeSummary: '8+ years full stack architect specialized in reactive client-side state engines and distributed WebSockets.',
+    skills: ['TypeScript', 'Node.js', 'React', 'Live Sync', 'PostgreSQL'],
+    resumeSummary: '8+ years full stack architect specialized in reactive client-side state tools and distributed systems.',
     appliedAt: new Date(Date.now() - 3600000 * 5).toISOString(),
     scorecard: {
       technical: 5,
       communication: 4,
       culture: 5,
-      notes: 'Exceptional architectural grasp. Built similar dual-sync systems in previous startup.',
+      notes: 'Exceptional architectural grasp. Built similar live synchronization systems in previous company.',
       decision: 'Strong Hire'
     }
   },
@@ -276,7 +292,7 @@ const applicantsStore = [
     status: 'Interviewing',
     score: 88,
     skills: ['Go', 'Node.js', 'Distributed Systems', 'Vue', 'Docker'],
-    resumeSummary: '6 years scaling high-availability microservices and real-time frontend streaming protocols.',
+    resumeSummary: '6 years scaling high-availability microservices and real-time streaming protocols.',
     appliedAt: new Date(Date.now() - 3600000 * 24).toISOString(),
     scorecard: {
       technical: 4,
@@ -310,65 +326,9 @@ const applicantsStore = [
   }
 ];
 
-const openSourceFeeds = [
-  {
-    id: 'FEED-SCHEMA-01',
-    source: 'Schema.org JobPosting Ingestion',
-    title: 'Lead Distributed Systems Architect',
-    company: 'Nexus Scale Labs',
-    location: 'Remote (US/EU)',
-    type: 'Full-Time',
-    minComp: 185000,
-    maxComp: 240000,
-    salary: '$185,000 - $240,000',
-    pto: 'Unlimited PTO + Sabbatical',
-    health: '100% Premium Covered',
-    retirement: '401(k) 6% Match',
-    perks: '$5,000 Hardware Setup Allowance',
-    url: 'https://nexusscale.io/careers/lead-architect',
-    summary: 'Lead next-gen distributed messaging broker with raft consensus and real-time WebSocket multiplexing.'
-  },
-  {
-    id: 'FEED-GITHUB-02',
-    source: 'GitHub Jobs Schema Ingestion',
-    title: 'Staff Frontend Engineer (TypeScript & Canvas)',
-    company: 'Vector Canvas Corp',
-    location: 'Austin, TX',
-    type: 'Full-Time',
-    minComp: 160000,
-    maxComp: 210000,
-    salary: '$160,000 - $210,000',
-    pto: '25 Days PTO',
-    health: 'Comprehensive PPO',
-    retirement: '401(k) Matching',
-    perks: 'Annual Conference & Travel Budget',
-    url: 'https://vectorcanvas.dev/jobs/staff-fe',
-    summary: 'Design high-performance 60fps web application canvases, rendering engines, and real-time collaborative state.'
-  },
-  {
-    id: 'FEED-RSS-03',
-    source: 'TechCareers Open RSS Aggregator',
-    title: 'Senior DevOps & Reliability Engineer',
-    company: 'Kubernetes Cloud Network',
-    location: 'Remote',
-    type: 'Contract',
-    minComp: 90,
-    maxComp: 125,
-    salary: '$90 - $125 / hr',
-    pto: 'Flexible Hours',
-    health: 'Health Insurance Stipend',
-    retirement: 'SEP-IRA Eligible',
-    perks: 'Full Remote Freedom',
-    url: 'https://k8scloud.net/openings/sr-sre',
-    summary: 'Manage multi-region Kubernetes clusters, automated zero-downtime canary pipelines, and edge network routing.'
-  }
-];
-
-// Hunter.io Lead Engine Search Simulation
+// Hunter.io Lead Search Simulation
 function handleHunterDomainSearch(params) {
   const domain = (params.get('domain') || 'stripe.com').toLowerCase().trim();
-  const department = params.get('department') || 'hr,management';
-  const seniority = params.get('seniority') || 'executive,senior';
   const companyName = domain.split('.')[0].toUpperCase();
 
   const leads = [
@@ -399,60 +359,14 @@ function handleHunterDomainSearch(params) {
       sources: ['github.com', 'press_release'],
       phone: '+1 (415) 890-2104',
       last_verified: new Date().toISOString().split('T')[0]
-    },
-    {
-      company_name: companyName,
-      domain: domain,
-      contact_name: 'Rachel Adams',
-      position: 'Director of Technical Recruiting',
-      department: 'human_resources',
-      seniority: 'senior',
-      verified_email: `rachel.a@${domain}`,
-      confidence_score: 91,
-      status: 'verified',
-      sources: ['linkedin.com'],
-      phone: '+1 (415) 890-2118',
-      last_verified: new Date().toISOString().split('T')[0]
     }
   ];
 
   return {
     data: {
       domain: domain,
-      disposable: false,
-      webmail: false,
-      accept_all: false,
-      pattern: '{first}.{last}',
       organization: companyName,
       emails: leads
-    },
-    meta: {
-      results: leads.length,
-      limit: 10,
-      offset: 0,
-      params: { domain, department, seniority }
-    }
-  };
-}
-
-function handleHunterEmailVerify(params) {
-  const email = (params.get('email') || 'recruiter@company.com').toLowerCase().trim();
-  return {
-    data: {
-      status: 'valid',
-      result: 'deliverable',
-      score: 96,
-      email: email,
-      regexp: true,
-      gibberish: false,
-      disposable: false,
-      webmail: false,
-      mx_records: true,
-      smtp_server: true,
-      smtp_check: true,
-      accept_all: false,
-      block: false,
-      sources: 6
     }
   };
 }
@@ -462,7 +376,7 @@ function resolveTargetFileForHost(req, parsedUrl) {
   const pathname = parsedUrl.pathname;
   const cleanPath = pathname.toLowerCase().replace(/\/+$/, '');
 
-  // 1. Explicit clean route aliases or direct filenames
+  // 1. Route aliases
   if (cleanPath === '/recruiter' || cleanPath === '/recruiter.html' || cleanPath === '/post' || cleanPath === '/u-thepost-enterprise-edition.html' || cleanPath === '/u-thepost-dual link to u-thejobs.html' || cleanPath === '/u-thepost-dual link & mobile.html') {
     return 'recruiter.html';
   }
@@ -476,7 +390,7 @@ function resolveTargetFileForHost(req, parsedUrl) {
     return 'preview-hub.html';
   }
 
-  // Static assets on disk
+  // Static files on disk
   if (cleanPath !== '' && cleanPath !== '/' && cleanPath !== '/index.html') {
     const rawFile = pathname.replace(/^\//, '');
     const candidatePath = path.join(__dirname, decodeURIComponent(rawFile));
@@ -529,7 +443,6 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Helper JSON response
   function sendJson(status, data, extraHeaders = {}) {
     res.writeHead(status, { 'Content-Type': 'application/json', ...extraHeaders });
     res.end(JSON.stringify(data));
@@ -554,8 +467,9 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/auth/signup' && req.method === 'POST') {
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON body' });
-      const { email, password, name, role, company } = body;
+      const { email, password, name, role, company, phone } = body;
       if (!email || !password) return sendJson(400, { error: 'Email and password required' });
+      if (password.length < 8) return sendJson(400, { error: 'Password must be at least 8 characters long' });
 
       const existing = usersDatabase.find(u => u.email.toLowerCase() === email.toLowerCase().trim());
       if (existing) return sendJson(409, { error: 'Email already registered' });
@@ -567,14 +481,15 @@ const server = http.createServer((req, res) => {
         name: name || email.split('@')[0],
         role: role || 'candidate',
         company: company || '',
-        phone: '',
+        phone: phone || '',
+        bio: '',
+        approved: true,
         createdAt: new Date().toISOString()
       };
 
       usersDatabase.push(newUser);
       const token = generateJwt({ userId: newUser.id, role: newUser.role, email: newUser.email });
-
-      const safeUser = { id: newUser.id, email: newUser.email, name: newUser.name, role: newUser.role, company: newUser.company };
+      const safeUser = { id: newUser.id, email: newUser.email, name: newUser.name, role: newUser.role, company: newUser.company, phone: newUser.phone, bio: newUser.bio };
       const cookieHeader = `uthe_token=${token}; Domain=.utheversity.com; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`;
 
       sendJson(201, { status: 'created', user: safeUser, token }, { 'Set-Cookie': cookieHeader });
@@ -594,7 +509,7 @@ const server = http.createServer((req, res) => {
       }
 
       const token = generateJwt({ userId: user.id, role: user.role, email: user.email });
-      const safeUser = { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company };
+      const safeUser = { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
       const cookieHeader = `uthe_token=${token}; Domain=.utheversity.com; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`;
 
       sendJson(200, { status: 'authenticated', user: safeUser, token }, { 'Set-Cookie': cookieHeader });
@@ -613,8 +528,25 @@ const server = http.createServer((req, res) => {
     if (!user) {
       return sendJson(200, { authenticated: false, user: null });
     }
-    const safeUser = { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone };
+    const safeUser = { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
     sendJson(200, { authenticated: true, user: safeUser });
+    return;
+  }
+
+  if (pathname === '/api/auth/profile' && req.method === 'PUT') {
+    const user = getAuthenticatedUser(req);
+    if (!user) return sendJson(401, { error: 'Unauthorized' });
+
+    readBody((err, body) => {
+      if (err) return sendJson(400, { error: 'Invalid JSON' });
+      if (body.name) user.name = body.name;
+      if (body.company) user.company = body.company;
+      if (body.phone) user.phone = body.phone;
+      if (body.bio) user.bio = body.bio;
+
+      const safeUser = { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
+      sendJson(200, { status: 'updated', user: safeUser });
+    });
     return;
   }
 
@@ -632,6 +564,48 @@ const server = http.createServer((req, res) => {
   }
 
   // ----------------------------------------------------
+  // SMART OMNI-SEARCH FOR MASTER ADMIN
+  // ----------------------------------------------------
+  if (pathname === '/api/admin/search' && req.method === 'GET') {
+    const q = (parsedUrl.searchParams.get('q') || '').toLowerCase().trim();
+    if (!q) {
+      return sendJson(200, { results: { users: usersDatabase, jobs: globalJobDatabase, applicants: applicantsStore } });
+    }
+
+    const matchedUsers = usersDatabase.filter(u =>
+      (u.name || '').toLowerCase().includes(q) ||
+      (u.email || '').toLowerCase().includes(q) ||
+      (u.phone || '').toLowerCase().includes(q) ||
+      (u.company || '').toLowerCase().includes(q)
+    );
+
+    const matchedJobs = globalJobDatabase.filter(j =>
+      (j.jobTitle || '').toLowerCase().includes(q) ||
+      (j.company || '').toLowerCase().includes(q) ||
+      (j.id || '').toLowerCase().includes(q) ||
+      (j.location || '').toLowerCase().includes(q)
+    );
+
+    const matchedApplicants = applicantsStore.filter(a =>
+      (a.name || '').toLowerCase().includes(q) ||
+      (a.email || '').toLowerCase().includes(q) ||
+      (a.phone || '').toLowerCase().includes(q) ||
+      (a.id || '').toLowerCase().includes(q) ||
+      (a.jobTitle || '').toLowerCase().includes(q)
+    );
+
+    sendJson(200, {
+      query: q,
+      results: {
+        users: matchedUsers,
+        jobs: matchedJobs,
+        applicants: matchedApplicants
+      }
+    });
+    return;
+  }
+
+  // ----------------------------------------------------
   // CMS OVERRIDE & MASTER CONFIGURATION ROUTES
   // ----------------------------------------------------
   if (pathname === '/api/cms/config' && req.method === 'GET') {
@@ -643,7 +617,9 @@ const server = http.createServer((req, res) => {
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON' });
       if (body.labels) cmsConfig.labels = { ...cmsConfig.labels, ...body.labels };
-      if (body.features) cmsConfig.features = { ...cmsConfig.features, ...body.features };
+      if (body.pricing) cmsConfig.pricing = { ...cmsConfig.pricing, ...body.pricing };
+      if (body.addOns) cmsConfig.addOns = { ...cmsConfig.addOns, ...body.addOns };
+      if (body.channels) cmsConfig.channels = { ...cmsConfig.channels, ...body.channels };
 
       broadcastWebSocketEvent('CMS_CONFIG_UPDATED', { config: cmsConfig });
       sendJson(200, { status: 'updated', config: cmsConfig });
@@ -662,6 +638,8 @@ const server = http.createServer((req, res) => {
       role: u.role,
       company: u.company,
       phone: u.phone,
+      bio: u.bio,
+      approved: u.approved !== false,
       createdAt: u.createdAt
     }));
     sendJson(200, { users: safeUsers, count: safeUsers.length });
@@ -686,13 +664,12 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/health') {
     sendJson(200, {
       status: 'healthy',
-      system: 'u-thePOST Multi-Sync Engine',
-      version: '2.0.0-ENTERPRISE',
+      system: 'u-thePOST Multi-Node Live Sync Studio',
+      version: '2.0.0-PROFESSIONAL',
       uptime: process.uptime(),
       activeJobs: globalJobDatabase.length,
       activeApplicants: applicantsStore.length,
       activeUsers: usersDatabase.length,
-      meshConnectedClients: connectedClients.size,
       timestamp: new Date().toISOString()
     });
     return;
@@ -701,22 +678,15 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/admin/stats') {
     sendJson(200, {
       status: 'success',
-      node: 'u-theADMIN Master Telemetry Core',
+      owner: 'Zion Daye',
       timestamp: new Date().toISOString(),
       metrics: {
         totalJobs: globalJobDatabase.length,
         totalApplicants: applicantsStore.length,
         totalUsers: usersDatabase.length,
-        externalFeeds: openSourceFeeds.length,
         activeWsClients: connectedClients.size,
         uptimeSeconds: Math.floor(process.uptime()),
         memoryUsageMb: Math.round(process.memoryUsage().heapUsed / 1024 / 1024)
-      },
-      roles: {
-        recruiter: { host: 'post.utheversity.com', target: 'recruiter.html', status: 'ONLINE' },
-        candidate: { host: 'jobs.utheversity.com', target: 'candidate.html', status: 'ONLINE' },
-        admin: { host: 'admin.utheversity.com', target: 'admin.html', status: 'ACTIVE CORE' },
-        fallback: { host: '*', target: 'preview-hub.html', status: 'STANDBY' }
       }
     });
     return;
@@ -725,22 +695,6 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/hunter/domain-search') {
     const payload = handleHunterDomainSearch(parsedUrl.searchParams);
     sendJson(200, payload);
-    return;
-  }
-
-  if (pathname === '/api/hunter/email-verifier') {
-    const payload = handleHunterEmailVerify(parsedUrl.searchParams);
-    sendJson(200, payload);
-    return;
-  }
-
-  if (pathname === '/api/jobs/aggregate') {
-    sendJson(200, {
-      status: 'success',
-      count: openSourceFeeds.length,
-      feeds: openSourceFeeds,
-      ingestedAt: new Date().toISOString()
-    });
     return;
   }
 
@@ -815,14 +769,7 @@ const server = http.createServer((req, res) => {
         score: payload.score || Math.floor(84 + Math.random() * 14),
         skills: payload.skills || ['JavaScript', 'System Design', 'Communication'],
         resumeSummary: payload.resumeSummary || 'Candidate interview request.',
-        appliedAt: new Date().toISOString(),
-        scorecard: {
-          technical: 0,
-          communication: 0,
-          culture: 0,
-          notes: 'Pending review',
-          decision: 'Pending'
-        }
+        appliedAt: new Date().toISOString()
       };
 
       applicantsStore.unshift(newApplicant);
@@ -871,7 +818,7 @@ const server = http.createServer((req, res) => {
 });
 
 // ----------------------------------------------------
-// WEBSOCKET MULTI-SYNC ENGINE & AUTO-HEARTBEAT
+// LIVE SYNC RELAY & AUTO-HEARTBEAT
 // ----------------------------------------------------
 let wss = null;
 const connectedClients = new Set();
@@ -957,7 +904,7 @@ function initWebSocket() {
     }, 25000);
 
   } catch (err) {
-    console.log('[WebSocket Bus] notice:', err.message);
+    console.log('[Live Sync Bus] notice:', err.message);
   }
 }
 
@@ -982,14 +929,13 @@ process.on('uncaughtException', (err) => {
 
 server.listen(PORT, () => {
   console.log(`================================================================`);
-  console.log(`U-THEPOST & U-THEJOBS ENTERPRISE MULTI-SYNC ENGINE ACTIVE`);
+  console.log(`UTHEVERSITY LIVE SYNC RECRUITMENT STUDIO ACTIVE`);
   console.log(`Local HTTP Server: http://localhost:${PORT}`);
-  console.log(`WebSocket Sync Mesh: ws://localhost:${PORT}`);
+  console.log(`Live Sync WebSocket: ws://localhost:${PORT}`);
   console.log(`Strict Subdomain Routing:`);
-  console.log(`  post.utheversity.com  -> recruiter.html (u-thePOST Standalone)`);
-  console.log(`  jobs.utheversity.com  -> candidate.html (u-theJOBS Standalone)`);
-  console.log(`  admin.utheversity.com -> admin.html (u-theADMIN Master Suite)`);
-  console.log(`  Direct / Fallback     -> preview-hub.html (Staging Workbench)`);
+  console.log(`  post.utheversity.com  -> recruiter.html (u-thePOST Recruiter Studio)`);
+  console.log(`  jobs.utheversity.com  -> candidate.html (u-theJOBS Candidate Board)`);
+  console.log(`  admin.utheversity.com -> admin.html (u-theADMIN Master Suite - Zion Daye)`);
   console.log(`================================================================`);
   initWebSocket();
 });
