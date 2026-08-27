@@ -1289,7 +1289,7 @@
   <!-- MASTER TOP HEADER (5 EXCLUSIVE TABS) -->
   <header>
     <div class="brand-group">
-      <h1 class="brand-title" id="cms-brand-title" data-tooltip="u-thePOST: Recruiter Studio & Multi-Platform Hiring Hub.">U-THEPOST</h1>
+      <h1 class="brand-title" id="cms-brand-title" data-cms-key="brand-title" data-tooltip="u-thePOST: Recruiter Studio & Multi-Platform Hiring Hub.">U-THEPOST</h1>
 
       <!-- LIVE LOGO OWNERSHIP COMPONENT -->
       <div class="employer-logo-badge" id="employer-logo-badge" onclick="openLogoUploadModal()" data-tooltip="Upload or change your company logo badge">
@@ -1353,31 +1353,31 @@
         <!-- CARD 1: EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LEFT COLUMN) -->
         <div class="panel-card">
           <div class="panel-header">
-            <span class="panel-title" id="card1-title-text">1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS</span>
+            <span class="panel-title" id="card1-title-text" data-cms-key="post-card1-title">1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS</span>
             <div style="display: flex; gap: 0.4rem; align-items: center;">
               <span class="urgent-hiring-badge">URGENT HIRING</span>
             </div>
           </div>
 
           <div class="form-group">
-            <label data-tooltip="Enter the public job position title.">Position Title</label>
+            <label data-cms-key="post-job-title-label" data-tooltip="Enter the public job position title.">Position Title</label>
             <input type="text" id="inp-title" value="Sales Manager" oninput="updateLivePreview()" data-tooltip="Position role title.">
           </div>
 
           <div class="grid-2">
             <div class="form-group">
-              <label data-tooltip="Company or Organization legal entity name.">Company Name</label>
+              <label data-cms-key="post-company-label" data-tooltip="Company or Organization legal entity name.">Company Name</label>
               <input type="text" id="inp-company" value="Quantum Retail Corp" oninput="updateLivePreview()" data-tooltip="Legal employer name.">
             </div>
             <div class="form-group">
-              <label data-tooltip="Work location and remote / on-site mode.">Location & Mode</label>
+              <label data-cms-key="post-loc-label" data-tooltip="Work location and remote / on-site mode.">Location & Mode</label>
               <input type="text" id="inp-location" value="AUSTIN, TX (HYBRID)" oninput="updateLivePreview()" data-tooltip="Location description.">
             </div>
           </div>
 
           <div class="grid-2">
             <div class="form-group">
-              <label data-tooltip="Employment commitment type.">Employment Commitment</label>
+              <label data-cms-key="post-emp-options" data-tooltip="Employment commitment type.">Employment Commitment</label>
               <select id="inp-type" onchange="updateLivePreview()" data-tooltip="Select employment type.">
                 <option value="Full-Time" selected>Full-Time</option>
                 <option value="Part-Time">Part-Time</option>
@@ -1386,21 +1386,21 @@
               </select>
             </div>
             <div class="form-group">
-              <label data-tooltip="Public compensation or hourly pay display.">Salary Range Display</label>
+              <label data-cms-key="post-salary-label" data-tooltip="Public compensation or hourly pay display.">Salary Range Display</label>
               <input type="text" id="inp-salary" value="$75,000 - $95,000" oninput="updateLivePreview()" data-tooltip="Salary range text.">
             </div>
           </div>
 
           <!-- DEDICATED EMPLOYER CONTACT EMAIL -->
           <div class="form-group">
-            <label data-tooltip="Official hiring contact email for candidate resume alerts and broadcast updates.">Employer Contact Email</label>
+            <label data-cms-key="post-email-label" data-tooltip="Official hiring contact email for candidate resume alerts and broadcast updates.">Employer Contact Email</label>
             <input type="email" id="inp-recruiter-email" value="hiring@quantumretail.com" data-tooltip="Contact email address for outreach and candidate notifications.">
           </div>
 
           <!-- DEDICATED SOCIAL MEDIA ACCOUNT CONNECTIONS (CARD 1) WITH HIGH-RES ICONS -->
           <div class="connected-socials-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 0.72rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 1px; text-transform: uppercase;">CONNECTED SOCIAL CHANNELS</span>
+              <span data-cms-key="post-social-header" style="font-size: 0.72rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 1px; text-transform: uppercase;">CONNECTED SOCIAL CHANNELS</span>
               <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.15rem 0.45rem; border-radius: 4px;">CONNECTED</span>
             </div>
             <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4;">
@@ -1414,7 +1414,7 @@
                   <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
                 </svg>
               </div>
-              <input type="text" id="inp-soc-linkedin" placeholder="LinkedIn Profile / Company URL (e.g. linkedin.com/company/quantumretail)" value="https://linkedin.com/company/quantumretail" style="height: 40px; font-size: 0.78rem;" data-tooltip="LinkedIn company page or recruiter URL.">
+              <input type="text" id="inp-soc-linkedin" data-cms-key="post-linkedin-ph" placeholder="LinkedIn Profile / Company URL (e.g. linkedin.com/company/quantumretail)" value="https://linkedin.com/company/quantumretail" style="height: 40px; font-size: 0.78rem;" data-tooltip="LinkedIn company page or recruiter URL.">
             </div>
 
             <!-- X / Twitter -->
@@ -1424,7 +1424,7 @@
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
               </div>
-              <input type="text" id="inp-soc-x" placeholder="X / Twitter Handle (e.g. @QuantumRetailJobs)" value="@QuantumRetailJobs" style="height: 40px; font-size: 0.78rem;" data-tooltip="X / Twitter recruitment handle.">
+              <input type="text" id="inp-soc-x" data-cms-key="post-x-ph" placeholder="X / Twitter Handle (e.g. @QuantumRetailJobs)" value="@QuantumRetailJobs" style="height: 40px; font-size: 0.78rem;" data-tooltip="X / Twitter recruitment handle.">
             </div>
 
             <!-- TikTok -->
@@ -1434,7 +1434,7 @@
                   <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.15 1.15 2.1 2.3 2.37 1.08.27 2.27-.05 3.06-.82.68-.64.98-1.58.98-2.5V.02z"/>
                 </svg>
               </div>
-              <input type="text" id="inp-soc-tiktok" placeholder="TikTok Handle (e.g. @QuantumRetailHiring)" value="@QuantumRetailHiring" style="height: 40px; font-size: 0.78rem;" data-tooltip="TikTok short-form talent handle.">
+              <input type="text" id="inp-soc-tiktok" data-cms-key="post-tiktok-ph" placeholder="TikTok Handle (e.g. @QuantumRetailHiring)" value="@QuantumRetailHiring" style="height: 40px; font-size: 0.78rem;" data-tooltip="TikTok short-form talent handle.">
             </div>
 
             <!-- Facebook -->
@@ -1470,9 +1470,9 @@
           <!-- CARD 2: LIVE POST PREVIEW WITH VERIFIED EMPLOYER BADGE & URGENT ACCENTS -->
           <div class="panel-card">
             <div class="panel-header">
-              <span class="panel-title" id="card2-title-text">2. LIVE POST PREVIEW</span>
+              <span class="panel-title" id="card2-title-text" data-cms-key="post-card2-title">2. LIVE POST PREVIEW</span>
               <div style="display:flex; gap:0.4rem; align-items:center;">
-                <span class="urgent-hiring-badge">URGENT HIRING</span>
+                <span class="urgent-hiring-badge" data-cms-key="post-preview-badge">URGENT HIRING</span>
                 <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">CANDIDATE VIEWPORT</span>
               </div>
             </div>
@@ -1519,7 +1519,7 @@
                 <strong style="color: var(--uthe-charcoal);">LinkedIn • X • TikTok • Facebook • Instagram</strong>
               </div>
 
-              <button style="background:#111827; color:var(--uthe-gold); border:1.5px solid var(--uthe-gold); font-weight:900; font-size:0.78rem; padding:0.75rem; border-radius:6px; letter-spacing:1px; cursor:default;">
+              <button style="background:#111827; color:var(--uthe-gold); border:1.5px solid var(--uthe-gold); font-weight:900; font-size:0.78rem; padding:0.75rem; border-radius:6px; letter-spacing:1px; cursor:default;" data-cms-key="post-primary-btn">
                 QUICK SEND / SUBMIT INTERVIEW REQUEST
               </button>
             </div>
@@ -1528,7 +1528,7 @@
           <!-- CARD 3: LIVE JOB LISTINGS (SNUG DIRECTLY BENEATH CARD 2) -->
           <div class="panel-card" id="card3-live-jobs-container">
             <div class="panel-header">
-              <span class="panel-title" id="card3-title-text">CARD 3: LIVE JOB LISTINGS</span>
+              <span class="panel-title" id="card3-title-text" data-cms-key="post-card3-title">CARD 3: LIVE JOB LISTINGS</span>
               <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">5 ACTIVE POSITIONS</span>
             </div>
 
@@ -1620,12 +1620,12 @@
       <!-- LOCKED BOTTOM SECTION: PUBLISHING & DISTRIBUTION SETTINGS (NO "3.", NO BADGE) -->
       <div class="bottom-distribution-panel">
         <div class="panel-header">
-          <span class="panel-title" id="publish-header-text">PUBLISHING & DISTRIBUTION SETTINGS</span>
+          <span class="panel-title" id="publish-header-text" data-cms-key="post-publish-header">PUBLISHING & DISTRIBUTION SETTINGS</span>
         </div>
 
         <div class="grid-2">
           <div class="form-group">
-            <label data-tooltip="Perks, health coverage, 401k and stipends.">Perks, PTO & Benefits Highlights</label>
+            <label data-cms-key="post-perks-label" data-tooltip="Perks, health coverage, 401k and stipends.">Perks, PTO & Benefits Highlights</label>
             <input type="text" id="inp-perks" value="18 Days PTO | Comprehensive Health | 401(k) 4% Match" oninput="updateLivePreview()" data-tooltip="Enter candidate benefits summary.">
           </div>
           <div class="form-group">
@@ -1669,7 +1669,7 @@
         </div>
 
         <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
-          <button class="btn-gold-action" id="btn-publish-post" style="flex: 1.5;" onclick="publishJobLive()" data-tooltip="Publish position live and share across all selected channels.">
+          <button class="btn-gold-action" id="btn-publish-post" data-cms-key="post-publish-btn" style="flex: 1.5;" onclick="publishJobLive()" data-tooltip="Publish position live and share across all selected channels.">
             PUBLISH POSITION LIVE & BROADCAST
           </button>
           <button class="btn-surface-action" style="flex: 1;" onclick="broadcastToConnectedChannels()" data-tooltip="Trigger immediate multi-platform social & email share.">
@@ -1875,7 +1875,7 @@
         <!-- u-thePAL FREE MEMBER TIER ($0/mo) -->
         <div class="pricing-card selected-plan" id="plan-card-pal" onclick="selectBasePlan('pal', 0)">
           <div class="pricing-tier-name">u-thePAL</div>
-          <div class="pricing-amount" id="price-pal">$0<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+          <div class="pricing-amount" id="price-pal" data-cms-key="price-pal">$0<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
           <p style="font-size: 0.78rem; color: var(--text-muted);">Free tier for registered members.</p>
           <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
             <li>✓ 1 Active Job Posting</li>
@@ -1890,7 +1890,7 @@
         <!-- STARTER PLAN -->
         <div class="pricing-card" id="plan-card-starter" onclick="selectBasePlan('starter', 99)">
           <div class="pricing-tier-name">STARTER</div>
-          <div class="pricing-amount" id="price-starter">$99<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+          <div class="pricing-amount" id="price-starter" data-cms-key="price-starter">$99<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
           <p style="font-size: 0.78rem; color: var(--text-muted);">Boutique hiring and early growth.</p>
           <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
             <li>✓ 3 Active Job Postings</li>
@@ -1908,7 +1908,7 @@
             <div class="pricing-tier-name">GROWTH</div>
             <span style="background:var(--uthe-gold); color:#000; font-size:0.6rem; font-weight:800; padding:0.15rem 0.4rem; border-radius:3px;">POPULAR</span>
           </div>
-          <div class="pricing-amount" id="price-growth">$299<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+          <div class="pricing-amount" id="price-growth" data-cms-key="price-growth">$299<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
           <p style="font-size: 0.78rem; color: var(--text-muted);">High-velocity hiring across networks.</p>
           <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
             <li>✓ 15 Active Job Postings</li>
@@ -1923,7 +1923,7 @@
         <!-- PROFESSIONAL -->
         <div class="pricing-card" id="plan-card-pro" onclick="selectBasePlan('pro', 699)">
           <div class="pricing-tier-name">PROFESSIONAL</div>
-          <div class="pricing-amount" id="price-pro">$699<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+          <div class="pricing-amount" id="price-pro" data-cms-key="price-pro">$699<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
           <p style="font-size: 0.78rem; color: var(--text-muted);">Unlimited scale and custom branding.</p>
           <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
             <li>✓ Unlimited Active Job Postings</li>
@@ -1963,10 +1963,10 @@
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
               <strong style="font-size: 0.88rem; color: var(--uthe-charcoal);">SOCIAL CHANNELS ADD-ON</strong>
-              <div style="font-size: 0.75rem; color: var(--text-muted);" id="label-social-pricing-sub">$5.99 each OR 5-Channel Bundle for $19.99/mo</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);" id="label-social-pricing-sub" data-cms-key="social-pricing-sub">$5.99 each OR 5-Channel Bundle for $19.99/mo</div>
             </div>
             <div style="display: flex; align-items: center; gap: 0.75rem;">
-              <span style="font-size: 0.75rem; font-weight: 900; color: #92400E;" id="label-social-bundle-price">5-CHANNEL BUNDLE ($19.99/mo)</span>
+              <span style="font-size: 0.75rem; font-weight: 900; color: #92400E;" id="label-social-bundle-price" data-cms-key="social-bundle-label">5-CHANNEL BUNDLE ($19.99/mo)</span>
               <label class="toggle-switch" data-tooltip="Toggle all 5 social networks for $19.99/mo (Save 33%)">
                 <input type="checkbox" id="toggle-social-bundle" onchange="toggleSocialBundle(this.checked)">
                 <span class="toggle-slider"></span>
@@ -1981,7 +1981,7 @@
                 <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
               </svg>
               <strong style="font-size: 0.75rem;">LinkedIn</strong>
-              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price">$5.99/mo</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price" data-cms-key="social-single-price">$5.99/mo</span>
               <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable LinkedIn multi-platform posting ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-li" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
@@ -1994,7 +1994,7 @@
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
               <strong style="font-size: 0.75rem;">Facebook</strong>
-              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price">$5.99/mo</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price" data-cms-key="social-single-price">$5.99/mo</span>
               <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable Facebook multi-platform posting ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-fb" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
@@ -2007,7 +2007,7 @@
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
               </svg>
               <strong style="font-size: 0.75rem;">Instagram</strong>
-              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price">$5.99/mo</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price" data-cms-key="social-single-price">$5.99/mo</span>
               <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable Instagram stories & talent showcase ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-ig" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
@@ -2020,7 +2020,7 @@
                 <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.15 1.15 2.1 2.3 2.37 1.08.27 2.27-.05 3.06-.82.68-.64.98-1.58.98-2.5V.02z"/>
               </svg>
               <strong style="font-size: 0.75rem;">TikTok</strong>
-              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price">$5.99/mo</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price" data-cms-key="social-single-price">$5.99/mo</span>
               <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable TikTok recruitment ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-tt" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
@@ -2033,7 +2033,7 @@
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
               </svg>
               <strong style="font-size: 0.75rem;">Twitter (X)</strong>
-              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price">$5.99/mo</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price" data-cms-key="social-single-price">$5.99/mo</span>
               <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable X / Twitter recruitment stream ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-x" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
@@ -3065,8 +3065,8 @@
           chatLog.scrollTop = chatLog.scrollHeight;
         }
         showCustomModalAlert('Candidate Reply Received', `New reply from ${data.message.senderName || 'Candidate'}: "${data.message.text}"`);
-      } else if (data.type === 'CMS_CONFIG_UPDATED' && data.config) {
-        applyCmsConfig(data.config);
+      } else if ((data.type === 'cms_update' || data.type === 'CMS_CONFIG_UPDATED' || data.event === 'cms_update') && (data.config || data.updatedConfig)) {
+        applyCmsConfig(data.config || data.updatedConfig);
       }
     }
 
@@ -3130,17 +3130,78 @@
           if (el) el.textContent = config.labels.postTitle;
         }
       }
+
+      // Explicit data-cms-key dynamic DOM binding
+      const cmsKeyMap = {
+        'brand-title': config.labels?.postTitle || 'U-THEPOST',
+        'post-card1-title': config.postStudio?.card1Title,
+        'post-card2-title': config.postStudio?.card2Title,
+        'post-card3-title': config.postStudio?.card3Title,
+        'post-publish-header': config.postStudio?.publishHeader,
+        'post-publish-btn': config.postStudio?.publishBtnText,
+        'post-job-title-label': config.postStudio?.jobTitleLabel,
+        'post-company-label': config.postStudio?.companyNameLabel,
+        'post-loc-label': config.postStudio?.locationLabel,
+        'post-emp-options': config.postStudio?.employmentOptions,
+        'post-salary-label': config.postStudio?.salaryLabel,
+        'post-email-label': config.postStudio?.emailFieldLabel,
+        'post-phone-label': config.postStudio?.phoneFieldLabel,
+        'post-social-header': config.postStudio?.socialHeader,
+        'post-linkedin-ph': config.postStudio?.linkedinPlaceholder,
+        'post-x-ph': config.postStudio?.xPlaceholder,
+        'post-tiktok-ph': config.postStudio?.tiktokPlaceholder,
+        'post-preview-badge': config.postStudio?.previewBadge,
+        'post-benefit-label': config.postStudio?.benefitSummaryLabel,
+        'post-primary-btn': config.postStudio?.primaryActionBtn,
+        'post-col-id': config.postStudio?.colJobId,
+        'post-col-title': config.postStudio?.colTitle,
+        'post-perks-label': config.postStudio?.perksLabel,
+        'price-pal': config.pricing?.palMonthly !== undefined ? `$${config.pricing.palMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
+        'price-starter': config.pricing?.starterMonthly !== undefined ? `$${config.pricing.starterMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
+        'price-growth': config.pricing?.growthMonthly !== undefined ? `$${config.pricing.growthMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
+        'price-pro': config.pricing?.proMonthly !== undefined ? `$${config.pricing.proMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
+        'social-bundle-label': config.pricing?.socialBundleAddon !== undefined ? `5-CHANNEL BUNDLE ($${config.pricing.socialBundleAddon}/mo)` : null,
+        'social-single-price': config.pricing?.individualSocialAddon !== undefined ? `$${config.pricing.individualSocialAddon}/mo` : null,
+        'social-pricing-sub': (config.pricing?.individualSocialAddon !== undefined && config.pricing?.socialBundleAddon !== undefined) ? `$${config.pricing.individualSocialAddon} each OR 5-Channel Bundle for $${config.pricing.socialBundleAddon}/mo` : null
+      };
+
+      document.querySelectorAll('[data-cms-key]').forEach(el => {
+        const key = el.getAttribute('data-cms-key');
+        const val = cmsKeyMap[key];
+        if (val !== undefined && val !== null) {
+          if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+            if (el.hasAttribute('placeholder')) el.placeholder = val;
+            else el.value = val;
+          } else if (typeof val === 'string' && val.includes('<span')) {
+            el.innerHTML = val;
+          } else {
+            el.textContent = val;
+          }
+        }
+      });
     }
 
+    // Cache-Busting Initial Fetch (GET /api/cms/config?t=...)
     async function loadInitialCmsConfig() {
       try {
-        const res = await fetch('/api/cms/config');
+        const res = await fetch(`/api/cms/config?t=${Date.now()}`, {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        });
         const data = await res.json();
-        if (data.config) {
-          applyCmsConfig(data.config);
+        const cfg = data.config || data.updatedConfig;
+        if (cfg) {
+          applyCmsConfig(cfg);
         }
       } catch (err) {}
     }
+
+    // Fallback Sync Polling (Every 5 seconds if socket disconnects)
+    setInterval(async () => {
+      if (!wsRelay || wsRelay.readyState !== WebSocket.OPEN) {
+        await loadInitialCmsConfig();
+      }
+    }, 5000);
 
     // Admin Shortcut Handler (Ctrl + Shift + A)
     window.handleAdminShortcut = function() {

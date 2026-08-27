@@ -1031,9 +1031,16 @@ const server = http.createServer((req, res) => {
 
   // ----------------------------------------------------
   // CMS OVERRIDE & MASTER CONFIGURATION ROUTES
+  // Strict Cache-Control Headers for instant live sync & cache invalidation
   // ----------------------------------------------------
+  if (pathname.startsWith('/api/cms')) {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+
   if (pathname === '/api/cms/config' && req.method === 'GET') {
-    sendJson(200, { status: 'success', config: cmsConfig });
+    sendJson(200, { status: 'success', config: cmsConfig, updatedConfig: cmsConfig });
     return;
   }
 
@@ -1054,8 +1061,9 @@ const server = http.createServer((req, res) => {
 
       saveCmsConfig();
       writeSystemLog('CMS_CONFIG_UPDATED', { timestamp: new Date().toISOString() });
-      broadcastWebSocketEvent('CMS_CONFIG_UPDATED', { config: cmsConfig });
-      sendJson(200, { status: 'updated', config: cmsConfig });
+      broadcastWebSocketEvent('cms_update', { config: cmsConfig, updatedConfig: cmsConfig });
+      broadcastWebSocketEvent('CMS_CONFIG_UPDATED', { config: cmsConfig, updatedConfig: cmsConfig });
+      sendJson(200, { status: 'updated', config: cmsConfig, updatedConfig: cmsConfig });
     });
     return;
   }
@@ -1668,6 +1676,20 @@ function initWebSocket() {
               writeSystemLog('WS_MESSAGE_SENT', { messageId: data.message.id });
             }
           }
+
+          if ((data.type === 'cms_update' || data.type === 'CMS_CONFIG_UPDATED' || data.event === 'cms_update') && (data.config || data.updatedConfig)) {
+            const newCfg = data.config || data.updatedConfig;
+            if (newCfg.postStudio) cmsConfig.postStudio = { ...cmsConfig.postStudio, ...newCfg.postStudio };
+            if (newCfg.jobsBoard) cmsConfig.jobsBoard = { ...cmsConfig.jobsBoard, ...newCfg.jobsBoard };
+            if (newCfg.labels) cmsConfig.labels = { ...cmsConfig.labels, ...newCfg.labels };
+            if (newCfg.pricing) cmsConfig.pricing = { ...cmsConfig.pricing, ...newCfg.pricing };
+            if (newCfg.addOns) cmsConfig.addOns = { ...cmsConfig.addOns, ...newCfg.addOns };
+            if (newCfg.channels) cmsConfig.channels = { ...cmsConfig.channels, ...newCfg.channels };
+            saveCmsConfig();
+            writeSystemLog('WS_CMS_CONFIG_UPDATED', { timestamp: new Date().toISOString() });
+            broadcastWebSocketEvent('cms_update', { config: cmsConfig, updatedConfig: cmsConfig });
+            broadcastWebSocketEvent('CMS_CONFIG_UPDATED', { config: cmsConfig, updatedConfig: cmsConfig });
+          }
         } catch (e) {}
       });
 
@@ -1693,6 +1715,7 @@ function broadcastWebSocketEvent(type, payload) {
   if (!wss) return;
   const message = JSON.stringify({
     type: type,
+    event: type,
     ...payload,
     timestamp: new Date().toISOString()
   });

@@ -506,12 +506,135 @@ async function runTests() {
     assert(false, `Group 13 failed: ${err.message}`);
   }
 
+  // ============================================================================
+  // GROUP 14: REAL-TIME CMS LIVE SYNC, CACHE CONTROL & FRONTEND DOM BINDING
+  // ============================================================================
+  console.log('\n--- GROUP 14: REAL-TIME CMS LIVE SYNC & CACHE CONTROL ---');
+  try {
+    // 1. Strict Cache-Control Headers on GET /api/cms/config
+    const cmsGetRes = await httpGet('/api/cms/config');
+    assert(cmsGetRes.status === 200, 'GET /api/cms/config returns 200');
+    
+    const cacheControlHeader = cmsGetRes.headers['cache-control'] || '';
+    const pragmaHeader = cmsGetRes.headers['pragma'] || '';
+    const expiresHeader = cmsGetRes.headers['expires'] || '';
+
+    assert(cacheControlHeader.includes('no-cache'), 'GET /api/cms/config includes no-cache in Cache-Control');
+    assert(cacheControlHeader.includes('no-store'), 'GET /api/cms/config includes no-store in Cache-Control');
+    assert(cacheControlHeader.includes('must-revalidate'), 'GET /api/cms/config includes must-revalidate in Cache-Control');
+    assert(cacheControlHeader.includes('max-age=0'), 'GET /api/cms/config includes max-age=0 in Cache-Control');
+    assert(pragmaHeader === 'no-cache', 'GET /api/cms/config includes Pragma: no-cache');
+    assert(expiresHeader === '0', 'GET /api/cms/config includes Expires: 0');
+
+    // Authenticate Master Admin
+    const loginRes = await httpPost('/api/auth/login', {
+      email: 'contact@utheversity.com',
+      password: 'ZionAdmin2026!'
+    });
+    const authHeaders = {
+      'Authorization': `Bearer ${loginRes.data.token}`,
+      'Cookie': `auth_token=${loginRes.data.token}`
+    };
+
+    // 2. WebSocket Real-Time Broadcast on CMS update
+    const ws = new WebSocket('ws://localhost:3000');
+    let receivedWsCmsUpdate = false;
+    let wsBroadcastData = null;
+
+    await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        ws.close();
+        resolve(); // Continue even if WS timeout to check results
+      }, 4000);
+
+      ws.on('open', async () => {
+        ws.on('message', (raw) => {
+          try {
+            const parsed = JSON.parse(raw.toString());
+            if (parsed.type === 'cms_update' || parsed.event === 'cms_update' || parsed.type === 'CMS_CONFIG_UPDATED') {
+              receivedWsCmsUpdate = true;
+              wsBroadcastData = parsed;
+              clearTimeout(timeout);
+              ws.close();
+              resolve();
+            }
+          } catch (e) {}
+        });
+
+        // Trigger CMS update via POST
+        const updatePayload = {
+          postStudio: {
+            card1Title: '1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LIVE SYNC)',
+            publishBtnText: 'PUBLISH POSITION LIVE & BROADCAST'
+          },
+          jobsBoard: {
+            boardTitle: 'U-THEJOBS LIVE'
+          },
+          pricing: {
+            palMonthly: 0,
+            starterMonthly: 99,
+            growthMonthly: 299,
+            proMonthly: 699
+          }
+        };
+
+        await httpPost('/api/cms/config', updatePayload, authHeaders);
+      });
+
+      ws.on('error', (err) => {
+        clearTimeout(timeout);
+        reject(err);
+      });
+    });
+
+    assert(receivedWsCmsUpdate === true, 'WebSocket server broadcasts cms_update event on CMS mutations');
+    if (wsBroadcastData) {
+      assert(wsBroadcastData.updatedConfig || wsBroadcastData.config, 'WebSocket broadcast contains updatedConfig payload');
+    }
+
+    // 3. Frontend HTML Verification: data-cms-key attributes & cache busting
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // recruiter.html checks
+    assert(recruiterHtml.includes('data-cms-key="brand-title"'), 'recruiter.html binds data-cms-key="brand-title"');
+    assert(recruiterHtml.includes('data-cms-key="post-card1-title"'), 'recruiter.html binds data-cms-key="post-card1-title"');
+    assert(recruiterHtml.includes('data-cms-key="post-card2-title"'), 'recruiter.html binds data-cms-key="post-card2-title"');
+    assert(recruiterHtml.includes('data-cms-key="post-card3-title"'), 'recruiter.html binds data-cms-key="post-card3-title"');
+    assert(recruiterHtml.includes('data-cms-key="post-publish-header"'), 'recruiter.html binds data-cms-key="post-publish-header"');
+    assert(recruiterHtml.includes('data-cms-key="post-publish-btn"'), 'recruiter.html binds data-cms-key="post-publish-btn"');
+    assert(recruiterHtml.includes('data-cms-key="price-pal"'), 'recruiter.html binds data-cms-key="price-pal"');
+    assert(recruiterHtml.includes('data-cms-key="price-starter"'), 'recruiter.html binds data-cms-key="price-starter"');
+    assert(recruiterHtml.includes('data-cms-key="price-growth"'), 'recruiter.html binds data-cms-key="price-growth"');
+    assert(recruiterHtml.includes('data-cms-key="price-pro"'), 'recruiter.html binds data-cms-key="price-pro"');
+    assert(recruiterHtml.includes('data-cms-key="social-bundle-label"'), 'recruiter.html binds data-cms-key="social-bundle-label"');
+    assert(recruiterHtml.includes('/api/cms/config?t='), 'recruiter.html uses cache-busting timestamp ?t= on initial CMS fetch');
+    assert(recruiterHtml.includes('cms_update'), 'recruiter.html listens for cms_update WebSocket event');
+
+    // candidate.html checks
+    assert(candidateHtml.includes('data-cms-key="jobs-board-title"'), 'candidate.html binds data-cms-key="jobs-board-title"');
+    assert(candidateHtml.includes('data-cms-key="jobs-search-placeholder"'), 'candidate.html binds data-cms-key="jobs-search-placeholder"');
+    assert(candidateHtml.includes('data-cms-key="jobs-quick-send-btn"'), 'candidate.html binds data-cms-key="jobs-quick-send-btn"');
+    assert(candidateHtml.includes('data-cms-key="jobs-send-resume-btn"'), 'candidate.html binds data-cms-key="jobs-send-resume-btn"');
+    assert(candidateHtml.includes('data-cms-key="jobs-modal-header"'), 'candidate.html binds data-cms-key="jobs-modal-header"');
+    assert(candidateHtml.includes('data-cms-key="jobs-resume-label"'), 'candidate.html binds data-cms-key="jobs-resume-label"');
+    assert(candidateHtml.includes('data-cms-key="jobs-contact-opts"'), 'candidate.html binds data-cms-key="jobs-contact-opts"');
+    assert(candidateHtml.includes('data-cms-key="jobs-interview-title"'), 'candidate.html binds data-cms-key="jobs-interview-title"');
+    assert(candidateHtml.includes('data-cms-key="jobs-submit-btn"'), 'candidate.html binds data-cms-key="jobs-submit-btn"');
+    assert(candidateHtml.includes('data-cms-key="jobs-msg-header"'), 'candidate.html binds data-cms-key="jobs-msg-header"');
+    assert(candidateHtml.includes('/api/cms/config?t='), 'candidate.html uses cache-busting timestamp ?t= on initial CMS fetch');
+    assert(candidateHtml.includes('cms_update'), 'candidate.html listens for cms_update WebSocket event');
+
+  } catch (err) {
+    assert(false, `Group 14 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL API ROUTE PRIVACY, SANITIZATION & AUTHENTICATION TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');

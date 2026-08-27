@@ -1475,7 +1475,10 @@
       } catch (e) {}
 
       try {
-        const cms = await fetch('/api/cms/config').then(r => r.json());
+        const cms = await fetch(`/api/cms/config?t=${Date.now()}`, {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        }).then(r => r.json());
         if (cms.config) {
           cmsConfig = cms.config;
           populateCmsForm(cms.config);

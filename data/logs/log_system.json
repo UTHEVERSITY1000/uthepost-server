@@ -1,5 +1,279 @@
 [
   {
+    "timestamp": "2026-08-27T23:54:26.019Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "timestamp": "2026-08-27T23:54:26.018Z"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.973Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-ZION-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.930Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-ZION-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.884Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-9531",
+      "applicantId": "APP-899",
+      "senderRole": "candidate",
+      "userId": "USR-995"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.862Z",
+    "eventType": "CANDIDATE_APPLIED",
+    "details": {
+      "applicantId": "APP-899",
+      "jobId": "JOB-223",
+      "name": "Jane Doe"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.810Z",
+    "eventType": "RESUME_UPLOADED",
+    "details": {
+      "filename": "John_Doe_Resume_2026.pdf",
+      "path": "C:\\Users\\nutrasye\\Desktop\\U-THEPOST HTML FILES ENCLOSED\\data\\resumes\\John_Doe_Resume_2026.pdf",
+      "uploadedBy": "USR-995"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.741Z",
+    "eventType": "JOB_PUBLISHED",
+    "details": {
+      "jobId": "JOB-223",
+      "title": "Senior Lead Architect 1787874865736",
+      "company": "Persistent Systems Corp"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.719Z",
+    "eventType": "USER_SIGNUP",
+    "details": {
+      "userId": "USR-995",
+      "role": "candidate",
+      "email": "test.candidate.1787874865683@domain.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.665Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-ZION-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.616Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "timestamp": "2026-08-27T23:54:25.615Z"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.580Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "timestamp": "2026-08-27T23:54:25.578Z"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:25.540Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-ZION-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:14.639Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-ZION-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:14.581Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-8257",
+      "applicantId": "APP-864",
+      "senderRole": "candidate",
+      "userId": "USR-708"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:14.560Z",
+    "eventType": "CANDIDATE_APPLIED",
+    "details": {
+      "applicantId": "APP-864",
+      "jobId": "JOB-610",
+      "name": "Jane Doe"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:14.519Z",
+    "eventType": "RESUME_UPLOADED",
+    "details": {
+      "filename": "John_Doe_Resume_2026.pdf",
+      "path": "C:\\Users\\nutrasye\\Desktop\\U-THEPOST HTML FILES ENCLOSED\\data\\resumes\\John_Doe_Resume_2026.pdf",
+      "uploadedBy": "USR-708"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:14.460Z",
+    "eventType": "JOB_PUBLISHED",
+    "details": {
+      "jobId": "JOB-610",
+      "title": "Senior Lead Architect 1787874854446",
+      "company": "Persistent Systems Corp"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:14.435Z",
+    "eventType": "USER_SIGNUP",
+    "details": {
+      "userId": "USR-708",
+      "role": "candidate",
+      "email": "test.candidate.1787874854414@domain.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:14.403Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-ZION-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:14.299Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "timestamp": "2026-08-27T23:54:14.297Z"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:14.262Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "timestamp": "2026-08-27T23:54:14.260Z"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:54:14.225Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-ZION-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:56.454Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-ZION-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:56.414Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-1561",
+      "applicantId": "APP-779",
+      "senderRole": "candidate",
+      "userId": "USR-717"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:56.351Z",
+    "eventType": "CANDIDATE_APPLIED",
+    "details": {
+      "applicantId": "APP-779",
+      "jobId": "JOB-852",
+      "name": "Jane Doe"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:56.291Z",
+    "eventType": "RESUME_UPLOADED",
+    "details": {
+      "filename": "John_Doe_Resume_2026.pdf",
+      "path": "C:\\Users\\nutrasye\\Desktop\\U-THEPOST HTML FILES ENCLOSED\\data\\resumes\\John_Doe_Resume_2026.pdf",
+      "uploadedBy": "USR-717"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:56.165Z",
+    "eventType": "JOB_PUBLISHED",
+    "details": {
+      "jobId": "JOB-852",
+      "title": "Senior Lead Architect 1787874836050",
+      "company": "Persistent Systems Corp"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:56.015Z",
+    "eventType": "USER_SIGNUP",
+    "details": {
+      "userId": "USR-717",
+      "role": "candidate",
+      "email": "test.candidate.1787874835993@domain.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:55.985Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-ZION-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:55.908Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "timestamp": "2026-08-27T23:53:55.906Z"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:55.875Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "timestamp": "2026-08-27T23:53:55.873Z"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:55.761Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-ZION-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T23:53:38.725Z",
+    "eventType": "SYSTEM_BOOT",
+    "details": {
+      "message": "UTHEVERSITY Storage & Indexing Engine Initialized"
+    }
+  },
+  {
     "timestamp": "2026-08-27T08:31:58.745Z",
     "eventType": "USER_LOGIN",
     "details": {
