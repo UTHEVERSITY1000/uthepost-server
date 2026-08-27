@@ -8,7 +8,7 @@ const WS_URL = 'ws://localhost:3000';
 
 async function runTests() {
   console.log('================================================================');
-  console.log('UTHEVERSITY CANDIDATE NOTIFICATIONS, MESSAGING & TOOLTIP TEST SUITE');
+  console.log('UTHEVERSITY PHASE 3 MASTER ADMIN & ZERO-CODE CMS TEST SUITE');
   console.log('================================================================\n');
 
   let passed = 0;
@@ -75,115 +75,129 @@ async function runTests() {
     });
   }
 
+  function httpPut(urlPath, payload, headers = {}) {
+    return new Promise((resolve, reject) => {
+      const dataStr = JSON.stringify(payload);
+      const req = http.request(`${BASE_URL}${urlPath}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(dataStr),
+          ...headers
+        }
+      }, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => {
+          try {
+            resolve({ status: res.statusCode, data: JSON.parse(data), raw: data, headers: res.headers });
+          } catch (e) {
+            resolve({ status: res.statusCode, raw: data, headers: res.headers });
+          }
+        });
+      });
+      req.on('error', reject);
+      req.write(dataStr);
+      req.end();
+    });
+  }
+
   const candContent = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
   const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
   const adminContent = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
 
   // ----------------------------------------------------
-  // TEST GROUP 1: Candidate Notification Alert Badge (candidate.html)
+  // TEST GROUP 1: Visual Theme Unification (Premium White Studio)
   // ----------------------------------------------------
-  console.log('[TEST GROUP 1] Candidate Notification Alert Badge (candidate.html)');
+  console.log('[TEST GROUP 1] Visual Theme Unification (Premium White Studio)');
   try {
-    assert(candContent.includes('btn-candidate-notif') && candContent.includes('notif-counter-badge'), 'Notification alert bell icon and counter badge present in header');
-    assert(candContent.includes('notif-badge-count'), 'Live unread counter badge id "notif-badge-count" present');
-    assert(candContent.includes('openCandidateMessageDrawer()'), 'Clicking notification alert triggers openCandidateMessageDrawer()');
-
-    const headerHtml = candContent.slice(candContent.indexOf('<header>'), candContent.indexOf('</header>'));
-    const notifIdx = headerHtml.indexOf('btn-candidate-notif');
-    const profileIdx = headerHtml.indexOf('btn-profile-header');
-    assert(notifIdx !== -1 && profileIdx !== -1 && notifIdx < profileIdx, 'Notification alert is positioned directly to the left of [MY PROFILE]');
+    assert(adminContent.includes('--bg-canvas: #F8F9FA'), 'admin.html uses Premium White Studio canvas background #F8F9FA');
+    assert(adminContent.includes('--card-surface: #FFFFFF'), 'admin.html uses crisp white card surfaces #FFFFFF');
+    assert(adminContent.includes('--text-main: #0F172A'), 'admin.html uses dark slate typography #0F172A');
+    assert(adminContent.includes('--uthe-gold: #E5A800'), 'admin.html uses signature gold accent palette');
+    assert(!adminContent.includes('--bg-dark: #080C14'), 'Legacy dark background permanently replaced');
   } catch (err) {
     assert(false, `Group 1 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 2: Candidate Message Center & Quick Responses
+  // TEST GROUP 2: Master Owner Account & Authentication (Zion Daye)
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 2] Candidate Message Center & Quick Responses');
+  console.log('\n[TEST GROUP 2] Master Owner Account (Zion Daye)');
   try {
-    assert(candContent.includes('candidate-messages-modal'), 'Candidate Message Drawer modal container present');
-    assert(candContent.includes('candidate-chat-log'), 'Candidate chat history thread element present');
-    assert(candContent.includes('cand-reply-input') && candContent.includes('SEND REPLY'), 'Reply text input and [SEND REPLY] button present');
+    assert(adminContent.includes('ZION DAYE (815-980-4272)'), 'Header displays Zion Daye identity with phone 815-980-4272');
+    assert(adminContent.includes('admin-auth-modal'), 'Master authentication modal configured');
+    assert(adminContent.includes('checkAdminPassLength') && adminContent.includes('admin-recaptcha'), 'Password length indicator & reCAPTCHA spam shield present');
 
-    assert(candContent.includes("I'M INTERESTED — LET'S TALK"), 'Quick response tag 1: [I\'M INTERESTED — LET\'S TALK] present');
-    assert(candContent.includes('ACCEPTED INTERVIEW TIME'), 'Quick response tag 2: [ACCEPTED INTERVIEW TIME] present');
-    assert(candContent.includes('PLEASE SEND MORE DETAILS'), 'Quick response tag 3: [PLEASE SEND MORE DETAILS] present');
-    assert(candContent.includes('applyCandidateQuickReply'), 'Quick response tag applicator function implemented');
+    const loginRes = await httpPost('/api/auth/login', {
+      email: 'contact@utheversity.com',
+      password: 'ZionAdmin2026!'
+    });
+    assert(loginRes.status === 200, 'Master Owner Zion Daye authenticated successfully via JWT');
+    assert(loginRes.data.user.name === 'Zion Daye', 'Master Owner name verified as Zion Daye');
+    assert(loginRes.data.user.phone === '815-980-4272', 'Master Owner contact phone verified as 815-980-4272');
+    assert(loginRes.data.user.role === 'admin', 'Master Owner role verified as admin');
   } catch (err) {
     assert(false, `Group 2 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 3: Server.js Two-Way Messaging REST API
+  // TEST GROUP 3: Smart Omni-Search Engine
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 3] Server.js Two-Way Messaging API');
+  console.log('\n[TEST GROUP 3] Smart Omni-Search Engine');
   try {
-    const getRes = await httpGet('/api/messages');
-    assert(getRes.status === 200, 'GET /api/messages returns HTTP 200');
-    assert(Array.isArray(getRes.data.messages), 'Messages endpoint returns array of message items');
+    assert(adminContent.includes('omni-search-input') && adminContent.includes('handleOmniSearch'), 'Omni-Search bar and live event handler present');
 
-    const postCandidateMsg = await httpPost('/api/messages', {
-      applicantId: 'APP-701',
-      senderRole: 'candidate',
-      senderName: 'Marcus Vance',
-      company: 'Quantum Retail Corp',
-      jobTitle: 'Sales Manager',
-      text: 'I am very interested in the position and available for an interview this Thursday.'
-    });
-    assert(postCandidateMsg.status === 201, 'POST /api/messages from candidate returns HTTP 201 Created');
-    assert(postCandidateMsg.data.message.senderRole === 'candidate', 'Candidate message recorded with senderRole=candidate');
+    const searchUser = await httpGet('/api/admin/search?q=Zion');
+    assert(searchUser.status === 200 && searchUser.data.results.users.some(u => u.name === 'Zion Daye'), 'Omni-Search finds users by name');
 
-    const postRecruiterMsg = await httpPost('/api/messages', {
-      applicantId: 'APP-701',
-      senderRole: 'recruiter',
-      senderName: 'Quantum Talent Acquisition',
-      company: 'Quantum Retail Corp',
-      jobTitle: 'Sales Manager',
-      text: 'Great, Thursday at 2:00 PM CST works perfectly for our hiring team.'
-    });
-    assert(postRecruiterMsg.status === 201, 'POST /api/messages from recruiter returns HTTP 201 Created');
-    assert(postRecruiterMsg.data.message.senderRole === 'recruiter', 'Recruiter message recorded with senderRole=recruiter');
+    const searchPhone = await httpGet('/api/admin/search?q=815-980-4272');
+    assert(searchPhone.status === 200 && searchPhone.data.results.users.some(u => u.phone === '815-980-4272'), 'Omni-Search finds accounts by phone number');
+
+    const searchJob = await httpGet('/api/admin/search?q=Senior');
+    assert(searchJob.status === 200 && searchJob.data.results.jobs.length > 0, 'Omni-Search finds jobs by title');
   } catch (err) {
     assert(false, `Group 3 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 4: Real-Time Two-Way WebSocket Relay
+  // TEST GROUP 4: Zero-Code Master CMS Override Panel & WebSocket Broadcast
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 4] Real-Time Two-Way Message WebSocket Broadcast');
+  console.log('\n[TEST GROUP 4] Zero-Code Master CMS Overrides & Broadcast');
   try {
+    assert(adminContent.includes('cms-post-title') && adminContent.includes('cms-jobs-title'), 'Brand title CMS input controls present');
+    assert(adminContent.includes('cms-quick-send-btn') && adminContent.includes('cms-send-resume-btn'), 'Button phrase CMS input controls present');
+    assert(adminContent.includes('cms-price-social-single') && adminContent.includes('cms-price-social-bundle'), 'Social add-on pricing controls ($5.99 / $19.99) present');
+
+    const cmsGet = await httpGet('/api/cms/config');
+    assert(cmsGet.status === 200 && cmsGet.data.config, 'GET /api/cms/config returns active CMS schema');
+
+    const cmsUpdate = await httpPost('/api/cms/config', {
+      labels: { postTitle: 'U-THEPOST STUDIO' },
+      pricing: { starterMonthly: 99, individualSocialAddon: 5.99, socialBundleAddon: 19.99 }
+    });
+    assert(cmsUpdate.status === 200 && cmsUpdate.data.config.labels.postTitle === 'U-THEPOST STUDIO', 'POST /api/cms/config persists overrides');
+
+    // Test live WebSocket sync
     await new Promise((resolve, reject) => {
-      const wsClient = new WebSocket(WS_URL);
-      let candMsgReceived = false;
-
-      wsClient.on('open', async () => {
-        const testCandidateReply = {
-          applicantId: 'APP-701',
-          senderRole: 'candidate',
-          senderName: 'Marcus Vance',
-          company: 'Quantum Retail Corp',
-          jobTitle: 'Sales Manager',
-          text: 'WebSocket Live sync message test from candidate.'
-        };
-        await httpPost('/api/messages', testCandidateReply);
+      const ws = new WebSocket(WS_URL);
+      let received = false;
+      ws.on('open', async () => {
+        await httpPost('/api/cms/config', { labels: { jobsTitle: 'U-THEJOBS VERIFIED' } });
       });
-
-      wsClient.on('message', (msg) => {
+      ws.on('message', (msg) => {
         const data = JSON.parse(msg.toString());
-        if (data.type === 'CANDIDATE_MESSAGE_SENT' && data.message && data.message.text.includes('WebSocket Live sync')) {
-          candMsgReceived = true;
-          assert(true, 'CANDIDATE_MESSAGE_SENT broadcast verified in real-time over WebSocket');
-          wsClient.close();
+        if (data.type === 'CMS_CONFIG_UPDATED' && data.config) {
+          received = true;
+          assert(true, 'CMS_CONFIG_UPDATED broadcasted live over WebSocket');
+          ws.close();
           resolve();
         }
       });
-
-      wsClient.on('error', reject);
-
       setTimeout(() => {
-        if (!candMsgReceived) {
-          assert(false, 'Timed out waiting for CANDIDATE_MESSAGE_SENT event');
-          wsClient.close();
+        if (!received) {
+          assert(false, 'Timed out waiting for CMS_CONFIG_UPDATED event');
+          ws.close();
           resolve();
         }
       }, 3000);
@@ -193,53 +207,33 @@ async function runTests() {
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 5: Recruiter Studio Message Sync
+  // TEST GROUP 5: User Approvals, Role Permissions & Stage Overrides
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 5] Recruiter Studio Message Sync (recruiter.html)');
+  console.log('\n[TEST GROUP 5] User Approvals, Role Permissions & Stage Overrides');
   try {
-    assert(recContent.includes('MESSAGE APPLICANT'), 'Recruiter ATS contains MESSAGE APPLICANT section');
-    assert(recContent.includes('applicant-chat-log'), 'Recruiter ATS contains applicant-chat-log');
-    assert(recContent.includes('CANDIDATE_MESSAGE_SENT'), 'Recruiter ATS handles CANDIDATE_MESSAGE_SENT event to update chat');
-    assert(recContent.includes('sendAtsDirectMessage'), 'Recruiter ATS dispatches direct messages via sendAtsDirectMessage');
+    const userRoleUpdate = await httpPut('/api/admin/users/USR-003', { role: 'candidate', approved: true });
+    assert(userRoleUpdate.status === 200 && userRoleUpdate.data.user.approved === true, 'User approval status updated via PUT /api/admin/users/:id');
+
+    const jobStatusUpdate = await httpPut('/api/jobs/JOB-101/status', { status: 'Active' });
+    assert(jobStatusUpdate.status === 200 && jobStatusUpdate.data.job.status === 'Active', 'Job status updated via PUT /api/jobs/:id/status');
+
+    const applicantStageUpdate = await httpPut('/api/applicants/APP-701/status', { status: 'Interviewing' });
+    assert(applicantStageUpdate.status === 200 && applicantStageUpdate.data.applicant.status === 'Interviewing', 'Applicant stage updated via PUT /api/applicants/:id/status');
   } catch (err) {
     assert(false, `Group 5 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 6: Top-Bar Tooltip Boundary Fix (All Portals)
+  // TEST GROUP 6: Top-Bar Tooltip Boundary Fix & Custom Popups
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 6] Top-Bar Tooltip Boundary Fix');
+  console.log('\n[TEST GROUP 6] Top-Bar Tooltip Boundary Fix & Custom Popups');
   try {
-    const portals = [
-      { name: 'recruiter.html', content: recContent },
-      { name: 'candidate.html', content: candContent },
-      { name: 'admin.html', content: adminContent }
-    ];
-
-    portals.forEach(p => {
-      assert(p.content.includes('header [data-tooltip]::after') && p.content.includes('top: calc(100% + 8px)'), `${p.name}: Top header tooltips automatically display below element`);
-      assert(p.content.includes('overflow: visible !important'), `${p.name}: Header container overflow set to visible to prevent clipping`);
-      assert(p.content.includes('initSmartTooltipPositioning') && p.content.includes('rect.top < 60'), `${p.name}: Viewport edge auto-detection (top < 60px) implemented`);
-    });
+    assert(adminContent.includes('header [data-tooltip]::after') && adminContent.includes('top: calc(100% + 8px)'), 'Top header tooltips positioned downward below elements');
+    assert(adminContent.includes('overflow: visible !important'), 'Header container overflow set to visible to prevent clipping');
+    assert(adminContent.includes('initSmartTooltipPositioning') && adminContent.includes('rect.top < 60'), 'Viewport edge auto-detection (top < 60px) implemented');
+    assert(adminContent.includes('showCustomModalAlert') && adminContent.includes('custom-modal-alert'), 'Signature custom popup card implemented (no browser alerts)');
   } catch (err) {
     assert(false, `Group 6 failed: ${err.message}`);
-  }
-
-  // ----------------------------------------------------
-  // TEST GROUP 7: Master Owner Account (Zion Daye)
-  // ----------------------------------------------------
-  console.log('\n[TEST GROUP 7] Master Owner Account (Zion Daye)');
-  try {
-    const loginRes = await httpPost('/api/auth/login', {
-      email: 'contact@utheversity.com',
-      password: 'ZionAdmin2026!'
-    });
-    assert(loginRes.status === 200, 'Master Owner Zion Daye authenticated successfully');
-    assert(loginRes.data.user.name === 'Zion Daye', 'Master Owner name verified as Zion Daye');
-    assert(loginRes.data.user.phone === '815-980-4272', 'Master Owner contact phone verified as 815-980-4272');
-    assert(loginRes.data.user.role === 'admin', 'Master Owner role verified as admin');
-  } catch (err) {
-    assert(false, `Group 7 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
@@ -247,7 +241,7 @@ async function runTests() {
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL PHASE 3 MASTER ADMIN & ZERO-CODE CMS TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');

@@ -176,13 +176,17 @@ let cmsConfig = {
     starterMonthly: 99,
     growthMonthly: 299,
     proMonthly: 699,
-    yearlyDiscountPct: 20
+    yearlyDiscountPct: 20,
+    individualSocialAddon: 5.99,
+    socialBundleAddon: 19.99
   },
   addOns: {
     topSpotlight: 49,
     urgentBadge: 29,
     directMessages: 19,
-    verifiedEmployer: 39
+    verifiedEmployer: 39,
+    individualSocial: 5.99,
+    socialBundle5: 19.99
   },
   channels: {
     linkedin: { name: "LinkedIn InMail & Posts", enabled: true },
@@ -660,6 +664,22 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (pathname.startsWith('/api/admin/users/') && (req.method === 'PUT' || req.method === 'POST')) {
+    const uid = pathname.split('/')[4];
+    const user = usersDatabase.find(u => u.id === uid);
+    if (!user) return sendJson(404, { error: 'User not found' });
+    readBody((err, body) => {
+      if (err) return sendJson(400, { error: 'Invalid JSON' });
+      if (body.role) user.role = body.role;
+      if (body.approved !== undefined) user.approved = Boolean(body.approved);
+      if (body.name) user.name = body.name;
+      if (body.phone) user.phone = body.phone;
+      broadcastWebSocketEvent('USER_UPDATED', { user: { id: user.id, role: user.role, approved: user.approved } });
+      sendJson(200, { status: 'updated', user });
+    });
+    return;
+  }
+
   if (pathname.startsWith('/api/admin/users/') && req.method === 'DELETE') {
     const uid = pathname.split('/')[4];
     const idx = usersDatabase.findIndex(u => u.id === uid);
@@ -669,6 +689,32 @@ const server = http.createServer((req, res) => {
     } else {
       sendJson(404, { error: 'User not found' });
     }
+    return;
+  }
+
+  if (pathname.startsWith('/api/jobs/') && pathname.endsWith('/status') && req.method === 'PUT') {
+    const jobId = pathname.split('/')[3];
+    const job = globalJobDatabase.find(j => j.id === jobId);
+    if (!job) return sendJson(404, { error: 'Job not found' });
+    readBody((err, body) => {
+      if (err) return sendJson(400, { error: 'Invalid JSON' });
+      job.status = body.status || 'Active';
+      broadcastWebSocketEvent('JOB_STATUS_UPDATED', { jobId, status: job.status });
+      sendJson(200, { status: 'updated', job });
+    });
+    return;
+  }
+
+  if (pathname.startsWith('/api/applicants/') && pathname.endsWith('/status') && req.method === 'PUT') {
+    const appId = pathname.split('/')[3];
+    const app = applicantsStore.find(a => a.id === appId);
+    if (!app) return sendJson(404, { error: 'Applicant not found' });
+    readBody((err, body) => {
+      if (err) return sendJson(400, { error: 'Invalid JSON' });
+      app.status = body.status || app.status;
+      broadcastWebSocketEvent('APPLICANT_STAGE_UPDATED', { applicantId: appId, status: app.status });
+      sendJson(200, { status: 'updated', applicant: app });
+    });
     return;
   }
 

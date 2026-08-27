@@ -9,21 +9,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #080C14;
-      --card-dark: #0F172A;
-      --card-surface: #1E293B;
-      --text-light: #F8FAFC;
-      --text-dim: #94A3B8;
-      --border-dark: #334155;
+      --bg-canvas: #F8F9FA;
+      --card-surface: #FFFFFF;
+      --card-subtle: #F1F5F9;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --border-strong: #CBD5E1;
       --uthe-gold: #E5A800;
       --uthe-gold-light: #FFF8E6;
       --uthe-gold-glow: rgba(229, 168, 0, 0.25);
+      --uthe-charcoal: #111827;
       --status-mint: #00C853;
-      --status-mint-bg: rgba(0, 200, 83, 0.12);
+      --status-mint-bg: #E8F8F0;
       --danger-red: #EF4444;
-      --danger-bg: rgba(239, 68, 68, 0.15);
-      --cyan-accent: #06B6D4;
-      --cyan-bg: rgba(6, 182, 212, 0.12);
+      --danger-bg: #FEF2F2;
+      --blue-accent: #2563EB;
+      --blue-bg: #EFF6FF;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 30px -4px rgba(8, 12, 20, 0.05), 0 2px 6px rgba(0, 0, 0, 0.02);
+      --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
     }
 
     * {
@@ -36,8 +41,8 @@
     html, body {
       width: 100%;
       min-height: 100%;
-      background-color: var(--bg-dark);
-      color: var(--text-light);
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -61,7 +66,7 @@
       bottom: calc(100% + 6px);
       left: 50%;
       transform: translateX(-50%);
-      background: #0F172A;
+      background: #111827;
       color: #F8FAFC;
       font-size: 11px;
       font-weight: 500;
@@ -69,7 +74,7 @@
       padding: 0.35rem 0.55rem;
       border-radius: 5px;
       border: 1px solid var(--uthe-gold);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
       white-space: normal;
       width: max-content;
       max-width: 200px;
@@ -151,19 +156,19 @@
       outline-offset: 2px;
     }
 
-    /* MASTER TOP HEADER */
+    /* MASTER TOP HEADER (PREMIUM WHITE STUDIO) */
     header {
       position: sticky;
       top: 0;
       z-index: 1000;
       height: 64px;
-      background: var(--card-dark);
+      background: #FFFFFF;
       border-bottom: 2.5px solid var(--uthe-gold);
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 1.25rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: var(--shadow-sm);
     }
 
     .brand-group {
@@ -176,7 +181,7 @@
       font-size: 1.15rem;
       font-weight: 900;
       letter-spacing: 2px;
-      color: var(--uthe-gold);
+      color: var(--uthe-charcoal);
       text-transform: uppercase;
       white-space: nowrap;
     }
@@ -184,8 +189,8 @@
     .brand-badge {
       font-size: 0.6rem;
       font-weight: 800;
-      background: rgba(229, 168, 0, 0.15);
-      color: var(--uthe-gold);
+      background: var(--uthe-gold-light);
+      color: #92400E;
       border: 1px solid var(--uthe-gold);
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
@@ -202,7 +207,7 @@
     .nav-tab {
       background: transparent;
       border: 1px solid transparent;
-      color: var(--text-dim);
+      color: var(--text-muted);
       font-size: 0.72rem;
       font-weight: 800;
       text-transform: uppercase;
@@ -217,15 +222,16 @@
     }
 
     .nav-tab:hover {
-      background: var(--card-surface);
-      color: var(--text-light);
+      background: var(--card-subtle);
+      color: var(--text-main);
     }
 
     .nav-tab.active {
-      background: var(--uthe-gold);
-      color: #000000;
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
+      border: 1px solid var(--uthe-gold);
       font-weight: 900;
-      box-shadow: 0 0 12px var(--uthe-gold-glow);
+      box-shadow: var(--shadow-sm);
     }
 
     .header-actions {
@@ -237,21 +243,22 @@
     .owner-badge {
       font-size: 0.68rem;
       font-weight: 800;
-      background: var(--card-surface);
-      color: var(--uthe-gold);
-      border: 1px solid var(--border-dark);
-      padding: 0 0.75rem;
+      background: var(--uthe-gold-light);
+      color: #92400E;
+      border: 1.5px solid var(--uthe-gold);
+      padding: 0 0.85rem;
       border-radius: 20px;
-      height: 36px;
+      height: 38px;
       display: flex;
       align-items: center;
       gap: 0.4rem;
+      cursor: pointer;
     }
 
     /* SMART OMNI-SEARCH BAR */
     .omni-search-belt {
-      background: var(--card-dark);
-      border-bottom: 1px solid var(--border-dark);
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-color);
       padding: 0.75rem 1.25rem;
       display: flex;
       gap: 0.75rem;
@@ -259,22 +266,31 @@
       position: sticky;
       top: 64px;
       z-index: 900;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .omni-search-wrap {
+      flex: 1;
+      position: relative;
     }
 
     .omni-search-input {
-      flex: 1;
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: #FFFFFF;
+      width: 100%;
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
       padding: 0 1rem 0 2.5rem;
       border-radius: 8px;
       font-size: 0.85rem;
+      font-weight: 500;
     }
 
     .search-icon-pos {
       position: absolute;
-      left: 2rem;
-      color: var(--uthe-gold);
+      left: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
       font-size: 0.9rem;
     }
 
@@ -307,14 +323,14 @@
     }
 
     .kpi-card {
-      background: var(--card-dark);
-      border: 1px solid var(--border-dark);
+      background: var(--card-surface);
+      border: 1.5px solid var(--border-color);
       border-radius: 10px;
       padding: 1.25rem;
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow-sm);
       position: relative;
       overflow: hidden;
     }
@@ -325,14 +341,14 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 2.5px;
+      height: 3px;
       background: var(--uthe-gold);
     }
 
     .kpi-label {
       font-size: 0.65rem;
       font-weight: 800;
-      color: var(--text-dim);
+      color: var(--text-muted);
       letter-spacing: 1px;
       text-transform: uppercase;
     }
@@ -341,16 +357,16 @@
       font-size: 1.65rem;
       font-weight: 900;
       font-family: 'JetBrains Mono', monospace;
-      color: var(--text-light);
+      color: var(--uthe-charcoal);
     }
 
     .table-container {
-      background: var(--card-dark);
-      border: 1px solid var(--border-dark);
+      background: var(--card-surface);
+      border: 1.5px solid var(--border-color);
       border-radius: 10px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow-sm);
     }
 
     table {
@@ -362,34 +378,34 @@
     }
 
     th {
-      background: var(--card-surface);
-      color: var(--text-dim);
+      background: #F8FAFC;
+      color: var(--text-muted);
       font-weight: 800;
       text-transform: uppercase;
       font-size: 0.65rem;
       letter-spacing: 1px;
       padding: 0.85rem 1rem;
-      border-bottom: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-color);
     }
 
     td {
       padding: 0.85rem 1rem;
-      border-bottom: 1px solid #1E293B;
-      color: var(--text-light);
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
       vertical-align: middle;
     }
 
     .btn-gold {
-      background: var(--uthe-gold);
-      color: #000000;
-      border: none;
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
+      border: 1.5px solid var(--uthe-gold);
       font-weight: 900;
       font-size: 0.72rem;
       letter-spacing: 1px;
       text-transform: uppercase;
       border-radius: 6px;
       cursor: pointer;
-      padding: 0 1rem;
+      padding: 0 1.25rem;
       height: 48px;
       display: inline-flex;
       align-items: center;
@@ -398,13 +414,15 @@
     }
 
     .btn-gold:hover {
-      box-shadow: 0 0 15px var(--uthe-gold-glow);
+      background: var(--uthe-gold);
+      color: var(--uthe-charcoal);
+      box-shadow: 0 4px 15px var(--uthe-gold-glow);
     }
 
     .btn-surface {
-      background: var(--card-surface);
-      color: var(--text-light);
-      border: 1px solid var(--border-dark);
+      background: #FFFFFF;
+      color: var(--uthe-charcoal);
+      border: 1px solid var(--border-color);
       font-weight: 800;
       font-size: 0.72rem;
       letter-spacing: 0.8px;
@@ -417,6 +435,10 @@
       align-items: center;
       justify-content: center;
       transition: all 0.2s ease;
+    }
+
+    .btn-surface:hover {
+      border-color: var(--uthe-gold);
     }
 
     .btn-danger {
@@ -437,15 +459,15 @@
     .badge-tag {
       font-size: 0.65rem;
       font-weight: 800;
-      padding: 0.15rem 0.45rem;
+      padding: 0.2rem 0.5rem;
       border-radius: 4px;
       text-transform: uppercase;
       display: inline-block;
     }
 
-    .tag-mint { background: var(--status-mint-bg); color: var(--status-mint); border: 1px solid rgba(0, 200, 83, 0.3); }
-    .tag-cyan { background: var(--cyan-bg); color: var(--cyan-accent); border: 1px solid rgba(6, 182, 212, 0.3); }
-    .tag-gold { background: rgba(229, 168, 0, 0.15); color: var(--uthe-gold); border: 1px solid var(--uthe-gold); }
+    .tag-mint { background: var(--status-mint-bg); color: #065F46; border: 1px solid rgba(0, 200, 83, 0.4); }
+    .tag-cyan { background: var(--blue-bg); color: var(--blue-accent); border: 1px solid rgba(37, 99, 235, 0.3); }
+    .tag-gold { background: var(--uthe-gold-light); color: #92400E; border: 1px solid var(--uthe-gold); }
 
     .form-group {
       display: flex;
@@ -456,15 +478,15 @@
     label {
       font-size: 0.65rem;
       font-weight: 800;
-      color: var(--text-dim);
+      color: var(--text-muted);
       letter-spacing: 0.8px;
       text-transform: uppercase;
     }
 
     input, select, textarea {
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: var(--text-light);
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
       padding: 0 0.85rem;
       border-radius: 6px;
       font-family: inherit;
@@ -474,12 +496,74 @@
       transition: all 0.2s ease;
     }
 
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--uthe-gold);
+      box-shadow: 0 0 0 3px var(--uthe-gold-glow);
+    }
+
+    /* MODALS */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-card {
+      background: #FFFFFF;
+      border: 2.5px solid var(--uthe-gold);
+      border-radius: 12px;
+      width: 540px;
+      max-width: 95%;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .modal-main-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: var(--uthe-charcoal);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .btn-close-modal {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     /* CUSTOM MODAL ALERT */
     .custom-modal-alert {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(5px);
       z-index: 3000;
       align-items: center;
@@ -488,7 +572,7 @@
     }
 
     .custom-alert-card {
-      background: var(--card-dark);
+      background: #FFFFFF;
       border: 2px solid var(--uthe-gold);
       border-radius: 12px;
       width: 420px;
@@ -497,22 +581,44 @@
       display: flex;
       flex-direction: column;
       gap: 0.85rem;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--shadow-lg);
       text-align: center;
     }
 
     .alert-card-title {
       font-size: 0.95rem;
       font-weight: 900;
-      color: var(--uthe-gold);
+      color: var(--uthe-charcoal);
       letter-spacing: 1px;
       text-transform: uppercase;
     }
 
     .alert-card-msg {
       font-size: 0.85rem;
-      color: var(--text-light);
+      color: var(--text-muted);
       line-height: 1.5;
+    }
+
+    /* AUTH TOGGLE & PASSWORD STRENGTH */
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-toggle-icon {
+      position: absolute;
+      right: 0.85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .pass-meter-text {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
     }
 
     @media (max-width: 1024px) {
@@ -523,35 +629,37 @@
 </head>
 <body>
 
-  <!-- MASTER TOP HEADER -->
+  <!-- MASTER TOP HEADER (PREMIUM WHITE STUDIO) -->
   <header>
     <div class="brand-group">
       <h1 class="brand-title" data-tooltip="u-theADMIN: Master Governance Suite for Zion Daye.">U-THEADMIN</h1>
-      <span class="brand-badge">MASTER CMS</span>
+      <span class="brand-badge" data-tooltip="Master CMS Control Panel">MASTER CMS</span>
     </div>
 
     <!-- TABS -->
     <div class="nav-tabs-container">
-      <button class="nav-tab active" onclick="switchAdminTab('overview')">1. TOPOLOGY</button>
-      <button class="nav-tab" onclick="switchAdminTab('cms')">2. ZERO-CODE CMS</button>
-      <button class="nav-tab" onclick="switchAdminTab('users')">3. USER ACCOUNTS</button>
-      <button class="nav-tab" onclick="switchAdminTab('jobs')">4. JOBS CATALOG</button>
-      <button class="nav-tab" onclick="switchAdminTab('applicants')">5. CANDIDATE ATS</button>
-      <button class="nav-tab" onclick="switchAdminTab('hunter')">6. HUNTER LEADS</button>
-      <button class="nav-tab" onclick="switchAdminTab('diagnostics')">7. AUDIT & DIAGS</button>
+      <button class="nav-tab active" onclick="switchAdminTab('overview')" data-tooltip="Live subdomain topology & nodes">1. TOPOLOGY</button>
+      <button class="nav-tab" onclick="switchAdminTab('cms')" data-tooltip="Zero-code live platform editor">2. ZERO-CODE CMS</button>
+      <button class="nav-tab" onclick="switchAdminTab('users')" data-tooltip="Manage user accounts & approvals">3. USER ACCOUNTS</button>
+      <button class="nav-tab" onclick="switchAdminTab('jobs')" data-tooltip="Manage active job listings">4. JOBS CATALOG</button>
+      <button class="nav-tab" onclick="switchAdminTab('applicants')" data-tooltip="Candidate applications & pipeline">5. CANDIDATE ATS</button>
+      <button class="nav-tab" onclick="switchAdminTab('hunter')" data-tooltip="Lead search tool">6. HUNTER LEADS</button>
+      <button class="nav-tab" onclick="switchAdminTab('diagnostics')" data-tooltip="System audit logs & telemetry">7. AUDIT & DIAGS</button>
     </div>
 
     <div class="header-actions">
-      <div class="owner-badge">
-        <span>👑</span><span>ZION DAYE (815-980-4272)</span>
+      <div class="owner-badge" onclick="openAdminAuthModal()" data-tooltip="Master Owner Profile: Zion Daye (815-980-4272)">
+        <span>👑</span><span id="header-admin-identity">ZION DAYE (815-980-4272)</span>
       </div>
     </div>
   </header>
 
   <!-- SMART OMNI-SEARCH BAR -->
   <section class="omni-search-belt">
-    <span class="search-icon-pos">&#128269;</span>
-    <input type="text" class="omni-search-input" id="omni-search-input" placeholder="Smart Omni-Search: Filter candidate names, employer accounts, phone numbers, emails, job IDs, or logs..." oninput="handleOmniSearch(this.value)">
+    <div class="omni-search-wrap">
+      <span class="search-icon-pos">&#128269;</span>
+      <input type="text" class="omni-search-input" id="omni-search-input" placeholder="Smart Omni-Search: Filter candidate names, employer accounts, phone numbers, emails, job IDs, or logs..." oninput="handleOmniSearch(this.value)" data-tooltip="Instant cross-platform search across all databases.">
+    </div>
   </section>
 
   <!-- MAIN SUITE VIEWS -->
@@ -562,7 +670,7 @@
       <div class="kpi-grid">
         <div class="kpi-card">
           <span class="kpi-label">ACTIVE JOBS</span>
-          <span class="kpi-value" id="kpi-jobs">3</span>
+          <span class="kpi-value" id="kpi-jobs">5</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">APPLICANTS</span>
@@ -574,12 +682,12 @@
         </div>
         <div class="kpi-card">
           <span class="kpi-label">HEALTH STATUS</span>
-          <span class="kpi-value" style="color: var(--status-mint);" id="kpi-health">ONLINE</span>
+          <span class="kpi-value" style="color: #065F46;" id="kpi-health">ONLINE</span>
         </div>
       </div>
 
       <div class="table-container">
-        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
+        <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.85rem; color: var(--uthe-charcoal);">
           ACTIVE SUBDOMAIN HOST NODES
         </div>
         <table>
@@ -621,17 +729,18 @@
 
     <!-- VIEW 2: ZERO-CODE CMS CONTROLS -->
     <section id="view-cms" class="view-section">
-      <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: 10px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); padding-bottom: 0.75rem;">
+      <div style="background: var(--card-surface); border: 1.5px solid var(--border-color); border-radius: 10px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1.25rem; box-shadow: var(--shadow-sm);">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
           <div>
-            <div style="font-size: 0.95rem; font-weight: 900; color: var(--uthe-gold);">ZERO-CODE LIVE CMS CONTROL PANEL (ZION DAYE)</div>
-            <div style="font-size: 0.72rem; color: var(--text-dim);">Edit every label, button phrase, and pricing rate across u-thePOST and u-theJOBS in real time.</div>
+            <div style="font-size: 0.95rem; font-weight: 900; color: var(--uthe-charcoal);">ZERO-CODE LIVE CMS CONTROL PANEL (ZION DAYE)</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">Edit every label, button phrase, and pricing rate across u-thePOST and u-theJOBS in real time.</div>
           </div>
           <button class="btn-gold" onclick="saveAndBroadcastCms()">
             SAVE & BROADCAST CMS
           </button>
         </div>
 
+        <div style="font-size: 0.8rem; font-weight: 900; color: var(--uthe-charcoal);">1. PLATFORM LABELS & BUTTON PHRASES</div>
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
           <div class="form-group">
             <label>u-thePOST Brand Title</label>
@@ -659,8 +768,8 @@
           </div>
         </div>
 
-        <div style="border-top: 1px solid var(--border-dark); padding-top: 0.75rem;">
-          <div style="font-size: 0.82rem; font-weight: 800; color: var(--cyan-accent); margin-bottom: 0.5rem;">TIER & ADD-ON PRICING OVERRIDES</div>
+        <div style="border-top: 1px solid var(--border-color); padding-top: 1rem;">
+          <div style="font-size: 0.8rem; font-weight: 900; color: var(--uthe-charcoal); margin-bottom: 0.75rem;">2. MEMBERSHIP TIER PRICING ($ / MONTH)</div>
           <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
             <div class="form-group">
               <label>u-thePAL Monthly Price ($)</label>
@@ -680,14 +789,28 @@
             </div>
           </div>
         </div>
+
+        <div style="border-top: 1px solid var(--border-color); padding-top: 1rem;">
+          <div style="font-size: 0.8rem; font-weight: 900; color: var(--uthe-charcoal); margin-bottom: 0.75rem;">3. ADD-ON RATES & SOCIAL MULTI-POSTING</div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+            <div class="form-group">
+              <label>Individual Social Channel Add-On ($ / channel / mo)</label>
+              <input type="number" step="0.01" id="cms-price-social-single" value="5.99">
+            </div>
+            <div class="form-group">
+              <label>5-Channel Multi-Posting Bundle ($ / mo)</label>
+              <input type="number" step="0.01" id="cms-price-social-bundle" value="19.99">
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- VIEW 3: USER ACCOUNTS CRUD -->
     <section id="view-users" class="view-section">
       <div class="table-container">
-        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          REGISTERED USER ACCOUNTS & APPROVALS
+        <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.85rem; color: var(--uthe-charcoal);">
+          REGISTERED USER ACCOUNTS & PERMISSIONS
         </div>
         <table>
           <thead>
@@ -697,6 +820,7 @@
               <th>Email Address</th>
               <th>Phone</th>
               <th>Role</th>
+              <th>Approved</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -708,7 +832,7 @@
     <!-- VIEW 4: MASTER JOB INVENTORY -->
     <section id="view-jobs" class="view-section">
       <div class="table-container">
-        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
+        <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.85rem; color: var(--uthe-charcoal);">
           ACTIVE JOB LISTINGS
         </div>
         <table>
@@ -719,6 +843,7 @@
               <th>Company</th>
               <th>Location</th>
               <th>Salary</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -730,8 +855,8 @@
     <!-- VIEW 5: CANDIDATE ATS -->
     <section id="view-applicants" class="view-section">
       <div class="table-container">
-        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          CANDIDATE APPLICATIONS & ATS DECISIONS
+        <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.85rem; color: var(--uthe-charcoal);">
+          CANDIDATE APPLICATIONS & STAGE OVERRIDES
         </div>
         <table>
           <thead>
@@ -740,7 +865,8 @@
               <th>Candidate Name</th>
               <th>Applied Position</th>
               <th>Email</th>
-              <th>Status</th>
+              <th>Phone</th>
+              <th>Stage</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -775,12 +901,45 @@
       <div style="display: flex; gap: 0.75rem; align-items: center;">
         <button class="btn-gold" onclick="exportAuditLog()">EXPORT AUDIT JSON</button>
       </div>
-      <div style="background: #000; border: 1px solid var(--border-dark); border-radius: 8px; padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; height: 260px; overflow-y: auto; color: var(--status-mint);" id="diag-console">
+      <div style="background: #111827; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; height: 260px; overflow-y: auto; color: #34D399;" id="diag-console">
         [12:00:00] [SYSTEM_INIT] u-theADMIN Master Suite active for Zion Daye on admin.utheversity.com
       </div>
     </section>
 
   </main>
+
+  <!-- MASTER AUTHENTICATION MODAL -->
+  <div class="modal-overlay" id="admin-auth-modal">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <span class="modal-main-title">MASTER ADMINISTRATOR AUTHENTICATION</span>
+        <button class="btn-close-modal" onclick="closeModal('admin-auth-modal')">X</button>
+      </div>
+
+      <div class="form-group">
+        <label>Master Administrator Email</label>
+        <input type="email" id="admin-auth-email" value="contact@utheversity.com">
+      </div>
+
+      <div class="form-group">
+        <label>Master Administrator Password</label>
+        <div class="password-wrap">
+          <input type="password" id="admin-auth-pass" value="ZionAdmin2026!" oninput="checkAdminPassLength(this.value)">
+          <span class="password-toggle-icon" onclick="togglePassVisibility('admin-auth-pass')">👁️</span>
+        </div>
+        <div class="pass-meter-text" id="admin-pass-meter">✓ Verified Master Encryption Key</div>
+      </div>
+
+      <div style="background: var(--card-subtle); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+        <input type="checkbox" id="admin-recaptcha" checked style="min-height: 20px; width: 20px;">
+        <span style="font-size: 0.72rem; color: var(--text-muted);">Protected by UTHEVERSITY Anti-Spam Security</span>
+      </div>
+
+      <button class="btn-gold" style="width: 100%; margin-top: 0.5rem;" onclick="handleAdminLogin()">
+        AUTHENTICATE MASTER SESSION
+      </button>
+    </div>
+  </div>
 
   <!-- SIGNATURE CUSTOM MODAL ALERT (NO BROWSER ALERT) -->
   <div class="custom-modal-alert" id="custom-modal-alert">
@@ -811,6 +970,53 @@
       const idx = tabs[tabKey] || 0;
       if (document.querySelectorAll('.nav-tab')[idx]) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
     };
+
+    function openAdminAuthModal() {
+      document.getElementById('admin-auth-modal').style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function togglePassVisibility(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function checkAdminPassLength(val) {
+      const meter = document.getElementById('admin-pass-meter');
+      if (val.length >= 8) {
+        meter.textContent = `✓ Strong encryption key (${val.length} chars)`;
+        meter.style.color = '#065F46';
+      } else {
+        meter.textContent = `Minimum 8 characters required (${val.length}/8)`;
+        meter.style.color = 'var(--text-muted)';
+      }
+    }
+
+    async function handleAdminLogin() {
+      const email = document.getElementById('admin-auth-email').value;
+      const password = document.getElementById('admin-auth-pass').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok && data.user) {
+          closeModal('admin-auth-modal');
+          document.getElementById('header-admin-identity').textContent = `${data.user.name.toUpperCase()} (${data.user.phone})`;
+          showCustomModalAlert('Master Session Active', `Authenticated as ${data.user.name} (${data.user.email}).`);
+        } else {
+          showCustomModalAlert('Authentication Failed', data.error || 'Invalid credentials.');
+        }
+      } catch (e) {
+        showCustomModalAlert('Error', e.message);
+      }
+    }
 
     async function loadAdminData() {
       try {
@@ -863,6 +1069,8 @@
         if (config.pricing.starterMonthly) document.getElementById('cms-price-starter').value = config.pricing.starterMonthly;
         if (config.pricing.growthMonthly) document.getElementById('cms-price-growth').value = config.pricing.growthMonthly;
         if (config.pricing.proMonthly) document.getElementById('cms-price-pro').value = config.pricing.proMonthly;
+        if (config.pricing.individualSocialAddon) document.getElementById('cms-price-social-single').value = config.pricing.individualSocialAddon;
+        if (config.pricing.socialBundleAddon) document.getElementById('cms-price-social-bundle').value = config.pricing.socialBundleAddon;
       }
     }
 
@@ -880,7 +1088,9 @@
           palMonthly: Number(document.getElementById('cms-price-pal').value),
           starterMonthly: Number(document.getElementById('cms-price-starter').value),
           growthMonthly: Number(document.getElementById('cms-price-growth').value),
-          proMonthly: Number(document.getElementById('cms-price-pro').value)
+          proMonthly: Number(document.getElementById('cms-price-pro').value),
+          individualSocialAddon: Number(document.getElementById('cms-price-social-single').value),
+          socialBundleAddon: Number(document.getElementById('cms-price-social-bundle').value)
         }
       };
 
@@ -896,7 +1106,7 @@
       }
     };
 
-    // Smart Omni-Search
+    // Smart Omni-Search (Searches candidates, employers, phone, emails, job IDs, logs)
     async function handleOmniSearch(query) {
       if (!query.trim()) {
         renderAdminUsers();
@@ -925,11 +1135,41 @@
           <td><strong>${u.name}</strong></td>
           <td>${u.email}</td>
           <td>${u.phone || 'N/A'}</td>
-          <td><span class="badge-tag ${u.role === 'admin' ? 'tag-gold' : u.role === 'recruiter' ? 'tag-cyan' : 'tag-mint'}">${u.role.toUpperCase()}</span></td>
+          <td>
+            <select onchange="updateUserRole('${u.id}', this.value)" style="height:32px; font-size:0.75rem; padding:0 0.5rem;">
+              <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>ADMIN</option>
+              <option value="recruiter" ${u.role === 'recruiter' ? 'selected' : ''}>RECRUITER</option>
+              <option value="candidate" ${u.role === 'candidate' ? 'selected' : ''}>CANDIDATE</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn-surface" style="min-height:32px; height:32px; font-size:0.65rem; padding:0 0.5rem;" onclick="toggleUserApproval('${u.id}', ${!u.approved})">
+              ${u.approved !== false ? '✓ APPROVED' : '⏳ PENDING'}
+            </button>
+          </td>
           <td><button class="btn-danger" onclick="deleteUser('${u.id}')">DELETE</button></td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    async function updateUserRole(uid, newRole) {
+      await fetch(`/api/admin/users/${uid}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role: newRole })
+      });
+      showCustomModalAlert('Role Updated', `User ${uid} role set to ${newRole.toUpperCase()}.`);
+    }
+
+    async function toggleUserApproval(uid, approved) {
+      await fetch(`/api/admin/users/${uid}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ approved })
+      });
+      loadAdminData();
+      showCustomModalAlert('Approval Updated', `User ${uid} approval status updated.`);
     }
 
     async function deleteUser(uid) {
@@ -950,16 +1190,33 @@
       tbody.innerHTML = '';
       (list || adminJobs).forEach(job => {
         const tr = document.createElement('tr');
+        const isActive = job.status !== 'Paused';
         tr.innerHTML = `
           <td><code>${job.id}</code></td>
           <td><strong>${job.jobTitle || job.title}</strong></td>
           <td>${job.company}</td>
           <td><span class="badge-tag tag-cyan">${job.location}</span></td>
           <td><span class="badge-tag tag-mint">${job.salary}</span></td>
-          <td><button class="btn-danger" onclick="deleteJobAdmin('${job.id}')">DELETE</button></td>
+          <td><span class="badge-tag ${isActive ? 'tag-mint' : 'tag-gold'}">${job.status || 'Active'}</span></td>
+          <td style="display:flex; gap:0.4rem; align-items:center;">
+            <button class="btn-surface" style="min-height:32px; height:32px; font-size:0.65rem; padding:0 0.5rem;" onclick="toggleJobStatus('${job.id}', '${isActive ? 'Paused' : 'Active'}')">
+              ${isActive ? 'PAUSE' : 'RESUME'}
+            </button>
+            <button class="btn-danger" onclick="deleteJobAdmin('${job.id}')">DELETE</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    async function toggleJobStatus(jobId, newStatus) {
+      await fetch(`/api/jobs/${jobId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      loadAdminData();
+      showCustomModalAlert('Job Status Updated', `Position ${jobId} set to ${newStatus}.`);
     }
 
     async function deleteJobAdmin(id) {
@@ -979,11 +1236,33 @@
           <td><strong>${app.name}</strong></td>
           <td>${app.jobTitle}</td>
           <td>${app.email}</td>
-          <td><span class="badge-tag tag-gold">${app.status}</span></td>
-          <td><button class="btn-surface" style="min-height:32px; font-size:0.65rem;" onclick="showCustomModalAlert('Applicant Reviewed', 'Applicant profile marked as reviewed.')">UPDATE</button></td>
+          <td>${app.phone || 'N/A'}</td>
+          <td>
+            <select onchange="updateApplicantStage('${app.id}', this.value)" style="height:32px; font-size:0.75rem; padding:0 0.5rem;">
+              <option value="Applied" ${app.status === 'Applied' ? 'selected' : ''}>Applied</option>
+              <option value="Screened" ${app.status === 'Screened' ? 'selected' : ''}>Screened</option>
+              <option value="Interviewing" ${app.status === 'Interviewing' ? 'selected' : ''}>Interviewing</option>
+              <option value="Offer" ${app.status === 'Offer' ? 'selected' : ''}>Offer</option>
+              <option value="Hired" ${app.status === 'Hired' ? 'selected' : ''}>Hired</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn-surface" style="min-height:32px; height:32px; font-size:0.65rem; padding:0 0.5rem;" onclick="showCustomModalAlert('Candidate Profile', 'Name: ${app.name}\\nEmail: ${app.email}\\nRole: ${app.jobTitle}')">
+              REVIEW
+            </button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    async function updateApplicantStage(appId, newStage) {
+      await fetch(`/api/applicants/${appId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStage })
+      });
+      showCustomModalAlert('Stage Updated', `Applicant ${appId} moved to ${newStage}.`);
     }
 
     async function searchAdminLeads() {
