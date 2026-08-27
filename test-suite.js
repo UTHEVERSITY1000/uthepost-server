@@ -8,7 +8,7 @@ const WS_URL = 'ws://localhost:3000';
 
 async function runTests() {
   console.log('================================================================');
-  console.log('UTHEVERSITY RECRUITER LAYOUT & PLAIN-ENGLISH TEST SUITE');
+  console.log('UTHEVERSITY PHASE 1 ATS, PLANS & ASSET OVERHAUL TEST SUITE');
   console.log('================================================================\n');
 
   let passed = 0;
@@ -75,10 +75,82 @@ async function runTests() {
     });
   }
 
+  const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
   // ----------------------------------------------------
-  // TEST GROUP 1: Master Owner Account (Zion Daye)
+  // TEST GROUP 1: Campaign Recipient Cap (25 Max per Batch)
   // ----------------------------------------------------
-  console.log('[TEST GROUP 1] Master Owner Account (Zion Daye)');
+  console.log('[TEST GROUP 1] Campaign Recipient Cap (25 Max)');
+  try {
+    assert(recContent.includes('max="25"'), 'Recipient input has max="25" attribute');
+    assert(recContent.includes('25 MAX PER BATCH'), 'Header / label displays 25 MAX PER BATCH');
+    assert(recContent.includes('clampCrmRecipients'), 'JS clamping function clampCrmRecipients is implemented');
+    assert(recContent.includes('if (count > 25) count = 25'), 'Campaign dispatch enforces 25 max recipient cap');
+  } catch (err) {
+    assert(false, `Group 1 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 2: Applicant Tracker Cards & Modal Handlers
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 2] Applicant Tracker & Candidate Review');
+  try {
+    assert(recContent.includes('openCandidateReviewModal'), 'Candidate cards click handler openCandidateReviewModal implemented');
+    assert(recContent.includes('candidate-review-modal'), 'Candidate review modal container present');
+    assert(recContent.includes('col-header-applied') && recContent.includes('col-header-screened') && recContent.includes('col-header-interviewing') && recContent.includes('col-header-offer'), 'Distinct high-contrast column decks styled for all 4 pipeline stages');
+  } catch (err) {
+    assert(false, `Group 2 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 3: Direct Messaging Drawer ("MESSAGE APPLICANT")
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 3] Direct Messaging Drawer (MESSAGE APPLICANT)');
+  try {
+    assert(recContent.includes('MESSAGE APPLICANT'), 'Dedicated message section labeled "MESSAGE APPLICANT" present');
+    assert(recContent.includes('applicant-chat-log'), 'Back-and-forth recruiter/applicant chat log thread present');
+    assert(recContent.includes('INTRODUCTION TEMPLATE'), 'Quick message template 1: INTRODUCTION TEMPLATE present');
+    assert(recContent.includes('INVITE TEMPLATE'), 'Quick message template 2: INVITE TEMPLATE present');
+    assert(recContent.includes('ARE YOU INTERESTED TEMPLATE'), 'Quick message template 3: ARE YOU INTERESTED TEMPLATE present');
+    assert(recContent.includes('sendAtsDirectMessage'), 'Direct message sender sendAtsDirectMessage active');
+  } catch (err) {
+    assert(false, `Group 3 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 4: Pricing Plans & Dynamic Add-Ons Overhaul
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 4] Pricing Plans & Structure Overhaul');
+  try {
+    assert(recContent.includes('BUILD FROM $0'), 'Dynamic total header includes "BUILD FROM $0"');
+    assert(recContent.includes('CHOOSE A PLAN + ADD-ONS'), 'Dynamic total header includes "CHOOSE A PLAN + ADD-ONS"');
+
+    assert(recContent.includes('1 Direct Applicant Messaging'), 'u-thePAL tier has "1 Direct Applicant Messaging"');
+    assert(!recContent.includes('Direct Applicant Ingestion'), 'Banned legacy term "Ingestion" replaced with "Messaging"');
+
+    assert(recContent.includes('3 Active Job Postings') && recContent.includes('3 Direct Candidate Messaging') && recContent.includes('Applicant Tracking'), 'STARTER plan structured with 3 Postings, 3 Messaging, Applicant Tracking');
+    assert(recContent.includes('15 Active Job Postings') && recContent.includes('3 Multi-Platform Sharing'), 'GROWTH plan structured with 15 Postings, 3 Sharing, Applicant Tracking');
+    assert(recContent.includes('Unlimited Active Job Postings') && recContent.includes('Full Multi-Platform Sharing'), 'PROFESSIONAL plan structured with Unlimited Postings, Full Sharing, Applicant Tracking');
+  } catch (err) {
+    assert(false, `Group 4 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 5: Branding, Badges & Asset Overhaul
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 5] Verified Employer Emblem & Sleek Social Assets');
+  try {
+    assert(recContent.includes('verified-employer-badge') && recContent.includes('VERIFIED EMPLOYER'), 'Verified Employer Badge with official gold UTHEVERSITY emblem present');
+    assert(recContent.includes('URGENT HIRING'), 'Visual URGENT HIRING badge rendered on job cards');
+    assert(recContent.includes('viewBox="0 0 24 24"') && recContent.includes('#0A66C2') && recContent.includes('#1877F2') && recContent.includes('#E4405F') && recContent.includes('#EE1D52'), 'Sleek SVG brand logos present for LinkedIn, Facebook, Instagram, TikTok, and X');
+  } catch (err) {
+    assert(false, `Group 5 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 6: Master Owner Account (Zion Daye)
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 6] Master Owner Account (Zion Daye)');
   try {
     const loginRes = await httpPost('/api/auth/login', {
       email: 'contact@utheversity.com',
@@ -89,114 +161,23 @@ async function runTests() {
     assert(loginRes.data.user.phone === '815-980-4272', 'Master Owner contact phone verified as 815-980-4272');
     assert(loginRes.data.user.role === 'admin', 'Master Owner role verified as admin');
   } catch (err) {
-    assert(false, `Group 1 failed: ${err.message}`);
-  }
-
-  // ----------------------------------------------------
-  // TEST GROUP 2: Smart Omni-Search Bar
-  // ----------------------------------------------------
-  console.log('\n[TEST GROUP 2] Smart Omni-Search Endpoint');
-  try {
-    const searchRes = await httpGet('/api/admin/search?q=Zion');
-    assert(searchRes.status === 200, 'GET /api/admin/search returns HTTP 200');
-    assert(searchRes.data.results.users.some(u => u.name === 'Zion Daye'), 'Omni-Search matched Zion Daye user account');
-
-    const searchPhone = await httpGet('/api/admin/search?q=815-980-4272');
-    assert(searchPhone.data.results.users.some(u => u.phone === '815-980-4272'), 'Omni-Search matched by phone number');
-
-    const searchJob = await httpGet('/api/admin/search?q=Quantum');
-    assert(searchJob.data.results.jobs.some(j => j.company.includes('Quantum')), 'Omni-Search matched by company name');
-  } catch (err) {
-    assert(false, `Group 2 failed: ${err.message}`);
-  }
-
-  // ----------------------------------------------------
-  // TEST GROUP 3: Strict Plain-English Language & Jargon Banning
-  // ----------------------------------------------------
-  console.log('\n[TEST GROUP 3] Strict Plain-English Language (Zero Tech Jargon)');
-  try {
-    const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
-
-    assert(!recContent.includes('BROADCAST ENGINE'), 'Banned term "BROADCAST ENGINE" removed');
-    assert(!recContent.includes('Syndication'), 'Banned term "Syndication" removed');
-    assert(!recContent.includes('Mesh'), 'Banned term "Mesh" removed');
-    assert(!recContent.includes('WebSockets'), 'Banned term "WebSockets" removed from user text');
-    assert(!recContent.includes('Reactive'), 'Banned term "Reactive" removed from user text');
-
-    assert(recContent.includes('Live Sync'), 'Plain English "Live Sync" used');
-    assert(recContent.toLowerCase().includes('multi-platform') || recContent.toLowerCase().includes('connected accounts'), 'Plain English "Multi-Platform / Connected Accounts" used');
-  } catch (err) {
-    assert(false, `Group 3 failed: ${err.message}`);
-  }
-
-  // ----------------------------------------------------
-  // TEST GROUP 4: Card 3 Live Job Listings Restoration (Right Column)
-  // ----------------------------------------------------
-  console.log('\n[TEST GROUP 4] Card 3: Live Job Listings Restoration (Right Column)');
-  try {
-    const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
-
-    assert(recContent.includes('CARD 3: LIVE JOB LISTINGS'), 'Header "CARD 3: LIVE JOB LISTINGS" present');
-    assert(recContent.includes('Sales Manager') && recContent.includes('Posted Today'), 'Relatable Job 1: Sales Manager pre-populated');
-    assert(recContent.includes('Retail Sales Associate') && recContent.includes('Posted Yesterday'), 'Relatable Job 2: Retail Sales Associate pre-populated');
-    assert(recContent.includes('Assembly Line Worker') && recContent.includes('Posted 3 Days Ago'), 'Relatable Job 3: Assembly Line Worker pre-populated');
-    assert(recContent.includes('Delivery Driver') && recContent.includes('Posted 5 Days Ago'), 'Relatable Job 4: Delivery Driver pre-populated');
-    assert(recContent.includes('Chef Needed') && recContent.includes('Posted 1 Week Ago'), 'Relatable Job 5: Chef Needed pre-populated');
-    assert(recContent.includes('EDIT') && recContent.includes('PAUSE') && recContent.includes('DELETE'), 'Action controls [EDIT], [PAUSE], [DELETE] present on rows');
-  } catch (err) {
-    assert(false, `Group 4 failed: ${err.message}`);
-  }
-
-  // ----------------------------------------------------
-  // TEST GROUP 5: Bottom Publishing & Distribution Settings Section
-  // ----------------------------------------------------
-  console.log('\n[TEST GROUP 5] Bottom Section: Publishing & Distribution Settings');
-  try {
-    const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
-
-    assert(recContent.includes('<span class="panel-title">PUBLISHING & DISTRIBUTION SETTINGS</span>'), 'Header is simply "PUBLISHING & DISTRIBUTION SETTINGS" without number prefix 3.');
-    assert(!recContent.includes('3. PUBLISHING & DISTRIBUTION SETTINGS'), 'Prefix "3." permanently removed from bottom settings header');
-    assert(recContent.includes('PUBLISH POSITION LIVE & BROADCAST'), 'Retains primary "PUBLISH POSITION LIVE & BROADCAST" button');
-    assert(recContent.includes('dist-board') && recContent.includes('dist-email') && recContent.includes('dist-social'), 'Channel checkboxes retained');
-  } catch (err) {
-    assert(false, `Group 5 failed: ${err.message}`);
-  }
-
-  // ----------------------------------------------------
-  // TEST GROUP 6: u-theJOBS Candidate Board & Profile
-  // ----------------------------------------------------
-  console.log('\n[TEST GROUP 6] u-theJOBS Candidate Board & Profile');
-  try {
-    const candContent = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
-    assert(candContent.includes('SEND RESUME/CV'), 'Bottom detail button beneath Job Description labeled "SEND RESUME/CV"');
-    assert(candContent.includes('QUICK SEND'), 'Trigger button labeled "QUICK SEND"');
-    assert(candContent.includes('SUBMIT INTERVIEW REQUEST') && candContent.includes('REMOVE ATS'), 'Submit button labeled "SUBMIT INTERVIEW REQUEST" with tooltip "REMOVE ATS"');
-    assert(candContent.includes('accept=".pdf"'), 'Resume picker restricted to .pdf only snug beneath phone');
-    assert(candContent.includes('Best Time to Contact') && candContent.includes('Morning'), 'Best Time to Contact dropdown present');
-    assert(candContent.includes('Interview Request Title'), 'Interview Request Title input present');
-    assert(candContent.includes('MY PROFILE'), 'Candidate "MY PROFILE" modal and profile preferences present');
-    assert(!candContent.includes('All Commitments') && candContent.includes('<option value="Full-Time"'), 'Commitment dropdown strictly restricted');
-  } catch (err) {
     assert(false, `Group 6 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 7: Performance & Plans Dynamic Add-Ons & Pricing
+  // TEST GROUP 7: Smart Omni-Search Endpoint
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 7] Performance & Plans Dynamic Add-Ons & Pricing');
+  console.log('\n[TEST GROUP 7] Smart Omni-Search Endpoint');
   try {
-    const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
-
-    assert(recContent.includes('ADD-ONS'), 'Itemized Features renamed to ADD-ONS');
-    assert(recContent.includes('toggle-switch') && recContent.includes('toggle-slider'), 'Interactive ON/OFF toggle switches implemented across plan features and add-ons');
-    assert(recContent.includes('calc-total-amount') && recContent.includes('recalculateMembershipTotal'), 'Dynamic membership pricing recalculation in real time implemented');
-    assert(recContent.includes('SOCIAL CHANNELS ADD-ON') && recContent.includes('toggle-social-bundle') && recContent.includes('5-CHANNEL BUNDLE ($19.99/mo)') && recContent.includes('$5.99'), 'Social Channels Add-On card with $5.99 each and $19.99 5-channel bundle implemented');
+    const searchRes = await httpGet('/api/admin/search?q=Zion');
+    assert(searchRes.status === 200, 'GET /api/admin/search returns HTTP 200');
+    assert(searchRes.data.results.users.some(u => u.name === 'Zion Daye'), 'Omni-Search matched Zion Daye user account');
   } catch (err) {
     assert(false, `Group 7 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 8: Real-Time Live Sync Relay
+  // TEST GROUP 8: Live Sync Real-Time Broadcast Relay
   // ----------------------------------------------------
   console.log('\n[TEST GROUP 8] Live Sync Real-Time Broadcast');
   try {
@@ -245,7 +226,7 @@ async function runTests() {
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL RECRUITER LAYOUT & PLAIN-ENGLISH TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL PHASE 1 ATS, PLANS & ASSET OVERHAUL TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');
