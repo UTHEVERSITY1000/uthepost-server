@@ -8,7 +8,7 @@ const WS_URL = 'ws://localhost:3000';
 
 async function runTests() {
   console.log('================================================================');
-  console.log('UTHEVERSITY CANDIDATE NOTIFICATIONS & MESSAGING TEST SUITE');
+  console.log('UTHEVERSITY CANDIDATE NOTIFICATIONS, MESSAGING & TOOLTIP TEST SUITE');
   console.log('================================================================\n');
 
   let passed = 0;
@@ -77,6 +77,7 @@ async function runTests() {
 
   const candContent = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
   const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+  const adminContent = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
 
   // ----------------------------------------------------
   // TEST GROUP 1: Candidate Notification Alert Badge (candidate.html)
@@ -205,9 +206,29 @@ async function runTests() {
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 6: Master Owner Account (Zion Daye)
+  // TEST GROUP 6: Top-Bar Tooltip Boundary Fix (All Portals)
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 6] Master Owner Account (Zion Daye)');
+  console.log('\n[TEST GROUP 6] Top-Bar Tooltip Boundary Fix');
+  try {
+    const portals = [
+      { name: 'recruiter.html', content: recContent },
+      { name: 'candidate.html', content: candContent },
+      { name: 'admin.html', content: adminContent }
+    ];
+
+    portals.forEach(p => {
+      assert(p.content.includes('header [data-tooltip]::after') && p.content.includes('top: calc(100% + 8px)'), `${p.name}: Top header tooltips automatically display below element`);
+      assert(p.content.includes('overflow: visible !important'), `${p.name}: Header container overflow set to visible to prevent clipping`);
+      assert(p.content.includes('initSmartTooltipPositioning') && p.content.includes('rect.top < 60'), `${p.name}: Viewport edge auto-detection (top < 60px) implemented`);
+    });
+  } catch (err) {
+    assert(false, `Group 6 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 7: Master Owner Account (Zion Daye)
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 7] Master Owner Account (Zion Daye)');
   try {
     const loginRes = await httpPost('/api/auth/login', {
       email: 'contact@utheversity.com',
@@ -218,7 +239,7 @@ async function runTests() {
     assert(loginRes.data.user.phone === '815-980-4272', 'Master Owner contact phone verified as 815-980-4272');
     assert(loginRes.data.user.role === 'admin', 'Master Owner role verified as admin');
   } catch (err) {
-    assert(false, `Group 6 failed: ${err.message}`);
+    assert(false, `Group 7 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
@@ -226,7 +247,7 @@ async function runTests() {
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL CANDIDATE NOTIFICATIONS & MESSAGING TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');

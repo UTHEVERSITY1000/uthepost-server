@@ -110,6 +110,33 @@
       visibility: visible;
     }
 
+    /* TOP-BAR & SMART BOTTOM TOOLTIP OVERRIDE */
+    header, .top-bar, nav, .search-filter-belt, .header-actions, .brand-group {
+      overflow: visible !important;
+    }
+
+    header [data-tooltip]::after,
+    nav [data-tooltip]::after,
+    .top-bar [data-tooltip]::after,
+    .search-filter-belt [data-tooltip]::after,
+    .tooltip-bottom[data-tooltip]::after,
+    [data-tooltip-pos="bottom"]::after {
+      bottom: auto;
+      top: calc(100% + 8px);
+    }
+
+    header [data-tooltip]::before,
+    nav [data-tooltip]::before,
+    .top-bar [data-tooltip]::before,
+    .search-filter-belt [data-tooltip]::before,
+    .tooltip-bottom[data-tooltip]::before,
+    [data-tooltip-pos="bottom"]::before {
+      bottom: auto;
+      top: calc(100% + 3px);
+      border-width: 0 5px 5px 5px;
+      border-color: transparent transparent var(--uthe-gold) transparent;
+    }
+
     /* 48PX MINIMUM TOUCH TARGETS */
     button, input, select, textarea, .touch-target {
       min-height: 48px;
@@ -1713,11 +1740,33 @@
       }
     });
 
+    // Smart Tooltip Boundary Detection (< 60px from top viewport edge)
+    function initSmartTooltipPositioning() {
+      const tooltippedElements = document.querySelectorAll('[data-tooltip]');
+      tooltippedElements.forEach(el => {
+        const checkAndFlipTooltip = () => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < 60) {
+            el.classList.add('tooltip-bottom');
+            el.setAttribute('data-tooltip-pos', 'bottom');
+          } else if (!el.closest('header') && !el.closest('nav') && !el.closest('.top-bar') && !el.closest('.search-filter-belt')) {
+            el.classList.remove('tooltip-bottom');
+            el.removeAttribute('data-tooltip-pos');
+          }
+        };
+
+        el.addEventListener('mouseenter', checkAndFlipTooltip, { passive: true });
+        el.addEventListener('focus', checkAndFlipTooltip, { passive: true });
+        checkAndFlipTooltip();
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       renderJobListings(jobsDatabase);
       selectJob('JOB-101');
       initDualSync();
       fetchMessages();
+      initSmartTooltipPositioning();
     });
   </script>
 </body>
