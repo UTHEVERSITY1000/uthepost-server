@@ -954,9 +954,43 @@ const server = http.createServer((req, res) => {
   }
 
   // ----------------------------------------------------
-  // SMART OMNI-SEARCH FOR MASTER ADMIN
+  // PUBLIC JOB LISTING SANITIZATION HELPER
+  // Strips confidential internal fields, applicant counts, and recruiter account details
+  // ----------------------------------------------------
+  function sanitizeJobForPublic(job) {
+    if (!job) return null;
+    return {
+      id: job.id,
+      jobTitle: job.jobTitle || 'Untitled Position',
+      company: job.company || 'Confidential Company',
+      location: job.location || 'Remote',
+      employmentType: job.employmentType || 'Full-Time',
+      payStructure: job.payStructure || 'Salary Range',
+      minCompensation: job.minCompensation || '0',
+      maxCompensation: job.maxCompensation || '0',
+      salary: job.salary || `$${Number(job.minCompensation || 0).toLocaleString()} - $${Number(job.maxCompensation || 0).toLocaleString()}`,
+      paidVacation: job.paidVacation || 'Standard PTO',
+      healthCoverage: job.healthCoverage || 'Medical Included',
+      retirement: job.retirement || '401(k)',
+      additionalPerks: job.additionalPerks || 'Standard Perks',
+      applyLinkUrl: job.applyLinkUrl || '',
+      summary: job.summary || '',
+      logo: job.logo || '',
+      featured: Boolean(job.featured),
+      status: job.status || 'Active',
+      createdAt: job.createdAt
+    };
+  }
+
+  // ----------------------------------------------------
+  // SMART OMNI-SEARCH FOR MASTER ADMIN (PROTECTED)
   // ----------------------------------------------------
   if (pathname === '/api/admin/search' && req.method === 'GET') {
+    const user = getAuthenticatedUser(req);
+    if (!user || user.role !== 'admin') {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
     const q = (parsedUrl.searchParams.get('q') || '').toLowerCase().trim();
     if (!q) {
       return sendJson(200, { results: { users: usersDatabase, jobs: globalJobDatabase, applicants: applicantsStore } });
@@ -1004,6 +1038,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname === '/api/cms/config' && (req.method === 'POST' || req.method === 'PUT')) {
+    const user = getAuthenticatedUser(req);
+    if (!user || user.role !== 'admin') {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON' });
       if (body.postStudio) cmsConfig.postStudio = { ...cmsConfig.postStudio, ...body.postStudio };
@@ -1022,9 +1061,14 @@ const server = http.createServer((req, res) => {
   }
 
   // ----------------------------------------------------
-  // ADMIN USER CRUD ROUTES
+  // ADMIN USER CRUD ROUTES (PROTECTED: ADMIN ONLY)
   // ----------------------------------------------------
   if (pathname === '/api/admin/users' && req.method === 'GET') {
+    const user = getAuthenticatedUser(req);
+    if (!user || user.role !== 'admin') {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
     const safeUsers = usersDatabase.map(u => ({
       id: u.id,
       email: u.email,
@@ -1041,6 +1085,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname.startsWith('/api/admin/users/') && pathname.endsWith('/reset-password') && req.method === 'POST') {
+    const authAdmin = getAuthenticatedUser(req);
+    if (!authAdmin || authAdmin.role !== 'admin') {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
     const uid = pathname.split('/')[4];
     const user = usersDatabase.find(u => u.id === uid);
     if (!user) return sendJson(404, { error: 'User not found' });
@@ -1054,6 +1103,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname.startsWith('/api/admin/users/') && (req.method === 'PUT' || req.method === 'POST')) {
+    const authAdmin = getAuthenticatedUser(req);
+    if (!authAdmin || authAdmin.role !== 'admin') {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
     const uid = pathname.split('/')[4];
     const user = usersDatabase.find(u => u.id === uid);
     if (!user) return sendJson(404, { error: 'User not found' });
@@ -1073,6 +1127,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname.startsWith('/api/admin/users/') && req.method === 'DELETE') {
+    const authAdmin = getAuthenticatedUser(req);
+    if (!authAdmin || authAdmin.role !== 'admin') {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
     const uid = pathname.split('/')[4];
     const idx = usersDatabase.findIndex(u => u.id === uid);
     if (idx !== -1) {
@@ -1088,6 +1147,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname.startsWith('/api/jobs/') && pathname.endsWith('/feature') && req.method === 'PUT') {
+    const user = getAuthenticatedUser(req);
+    if (!user || (user.role !== 'recruiter' && user.role !== 'admin')) {
+      return sendJson(401, { error: 'Unauthorized: Recruiter or Administrator privileges required.' });
+    }
+
     const jobId = pathname.split('/')[3];
     const job = globalJobDatabase.find(j => j.id === jobId);
     if (!job) return sendJson(404, { error: 'Job not found' });
@@ -1100,6 +1164,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname.startsWith('/api/jobs/') && pathname.endsWith('/status') && req.method === 'PUT') {
+    const user = getAuthenticatedUser(req);
+    if (!user || (user.role !== 'recruiter' && user.role !== 'admin')) {
+      return sendJson(401, { error: 'Unauthorized: Recruiter or Administrator privileges required.' });
+    }
+
     const jobId = pathname.split('/')[3];
     const job = globalJobDatabase.find(j => j.id === jobId);
     if (!job) return sendJson(404, { error: 'Job not found' });
@@ -1115,6 +1184,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname.startsWith('/api/jobs/') && req.method === 'PUT') {
+    const user = getAuthenticatedUser(req);
+    if (!user || (user.role !== 'recruiter' && user.role !== 'admin')) {
+      return sendJson(401, { error: 'Unauthorized: Recruiter or Administrator privileges required.' });
+    }
+
     const jobId = pathname.split('/')[3];
     const job = globalJobDatabase.find(j => j.id === jobId);
     if (!job) return sendJson(404, { error: 'Job not found' });
@@ -1130,6 +1204,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname.startsWith('/api/applicants/') && pathname.endsWith('/status') && req.method === 'PUT') {
+    const user = getAuthenticatedUser(req);
+    if (!user || (user.role !== 'recruiter' && user.role !== 'admin')) {
+      return sendJson(401, { error: 'Unauthorized: Recruiter or Administrator privileges required.' });
+    }
+
     const appId = pathname.split('/')[3];
     const app = applicantsStore.find(a => a.id === appId);
     if (!app) return sendJson(404, { error: 'Applicant not found' });
@@ -1145,6 +1224,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname.startsWith('/api/applicants/') && req.method === 'DELETE') {
+    const user = getAuthenticatedUser(req);
+    if (!user || (user.role !== 'recruiter' && user.role !== 'admin')) {
+      return sendJson(401, { error: 'Unauthorized: Recruiter or Administrator privileges required.' });
+    }
+
     const appId = pathname.split('/')[3];
     const idx = applicantsStore.findIndex(a => a.id === appId);
     if (idx !== -1) {
@@ -1176,6 +1260,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname === '/api/admin/stats') {
+    const user = getAuthenticatedUser(req);
+    if (!user || user.role !== 'admin') {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
     sendJson(200, {
       status: 'success',
       owner: 'Zion Daye',
@@ -1199,10 +1288,32 @@ const server = http.createServer((req, res) => {
   }
 
   // ----------------------------------------------------
+  // PUBLIC JOB BOARD ENDPOINT (/api/listings/public)
+  // Sanitized public position details (Title, Company, Location, Salary, Perks, Description)
+  // Zero private candidate or employer account leaks
+  // ----------------------------------------------------
+  if (pathname === '/api/listings/public' && req.method === 'GET') {
+    const publicJobs = globalJobDatabase
+      .filter(j => (j.status || 'Active') === 'Active')
+      .map(sanitizeJobForPublic);
+    sendJson(200, { jobs: publicJobs, count: publicJobs.length });
+    return;
+  }
+
+  // ----------------------------------------------------
   // JOBS CRUD & INSTANT REAL-TIME BROADCAST
+  // Public callers receive sanitized listings; authenticated recruiters/admins receive full records
   // ----------------------------------------------------
   if (pathname === '/api/jobs' && req.method === 'GET') {
-    sendJson(200, { jobs: globalJobDatabase });
+    const user = getAuthenticatedUser(req);
+    if (user && (user.role === 'recruiter' || user.role === 'admin')) {
+      sendJson(200, { jobs: globalJobDatabase, count: globalJobDatabase.length });
+    } else {
+      const publicJobs = globalJobDatabase
+        .filter(j => (j.status || 'Active') === 'Active')
+        .map(sanitizeJobForPublic);
+      sendJson(200, { jobs: publicJobs, count: publicJobs.length });
+    }
     return;
   }
 
@@ -1242,6 +1353,11 @@ const server = http.createServer((req, res) => {
   }
 
   if (pathname.startsWith('/api/jobs/') && req.method === 'DELETE') {
+    const user = getAuthenticatedUser(req);
+    if (!user || (user.role !== 'recruiter' && user.role !== 'admin')) {
+      return sendJson(401, { error: 'Unauthorized: Recruiter or Administrator privileges required.' });
+    }
+
     const jobId = pathname.split('/')[3];
     const index = globalJobDatabase.findIndex(j => j.id === jobId);
     if (index !== -1) {
@@ -1257,9 +1373,14 @@ const server = http.createServer((req, res) => {
   }
 
   // ----------------------------------------------------
-  // RESUME UPLOADS & STRICT PDF VALIDATION
+  // RESUME UPLOADS & STRICT PDF VALIDATION (AUTHENTICATED)
   // ----------------------------------------------------
   if (pathname === '/api/resumes/upload' && req.method === 'POST') {
+    const user = getAuthenticatedUser(req);
+    if (!user) {
+      return sendJson(401, { error: 'Unauthorized: Authentication required to upload candidate resumes.' });
+    }
+
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON payload' });
       const { filename, fileBase64 } = body;
@@ -1281,7 +1402,7 @@ const server = http.createServer((req, res) => {
         } else {
           fs.writeFileSync(targetPath, `%PDF-1.4\n% UTHEVERSITY Candidate Resume: ${cleanName}\n%%EOF`, 'utf8');
         }
-        writeSystemLog('RESUME_UPLOADED', { filename: cleanName, path: targetPath });
+        writeSystemLog('RESUME_UPLOADED', { filename: cleanName, path: targetPath, uploadedBy: user.id });
         sendJson(201, { status: 'uploaded', filename: cleanName, path: `/data/resumes/${cleanName}` });
       } catch (uploadErr) {
         sendJson(500, { error: 'Failed to write resume file: ' + uploadErr.message });
@@ -1290,7 +1411,13 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (pathname.startsWith('/data/resumes/') && req.method === 'GET') {
+  // Protected Candidate Resume Direct PDF Download
+  if ((pathname.startsWith('/data/resumes/') || pathname.startsWith('/api/resumes/')) && req.method === 'GET') {
+    const user = getAuthenticatedUser(req);
+    if (!user) {
+      return sendJson(401, { error: 'Unauthorized: Authentication required to view candidate resumes.' });
+    }
+
     const resumeFileName = path.basename(pathname);
     const resumeFilePath = path.join(DIRS.resumes, resumeFileName);
     if (fs.existsSync(resumeFilePath) && path.extname(resumeFilePath).toLowerCase() === '.pdf') {
@@ -1303,7 +1430,7 @@ const server = http.createServer((req, res) => {
   }
 
   // ----------------------------------------------------
-  // APPLICANTS & QUICK SEND INGESTION
+  // APPLICANTS & APPLICATIONS INGESTION & ACCESS CONTROL
   // ----------------------------------------------------
   if (pathname === '/api/applicants' && req.method === 'POST') {
     readBody((err, payload) => {
@@ -1355,34 +1482,52 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (pathname === '/api/applicants' && req.method === 'GET') {
-    sendJson(200, { applicants: applicantsStore });
+  // Protected applicant list (Recruiters & Admins only)
+  if ((pathname === '/api/applicants' || pathname === '/api/applications') && req.method === 'GET') {
+    const user = getAuthenticatedUser(req);
+    if (!user) {
+      return sendJson(401, { error: 'Unauthorized: Authentication required to view applicant data.' });
+    }
+    if (user.role !== 'recruiter' && user.role !== 'admin') {
+      return sendJson(403, { error: 'Forbidden: Recruiter or Administrator privileges required.' });
+    }
+    sendJson(200, { applicants: applicantsStore, count: applicantsStore.length });
     return;
   }
 
   // ----------------------------------------------------
-  // TWO-WAY CANDIDATE & RECRUITER MESSAGING
+  // TWO-WAY CANDIDATE & RECRUITER MESSAGING (PROTECTED)
   // ----------------------------------------------------
   if (pathname === '/api/messages' && req.method === 'GET') {
+    const user = getAuthenticatedUser(req);
+    if (!user) {
+      return sendJson(401, { error: 'Unauthorized: Authentication required to access private messaging threads.' });
+    }
+
     const applicantId = parsedUrl.searchParams ? parsedUrl.searchParams.get('applicantId') : null;
     if (applicantId) {
       const filtered = globalMessageStore.filter(m => m.applicantId === applicantId);
-      sendJson(200, { messages: filtered });
+      sendJson(200, { messages: filtered, count: filtered.length });
     } else {
-      sendJson(200, { messages: globalMessageStore });
+      sendJson(200, { messages: globalMessageStore, count: globalMessageStore.length });
     }
     return;
   }
 
   if (pathname === '/api/messages' && req.method === 'POST') {
+    const user = getAuthenticatedUser(req);
+    if (!user) {
+      return sendJson(401, { error: 'Unauthorized: Authentication required to send messages.' });
+    }
+
     readBody((err, payload) => {
       if (err) return sendJson(400, { error: err.message });
       const newMsg = {
         id: payload.id || `MSG-${Math.floor(1000 + Math.random() * 9000)}`,
         applicantId: payload.applicantId || 'APP-701',
-        senderRole: payload.senderRole || 'candidate', // 'candidate' | 'recruiter'
-        senderName: payload.senderName || (payload.senderRole === 'recruiter' ? 'Quantum Talent Acquisition' : 'Marcus Vance'),
-        company: payload.company || 'Quantum Retail Corp',
+        senderRole: payload.senderRole || user.role || 'candidate',
+        senderName: payload.senderName || user.name || (payload.senderRole === 'recruiter' ? 'Quantum Talent Acquisition' : 'Marcus Vance'),
+        company: payload.company || user.company || 'Quantum Retail Corp',
         jobTitle: payload.jobTitle || 'Sales Manager',
         text: payload.text || '',
         timestamp: new Date().toISOString()
@@ -1390,7 +1535,7 @@ const server = http.createServer((req, res) => {
 
       globalMessageStore.push(newMsg);
       saveMessageRecord(newMsg);
-      writeSystemLog('MESSAGE_SENT', { messageId: newMsg.id, applicantId: newMsg.applicantId, senderRole: newMsg.senderRole });
+      writeSystemLog('MESSAGE_SENT', { messageId: newMsg.id, applicantId: newMsg.applicantId, senderRole: newMsg.senderRole, userId: user.id });
 
       if (newMsg.senderRole === 'recruiter') {
         broadcastWebSocketEvent('RECRUITER_MESSAGE_SENT', { message: newMsg });

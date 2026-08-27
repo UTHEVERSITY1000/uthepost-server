@@ -163,11 +163,22 @@ async function runTests() {
   // ----------------------------------------------------
   console.log('\n[TEST GROUP 4] Database Sync & Live WebSocket Broadcast');
   try {
+    const adminLoginRes = await httpPost('/api/auth/login', {
+      email: 'contact@utheversity.com',
+      password: 'ZionAdmin2026!'
+    });
+    assert(adminLoginRes.status === 200 && adminLoginRes.data.token, 'Master Admin authentication session established');
+    const adminToken = adminLoginRes.data.token;
+    const adminHeaders = {
+      'Authorization': `Bearer ${adminToken}`,
+      'Cookie': `uthe_token=${adminToken}`
+    };
+
     const cmsUpdate = await httpPost('/api/cms/config', {
       postStudio: { card1Title: 'CUSTOM CARD 1 HEADER' },
       jobsBoard: { submitTooltip: 'DOUBLE CHECK CONTACT INFO ON RESUME' },
       pricing: { palMonthly: 0, starterMonthly: 99, individualSocialAddon: 5.99, socialBundleAddon: 19.99 }
-    });
+    }, adminHeaders);
     assert(cmsUpdate.status === 200, 'POST /api/cms/config successfully saved field-by-field updates');
     assert(cmsUpdate.data.config.postStudio.card1Title === 'CUSTOM CARD 1 HEADER', 'postStudio schema persisted');
     assert(cmsUpdate.data.config.jobsBoard.submitTooltip === 'DOUBLE CHECK CONTACT INFO ON RESUME', 'jobsBoard schema persisted');
@@ -177,7 +188,7 @@ async function runTests() {
       const ws = new WebSocket(WS_URL);
       let received = false;
       ws.on('open', async () => {
-        await httpPost('/api/cms/config', { jobsBoard: { boardTitle: 'U-THEJOBS LIVE' } });
+        await httpPost('/api/cms/config', { jobsBoard: { boardTitle: 'U-THEJOBS LIVE' } }, adminHeaders);
       });
       ws.on('message', (msg) => {
         const data = JSON.parse(msg.toString());
@@ -310,6 +321,16 @@ async function runTests() {
   // ----------------------------------------------------
   console.log('\n[TEST GROUP 11] Synchronous Disk Persistence & Strict PDF Validation');
   try {
+    const adminLoginRes = await httpPost('/api/auth/login', {
+      email: 'contact@utheversity.com',
+      password: 'ZionAdmin2026!'
+    });
+    const adminToken = adminLoginRes.data.token;
+    const adminHeaders = {
+      'Authorization': `Bearer ${adminToken}`,
+      'Cookie': `uthe_token=${adminToken}`
+    };
+
     // 1. Test candidate signup persistence
     const testEmail = `test.candidate.${Date.now()}@domain.com`;
     const signupRes = await httpPost('/api/auth/signup', {
@@ -321,6 +342,11 @@ async function runTests() {
     });
     assert(signupRes.status === 201, 'POST /api/auth/signup returns 201');
     const newCandId = signupRes.data.user.id;
+    const candToken = signupRes.data.token;
+    const candHeaders = {
+      'Authorization': `Bearer ${candToken}`,
+      'Cookie': `uthe_token=${candToken}`
+    };
     const candDiskPath = path.join(__dirname, 'data', 'candidates', `cand_${newCandId}.json`);
     assert(fs.existsSync(candDiskPath), `Candidate record synchronously written to disk: ${candDiskPath}`);
 
@@ -333,7 +359,7 @@ async function runTests() {
       employmentType: 'Full-Time',
       minCompensation: 180000,
       maxCompensation: 220000
-    });
+    }, adminHeaders);
     assert(jobRes.status === 201, 'POST /api/jobs returns 201');
     const newJobId = jobRes.data.job.id;
     const jobDiskPath = path.join(__dirname, 'data', 'listings', `job_${newJobId}.json`);
@@ -342,13 +368,13 @@ async function runTests() {
     // 3. Test strict resume PDF validation
     const invalidResumeRes = await httpPost('/api/resumes/upload', {
       filename: 'malicious_resume.exe'
-    });
+    }, candHeaders);
     assert(invalidResumeRes.status === 400, 'POST /api/resumes/upload rejects non-PDF extension (.exe) with 400');
 
     const validResumeRes = await httpPost('/api/resumes/upload', {
       filename: 'John_Doe_Resume_2026.pdf',
       fileBase64: Buffer.from('%PDF-1.4\n% John Doe Test Resume\n%%EOF').toString('base64')
-    });
+    }, candHeaders);
     assert(validResumeRes.status === 201, 'POST /api/resumes/upload accepts valid .pdf file with 201');
     const resumeDiskPath = path.join(__dirname, 'data', 'resumes', 'John_Doe_Resume_2026.pdf');
     assert(fs.existsSync(resumeDiskPath), `Resume PDF file saved to /data/resumes/: ${resumeDiskPath}`);
@@ -378,23 +404,106 @@ async function runTests() {
     // 5. Test message thread persistence
     const msgRes = await httpPost('/api/messages', {
       applicantId: newAppId,
-      senderRole: 'recruiter',
-      senderName: 'Quantum Recruiter',
+      senderRole: 'candidate',
+      senderName: 'Test Persistent Candidate',
       company: 'Persistent Systems Corp',
       jobTitle: testJobTitle,
       text: 'We loved your PDF resume and would like to schedule an interview.'
-    });
+    }, candHeaders);
     assert(msgRes.status === 201, 'POST /api/messages returns 201');
     const newMsgId = msgRes.data.message.id;
     const msgDiskPath = path.join(__dirname, 'data', 'messages', `thread_${newMsgId}.json`);
     assert(fs.existsSync(msgDiskPath), `Message thread synchronously written to disk: ${msgDiskPath}`);
 
     // 6. Test Omni-Search retrieves newly indexed records
-    const searchRes = await httpGet(`/api/admin/search?q=${encodeURIComponent('Persistent Systems')}`);
+    const searchRes = await httpGet(`/api/admin/search?q=${encodeURIComponent('Persistent Systems')}`, adminHeaders);
     assert(searchRes.status === 200, 'GET /api/admin/search returns 200');
     assert(searchRes.data.results.jobs.some(j => j.id === newJobId), 'Omni-Search instantly retrieves new indexed job from memory & storage');
   } catch (err) {
     assert(false, `Group 11 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 12: Public Job Listing Sanitization (/api/listings/public & /api/jobs)
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 12] Public Job Listing Sanitization');
+  try {
+    const pubListingsRes = await httpGet('/api/listings/public');
+    assert(pubListingsRes.status === 200, 'GET /api/listings/public returns 200');
+    assert(Array.isArray(pubListingsRes.data.jobs), 'Public jobs payload contains jobs array');
+    assert(pubListingsRes.data.jobs.length > 0, 'Public jobs list is non-empty');
+
+    const firstJob = pubListingsRes.data.jobs[0];
+    assert(firstJob.jobTitle && firstJob.company && firstJob.location && firstJob.salary, 'Public job contains Title, Company, Location, and Salary');
+    assert(firstJob.recruiterEmail === undefined, 'Private recruiterEmail stripped from public response');
+    assert(firstJob.applicantCount === undefined, 'Internal applicant counts stripped from public response');
+    assert(firstJob.applicants === undefined, 'Candidate applicant profiles stripped from public response');
+
+    const unauthJobsRes = await httpGet('/api/jobs');
+    assert(unauthJobsRes.status === 200, 'Unauthenticated GET /api/jobs returns 200');
+    assert(unauthJobsRes.data.jobs[0].recruiterEmail === undefined, 'Unauthenticated /api/jobs returns sanitized job objects');
+  } catch (err) {
+    assert(false, `Group 12 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 13: Secure Private Routes & 401 Unauthorized Enforcement
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 13] Secure Private Routes & 401 Unauthorized Enforcement');
+  try {
+    // 1. Unauthenticated direct access to private candidate resumes must return 401
+    const unauthResumeRes = await httpGet('/data/resumes/Marcus_Vance_Resume_2026.pdf');
+    assert(unauthResumeRes.status === 401, 'Unauthenticated GET /data/resumes/Marcus_Vance_Resume_2026.pdf blocked with 401 Unauthorized');
+
+    // 2. Unauthenticated access to applicants list must return 401
+    const unauthAppsRes = await httpGet('/api/applicants');
+    assert(unauthAppsRes.status === 401, 'Unauthenticated GET /api/applicants blocked with 401 Unauthorized');
+
+    // 3. Unauthenticated access to messages must return 401
+    const unauthMsgsRes = await httpGet('/api/messages');
+    assert(unauthMsgsRes.status === 401, 'Unauthenticated GET /api/messages blocked with 401 Unauthorized');
+
+    // 4. Unauthenticated access to admin users list must return 401
+    const unauthUsersRes = await httpGet('/api/admin/users');
+    assert(unauthUsersRes.status === 401, 'Unauthenticated GET /api/admin/users blocked with 401 Unauthorized');
+
+    // 5. Unauthenticated access to admin stats must return 401
+    const unauthStatsRes = await httpGet('/api/admin/stats');
+    assert(unauthStatsRes.status === 401, 'Unauthenticated GET /api/admin/stats blocked with 401 Unauthorized');
+
+    // 6. Unauthenticated access to admin search must return 401
+    const unauthSearchRes = await httpGet('/api/admin/search?q=test');
+    assert(unauthSearchRes.status === 401, 'Unauthenticated GET /api/admin/search blocked with 401 Unauthorized');
+
+    // 7. Authenticate as Master Admin Zion Daye
+    const adminLoginRes = await httpPost('/api/auth/login', {
+      email: 'contact@utheversity.com',
+      password: 'ZionAdmin2026!'
+    });
+    assert(adminLoginRes.status === 200 && adminLoginRes.data.token, 'Master Admin Zion Daye logs in and receives token');
+    const adminToken = adminLoginRes.data.token;
+    const authHeaders = {
+      'Authorization': `Bearer ${adminToken}`,
+      'Cookie': `uthe_token=${adminToken}`
+    };
+
+    // 8. Authenticated access to private endpoints succeeds with 200
+    const authAppsRes = await httpGet('/api/applicants', authHeaders);
+    assert(authAppsRes.status === 200, 'Authenticated GET /api/applicants succeeds with 200');
+
+    const authMsgsRes = await httpGet('/api/messages', authHeaders);
+    assert(authMsgsRes.status === 200, 'Authenticated GET /api/messages succeeds with 200');
+
+    const authResumeRes = await httpGet('/data/resumes/Marcus_Vance_Resume_2026.pdf', authHeaders);
+    assert(authResumeRes.status === 200, 'Authenticated GET /data/resumes/... returns 200 and serves PDF');
+
+    const authStatsRes = await httpGet('/api/admin/stats', authHeaders);
+    assert(authStatsRes.status === 200, 'Authenticated GET /api/admin/stats returns 200');
+
+    const authUsersRes = await httpGet('/api/admin/users', authHeaders);
+    assert(authUsersRes.status === 200, 'Authenticated GET /api/admin/users returns 200');
+  } catch (err) {
+    assert(false, `Group 13 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
@@ -402,7 +511,7 @@ async function runTests() {
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL STRICT DATA STORAGE, INDEXING & ZERO-DATA-LOSS PERSISTENCE TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL API ROUTE PRIVACY, SANITIZATION & AUTHENTICATION TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');
