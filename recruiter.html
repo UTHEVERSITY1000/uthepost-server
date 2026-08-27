@@ -1353,7 +1353,7 @@
         <!-- CARD 1: EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LEFT COLUMN) -->
         <div class="panel-card">
           <div class="panel-header">
-            <span class="panel-title">1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS</span>
+            <span class="panel-title" id="card1-title-text">1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS</span>
             <div style="display: flex; gap: 0.4rem; align-items: center;">
               <span class="urgent-hiring-badge">URGENT HIRING</span>
             </div>
@@ -1470,7 +1470,7 @@
           <!-- CARD 2: LIVE POST PREVIEW WITH VERIFIED EMPLOYER BADGE & URGENT ACCENTS -->
           <div class="panel-card">
             <div class="panel-header">
-              <span class="panel-title">2. LIVE POST PREVIEW</span>
+              <span class="panel-title" id="card2-title-text">2. LIVE POST PREVIEW</span>
               <div style="display:flex; gap:0.4rem; align-items:center;">
                 <span class="urgent-hiring-badge">URGENT HIRING</span>
                 <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">CANDIDATE VIEWPORT</span>
@@ -1528,7 +1528,7 @@
           <!-- CARD 3: LIVE JOB LISTINGS (SNUG DIRECTLY BENEATH CARD 2) -->
           <div class="panel-card" id="card3-live-jobs-container">
             <div class="panel-header">
-              <span class="panel-title">CARD 3: LIVE JOB LISTINGS</span>
+              <span class="panel-title" id="card3-title-text">CARD 3: LIVE JOB LISTINGS</span>
               <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">5 ACTIVE POSITIONS</span>
             </div>
 
@@ -1620,7 +1620,7 @@
       <!-- LOCKED BOTTOM SECTION: PUBLISHING & DISTRIBUTION SETTINGS (NO "3.", NO BADGE) -->
       <div class="bottom-distribution-panel">
         <div class="panel-header">
-          <span class="panel-title">PUBLISHING & DISTRIBUTION SETTINGS</span>
+          <span class="panel-title" id="publish-header-text">PUBLISHING & DISTRIBUTION SETTINGS</span>
         </div>
 
         <div class="grid-2">
@@ -1669,7 +1669,7 @@
         </div>
 
         <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
-          <button class="btn-gold-action" style="flex: 1.5;" onclick="publishJobLive()" data-tooltip="Publish position live and share across all selected channels.">
+          <button class="btn-gold-action" id="btn-publish-post" style="flex: 1.5;" onclick="publishJobLive()" data-tooltip="Publish position live and share across all selected channels.">
             PUBLISH POSITION LIVE & BROADCAST
           </button>
           <button class="btn-surface-action" style="flex: 1;" onclick="broadcastToConnectedChannels()" data-tooltip="Trigger immediate multi-platform social & email share.">
@@ -1875,7 +1875,7 @@
         <!-- u-thePAL FREE MEMBER TIER ($0/mo) -->
         <div class="pricing-card selected-plan" id="plan-card-pal" onclick="selectBasePlan('pal', 0)">
           <div class="pricing-tier-name">u-thePAL</div>
-          <div class="pricing-amount">$0<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+          <div class="pricing-amount" id="price-pal">$0<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
           <p style="font-size: 0.78rem; color: var(--text-muted);">Free tier for registered members.</p>
           <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
             <li>✓ 1 Active Job Posting</li>
@@ -1963,10 +1963,10 @@
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
               <strong style="font-size: 0.88rem; color: var(--uthe-charcoal);">SOCIAL CHANNELS ADD-ON</strong>
-              <div style="font-size: 0.75rem; color: var(--text-muted);">$5.99 each OR 5-Channel Bundle for $19.99/mo</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);" id="label-social-pricing-sub">$5.99 each OR 5-Channel Bundle for $19.99/mo</div>
             </div>
             <div style="display: flex; align-items: center; gap: 0.75rem;">
-              <span style="font-size: 0.75rem; font-weight: 900; color: #92400E;">5-CHANNEL BUNDLE ($19.99/mo)</span>
+              <span style="font-size: 0.75rem; font-weight: 900; color: #92400E;" id="label-social-bundle-price">5-CHANNEL BUNDLE ($19.99/mo)</span>
               <label class="toggle-switch" data-tooltip="Toggle all 5 social networks for $19.99/mo (Save 33%)">
                 <input type="checkbox" id="toggle-social-bundle" onchange="toggleSocialBundle(this.checked)">
                 <span class="toggle-slider"></span>
@@ -1981,7 +1981,7 @@
                 <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
               </svg>
               <strong style="font-size: 0.75rem;">LinkedIn</strong>
-              <span style="font-size: 0.68rem; color: var(--text-muted);">$5.99/mo</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price">$5.99/mo</span>
               <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable LinkedIn multi-platform posting ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-li" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
@@ -1994,7 +1994,7 @@
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
               <strong style="font-size: 0.75rem;">Facebook</strong>
-              <span style="font-size: 0.68rem; color: var(--text-muted);">$5.99/mo</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price">$5.99/mo</span>
               <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable Facebook multi-platform posting ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-fb" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
@@ -2007,7 +2007,7 @@
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
               </svg>
               <strong style="font-size: 0.75rem;">Instagram</strong>
-              <span style="font-size: 0.68rem; color: var(--text-muted);">$5.99/mo</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price">$5.99/mo</span>
               <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable Instagram stories & talent showcase ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-ig" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
@@ -2020,7 +2020,7 @@
                 <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.15 1.15 2.1 2.3 2.37 1.08.27 2.27-.05 3.06-.82.68-.64.98-1.58.98-2.5V.02z"/>
               </svg>
               <strong style="font-size: 0.75rem;">TikTok</strong>
-              <span style="font-size: 0.68rem; color: var(--text-muted);">$5.99/mo</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price">$5.99/mo</span>
               <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable TikTok recruitment ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-tt" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
@@ -2033,7 +2033,7 @@
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
               </svg>
               <strong style="font-size: 0.75rem;">Twitter (X)</strong>
-              <span style="font-size: 0.68rem; color: var(--text-muted);">$5.99/mo</span>
+              <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price">$5.99/mo</span>
               <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable X / Twitter recruitment stream ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-x" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
@@ -2662,9 +2662,29 @@
     };
 
     // 3. PRICING PLANS & DYNAMIC PRICING CALCULATOR (BUILD FROM $0)
+    let liveCmsPricing = {
+      palMonthly: 0,
+      starterMonthly: 99,
+      growthMonthly: 299,
+      proMonthly: 699,
+      individualSocialAddon: 5.99,
+      socialBundleAddon: 19.99,
+      topSpotlight: 49,
+      urgentBadge: 29,
+      directMessages: 19,
+      verifiedEmployer: 39
+    };
+
     window.selectBasePlan = function(planKey, price) {
       selectedBasePlan = planKey;
-      basePlanPrice = price;
+      if (price !== undefined) {
+        basePlanPrice = price;
+      } else {
+        if (planKey === 'pal') basePlanPrice = liveCmsPricing.palMonthly || 0;
+        else if (planKey === 'starter') basePlanPrice = liveCmsPricing.starterMonthly || 99;
+        else if (planKey === 'growth') basePlanPrice = liveCmsPricing.growthMonthly || 299;
+        else if (planKey === 'pro') basePlanPrice = liveCmsPricing.proMonthly || 699;
+      }
 
       document.querySelectorAll('.pricing-card').forEach(c => c.classList.remove('selected-plan'));
       const card = document.getElementById(`plan-card-${planKey}`);
@@ -2681,50 +2701,73 @@
     };
 
     window.recalculateMembershipTotal = function() {
+      // Sync base plan rate to live CMS if basePlan matches
+      if (selectedBasePlan === 'pal') basePlanPrice = liveCmsPricing.palMonthly !== undefined ? liveCmsPricing.palMonthly : 0;
+      else if (selectedBasePlan === 'starter') basePlanPrice = liveCmsPricing.starterMonthly || 99;
+      else if (selectedBasePlan === 'growth') basePlanPrice = liveCmsPricing.growthMonthly || 299;
+      else if (selectedBasePlan === 'pro') basePlanPrice = liveCmsPricing.proMonthly || 699;
+
       let total = basePlanPrice;
       let addonCount = 0;
       let addonDetails = [];
 
-      const bundleChecked = document.getElementById('toggle-social-bundle').checked;
+      const bundleChecked = document.getElementById('toggle-social-bundle') ? document.getElementById('toggle-social-bundle').checked : false;
       const individualSocials = document.querySelectorAll('.social-channel-toggle:checked');
 
       if (bundleChecked) {
-        total += 19.99;
+        const bundleRate = liveCmsPricing.socialBundleAddon !== undefined ? liveCmsPricing.socialBundleAddon : 19.99;
+        total += bundleRate;
         addonCount += 5;
-        addonDetails.push('5-Channel Bundle ($19.99)');
+        addonDetails.push(`5-Channel Bundle ($${bundleRate.toFixed(2)})`);
       } else {
         if (individualSocials.length > 0) {
-          const socialCost = individualSocials.length * 5.99;
+          const singleRate = liveCmsPricing.individualSocialAddon !== undefined ? liveCmsPricing.individualSocialAddon : 5.99;
+          const socialCost = individualSocials.length * singleRate;
           total += socialCost;
           addonCount += individualSocials.length;
           addonDetails.push(`${individualSocials.length} Social Channels (\$${socialCost.toFixed(2)})`);
         }
       }
 
-      if (document.getElementById('toggle-addon-spotlight').checked) {
-        total += 49;
+      const spotEl = document.getElementById('toggle-addon-spotlight');
+      if (spotEl && spotEl.checked) {
+        const rate = liveCmsPricing.topSpotlight !== undefined ? liveCmsPricing.topSpotlight : 49;
+        total += rate;
         addonCount++;
-        addonDetails.push('Spotlight ($49)');
+        addonDetails.push(`Spotlight ($${rate})`);
       }
-      if (document.getElementById('toggle-addon-urgent').checked) {
-        total += 29;
+      const urgEl = document.getElementById('toggle-addon-urgent');
+      if (urgEl && urgEl.checked) {
+        const rate = liveCmsPricing.urgentBadge !== undefined ? liveCmsPricing.urgentBadge : 29;
+        total += rate;
         addonCount++;
-        addonDetails.push('Urgent Badges ($29)');
+        addonDetails.push(`Urgent Badges ($${rate})`);
       }
-      if (document.getElementById('toggle-addon-inmail').checked) {
-        total += 19;
+      const msgEl = document.getElementById('toggle-addon-inmail');
+      if (msgEl && msgEl.checked) {
+        const rate = liveCmsPricing.directMessages !== undefined ? liveCmsPricing.directMessages : 19;
+        total += rate;
         addonCount++;
-        addonDetails.push('InMail Messages ($19)');
+        addonDetails.push(`InMail Messages ($${rate})`);
       }
-      if (document.getElementById('toggle-addon-verified').checked) {
-        total += 39;
+      const verEl = document.getElementById('toggle-addon-verified');
+      if (verEl && verEl.checked) {
+        const rate = liveCmsPricing.verifiedEmployer !== undefined ? liveCmsPricing.verifiedEmployer : 39;
+        total += rate;
         addonCount++;
-        addonDetails.push('Verified Shield ($39)');
+        addonDetails.push(`Verified Shield ($${rate})`);
       }
 
-      const planNames = { pal: 'u-thePAL ($0)', starter: 'Starter ($99)', growth: 'Growth ($299)', pro: 'Professional ($699)' };
-      document.getElementById('calc-total-amount').innerHTML = `$${total.toFixed(2)}<span style="font-size: 1rem; color: #94A3B8;">/mo</span>`;
-      document.getElementById('calc-breakdown-text').textContent = `Base Plan: ${planNames[selectedBasePlan]} + ${addonCount} Add-Ons (${addonDetails.join(', ') || 'None'})`;
+      const planNames = {
+        pal: `u-thePAL ($${liveCmsPricing.palMonthly !== undefined ? liveCmsPricing.palMonthly : 0})`,
+        starter: `Starter ($${liveCmsPricing.starterMonthly || 99})`,
+        growth: `Growth ($${liveCmsPricing.growthMonthly || 299})`,
+        pro: `Professional ($${liveCmsPricing.proMonthly || 699})`
+      };
+      const totalEl = document.getElementById('calc-total-amount');
+      if (totalEl) totalEl.innerHTML = `$${total.toFixed(2)}<span style="font-size: 1rem; color: #94A3B8;">/mo</span>`;
+      const breakdownEl = document.getElementById('calc-breakdown-text');
+      if (breakdownEl) breakdownEl.textContent = `Base Plan: ${planNames[selectedBasePlan] || 'u-thePAL ($0)'} + ${addonCount} Add-Ons (${addonDetails.join(', ') || 'None'})`;
     };
 
     window.checkoutMembershipPlan = function() {
@@ -3023,10 +3066,80 @@
         }
         showCustomModalAlert('Candidate Reply Received', `New reply from ${data.message.senderName || 'Candidate'}: "${data.message.text}"`);
       } else if (data.type === 'CMS_CONFIG_UPDATED' && data.config) {
-        if (data.config.labels && data.config.labels.postTitle) {
-          document.getElementById('cms-brand-title').textContent = data.config.labels.postTitle;
+        applyCmsConfig(data.config);
+      }
+    }
+
+    // Master CMS Config Live Application
+    function applyCmsConfig(config) {
+      if (!config) return;
+
+      if (config.pricing) {
+        liveCmsPricing = { ...liveCmsPricing, ...config.pricing };
+        if (config.addOns) liveCmsPricing = { ...liveCmsPricing, ...config.addOns };
+
+        // Update Plan Card Price Texts
+        const palEl = document.getElementById('price-pal');
+        if (palEl) palEl.innerHTML = `$${config.pricing.palMonthly !== undefined ? config.pricing.palMonthly : 0}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
+        const startEl = document.getElementById('price-starter');
+        if (startEl) startEl.innerHTML = `$${config.pricing.starterMonthly || 99}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
+        const growEl = document.getElementById('price-growth');
+        if (growEl) growEl.innerHTML = `$${config.pricing.growthMonthly || 299}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
+        const proEl = document.getElementById('price-pro');
+        if (proEl) proEl.innerHTML = `$${config.pricing.proMonthly || 699}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
+
+        // Update Social Add-On Price Texts
+        const bundleLabel = document.getElementById('label-social-bundle-price');
+        if (bundleLabel) bundleLabel.textContent = `5-CHANNEL BUNDLE ($${(config.pricing.socialBundleAddon || 19.99)}/mo)`;
+        const singleLabels = document.querySelectorAll('.label-social-single-price');
+        singleLabels.forEach(el => el.textContent = `$${(config.pricing.individualSocialAddon || 5.99)}/mo`);
+        const subPricing = document.getElementById('label-social-pricing-sub');
+        if (subPricing) subPricing.textContent = `$${(config.pricing.individualSocialAddon || 5.99)} each OR 5-Channel Bundle for $${(config.pricing.socialBundleAddon || 19.99)}/mo`;
+
+        // Recalculate Dynamic Total
+        recalculateMembershipTotal();
+      }
+
+      if (config.postStudio) {
+        const p = config.postStudio;
+        if (p.card1Title) {
+          const el = document.getElementById('card1-title-text');
+          if (el) el.textContent = p.card1Title;
+        }
+        if (p.card2Title) {
+          const el = document.getElementById('card2-title-text');
+          if (el) el.textContent = p.card2Title;
+        }
+        if (p.card3Title) {
+          const el = document.getElementById('card3-title-text');
+          if (el) el.textContent = p.card3Title;
+        }
+        if (p.publishHeader) {
+          const el = document.getElementById('publish-header-text');
+          if (el) el.textContent = p.publishHeader;
+        }
+        if (p.publishBtnText) {
+          const el = document.getElementById('btn-publish-post');
+          if (el) el.textContent = p.publishBtnText;
         }
       }
+
+      if (config.labels) {
+        if (config.labels.postTitle) {
+          const el = document.getElementById('cms-brand-title');
+          if (el) el.textContent = config.labels.postTitle;
+        }
+      }
+    }
+
+    async function loadInitialCmsConfig() {
+      try {
+        const res = await fetch('/api/cms/config');
+        const data = await res.json();
+        if (data.config) {
+          applyCmsConfig(data.config);
+        }
+      } catch (err) {}
     }
 
     // Admin Shortcut Handler (Ctrl + Shift + A)
@@ -3066,6 +3179,7 @@
       loadSavedLogo();
       setupMobileTouchAts();
       initDualSync();
+      loadInitialCmsConfig();
       recalculateMembershipTotal();
       initSmartTooltipPositioning();
     });

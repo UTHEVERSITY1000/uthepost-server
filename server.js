@@ -251,6 +251,42 @@ let cmsConfig = {
   }
 };
 
+const CMS_FILE = path.join(__dirname, 'cms_config.json');
+
+function loadCmsConfig() {
+  try {
+    if (fs.existsSync(CMS_FILE)) {
+      const data = fs.readFileSync(CMS_FILE, 'utf8');
+      const parsed = JSON.parse(data);
+      if (parsed) {
+        if (parsed.postStudio) cmsConfig.postStudio = { ...cmsConfig.postStudio, ...parsed.postStudio };
+        if (parsed.jobsBoard) cmsConfig.jobsBoard = { ...cmsConfig.jobsBoard, ...parsed.jobsBoard };
+        if (parsed.labels) cmsConfig.labels = { ...cmsConfig.labels, ...parsed.labels };
+        if (parsed.pricing) cmsConfig.pricing = { ...cmsConfig.pricing, ...parsed.pricing };
+        if (parsed.addOns) cmsConfig.addOns = { ...cmsConfig.addOns, ...parsed.addOns };
+        if (parsed.channels) cmsConfig.channels = { ...cmsConfig.channels, ...parsed.channels };
+        console.log('[CMS STORAGE] Successfully loaded cms_config.json from disk.');
+      }
+    } else {
+      saveCmsConfig();
+    }
+  } catch (err) {
+    console.error('[CMS STORAGE] Error loading cms_config.json:', err.message);
+  }
+}
+
+function saveCmsConfig() {
+  try {
+    fs.writeFileSync(CMS_FILE, JSON.stringify(cmsConfig, null, 2), 'utf8');
+    console.log('[CMS STORAGE] Saved cms_config.json to disk.');
+  } catch (err) {
+    console.error('[CMS STORAGE] Error saving cms_config.json:', err.message);
+  }
+}
+
+// Auto-load persistent CMS config on server startup
+loadCmsConfig();
+
 // ----------------------------------------------------
 // IN-MEMORY JOB CATALOG & APPLICANTS DATABASE
 // ----------------------------------------------------
@@ -694,6 +730,7 @@ const server = http.createServer((req, res) => {
       if (body.addOns) cmsConfig.addOns = { ...cmsConfig.addOns, ...body.addOns };
       if (body.channels) cmsConfig.channels = { ...cmsConfig.channels, ...body.channels };
 
+      saveCmsConfig();
       broadcastWebSocketEvent('CMS_CONFIG_UPDATED', { config: cmsConfig });
       sendJson(200, { status: 'updated', config: cmsConfig });
     });

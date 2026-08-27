@@ -1055,8 +1055,8 @@
         <textarea id="cand-summary" rows="4" placeholder="Quick About Me / Why Hire Me...">6+ years driving retail team leadership and revenue targets. Passionate about outstanding customer experience.</textarea>
       </div>
 
-      <!-- SUBMIT BUTTON WITH TOOLTIP: REMOVE ATS -->
-      <button class="btn-submit-request" id="btn-submit-interview-request" onclick="submitInterviewRequest()" data-tooltip="REMOVE ATS">
+      <!-- SUBMIT BUTTON WITH TOOLTIP: DOUBLE CHECK CONTACT INFO ON RESUME -->
+      <button class="btn-submit-request" id="btn-submit-interview-request" onclick="submitInterviewRequest()" data-tooltip="DOUBLE CHECK CONTACT INFO ON RESUME">
         SUBMIT INTERVIEW REQUEST
       </button>
     </div>
@@ -1722,10 +1722,96 @@
 
         showCustomModalAlert('New Message from Recruiter', `"${data.message.text}" from ${data.message.company || 'Employer'}.`);
       } else if (data.type === 'CMS_CONFIG_UPDATED' && data.config) {
-        if (data.config.labels && data.config.labels.jobsTitle) {
-          document.getElementById('cms-brand-title').textContent = data.config.labels.jobsTitle;
+        applyCmsConfig(data.config);
+      }
+    }
+
+    // Master CMS Config Live Application
+    function applyCmsConfig(config) {
+      if (!config) return;
+
+      if (config.jobsBoard) {
+        const j = config.jobsBoard;
+        if (j.boardTitle) {
+          const el = document.getElementById('cms-brand-title');
+          if (el) el.textContent = j.boardTitle;
+        }
+        if (j.searchPlaceholder) {
+          const el = document.getElementById('search-input');
+          if (el) el.placeholder = j.searchPlaceholder;
+        }
+        if (j.quickSendBtn) {
+          document.querySelectorAll('.btn-quick-send-main, .mobile-quick-send-btn, .btn-quick-send-head').forEach(el => {
+            if (el.id !== 'btn-send-resume-bottom') el.textContent = j.quickSendBtn;
+          });
+        }
+        if (j.sendResumeBtn) {
+          const el = document.getElementById('btn-send-resume-bottom');
+          if (el) el.textContent = j.sendResumeBtn;
+        }
+        if (j.modalHeader) {
+          const el = document.querySelector('#app-modal .modal-main-title');
+          if (el) el.textContent = j.modalHeader;
+        }
+        if (j.submitBtnText) {
+          const el = document.getElementById('btn-submit-interview-request');
+          if (el) el.textContent = j.submitBtnText;
+        }
+        if (j.submitTooltip) {
+          const el = document.getElementById('btn-submit-interview-request');
+          if (el) el.setAttribute('data-tooltip', j.submitTooltip);
+        }
+        if (j.interviewReqTitle) {
+          const el = document.getElementById('cand-interview-title');
+          if (el) el.placeholder = j.interviewReqTitle;
+        }
+        if (j.interviewReqTooltip) {
+          const el = document.getElementById('cand-interview-title');
+          if (el) el.setAttribute('data-tooltip', j.interviewReqTooltip);
+        }
+        if (j.interviewReqPlaceholder) {
+          const el = document.getElementById('cand-summary');
+          if (el) el.placeholder = j.interviewReqPlaceholder;
+        }
+        if (j.messageDrawerHeader) {
+          const el = document.querySelector('#candidate-messages-modal .modal-main-title');
+          if (el) el.textContent = j.messageDrawerHeader;
         }
       }
+
+      if (config.labels) {
+        if (config.labels.jobsTitle) {
+          const el = document.getElementById('cms-brand-title');
+          if (el) el.textContent = config.labels.jobsTitle;
+        }
+        if (config.labels.quickSendBtn) {
+          document.querySelectorAll('.btn-quick-send-main, .mobile-quick-send-btn').forEach(el => {
+            if (el.id !== 'btn-send-resume-bottom') el.textContent = config.labels.quickSendBtn;
+          });
+        }
+        if (config.labels.sendResumeBtn) {
+          const el = document.getElementById('btn-send-resume-bottom');
+          if (el) el.textContent = config.labels.sendResumeBtn;
+        }
+        if (config.labels.submitInterviewBtn) {
+          const el = document.getElementById('btn-submit-interview-request');
+          if (el) el.textContent = config.labels.submitInterviewBtn;
+        }
+        if (config.labels.submitTooltip) {
+          const el = document.getElementById('btn-submit-interview-request');
+          if (el) el.setAttribute('data-tooltip', config.labels.submitTooltip);
+        }
+      }
+    }
+
+    async function loadInitialCmsConfig() {
+      try {
+        const res = await fetch('/api/cms/config');
+        const data = await res.json();
+        if (data.config) {
+          applyCmsConfig(data.config);
+        }
+      } catch (err) {}
     }
 
     // Admin Shortcut Handler (Ctrl + Shift + A)
@@ -1766,6 +1852,7 @@
       selectJob('JOB-101');
       initDualSync();
       fetchMessages();
+      loadInitialCmsConfig();
       initSmartTooltipPositioning();
     });
   </script>

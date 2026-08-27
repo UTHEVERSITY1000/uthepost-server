@@ -224,12 +224,56 @@ async function runTests() {
     assert(false, `Group 6 failed: ${err.message}`);
   }
 
+  // ----------------------------------------------------
+  // TEST GROUP 7: Disk Persistence (cms_config.json)
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 7] Disk Persistence (cms_config.json)');
+  try {
+    const cmsFilePath = path.join(__dirname, 'cms_config.json');
+    assert(fs.existsSync(cmsFilePath), 'cms_config.json file exists on server disk');
+    const diskContent = JSON.parse(fs.readFileSync(cmsFilePath, 'utf8'));
+    assert(diskContent.postStudio && diskContent.jobsBoard && diskContent.pricing, 'cms_config.json contains postStudio, jobsBoard, and pricing schemas');
+    assert(diskContent.pricing.individualSocialAddon === 5.99 && diskContent.pricing.socialBundleAddon === 19.99, 'Add-on pricing ($5.99 / $19.99) correctly persisted to disk');
+  } catch (err) {
+    assert(false, `Group 7 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 8: Recruiter & Candidate Client Live CMS Load Overrides
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 8] Recruiter & Candidate Client Live CMS Load Overrides');
+  try {
+    assert(recContent.includes('function applyCmsConfig(config)'), 'recruiter.html implements applyCmsConfig');
+    assert(recContent.includes('async function loadInitialCmsConfig()'), 'recruiter.html implements loadInitialCmsConfig');
+    assert(recContent.includes('loadInitialCmsConfig();'), 'recruiter.html executes loadInitialCmsConfig on DOMContentLoaded');
+    assert(recContent.includes('id="card1-title-text"') && recContent.includes('id="card2-title-text"') && recContent.includes('id="card3-title-text"'), 'recruiter.html has Card 1, 2, 3 title mapping IDs');
+    assert(recContent.includes('id="price-pal"') && recContent.includes('id="label-social-bundle-price"'), 'recruiter.html has price-pal and social add-on price mapping IDs');
+
+    assert(candContent.includes('function applyCmsConfig(config)'), 'candidate.html implements applyCmsConfig');
+    assert(candContent.includes('async function loadInitialCmsConfig()'), 'candidate.html implements loadInitialCmsConfig');
+    assert(candContent.includes('loadInitialCmsConfig();'), 'candidate.html executes loadInitialCmsConfig on DOMContentLoaded');
+    assert(candContent.includes('DOUBLE CHECK CONTACT INFO ON RESUME'), 'candidate.html submit tooltip set to DOUBLE CHECK CONTACT INFO ON RESUME');
+  } catch (err) {
+    assert(false, `Group 8 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 9: Dynamic Membership Calculation Sync with Live CMS
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 9] Dynamic Membership Calculation Sync with Live CMS');
+  try {
+    assert(recContent.includes('liveCmsPricing.socialBundleAddon') && recContent.includes('liveCmsPricing.individualSocialAddon'), 'recalculateMembershipTotal in recruiter.html dynamically uses liveCmsPricing');
+    assert(recContent.includes('BUILD FROM $0'), 'recruiter.html retains signature BUILD FROM $0 header');
+  } catch (err) {
+    assert(false, `Group 9 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL COMPACT UI SCALE & FIELD-FOR-FIELD CMS TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL CROSS-PORTAL LIVE CMS SYNC & STORAGE PERSISTENCE TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');
