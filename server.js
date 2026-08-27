@@ -664,6 +664,16 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (pathname.startsWith('/api/admin/users/') && pathname.endsWith('/reset-password') && req.method === 'POST') {
+    const uid = pathname.split('/')[4];
+    const user = usersDatabase.find(u => u.id === uid);
+    if (!user) return sendJson(404, { error: 'User not found' });
+    const tempPass = `Reset${Math.floor(1000 + Math.random() * 9000)}!`;
+    user.passwordHash = hashPassword(tempPass);
+    sendJson(200, { status: 'reset', tempPassword: tempPass, message: `Password for ${user.email} reset successfully.` });
+    return;
+  }
+
   if (pathname.startsWith('/api/admin/users/') && (req.method === 'PUT' || req.method === 'POST')) {
     const uid = pathname.split('/')[4];
     const user = usersDatabase.find(u => u.id === uid);
@@ -692,6 +702,16 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (pathname.startsWith('/api/jobs/') && pathname.endsWith('/feature') && req.method === 'PUT') {
+    const jobId = pathname.split('/')[3];
+    const job = globalJobDatabase.find(j => j.id === jobId);
+    if (!job) return sendJson(404, { error: 'Job not found' });
+    job.featured = !job.featured;
+    broadcastWebSocketEvent('JOB_FEATURED_UPDATED', { jobId, featured: job.featured });
+    sendJson(200, { status: 'updated', job });
+    return;
+  }
+
   if (pathname.startsWith('/api/jobs/') && pathname.endsWith('/status') && req.method === 'PUT') {
     const jobId = pathname.split('/')[3];
     const job = globalJobDatabase.find(j => j.id === jobId);
@@ -700,6 +720,19 @@ const server = http.createServer((req, res) => {
       if (err) return sendJson(400, { error: 'Invalid JSON' });
       job.status = body.status || 'Active';
       broadcastWebSocketEvent('JOB_STATUS_UPDATED', { jobId, status: job.status });
+      sendJson(200, { status: 'updated', job });
+    });
+    return;
+  }
+
+  if (pathname.startsWith('/api/jobs/') && req.method === 'PUT') {
+    const jobId = pathname.split('/')[3];
+    const job = globalJobDatabase.find(j => j.id === jobId);
+    if (!job) return sendJson(404, { error: 'Job not found' });
+    readBody((err, body) => {
+      if (err) return sendJson(400, { error: 'Invalid JSON' });
+      Object.assign(job, body);
+      broadcastWebSocketEvent('JOB_UPDATED', { job });
       sendJson(200, { status: 'updated', job });
     });
     return;
@@ -715,6 +748,18 @@ const server = http.createServer((req, res) => {
       broadcastWebSocketEvent('APPLICANT_STAGE_UPDATED', { applicantId: appId, status: app.status });
       sendJson(200, { status: 'updated', applicant: app });
     });
+    return;
+  }
+
+  if (pathname.startsWith('/api/applicants/') && req.method === 'DELETE') {
+    const appId = pathname.split('/')[3];
+    const idx = applicantsStore.findIndex(a => a.id === appId);
+    if (idx !== -1) {
+      applicantsStore.splice(idx, 1);
+      sendJson(200, { status: 'deleted', applicantId: appId });
+    } else {
+      sendJson(404, { error: 'Applicant not found' });
+    }
     return;
   }
 

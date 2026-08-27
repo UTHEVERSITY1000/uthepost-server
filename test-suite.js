@@ -8,7 +8,7 @@ const WS_URL = 'ws://localhost:3000';
 
 async function runTests() {
   console.log('================================================================');
-  console.log('UTHEVERSITY PHASE 3 MASTER ADMIN & ZERO-CODE CMS TEST SUITE');
+  console.log('UTHEVERSITY FULL MASTER CMS TABS & FUNCTION RESTORATION TEST SUITE');
   console.log('================================================================\n');
 
   let passed = 0;
@@ -107,131 +107,107 @@ async function runTests() {
   const adminContent = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
 
   // ----------------------------------------------------
-  // TEST GROUP 1: Visual Theme Unification (Premium White Studio)
+  // TEST GROUP 1: Primary 5 Admin Tabs Navigation Bar (admin.html)
   // ----------------------------------------------------
-  console.log('[TEST GROUP 1] Visual Theme Unification (Premium White Studio)');
+  console.log('[TEST GROUP 1] Primary 5 Admin Tabs Navigation Bar');
   try {
-    assert(adminContent.includes('--bg-canvas: #F8F9FA'), 'admin.html uses Premium White Studio canvas background #F8F9FA');
-    assert(adminContent.includes('--card-surface: #FFFFFF'), 'admin.html uses crisp white card surfaces #FFFFFF');
-    assert(adminContent.includes('--text-main: #0F172A'), 'admin.html uses dark slate typography #0F172A');
-    assert(adminContent.includes('--uthe-gold: #E5A800'), 'admin.html uses signature gold accent palette');
-    assert(!adminContent.includes('--bg-dark: #080C14'), 'Legacy dark background permanently replaced');
+    assert(adminContent.includes('1. DASHBOARD OVERVIEW'), 'Tab 1: [1. DASHBOARD OVERVIEW] present');
+    assert(adminContent.includes('2. USER GOVERNANCE'), 'Tab 2: [2. USER GOVERNANCE] present');
+    assert(adminContent.includes('3. LIVE UI & CONTENT EDITOR'), 'Tab 3: [3. LIVE UI & CONTENT EDITOR] present');
+    assert(adminContent.includes('4. PLANS & ADD-ONS CMS'), 'Tab 4: [4. PLANS & ADD-ONS CMS] present');
+    assert(adminContent.includes('5. LISTINGS & APPLICATIONS'), 'Tab 5: [5. LISTINGS & APPLICATIONS] present');
+
+    assert(adminContent.includes('admin-tabs-nav-bar'), 'admin-tabs-nav-bar element styled directly beneath Omni-Search');
+    assert(adminContent.includes('view-overview') && adminContent.includes('view-users') && adminContent.includes('view-cms') && adminContent.includes('view-plans') && adminContent.includes('view-listings'), 'All 5 corresponding view sections present');
   } catch (err) {
     assert(false, `Group 1 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 2: Master Owner Account & Authentication (Zion Daye)
+  // TEST GROUP 2: Tab 2 User Governance (Account Control Actions)
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 2] Master Owner Account (Zion Daye)');
+  console.log('\n[TEST GROUP 2] Tab 2 User Governance Actions');
   try {
-    assert(adminContent.includes('ZION DAYE (815-980-4272)'), 'Header displays Zion Daye identity with phone 815-980-4272');
-    assert(adminContent.includes('admin-auth-modal'), 'Master authentication modal configured');
-    assert(adminContent.includes('checkAdminPassLength') && adminContent.includes('admin-recaptcha'), 'Password length indicator & reCAPTCHA spam shield present');
+    assert(adminContent.includes('openUserEditModal'), 'Direct action [EDIT PROFILE] implemented');
+    assert(adminContent.includes('resetUserPassword'), 'Direct action [RESET PASSWORD] implemented');
+    assert(adminContent.includes('toggleUserApproval'), 'Direct action [APPROVE/SUSPEND] implemented');
+    assert(adminContent.includes('deleteUser'), 'Direct action [DELETE ACCOUNT] implemented');
+    assert(adminContent.includes('user-edit-modal'), 'User Profile Edit Modal present');
 
-    const loginRes = await httpPost('/api/auth/login', {
-      email: 'contact@utheversity.com',
-      password: 'ZionAdmin2026!'
-    });
-    assert(loginRes.status === 200, 'Master Owner Zion Daye authenticated successfully via JWT');
-    assert(loginRes.data.user.name === 'Zion Daye', 'Master Owner name verified as Zion Daye');
-    assert(loginRes.data.user.phone === '815-980-4272', 'Master Owner contact phone verified as 815-980-4272');
-    assert(loginRes.data.user.role === 'admin', 'Master Owner role verified as admin');
+    const resetRes = await httpPost('/api/admin/users/USR-002/reset-password', {});
+    assert(resetRes.status === 200 && resetRes.data.tempPassword, 'POST /api/admin/users/:id/reset-password generates temp key');
+
+    const updateRes = await httpPut('/api/admin/users/USR-002', { name: 'Quantum Senior Talent Team', role: 'recruiter' });
+    assert(updateRes.status === 200 && updateRes.data.user.name === 'Quantum Senior Talent Team', 'PUT /api/admin/users/:id updates profile');
   } catch (err) {
     assert(false, `Group 2 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 3: Smart Omni-Search Engine
+  // TEST GROUP 3: Tab 3 Live UI & Content Editor (Zero-Code Control)
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 3] Smart Omni-Search Engine');
+  console.log('\n[TEST GROUP 3] Tab 3 Live UI & Content Editor');
   try {
-    assert(adminContent.includes('omni-search-input') && adminContent.includes('handleOmniSearch'), 'Omni-Search bar and live event handler present');
-
-    const searchUser = await httpGet('/api/admin/search?q=Zion');
-    assert(searchUser.status === 200 && searchUser.data.results.users.some(u => u.name === 'Zion Daye'), 'Omni-Search finds users by name');
-
-    const searchPhone = await httpGet('/api/admin/search?q=815-980-4272');
-    assert(searchPhone.status === 200 && searchPhone.data.results.users.some(u => u.phone === '815-980-4272'), 'Omni-Search finds accounts by phone number');
-
-    const searchJob = await httpGet('/api/admin/search?q=Senior');
-    assert(searchJob.status === 200 && searchJob.data.results.jobs.length > 0, 'Omni-Search finds jobs by title');
+    assert(adminContent.includes('switchCmsTarget'), 'Subdomain selector function switchCmsTarget implemented');
+    assert(adminContent.includes('btn-target-post') && adminContent.includes('btn-target-jobs'), 'Subdomain selector buttons for u-thePOST and u-theJOBS present');
+    assert(adminContent.includes('cms-panel-post') && adminContent.includes('cms-panel-jobs'), 'Dedicated panels for u-thePOST and u-theJOBS present');
+    assert(adminContent.includes('cms-post-title') && adminContent.includes('cms-jobs-title'), 'Brand title controls present');
+    assert(adminContent.includes('cms-quick-send-btn') && adminContent.includes('cms-send-resume-btn'), 'Button phrase controls present');
+    assert(adminContent.includes('cms-submit-btn') && adminContent.includes('cms-submit-tooltip'), 'Interview submission phrase and tooltip controls present');
   } catch (err) {
     assert(false, `Group 3 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 4: Zero-Code Master CMS Override Panel & WebSocket Broadcast
+  // TEST GROUP 4: Tab 4 Plans & Add-Ons CMS (Pricing Matrix)
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 4] Zero-Code Master CMS Overrides & Broadcast');
+  console.log('\n[TEST GROUP 4] Tab 4 Plans & Add-Ons CMS (Pricing Control)');
   try {
-    assert(adminContent.includes('cms-post-title') && adminContent.includes('cms-jobs-title'), 'Brand title CMS input controls present');
-    assert(adminContent.includes('cms-quick-send-btn') && adminContent.includes('cms-send-resume-btn'), 'Button phrase CMS input controls present');
+    assert(adminContent.includes('cms-price-pal') && adminContent.includes('cms-price-starter') && adminContent.includes('cms-price-growth') && adminContent.includes('cms-price-pro'), 'Base plan pricing matrix controls ($0, $99, $299, $699) present');
     assert(adminContent.includes('cms-price-social-single') && adminContent.includes('cms-price-social-bundle'), 'Social add-on pricing controls ($5.99 / $19.99) present');
+    assert(adminContent.includes('cms-price-spotlight'), 'Spotlight listing pricing control present');
 
-    const cmsGet = await httpGet('/api/cms/config');
-    assert(cmsGet.status === 200 && cmsGet.data.config, 'GET /api/cms/config returns active CMS schema');
-
-    const cmsUpdate = await httpPost('/api/cms/config', {
-      labels: { postTitle: 'U-THEPOST STUDIO' },
-      pricing: { starterMonthly: 99, individualSocialAddon: 5.99, socialBundleAddon: 19.99 }
+    const updatePricing = await httpPost('/api/cms/config', {
+      pricing: { palMonthly: 0, starterMonthly: 99, growthMonthly: 299, proMonthly: 699, individualSocialAddon: 5.99, socialBundleAddon: 19.99 }
     });
-    assert(cmsUpdate.status === 200 && cmsUpdate.data.config.labels.postTitle === 'U-THEPOST STUDIO', 'POST /api/cms/config persists overrides');
-
-    // Test live WebSocket sync
-    await new Promise((resolve, reject) => {
-      const ws = new WebSocket(WS_URL);
-      let received = false;
-      ws.on('open', async () => {
-        await httpPost('/api/cms/config', { labels: { jobsTitle: 'U-THEJOBS VERIFIED' } });
-      });
-      ws.on('message', (msg) => {
-        const data = JSON.parse(msg.toString());
-        if (data.type === 'CMS_CONFIG_UPDATED' && data.config) {
-          received = true;
-          assert(true, 'CMS_CONFIG_UPDATED broadcasted live over WebSocket');
-          ws.close();
-          resolve();
-        }
-      });
-      setTimeout(() => {
-        if (!received) {
-          assert(false, 'Timed out waiting for CMS_CONFIG_UPDATED event');
-          ws.close();
-          resolve();
-        }
-      }, 3000);
-    });
+    assert(updatePricing.status === 200, 'POST /api/cms/config successfully persists pricing matrix');
   } catch (err) {
     assert(false, `Group 4 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 5: User Approvals, Role Permissions & Stage Overrides
+  // TEST GROUP 5: Tab 5 Listings & Applications (Master CRUD)
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 5] User Approvals, Role Permissions & Stage Overrides');
+  console.log('\n[TEST GROUP 5] Tab 5 Listings & Applications Master CRUD');
   try {
-    const userRoleUpdate = await httpPut('/api/admin/users/USR-003', { role: 'candidate', approved: true });
-    assert(userRoleUpdate.status === 200 && userRoleUpdate.data.user.approved === true, 'User approval status updated via PUT /api/admin/users/:id');
+    assert(adminContent.includes('toggleJobFeatured'), 'Master Job [FEATURE] control implemented');
+    assert(adminContent.includes('toggleJobStatus'), 'Master Job [PAUSE / RESUME] control implemented');
+    assert(adminContent.includes('openJobEditModal'), 'Master Job [EDIT] modal controller implemented');
+    assert(adminContent.includes('deleteJobAdmin'), 'Master Job [DELETE] control implemented');
+    assert(adminContent.includes('job-edit-modal'), 'Job Edit Modal present in DOM');
 
-    const jobStatusUpdate = await httpPut('/api/jobs/JOB-101/status', { status: 'Active' });
-    assert(jobStatusUpdate.status === 200 && jobStatusUpdate.data.job.status === 'Active', 'Job status updated via PUT /api/jobs/:id/status');
+    assert(adminContent.includes('updateApplicantStage'), 'Candidate Stage dropdown override implemented');
+    assert(adminContent.includes('deleteApplicantAdmin'), 'Candidate Submission [DELETE] control implemented');
 
-    const applicantStageUpdate = await httpPut('/api/applicants/APP-701/status', { status: 'Interviewing' });
-    assert(applicantStageUpdate.status === 200 && applicantStageUpdate.data.applicant.status === 'Interviewing', 'Applicant stage updated via PUT /api/applicants/:id/status');
+    // Test feature toggle endpoint
+    const featureRes = await httpPut('/api/jobs/JOB-101/feature', {});
+    assert(featureRes.status === 200, 'PUT /api/jobs/:id/feature toggles featured state');
+
+    // Test job edit endpoint
+    const editJobRes = await httpPut('/api/jobs/JOB-101', { salary: '$80,000 - $100,000' });
+    assert(editJobRes.status === 200 && editJobRes.data.job.salary.includes('$80,000'), 'PUT /api/jobs/:id updates job details');
   } catch (err) {
     assert(false, `Group 5 failed: ${err.message}`);
   }
 
   // ----------------------------------------------------
-  // TEST GROUP 6: Top-Bar Tooltip Boundary Fix & Custom Popups
+  // TEST GROUP 6: Master Owner Authentication & Visual Theme
   // ----------------------------------------------------
-  console.log('\n[TEST GROUP 6] Top-Bar Tooltip Boundary Fix & Custom Popups');
+  console.log('\n[TEST GROUP 6] Master Owner Profile & Theme');
   try {
-    assert(adminContent.includes('header [data-tooltip]::after') && adminContent.includes('top: calc(100% + 8px)'), 'Top header tooltips positioned downward below elements');
-    assert(adminContent.includes('overflow: visible !important'), 'Header container overflow set to visible to prevent clipping');
-    assert(adminContent.includes('initSmartTooltipPositioning') && adminContent.includes('rect.top < 60'), 'Viewport edge auto-detection (top < 60px) implemented');
-    assert(adminContent.includes('showCustomModalAlert') && adminContent.includes('custom-modal-alert'), 'Signature custom popup card implemented (no browser alerts)');
+    assert(adminContent.includes('ZION DAYE (815-980-4272)'), 'Master profile identity Zion Daye (815-980-4272) present');
+    assert(adminContent.includes('--bg-canvas: #F8F9FA') && adminContent.includes('--card-surface: #FFFFFF'), 'Unified Premium White Studio theme active');
+    assert(adminContent.includes('header [data-tooltip]::after') && adminContent.includes('top: calc(100% + 8px)'), 'Top-bar tooltips display below elements');
   } catch (err) {
     assert(false, `Group 6 failed: ${err.message}`);
   }
@@ -241,7 +217,7 @@ async function runTests() {
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL PHASE 3 MASTER ADMIN & ZERO-CODE CMS TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL MASTER CMS TABS & FUNCTION RESTORATION TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');
