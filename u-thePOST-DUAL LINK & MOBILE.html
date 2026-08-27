@@ -159,7 +159,7 @@
       white-space: nowrap;
     }
 
-    /* 1. HEADER BRANDING & LOGO OWNERSHIP COMPONENT */
+    /* HEADER BRANDING & LOGO OWNERSHIP COMPONENT */
     .employer-logo-badge {
       display: flex;
       align-items: center;
@@ -398,10 +398,16 @@
       display: flex;
     }
 
-    /* 3-CARD / 2-COLUMN JOB STUDIO LAYOUT */
+    /* 2-COLUMN JOB STUDIO GRID */
     .studio-grid {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
+      gap: 1.25rem;
+    }
+
+    .studio-col-right {
+      display: flex;
+      flex-direction: column;
       gap: 1.25rem;
     }
 
@@ -497,41 +503,6 @@
       text-align: center;
     }
 
-    /* CARD 3: PUBLISHING & DISTRIBUTION SETTINGS */
-    .card3-distribution-panel {
-      background: var(--card-white);
-      border: 1.5px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      box-shadow: var(--shadow-md);
-    }
-
-    .distribution-checkbox-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.75rem;
-    }
-
-    .dist-channel-box {
-      background: var(--card-subtle);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .dist-channel-box:hover, .dist-channel-box.selected {
-      border-color: var(--uthe-gold);
-      background: var(--uthe-gold-light);
-    }
-
     /* ACTION BUTTONS */
     .btn-gold-action {
       background: var(--uthe-charcoal);
@@ -622,6 +593,92 @@
       font-weight: 800;
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
+    }
+
+    /* CARD 3: LIVE JOB LISTINGS TABLE */
+    .card3-live-jobs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+
+    .card3-live-jobs-table th {
+      padding: 0.5rem 0.6rem;
+      color: var(--text-muted);
+      font-size: 0.65rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      border-bottom: 1.5px solid var(--border-color);
+      text-align: left;
+    }
+
+    .card3-live-jobs-table td {
+      padding: 0.65rem 0.6rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    .btn-table-action {
+      background: var(--card-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--uthe-charcoal);
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-height: 28px;
+      margin-left: 0.2rem;
+    }
+
+    .btn-table-action:hover {
+      border-color: var(--uthe-gold);
+      background: var(--uthe-gold-light);
+    }
+
+    .btn-table-del:hover {
+      border-color: var(--danger-red);
+      background: var(--danger-bg);
+      color: var(--danger-red);
+    }
+
+    /* BOTTOM SECTION: PUBLISHING & DISTRIBUTION SETTINGS */
+    .bottom-distribution-panel {
+      background: var(--card-white);
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      box-shadow: var(--shadow-md);
+      width: 100%;
+    }
+
+    .distribution-checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+
+    .dist-channel-box {
+      background: var(--card-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dist-channel-box:hover, .dist-channel-box.selected {
+      border-color: var(--uthe-gold);
+      background: var(--uthe-gold-light);
     }
 
     /* ATS MOBILE TOUCH KANBAN BOARD */
@@ -1077,7 +1134,7 @@
     <div class="brand-group">
       <h1 class="brand-title" id="cms-brand-title" data-tooltip="u-thePOST: Recruiter Studio & Multi-Platform Hiring Hub.">U-THEPOST</h1>
 
-      <!-- 1. LIVE LOGO OWNERSHIP COMPONENT -->
+      <!-- LIVE LOGO OWNERSHIP COMPONENT -->
       <div class="employer-logo-badge" id="employer-logo-badge" onclick="openLogoUploadModal()" data-tooltip="Upload or change your company logo badge">
         <img id="employer-logo-img" class="employer-logo-preview-img" alt="Employer Logo">
         <span class="employer-logo-text" id="employer-logo-text">+ UPLOAD LOGO</span>
@@ -1086,7 +1143,7 @@
 
     <!-- 5 EXCLUSIVE CUSTOMER TABS -->
     <div class="header-center-tabs">
-      <button class="nav-tab-btn active" onclick="switchRecruiterTab('studio')" data-tooltip="Design, configure connected channels & launch job postings.">
+      <button class="nav-tab-btn active" onclick="switchRecruiterTab('studio')" data-tooltip="Design, configure connected accounts & launch job postings.">
         1. JOB STUDIO
       </button>
       <button class="nav-tab-btn" onclick="switchRecruiterTab('crm')" data-tooltip="Multi-channel candidate outreach & launch date tracker.">
@@ -1132,11 +1189,11 @@
   <!-- MAIN WORKSPACE VIEWS -->
   <main>
 
-    <!-- TAB 1: JOB STUDIO (CARD 1, CARD 2 & CARD 3) -->
+    <!-- TAB 1: JOB STUDIO (CARD 1, CARD 2, CARD 3 & LOCKED BOTTOM SETTINGS) -->
     <section id="view-studio" class="tab-view active">
       <div class="studio-grid">
 
-        <!-- CARD 1: EMPLOYER JOB LISTING & CONNECTED ACCOUNTS -->
+        <!-- CARD 1: EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LEFT COLUMN) -->
         <div class="panel-card">
           <div class="panel-header">
             <span class="panel-title">1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS</span>
@@ -1145,17 +1202,17 @@
 
           <div class="form-group">
             <label data-tooltip="Enter the public job position title.">Position Title</label>
-            <input type="text" id="inp-title" value="Senior Full-Stack Engineer" oninput="updateLivePreview()" data-tooltip="Position role title.">
+            <input type="text" id="inp-title" value="Sales Manager" oninput="updateLivePreview()" data-tooltip="Position role title.">
           </div>
 
           <div class="grid-2">
             <div class="form-group">
               <label data-tooltip="Company or Organization legal entity name.">Company Name</label>
-              <input type="text" id="inp-company" value="Quantum Technologies Corp" oninput="updateLivePreview()" data-tooltip="Legal employer name.">
+              <input type="text" id="inp-company" value="Quantum Retail Corp" oninput="updateLivePreview()" data-tooltip="Legal employer name.">
             </div>
             <div class="form-group">
               <label data-tooltip="Work location and remote / on-site mode.">Location & Mode</label>
-              <input type="text" id="inp-location" value="AUSTIN, TX (REMOTE)" oninput="updateLivePreview()" data-tooltip="Location description.">
+              <input type="text" id="inp-location" value="AUSTIN, TX (HYBRID)" oninput="updateLivePreview()" data-tooltip="Location description.">
             </div>
           </div>
 
@@ -1171,21 +1228,21 @@
             </div>
             <div class="form-group">
               <label data-tooltip="Public compensation or hourly pay display.">Salary Range Display</label>
-              <input type="text" id="inp-salary" value="$135,000 - $175,000" oninput="updateLivePreview()" data-tooltip="Salary range text.">
+              <input type="text" id="inp-salary" value="$75,000 - $95,000" oninput="updateLivePreview()" data-tooltip="Salary range text.">
             </div>
           </div>
 
           <!-- DEDICATED EMPLOYER CONTACT EMAIL -->
           <div class="form-group">
             <label data-tooltip="Official hiring contact email for candidate resume alerts and broadcast updates.">Employer Contact Email</label>
-            <input type="email" id="inp-recruiter-email" value="recruiter@quantumtech.io" data-tooltip="Contact email address for outreach and candidate notifications.">
+            <input type="email" id="inp-recruiter-email" value="hiring@quantumretail.com" data-tooltip="Contact email address for outreach and candidate notifications.">
           </div>
 
           <!-- DEDICATED SOCIAL MEDIA ACCOUNT CONNECTIONS (CARD 1) -->
           <div class="connected-socials-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <span style="font-size: 0.72rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 1px; text-transform: uppercase;">CONNECTED SOCIAL CHANNELS</span>
-              <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.15rem 0.45rem; border-radius: 4px;">5 CHANNELS READY</span>
+              <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.15rem 0.45rem; border-radius: 4px;">CONNECTED</span>
             </div>
             <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4;">
               Multi-platform outreach broadcasts directly to these connected handles and profiles upon publication.
@@ -1193,103 +1250,195 @@
 
             <div class="social-input-row">
               <span class="social-input-icon">💼</span>
-              <input type="text" id="inp-soc-linkedin" placeholder="LinkedIn Profile / Company URL (e.g. linkedin.com/company/quantumtech)" value="https://linkedin.com/company/quantumtech" style="height: 40px; font-size: 0.78rem;" data-tooltip="LinkedIn company page or recruiter URL.">
+              <input type="text" id="inp-soc-linkedin" placeholder="LinkedIn Profile / Company URL (e.g. linkedin.com/company/quantumretail)" value="https://linkedin.com/company/quantumretail" style="height: 40px; font-size: 0.78rem;" data-tooltip="LinkedIn company page or recruiter URL.">
             </div>
 
             <div class="social-input-row">
               <span class="social-input-icon">𝕏</span>
-              <input type="text" id="inp-soc-x" placeholder="X / Twitter Handle (e.g. @QuantumTechJobs)" value="@QuantumTechJobs" style="height: 40px; font-size: 0.78rem;" data-tooltip="X / Twitter recruitment handle.">
+              <input type="text" id="inp-soc-x" placeholder="X / Twitter Handle (e.g. @QuantumRetailJobs)" value="@QuantumRetailJobs" style="height: 40px; font-size: 0.78rem;" data-tooltip="X / Twitter recruitment handle.">
             </div>
 
             <div class="social-input-row">
               <span class="social-input-icon">🎬</span>
-              <input type="text" id="inp-soc-tiktok" placeholder="TikTok Handle (e.g. @QuantumCareers)" value="@QuantumCareers" style="height: 40px; font-size: 0.78rem;" data-tooltip="TikTok short-form talent handle.">
+              <input type="text" id="inp-soc-tiktok" placeholder="TikTok Handle (e.g. @QuantumRetailHiring)" value="@QuantumRetailHiring" style="height: 40px; font-size: 0.78rem;" data-tooltip="TikTok short-form talent handle.">
             </div>
 
             <div class="social-input-row">
               <span class="social-input-icon">🌐</span>
-              <input type="text" id="inp-soc-fb" placeholder="Facebook Page URL (e.g. facebook.com/quantumtech)" value="https://facebook.com/quantumtech" style="height: 40px; font-size: 0.78rem;" data-tooltip="Facebook business network page.">
+              <input type="text" id="inp-soc-fb" placeholder="Facebook Page URL (e.g. facebook.com/quantumretail)" value="https://facebook.com/quantumretail" style="height: 40px; font-size: 0.78rem;" data-tooltip="Facebook business network page.">
             </div>
 
             <div class="social-input-row">
               <span class="social-input-icon">📸</span>
-              <input type="text" id="inp-soc-ig" placeholder="Instagram Handle (e.g. @QuantumTechTeam)" value="@QuantumTechTeam" style="height: 40px; font-size: 0.78rem;" data-tooltip="Instagram talent showcase handle.">
+              <input type="text" id="inp-soc-ig" placeholder="Instagram Handle (e.g. @QuantumRetailCareers)" value="@QuantumRetailCareers" style="height: 40px; font-size: 0.78rem;" data-tooltip="Instagram talent showcase handle.">
             </div>
           </div>
 
           <div class="form-group">
             <label data-tooltip="Main responsibilities and role summary.">Job Description & Key Responsibilities</label>
-            <textarea id="inp-desc" rows="4" oninput="updateLivePreview()" data-tooltip="Job description content.">Lead our next-generation live multi-agent sync tool and professional web infrastructure. Modern TypeScript, WebSockets, high-performance UI.</textarea>
+            <textarea id="inp-desc" rows="4" oninput="updateLivePreview()" data-tooltip="Job description content.">Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.</textarea>
           </div>
         </div>
 
-        <!-- CARD 2: LIVE POST PREVIEW -->
-        <div class="panel-card">
-          <div class="panel-header">
-            <span class="panel-title">2. LIVE POST PREVIEW</span>
-            <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">CANDIDATE VIEWPORT</span>
-          </div>
+        <!-- RIGHT COLUMN: CARD 2 & CARD 3 SNUG BENEATH -->
+        <div class="studio-col-right">
 
-          <div class="preview-sheet" id="preview-sheet">
-            <div class="pv-header">
-              <div>
-                <div class="pv-title" id="pv-title">Senior Full-Stack Engineer</div>
-                <div class="pv-company" id="pv-company">Quantum Technologies Corp</div>
-                <div style="font-size: 0.72rem; color: #64748B; font-weight: 700; margin-top: 0.2rem;">
-                  <span id="pv-location">AUSTIN, TX (REMOTE)</span> • <span id="pv-type">FULL-TIME</span>
+          <!-- CARD 2: LIVE POST PREVIEW -->
+          <div class="panel-card">
+            <div class="panel-header">
+              <span class="panel-title">2. LIVE POST PREVIEW</span>
+              <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">CANDIDATE VIEWPORT</span>
+            </div>
+
+            <div class="preview-sheet" id="preview-sheet">
+              <div class="pv-header">
+                <div>
+                  <div class="pv-title" id="pv-title">Sales Manager</div>
+                  <div class="pv-company" id="pv-company">Quantum Retail Corp</div>
+                  <div style="font-size: 0.72rem; color: #64748B; font-weight: 700; margin-top: 0.2rem;">
+                    <span id="pv-location">AUSTIN, TX (HYBRID)</span> • <span id="pv-type">FULL-TIME</span>
+                  </div>
+                </div>
+                <span class="pv-salary-badge" id="pv-salary">$75,000 - $95,000</span>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
+                  <strong style="display:block; color:#64748B;">PTO</strong> 18 Days PTO
+                </div>
+                <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
+                  <strong style="display:block; color:#64748B;">HEALTH</strong> Comprehensive Health
+                </div>
+                <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
+                  <strong style="display:block; color:#64748B;">401(K)</strong> 4% Match
                 </div>
               </div>
-              <span class="pv-salary-badge" id="pv-salary">$135,000 - $175,000</span>
-            </div>
 
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-              <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
-                <strong style="display:block; color:#64748B;">PTO</strong> Unlimited PTO
+              <div style="font-size: 0.85rem; line-height: 1.5; color: #334155;" id="pv-desc">
+                Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.
               </div>
-              <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
-                <strong style="display:block; color:#64748B;">HEALTH</strong> Premium Medical
+
+              <div style="display: flex; gap: 0.5rem; align-items: center; background: #F8FAFC; padding: 0.5rem; border-radius: 6px; font-size: 0.72rem; color: var(--text-muted);">
+                <span>🔗 Connected Multi-Platform Feeds:</span>
+                <strong style="color: var(--uthe-charcoal);">LinkedIn • X • TikTok • Facebook • Instagram</strong>
               </div>
-              <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
-                <strong style="display:block; color:#64748B;">401(K)</strong> 5% Match
-              </div>
-            </div>
 
-            <div style="font-size: 0.85rem; line-height: 1.5; color: #334155;" id="pv-desc">
-              Lead our next-generation live multi-agent sync tool and professional web infrastructure. Modern TypeScript, WebSockets, high-performance UI.
+              <button style="background:#111827; color:var(--uthe-gold); border:1.5px solid var(--uthe-gold); font-weight:900; font-size:0.78rem; padding:0.75rem; border-radius:6px; letter-spacing:1px; cursor:default;">
+                QUICK SEND / SUBMIT INTERVIEW REQUEST
+              </button>
             </div>
-
-            <div style="display: flex; gap: 0.5rem; align-items: center; background: #F8FAFC; padding: 0.5rem; border-radius: 6px; font-size: 0.72rem; color: var(--text-muted);">
-              <span>🔗 Connected Multi-Platform Feeds:</span>
-              <strong style="color: var(--uthe-charcoal);">LinkedIn • X • TikTok • Facebook • Instagram</strong>
-            </div>
-
-            <button style="background:#111827; color:var(--uthe-gold); border:1.5px solid var(--uthe-gold); font-weight:900; font-size:0.78rem; padding:0.75rem; border-radius:6px; letter-spacing:1px; cursor:default;">
-              QUICK SEND / SUBMIT INTERVIEW REQUEST
-            </button>
           </div>
+
+          <!-- CARD 3: LIVE JOB LISTINGS (SNUG DIRECTLY BENEATH CARD 2) -->
+          <div class="panel-card" id="card3-live-jobs-container">
+            <div class="panel-header">
+              <span class="panel-title">CARD 3: LIVE JOB LISTINGS</span>
+              <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">5 ACTIVE POSITIONS</span>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="card3-live-jobs-table">
+                <thead>
+                  <tr>
+                    <th data-tooltip="Active job opening title.">Position Title</th>
+                    <th data-tooltip="Current status.">Status</th>
+                    <th data-tooltip="Time since publication.">Posted</th>
+                    <th data-tooltip="Distribution destinations.">Channels</th>
+                    <th style="text-align: right;" data-tooltip="Manage position.">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="card3-live-jobs-tbody">
+                  <!-- 1. Sales Manager -->
+                  <tr>
+                    <td><strong>Sales Manager</strong></td>
+                    <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
+                    <td style="color:var(--text-muted); font-size:0.72rem;">Posted Today</td>
+                    <td style="font-size:0.7rem;">u-theJOBS, Email, Socials</td>
+                    <td style="text-align: right; white-space: nowrap;">
+                      <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for Sales Manager.')" data-tooltip="Edit job details">EDIT</button>
+                      <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', 'Sales Manager posting is now paused.')" data-tooltip="Pause position">PAUSE</button>
+                      <button class="btn-table-action btn-table-del" onclick="showCustomModalAlert('Position Deleted', 'Sales Manager listing removed.')" data-tooltip="Delete position">DELETE</button>
+                    </td>
+                  </tr>
+
+                  <!-- 2. Retail Sales Associate -->
+                  <tr>
+                    <td><strong>Retail Sales Associate</strong></td>
+                    <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
+                    <td style="color:var(--text-muted); font-size:0.72rem;">Posted Yesterday</td>
+                    <td style="font-size:0.7rem;">u-theJOBS, Email</td>
+                    <td style="text-align: right; white-space: nowrap;">
+                      <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for Retail Sales Associate.')" data-tooltip="Edit job details">EDIT</button>
+                      <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', 'Retail Sales Associate posting paused.')" data-tooltip="Pause position">PAUSE</button>
+                      <button class="btn-table-action btn-table-del" onclick="showCustomModalAlert('Position Deleted', 'Retail Sales Associate listing removed.')" data-tooltip="Delete position">DELETE</button>
+                    </td>
+                  </tr>
+
+                  <!-- 3. Assembly Line Worker -->
+                  <tr>
+                    <td><strong>Assembly Line Worker</strong></td>
+                    <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
+                    <td style="color:var(--text-muted); font-size:0.72rem;">Posted 3 Days Ago</td>
+                    <td style="font-size:0.7rem;">u-theJOBS, Socials</td>
+                    <td style="text-align: right; white-space: nowrap;">
+                      <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for Assembly Line Worker.')" data-tooltip="Edit job details">EDIT</button>
+                      <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', 'Assembly Line Worker posting paused.')" data-tooltip="Pause position">PAUSE</button>
+                      <button class="btn-table-action btn-table-del" onclick="showCustomModalAlert('Position Deleted', 'Assembly Line Worker listing removed.')" data-tooltip="Delete position">DELETE</button>
+                    </td>
+                  </tr>
+
+                  <!-- 4. Delivery Driver -->
+                  <tr>
+                    <td><strong>Delivery Driver</strong></td>
+                    <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
+                    <td style="color:var(--text-muted); font-size:0.72rem;">Posted 5 Days Ago</td>
+                    <td style="font-size:0.7rem;">u-theJOBS, Email, Socials</td>
+                    <td style="text-align: right; white-space: nowrap;">
+                      <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for Delivery Driver.')" data-tooltip="Edit job details">EDIT</button>
+                      <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', 'Delivery Driver posting paused.')" data-tooltip="Pause position">PAUSE</button>
+                      <button class="btn-table-action btn-table-del" onclick="showCustomModalAlert('Position Deleted', 'Delivery Driver listing removed.')" data-tooltip="Delete position">DELETE</button>
+                    </td>
+                  </tr>
+
+                  <!-- 5. Chef Needed -->
+                  <tr>
+                    <td><strong>Chef Needed</strong></td>
+                    <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
+                    <td style="color:var(--text-muted); font-size:0.72rem;">Posted 1 Week Ago</td>
+                    <td style="font-size:0.7rem;">u-theJOBS, Email, Socials</td>
+                    <td style="text-align: right; white-space: nowrap;">
+                      <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for Chef Needed.')" data-tooltip="Edit job details">EDIT</button>
+                      <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', 'Chef Needed posting paused.')" data-tooltip="Pause position">PAUSE</button>
+                      <button class="btn-table-action btn-table-del" onclick="showCustomModalAlert('Position Deleted', 'Chef Needed listing removed.')" data-tooltip="Delete position">DELETE</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
 
       </div>
 
-      <!-- CARD 3: PUBLISHING & DISTRIBUTION SETTINGS -->
-      <div class="card3-distribution-panel">
+      <!-- LOCKED BOTTOM SECTION: PUBLISHING & DISTRIBUTION SETTINGS (NO "3.", NO BADGE) -->
+      <div class="bottom-distribution-panel">
         <div class="panel-header">
-          <span class="panel-title">3. PUBLISHING & DISTRIBUTION SETTINGS</span>
-          <span style="font-size: 0.65rem; color: var(--uthe-gold); font-weight: 800; background: var(--uthe-charcoal); padding: 0.2rem 0.5rem; border-radius: 4px;">BROADCAST ENGINE</span>
+          <span class="panel-title">PUBLISHING & DISTRIBUTION SETTINGS</span>
         </div>
 
         <div class="grid-2">
           <div class="form-group">
             <label data-tooltip="Perks, health coverage, 401k and stipends.">Perks, PTO & Benefits Highlights</label>
-            <input type="text" id="inp-perks" value="$3,000 Home Office Stipend + Equity | Unlimited PTO | 401(k) 5% Match" oninput="updateLivePreview()" data-tooltip="Enter candidate benefits summary.">
+            <input type="text" id="inp-perks" value="18 Days PTO | Comprehensive Health | 401(k) 4% Match" oninput="updateLivePreview()" data-tooltip="Enter candidate benefits summary.">
           </div>
           <div class="form-group">
-            <label data-tooltip="Select target candidate seniority.">Target Seniority / Level</label>
-            <select id="inp-seniority" data-tooltip="Seniority filter.">
-              <option value="Senior" selected>Senior (5+ Years)</option>
-              <option value="Staff/Principal">Staff / Principal (8+ Years)</option>
-              <option value="Mid-Level">Mid-Level (3-5 Years)</option>
-              <option value="Executive">Executive / Director</option>
+            <label data-tooltip="Select target candidate experience level.">Target Experience Level</label>
+            <select id="inp-seniority" data-tooltip="Experience level filter.">
+              <option value="Mid-Level" selected>Mid-Level (2-5 Years)</option>
+              <option value="Entry-Level">Entry-Level (0-2 Years)</option>
+              <option value="Senior">Senior (5+ Years)</option>
+              <option value="Executive">Management / Director</option>
             </select>
           </div>
         </div>
@@ -1313,7 +1462,7 @@
               </div>
             </div>
 
-            <div class="dist-channel-box selected" id="dist-social" onclick="toggleDistChannel(this)" data-tooltip="Multi-platform broadcast to connected LinkedIn, X, TikTok, Facebook, IG.">
+            <div class="dist-channel-box selected" id="dist-social" onclick="toggleDistChannel(this)" data-tooltip="Multi-platform post to connected LinkedIn, X, TikTok, Facebook, IG.">
               <input type="checkbox" checked style="min-height: 18px; width: 18px;">
               <div>
                 <strong style="font-size: 0.78rem; display: block;">Connected Socials</strong>
@@ -1324,11 +1473,11 @@
         </div>
 
         <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
-          <button class="btn-gold-action" style="flex: 1.5;" onclick="publishJobLive()" data-tooltip="Publish position live and broadcast across all selected channels.">
+          <button class="btn-gold-action" style="flex: 1.5;" onclick="publishJobLive()" data-tooltip="Publish position live and share across all selected channels.">
             PUBLISH POSITION LIVE & BROADCAST
           </button>
-          <button class="btn-surface-action" style="flex: 1;" onclick="broadcastToConnectedChannels()" data-tooltip="Trigger immediate multi-platform social & email blast.">
-            BROADCAST TO CONNECTED CHANNELS
+          <button class="btn-surface-action" style="flex: 1;" onclick="broadcastToConnectedChannels()" data-tooltip="Trigger immediate multi-platform social & email share.">
+            SHARE TO CONNECTED CHANNELS
           </button>
           <button class="btn-surface-action" onclick="resetStudioForm()" data-tooltip="Clear form inputs.">
             RESET
@@ -1348,13 +1497,13 @@
         <div class="grid-2">
           <div class="form-group">
             <label data-tooltip="Target audience filter or candidate talent pool.">Campaign Target Audience</label>
-            <input type="text" id="crm-target-audience" value="Senior & Staff Engineers (Austin / Remote)" data-tooltip="Specify candidate segment to receive outreach.">
+            <input type="text" id="crm-target-audience" value="Retail & Sales Professionals (Austin / Hybrid)" data-tooltip="Specify candidate segment to receive outreach.">
           </div>
           <div class="form-group">
             <label data-tooltip="Choose an outreach message template aligned with connected accounts.">Outreach Template (Channel Aligned)</label>
             <select id="crm-template-select" onchange="handleTemplateChange(this.value)" data-tooltip="Select template tailored for email, LinkedIn, X, or Meta DMs.">
-              <option value="email_blast">1. Direct Cold Email Blast (Via Recruiter Email)</option>
-              <option value="linkedin_dm">2. LinkedIn InMail & Executive Direct Message</option>
+              <option value="email_blast">1. Direct Email Share (Via Recruiter Email)</option>
+              <option value="linkedin_dm">2. LinkedIn InMail & Direct Message</option>
               <option value="x_dm">3. X (Twitter) Talent Stream Message</option>
               <option value="meta_dm">4. Facebook & Instagram Direct Talent Message</option>
             </select>
@@ -1363,8 +1512,8 @@
 
         <div class="grid-2">
           <div class="form-group">
-            <label data-tooltip="Specific connected channel utilized for this campaign broadcast.">Target Channel</label>
-            <input type="text" id="crm-channel-display" value="Email Blast (recruiter@quantumtech.io)" readonly style="background: var(--card-subtle);" data-tooltip="Target channel aligned with selected template.">
+            <label data-tooltip="Specific connected channel utilized for this campaign outreach.">Target Channel</label>
+            <input type="text" id="crm-channel-display" value="Email Share (hiring@quantumretail.com)" readonly style="background: var(--card-subtle);" data-tooltip="Target channel aligned with selected template.">
           </div>
           <div class="form-group">
             <label data-tooltip="Estimated number of candidate recipients for this outreach run.">Recipient Count</label>
@@ -1374,7 +1523,7 @@
 
         <div class="form-group">
           <label data-tooltip="Outreach message body with personalized replacement tokens.">Personalized Outreach Message Body</label>
-          <textarea id="crm-message-body" rows="4" data-tooltip="Compose your custom candidate pitch. Supports {candidate_name}, {job_title}, {company_name}.">Hi {candidate_name}, I saw your background in distributed systems and modern web technologies. We are expanding Quantum Technologies' team and would love to invite you for a fast-track interview for our {job_title} role.</textarea>
+          <textarea id="crm-message-body" rows="4" data-tooltip="Compose your custom candidate pitch. Supports {candidate_name}, {job_title}, {company_name}.">Hi {candidate_name}, I saw your background in sales and customer service. We are expanding our team at {company_name} and would love to invite you for an interview for our {job_title} role.</textarea>
         </div>
 
         <div style="display: flex; gap: 0.75rem;">
@@ -1386,7 +1535,7 @@
           </button>
         </div>
 
-        <!-- 3. CAMPAIGN DATE TRACKER TABLE -->
+        <!-- CAMPAIGN DATE TRACKER TABLE -->
         <div style="margin-top: 1rem; border-top: 1.5px solid var(--border-color); padding-top: 1rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
             <div>
@@ -1403,7 +1552,7 @@
                   <th data-tooltip="Unique campaign identification code.">Campaign ID</th>
                   <th data-tooltip="Exact launch date and timestamp.">Launch Timestamp</th>
                   <th data-tooltip="Campaign target audience.">Target Audience</th>
-                  <th data-tooltip="Channel used for broadcast.">Channel</th>
+                  <th data-tooltip="Channel used for outreach.">Channel</th>
                   <th data-tooltip="Number of candidates reached.">Recipients</th>
                   <th data-tooltip="Delivery status.">Status</th>
                   <th data-tooltip="Scheduled follow-up date.">Next Follow-Up</th>
@@ -1413,7 +1562,7 @@
                 <tr>
                   <td><code>CMP-901</code></td>
                   <td><strong>2026-08-26 14:30:00</strong></td>
-                  <td>Senior Full-Stack Engineers</td>
+                  <td>Retail Store Supervisors</td>
                   <td>LinkedIn InMail</td>
                   <td>35</td>
                   <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">DISPATCHED</span></td>
@@ -1422,8 +1571,8 @@
                 <tr>
                   <td><code>CMP-902</code></td>
                   <td><strong>2026-08-26 18:15:00</strong></td>
-                  <td>Austin Cloud Architects</td>
-                  <td>Email Blast</td>
+                  <td>Austin Sales Leads</td>
+                  <td>Email Share</td>
                   <td>62</td>
                   <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">ACTIVE</span></td>
                   <td>2026-08-29 (72h Follow-up)</td>
@@ -1451,7 +1600,7 @@
               <span>:::</span>
             </div>
             <div class="cand-name">Marcus Vance</div>
-            <div class="cand-role">Senior Full-Stack Engineer</div>
+            <div class="cand-role">Sales Manager</div>
             <div class="cand-score">94% MATCH</div>
           </div>
         </div>
@@ -1467,7 +1616,7 @@
               <span>:::</span>
             </div>
             <div class="cand-name">Elena Rostova</div>
-            <div class="cand-role">Senior Full-Stack Engineer</div>
+            <div class="cand-role">Retail Sales Associate</div>
             <div class="cand-score">88% MATCH</div>
           </div>
         </div>
@@ -1483,7 +1632,7 @@
               <span>:::</span>
             </div>
             <div class="cand-name">David K. Mercer</div>
-            <div class="cand-role">VP of Engineering</div>
+            <div class="cand-role">Store Director</div>
             <div class="cand-score">97% MATCH</div>
           </div>
         </div>
@@ -1544,8 +1693,8 @@
           <p style="font-size: 0.78rem; color: var(--text-muted);">High-velocity hiring across networks.</p>
           <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
             <li>✓ 15 Active Job Postings</li>
-            <li>✓ Multi-Platform Social Syndication</li>
-            <li>✓ Hunter.io Verified Lead Engine</li>
+            <li>✓ Multi-Platform Social Sharing</li>
+            <li>✓ Verified Candidate Search</li>
           </ul>
           <button class="btn-gold-action" style="margin-top: auto;" onclick="event.stopPropagation(); selectBasePlan('growth', 299);" data-tooltip="Choose Growth $299/mo.">
             CHOOSE GROWTH
@@ -1559,7 +1708,7 @@
           <p style="font-size: 0.78rem; color: var(--text-muted);">Unlimited scale and custom branding.</p>
           <ul style="font-size: 0.75rem; color: var(--text-main); line-height: 1.8; list-style: none;">
             <li>✓ Unlimited Active Postings</li>
-            <li>✓ Full Multi-Platform Broadcast</li>
+            <li>✓ Full Multi-Platform Sharing</li>
             <li>✓ Dedicated Subdomain Branding</li>
           </ul>
           <button class="btn-surface-action" style="margin-top: auto;" onclick="event.stopPropagation(); selectBasePlan('pro', 699);" data-tooltip="Choose Professional $699/mo.">
@@ -1583,7 +1732,7 @@
         </div>
       </div>
 
-      <!-- 4. ADD-ONS SECTION (RENAME HEADER TO ADD-ONS & INTERACTIVE TOGGLES) -->
+      <!-- ADD-ONS SECTION -->
       <div class="addons-list-card">
         <div style="font-size: 0.95rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 2px solid var(--uthe-gold); padding-bottom: 0.5rem;">
           ADD-ONS
@@ -1610,7 +1759,7 @@
               <span style="font-size: 1.25rem;">💼</span>
               <strong style="font-size: 0.75rem;">LinkedIn</strong>
               <span style="font-size: 0.68rem; color: var(--text-muted);">$5.99/mo</span>
-              <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable LinkedIn multi-platform syndication ($5.99/mo)">
+              <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable LinkedIn multi-platform posting ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-li" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
               </label>
@@ -1620,7 +1769,7 @@
               <span style="font-size: 1.25rem;">🌐</span>
               <strong style="font-size: 0.75rem;">Facebook</strong>
               <span style="font-size: 0.68rem; color: var(--text-muted);">$5.99/mo</span>
-              <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable Facebook multi-platform syndication ($5.99/mo)">
+              <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable Facebook multi-platform posting ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-fb" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
               </label>
@@ -1640,7 +1789,7 @@
               <span style="font-size: 1.25rem;">🎬</span>
               <strong style="font-size: 0.75rem;">TikTok</strong>
               <span style="font-size: 0.68rem; color: var(--text-muted);">$5.99/mo</span>
-              <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable TikTok short-form video recruitment ($5.99/mo)">
+              <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable TikTok recruitment ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-tt" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
               </label>
@@ -1650,7 +1799,7 @@
               <span style="font-size: 1.25rem;">𝕏</span>
               <strong style="font-size: 0.75rem;">Twitter (X)</strong>
               <span style="font-size: 0.68rem; color: var(--text-muted);">$5.99/mo</span>
-              <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable X / Twitter executive stream ($5.99/mo)">
+              <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable X / Twitter recruitment stream ($5.99/mo)">
                 <input type="checkbox" class="social-channel-toggle" id="toggle-soc-x" onchange="recalculateMembershipTotal()">
                 <span class="toggle-slider"></span>
               </label>
@@ -1729,7 +1878,7 @@
         <div class="grid-2">
           <div class="form-group">
             <label data-tooltip="Official company legal name.">Organization Legal Name</label>
-            <input type="text" id="prof-company" value="Quantum Technologies Corp" data-tooltip="Employer name.">
+            <input type="text" id="prof-company" value="Quantum Retail Corp" data-tooltip="Employer name.">
           </div>
           <div class="form-group">
             <label data-tooltip="Lead recruiter or talent acquisition manager name.">Contact Lead Name</label>
@@ -1740,7 +1889,7 @@
         <div class="grid-2">
           <div class="form-group">
             <label data-tooltip="Registered company email.">Work Email Address</label>
-            <input type="email" id="prof-email" value="recruiter@quantumtech.io" readonly style="background: var(--card-subtle);" data-tooltip="Work email address.">
+            <input type="email" id="prof-email" value="hiring@quantumretail.com" readonly style="background: var(--card-subtle);" data-tooltip="Work email address.">
           </div>
           <div class="form-group">
             <label data-tooltip="Contact phone number.">Contact Phone Number</label>
@@ -1749,8 +1898,8 @@
         </div>
 
         <div class="form-group">
-          <label data-tooltip="Company branding and recruitment philosophy.">Company Bio & Hiring Philosophy</label>
-          <textarea id="prof-bio" rows="3" data-tooltip="Company culture overview.">High-growth technology organization pioneering live real-time state synchronizations and distributed architectures.</textarea>
+          <label data-tooltip="Company branding and recruitment overview.">Company Overview & Culture</label>
+          <textarea id="prof-bio" rows="3" data-tooltip="Company culture overview.">High-growth retail and customer organization focused on positive team leadership and seamless community service.</textarea>
         </div>
 
         <button class="btn-gold-action" style="align-self: flex-start;" onclick="saveEmployerProfile()" data-tooltip="Save your brand details and organization profile.">
@@ -1809,7 +1958,7 @@
 
         <div class="form-group">
           <label>Work Email</label>
-          <input type="email" id="auth-email" placeholder="recruiter@quantumtech.io">
+          <input type="email" id="auth-email" placeholder="hiring@quantumretail.com">
         </div>
 
         <div class="form-group" id="auth-group-pass">
@@ -1999,32 +2148,50 @@
         });
       } catch (e) {}
 
+      // Prepend to Card 3 live listings table
+      const tbody = document.getElementById('card3-live-jobs-tbody');
+      if (tbody) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${newJob.jobTitle}</strong></td>
+          <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
+          <td style="color:var(--text-muted); font-size:0.72rem;">Just Now</td>
+          <td style="font-size:0.7rem;">u-theJOBS, Email, Socials</td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for ${newJob.jobTitle}.')">EDIT</button>
+            <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', '${newJob.jobTitle} posting paused.')">PAUSE</button>
+            <button class="btn-table-action btn-table-del" onclick="this.closest('tr').remove(); showCustomModalAlert('Position Deleted', '${newJob.jobTitle} listing removed.')">DELETE</button>
+          </td>
+        `;
+        tbody.prepend(tr);
+      }
+
       broadcastSyncEvent('JOB_PUBLISHED', { job: newJob });
-      showCustomModalAlert('Position Published Live', `Your position "${newJob.jobTitle}" is live and broadcasted to connected channels.`);
+      showCustomModalAlert('Position Published Live', `Your position "${newJob.jobTitle}" is live and shared to connected channels.`);
     }
 
     window.broadcastToConnectedChannels = function() {
       const email = document.getElementById('inp-recruiter-email').value;
-      showCustomModalAlert('Broadcast Initiated', `Immediate multi-platform talent blast dispatched to LinkedIn, X, TikTok, Meta networks and ${email}.`);
+      showCustomModalAlert('Share Dispatched', `Immediate multi-platform talent share sent to LinkedIn, X, TikTok, Meta networks and ${email}.`);
     };
 
     // CRM Templates Alignment
     const CRM_TEMPLATES = {
       email_blast: {
-        channel: 'Email Blast (recruiter@quantumtech.io)',
-        message: 'Hi {candidate_name},\n\nI saw your exceptional background in distributed systems. We are expanding our engineering team at {company_name} and would love to invite you for a fast-track interview for our {job_title} role.\n\nBest regards,\nQuantum Recruiting Lead'
+        channel: 'Email Share (hiring@quantumretail.com)',
+        message: 'Hi {candidate_name},\n\nI saw your exceptional background in sales and customer service. We are expanding our team at {company_name} and would love to invite you for an interview for our {job_title} role.\n\nBest regards,\nQuantum Talent Team'
       },
       linkedin_dm: {
-        channel: 'LinkedIn InMail & Executive Direct Message',
-        message: 'Hello {candidate_name}, impressed by your engineering leadership. We have an open {job_title} at {company_name} that aligns directly with your expertise. Let’s connect for a brief 15-minute introductory discussion.'
+        channel: 'LinkedIn InMail & Direct Message',
+        message: 'Hello {candidate_name}, impressed by your leadership and customer focus. We have an open {job_title} at {company_name} that matches your background. Let’s connect for a quick 15-minute introductory call.'
       },
       x_dm: {
         channel: 'X (Twitter) Talent Stream Message',
-        message: 'Hey {candidate_name}! Loved your recent engineering posts. We are hiring a {job_title} at {company_name} with equity + remote flexibility. Check our direct posting or DM me!'
+        message: 'Hey {candidate_name}! Loved your recent posts. We are hiring a {job_title} at {company_name} with competitive pay and growth opportunities. Check out our position or send a DM!'
       },
       meta_dm: {
         channel: 'Facebook & Instagram Direct Talent Message',
-        message: 'Hi {candidate_name}! Your technical work caught our eye. We are scaling {company_name} and currently hiring a {job_title}. We would love to chat!'
+        message: 'Hi {candidate_name}! Your work and leadership caught our eye. We are growing {company_name} and currently hiring a {job_title}. We would love to connect!'
       }
     };
 
@@ -2066,8 +2233,8 @@
       const tmpl = document.getElementById('crm-message-body').value;
       const rendered = tmpl
         .replace(/{candidate_name}/g, 'Marcus Vance')
-        .replace(/{job_title}/g, 'Senior Full-Stack Engineer')
-        .replace(/{company_name}/g, 'Quantum Technologies Corp');
+        .replace(/{job_title}/g, 'Sales Manager')
+        .replace(/{company_name}/g, 'Quantum Retail Corp');
       showCustomModalAlert('Personalization Preview (Marcus Vance)', rendered);
     };
 
@@ -2240,7 +2407,7 @@
       document.getElementById('custom-modal-alert').style.display = 'none';
     };
 
-    // Auth Engine Handlers
+    // Auth Handlers
     window.openAuthModal = function() {
       if (currentUser) {
         showCustomModalAlert('Account Session', `Logged in as ${currentUser.name} (${currentUser.email}).`);
