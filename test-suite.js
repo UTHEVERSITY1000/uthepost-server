@@ -268,12 +268,141 @@ async function runTests() {
     assert(false, `Group 9 failed: ${err.message}`);
   }
 
+  // ----------------------------------------------------
+  // TEST GROUP 10: Strict /data Directory Structure & Prefix Indexing Verification
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 10] Strict /data Directory Structure & Prefix Indexing');
+  try {
+    const dataDir = path.join(__dirname, 'data');
+    assert(fs.existsSync(dataDir), '/data root directory exists');
+    assert(fs.existsSync(path.join(dataDir, 'employers')), '/data/employers/ subfolder exists');
+    assert(fs.existsSync(path.join(dataDir, 'candidates')), '/data/candidates/ subfolder exists');
+    assert(fs.existsSync(path.join(dataDir, 'resumes')), '/data/resumes/ subfolder exists');
+    assert(fs.existsSync(path.join(dataDir, 'listings')), '/data/listings/ subfolder exists');
+    assert(fs.existsSync(path.join(dataDir, 'applications')), '/data/applications/ subfolder exists');
+    assert(fs.existsSync(path.join(dataDir, 'messages')), '/data/messages/ subfolder exists');
+    assert(fs.existsSync(path.join(dataDir, 'logs')), '/data/logs/ subfolder exists');
+    assert(fs.existsSync(path.join(dataDir, 'cms_config.json')), '/data/cms_config.json exists');
+
+    const empFiles = fs.readdirSync(path.join(dataDir, 'employers'));
+    assert(empFiles.some(f => f.startsWith('emp_') && f.endsWith('.json')), 'Employer files use "emp_" prefix');
+
+    const candFiles = fs.readdirSync(path.join(dataDir, 'candidates'));
+    assert(candFiles.some(f => f.startsWith('cand_') && f.endsWith('.json')), 'Candidate files use "cand_" prefix');
+
+    const jobFiles = fs.readdirSync(path.join(dataDir, 'listings'));
+    assert(jobFiles.some(f => f.startsWith('job_') && f.endsWith('.json')), 'Job listing files use "job_" prefix');
+
+    const appFiles = fs.readdirSync(path.join(dataDir, 'applications'));
+    assert(appFiles.some(f => f.startsWith('app_') && f.endsWith('.json')), 'Application files use "app_" prefix');
+
+    const msgFiles = fs.readdirSync(path.join(dataDir, 'messages'));
+    assert(msgFiles.some(f => f.startsWith('thread_') && f.endsWith('.json')), 'Message thread files use "thread_" prefix');
+
+    const logFiles = fs.readdirSync(path.join(dataDir, 'logs'));
+    assert(logFiles.some(f => f.startsWith('log_') && f.endsWith('.json')), 'System log files use "log_" prefix');
+  } catch (err) {
+    assert(false, `Group 10 failed: ${err.message}`);
+  }
+
+  // ----------------------------------------------------
+  // TEST GROUP 11: Synchronous Zero-Data-Loss Disk Persistence & PDF Validation
+  // ----------------------------------------------------
+  console.log('\n[TEST GROUP 11] Synchronous Disk Persistence & Strict PDF Validation');
+  try {
+    // 1. Test candidate signup persistence
+    const testEmail = `test.candidate.${Date.now()}@domain.com`;
+    const signupRes = await httpPost('/api/auth/signup', {
+      email: testEmail,
+      password: 'SecurePassword2026!',
+      name: 'Test Persistent Candidate',
+      role: 'candidate',
+      company: 'Test Co'
+    });
+    assert(signupRes.status === 201, 'POST /api/auth/signup returns 201');
+    const newCandId = signupRes.data.user.id;
+    const candDiskPath = path.join(__dirname, 'data', 'candidates', `cand_${newCandId}.json`);
+    assert(fs.existsSync(candDiskPath), `Candidate record synchronously written to disk: ${candDiskPath}`);
+
+    // 2. Test job listing creation persistence
+    const testJobTitle = `Senior Lead Architect ${Date.now()}`;
+    const jobRes = await httpPost('/api/jobs', {
+      jobTitle: testJobTitle,
+      company: 'Persistent Systems Corp',
+      location: 'New York, NY',
+      employmentType: 'Full-Time',
+      minCompensation: 180000,
+      maxCompensation: 220000
+    });
+    assert(jobRes.status === 201, 'POST /api/jobs returns 201');
+    const newJobId = jobRes.data.job.id;
+    const jobDiskPath = path.join(__dirname, 'data', 'listings', `job_${newJobId}.json`);
+    assert(fs.existsSync(jobDiskPath), `Job listing synchronously written to disk: ${jobDiskPath}`);
+
+    // 3. Test strict resume PDF validation
+    const invalidResumeRes = await httpPost('/api/resumes/upload', {
+      filename: 'malicious_resume.exe'
+    });
+    assert(invalidResumeRes.status === 400, 'POST /api/resumes/upload rejects non-PDF extension (.exe) with 400');
+
+    const validResumeRes = await httpPost('/api/resumes/upload', {
+      filename: 'John_Doe_Resume_2026.pdf',
+      fileBase64: Buffer.from('%PDF-1.4\n% John Doe Test Resume\n%%EOF').toString('base64')
+    });
+    assert(validResumeRes.status === 201, 'POST /api/resumes/upload accepts valid .pdf file with 201');
+    const resumeDiskPath = path.join(__dirname, 'data', 'resumes', 'John_Doe_Resume_2026.pdf');
+    assert(fs.existsSync(resumeDiskPath), `Resume PDF file saved to /data/resumes/: ${resumeDiskPath}`);
+
+    // 4. Test applicant submission persistence & PDF check
+    const invalidAppRes = await httpPost('/api/applicants', {
+      jobId: newJobId,
+      jobTitle: testJobTitle,
+      name: 'Jane Doe',
+      email: 'jane.doe@example.com',
+      resumeFile: 'resume_word_doc.docx'
+    });
+    assert(invalidAppRes.status === 400, 'POST /api/applicants rejects non-PDF resume (.docx) with 400');
+
+    const validAppRes = await httpPost('/api/applicants', {
+      jobId: newJobId,
+      jobTitle: testJobTitle,
+      name: 'Jane Doe',
+      email: 'jane.doe@example.com',
+      resumeFile: 'Jane_Doe_Resume_2026.pdf'
+    });
+    assert(validAppRes.status === 201, 'POST /api/applicants accepts .pdf resume with 201');
+    const newAppId = validAppRes.data.applicant.id;
+    const appDiskPath = path.join(__dirname, 'data', 'applications', `app_${newAppId}.json`);
+    assert(fs.existsSync(appDiskPath), `Applicant record synchronously written to disk: ${appDiskPath}`);
+
+    // 5. Test message thread persistence
+    const msgRes = await httpPost('/api/messages', {
+      applicantId: newAppId,
+      senderRole: 'recruiter',
+      senderName: 'Quantum Recruiter',
+      company: 'Persistent Systems Corp',
+      jobTitle: testJobTitle,
+      text: 'We loved your PDF resume and would like to schedule an interview.'
+    });
+    assert(msgRes.status === 201, 'POST /api/messages returns 201');
+    const newMsgId = msgRes.data.message.id;
+    const msgDiskPath = path.join(__dirname, 'data', 'messages', `thread_${newMsgId}.json`);
+    assert(fs.existsSync(msgDiskPath), `Message thread synchronously written to disk: ${msgDiskPath}`);
+
+    // 6. Test Omni-Search retrieves newly indexed records
+    const searchRes = await httpGet(`/api/admin/search?q=${encodeURIComponent('Persistent Systems')}`);
+    assert(searchRes.status === 200, 'GET /api/admin/search returns 200');
+    assert(searchRes.data.results.jobs.some(j => j.id === newJobId), 'Omni-Search instantly retrieves new indexed job from memory & storage');
+  } catch (err) {
+    assert(false, `Group 11 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
 
   if (failed === 0) {
-    console.log('ALL CROSS-PORTAL LIVE CMS SYNC & STORAGE PERSISTENCE TESTS PASSED! 100% VERIFIED.\n');
+    console.log('ALL STRICT DATA STORAGE, INDEXING & ZERO-DATA-LOSS PERSISTENCE TESTS PASSED! 100% VERIFIED.\n');
     process.exit(0);
   } else {
     console.error('SOME TESTS FAILED. CHECK LOGS ABOVE.\n');

@@ -251,41 +251,7 @@ let cmsConfig = {
   }
 };
 
-const CMS_FILE = path.join(__dirname, 'cms_config.json');
 
-function loadCmsConfig() {
-  try {
-    if (fs.existsSync(CMS_FILE)) {
-      const data = fs.readFileSync(CMS_FILE, 'utf8');
-      const parsed = JSON.parse(data);
-      if (parsed) {
-        if (parsed.postStudio) cmsConfig.postStudio = { ...cmsConfig.postStudio, ...parsed.postStudio };
-        if (parsed.jobsBoard) cmsConfig.jobsBoard = { ...cmsConfig.jobsBoard, ...parsed.jobsBoard };
-        if (parsed.labels) cmsConfig.labels = { ...cmsConfig.labels, ...parsed.labels };
-        if (parsed.pricing) cmsConfig.pricing = { ...cmsConfig.pricing, ...parsed.pricing };
-        if (parsed.addOns) cmsConfig.addOns = { ...cmsConfig.addOns, ...parsed.addOns };
-        if (parsed.channels) cmsConfig.channels = { ...cmsConfig.channels, ...parsed.channels };
-        console.log('[CMS STORAGE] Successfully loaded cms_config.json from disk.');
-      }
-    } else {
-      saveCmsConfig();
-    }
-  } catch (err) {
-    console.error('[CMS STORAGE] Error loading cms_config.json:', err.message);
-  }
-}
-
-function saveCmsConfig() {
-  try {
-    fs.writeFileSync(CMS_FILE, JSON.stringify(cmsConfig, null, 2), 'utf8');
-    console.log('[CMS STORAGE] Saved cms_config.json to disk.');
-  } catch (err) {
-    console.error('[CMS STORAGE] Error saving cms_config.json:', err.message);
-  }
-}
-
-// Auto-load persistent CMS config on server startup
-loadCmsConfig();
 
 // ----------------------------------------------------
 // IN-MEMORY JOB CATALOG & APPLICANTS DATABASE
@@ -432,6 +398,303 @@ const globalMessageStore = [
     timestamp: new Date(Date.now() - 3600000).toISOString()
   }
 ];
+
+// ----------------------------------------------------
+// STRICT DATA STORAGE & AUTOMATIC INDEXING SYSTEM
+// Subfolders: /data/employers/, /data/candidates/, /data/resumes/,
+// /data/listings/, /data/applications/, /data/messages/, /data/logs/,
+// and /data/cms_config.json
+// ----------------------------------------------------
+const DATA_DIR = path.join(__dirname, 'data');
+const DIRS = {
+  data: DATA_DIR,
+  employers: path.join(DATA_DIR, 'employers'),
+  candidates: path.join(DATA_DIR, 'candidates'),
+  resumes: path.join(DATA_DIR, 'resumes'),
+  listings: path.join(DATA_DIR, 'listings'),
+  applications: path.join(DATA_DIR, 'applications'),
+  messages: path.join(DATA_DIR, 'messages'),
+  logs: path.join(DATA_DIR, 'logs'),
+  cmsConfig: path.join(DATA_DIR, 'cms_config.json')
+};
+
+const ROOT_CMS_FILE = path.join(__dirname, 'cms_config.json');
+
+function initDataDirectories() {
+  const folders = [
+    DIRS.data,
+    DIRS.employers,
+    DIRS.candidates,
+    DIRS.resumes,
+    DIRS.listings,
+    DIRS.applications,
+    DIRS.messages,
+    DIRS.logs
+  ];
+  folders.forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+      console.log(`[DATA STORAGE] Initialized directory: ${dir}`);
+    }
+  });
+}
+
+function writeSystemLog(eventType, details = {}) {
+  try {
+    initDataDirectories();
+    const timestamp = new Date().toISOString();
+    const logEntry = {
+      timestamp,
+      eventType,
+      details
+    };
+    const logFile = path.join(DIRS.logs, 'log_system.json');
+    let logs = [];
+    if (fs.existsSync(logFile)) {
+      try {
+        logs = JSON.parse(fs.readFileSync(logFile, 'utf8'));
+        if (!Array.isArray(logs)) logs = [];
+      } catch (e) {
+        logs = [];
+      }
+    }
+    logs.unshift(logEntry);
+    if (logs.length > 500) logs = logs.slice(0, 500);
+    fs.writeFileSync(logFile, JSON.stringify(logs, null, 2), 'utf8');
+  } catch (err) {
+    console.error('[LOG STORAGE ERROR]', err.message);
+  }
+}
+
+// 1. Employer Indexing: emp_<id>.json in /data/employers/
+function saveEmployerRecord(user) {
+  try {
+    initDataDirectories();
+    const safeId = String(user.id).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filePath = path.join(DIRS.employers, `emp_${safeId}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(user, null, 2), 'utf8');
+  } catch (e) {
+    console.error('[STORAGE ERROR] Failed saving employer:', e.message);
+  }
+}
+
+function deleteEmployerRecord(userId) {
+  try {
+    const safeId = String(userId).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filePath = path.join(DIRS.employers, `emp_${safeId}.json`);
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+  } catch (e) {}
+}
+
+// 2. Candidate Indexing: cand_<id>.json in /data/candidates/
+function saveCandidateRecord(user) {
+  try {
+    initDataDirectories();
+    const safeId = String(user.id).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filePath = path.join(DIRS.candidates, `cand_${safeId}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(user, null, 2), 'utf8');
+  } catch (e) {
+    console.error('[STORAGE ERROR] Failed saving candidate:', e.message);
+  }
+}
+
+function deleteCandidateRecord(userId) {
+  try {
+    const safeId = String(userId).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filePath = path.join(DIRS.candidates, `cand_${safeId}.json`);
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+  } catch (e) {}
+}
+
+// 3. Listings (Jobs) Indexing: job_<id>.json in /data/listings/
+function saveJobRecord(job) {
+  try {
+    initDataDirectories();
+    const safeId = String(job.id).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filePath = path.join(DIRS.listings, `job_${safeId}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(job, null, 2), 'utf8');
+  } catch (e) {
+    console.error('[STORAGE ERROR] Failed saving job listing:', e.message);
+  }
+}
+
+function deleteJobRecord(jobId) {
+  try {
+    const safeId = String(jobId).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filePath = path.join(DIRS.listings, `job_${safeId}.json`);
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+  } catch (e) {}
+}
+
+// 4. Applications Indexing: app_<id>.json in /data/applications/
+function saveApplicantRecord(applicant) {
+  try {
+    initDataDirectories();
+    const safeId = String(applicant.id).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filePath = path.join(DIRS.applications, `app_${safeId}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(applicant, null, 2), 'utf8');
+  } catch (e) {
+    console.error('[STORAGE ERROR] Failed saving applicant:', e.message);
+  }
+}
+
+function deleteApplicantRecord(applicantId) {
+  try {
+    const safeId = String(applicantId).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filePath = path.join(DIRS.applications, `app_${safeId}.json`);
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+  } catch (e) {}
+}
+
+// 5. Messages Indexing: thread_<id>.json in /data/messages/
+function saveMessageRecord(msg) {
+  try {
+    initDataDirectories();
+    const safeId = String(msg.id).replace(/[^a-zA-Z0-9_-]/g, '_');
+    const filePath = path.join(DIRS.messages, `thread_${safeId}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(msg, null, 2), 'utf8');
+  } catch (e) {
+    console.error('[STORAGE ERROR] Failed saving message thread:', e.message);
+  }
+}
+
+// 6. CMS Config: /data/cms_config.json & cms_config.json
+function saveCmsConfig() {
+  try {
+    initDataDirectories();
+    const content = JSON.stringify(cmsConfig, null, 2);
+    fs.writeFileSync(DIRS.cmsConfig, content, 'utf8');
+    fs.writeFileSync(ROOT_CMS_FILE, content, 'utf8');
+    console.log('[CMS STORAGE] Synchronously saved /data/cms_config.json & root cms_config.json.');
+  } catch (err) {
+    console.error('[CMS STORAGE] Error saving cms_config.json:', err.message);
+  }
+}
+
+function loadCmsConfig() {
+  try {
+    let raw = null;
+    if (fs.existsSync(DIRS.cmsConfig)) {
+      raw = fs.readFileSync(DIRS.cmsConfig, 'utf8');
+    } else if (fs.existsSync(ROOT_CMS_FILE)) {
+      raw = fs.readFileSync(ROOT_CMS_FILE, 'utf8');
+    }
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed) {
+        if (parsed.postStudio) cmsConfig.postStudio = { ...cmsConfig.postStudio, ...parsed.postStudio };
+        if (parsed.jobsBoard) cmsConfig.jobsBoard = { ...cmsConfig.jobsBoard, ...parsed.jobsBoard };
+        if (parsed.labels) cmsConfig.labels = { ...cmsConfig.labels, ...parsed.labels };
+        if (parsed.pricing) cmsConfig.pricing = { ...cmsConfig.pricing, ...parsed.pricing };
+        if (parsed.addOns) cmsConfig.addOns = { ...cmsConfig.addOns, ...parsed.addOns };
+        if (parsed.channels) cmsConfig.channels = { ...cmsConfig.channels, ...parsed.channels };
+        console.log('[CMS STORAGE] Loaded persistent cms_config.json.');
+      }
+    } else {
+      saveCmsConfig();
+    }
+  } catch (err) {
+    console.error('[CMS STORAGE] Error loading cms_config.json:', err.message);
+  }
+}
+
+// Full Disk Sync & Database Ingestion on Startup
+function loadAllDataFromDisk() {
+  initDataDirectories();
+  loadCmsConfig();
+
+  // 1. Ingest Employers
+  try {
+    const empFiles = fs.readdirSync(DIRS.employers).filter(f => f.startsWith('emp_') && f.endsWith('.json'));
+    if (empFiles.length > 0) {
+      empFiles.forEach(file => {
+        try {
+          const u = JSON.parse(fs.readFileSync(path.join(DIRS.employers, file), 'utf8'));
+          if (u && !usersDatabase.some(x => x.id === u.id)) usersDatabase.push(u);
+        } catch (e) {}
+      });
+    } else {
+      usersDatabase.forEach(u => {
+        if (u.role === 'admin' || u.role === 'recruiter') saveEmployerRecord(u);
+      });
+    }
+  } catch (e) {}
+
+  // 2. Ingest Candidates
+  try {
+    const candFiles = fs.readdirSync(DIRS.candidates).filter(f => f.startsWith('cand_') && f.endsWith('.json'));
+    if (candFiles.length > 0) {
+      candFiles.forEach(file => {
+        try {
+          const u = JSON.parse(fs.readFileSync(path.join(DIRS.candidates, file), 'utf8'));
+          if (u && !usersDatabase.some(x => x.id === u.id)) usersDatabase.push(u);
+        } catch (e) {}
+      });
+    } else {
+      usersDatabase.forEach(u => {
+        if (u.role === 'candidate') saveCandidateRecord(u);
+      });
+    }
+  } catch (e) {}
+
+  // 3. Ingest Listings (Jobs)
+  try {
+    const jobFiles = fs.readdirSync(DIRS.listings).filter(f => f.startsWith('job_') && f.endsWith('.json'));
+    if (jobFiles.length > 0) {
+      jobFiles.forEach(file => {
+        try {
+          const j = JSON.parse(fs.readFileSync(path.join(DIRS.listings, file), 'utf8'));
+          if (j && !globalJobDatabase.some(x => x.id === j.id)) globalJobDatabase.push(j);
+        } catch (e) {}
+      });
+    } else {
+      globalJobDatabase.forEach(j => saveJobRecord(j));
+    }
+  } catch (e) {}
+
+  // 4. Ingest Applications
+  try {
+    const appFiles = fs.readdirSync(DIRS.applications).filter(f => f.startsWith('app_') && f.endsWith('.json'));
+    if (appFiles.length > 0) {
+      appFiles.forEach(file => {
+        try {
+          const a = JSON.parse(fs.readFileSync(path.join(DIRS.applications, file), 'utf8'));
+          if (a && !applicantsStore.some(x => x.id === a.id)) applicantsStore.push(a);
+        } catch (e) {}
+      });
+    } else {
+      applicantsStore.forEach(a => saveApplicantRecord(a));
+    }
+  } catch (e) {}
+
+  // 5. Ingest Messages
+  try {
+    const msgFiles = fs.readdirSync(DIRS.messages).filter(f => f.startsWith('thread_') && f.endsWith('.json'));
+    if (msgFiles.length > 0) {
+      msgFiles.forEach(file => {
+        try {
+          const m = JSON.parse(fs.readFileSync(path.join(DIRS.messages, file), 'utf8'));
+          if (m && !globalMessageStore.some(x => x.id === m.id)) globalMessageStore.push(m);
+        } catch (e) {}
+      });
+    } else {
+      globalMessageStore.forEach(m => saveMessageRecord(m));
+    }
+  } catch (e) {}
+
+  // 6. Default PDF Resume in /data/resumes/
+  try {
+    const sampleResume = path.join(DIRS.resumes, 'Marcus_Vance_Resume_2026.pdf');
+    if (!fs.existsSync(sampleResume)) {
+      fs.writeFileSync(sampleResume, '%PDF-1.4\n% Marcus Vance Verified PDF Resume - UTHEVERSITY Professional Career Network\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>\nendobj\nxref\n0 4\n0000000000 65535 f \n0000000090 00000 n \n0000000140 00000 n \n0000000200 00000 n \ntrailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n275\n%%EOF\n', 'utf8');
+    }
+  } catch (e) {}
+
+  writeSystemLog('SYSTEM_BOOT', { message: 'UTHEVERSITY Storage & Indexing Engine Initialized' });
+}
+
+// Execute auto-initialization & database loading on startup
+loadAllDataFromDisk();
 
 // Hunter.io Lead Search Simulation
 function handleHunterDomainSearch(params) {
@@ -595,6 +858,13 @@ const server = http.createServer((req, res) => {
       };
 
       usersDatabase.push(newUser);
+      if (newUser.role === 'candidate') {
+        saveCandidateRecord(newUser);
+      } else {
+        saveEmployerRecord(newUser);
+      }
+      writeSystemLog('USER_SIGNUP', { userId: newUser.id, role: newUser.role, email: newUser.email });
+
       const token = generateJwt({ userId: newUser.id, role: newUser.role, email: newUser.email });
       const safeUser = { id: newUser.id, email: newUser.email, name: newUser.name, role: newUser.role, company: newUser.company, phone: newUser.phone, bio: newUser.bio };
       const cookieHeader = `uthe_token=${token}; Domain=.utheversity.com; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`;
@@ -614,6 +884,8 @@ const server = http.createServer((req, res) => {
       if (!user || !verifyPassword(password, user.passwordHash)) {
         return sendJson(401, { error: 'Invalid email or password' });
       }
+
+      writeSystemLog('USER_LOGIN', { userId: user.id, email: user.email });
 
       const token = generateJwt({ userId: user.id, role: user.role, email: user.email });
       const safeUser = { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
@@ -651,6 +923,13 @@ const server = http.createServer((req, res) => {
       if (body.phone) user.phone = body.phone;
       if (body.bio) user.bio = body.bio;
 
+      if (user.role === 'candidate') {
+        saveCandidateRecord(user);
+      } else {
+        saveEmployerRecord(user);
+      }
+      writeSystemLog('PROFILE_UPDATED', { userId: user.id });
+
       const safeUser = { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
       sendJson(200, { status: 'updated', user: safeUser });
     });
@@ -665,6 +944,10 @@ const server = http.createServer((req, res) => {
       if (!user) return sendJson(404, { error: 'User not found' });
 
       user.passwordHash = hashPassword(newPassword || 'NewSecurePass2026!');
+      if (user.role === 'candidate') saveCandidateRecord(user);
+      else saveEmployerRecord(user);
+      writeSystemLog('PASSWORD_RESET', { userId: user.id, email: user.email });
+
       sendJson(200, { status: 'password_reset', email: user.email });
     });
     return;
@@ -731,6 +1014,7 @@ const server = http.createServer((req, res) => {
       if (body.channels) cmsConfig.channels = { ...cmsConfig.channels, ...body.channels };
 
       saveCmsConfig();
+      writeSystemLog('CMS_CONFIG_UPDATED', { timestamp: new Date().toISOString() });
       broadcastWebSocketEvent('CMS_CONFIG_UPDATED', { config: cmsConfig });
       sendJson(200, { status: 'updated', config: cmsConfig });
     });
@@ -762,6 +1046,9 @@ const server = http.createServer((req, res) => {
     if (!user) return sendJson(404, { error: 'User not found' });
     const tempPass = `Reset${Math.floor(1000 + Math.random() * 9000)}!`;
     user.passwordHash = hashPassword(tempPass);
+    if (user.role === 'candidate') saveCandidateRecord(user);
+    else saveEmployerRecord(user);
+    writeSystemLog('ADMIN_RESET_PASSWORD', { userId: user.id, email: user.email });
     sendJson(200, { status: 'reset', tempPassword: tempPass, message: `Password for ${user.email} reset successfully.` });
     return;
   }
@@ -776,6 +1063,9 @@ const server = http.createServer((req, res) => {
       if (body.approved !== undefined) user.approved = Boolean(body.approved);
       if (body.name) user.name = body.name;
       if (body.phone) user.phone = body.phone;
+      if (user.role === 'candidate') saveCandidateRecord(user);
+      else saveEmployerRecord(user);
+      writeSystemLog('ADMIN_USER_UPDATED', { userId: user.id, role: user.role, approved: user.approved });
       broadcastWebSocketEvent('USER_UPDATED', { user: { id: user.id, role: user.role, approved: user.approved } });
       sendJson(200, { status: 'updated', user });
     });
@@ -787,6 +1077,9 @@ const server = http.createServer((req, res) => {
     const idx = usersDatabase.findIndex(u => u.id === uid);
     if (idx !== -1) {
       usersDatabase.splice(idx, 1);
+      deleteEmployerRecord(uid);
+      deleteCandidateRecord(uid);
+      writeSystemLog('ADMIN_USER_DELETED', { userId: uid });
       sendJson(200, { status: 'deleted', userId: uid });
     } else {
       sendJson(404, { error: 'User not found' });
@@ -799,6 +1092,8 @@ const server = http.createServer((req, res) => {
     const job = globalJobDatabase.find(j => j.id === jobId);
     if (!job) return sendJson(404, { error: 'Job not found' });
     job.featured = !job.featured;
+    saveJobRecord(job);
+    writeSystemLog('JOB_FEATURED_UPDATED', { jobId, featured: job.featured });
     broadcastWebSocketEvent('JOB_FEATURED_UPDATED', { jobId, featured: job.featured });
     sendJson(200, { status: 'updated', job });
     return;
@@ -811,6 +1106,8 @@ const server = http.createServer((req, res) => {
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON' });
       job.status = body.status || 'Active';
+      saveJobRecord(job);
+      writeSystemLog('JOB_STATUS_UPDATED', { jobId, status: job.status });
       broadcastWebSocketEvent('JOB_STATUS_UPDATED', { jobId, status: job.status });
       sendJson(200, { status: 'updated', job });
     });
@@ -824,6 +1121,8 @@ const server = http.createServer((req, res) => {
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON' });
       Object.assign(job, body);
+      saveJobRecord(job);
+      writeSystemLog('JOB_UPDATED', { jobId: job.id });
       broadcastWebSocketEvent('JOB_UPDATED', { job });
       sendJson(200, { status: 'updated', job });
     });
@@ -837,6 +1136,8 @@ const server = http.createServer((req, res) => {
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON' });
       app.status = body.status || app.status;
+      saveApplicantRecord(app);
+      writeSystemLog('APPLICANT_STATUS_UPDATED', { applicantId: appId, status: app.status });
       broadcastWebSocketEvent('APPLICANT_STAGE_UPDATED', { applicantId: appId, status: app.status });
       sendJson(200, { status: 'updated', applicant: app });
     });
@@ -848,6 +1149,8 @@ const server = http.createServer((req, res) => {
     const idx = applicantsStore.findIndex(a => a.id === appId);
     if (idx !== -1) {
       applicantsStore.splice(idx, 1);
+      deleteApplicantRecord(appId);
+      writeSystemLog('APPLICANT_DELETED', { applicantId: appId });
       sendJson(200, { status: 'deleted', applicantId: appId });
     } else {
       sendJson(404, { error: 'Applicant not found' });
@@ -929,6 +1232,9 @@ const server = http.createServer((req, res) => {
       };
 
       globalJobDatabase.unshift(newJob);
+      saveJobRecord(newJob);
+      writeSystemLog('JOB_PUBLISHED', { jobId: newJob.id, title: newJob.jobTitle, company: newJob.company });
+
       broadcastWebSocketEvent('JOB_PUBLISHED', { job: newJob, total: globalJobDatabase.length });
       sendJson(201, { status: 'created', job: newJob });
     });
@@ -940,10 +1246,58 @@ const server = http.createServer((req, res) => {
     const index = globalJobDatabase.findIndex(j => j.id === jobId);
     if (index !== -1) {
       const removed = globalJobDatabase.splice(index, 1)[0];
+      deleteJobRecord(jobId);
+      writeSystemLog('JOB_DELETED', { jobId: jobId });
       broadcastWebSocketEvent('JOB_DELETED', { jobId: jobId, removed });
       sendJson(200, { status: 'deleted', jobId });
     } else {
       sendJson(404, { error: 'Job not found' });
+    }
+    return;
+  }
+
+  // ----------------------------------------------------
+  // RESUME UPLOADS & STRICT PDF VALIDATION
+  // ----------------------------------------------------
+  if (pathname === '/api/resumes/upload' && req.method === 'POST') {
+    readBody((err, body) => {
+      if (err) return sendJson(400, { error: 'Invalid JSON payload' });
+      const { filename, fileBase64 } = body;
+      if (!filename) return sendJson(400, { error: 'Filename is required' });
+
+      // Strictly validate .pdf extension
+      const ext = path.extname(filename).toLowerCase();
+      if (ext !== '.pdf') {
+        return sendJson(400, { error: 'Strict Validation Error: Only .pdf files are permitted for candidate resumes.' });
+      }
+
+      const cleanName = path.basename(filename).replace(/[^a-zA-Z0-9._-]/g, '_');
+      const targetPath = path.join(DIRS.resumes, cleanName);
+
+      try {
+        if (fileBase64) {
+          const buffer = Buffer.from(fileBase64, 'base64');
+          fs.writeFileSync(targetPath, buffer);
+        } else {
+          fs.writeFileSync(targetPath, `%PDF-1.4\n% UTHEVERSITY Candidate Resume: ${cleanName}\n%%EOF`, 'utf8');
+        }
+        writeSystemLog('RESUME_UPLOADED', { filename: cleanName, path: targetPath });
+        sendJson(201, { status: 'uploaded', filename: cleanName, path: `/data/resumes/${cleanName}` });
+      } catch (uploadErr) {
+        sendJson(500, { error: 'Failed to write resume file: ' + uploadErr.message });
+      }
+    });
+    return;
+  }
+
+  if (pathname.startsWith('/data/resumes/') && req.method === 'GET') {
+    const resumeFileName = path.basename(pathname);
+    const resumeFilePath = path.join(DIRS.resumes, resumeFileName);
+    if (fs.existsSync(resumeFilePath) && path.extname(resumeFilePath).toLowerCase() === '.pdf') {
+      res.writeHead(200, { 'Content-Type': 'application/pdf' });
+      fs.createReadStream(resumeFilePath).pipe(res);
+    } else {
+      sendJson(404, { error: 'Resume PDF not found' });
     }
     return;
   }
@@ -954,6 +1308,26 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/applicants' && req.method === 'POST') {
     readBody((err, payload) => {
       if (err) return sendJson(400, { error: err.message });
+
+      const resumeFileName = payload.resumeFile || 'Marcus_Vance_Resume_2026.pdf';
+      const resumeExt = path.extname(resumeFileName).toLowerCase();
+      if (resumeExt !== '.pdf') {
+        return sendJson(400, { error: 'Strict Validation Error: Only .pdf files are permitted for candidate resumes.' });
+      }
+
+      // Ensure PDF file saved to /data/resumes/
+      const cleanResumeName = path.basename(resumeFileName).replace(/[^a-zA-Z0-9._-]/g, '_');
+      const resumeTarget = path.join(DIRS.resumes, cleanResumeName);
+      if (!fs.existsSync(resumeTarget)) {
+        try {
+          if (payload.resumeBase64) {
+            fs.writeFileSync(resumeTarget, Buffer.from(payload.resumeBase64, 'base64'));
+          } else {
+            fs.writeFileSync(resumeTarget, `%PDF-1.4\n% UTHEVERSITY Candidate Resume: ${cleanResumeName}\n%%EOF`, 'utf8');
+          }
+        } catch (e) {}
+      }
+
       const newApplicant = {
         id: payload.id || `APP-${Math.floor(700 + Math.random() * 200)}`,
         jobId: payload.jobId || 'JOB-101',
@@ -963,7 +1337,7 @@ const server = http.createServer((req, res) => {
         phone: payload.phone || '+1 (555) 000-0000',
         bestTime: payload.bestTime || 'Anytime',
         interviewTitle: payload.interviewTitle || payload.jobTitle || 'General Application',
-        resumeFile: payload.resumeFile || 'resume.pdf',
+        resumeFile: cleanResumeName,
         status: payload.status || 'Applied',
         score: payload.score || Math.floor(84 + Math.random() * 14),
         skills: payload.skills || ['JavaScript', 'System Design', 'Communication'],
@@ -972,6 +1346,9 @@ const server = http.createServer((req, res) => {
       };
 
       applicantsStore.unshift(newApplicant);
+      saveApplicantRecord(newApplicant);
+      writeSystemLog('CANDIDATE_APPLIED', { applicantId: newApplicant.id, jobId: newApplicant.jobId, name: newApplicant.name });
+
       broadcastWebSocketEvent('CANDIDATE_APPLIED', { applicant: newApplicant });
       sendJson(201, { status: 'submitted', applicant: newApplicant });
     });
@@ -1012,6 +1389,8 @@ const server = http.createServer((req, res) => {
       };
 
       globalMessageStore.push(newMsg);
+      saveMessageRecord(newMsg);
+      writeSystemLog('MESSAGE_SENT', { messageId: newMsg.id, applicantId: newMsg.applicantId, senderRole: newMsg.senderRole });
 
       if (newMsg.senderRole === 'recruiter') {
         broadcastWebSocketEvent('RECRUITER_MESSAGE_SENT', { message: newMsg });
@@ -1118,19 +1497,31 @@ function initWebSocket() {
             };
             if (!globalJobDatabase.some(j => j.id === newJob.id)) {
               globalJobDatabase.unshift(newJob);
+              saveJobRecord(newJob);
+              writeSystemLog('WS_JOB_PUBLISHED', { jobId: newJob.id });
             }
             broadcastWebSocketEvent('JOB_PUBLISHED', { job: newJob, total: globalJobDatabase.length });
           } else if (data.type === 'DELETE_JOB' && data.jobId) {
             const idx = globalJobDatabase.findIndex(j => j.id === data.jobId);
-            if (idx !== -1) globalJobDatabase.splice(idx, 1);
+            if (idx !== -1) {
+              globalJobDatabase.splice(idx, 1);
+              deleteJobRecord(data.jobId);
+              writeSystemLog('WS_JOB_DELETED', { jobId: data.jobId });
+            }
           } else if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
             applicantsStore.unshift(data.applicant);
+            saveApplicantRecord(data.applicant);
+            writeSystemLog('WS_CANDIDATE_APPLIED', { applicantId: data.applicant.id });
             broadcastWebSocketEvent('CANDIDATE_APPLIED', { applicant: data.applicant });
           }
 
           if ((data.type === 'CANDIDATE_MESSAGE_SENT' || data.type === 'RECRUITER_MESSAGE_SENT') && data.message) {
             const exists = globalMessageStore.some(m => m.id === data.message.id);
-            if (!exists) globalMessageStore.push(data.message);
+            if (!exists) {
+              globalMessageStore.push(data.message);
+              saveMessageRecord(data.message);
+              writeSystemLog('WS_MESSAGE_SENT', { messageId: data.message.id });
+            }
           }
         } catch (e) {}
       });

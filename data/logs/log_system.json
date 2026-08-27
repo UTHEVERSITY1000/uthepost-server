@@ -1,0 +1,67 @@
+[
+  {
+    "timestamp": "2026-08-27T08:22:04.282Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-8545",
+      "applicantId": "APP-818",
+      "senderRole": "recruiter"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T08:22:04.260Z",
+    "eventType": "CANDIDATE_APPLIED",
+    "details": {
+      "applicantId": "APP-818",
+      "jobId": "JOB-533",
+      "name": "Jane Doe"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T08:22:04.233Z",
+    "eventType": "RESUME_UPLOADED",
+    "details": {
+      "filename": "John_Doe_Resume_2026.pdf",
+      "path": "C:\\Users\\nutrasye\\Desktop\\U-THEPOST HTML FILES ENCLOSED\\data\\resumes\\John_Doe_Resume_2026.pdf"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T08:22:04.217Z",
+    "eventType": "JOB_PUBLISHED",
+    "details": {
+      "jobId": "JOB-533",
+      "title": "Senior Lead Architect 1787818924180",
+      "company": "Persistent Systems Corp"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T08:22:04.158Z",
+    "eventType": "USER_SIGNUP",
+    "details": {
+      "userId": "USR-951",
+      "role": "candidate",
+      "email": "test.candidate.1787818924142@domain.com"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T08:22:04.109Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "timestamp": "2026-08-27T08:22:04.106Z"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T08:22:04.072Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "timestamp": "2026-08-27T08:22:04.070Z"
+    }
+  },
+  {
+    "timestamp": "2026-08-27T08:22:01.782Z",
+    "eventType": "SYSTEM_BOOT",
+    "details": {
+      "message": "UTHEVERSITY Storage & Indexing Engine Initialized"
+    }
+  }
+]
