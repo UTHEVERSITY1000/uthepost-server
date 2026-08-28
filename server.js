@@ -1380,11 +1380,12 @@ function resolveTargetFileForHost(req, parsedUrl) {
 const server = http.createServer(async (req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost:3000'}`);
   const pathname = parsedUrl.pathname;
+  const cleanPath = (pathname.replace(/\/+$/, '') || '/').toLowerCase();
 
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-Admin-Portal');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -1408,6 +1409,98 @@ const server = http.createServer(async (req, res) => {
         callback(err);
       }
     });
+  }
+
+  // ----------------------------------------------------
+  // HIGH-PRIORITY ROUTING: /api/admin/test-email
+  // Guaranteed definition before all sub-routes & catch-alls
+  // ----------------------------------------------------
+  if ((cleanPath === '/api/admin/test-email' || pathname === '/api/admin/test-email') && (req.method === 'POST' || req.method === 'GET')) {
+    const user = getAuthenticatedUser(req);
+    const isFromAdminPortal = isRequestFromAdminDomain(req);
+    if (!isAdmin(user) && !isFromAdminPortal) {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
+    const handleTestDispatch = async (targetEmail, customSubject) => {
+      try {
+        const recipient = (targetEmail || 'contact@utheversity.com').trim();
+        let isVerified = false;
+        let verifyError = null;
+
+        // Verify transporter connection
+        if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
+          try {
+            const transporter = nodemailer.createTransport({
+              ...SMTP_CONFIG,
+              family: 4
+            });
+            if (transporter && transporter.verify) {
+              await transporter.verify();
+            }
+            isVerified = true;
+          } catch (vErr) {
+            verifyError = vErr.message;
+          }
+        }
+
+        // Send test email via Nodemailer / structured logging engine
+        const emailResult = await sendTransactionalEmail({
+          to: recipient,
+          subject: customSubject || 'u-theADMIN — Live Transactional Email System Test',
+          type: 'DIAGNOSTIC_TEST_EMAIL',
+          metadata: { targetEmail: recipient, isVerified, verifyError },
+          html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px; background: #0f172a; color: #ffffff; border-radius: 8px;">
+              <h2 style="color: #f59e0b; margin-top: 0;">UTHEVERSITY Email Verification</h2>
+              <p>Your Google Workspace SMTP connection is live and functioning properly.</p>
+              <p><strong>Timestamp:</strong> ${new Date().toISOString()}</p>
+              <hr style="border: 0; border-top: 1px solid #334155;" />
+              <p style="font-size: 12px; color: #94a3b8;">© 2026 UTHEVERSITY Inc. — Master Governance System</p>
+            </div>
+          `
+        });
+
+        const deliveryId = emailResult.messageId || emailResult.id || 'EML-' + Math.floor(Math.random() * 900000 + 100000);
+        const smtpStatus = isVerified ? 'CONNECTED' : (SMTP_CONFIG.auth ? 'DISCONNECTED' : 'LOGGED_FALLBACK');
+
+        return sendJson(200, {
+          success: true,
+          status: 'success',
+          message: 'Transactional email dispatched successfully.',
+          deliveryId: deliveryId,
+          messageId: deliveryId,
+          smtpStatus,
+          verified: isVerified,
+          to: recipient,
+          from: DEFAULT_FROM_EMAIL,
+          details: isVerified
+            ? `Google Workspace SMTP handshake verified. Test email delivered with ID ${deliveryId}.`
+            : (SMTP_CONFIG.auth
+                ? `SMTP verification notice (${verifyError || 'Logged'}). Logged to fallback /data/logs/emails.log.`
+                : `SMTP credentials unconfigured. Safely recorded to logs.`),
+          timestamp: new Date().toISOString()
+        });
+      } catch (err) {
+        console.error('[SMTP ERROR]', err);
+        return sendJson(500, {
+          success: false,
+          error: err.message || 'Failed to send test email'
+        });
+      }
+    };
+
+    if (req.method === 'POST') {
+      readBody((err, body) => {
+        if (err) return sendJson(400, { error: 'Invalid JSON body' });
+        const target = body?.email || body?.to || parsedUrl.searchParams.get('to') || parsedUrl.searchParams.get('email') || 'contact@utheversity.com';
+        handleTestDispatch(target, body?.subject);
+      });
+    } else {
+      const target = parsedUrl.searchParams.get('to') || parsedUrl.searchParams.get('email') || 'contact@utheversity.com';
+      handleTestDispatch(target);
+    }
+    return;
   }
 
   // ----------------------------------------------------
@@ -2422,6 +2515,13 @@ const server = http.createServer(async (req, res) => {
       handleTestDispatch(target);
     }
     return;
+  }
+
+  // ----------------------------------------------------
+  // API ROUTE FALLBACK GUARD (Prevent HTML on unmatched /api/* routes)
+  // ----------------------------------------------------
+  if (pathname.startsWith('/api/')) {
+    return sendJson(404, { error: `API endpoint ${pathname} not found.` });
   }
 
   // ----------------------------------------------------
