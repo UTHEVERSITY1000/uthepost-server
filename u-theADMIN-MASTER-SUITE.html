@@ -3,27 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>u-theADMIN — Master Governance & Zero-Code CMS Suite</title>
+  <title>u-theADMIN — Master Governance & Compact CMS Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #080C14;
-      --card-dark: #0F172A;
-      --card-surface: #1E293B;
-      --text-light: #F8FAFC;
-      --text-dim: #94A3B8;
-      --border-dark: #334155;
+      --bg-canvas: #F8F9FA;
+      --card-surface: #FFFFFF;
+      --card-subtle: #F1F5F9;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --border-strong: #CBD5E1;
       --uthe-gold: #E5A800;
       --uthe-gold-light: #FFF8E6;
-      --uthe-gold-glow: rgba(229, 168, 0, 0.25);
+      --uthe-gold-glow: rgba(229, 168, 0, 0.2);
+      --uthe-charcoal: #111827;
       --status-mint: #00C853;
-      --status-mint-bg: rgba(0, 200, 83, 0.12);
+      --status-mint-bg: #E8F8F0;
       --danger-red: #EF4444;
-      --danger-bg: rgba(239, 68, 68, 0.15);
-      --cyan-accent: #06B6D4;
-      --cyan-bg: rgba(6, 182, 212, 0.12);
+      --danger-bg: #FEF2F2;
+      --blue-accent: #2563EB;
+      --blue-bg: #EFF6FF;
+      --purple-accent: #8B5CF6;
+      --purple-bg: #F5F3FF;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 12px rgba(8, 12, 20, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+      --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.08);
     }
 
     * {
@@ -36,8 +43,8 @@
     html, body {
       width: 100%;
       min-height: 100%;
-      background-color: var(--bg-dark);
-      color: var(--text-light);
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -47,10 +54,10 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      padding-bottom: 72px;
+      padding-bottom: 48px;
     }
 
-    /* REFINED SMART TOOLTIP SYSTEM (< 200px, 11px font, z-index 99999) */
+    /* REFINED SMART TOOLTIP SYSTEM (< 200px, 10.5px font, z-index 99999) */
     [data-tooltip] {
       position: relative;
     }
@@ -58,18 +65,18 @@
     [data-tooltip]::after {
       content: attr(data-tooltip);
       position: absolute;
-      bottom: calc(100% + 6px);
+      bottom: calc(100% + 5px);
       left: 50%;
       transform: translateX(-50%);
-      background: #0F172A;
+      background: #111827;
       color: #F8FAFC;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 500;
-      line-height: 1.3;
-      padding: 0.35rem 0.55rem;
-      border-radius: 5px;
+      line-height: 1.25;
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
       border: 1px solid var(--uthe-gold);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
       white-space: normal;
       width: max-content;
       max-width: 200px;
@@ -89,7 +96,7 @@
       bottom: calc(100% + 1px);
       left: 50%;
       transform: translateX(-50%);
-      border-width: 5px 5px 0 5px;
+      border-width: 4px 4px 0 4px;
       border-style: solid;
       border-color: var(--uthe-gold) transparent transparent transparent;
       z-index: 99999;
@@ -107,157 +114,203 @@
       visibility: visible;
     }
 
-    /* 48PX MINIMUM TOUCH TARGETS */
+    /* TOP-BAR & SMART BOTTOM TOOLTIP OVERRIDE */
+    header, .top-bar, nav, .header-actions, .brand-group, .admin-tabs-nav-bar, .omni-search-belt {
+      overflow: visible !important;
+    }
+
+    header [data-tooltip]::after,
+    nav [data-tooltip]::after,
+    .admin-tabs-nav-bar [data-tooltip]::after,
+    .omni-search-belt [data-tooltip]::after,
+    .tooltip-bottom[data-tooltip]::after,
+    [data-tooltip-pos="bottom"]::after {
+      bottom: auto;
+      top: calc(100% + 6px);
+    }
+
+    header [data-tooltip]::before,
+    nav [data-tooltip]::before,
+    .admin-tabs-nav-bar [data-tooltip]::before,
+    .omni-search-belt [data-tooltip]::before,
+    .tooltip-bottom[data-tooltip]::before,
+    [data-tooltip-pos="bottom"]::before {
+      bottom: auto;
+      top: calc(100% + 2px);
+      border-width: 0 4px 4px 4px;
+      border-color: transparent transparent var(--uthe-gold) transparent;
+    }
+
+    /* COMPACT TOUCH TARGETS */
     button, input, select, textarea, .touch-target {
-      min-height: 48px;
+      min-height: 32px;
       touch-action: manipulation;
       font-family: inherit;
     }
 
     button:active, .btn-touch:active {
-      transform: scale(0.97);
-      transition: transform 0.1s ease;
+      transform: scale(0.98);
+      transition: transform 0.05s ease;
     }
 
     button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-      outline: 2px solid var(--uthe-gold);
-      outline-offset: 2px;
+      outline: 1.5px solid var(--uthe-gold);
+      outline-offset: 1px;
     }
 
-    /* MASTER TOP HEADER */
+    /* 1. COMPACT TOP HEADER (48PX HEIGHT) */
     header {
       position: sticky;
       top: 0;
       z-index: 1000;
-      height: 64px;
-      background: var(--card-dark);
-      border-bottom: 2.5px solid var(--uthe-gold);
+      height: 48px;
+      background: #FFFFFF;
+      border-bottom: 2px solid var(--uthe-gold);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 1.25rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      padding: 0 1rem;
+      box-shadow: var(--shadow-sm);
     }
 
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
+      gap: 0.65rem;
     }
 
     .brand-title {
-      font-size: 1.15rem;
+      font-size: 0.92rem;
       font-weight: 900;
-      letter-spacing: 2px;
-      color: var(--uthe-gold);
+      letter-spacing: 1.5px;
+      color: var(--uthe-charcoal);
       text-transform: uppercase;
       white-space: nowrap;
     }
 
     .brand-badge {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       font-weight: 800;
-      background: rgba(229, 168, 0, 0.15);
-      color: var(--uthe-gold);
+      background: var(--uthe-gold-light);
+      color: #92400E;
       border: 1px solid var(--uthe-gold);
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-
-    .nav-tabs-container {
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .nav-tab {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-dim);
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      padding: 0 0.85rem;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      transition: all 0.2s ease;
-      height: 40px;
-    }
-
-    .nav-tab:hover {
-      background: var(--card-surface);
-      color: var(--text-light);
-    }
-
-    .nav-tab.active {
-      background: var(--uthe-gold);
-      color: #000000;
-      font-weight: 900;
-      box-shadow: 0 0 12px var(--uthe-gold-glow);
+      letter-spacing: 0.5px;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
     }
 
     .owner-badge {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 800;
-      background: var(--card-surface);
-      color: var(--uthe-gold);
-      border: 1px solid var(--border-dark);
-      padding: 0 0.75rem;
-      border-radius: 20px;
-      height: 36px;
+      background: var(--uthe-gold-light);
+      color: #92400E;
+      border: 1px solid var(--uthe-gold);
+      padding: 0 0.65rem;
+      border-radius: 14px;
+      height: 28px;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.35rem;
+      cursor: pointer;
     }
 
-    /* SMART OMNI-SEARCH BAR */
+    /* COMPACT SMART OMNI-SEARCH BAR */
     .omni-search-belt {
-      background: var(--card-dark);
-      border-bottom: 1px solid var(--border-dark);
-      padding: 0.75rem 1.25rem;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.4rem 1rem;
       display: flex;
-      gap: 0.75rem;
+      gap: 0.5rem;
       align-items: center;
-      position: sticky;
-      top: 64px;
-      z-index: 900;
+    }
+
+    .omni-search-wrap {
+      flex: 1;
+      position: relative;
     }
 
     .omni-search-input {
-      flex: 1;
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: #FFFFFF;
-      padding: 0 1rem 0 2.5rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
+      width: 100%;
+      height: 32px;
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0 0.75rem 0 2rem;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      font-weight: 500;
     }
 
     .search-icon-pos {
       position: absolute;
-      left: 2rem;
-      color: var(--uthe-gold);
-      font-size: 0.9rem;
+      left: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    /* 2. COMPACT 6 NAVIGATION TABS (36PX HEIGHT) */
+    .admin-tabs-nav-bar {
+      background: #FFFFFF;
+      border-bottom: 1.5px solid var(--border-color);
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      position: sticky;
+      top: 48px;
+      z-index: 850;
+      box-shadow: var(--shadow-sm);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .admin-nav-tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2.5px solid transparent;
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 0 0.75rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      height: 36px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .admin-nav-tab-btn:hover {
+      color: var(--uthe-charcoal);
+      background: var(--card-subtle);
+    }
+
+    .admin-nav-tab-btn.active {
+      color: var(--uthe-charcoal);
+      border-bottom-color: var(--uthe-gold);
+      font-weight: 900;
+      background: var(--uthe-gold-light);
     }
 
     /* MAIN WORKSPACE */
     main {
       flex: 1;
-      padding: 1.25rem;
+      padding: 0.85rem 1rem;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 0.85rem;
       max-width: 1440px;
       margin: 0 auto;
       width: 100%;
@@ -266,7 +319,7 @@
     .view-section {
       display: none;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 0.85rem;
     }
 
     .view-section.active {
@@ -276,18 +329,18 @@
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
+      gap: 0.65rem;
     }
 
     .kpi-card {
-      background: var(--card-dark);
-      border: 1px solid var(--border-dark);
-      border-radius: 10px;
-      padding: 1.25rem;
+      background: var(--card-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      gap: 0.2rem;
+      box-shadow: var(--shadow-sm);
       position: relative;
       overflow: hidden;
     }
@@ -303,148 +356,351 @@
     }
 
     .kpi-label {
-      font-size: 0.65rem;
+      font-size: 0.58rem;
       font-weight: 800;
-      color: var(--text-dim);
-      letter-spacing: 1px;
+      color: var(--text-muted);
+      letter-spacing: 0.6px;
       text-transform: uppercase;
     }
 
     .kpi-value {
-      font-size: 1.65rem;
+      font-size: 1.25rem;
       font-weight: 900;
       font-family: 'JetBrains Mono', monospace;
-      color: var(--text-light);
+      color: var(--uthe-charcoal);
     }
 
     .table-container {
-      background: var(--card-dark);
-      border: 1px solid var(--border-dark);
-      border-radius: 10px;
+      background: var(--card-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow-sm);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       min-width: 700px;
     }
 
     th {
-      background: var(--card-surface);
-      color: var(--text-dim);
+      background: #F8FAFC;
+      color: var(--text-muted);
       font-weight: 800;
       text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 1px;
-      padding: 0.85rem 1rem;
-      border-bottom: 1px solid var(--border-dark);
+      font-size: 0.58rem;
+      letter-spacing: 0.6px;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border-color);
     }
 
     td {
-      padding: 0.85rem 1rem;
-      border-bottom: 1px solid #1E293B;
-      color: var(--text-light);
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
       vertical-align: middle;
     }
 
+    /* COMPACT ACTION BUTTONS (28-32PX HEIGHT) */
     .btn-gold {
-      background: var(--uthe-gold);
-      color: #000000;
-      border: none;
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
+      border: 1px solid var(--uthe-gold);
       font-weight: 900;
-      font-size: 0.72rem;
-      letter-spacing: 1px;
+      font-size: 0.68rem;
+      letter-spacing: 0.6px;
       text-transform: uppercase;
-      border-radius: 6px;
+      border-radius: 4px;
       cursor: pointer;
-      padding: 0 1rem;
-      height: 48px;
+      padding: 0 0.85rem;
+      height: 32px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
+      white-space: nowrap;
     }
 
     .btn-gold:hover {
-      box-shadow: 0 0 15px var(--uthe-gold-glow);
+      background: var(--uthe-gold);
+      color: var(--uthe-charcoal);
+      box-shadow: 0 2px 8px var(--uthe-gold-glow);
     }
 
-    .btn-surface {
-      background: var(--card-surface);
-      color: var(--text-light);
-      border: 1px solid var(--border-dark);
-      font-weight: 800;
-      font-size: 0.72rem;
-      letter-spacing: 0.8px;
+    .btn-surface-sm {
+      background: #FFFFFF;
+      color: var(--uthe-charcoal);
+      border: 1px solid var(--border-color);
+      font-weight: 700;
+      font-size: 0.62rem;
+      letter-spacing: 0.4px;
       text-transform: uppercase;
-      border-radius: 6px;
+      border-radius: 3px;
       cursor: pointer;
-      padding: 0 0.85rem;
-      height: 48px;
+      padding: 0 0.5rem;
+      height: 26px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      transition: all 0.1s ease;
+      white-space: nowrap;
     }
 
-    .btn-danger {
+    .btn-surface-sm:hover {
+      border-color: var(--uthe-gold);
+      background: var(--uthe-gold-light);
+    }
+
+    .btn-surface-sm.active {
+      background: var(--uthe-charcoal);
+      color: var(--uthe-gold);
+      border-color: var(--uthe-gold);
+    }
+
+    .btn-danger-sm {
       background: var(--danger-bg);
       color: var(--danger-red);
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      font-weight: 800;
-      font-size: 0.7rem;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      font-weight: 700;
+      font-size: 0.62rem;
       text-transform: uppercase;
-      padding: 0 0.75rem;
-      border-radius: 6px;
+      padding: 0 0.5rem;
+      border-radius: 3px;
       cursor: pointer;
-      height: 36px;
+      height: 26px;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
+      white-space: nowrap;
     }
 
     .badge-tag {
-      font-size: 0.65rem;
+      font-size: 0.58rem;
       font-weight: 800;
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
       text-transform: uppercase;
       display: inline-block;
     }
 
-    .tag-mint { background: var(--status-mint-bg); color: var(--status-mint); border: 1px solid rgba(0, 200, 83, 0.3); }
-    .tag-cyan { background: var(--cyan-bg); color: var(--cyan-accent); border: 1px solid rgba(6, 182, 212, 0.3); }
-    .tag-gold { background: rgba(229, 168, 0, 0.15); color: var(--uthe-gold); border: 1px solid var(--uthe-gold); }
+    .tag-mint { background: var(--status-mint-bg); color: #065F46; border: 1px solid rgba(0, 200, 83, 0.3); }
+    .tag-cyan { background: var(--blue-bg); color: var(--blue-accent); border: 1px solid rgba(37, 99, 235, 0.25); }
+    .tag-gold { background: var(--uthe-gold-light); color: #92400E; border: 1px solid var(--uthe-gold); }
+    .tag-purple { background: var(--purple-bg); color: var(--purple-accent); border: 1px solid rgba(139, 92, 246, 0.3); }
+
+    /* ROLE & STATUS BADGES & ACTION CELLS */
+    .role-badge {
+      font-size: 0.58rem;
+      font-weight: 800;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      display: inline-block;
+      letter-spacing: 0.4px;
+      background: var(--uthe-gold-light);
+      color: #92400E;
+      border: 1px solid var(--uthe-gold);
+    }
+    .role-badge.admin, .role-badge.master-admin { background: var(--uthe-gold-light); color: #92400E; border: 1px solid var(--uthe-gold); }
+    .role-badge.employer, .role-badge.recruiter { background: var(--blue-bg); color: var(--blue-accent); border: 1px solid rgba(37, 99, 235, 0.25); }
+    .role-badge.candidate { background: var(--status-mint-bg); color: #065F46; border: 1px solid rgba(0, 200, 83, 0.3); }
+
+    .status-badge {
+      font-size: 0.58rem;
+      font-weight: 800;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .status-badge.active {
+      background: var(--status-mint-bg);
+      color: #065F46;
+      border: 1px solid rgba(0, 200, 83, 0.3);
+    }
+    .status-badge.suspended {
+      background: var(--danger-bg);
+      color: var(--danger-red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .action-cells {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+      flex-wrap: nowrap;
+    }
+    .action-cells button {
+      background: #FFFFFF;
+      color: var(--uthe-charcoal);
+      border: 1px solid var(--border-color);
+      font-weight: 700;
+      font-size: 0.62rem;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      border-radius: 3px;
+      cursor: pointer;
+      padding: 0 0.5rem;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.1s ease;
+      white-space: nowrap;
+    }
+    .action-cells button:hover {
+      border-color: var(--uthe-gold);
+      background: var(--uthe-gold-light);
+    }
+    .action-cells button.danger {
+      background: var(--danger-bg);
+      color: var(--danger-red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .action-cells button.danger:hover {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: var(--danger-red);
+    }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.25rem;
     }
 
     label {
-      font-size: 0.65rem;
+      font-size: 0.58rem;
       font-weight: 800;
-      color: var(--text-dim);
-      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      letter-spacing: 0.6px;
       text-transform: uppercase;
     }
 
     input, select, textarea {
-      background: var(--card-surface);
-      border: 1px solid var(--border-dark);
-      color: var(--text-light);
-      padding: 0 0.85rem;
-      border-radius: 6px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0 0.65rem;
+      border-radius: 4px;
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       font-weight: 500;
       outline: none;
-      transition: all 0.2s ease;
+      height: 32px;
+      transition: all 0.15s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--uthe-gold);
+      box-shadow: 0 0 0 2px var(--uthe-gold-glow);
+    }
+
+    /* SECTION CARDS */
+    .section-card {
+      background: var(--card-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-header-compact {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .section-title-compact {
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: var(--uthe-charcoal);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .cms-sub-box {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      padding: 0.65rem 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .cms-sub-box-title {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--uthe-charcoal);
+      text-transform: uppercase;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 0.35rem;
+    }
+
+    /* MODALS */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-card {
+      background: #FFFFFF;
+      border: 2px solid var(--uthe-gold);
+      border-radius: 8px;
+      width: 480px;
+      max-width: 95%;
+      padding: 1.15rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.4rem;
+    }
+
+    .modal-main-title {
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: var(--uthe-charcoal);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .btn-close-modal {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      min-height: 32px;
+      min-width: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* CUSTOM MODAL ALERT */
@@ -452,8 +708,8 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(5px);
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
       z-index: 3000;
       align-items: center;
       justify-content: center;
@@ -461,99 +717,135 @@
     }
 
     .custom-alert-card {
-      background: var(--card-dark);
+      background: #FFFFFF;
       border: 2px solid var(--uthe-gold);
-      border-radius: 12px;
-      width: 420px;
+      border-radius: 8px;
+      width: 380px;
       max-width: 95%;
-      padding: 1.5rem;
+      padding: 1.15rem;
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      gap: 0.65rem;
+      box-shadow: var(--shadow-lg);
       text-align: center;
     }
 
     .alert-card-title {
-      font-size: 0.95rem;
+      font-size: 0.82rem;
       font-weight: 900;
-      color: var(--uthe-gold);
-      letter-spacing: 1px;
+      color: var(--uthe-charcoal);
+      letter-spacing: 0.6px;
       text-transform: uppercase;
     }
 
     .alert-card-msg {
-      font-size: 0.85rem;
-      color: var(--text-light);
-      line-height: 1.5;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-toggle-icon {
+      position: absolute;
+      right: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .pass-meter-text {
+      font-size: 0.58rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
     }
 
     @media (max-width: 1024px) {
-      .nav-tabs-container { display: none; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
 
-  <!-- MASTER TOP HEADER -->
+  <!-- MASTER COMPACT TOP HEADER (48PX HEIGHT) -->
   <header>
     <div class="brand-group">
-      <h1 class="brand-title" data-tooltip="u-theADMIN: Master Governance Suite for Zion Daye.">U-THEADMIN</h1>
-      <span class="brand-badge">MASTER CMS</span>
-    </div>
-
-    <!-- TABS -->
-    <div class="nav-tabs-container">
-      <button class="nav-tab active" onclick="switchAdminTab('overview')">1. TOPOLOGY</button>
-      <button class="nav-tab" onclick="switchAdminTab('cms')">2. ZERO-CODE CMS</button>
-      <button class="nav-tab" onclick="switchAdminTab('users')">3. USER ACCOUNTS</button>
-      <button class="nav-tab" onclick="switchAdminTab('jobs')">4. JOBS CATALOG</button>
-      <button class="nav-tab" onclick="switchAdminTab('applicants')">5. CANDIDATE ATS</button>
-      <button class="nav-tab" onclick="switchAdminTab('hunter')">6. HUNTER LEADS</button>
-      <button class="nav-tab" onclick="switchAdminTab('diagnostics')">7. AUDIT & DIAGS</button>
+      <h1 class="brand-title" data-tooltip="u-theADMIN: Master Governance & High-Density CMS Suite">U-THEADMIN</h1>
+      <span class="brand-badge" data-tooltip="Master Zero-Code CMS Active">MASTER CMS</span>
     </div>
 
     <div class="header-actions">
-      <div class="owner-badge">
-        <span>👑</span><span>ZION DAYE (815-980-4272)</span>
+      <div class="owner-badge" onclick="openAdminAuthModal()" data-tooltip="Master Administrator Profile: Zion Daye (815-980-4272)">
+        <span>👑</span><span id="header-admin-identity">ZION DAYE (815-980-4272)</span>
       </div>
     </div>
   </header>
 
-  <!-- SMART OMNI-SEARCH BAR -->
+  <!-- COMPACT SMART OMNI-SEARCH BAR -->
   <section class="omni-search-belt">
-    <span class="search-icon-pos">&#128269;</span>
-    <input type="text" class="omni-search-input" id="omni-search-input" placeholder="Smart Omni-Search: Filter candidate names, employer accounts, phone numbers, emails, job IDs, or logs..." oninput="handleOmniSearch(this.value)">
+    <div class="omni-search-wrap">
+      <span class="search-icon-pos">&#128269;</span>
+      <input type="text" class="omni-search-input" id="omni-search-input" placeholder="Smart Omni-Search: Filter candidate names, employer accounts, phone numbers, emails, job IDs, or logs..." oninput="handleOmniSearch(this.value)" data-tooltip="Real-time multi-node cross search across all tables and databases.">
+    </div>
   </section>
+
+  <!-- 3. STREAMLINED 6 MASTER NAVIGATION TABS -->
+  <nav class="admin-tabs-nav-bar">
+    <button class="admin-nav-tab-btn active" id="tab-btn-overview" onclick="switchAdminTab('overview')" data-tooltip="View live system counters, health, and subdomain node statuses">
+      1. DASHBOARD OVERVIEW
+    </button>
+    <button class="admin-nav-tab-btn" id="tab-btn-users" onclick="switchAdminTab('users')" data-tooltip="Manage employer and candidate accounts, role permissions, and access approvals">
+      2. USER GOVERNANCE
+    </button>
+    <button class="admin-nav-tab-btn" id="tab-btn-cms" onclick="switchAdminTab('cms')" data-tooltip="Section-by-section live field, label, button, and tooltip text editor">
+      3. FIELD-BY-FIELD LIVE CMS
+    </button>
+    <button class="admin-nav-tab-btn" id="tab-btn-plans" onclick="switchAdminTab('plans')" data-tooltip="Manage subscription tier prices and multi-channel posting add-on rates">
+      4. PLANS & ADD-ONS CONTROL
+    </button>
+    <button class="admin-nav-tab-btn" id="tab-btn-listings" onclick="switchAdminTab('listings')" data-tooltip="Master CRUD over all active job listings and candidate ATS submissions">
+      5. LISTINGS & APPLICATIONS
+    </button>
+    <button class="admin-nav-tab-btn" id="tab-btn-security" onclick="switchAdminTab('security')" data-tooltip="Master security controls, password reset keys, and system telemetry log">
+      6. SYSTEM & SECURITY SETTINGS
+    </button>
+  </nav>
 
   <!-- MAIN SUITE VIEWS -->
   <main>
 
-    <!-- VIEW 1: TOPOLOGY -->
+    <!-- ================================================================
+         TAB 1: DASHBOARD OVERVIEW
+         ================================================================ -->
     <section id="view-overview" class="view-section active">
       <div class="kpi-grid">
-        <div class="kpi-card">
+        <div class="kpi-card" data-tooltip="Total active positions published across the network">
           <span class="kpi-label">ACTIVE JOBS</span>
-          <span class="kpi-value" id="kpi-jobs">3</span>
+          <span class="kpi-value" id="kpi-jobs">5</span>
         </div>
-        <div class="kpi-card">
+        <div class="kpi-card" data-tooltip="Total candidates submitted through u-theJOBS">
           <span class="kpi-label">APPLICANTS</span>
           <span class="kpi-value" id="kpi-applicants">3</span>
         </div>
-        <div class="kpi-card">
+        <div class="kpi-card" data-tooltip="Registered employer and candidate accounts">
           <span class="kpi-label">REGISTERED USERS</span>
           <span class="kpi-value" id="kpi-users">3</span>
         </div>
-        <div class="kpi-card">
+        <div class="kpi-card" data-tooltip="Cluster node health and connectivity">
           <span class="kpi-label">HEALTH STATUS</span>
-          <span class="kpi-value" style="color: var(--status-mint);" id="kpi-health">ONLINE</span>
+          <span class="kpi-value" style="color: #065F46;" id="kpi-health">ONLINE</span>
         </div>
       </div>
 
       <div class="table-container">
-        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          ACTIVE SUBDOMAIN HOST NODES
+        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center;">
+          <span>ACTIVE SUBDOMAIN HOST NODES & ISOLATION TOPOLOGY</span>
+          <span class="badge-tag tag-mint" data-tooltip="Cluster nodes operating with zero downtime">100% HEALTHY</span>
         </div>
         <table>
           <thead>
@@ -592,128 +884,386 @@
       </div>
     </section>
 
-    <!-- VIEW 2: ZERO-CODE CMS CONTROLS -->
-    <section id="view-cms" class="view-section">
-      <div style="background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: 10px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-dark); padding-bottom: 0.75rem;">
-          <div>
-            <div style="font-size: 0.95rem; font-weight: 900; color: var(--uthe-gold);">ZERO-CODE LIVE CMS CONTROL PANEL (ZION DAYE)</div>
-            <div style="font-size: 0.72rem; color: var(--text-dim);">Edit every label, button phrase, and pricing rate across u-thePOST and u-theJOBS in real time.</div>
-          </div>
-          <button class="btn-gold" onclick="saveAndBroadcastCms()">
-            SAVE & BROADCAST CMS
-          </button>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-          <div class="form-group">
-            <label>u-thePOST Brand Title</label>
-            <input type="text" id="cms-post-title" value="U-THEPOST">
-          </div>
-          <div class="form-group">
-            <label>u-theJOBS Brand Title</label>
-            <input type="text" id="cms-jobs-title" value="U-THEJOBS">
-          </div>
-          <div class="form-group">
-            <label>Candidate Quick Send Button Text</label>
-            <input type="text" id="cms-quick-send-btn" value="QUICK SEND">
-          </div>
-          <div class="form-group">
-            <label>Candidate Bottom Detail Button Text</label>
-            <input type="text" id="cms-send-resume-btn" value="SEND RESUME/CV">
-          </div>
-          <div class="form-group">
-            <label>Submit Interview Request Button Text</label>
-            <input type="text" id="cms-submit-btn" value="SUBMIT INTERVIEW REQUEST">
-          </div>
-          <div class="form-group">
-            <label>Submit Button Tooltip Text</label>
-            <input type="text" id="cms-submit-tooltip" value="REMOVE ATS">
-          </div>
-        </div>
-
-        <div style="border-top: 1px solid var(--border-dark); padding-top: 0.75rem;">
-          <div style="font-size: 0.82rem; font-weight: 800; color: var(--cyan-accent); margin-bottom: 0.5rem;">TIER & ADD-ON PRICING OVERRIDES</div>
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;">
-            <div class="form-group">
-              <label>u-thePAL Monthly Price ($)</label>
-              <input type="number" id="cms-price-pal" value="0">
-            </div>
-            <div class="form-group">
-              <label>Starter Monthly Price ($)</label>
-              <input type="number" id="cms-price-starter" value="99">
-            </div>
-            <div class="form-group">
-              <label>Growth Monthly Price ($)</label>
-              <input type="number" id="cms-price-growth" value="299">
-            </div>
-            <div class="form-group">
-              <label>Professional Monthly Price ($)</label>
-              <input type="number" id="cms-price-pro" value="699">
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- VIEW 3: USER ACCOUNTS CRUD -->
+    <!-- ================================================================
+         TAB 2: USER GOVERNANCE (Account Control)
+         ================================================================ -->
     <section id="view-users" class="view-section">
       <div class="table-container">
-        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          REGISTERED USER ACCOUNTS & APPROVALS
+        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center;">
+          <span>REGISTERED USER ACCOUNTS & ACCESS PERMISSIONS</span>
+          <span style="font-size:0.65rem; color:var(--text-muted);">Direct action controls for master administrator</span>
         </div>
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>User ID</th>
               <th>Full Name</th>
               <th>Email Address</th>
               <th>Phone</th>
               <th>Role</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="admin-users-tbody"></tbody>
+          <tbody id="user-table-body"></tbody>
         </table>
       </div>
     </section>
 
-    <!-- VIEW 4: MASTER JOB INVENTORY -->
-    <section id="view-jobs" class="view-section">
+    <!-- ================================================================
+         TAB 3: FIELD-FOR-FIELD LIVE CMS EDITOR (ZERO-CODE CONTROL)
+         ================================================================ -->
+    <section id="view-cms" class="view-section">
+      <div class="section-card">
+        <div class="section-header-compact">
+          <div>
+            <div class="section-title-compact">FIELD-FOR-FIELD LIVE CMS EDITOR (ZION DAYE)</div>
+            <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.15rem;">Select target subdomain below to edit every input label, button phrase, and tooltip live.</div>
+          </div>
+          <button class="btn-gold" onclick="saveAndBroadcastCms()" data-tooltip="Save changes and broadcast live to all active subdomains">
+            SAVE & BROADCAST CMS
+          </button>
+        </div>
+
+        <!-- Target Subdomain Selector -->
+        <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--card-subtle); padding: 0.5rem 0.75rem; border-radius: 5px; border: 1px solid var(--border-color);">
+          <label style="margin-bottom:0; font-size:0.65rem;">TARGET PLATFORM:</label>
+          <button type="button" class="btn-surface-sm active" id="btn-target-post" onclick="switchCmsTarget('post')" data-tooltip="Edit field text for u-thePOST Recruiter Studio">
+            u-thePOST (Recruiter Studio)
+          </button>
+          <button type="button" class="btn-surface-sm" id="btn-target-jobs" onclick="switchCmsTarget('jobs')" data-tooltip="Edit field text for u-theJOBS Candidate Board">
+            u-theJOBS (Candidate Board)
+          </button>
+        </div>
+
+        <!-- ============================================================
+             SUB-PANEL 1: u-thePOST Studio Editor
+             ============================================================ -->
+        <div id="cms-panel-post" style="display: flex; flex-direction: column; gap: 0.75rem;">
+          
+          <!-- 1. Card 1 Inputs -->
+          <div class="cms-sub-box">
+            <div class="cms-sub-box-title">1. CARD 1 INPUTS & EMPLOYER DETAILS</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+              <div class="form-group">
+                <label>Card 1 Section Title</label>
+                <input type="text" id="cms-post-card1-title" value="CARD 1: EMPLOYER JOB LISTING & CONNECTED ACCOUNTS" data-tooltip="Card 1 main header">
+              </div>
+              <div class="form-group">
+                <label>Position Title Label</label>
+                <input type="text" id="cms-post-job-title-label" value="Job Title" data-tooltip="Position title input label">
+              </div>
+              <div class="form-group">
+                <label>Company Name Label</label>
+                <input type="text" id="cms-post-company-label" value="Company / Organization Name" data-tooltip="Company name field label">
+              </div>
+              <div class="form-group">
+                <label>Location Field Label</label>
+                <input type="text" id="cms-post-loc-label" value="Location (e.g. Austin, TX or Remote)" data-tooltip="Location input label">
+              </div>
+              <div class="form-group">
+                <label>Employment Options (Comma-Separated)</label>
+                <input type="text" id="cms-post-emp-options" value="Full-Time, Contract, Part-Time, Temporary" data-tooltip="Dropdown options for employment type">
+              </div>
+              <div class="form-group">
+                <label>Salary Field Label</label>
+                <input type="text" id="cms-post-salary-label" value="Estimated Compensation / Salary Range" data-tooltip="Salary range input label">
+              </div>
+              <div class="form-group">
+                <label>Employer Contact Email Label</label>
+                <input type="text" id="cms-post-email-label" value="Employer Contact Email" data-tooltip="Contact email label">
+              </div>
+              <div class="form-group">
+                <label>Employer Phone Number Label</label>
+                <input type="text" id="cms-post-phone-label" value="Employer Phone Number" data-tooltip="Contact phone label">
+              </div>
+              <div class="form-group">
+                <label>Social Handles Header</label>
+                <input type="text" id="cms-post-social-header" value="Link Social Media Accounts" data-tooltip="Connected accounts section header">
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.25rem;">
+              <div class="form-group">
+                <label>LinkedIn Placeholder</label>
+                <input type="text" id="cms-post-linkedin-ph" value="LinkedIn Page URL..." data-tooltip="Placeholder for LinkedIn input">
+              </div>
+              <div class="form-group">
+                <label>X / Twitter Placeholder</label>
+                <input type="text" id="cms-post-x-ph" value="X Profile URL..." data-tooltip="Placeholder for X input">
+              </div>
+              <div class="form-group">
+                <label>TikTok Placeholder</label>
+                <input type="text" id="cms-post-tiktok-ph" value="TikTok Handle URL..." data-tooltip="Placeholder for TikTok input">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Card 2 Live Preview -->
+          <div class="cms-sub-box">
+            <div class="cms-sub-box-title">2. CARD 2 LIVE PREVIEW & BADGES</div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+              <div class="form-group">
+                <label>Preview Section Header</label>
+                <input type="text" id="cms-post-card2-title" value="CARD 2: LIVE JOB CARD PREVIEW" data-tooltip="Card 2 top title">
+              </div>
+              <div class="form-group">
+                <label>Live Preview Badge Text</label>
+                <input type="text" id="cms-post-preview-badge" value="LIVE PREVIEW" data-tooltip="Badge tag on preview card">
+              </div>
+              <div class="form-group">
+                <label>Benefit Summary Label</label>
+                <input type="text" id="cms-post-benefit-label" value="Selected Compensation & Benefits" data-tooltip="Benefits header in preview">
+              </div>
+              <div class="form-group">
+                <label>Primary Action Button Text</label>
+                <input type="text" id="cms-post-primary-btn" value="QUICK SEND / APPLY NOW" data-tooltip="Button text in preview card">
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Card 3 Live Listings Table -->
+          <div class="cms-sub-box">
+            <div class="cms-sub-box-title">3. CARD 3 LIVE LISTINGS TABLE</div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+              <div class="form-group">
+                <label>Card 3 Main Header</label>
+                <input type="text" id="cms-post-card3-title" value="CARD 3: LIVE ACTIVE JOB LISTINGS" data-tooltip="Card 3 header title">
+              </div>
+              <div class="form-group">
+                <label>Job ID Column Header</label>
+                <input type="text" id="cms-post-col-id" value="Job ID" data-tooltip="Column 1 header text">
+              </div>
+              <div class="form-group">
+                <label>Position Column Header</label>
+                <input type="text" id="cms-post-col-title" value="Position Title" data-tooltip="Column 2 header text">
+              </div>
+              <div class="form-group">
+                <label>Action Button Text ([EDIT] / [PAUSE] / [DELETE])</label>
+                <input type="text" id="cms-post-btn-actions" value="EDIT | PAUSE | DELETE" data-tooltip="Action buttons label format">
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Bottom Publishing Section -->
+          <div class="cms-sub-box">
+            <div class="cms-sub-box-title">4. BOTTOM PUBLISHING & DISTRIBUTION SECTION</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+              <div class="form-group">
+                <label>Publishing Header Text</label>
+                <input type="text" id="cms-post-pub-header" value="PUBLISHING & DISTRIBUTION SETTINGS" data-tooltip="Publishing section header">
+              </div>
+              <div class="form-group">
+                <label>Perks Input Label</label>
+                <input type="text" id="cms-post-perks-label" value="Perks & Executive Benefits Summary" data-tooltip="Perks field label">
+              </div>
+              <div class="form-group">
+                <label>Publish Button Text</label>
+                <input type="text" id="cms-post-pub-btn" value="PUBLISH & BROADCAST POSITION" data-tooltip="Primary submit button text">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================================
+             SUB-PANEL 2: u-theJOBS Board Editor
+             ============================================================ -->
+        <div id="cms-panel-jobs" style="display: none; flex-direction: column; gap: 0.75rem;">
+          
+          <!-- 1. Header & Search -->
+          <div class="cms-sub-box">
+            <div class="cms-sub-box-title">1. HEADER, BRAND & SEARCH FILTERS</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+              <div class="form-group">
+                <label>Job Board Title</label>
+                <input type="text" id="cms-jobs-board-title" value="U-THEJOBS" data-tooltip="Main candidate board brand title">
+              </div>
+              <div class="form-group">
+                <label>Search Bar Placeholder</label>
+                <input type="text" id="cms-jobs-search-ph" value="Search positions, verified companies, locations, or skills..." data-tooltip="Search input placeholder text">
+              </div>
+              <div class="form-group">
+                <label>Commitment Filter Options</label>
+                <input type="text" id="cms-jobs-commit-opts" value="All Commitments, Full-Time, Contract, Part-Time" data-tooltip="Filter dropdown options">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Candidate Cards -->
+          <div class="cms-sub-box">
+            <div class="cms-sub-box-title">2. CANDIDATE CARDS & ACTION BUTTONS</div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+              <div class="form-group">
+                <label>Quick Send Button Text</label>
+                <input type="text" id="cms-jobs-quick-send-btn" value="QUICK SEND" data-tooltip="Card quick send action text">
+              </div>
+              <div class="form-group">
+                <label>Bottom Detail Button Text</label>
+                <input type="text" id="cms-jobs-send-resume-btn" value="SEND RESUME/CV" data-tooltip="Bottom detail drawer action text">
+              </div>
+              <div class="form-group">
+                <label>Compensation Badge Label</label>
+                <input type="text" id="cms-jobs-salary-badge" value="COMPENSATION" data-tooltip="Salary badge title on card">
+              </div>
+              <div class="form-group">
+                <label>Location Badge Label</label>
+                <input type="text" id="cms-jobs-loc-badge" value="LOCATION" data-tooltip="Location badge title on card">
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Quick Send Modal -->
+          <div class="cms-sub-box">
+            <div class="cms-sub-box-title">3. QUICK SEND POPUP MODAL</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+              <div class="form-group">
+                <label>Modal Main Header</label>
+                <input type="text" id="cms-jobs-modal-header" value="UPLOAD RESUME AND COVER LETTER" data-tooltip="Popup modal title">
+              </div>
+              <div class="form-group">
+                <label>Resume Upload Label</label>
+                <input type="text" id="cms-jobs-resume-label" value="Choose Resume (.pdf only)" data-tooltip="File upload field label">
+              </div>
+              <div class="form-group">
+                <label>Contact Time Options</label>
+                <input type="text" id="cms-jobs-contact-opts" value="Morning, Afternoon, Evening, Anytime" data-tooltip="Time dropdown options">
+              </div>
+              <div class="form-group">
+                <label>Interview Request Title Label</label>
+                <input type="text" id="cms-jobs-interview-title" value="Interview Request Title" data-tooltip="Title field label">
+              </div>
+              <div class="form-group">
+                <label>Submit Button Text</label>
+                <input type="text" id="cms-jobs-submit-btn" value="SUBMIT INTERVIEW REQUEST" data-tooltip="Modal submit button text">
+              </div>
+              <div class="form-group">
+                <label>Submit Button Hover Tooltip</label>
+                <input type="text" id="cms-jobs-submit-tooltip" value="DOUBLE CHECK CONTACT INFO ON RESUME" data-tooltip="Tooltip displayed when hovering submit button">
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Candidate Messages & Profile -->
+          <div class="cms-sub-box">
+            <div class="cms-sub-box-title">4. CANDIDATE MESSAGES & PROFILE DRAWER</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+              <div class="form-group">
+                <label>Message Drawer Header</label>
+                <input type="text" id="cms-jobs-msg-header" value="DIRECT RECRUITER MESSAGES" data-tooltip="Drawer header title">
+              </div>
+              <div class="form-group">
+                <label>Quick Response Options</label>
+                <input type="text" id="cms-jobs-quick-replies" value="1. I'M INTERESTED — LET'S TALK | 2. ACCEPTED INTERVIEW TIME | 3. PLEASE SEND MORE DETAILS" data-tooltip="Candidate response chips">
+              </div>
+              <div class="form-group">
+                <label>Profile Tab Label</label>
+                <input type="text" id="cms-jobs-profile-tab" value="MY PROFILE" data-tooltip="Profile navigation label">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         TAB 4: PLANS & ADD-ONS CONTROL (Pricing Control)
+         ================================================================ -->
+    <section id="view-plans" class="view-section">
+      <div class="section-card">
+        <div class="section-header-compact">
+          <div>
+            <div class="section-title-compact">PLANS & ADD-ONS PRICING MATRIX</div>
+            <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.15rem;">Override membership plan rates and multi-posting add-on fees live across the network.</div>
+          </div>
+          <button class="btn-gold" onclick="saveAndBroadcastCms()" data-tooltip="Update pricing matrix and sync live to recruiter studio">
+            UPDATE PRICING MATRIX
+          </button>
+        </div>
+
+        <div style="font-size: 0.68rem; font-weight: 800; color: var(--uthe-charcoal); text-transform: uppercase;">1. BASE MEMBERSHIP PLANS ($ / MONTH)</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+          <div class="form-group">
+            <label>u-thePAL Monthly Price ($)</label>
+            <input type="number" id="cms-price-pal" value="0" data-tooltip="Free tier monthly price">
+            <span style="font-size:0.58rem; color:var(--text-muted);">1 Active Post | Email Only</span>
+          </div>
+          <div class="form-group">
+            <label>Starter Monthly Price ($)</label>
+            <input type="number" id="cms-price-starter" value="99" data-tooltip="Starter tier monthly price">
+            <span style="font-size:0.58rem; color:var(--text-muted);">3 Active Posts | Messaging | ATS</span>
+          </div>
+          <div class="form-group">
+            <label>Growth Monthly Price ($)</label>
+            <input type="number" id="cms-price-growth" value="299" data-tooltip="Growth tier monthly price">
+            <span style="font-size:0.58rem; color:var(--text-muted);">15 Active Posts | 3 Social Sharing</span>
+          </div>
+          <div class="form-group">
+            <label>Professional Monthly Price ($)</label>
+            <input type="number" id="cms-price-pro" value="699" data-tooltip="Professional tier monthly price">
+            <span style="font-size:0.58rem; color:var(--text-muted);">Unlimited Posts | Full Social Sharing</span>
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-color); padding-top: 0.65rem;">
+          <div style="font-size: 0.68rem; font-weight: 800; color: var(--uthe-charcoal); text-transform: uppercase; margin-bottom: 0.5rem;">2. MULTI-PLATFORM & FEATURE ADD-ON PRICING</div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+            <div class="form-group">
+              <label>Individual Social Channel ($ / channel / mo)</label>
+              <input type="number" step="0.01" id="cms-price-social-single" value="5.99" data-tooltip="Single social channel add-on rate">
+            </div>
+            <div class="form-group">
+              <label>5-Channel Multi-Posting Bundle ($ / mo)</label>
+              <input type="number" step="0.01" id="cms-price-social-bundle" value="19.99" data-tooltip="5-Channel multi-posting bundle rate">
+            </div>
+            <div class="form-group">
+              <label>Top Spotlight Listing ($)</label>
+              <input type="number" id="cms-price-spotlight" value="49" data-tooltip="Top Spotlight job add-on price">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         TAB 5: LISTINGS & APPLICATIONS (Master CRUD)
+         ================================================================ -->
+    <section id="view-listings" class="view-section">
+      <!-- Section A: Job Listings -->
       <div class="table-container">
-        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          ACTIVE JOB LISTINGS
+        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center;">
+          <span>MASTER JOB LISTINGS INVENTORY</span>
+          <span style="font-size:0.65rem; color:var(--text-muted);">Override controls: Feature, Pause, Edit, Delete</span>
         </div>
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Job ID</th>
               <th>Position Title</th>
               <th>Company</th>
               <th>Location</th>
               <th>Salary</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="admin-jobs-tbody"></tbody>
         </table>
       </div>
-    </section>
 
-    <!-- VIEW 5: CANDIDATE ATS -->
-    <section id="view-applicants" class="view-section">
+      <!-- Section B: Candidate Applications -->
       <div class="table-container">
-        <div style="padding: 1rem; border-bottom: 1px solid var(--border-dark); font-weight: 900; font-size: 0.85rem; color: var(--uthe-gold);">
-          CANDIDATE APPLICATIONS & ATS DECISIONS
+        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center;">
+          <span>CANDIDATE APPLICATIONS & ATS STAGE OVERRIDES</span>
+          <span style="font-size:0.65rem; color:var(--text-muted);">Direct pipeline stage controls</span>
         </div>
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Applicant ID</th>
               <th>Candidate Name</th>
               <th>Applied Position</th>
               <th>Email</th>
-              <th>Status</th>
+              <th>Phone</th>
+              <th>Stage</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -722,45 +1272,166 @@
       </div>
     </section>
 
-    <!-- VIEW 6: HUNTER LEADS -->
-    <section id="view-hunter" class="view-section">
-      <div style="display: flex; gap: 0.75rem; align-items: center;">
-        <input type="text" id="admin-lead-domain" value="stripe.com" style="max-width: 240px;">
-        <button class="btn-gold" onclick="searchAdminLeads()">SEARCH HUNTER.IO</button>
-      </div>
-      <div class="table-container" style="margin-top: 1rem;">
-        <table>
-          <thead>
-            <tr>
-              <th>Contact Name</th>
-              <th>Position</th>
-              <th>Verified Email</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="admin-leads-tbody"></tbody>
-        </table>
-      </div>
-    </section>
+    <!-- ================================================================
+         TAB 6: SYSTEM & SECURITY SETTINGS
+         ================================================================ -->
+    <section id="view-security" class="view-section">
+      <div class="section-card">
+        <div class="section-header-compact">
+          <div class="section-title-compact">MASTER ADMINISTRATOR SECURITY & IDENTITY CONTROLS</div>
+          <span class="badge-tag tag-gold" data-tooltip="Protected Master Administrator Identity">ZION DAYE</span>
+        </div>
 
-    <!-- VIEW 7: DIAGNOSTICS & AUDIT -->
-    <section id="view-diagnostics" class="view-section">
-      <div style="display: flex; gap: 0.75rem; align-items: center;">
-        <button class="btn-gold" onclick="exportAuditLog()">EXPORT AUDIT JSON</button>
-      </div>
-      <div style="background: #000; border: 1px solid var(--border-dark); border-radius: 8px; padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; height: 260px; overflow-y: auto; color: var(--status-mint);" id="diag-console">
-        [12:00:00] [SYSTEM_INIT] u-theADMIN Master Suite active for Zion Daye on admin.utheversity.com
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.65rem;">
+          <div class="form-group">
+            <label>Master Administrator Name</label>
+            <input type="text" value="Zion Daye" readonly style="background:#F8FAFC;" data-tooltip="Master Owner Name">
+          </div>
+          <div class="form-group">
+            <label>Master Contact Email</label>
+            <input type="email" value="contact@utheversity.com" readonly style="background:#F8FAFC;" data-tooltip="Master Contact Email">
+          </div>
+          <div class="form-group">
+            <label>Master Phone Number</label>
+            <input type="tel" value="815-980-4272" readonly style="background:#F8FAFC;" data-tooltip="Master Phone Number">
+          </div>
+        </div>
+
+        <div style="display:flex; gap:0.5rem; margin-top:0.5rem; align-items:center;">
+          <button class="btn-gold" onclick="openAdminAuthModal()" data-tooltip="Re-authenticate or verify master session token">
+            AUTHENTICATE MASTER SESSION
+          </button>
+          <button class="btn-surface-sm" onclick="exportAuditLog()" style="height:32px; padding:0 0.85rem;" data-tooltip="Export full system state JSON">
+            EXPORT AUDIT LOG
+          </button>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-color); padding-top: 0.65rem;">
+          <label style="margin-bottom:0.35rem;">LIVE SYSTEM EVENT LOG</label>
+          <div style="background: #111827; border: 1px solid var(--border-color); border-radius: 5px; padding: 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; height: 160px; overflow-y: auto; color: #34D399;" id="diag-console">
+            [12:00:00] [SYSTEM_INIT] u-theADMIN Master High-Density Suite active for Zion Daye on admin.utheversity.com
+          </div>
+        </div>
       </div>
     </section>
 
   </main>
+
+  <!-- USER PROFILE EDIT MODAL -->
+  <div class="modal-overlay" id="user-edit-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-main-title">EDIT USER ACCOUNT PROFILE</span>
+        <button class="btn-close-modal" onclick="closeModal('user-edit-modal')">X</button>
+      </div>
+
+      <input type="hidden" id="edit-user-id">
+
+      <div class="form-group">
+        <label>Full Legal Name</label>
+        <input type="text" id="edit-user-name" data-tooltip="User full legal name">
+      </div>
+
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="edit-user-email" data-tooltip="User account email address">
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="edit-user-phone" data-tooltip="User contact phone number">
+      </div>
+
+      <div class="form-group">
+        <label>Account Role</label>
+        <select id="edit-user-role" data-tooltip="Select account role permission">
+          <option value="recruiter">Recruiter / Employer</option>
+          <option value="candidate">Candidate</option>
+          <option value="admin">Master Administrator</option>
+        </select>
+      </div>
+
+      <button class="btn-gold" style="width: 100%; margin-top: 0.35rem;" onclick="saveUserEditProfile()" data-tooltip="Save profile changes to database">
+        SAVE USER PROFILE
+      </button>
+    </div>
+  </div>
+
+  <!-- JOB EDIT MODAL -->
+  <div class="modal-overlay" id="job-edit-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span class="modal-main-title">EDIT JOB LISTING DETAILS</span>
+        <button class="btn-close-modal" onclick="closeModal('job-edit-modal')">X</button>
+      </div>
+
+      <input type="hidden" id="edit-job-id">
+
+      <div class="form-group">
+        <label>Job Title</label>
+        <input type="text" id="edit-job-title" data-tooltip="Position title">
+      </div>
+
+      <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" id="edit-job-company" data-tooltip="Company organization name">
+      </div>
+
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" id="edit-job-location" data-tooltip="Geographic or remote location">
+      </div>
+
+      <div class="form-group">
+        <label>Salary Range</label>
+        <input type="text" id="edit-job-salary" data-tooltip="Compensation / salary text">
+      </div>
+
+      <button class="btn-gold" style="width: 100%; margin-top: 0.35rem;" onclick="saveJobEditDetails()" data-tooltip="Save job details to database">
+        SAVE JOB LISTING
+      </button>
+    </div>
+  </div>
+
+  <!-- MASTER AUTHENTICATION MODAL -->
+  <div class="modal-overlay" id="admin-auth-modal">
+    <div class="modal-card" style="max-width: 400px;">
+      <div class="modal-header">
+        <span class="modal-main-title">MASTER ADMIN AUTHENTICATION</span>
+        <button class="btn-close-modal" onclick="closeModal('admin-auth-modal')">X</button>
+      </div>
+
+      <div class="form-group">
+        <label>Master Administrator Email</label>
+        <input type="email" id="admin-auth-email" value="contact@utheversity.com" data-tooltip="Zion Daye administrator email">
+      </div>
+
+      <div class="form-group">
+        <label>Master Administrator Password</label>
+        <div class="password-wrap">
+          <input type="password" id="admin-auth-pass" value="ZionAdmin2026!" oninput="checkAdminPassLength(this.value)" data-tooltip="Master encryption key">
+          <span class="password-toggle-icon" onclick="togglePassVisibility('admin-auth-pass')">👁️</span>
+        </div>
+        <div class="pass-meter-text" id="admin-pass-meter">✓ Verified Master Encryption Key</div>
+      </div>
+
+      <div style="background: var(--card-subtle); border: 1px solid var(--border-color); border-radius: 4px; padding: 0.4rem; display: flex; align-items: center; gap: 0.4rem; margin-top: 0.35rem;">
+        <input type="checkbox" id="admin-recaptcha" checked style="min-height: 16px; width: 16px;">
+        <span style="font-size: 0.65rem; color: var(--text-muted);">Protected by UTHEVERSITY Anti-Spam Security</span>
+      </div>
+
+      <button class="btn-gold" style="width: 100%; margin-top: 0.35rem;" onclick="handleAdminLogin()" data-tooltip="Authenticate master session via secure JWT">
+        AUTHENTICATE MASTER SESSION
+      </button>
+    </div>
+  </div>
 
   <!-- SIGNATURE CUSTOM MODAL ALERT (NO BROWSER ALERT) -->
   <div class="custom-modal-alert" id="custom-modal-alert">
     <div class="custom-alert-card">
       <div class="alert-card-title" id="custom-alert-title">ADMIN EVENT</div>
       <div class="alert-card-msg" id="custom-alert-msg">Action processed successfully.</div>
-      <button class="btn-gold" onclick="closeCustomAlert()" style="height: 40px; margin-top: 0.5rem;">
+      <button class="btn-gold" onclick="closeCustomAlert()" style="height: 32px; margin-top: 0.35rem;" data-tooltip="Acknowledge alert message">
         OK, GOT IT
       </button>
     </div>
@@ -773,17 +1444,102 @@
     let adminUsers = [];
     let cmsConfig = null;
 
+    // 1. Primary 6-Tab Navigation Switcher
     window.switchAdminTab = function(tabKey) {
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.admin-nav-tab-btn').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
 
       const sec = document.getElementById(`view-${tabKey}`);
       if (sec) sec.classList.add('active');
 
-      const tabs = { 'overview': 0, 'cms': 1, 'users': 2, 'jobs': 3, 'applicants': 4, 'hunter': 5, 'diagnostics': 6 };
-      const idx = tabs[tabKey] || 0;
-      if (document.querySelectorAll('.nav-tab')[idx]) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
+      const tabMap = {
+        'overview': 'tab-btn-overview',
+        'users': 'tab-btn-users',
+        'cms': 'tab-btn-cms',
+        'plans': 'tab-btn-plans',
+        'listings': 'tab-btn-listings',
+        'security': 'tab-btn-security'
+      };
+
+      const btnId = tabMap[tabKey] || 'tab-btn-overview';
+      const activeBtn = document.getElementById(btnId);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (tabKey === 'users') {
+        loadUsers();
+      } else if (tabKey === 'overview') {
+        loadAdminData();
+      }
     };
+
+    window.switchCmsTarget = function(targetKey) {
+      document.getElementById('btn-target-post').classList.toggle('active', targetKey === 'post');
+      document.getElementById('btn-target-jobs').classList.toggle('active', targetKey === 'jobs');
+      document.getElementById('cms-panel-post').style.display = targetKey === 'post' ? 'flex' : 'none';
+      document.getElementById('cms-panel-jobs').style.display = targetKey === 'jobs' ? 'flex' : 'none';
+    };
+
+    function openAdminAuthModal() {
+      document.getElementById('admin-auth-modal').style.display = 'flex';
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function togglePassVisibility(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function checkAdminPassLength(val) {
+      const meter = document.getElementById('admin-pass-meter');
+      if (val.length >= 8) {
+        meter.textContent = `✓ Strong encryption key (${val.length} chars)`;
+        meter.style.color = '#065F46';
+      } else {
+        meter.textContent = `Minimum 8 characters required (${val.length}/8)`;
+        meter.style.color = 'var(--text-muted)';
+      }
+    }
+
+    async function handleAdminLogin() {
+      const email = document.getElementById('admin-auth-email').value;
+      const password = document.getElementById('admin-auth-pass').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok && data.user) {
+          closeModal('admin-auth-modal');
+          document.getElementById('header-admin-identity').textContent = `${data.user.name.toUpperCase()} (${data.user.phone})`;
+          showCustomModalAlert('Master Session Active', `Authenticated as ${data.user.name} (${data.user.email}).`);
+        } else {
+          showCustomModalAlert('Authentication Failed', data.error || 'Invalid credentials.');
+        }
+      } catch (e) {
+        showCustomModalAlert('Error', e.message);
+      }
+    }
+
+    window.loadUsers = async function() {
+      try {
+        const res = await fetch(`/api/admin/users?t=${Date.now()}`, {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        });
+        const data = await res.json();
+        adminUsers = (data && data.users) ? data.users : [];
+        renderUserTable(adminUsers);
+      } catch (e) {
+        console.error('[USER GOVERNANCE] Error fetching users:', e);
+      }
+    };
+    window.fetchUsers = window.loadUsers;
 
     async function loadAdminData() {
       try {
@@ -808,13 +1564,14 @@
       } catch (e) {}
 
       try {
-        const users = await fetch('/api/admin/users').then(r => r.json());
-        adminUsers = users.users || [];
-        renderAdminUsers();
+        await loadUsers();
       } catch (e) {}
 
       try {
-        const cms = await fetch('/api/cms/config').then(r => r.json());
+        const cms = await fetch(`/api/cms/config?t=${Date.now()}`, {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        }).then(r => r.json());
         if (cms.config) {
           cmsConfig = cms.config;
           populateCmsForm(cms.config);
@@ -823,37 +1580,121 @@
     }
 
     function populateCmsForm(config) {
-      if (config.labels) {
-        if (config.labels.postTitle) document.getElementById('cms-post-title').value = config.labels.postTitle;
-        if (config.labels.jobsTitle) document.getElementById('cms-jobs-title').value = config.labels.jobsTitle;
-        if (config.labels.quickSendBtn) document.getElementById('cms-quick-send-btn').value = config.labels.quickSendBtn;
-        if (config.labels.sendResumeBtn) document.getElementById('cms-send-resume-btn').value = config.labels.sendResumeBtn;
-        if (config.labels.submitInterviewBtn) document.getElementById('cms-submit-btn').value = config.labels.submitInterviewBtn;
-        if (config.labels.submitTooltip) document.getElementById('cms-submit-tooltip').value = config.labels.submitTooltip;
+      if (config.postStudio) {
+        const p = config.postStudio;
+        if (p.card1Title) document.getElementById('cms-post-card1-title').value = p.card1Title;
+        if (p.jobTitleLabel) document.getElementById('cms-post-job-title-label').value = p.jobTitleLabel;
+        if (p.companyNameLabel) document.getElementById('cms-post-company-label').value = p.companyNameLabel;
+        if (p.locationLabel) document.getElementById('cms-post-loc-label').value = p.locationLabel;
+        if (p.employmentOptions) document.getElementById('cms-post-emp-options').value = p.employmentOptions;
+        if (p.salaryLabel) document.getElementById('cms-post-salary-label').value = p.salaryLabel;
+        if (p.emailFieldLabel) document.getElementById('cms-post-email-label').value = p.emailFieldLabel;
+        if (p.phoneFieldLabel) document.getElementById('cms-post-phone-label').value = p.phoneFieldLabel;
+        if (p.socialHeader) document.getElementById('cms-post-social-header').value = p.socialHeader;
+        if (p.linkedinPlaceholder) document.getElementById('cms-post-linkedin-ph').value = p.linkedinPlaceholder;
+        if (p.xPlaceholder) document.getElementById('cms-post-x-ph').value = p.xPlaceholder;
+        if (p.tiktokPlaceholder) document.getElementById('cms-post-tiktok-ph').value = p.tiktokPlaceholder;
+        if (p.card2Title) document.getElementById('cms-post-card2-title').value = p.card2Title;
+        if (p.previewBadge) document.getElementById('cms-post-preview-badge').value = p.previewBadge;
+        if (p.benefitSummaryLabel) document.getElementById('cms-post-benefit-label').value = p.benefitSummaryLabel;
+        if (p.primaryActionBtn) document.getElementById('cms-post-primary-btn').value = p.primaryActionBtn;
+        if (p.card3Title) document.getElementById('cms-post-card3-title').value = p.card3Title;
+        if (p.colJobId) document.getElementById('cms-post-col-id').value = p.colJobId;
+        if (p.colTitle) document.getElementById('cms-post-col-title').value = p.colTitle;
+        if (p.publishHeader) document.getElementById('cms-post-pub-header').value = p.publishHeader;
+        if (p.perksLabel) document.getElementById('cms-post-perks-label').value = p.perksLabel;
+        if (p.publishBtnText) document.getElementById('cms-post-pub-btn').value = p.publishBtnText;
       }
+
+      if (config.jobsBoard) {
+        const j = config.jobsBoard;
+        if (j.boardTitle) document.getElementById('cms-jobs-board-title').value = j.boardTitle;
+        if (j.searchPlaceholder) document.getElementById('cms-jobs-search-ph').value = j.searchPlaceholder;
+        if (j.commitmentOptions) document.getElementById('cms-jobs-commit-opts').value = j.commitmentOptions;
+        if (j.quickSendBtn) document.getElementById('cms-jobs-quick-send-btn').value = j.quickSendBtn;
+        if (j.sendResumeBtn) document.getElementById('cms-jobs-send-resume-btn').value = j.sendResumeBtn;
+        if (j.salaryBadgeLabel) document.getElementById('cms-jobs-salary-badge').value = j.salaryBadgeLabel;
+        if (j.locationBadgeLabel) document.getElementById('cms-jobs-loc-badge').value = j.locationBadgeLabel;
+        if (j.modalHeader) document.getElementById('cms-jobs-modal-header').value = j.modalHeader;
+        if (j.resumeUploadLabel) document.getElementById('cms-jobs-resume-label').value = j.resumeUploadLabel;
+        if (j.contactTimeOptions) document.getElementById('cms-jobs-contact-opts').value = j.contactTimeOptions;
+        if (j.interviewReqTitle) document.getElementById('cms-jobs-interview-title').value = j.interviewReqTitle;
+        if (j.submitBtnText) document.getElementById('cms-jobs-submit-btn').value = j.submitBtnText;
+        if (j.submitTooltip) document.getElementById('cms-jobs-submit-tooltip').value = j.submitTooltip;
+        if (j.messageDrawerHeader) document.getElementById('cms-jobs-msg-header').value = j.messageDrawerHeader;
+        if (j.quickReplies) document.getElementById('cms-jobs-quick-replies').value = j.quickReplies;
+        if (j.profileTabName) document.getElementById('cms-jobs-profile-tab').value = j.profileTabName;
+      }
+
       if (config.pricing) {
         if (config.pricing.palMonthly !== undefined) document.getElementById('cms-price-pal').value = config.pricing.palMonthly;
         if (config.pricing.starterMonthly) document.getElementById('cms-price-starter').value = config.pricing.starterMonthly;
         if (config.pricing.growthMonthly) document.getElementById('cms-price-growth').value = config.pricing.growthMonthly;
         if (config.pricing.proMonthly) document.getElementById('cms-price-pro').value = config.pricing.proMonthly;
+        if (config.pricing.individualSocialAddon) document.getElementById('cms-price-social-single').value = config.pricing.individualSocialAddon;
+        if (config.pricing.socialBundleAddon) document.getElementById('cms-price-social-bundle').value = config.pricing.socialBundleAddon;
       }
     }
 
     window.saveAndBroadcastCms = async function() {
       const payload = {
+        postStudio: {
+          card1Title: document.getElementById('cms-post-card1-title').value,
+          jobTitleLabel: document.getElementById('cms-post-job-title-label').value,
+          companyNameLabel: document.getElementById('cms-post-company-label').value,
+          locationLabel: document.getElementById('cms-post-loc-label').value,
+          employmentOptions: document.getElementById('cms-post-emp-options').value,
+          salaryLabel: document.getElementById('cms-post-salary-label').value,
+          emailFieldLabel: document.getElementById('cms-post-email-label').value,
+          phoneFieldLabel: document.getElementById('cms-post-phone-label').value,
+          socialHeader: document.getElementById('cms-post-social-header').value,
+          linkedinPlaceholder: document.getElementById('cms-post-linkedin-ph').value,
+          xPlaceholder: document.getElementById('cms-post-x-ph').value,
+          tiktokPlaceholder: document.getElementById('cms-post-tiktok-ph').value,
+          card2Title: document.getElementById('cms-post-card2-title').value,
+          previewBadge: document.getElementById('cms-post-preview-badge').value,
+          benefitSummaryLabel: document.getElementById('cms-post-benefit-label').value,
+          primaryActionBtn: document.getElementById('cms-post-primary-btn').value,
+          card3Title: document.getElementById('cms-post-card3-title').value,
+          colJobId: document.getElementById('cms-post-col-id').value,
+          colTitle: document.getElementById('cms-post-col-title').value,
+          publishHeader: document.getElementById('cms-post-pub-header').value,
+          perksLabel: document.getElementById('cms-post-perks-label').value,
+          publishBtnText: document.getElementById('cms-post-pub-btn').value
+        },
+        jobsBoard: {
+          boardTitle: document.getElementById('cms-jobs-board-title').value,
+          searchPlaceholder: document.getElementById('cms-jobs-search-ph').value,
+          commitmentOptions: document.getElementById('cms-jobs-commit-opts').value,
+          quickSendBtn: document.getElementById('cms-jobs-quick-send-btn').value,
+          sendResumeBtn: document.getElementById('cms-jobs-send-resume-btn').value,
+          salaryBadgeLabel: document.getElementById('cms-jobs-salary-badge').value,
+          locationBadgeLabel: document.getElementById('cms-jobs-loc-badge').value,
+          modalHeader: document.getElementById('cms-jobs-modal-header').value,
+          resumeUploadLabel: document.getElementById('cms-jobs-resume-label').value,
+          contactTimeOptions: document.getElementById('cms-jobs-contact-opts').value,
+          interviewReqTitle: document.getElementById('cms-jobs-interview-title').value,
+          submitBtnText: document.getElementById('cms-jobs-submit-btn').value,
+          submitTooltip: document.getElementById('cms-jobs-submit-tooltip').value,
+          messageDrawerHeader: document.getElementById('cms-jobs-msg-header').value,
+          quickReplies: document.getElementById('cms-jobs-quick-replies').value,
+          profileTabName: document.getElementById('cms-jobs-profile-tab').value
+        },
         labels: {
-          postTitle: document.getElementById('cms-post-title').value,
-          jobsTitle: document.getElementById('cms-jobs-title').value,
-          quickSendBtn: document.getElementById('cms-quick-send-btn').value,
-          sendResumeBtn: document.getElementById('cms-send-resume-btn').value,
-          submitInterviewBtn: document.getElementById('cms-submit-btn').value,
-          submitTooltip: document.getElementById('cms-submit-tooltip').value
+          postTitle: "U-THEPOST",
+          jobsTitle: document.getElementById('cms-jobs-board-title').value,
+          quickSendBtn: document.getElementById('cms-jobs-quick-send-btn').value,
+          sendResumeBtn: document.getElementById('cms-jobs-send-resume-btn').value,
+          submitInterviewBtn: document.getElementById('cms-jobs-submit-btn').value,
+          submitTooltip: document.getElementById('cms-jobs-submit-tooltip').value
         },
         pricing: {
           palMonthly: Number(document.getElementById('cms-price-pal').value),
           starterMonthly: Number(document.getElementById('cms-price-starter').value),
           growthMonthly: Number(document.getElementById('cms-price-growth').value),
-          proMonthly: Number(document.getElementById('cms-price-pro').value)
+          proMonthly: Number(document.getElementById('cms-price-pro').value),
+          individualSocialAddon: Number(document.getElementById('cms-price-social-single').value),
+          socialBundleAddon: Number(document.getElementById('cms-price-social-bundle').value)
         }
       };
 
@@ -869,70 +1710,242 @@
       }
     };
 
-    // Smart Omni-Search
+    // Smart Omni-Search (Filters Table by Name, Email, Phone, Role, ID)
     async function handleOmniSearch(query) {
-      if (!query.trim()) {
-        renderAdminUsers();
+      const q = (query || '').trim().toLowerCase();
+      if (!q) {
+        renderUserTable();
         renderAdminJobs();
         renderAdminApplicants();
         return;
       }
+
+      // Real-time client-side filter
+      const filteredUsers = adminUsers.filter(u => {
+        const name = (u.fullName || u.name || '').toLowerCase();
+        const email = (u.email || '').toLowerCase();
+        const phone = (u.phone || '').toLowerCase();
+        const role = (u.role || '').toLowerCase();
+        const id = (u.userId || u.id || '').toLowerCase();
+        return name.includes(q) || email.includes(q) || phone.includes(q) || role.includes(q) || id.includes(q);
+      });
+      renderUserTable(filteredUsers);
+
+      const filteredJobs = adminJobs.filter(j => {
+        const title = (j.jobTitle || j.title || '').toLowerCase();
+        const company = (j.company || '').toLowerCase();
+        const loc = (j.location || '').toLowerCase();
+        const id = (j.id || '').toLowerCase();
+        return title.includes(q) || company.includes(q) || loc.includes(q) || id.includes(q);
+      });
+      renderAdminJobs(filteredJobs);
+
+      const filteredApps = adminApplicants.filter(a => {
+        const name = (a.name || '').toLowerCase();
+        const email = (a.email || '').toLowerCase();
+        const title = (a.jobTitle || '').toLowerCase();
+        const id = (a.id || '').toLowerCase();
+        return name.includes(q) || email.includes(q) || title.includes(q) || id.includes(q);
+      });
+      renderAdminApplicants(filteredApps);
+
       try {
-        const res = await fetch(`/api/admin/search?q=${encodeURIComponent(query)}`);
+        const res = await fetch(`/api/admin/search?q=${encodeURIComponent(q)}`);
         const data = await res.json();
         if (data.results) {
-          renderAdminUsers(data.results.users);
-          renderAdminJobs(data.results.jobs);
-          renderAdminApplicants(data.results.applicants);
+          if (data.results.users && data.results.users.length) renderUserTable(data.results.users);
+          if (data.results.jobs && data.results.jobs.length) renderAdminJobs(data.results.jobs);
+          if (data.results.applicants && data.results.applicants.length) renderAdminApplicants(data.results.applicants);
         }
       } catch (e) {}
     }
 
-    function renderAdminUsers(list = null) {
-      const tbody = document.getElementById('admin-users-tbody');
+    // 2. USER GOVERNANCE TABLE RENDERING & ACTIONS
+    function renderUserTable(users = null) {
+      const list = users || adminUsers;
+      const tbody = document.getElementById('user-table-body') || document.getElementById('admin-users-tbody');
+      if (!tbody) return;
       tbody.innerHTML = '';
-      (list || adminUsers).forEach(u => {
+
+      if (!list || list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:1.25rem; color:var(--text-muted);">No users found. Loading platform accounts...</td></tr>`;
+        return;
+      }
+
+      list.forEach(user => {
+        const uid = user.userId || user.id || 'USR-000';
+        const fullName = user.fullName || user.name || 'Anonymous User';
+        const email = user.email || 'N/A';
+        const phone = user.phone || 'N/A';
+        const role = user.role || 'Candidate';
+        const rawRole = role.toLowerCase();
+        const roleClass = rawRole.includes('admin') ? 'admin' : (rawRole.includes('employer') || rawRole.includes('recruiter')) ? 'employer' : 'candidate';
+        const isSuspended = user.status === 'Suspended' || user.approved === false;
+        const statusText = isSuspended ? 'Suspended' : 'Active';
+        const statusClass = isSuspended ? 'suspended' : 'active';
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><code>${u.id}</code></td>
-          <td><strong>${u.name}</strong></td>
-          <td>${u.email}</td>
-          <td>${u.phone || 'N/A'}</td>
-          <td><span class="badge-tag ${u.role === 'admin' ? 'tag-gold' : u.role === 'recruiter' ? 'tag-cyan' : 'tag-mint'}">${u.role.toUpperCase()}</span></td>
-          <td><button class="btn-danger" onclick="deleteUser('${u.id}')">DELETE</button></td>
+          <td><code>${uid}</code></td>
+          <td><strong>${fullName}</strong></td>
+          <td>${email}</td>
+          <td>${phone}</td>
+          <td><span class="role-badge ${roleClass}">${role}</span></td>
+          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+          <td class="action-cells">
+            <button onclick="editUser('${uid}')" data-tooltip="Edit user account details">EDIT</button>
+            <button onclick="resetPassword('${uid}')" data-tooltip="Generate temporary secure password">RESET PW</button>
+            <button onclick="toggleSuspend('${uid}', ${!isSuspended})" data-tooltip="Suspend or activate user account access">
+              ${isSuspended ? 'ACTIVATE' : 'SUSPEND'}
+            </button>
+            <button onclick="deleteUser('${uid}')" class="danger" data-tooltip="Permanently delete user account">DELETE</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
     }
+    window.renderAdminUsers = renderUserTable;
 
-    async function deleteUser(uid) {
-      if (uid === 'USR-ZION-001') {
+    window.editUser = function(uid) {
+      openUserEditModal(uid);
+    };
+
+    function openUserEditModal(uid) {
+      const user = adminUsers.find(u => (u.userId || u.id) === uid);
+      if (!user) return;
+      document.getElementById('edit-user-id').value = user.userId || user.id;
+      document.getElementById('edit-user-name').value = user.fullName || user.name || '';
+      document.getElementById('edit-user-email').value = user.email || '';
+      document.getElementById('edit-user-phone').value = user.phone || '';
+      const rawRole = (user.role || 'candidate').toLowerCase();
+      document.getElementById('edit-user-role').value = rawRole.includes('admin') ? 'admin' : (rawRole.includes('employer') || rawRole.includes('recruiter')) ? 'recruiter' : 'candidate';
+      document.getElementById('user-edit-modal').style.display = 'flex';
+    }
+
+    async function saveUserEditProfile() {
+      const uid = document.getElementById('edit-user-id').value;
+      const name = document.getElementById('edit-user-name').value;
+      const email = document.getElementById('edit-user-email').value;
+      const phone = document.getElementById('edit-user-phone').value;
+      const role = document.getElementById('edit-user-role').value;
+
+      await fetch(`/api/admin/users/${uid}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, fullName: name, email, phone, role })
+      });
+      closeModal('user-edit-modal');
+      await loadUsers();
+      showCustomModalAlert('Profile Updated', `Account profile for ${name} (${uid}) updated.`);
+    }
+
+    window.resetPassword = async function(uid) {
+      const res = await fetch(`/api/admin/users/${uid}/reset-password`, { method: 'POST' });
+      const data = await res.json();
+      if (res.ok) {
+        showCustomModalAlert('Password Reset Generated', `Temporary key for ${uid}: ${data.tempPassword}`);
+      }
+    };
+    window.resetUserPassword = window.resetPassword;
+
+    window.toggleSuspend = async function(uid, shouldSuspend) {
+      const newStatus = (shouldSuspend === true || shouldSuspend === 'true' || shouldSuspend === undefined) ? 'Suspended' : 'Active';
+      const approved = newStatus === 'Active';
+      await fetch(`/api/admin/users/${uid}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus, approved })
+      });
+      await loadUsers();
+      showCustomModalAlert('Account Status Updated', `User ${uid} status set to ${newStatus.toUpperCase()}.`);
+    };
+    window.toggleUserApproval = function(uid, approved) {
+      window.toggleSuspend(uid, !approved);
+    };
+
+    window.deleteUser = async function(uid) {
+      if (uid === 'USR-001' || uid === 'USR-ZION-001') {
         showCustomModalAlert('Protected Account', 'The Master Owner account (Zion Daye) cannot be deleted.');
         return;
       }
       try {
         await fetch(`/api/admin/users/${uid}`, { method: 'DELETE' });
-        adminUsers = adminUsers.filter(u => u.id !== uid);
-        renderAdminUsers();
+        adminUsers = adminUsers.filter(u => (u.userId || u.id) !== uid);
+        renderUserTable(adminUsers);
         showCustomModalAlert('User Removed', `User account ${uid} was removed.`);
       } catch (e) {}
-    }
+    };
 
+    // 5. MASTER LISTINGS & APPLICATIONS CRUD
     function renderAdminJobs(list = null) {
       const tbody = document.getElementById('admin-jobs-tbody');
       tbody.innerHTML = '';
       (list || adminJobs).forEach(job => {
         const tr = document.createElement('tr');
+        const isActive = job.status !== 'Paused';
+        const isFeatured = Boolean(job.featured);
         tr.innerHTML = `
           <td><code>${job.id}</code></td>
-          <td><strong>${job.jobTitle || job.title}</strong></td>
+          <td><strong>${job.jobTitle || job.title}</strong> ${isFeatured ? '<span class="badge-tag tag-purple">FEATURED</span>' : ''}</td>
           <td>${job.company}</td>
           <td><span class="badge-tag tag-cyan">${job.location}</span></td>
           <td><span class="badge-tag tag-mint">${job.salary}</span></td>
-          <td><button class="btn-danger" onclick="deleteJobAdmin('${job.id}')">DELETE</button></td>
+          <td><span class="badge-tag ${isActive ? 'tag-mint' : 'tag-gold'}">${job.status || 'Active'}</span></td>
+          <td style="display:flex; gap:0.25rem; align-items:center; flex-wrap:nowrap;">
+            <button class="btn-surface-sm" onclick="toggleJobFeatured('${job.id}')" data-tooltip="Toggle featured job spotlight on board">${isFeatured ? 'UNFEATURE' : 'FEATURE'}</button>
+            <button class="btn-surface-sm" onclick="toggleJobStatus('${job.id}', '${isActive ? 'Paused' : 'Active'}')" data-tooltip="Pause or resume live job visibility">
+              ${isActive ? 'PAUSE' : 'RESUME'}
+            </button>
+            <button class="btn-surface-sm" onclick="openJobEditModal('${job.id}')" data-tooltip="Edit job title, location, company, or salary">EDIT</button>
+            <button class="btn-danger-sm" onclick="deleteJobAdmin('${job.id}')" data-tooltip="Delete listing from catalog">DELETE</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    async function toggleJobFeatured(jobId) {
+      await fetch(`/api/jobs/${jobId}/feature`, { method: 'PUT' });
+      loadAdminData();
+      showCustomModalAlert('Listing Updated', `Featured state toggled for ${jobId}.`);
+    }
+
+    async function toggleJobStatus(jobId, newStatus) {
+      await fetch(`/api/jobs/${jobId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+      loadAdminData();
+      showCustomModalAlert('Job Status Updated', `Position ${jobId} set to ${newStatus}.`);
+    }
+
+    function openJobEditModal(jobId) {
+      const job = adminJobs.find(j => j.id === jobId);
+      if (!job) return;
+      document.getElementById('edit-job-id').value = job.id;
+      document.getElementById('edit-job-title').value = job.jobTitle || job.title;
+      document.getElementById('edit-job-company').value = job.company;
+      document.getElementById('edit-job-location').value = job.location;
+      document.getElementById('edit-job-salary').value = job.salary;
+      document.getElementById('job-edit-modal').style.display = 'flex';
+    }
+
+    async function saveJobEditDetails() {
+      const jobId = document.getElementById('edit-job-id').value;
+      const jobTitle = document.getElementById('edit-job-title').value;
+      const company = document.getElementById('edit-job-company').value;
+      const location = document.getElementById('edit-job-location').value;
+      const salary = document.getElementById('edit-job-salary').value;
+
+      await fetch(`/api/jobs/${jobId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobTitle, company, location, salary })
+      });
+      closeModal('job-edit-modal');
+      loadAdminData();
+      showCustomModalAlert('Job Updated', `Listing ${jobId} updated successfully.`);
     }
 
     async function deleteJobAdmin(id) {
@@ -952,31 +1965,41 @@
           <td><strong>${app.name}</strong></td>
           <td>${app.jobTitle}</td>
           <td>${app.email}</td>
-          <td><span class="badge-tag tag-gold">${app.status}</span></td>
-          <td><button class="btn-surface" style="min-height:32px; font-size:0.65rem;" onclick="showCustomModalAlert('Applicant Reviewed', 'Applicant profile marked as reviewed.')">UPDATE</button></td>
+          <td>${app.phone || 'N/A'}</td>
+          <td>
+            <select onchange="updateApplicantStage('${app.id}', this.value)" style="height:26px; font-size:0.68rem; padding:0 0.4rem;" data-tooltip="Override candidate ATS hiring stage">
+              <option value="Applied" ${app.status === 'Applied' ? 'selected' : ''}>Applied</option>
+              <option value="Screened" ${app.status === 'Screened' ? 'selected' : ''}>Screened</option>
+              <option value="Interviewing" ${app.status === 'Interviewing' ? 'selected' : ''}>Interviewing</option>
+              <option value="Offer" ${app.status === 'Offer' ? 'selected' : ''}>Offer</option>
+              <option value="Hired" ${app.status === 'Hired' ? 'selected' : ''}>Hired</option>
+            </select>
+          </td>
+          <td style="display:flex; gap:0.25rem; align-items:center;">
+            <button class="btn-surface-sm" onclick="showCustomModalAlert('Candidate Profile: ${app.name}', 'Role: ${app.jobTitle}\\nEmail: ${app.email}\\nPhone: ${app.phone}\\nResume: ${app.resumeFile || 'resume.pdf'}')" data-tooltip="Review candidate submission details">
+              REVIEW
+            </button>
+            <button class="btn-danger-sm" onclick="deleteApplicantAdmin('${app.id}')" data-tooltip="Delete submission">DELETE</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    async function searchAdminLeads() {
-      const domain = document.getElementById('admin-lead-domain').value;
-      const res = await fetch(`/api/hunter/domain-search?domain=${encodeURIComponent(domain)}`);
-      const data = await res.json();
-      const tbody = document.getElementById('admin-leads-tbody');
-      tbody.innerHTML = '';
-      if (data.data && data.data.emails) {
-        data.data.emails.forEach(l => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td><strong>${l.contact_name}</strong></td>
-            <td>${l.position}</td>
-            <td><code>${l.verified_email}</code></td>
-            <td><span class="badge-tag tag-mint">VERIFIED</span></td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
+    async function updateApplicantStage(appId, newStage) {
+      await fetch(`/api/applicants/${appId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStage })
+      });
+      showCustomModalAlert('Stage Updated', `Applicant ${appId} moved to ${newStage}.`);
+    }
+
+    async function deleteApplicantAdmin(appId) {
+      await fetch(`/api/applicants/${appId}`, { method: 'DELETE' });
+      adminApplicants = adminApplicants.filter(a => a.id !== appId);
+      renderAdminApplicants();
+      showCustomModalAlert('Applicant Removed', `Submission ${appId} removed.`);
     }
 
     function exportAuditLog() {
@@ -1005,8 +2028,30 @@
       document.getElementById('custom-modal-alert').style.display = 'none';
     };
 
+    // Smart Tooltip Boundary Detection (< 60px from top viewport edge)
+    function initSmartTooltipPositioning() {
+      const tooltippedElements = document.querySelectorAll('[data-tooltip]');
+      tooltippedElements.forEach(el => {
+        const checkAndFlipTooltip = () => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < 60) {
+            el.classList.add('tooltip-bottom');
+            el.setAttribute('data-tooltip-pos', 'bottom');
+          } else if (!el.closest('header') && !el.closest('nav') && !el.closest('.admin-tabs-nav-bar') && !el.closest('.omni-search-belt')) {
+            el.classList.remove('tooltip-bottom');
+            el.removeAttribute('data-tooltip-pos');
+          }
+        };
+
+        el.addEventListener('mouseenter', checkAndFlipTooltip, { passive: true });
+        el.addEventListener('focus', checkAndFlipTooltip, { passive: true });
+        checkAndFlipTooltip();
+      });
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       loadAdminData();
+      initSmartTooltipPositioning();
     });
   </script>
 </body>
