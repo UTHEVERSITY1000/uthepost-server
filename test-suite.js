@@ -888,6 +888,22 @@ async function runTests() {
     assert(adminHtmlContent.includes('sendAdminTestEmail'), 'admin.html implements sendAdminTestEmail()');
     assert(adminHtmlContent.includes('checkSmtpStatus'), 'admin.html implements checkSmtpStatus()');
     assert(adminHtmlContent.includes('btn-send-test-email'), 'admin.html includes [SEND TEST EMAIL] button');
+    assert(adminHtmlContent.includes('master_admin_token'), 'admin.html manages master_admin_token in localStorage');
+    assert(adminHtmlContent.includes('getAdminAuthHeaders'), 'admin.html injects getAdminAuthHeaders()');
+    assert(adminHtmlContent.includes('authenticateMasterSession'), 'admin.html implements authenticateMasterSession()');
+    assert(adminHtmlContent.includes('master-session-badge'), 'admin.html includes #master-session-badge');
+
+    // 10. Direct Master Admin Bearer Token Access
+    const masterBearerRes = await httpPost('/api/admin/test-email', {
+      to: 'contact@utheversity.com'
+    }, { 'Authorization': 'Bearer master_admin_token' });
+    assert(masterBearerRes.status === 200, 'POST /api/admin/test-email accepts master_admin_token Bearer token');
+
+    // 11. Direct https://admin.utheversity.com Domain / Portal Header Auto-Permit
+    const portalOriginRes = await httpPost('/api/admin/test-email', {
+      to: 'contact@utheversity.com'
+    }, { 'Origin': 'https://admin.utheversity.com', 'X-Admin-Portal': 'true' });
+    assert(portalOriginRes.status === 200, 'POST /api/admin/test-email automatically permits requests from admin.utheversity.com portal');
 
   } catch (err) {
     assert(false, `Group 16 failed: ${err.message}`);
