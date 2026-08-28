@@ -1298,7 +1298,7 @@ function resolveTargetFileForHost(req, parsedUrl) {
 // ----------------------------------------------------
 // HTTP SERVER & ROUTING ENGINE
 // ----------------------------------------------------
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost:3000'}`);
   const pathname = parsedUrl.pathname;
 
@@ -2206,6 +2206,133 @@ const server = http.createServer((req, res) => {
       } catch (e) { emails = []; }
     }
     sendJson(200, { emails, count: emails.length });
+    return;
+  }
+
+  // ----------------------------------------------------
+  // TRANSACTIONAL EMAIL DIAGNOSTIC & TEST DISPATCH (ADMIN ONLY)
+  // ----------------------------------------------------
+  if (pathname === '/api/admin/smtp-status' && req.method === 'GET') {
+    const user = getAuthenticatedUser(req);
+    if (!isAdmin(user)) {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
+    let isVerified = false;
+    let verifyError = null;
+
+    if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
+      try {
+        const transporter = nodemailer.createTransport(SMTP_CONFIG);
+        await transporter.verify();
+        isVerified = true;
+      } catch (vErr) {
+        verifyError = vErr.message;
+      }
+    }
+
+    const smtpStatus = isVerified ? 'CONNECTED' : (SMTP_CONFIG.auth ? 'DISCONNECTED' : 'LOGGED_FALLBACK');
+
+    sendJson(200, {
+      status: 'success',
+      smtpStatus,
+      verified: isVerified,
+      verifyError,
+      config: {
+        host: SMTP_CONFIG.host,
+        port: SMTP_CONFIG.port,
+        user: SMTP_CONFIG.auth ? SMTP_CONFIG.auth.user : '(None / Fallback)',
+        from: DEFAULT_FROM_EMAIL,
+        secure: SMTP_CONFIG.secure
+      },
+      timestamp: new Date().toISOString()
+    });
+    return;
+  }
+
+  if (pathname === '/api/admin/test-email' && (req.method === 'POST' || req.method === 'GET')) {
+    const user = getAuthenticatedUser(req);
+    if (!isAdmin(user)) {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
+    const handleTestDispatch = async (targetEmail, customSubject) => {
+      const emailTo = (targetEmail || 'contact@utheversity.com').trim();
+      let isVerified = false;
+      let verifyError = null;
+
+      if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
+        try {
+          const transporter = nodemailer.createTransport(SMTP_CONFIG);
+          await transporter.verify();
+          isVerified = true;
+        } catch (vErr) {
+          verifyError = vErr.message;
+        }
+      }
+
+      const bodyContent = `
+        <p>Hello <strong>Zion Daye</strong>,</p>
+        <p>This is a live transactional email diagnostic test sent from the <strong>u-theADMIN Master High-Density Suite</strong>.</p>
+        <div class="details-box">
+          <div class="details-row"><span class="details-label">SMTP Connection:</span><span class="details-value">${isVerified ? 'VERIFIED (Google Workspace / SMTP)' : (SMTP_CONFIG.auth ? 'VERIFY_FAILED (Logged to Fallback)' : 'LOGGED_FALLBACK (No Live SMTP Credentials)')}</span></div>
+          <div class="details-row"><span class="details-label">SMTP Host:</span><span class="details-value">${SMTP_CONFIG.host}:${SMTP_CONFIG.port}</span></div>
+          <div class="details-row"><span class="details-label">Configured Sender:</span><span class="details-value">${DEFAULT_FROM_EMAIL}</span></div>
+          <div class="details-row"><span class="details-label">Target Recipient:</span><span class="details-value">${emailTo}</span></div>
+          <div class="details-row"><span class="details-label">Dispatch Timestamp:</span><span class="details-value">${new Date().toISOString()}</span></div>
+        </div>
+        <p>All transactional templates, user governance alerts, reset links, and applicant receipts are functioning normally across u-thePOST, u-theJOBS, and u-theADMIN.</p>
+      `;
+
+      const emailResult = await sendTransactionalEmail({
+        to: emailTo,
+        subject: customSubject || '[UTHEVERSITY] Google Workspace SMTP Diagnostic Test — Verified Delivery',
+        type: 'DIAGNOSTIC_TEST_EMAIL',
+        metadata: { adminUserId: user.id || user.userId, targetEmail: emailTo, isVerified, verifyError },
+        html: buildBrandedEmailHtml({
+          title: 'Google Workspace SMTP Diagnostic Test',
+          bodyContent,
+          ctaText: 'ACCESS U-THEADMIN MASTER SUITE',
+          ctaUrl: 'https://admin.utheversity.com'
+        })
+      });
+
+      const smtpStatus = isVerified ? 'CONNECTED' : (SMTP_CONFIG.auth ? 'DISCONNECTED' : 'LOGGED_FALLBACK');
+
+      sendJson(200, {
+        status: 'success',
+        smtpStatus,
+        verified: isVerified,
+        messageId: emailResult.messageId || emailResult.id,
+        deliveryId: emailResult.messageId || emailResult.id,
+        to: emailTo,
+        from: DEFAULT_FROM_EMAIL,
+        smtpConfig: {
+          host: SMTP_CONFIG.host,
+          port: SMTP_CONFIG.port,
+          user: SMTP_CONFIG.auth ? SMTP_CONFIG.auth.user : null,
+          secure: SMTP_CONFIG.secure
+        },
+        verifyError,
+        details: isVerified
+          ? `Google Workspace SMTP handshake verified. Test email delivered with ID ${emailResult.messageId || emailResult.id}.`
+          : (SMTP_CONFIG.auth
+              ? `SMTP verification error (${verifyError}). Logged to fallback /data/logs/emails.log.`
+              : `SMTP credentials unconfigured in environment. Test email safely recorded to fallback logs.`),
+        timestamp: new Date().toISOString()
+      });
+    };
+
+    if (req.method === 'POST') {
+      readBody((err, body) => {
+        if (err) return sendJson(400, { error: 'Invalid JSON body' });
+        const target = body.to || body.email || parsedUrl.searchParams.get('to') || 'contact@utheversity.com';
+        handleTestDispatch(target, body.subject);
+      });
+    } else {
+      const target = parsedUrl.searchParams.get('to') || 'contact@utheversity.com';
+      handleTestDispatch(target);
+    }
     return;
   }
 

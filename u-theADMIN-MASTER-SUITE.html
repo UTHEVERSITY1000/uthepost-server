@@ -1356,6 +1356,40 @@
           </div>
         </div>
       </div>
+
+      <!-- TRANSACTIONAL EMAIL SYSTEM DIAGNOSTIC CARD -->
+      <div class="section-card" style="margin-top: 0.85rem;">
+        <div class="section-header-compact">
+          <div class="section-title-compact">TRANSACTIONAL EMAIL SYSTEM (GOOGLE WORKSPACE & SMTP)</div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span class="badge-tag tag-gold" id="smtp-status-indicator" data-tooltip="Live Google Workspace / SMTP Connection Status">INITIALIZING...</span>
+          </div>
+        </div>
+
+        <div style="font-size: 0.68rem; color: var(--text-muted); margin-bottom: 0.65rem;">
+          Test and verify Google Workspace SMTP delivery, transporter socket handshake, and live transactional email receipt across all portal endpoints.
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1.2fr auto auto; gap: 0.5rem; align-items: flex-end;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Target Recipient Email</label>
+            <input type="email" id="test-email-target" value="contact@utheversity.com" placeholder="contact@utheversity.com" data-tooltip="Recipient address for live test email dispatch">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Configured Sender (FROM)</label>
+            <input type="text" id="test-email-from" value="contact@utheversity.com" readonly style="background:#F8FAFC;" data-tooltip="System default sender address">
+          </div>
+          <button class="btn-gold" onclick="sendAdminTestEmail()" id="btn-send-test-email" style="height:32px; padding:0 0.85rem;" data-tooltip="Send live diagnostic welcome email to target recipient">
+            SEND TEST EMAIL
+          </button>
+          <button class="btn-surface-sm" onclick="checkSmtpStatus()" style="height:32px; padding:0 0.85rem;" data-tooltip="Re-verify SMTP transporter handshake">
+            CHECK SMTP STATUS
+          </button>
+        </div>
+
+        <div id="email-diagnostic-result" style="margin-top: 0.65rem; font-size: 0.68rem; padding: 0.5rem 0.75rem; border-radius: 5px; background: #F8FAFC; border: 1px solid var(--border-color); display: none;">
+        </div>
+      </div>
     </section>
 
   </main>
@@ -1512,6 +1546,8 @@
         loadUsers();
       } else if (tabKey === 'overview') {
         loadAdminData();
+      } else if (tabKey === 'security') {
+        checkSmtpStatus();
       }
     };
 
@@ -2091,6 +2127,93 @@
     window.closeCustomAlert = function() {
       document.getElementById('custom-modal-alert').style.display = 'none';
     };
+
+    // ----------------------------------------------------
+    // TRANSACTIONAL EMAIL DIAGNOSTIC & TEST ENGINE
+    // ----------------------------------------------------
+    async function checkSmtpStatus() {
+      const badge = document.getElementById('smtp-status-indicator');
+      if (badge) {
+        badge.textContent = 'CHECKING...';
+        badge.className = 'badge-tag tag-gold';
+      }
+
+      try {
+        const res = await fetch('/api/admin/smtp-status');
+        if (res.ok) {
+          const data = await res.json();
+          if (badge) {
+            if (data.smtpStatus === 'CONNECTED') {
+              badge.textContent = 'CONNECTED (GOOGLE WORKSPACE)';
+              badge.className = 'badge-tag tag-mint';
+            } else if (data.smtpStatus === 'DISCONNECTED') {
+              badge.textContent = 'DISCONNECTED (AUTH ERROR)';
+              badge.className = 'badge-tag tag-crimson';
+            } else {
+              badge.textContent = 'LOGGED FALLBACK (DEV MODE)';
+              badge.className = 'badge-tag tag-gold';
+            }
+          }
+          const diagRes = document.getElementById('email-diagnostic-result');
+          if (diagRes && data.config) {
+            diagRes.style.display = 'block';
+            diagRes.innerHTML = `
+              <strong>Host:</strong> ${data.config.host}:${data.config.port} &nbsp;|&nbsp; 
+              <strong>Sender:</strong> ${data.config.from} &nbsp;|&nbsp; 
+              <strong>Status:</strong> ${data.smtpStatus} 
+              ${data.verifyError ? `<div style="color:var(--uthe-crimson); margin-top:3px;">Verify Notice: ${data.verifyError}</div>` : ''}
+            `;
+          }
+          return data;
+        }
+      } catch (err) {
+        if (badge) {
+          badge.textContent = 'FALLBACK MODE';
+          badge.className = 'badge-tag tag-gold';
+        }
+      }
+    }
+
+    async function sendAdminTestEmail() {
+      const targetInput = document.getElementById('test-email-target');
+      const targetEmail = targetInput ? (targetInput.value || 'contact@utheversity.com').trim() : 'contact@utheversity.com';
+      const btn = document.getElementById('btn-send-test-email');
+      const origText = btn ? btn.textContent : 'SEND TEST EMAIL';
+      if (btn) {
+        btn.textContent = 'SENDING...';
+        btn.disabled = true;
+      }
+
+      try {
+        const res = await fetch('/api/admin/test-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ to: targetEmail })
+        });
+
+        const data = await res.json();
+        if (btn) {
+          btn.textContent = origText;
+          btn.disabled = false;
+        }
+
+        if (res.ok) {
+          checkSmtpStatus();
+          showCustomModalAlert(
+            'Transactional Email Dispatched',
+            `Status: ${data.smtpStatus || 'OK'}\nTarget: ${data.to}\nMessage Delivery ID: ${data.deliveryId || data.messageId}\n\n${data.details}`
+          );
+        } else {
+          showCustomModalAlert('Email Test Failed', data.error || 'Failed to dispatch test email.');
+        }
+      } catch (err) {
+        if (btn) {
+          btn.textContent = origText;
+          btn.disabled = false;
+        }
+        showCustomModalAlert('Network Error', `Could not reach /api/admin/test-email: ${err.message}`);
+      }
+    }
 
     // Smart Tooltip Boundary Detection (< 60px from top viewport edge)
     function initSmartTooltipPositioning() {

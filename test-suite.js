@@ -857,11 +857,37 @@ async function runTests() {
     assert(Array.isArray(adminEmailsRes.data.emails), '/api/admin/emails returns an array of emails');
     assert(adminEmailsRes.data.count > 0, '/api/admin/emails contains dispatched email records');
 
-    // 6. Template & Styling Verification
+    // 6. SMTP Diagnostic Status Endpoint (/api/admin/smtp-status)
+    const smtpStatusRes = await httpGet('/api/admin/smtp-status', authHeaders);
+    assert(smtpStatusRes.status === 200, 'GET /api/admin/smtp-status returns 200 OK');
+    assert(smtpStatusRes.data.smtpStatus !== undefined, '/api/admin/smtp-status returns smtpStatus indicator');
+    assert(smtpStatusRes.data.config !== undefined, '/api/admin/smtp-status returns config object');
+    assert(smtpStatusRes.data.config.from === 'contact@utheversity.com', 'Configured sender defaults to contact@utheversity.com');
+
+    // 7. Live Test Email Dispatch Endpoint (/api/admin/test-email)
+    const testEmailDispatchRes = await httpPost('/api/admin/test-email', {
+      to: 'contact@utheversity.com'
+    }, authHeaders);
+    assert(testEmailDispatchRes.status === 200, 'POST /api/admin/test-email returns 200 OK');
+    assert(testEmailDispatchRes.data.status === 'success', 'Test email returns success status');
+    assert(testEmailDispatchRes.data.deliveryId !== undefined || testEmailDispatchRes.data.messageId !== undefined, 'Test email returns message delivery ID');
+    assert(testEmailDispatchRes.data.to === 'contact@utheversity.com', 'Test email dispatched to target contact@utheversity.com');
+
+    // 8. Template & Styling Verification
     const emailsTextLog = fs.readFileSync(emailLogPath, 'utf8');
     assert(emailsTextLog.includes('WELCOME_USER'), 'emails.log records WELCOME_USER entries');
     assert(emailsTextLog.includes('APPLICATION_RECEIPT_CANDIDATE'), 'emails.log records APPLICATION_RECEIPT entries');
     assert(emailsTextLog.includes('NEW_DIRECT_MESSAGE_ALERT'), 'emails.log records NEW_DIRECT_MESSAGE_ALERT entries');
+    assert(emailsTextLog.includes('DIAGNOSTIC_TEST_EMAIL'), 'emails.log records DIAGNOSTIC_TEST_EMAIL entries');
+
+    // 9. Admin Interface Verification (admin.html & u-theADMIN-MASTER-SUITE.html)
+    const adminHtmlContent = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    assert(adminHtmlContent.includes('TRANSACTIONAL EMAIL SYSTEM'), 'admin.html includes Transactional Email System card');
+    assert(adminHtmlContent.includes('smtp-status-indicator'), 'admin.html includes #smtp-status-indicator');
+    assert(adminHtmlContent.includes('test-email-target'), 'admin.html includes target email input #test-email-target');
+    assert(adminHtmlContent.includes('sendAdminTestEmail'), 'admin.html implements sendAdminTestEmail()');
+    assert(adminHtmlContent.includes('checkSmtpStatus'), 'admin.html implements checkSmtpStatus()');
+    assert(adminHtmlContent.includes('btn-send-test-email'), 'admin.html includes [SEND TEST EMAIL] button');
 
   } catch (err) {
     assert(false, `Group 16 failed: ${err.message}`);
