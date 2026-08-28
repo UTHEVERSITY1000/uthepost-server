@@ -2,6 +2,12 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const dns = require('dns');
+
+// Force IPv4 DNS resolution first to prevent ENETUNREACH errors on cloud hosts (e.g. Render)
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first');
+}
 
 let nodemailer = null;
 try {
@@ -573,13 +579,17 @@ function writeSystemLog(eventType, details = {}) {
 // Fallback SMTP credentials with structured file logging
 // ----------------------------------------------------
 const SMTP_CONFIG = {
-  host: process.env.SMTP_HOST || 'smtp.utheversity.com',
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.SMTP_PORT || '587', 10),
   secure: process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465',
   auth: (process.env.SMTP_USER && process.env.SMTP_PASS) ? {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
-  } : null
+  } : null,
+  family: 4, // Force IPv4 family to resolve ENETUNREACH on cloud environments
+  tls: {
+    rejectUnauthorized: false
+  }
 };
 
 const DEFAULT_FROM_EMAIL = process.env.FROM_EMAIL || 'contact@utheversity.com';

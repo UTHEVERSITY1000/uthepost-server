@@ -905,6 +905,11 @@ async function runTests() {
     }, { 'Origin': 'https://admin.utheversity.com', 'X-Admin-Portal': 'true' });
     assert(portalOriginRes.status === 200, 'POST /api/admin/test-email automatically permits requests from admin.utheversity.com portal');
 
+    // 12. IPv4 DNS & SMTP Connection Verification (Fix ENETUNREACH)
+    const serverJsContent = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+    assert(serverJsContent.includes("dns.setDefaultResultOrder('ipv4first')"), "server.js forces dns.setDefaultResultOrder('ipv4first')");
+    assert(serverJsContent.includes('family: 4'), 'server.js forces family: 4 on Nodemailer SMTP transport');
+
   } catch (err) {
     assert(false, `Group 16 failed: ${err.message}`);
   }
