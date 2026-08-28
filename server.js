@@ -1,13 +1,10 @@
+const dns = require('dns');
+if (dns.setDefaultResultOrder) { dns.setDefaultResultOrder('ipv4first'); }
+
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const dns = require('dns');
-
-// Force IPv4 DNS resolution first to prevent ENETUNREACH errors on cloud hosts (e.g. Render)
-if (dns.setDefaultResultOrder) {
-  dns.setDefaultResultOrder('ipv4first');
-}
 
 let nodemailer = null;
 try {
