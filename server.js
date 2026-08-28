@@ -598,6 +598,148 @@ function loadCmsConfig() {
   }
 }
 
+// 7. Backend User Aggregation Function (Scans /data/employers/, /data/candidates/, and memory)
+function getAllAggregatedUsers() {
+  initDataDirectories();
+  const userMap = new Map();
+
+  // In-Memory Database scan
+  usersDatabase.forEach(u => {
+    const rawRole = (u.role || '').toLowerCase();
+    const roleNormalized = rawRole === 'admin' ? 'Admin' : (rawRole === 'recruiter' || rawRole === 'employer') ? 'Employer' : 'Candidate';
+    const isApproved = u.approved !== false && u.status !== 'Suspended';
+    const uid = u.userId || u.id;
+    userMap.set(uid, {
+      userId: uid,
+      id: uid,
+      fullName: u.fullName || u.name || 'Anonymous User',
+      name: u.fullName || u.name || 'Anonymous User',
+      email: u.email,
+      phone: u.phone || 'N/A',
+      role: roleNormalized,
+      status: isApproved ? 'Active' : 'Suspended',
+      approved: isApproved,
+      company: u.company || '',
+      bio: u.bio || '',
+      createdAt: u.createdAt || new Date().toISOString()
+    });
+  });
+
+  // Scan /data/employers/ directory
+  try {
+    if (fs.existsSync(DIRS.employers)) {
+      const empFiles = fs.readdirSync(DIRS.employers);
+      empFiles.forEach(file => {
+        if (file.endsWith('.json')) {
+          try {
+            const raw = fs.readFileSync(path.join(DIRS.employers, file), 'utf8');
+            const data = JSON.parse(raw);
+            const uid = data.userId || data.id || file.replace(/^emp_/, '').replace(/\.json$/, '');
+            const isApproved = data.approved !== false && data.status !== 'Suspended';
+            const rawRole = (data.role || 'Employer').toLowerCase();
+            const roleNormalized = rawRole === 'admin' ? 'Admin' : (rawRole === 'recruiter' || rawRole === 'employer') ? 'Employer' : 'Candidate';
+            userMap.set(uid, {
+              userId: uid,
+              id: uid,
+              fullName: data.fullName || data.name || data.company || 'Employer Account',
+              name: data.fullName || data.name || data.company || 'Employer Account',
+              email: data.email || 'employer@example.com',
+              phone: data.phone || 'N/A',
+              role: roleNormalized,
+              status: isApproved ? 'Active' : 'Suspended',
+              approved: isApproved,
+              company: data.company || '',
+              bio: data.bio || '',
+              createdAt: data.createdAt || new Date().toISOString()
+            });
+          } catch (e) {}
+        }
+      });
+    }
+  } catch (err) {}
+
+  // Scan /data/candidates/ directory
+  try {
+    if (fs.existsSync(DIRS.candidates)) {
+      const candFiles = fs.readdirSync(DIRS.candidates);
+      candFiles.forEach(file => {
+        if (file.endsWith('.json')) {
+          try {
+            const raw = fs.readFileSync(path.join(DIRS.candidates, file), 'utf8');
+            const data = JSON.parse(raw);
+            const uid = data.userId || data.id || file.replace(/^cand_/, '').replace(/\.json$/, '');
+            const isApproved = data.approved !== false && data.status !== 'Suspended';
+            const rawRole = (data.role || 'Candidate').toLowerCase();
+            const roleNormalized = rawRole === 'admin' ? 'Admin' : (rawRole === 'recruiter' || rawRole === 'employer') ? 'Employer' : 'Candidate';
+            userMap.set(uid, {
+              userId: uid,
+              id: uid,
+              fullName: data.fullName || data.name || 'Candidate User',
+              name: data.fullName || data.name || 'Candidate User',
+              email: data.email || 'candidate@example.com',
+              phone: data.phone || 'N/A',
+              role: roleNormalized,
+              status: isApproved ? 'Active' : 'Suspended',
+              approved: isApproved,
+              company: data.company || '',
+              bio: data.bio || '',
+              createdAt: data.createdAt || new Date().toISOString()
+            });
+          } catch (e) {}
+        }
+      });
+    }
+  } catch (err) {}
+
+  // Fallback seed accounts if store is completely empty
+  if (userMap.size === 0) {
+    const seedUsers = [
+      {
+        userId: 'USR-ZION-001',
+        id: 'USR-ZION-001',
+        fullName: 'Zion Daye',
+        name: 'Zion Daye',
+        email: 'contact@utheversity.com',
+        phone: '815-980-4272',
+        role: 'Admin',
+        status: 'Active',
+        approved: true,
+        company: 'UTHEVERSITY Global Inc.',
+        createdAt: '2026-01-01T00:00:00.000Z'
+      },
+      {
+        userId: 'USR-002',
+        id: 'USR-002',
+        fullName: 'Quantum Talent Team',
+        name: 'Quantum Talent Team',
+        email: 'recruiter@quantumtech.io',
+        phone: '+1 (555) 019-2831',
+        role: 'Employer',
+        status: 'Active',
+        approved: true,
+        company: 'Quantum Technologies Corp',
+        createdAt: '2026-01-15T12:00:00.000Z'
+      },
+      {
+        userId: 'USR-003',
+        id: 'USR-003',
+        fullName: 'Alex Morgan',
+        name: 'Alex Morgan',
+        email: 'alex.morgan@candidate.dev',
+        phone: '+1 (555) 448-9102',
+        role: 'Candidate',
+        status: 'Active',
+        approved: true,
+        company: 'Independent Professional',
+        createdAt: '2026-02-01T09:30:00.000Z'
+      }
+    ];
+    seedUsers.forEach(u => userMap.set(u.userId, u));
+  }
+
+  return Array.from(userMap.values());
+}
+
 // Full Disk Sync & Database Ingestion on Startup
 function loadAllDataFromDisk() {
   initDataDirectories();
@@ -992,15 +1134,18 @@ const server = http.createServer((req, res) => {
     }
 
     const q = (parsedUrl.searchParams.get('q') || '').toLowerCase().trim();
+    const allUsers = getAllAggregatedUsers();
     if (!q) {
-      return sendJson(200, { results: { users: usersDatabase, jobs: globalJobDatabase, applicants: applicantsStore } });
+      return sendJson(200, { results: { users: allUsers, jobs: globalJobDatabase, applicants: applicantsStore } });
     }
 
-    const matchedUsers = usersDatabase.filter(u =>
-      (u.name || '').toLowerCase().includes(q) ||
+    const matchedUsers = allUsers.filter(u =>
+      (u.fullName || u.name || '').toLowerCase().includes(q) ||
       (u.email || '').toLowerCase().includes(q) ||
       (u.phone || '').toLowerCase().includes(q) ||
-      (u.company || '').toLowerCase().includes(q)
+      (u.company || '').toLowerCase().includes(q) ||
+      (u.role || '').toLowerCase().includes(q) ||
+      (u.userId || u.id || '').toLowerCase().includes(q)
     );
 
     const matchedJobs = globalJobDatabase.filter(j =>
@@ -1070,6 +1215,7 @@ const server = http.createServer((req, res) => {
 
   // ----------------------------------------------------
   // ADMIN USER CRUD ROUTES (PROTECTED: ADMIN ONLY)
+  // Aggregates /data/employers/, /data/candidates/, and memory
   // ----------------------------------------------------
   if (pathname === '/api/admin/users' && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
@@ -1077,18 +1223,8 @@ const server = http.createServer((req, res) => {
       return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
     }
 
-    const safeUsers = usersDatabase.map(u => ({
-      id: u.id,
-      email: u.email,
-      name: u.name,
-      role: u.role,
-      company: u.company,
-      phone: u.phone,
-      bio: u.bio,
-      approved: u.approved !== false,
-      createdAt: u.createdAt
-    }));
-    sendJson(200, { users: safeUsers, count: safeUsers.length });
+    const users = getAllAggregatedUsers();
+    sendJson(200, { users: users, count: users.length });
     return;
   }
 
@@ -1099,13 +1235,20 @@ const server = http.createServer((req, res) => {
     }
 
     const uid = pathname.split('/')[4];
-    const user = usersDatabase.find(u => u.id === uid);
+    let user = usersDatabase.find(u => u.id === uid || u.userId === uid);
+    if (!user) {
+      const allUsers = getAllAggregatedUsers();
+      user = allUsers.find(u => u.id === uid || u.userId === uid);
+      if (user) {
+        usersDatabase.push(user);
+      }
+    }
     if (!user) return sendJson(404, { error: 'User not found' });
     const tempPass = `Reset${Math.floor(1000 + Math.random() * 9000)}!`;
     user.passwordHash = hashPassword(tempPass);
-    if (user.role === 'candidate') saveCandidateRecord(user);
+    if (user.role && user.role.toLowerCase() === 'candidate') saveCandidateRecord(user);
     else saveEmployerRecord(user);
-    writeSystemLog('ADMIN_RESET_PASSWORD', { userId: user.id, email: user.email });
+    writeSystemLog('ADMIN_RESET_PASSWORD', { userId: user.id || user.userId, email: user.email });
     sendJson(200, { status: 'reset', tempPassword: tempPass, message: `Password for ${user.email} reset successfully.` });
     return;
   }
@@ -1117,18 +1260,31 @@ const server = http.createServer((req, res) => {
     }
 
     const uid = pathname.split('/')[4];
-    const user = usersDatabase.find(u => u.id === uid);
+    let user = usersDatabase.find(u => u.id === uid || u.userId === uid);
+    if (!user) {
+      const allUsers = getAllAggregatedUsers();
+      user = allUsers.find(u => u.id === uid || u.userId === uid);
+      if (user) {
+        usersDatabase.push(user);
+      }
+    }
     if (!user) return sendJson(404, { error: 'User not found' });
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON' });
       if (body.role) user.role = body.role;
       if (body.approved !== undefined) user.approved = Boolean(body.approved);
+      if (body.status !== undefined) {
+        user.status = body.status;
+        user.approved = body.status === 'Active';
+      }
       if (body.name) user.name = body.name;
+      if (body.fullName) { user.fullName = body.fullName; user.name = body.fullName; }
       if (body.phone) user.phone = body.phone;
-      if (user.role === 'candidate') saveCandidateRecord(user);
+      if (body.email) user.email = body.email;
+      if (user.role && user.role.toLowerCase() === 'candidate') saveCandidateRecord(user);
       else saveEmployerRecord(user);
-      writeSystemLog('ADMIN_USER_UPDATED', { userId: user.id, role: user.role, approved: user.approved });
-      broadcastWebSocketEvent('USER_UPDATED', { user: { id: user.id, role: user.role, approved: user.approved } });
+      writeSystemLog('ADMIN_USER_UPDATED', { userId: user.id || user.userId, role: user.role, approved: user.approved, status: user.status });
+      broadcastWebSocketEvent('USER_UPDATED', { user: { id: user.id || user.userId, role: user.role, approved: user.approved } });
       sendJson(200, { status: 'updated', user });
     });
     return;
@@ -1141,16 +1297,14 @@ const server = http.createServer((req, res) => {
     }
 
     const uid = pathname.split('/')[4];
-    const idx = usersDatabase.findIndex(u => u.id === uid);
+    deleteEmployerRecord(uid);
+    deleteCandidateRecord(uid);
+    const idx = usersDatabase.findIndex(u => u.id === uid || u.userId === uid);
     if (idx !== -1) {
       usersDatabase.splice(idx, 1);
-      deleteEmployerRecord(uid);
-      deleteCandidateRecord(uid);
-      writeSystemLog('ADMIN_USER_DELETED', { userId: uid });
-      sendJson(200, { status: 'deleted', userId: uid });
-    } else {
-      sendJson(404, { error: 'User not found' });
     }
+    writeSystemLog('ADMIN_USER_DELETED', { userId: uid });
+    sendJson(200, { status: 'deleted', userId: uid });
     return;
   }
 

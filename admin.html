@@ -1390,6 +1390,12 @@
       const btnId = tabMap[tabKey] || 'tab-btn-overview';
       const activeBtn = document.getElementById(btnId);
       if (activeBtn) activeBtn.classList.add('active');
+
+      if (tabKey === 'users') {
+        fetchUsers();
+      } else if (tabKey === 'overview') {
+        loadAdminData();
+      }
     };
 
     window.switchCmsTarget = function(targetKey) {
@@ -1446,6 +1452,20 @@
       }
     }
 
+    window.fetchUsers = async function() {
+      try {
+        const res = await fetch(`/api/admin/users?t=${Date.now()}`, {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        });
+        const data = await res.json();
+        adminUsers = data.users || [];
+        renderAdminUsers();
+      } catch (e) {
+        console.error('[USER GOVERNANCE] Error fetching users:', e);
+      }
+    };
+
     async function loadAdminData() {
       try {
         const stats = await fetch('/api/admin/stats').then(r => r.json());
@@ -1469,9 +1489,7 @@
       } catch (e) {}
 
       try {
-        const users = await fetch('/api/admin/users').then(r => r.json());
-        adminUsers = users.users || [];
-        renderAdminUsers();
+        await fetchUsers();
       } catch (e) {}
 
       try {
@@ -1617,21 +1635,52 @@
       }
     };
 
-    // Smart Omni-Search
+    // Smart Omni-Search (Filters Table by Name, Email, Phone, Role, ID)
     async function handleOmniSearch(query) {
-      if (!query.trim()) {
+      const q = (query || '').trim().toLowerCase();
+      if (!q) {
         renderAdminUsers();
         renderAdminJobs();
         renderAdminApplicants();
         return;
       }
+
+      // Real-time client-side filter
+      const filteredUsers = adminUsers.filter(u => {
+        const name = (u.fullName || u.name || '').toLowerCase();
+        const email = (u.email || '').toLowerCase();
+        const phone = (u.phone || '').toLowerCase();
+        const role = (u.role || '').toLowerCase();
+        const id = (u.userId || u.id || '').toLowerCase();
+        return name.includes(q) || email.includes(q) || phone.includes(q) || role.includes(q) || id.includes(q);
+      });
+      renderAdminUsers(filteredUsers);
+
+      const filteredJobs = adminJobs.filter(j => {
+        const title = (j.jobTitle || j.title || '').toLowerCase();
+        const company = (j.company || '').toLowerCase();
+        const loc = (j.location || '').toLowerCase();
+        const id = (j.id || '').toLowerCase();
+        return title.includes(q) || company.includes(q) || loc.includes(q) || id.includes(q);
+      });
+      renderAdminJobs(filteredJobs);
+
+      const filteredApps = adminApplicants.filter(a => {
+        const name = (a.name || '').toLowerCase();
+        const email = (a.email || '').toLowerCase();
+        const title = (a.jobTitle || '').toLowerCase();
+        const id = (a.id || '').toLowerCase();
+        return name.includes(q) || email.includes(q) || title.includes(q) || id.includes(q);
+      });
+      renderAdminApplicants(filteredApps);
+
       try {
-        const res = await fetch(`/api/admin/search?q=${encodeURIComponent(query)}`);
+        const res = await fetch(`/api/admin/search?q=${encodeURIComponent(q)}`);
         const data = await res.json();
         if (data.results) {
-          renderAdminUsers(data.results.users);
-          renderAdminJobs(data.results.jobs);
-          renderAdminApplicants(data.results.applicants);
+          if (data.results.users && data.results.users.length) renderAdminUsers(data.results.users);
+          if (data.results.jobs && data.results.jobs.length) renderAdminJobs(data.results.jobs);
+          if (data.results.applicants && data.results.applicants.length) renderAdminApplicants(data.results.applicants);
         }
       } catch (e) {}
     }
@@ -1639,24 +1688,34 @@
     // 2. USER GOVERNANCE TABLE RENDERING & ACTIONS
     function renderAdminUsers(list = null) {
       const tbody = document.getElementById('admin-users-tbody');
+      if (!tbody) return;
       tbody.innerHTML = '';
-      (list || adminUsers).forEach(u => {
+      const usersToRender = list || adminUsers;
+      usersToRender.forEach(u => {
+        const uid = u.userId || u.id;
+        const fullName = u.fullName || u.name || 'Anonymous User';
+        const email = u.email || 'N/A';
+        const phone = u.phone || 'N/A';
+        const rawRole = (u.role || 'Candidate').toLowerCase();
+        const role = rawRole === 'admin' ? 'ADMIN' : (rawRole === 'recruiter' || rawRole === 'employer') ? 'EMPLOYER' : 'CANDIDATE';
+        const isApproved = u.status ? u.status === 'Active' : u.approved !== false;
+        const tagClass = role === 'ADMIN' ? 'tag-gold' : role === 'EMPLOYER' ? 'tag-cyan' : 'tag-mint';
+
         const tr = document.createElement('tr');
-        const isApproved = u.approved !== false;
         tr.innerHTML = `
-          <td><code>${u.id}</code></td>
-          <td><strong>${u.name}</strong></td>
-          <td>${u.email}</td>
-          <td>${u.phone || 'N/A'}</td>
-          <td><span class="badge-tag ${u.role === 'admin' ? 'tag-gold' : u.role === 'recruiter' ? 'tag-cyan' : 'tag-mint'}">${u.role.toUpperCase()}</span></td>
+          <td><code>${uid}</code></td>
+          <td><strong>${fullName}</strong></td>
+          <td>${email}</td>
+          <td>${phone}</td>
+          <td><span class="badge-tag ${tagClass}">${role}</span></td>
           <td><span class="badge-tag ${isApproved ? 'tag-mint' : 'tag-gold'}">${isApproved ? 'APPROVED' : 'SUSPENDED'}</span></td>
           <td style="display:flex; gap:0.25rem; align-items:center; flex-wrap:nowrap;">
-            <button class="btn-surface-sm" onclick="openUserEditModal('${u.id}')" data-tooltip="Edit user name, email, phone, and role">EDIT</button>
-            <button class="btn-surface-sm" onclick="resetUserPassword('${u.id}')" data-tooltip="Generate temporary secure password">RESET PASS</button>
-            <button class="btn-surface-sm" onclick="toggleUserApproval('${u.id}', ${!isApproved})" data-tooltip="Approve or suspend account access">
+            <button class="btn-surface-sm" onclick="openUserEditModal('${uid}')" data-tooltip="Edit user name, email, phone, and role">EDIT</button>
+            <button class="btn-surface-sm" onclick="resetUserPassword('${uid}')" data-tooltip="Generate temporary secure password">RESET PASS</button>
+            <button class="btn-surface-sm" onclick="toggleUserApproval('${uid}', ${!isApproved})" data-tooltip="Approve or suspend account access">
               ${isApproved ? 'SUSPEND' : 'APPROVE'}
             </button>
-            <button class="btn-danger-sm" onclick="deleteUser('${u.id}')" data-tooltip="Permanently delete user account">DELETE</button>
+            <button class="btn-danger-sm" onclick="deleteUser('${uid}')" data-tooltip="Permanently delete user account">DELETE</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -1664,13 +1723,13 @@
     }
 
     function openUserEditModal(uid) {
-      const user = adminUsers.find(u => u.id === uid);
+      const user = adminUsers.find(u => (u.userId || u.id) === uid);
       if (!user) return;
-      document.getElementById('edit-user-id').value = user.id;
-      document.getElementById('edit-user-name').value = user.name;
-      document.getElementById('edit-user-email').value = user.email;
+      document.getElementById('edit-user-id').value = user.userId || user.id;
+      document.getElementById('edit-user-name').value = user.fullName || user.name || '';
+      document.getElementById('edit-user-email').value = user.email || '';
       document.getElementById('edit-user-phone').value = user.phone || '';
-      document.getElementById('edit-user-role').value = user.role;
+      document.getElementById('edit-user-role').value = (user.role || 'candidate').toLowerCase() === 'admin' ? 'admin' : ((user.role || '').toLowerCase() === 'employer' || (user.role || '').toLowerCase() === 'recruiter') ? 'recruiter' : 'candidate';
       document.getElementById('user-edit-modal').style.display = 'flex';
     }
 
@@ -1684,10 +1743,10 @@
       await fetch(`/api/admin/users/${uid}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone, role })
+        body: JSON.stringify({ name, fullName: name, email, phone, role })
       });
       closeModal('user-edit-modal');
-      loadAdminData();
+      await fetchUsers();
       showCustomModalAlert('Profile Updated', `Account profile for ${name} (${uid}) updated.`);
     }
 
@@ -1703,9 +1762,9 @@
       await fetch(`/api/admin/users/${uid}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ approved })
+        body: JSON.stringify({ approved, status: approved ? 'Active' : 'Suspended' })
       });
-      loadAdminData();
+      await fetchUsers();
       showCustomModalAlert('Account Status Updated', `User ${uid} status set to ${approved ? 'APPROVED' : 'SUSPENDED'}.`);
     }
 
@@ -1716,7 +1775,7 @@
       }
       try {
         await fetch(`/api/admin/users/${uid}`, { method: 'DELETE' });
-        adminUsers = adminUsers.filter(u => u.id !== uid);
+        adminUsers = adminUsers.filter(u => (u.userId || u.id) !== uid);
         renderAdminUsers();
         showCustomModalAlert('User Removed', `User account ${uid} was removed.`);
       } catch (e) {}

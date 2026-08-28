@@ -629,6 +629,119 @@ async function runTests() {
     assert(false, `Group 14 failed: ${err.message}`);
   }
 
+  // ----------------------------------------------------
+  // TEST GROUP 15: USER GOVERNANCE TABLE DATA POPULATION & OMNI-SEARCH
+  // ----------------------------------------------------
+  console.log('\n--- GROUP 15: USER GOVERNANCE DATA POPULATION & OMNI-SEARCH ---');
+  try {
+    const adminLoginRes = await httpPost('/api/auth/login', {
+      email: 'contact@utheversity.com',
+      password: 'ZionAdmin2026!'
+    });
+    const adminToken = adminLoginRes.data.token;
+    const authHeaders = {
+      'Authorization': `Bearer ${adminToken}`,
+      'Cookie': `uthe_token=${adminToken}`
+    };
+
+    // 1. Backend User Aggregation Endpoint (/api/admin/users)
+    const usersRes = await httpGet('/api/admin/users', authHeaders);
+    assert(usersRes.status === 200, 'GET /api/admin/users returns HTTP 200 for authenticated admin');
+    assert(Array.isArray(usersRes.data.users), '/api/admin/users returns an array of users');
+    assert(usersRes.data.users.length >= 3, '/api/admin/users contains at least 3 aggregated users (Master Admin, Employer, Candidate)');
+
+    // Verify format compliance for each user
+    const firstUser = usersRes.data.users[0];
+    assert(firstUser.userId !== undefined || firstUser.id !== undefined, 'User record has userId / id');
+    assert(firstUser.fullName !== undefined || firstUser.name !== undefined, 'User record has fullName / name');
+    assert(firstUser.email !== undefined, 'User record has email');
+    assert(firstUser.phone !== undefined, 'User record has phone');
+    assert(firstUser.role !== undefined, 'User record has role');
+    assert(firstUser.status !== undefined, 'User record has status');
+    assert(firstUser.createdAt !== undefined, 'User record has createdAt');
+
+    // Check Master Admin identity
+    const zionUser = usersRes.data.users.find(u => u.email === 'contact@utheversity.com');
+    assert(zionUser !== undefined, 'Zion Daye exists in aggregated user list');
+    assert(zionUser.role === 'Admin', 'Zion Daye has normalized role "Admin"');
+    assert(zionUser.status === 'Active', 'Zion Daye has status "Active"');
+
+    // 2. Multi-Directory Scanning (/data/employers/ and /data/candidates/)
+    const testEmpPath = path.join(__dirname, 'data', 'employers', 'emp_USR_TEST_EMP_99.json');
+    const testCandPath = path.join(__dirname, 'data', 'candidates', 'cand_USR_TEST_CAND_99.json');
+    
+    fs.writeFileSync(testEmpPath, JSON.stringify({
+      id: 'USR-TEST-EMP-99',
+      userId: 'USR-TEST-EMP-99',
+      name: 'Dynamic Test Employer',
+      fullName: 'Dynamic Test Employer',
+      email: 'test.employer@scan.org',
+      phone: '+1 (555) 777-8888',
+      role: 'Employer',
+      status: 'Active',
+      approved: true,
+      createdAt: new Date().toISOString()
+    }, null, 2), 'utf8');
+
+    fs.writeFileSync(testCandPath, JSON.stringify({
+      id: 'USR-TEST-CAND-99',
+      userId: 'USR-TEST-CAND-99',
+      name: 'Dynamic Test Candidate',
+      fullName: 'Dynamic Test Candidate',
+      email: 'test.candidate@scan.org',
+      phone: '+1 (555) 333-4444',
+      role: 'Candidate',
+      status: 'Active',
+      approved: true,
+      createdAt: new Date().toISOString()
+    }, null, 2), 'utf8');
+
+    const rescannedRes = await httpGet('/api/admin/users', authHeaders);
+    const hasScannedEmp = rescannedRes.data.users.some(u => u.email === 'test.employer@scan.org');
+    const hasScannedCand = rescannedRes.data.users.some(u => u.email === 'test.candidate@scan.org');
+    assert(hasScannedEmp, 'Aggregated endpoint dynamically includes /data/employers/ files');
+    assert(hasScannedCand, 'Aggregated endpoint dynamically includes /data/candidates/ files');
+
+    // Clean up test files
+    if (fs.existsSync(testEmpPath)) fs.unlinkSync(testEmpPath);
+    if (fs.existsSync(testCandPath)) fs.unlinkSync(testCandPath);
+
+    // 3. User Governance Actions: Password Reset, Edit & Toggle Status
+    const resetRes = await httpPost('/api/admin/users/USR-003/reset-password', {}, authHeaders);
+    assert(resetRes.status === 200, 'POST /api/admin/users/:id/reset-password generates secure temporary password');
+    assert(resetRes.data.tempPassword && resetRes.data.tempPassword.startsWith('Reset'), 'Reset response returns tempPassword');
+
+    const updateRes = await httpPost('/api/admin/users/USR-003', {
+      status: 'Active',
+      approved: true,
+      phone: '+1 (555) 999-0000'
+    }, authHeaders);
+    assert(updateRes.status === 200, 'POST/PUT /api/admin/users/:id updates user record');
+
+    // 4. Omni-Search Backend & Frontend Filter Testing
+    const searchAdminRes = await httpGet('/api/admin/search?q=Zion', authHeaders);
+    assert(searchAdminRes.status === 200, 'GET /api/admin/search returns 200 for authenticated admin');
+    assert(searchAdminRes.data.results.users.some(u => (u.fullName || u.name).includes('Zion')), 'Omni-Search filters users by Name');
+
+    const searchRoleRes = await httpGet('/api/admin/search?q=Candidate', authHeaders);
+    assert(searchRoleRes.data.results.users.length > 0, 'Omni-Search filters users by Role');
+
+    // 5. Frontend admin.html Structure Verification
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    assert(adminHtml.includes('fetchUsers'), 'admin.html implements fetchUsers()');
+    assert(adminHtml.includes('switchAdminTab(\'users\')') || adminHtml.includes('switchAdminTab("users")'), 'admin.html binds switchAdminTab to Tab 2');
+    assert(adminHtml.includes('renderAdminUsers'), 'admin.html implements renderAdminUsers()');
+    assert(adminHtml.includes('admin-users-tbody'), 'admin.html defines #admin-users-tbody container');
+    assert(adminHtml.includes('openUserEditModal'), 'admin.html renders [EDIT] action trigger');
+    assert(adminHtml.includes('resetUserPassword'), 'admin.html renders [RESET PASS] action trigger');
+    assert(adminHtml.includes('toggleUserApproval'), 'admin.html renders [SUSPEND / APPROVE] action trigger');
+    assert(adminHtml.includes('deleteUser'), 'admin.html renders [DELETE] action trigger');
+    assert(adminHtml.includes('handleOmniSearch'), 'admin.html implements real-time handleOmniSearch');
+
+  } catch (err) {
+    assert(false, `Group 15 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
@@ -648,3 +761,4 @@ setTimeout(() => {
     process.exit(1);
   });
 }, 1000);
+
