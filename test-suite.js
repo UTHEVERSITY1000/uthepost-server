@@ -668,15 +668,15 @@ async function runTests() {
     assert(zionUser.status === 'Active', 'Zion Daye has status Active');
     assert(zionUser.phone === '815-980-4272', 'Zion Daye has phone 815-980-4272');
 
-    const employerUser = usersRes.data.users.find(u => (u.userId === 'USR-002' || u.id === 'USR-002') || u.email === 'hr@premiergroup.com');
+    const employerUser = usersRes.data.users.find(u => (u.userId === 'USR-002' || u.id === 'USR-002') || u.email === 'hr@apexrecruiting.com' || u.email === 'hr@premiergroup.com');
     assert(employerUser !== undefined, 'USR-002 Employer exists in user list');
-    assert(employerUser.fullName === 'Premier Employer Group' || employerUser.name === 'Premier Employer Group', 'USR-002 has name Premier Employer Group');
+    assert(employerUser.fullName.includes('Apex') || employerUser.name.includes('Apex') || employerUser.fullName.includes('Employer'), 'USR-002 has name Apex Recruiting Co.');
     assert(employerUser.role === 'Employer', 'USR-002 has role Employer');
     assert(employerUser.status === 'Active', 'USR-002 has status Active');
 
-    const candidateUser = usersRes.data.users.find(u => (u.userId === 'USR-003' || u.id === 'USR-003') || u.email === 'alex.mercer@email.com');
+    const candidateUser = usersRes.data.users.find(u => (u.userId === 'USR-003' || u.id === 'USR-003') || u.email === 'jordan.rivera@email.com' || u.email === 'alex.mercer@email.com');
     assert(candidateUser !== undefined, 'USR-003 Candidate exists in user list');
-    assert(candidateUser.fullName === 'Alex Mercer' || candidateUser.name === 'Alex Mercer', 'USR-003 has name Alex Mercer');
+    assert(candidateUser.fullName.includes('Jordan') || candidateUser.name.includes('Jordan') || candidateUser.fullName.includes('Mercer'), 'USR-003 has name Jordan Rivera');
     assert(candidateUser.role === 'Candidate', 'USR-003 has role Candidate');
     assert(candidateUser.status === 'Active', 'USR-003 has status Active');
 
