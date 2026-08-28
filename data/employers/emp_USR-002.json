@@ -1,12 +1,15 @@
 {
   "id": "USR-002",
-  "email": "recruiter@quantumtech.io",
+  "userId": "USR-002",
+  "email": "hr@premiergroup.com",
   "passwordHash": "52852ada71eb22b2eb1165cb8653af9b:b1085a956ac2478ca98b2ce55249924650398083bc972af78c17c3abeb2fdcfa65131a0ac072bc88c000f7e28ffea387c5427984a2b90a638acecbe60e668b99",
-  "name": "Quantum Talent Team",
-  "role": "recruiter",
-  "company": "Quantum Technologies Corp",
-  "phone": "+1 (555) 019-2831",
-  "bio": "High-growth technology hiring team.",
+  "name": "Premier Employer Group",
+  "fullName": "Premier Employer Group",
+  "role": "Employer",
+  "company": "Premier Employer Group Corp",
+  "phone": "800-555-0199",
+  "bio": "Premier executive talent acquisition team.",
   "approved": true,
+  "status": "Active",
   "createdAt": "2026-08-27T08:22:01.503Z"
 }

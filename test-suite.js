@@ -660,11 +660,25 @@ async function runTests() {
     assert(firstUser.status !== undefined, 'User record has status');
     assert(firstUser.createdAt !== undefined, 'User record has createdAt');
 
-    // Check Master Admin identity
+    // Check Mandatory 3 Seed Accounts
     const zionUser = usersRes.data.users.find(u => u.email === 'contact@utheversity.com');
     assert(zionUser !== undefined, 'Zion Daye exists in aggregated user list');
-    assert(zionUser.role === 'Admin', 'Zion Daye has normalized role "Admin"');
-    assert(zionUser.status === 'Active', 'Zion Daye has status "Active"');
+    assert(zionUser.userId === 'USR-001' || zionUser.id === 'USR-001', 'Zion Daye has ID USR-001');
+    assert(zionUser.role.toLowerCase().includes('admin'), 'Zion Daye has role Master Admin / Admin');
+    assert(zionUser.status === 'Active', 'Zion Daye has status Active');
+    assert(zionUser.phone === '815-980-4272', 'Zion Daye has phone 815-980-4272');
+
+    const employerUser = usersRes.data.users.find(u => (u.userId === 'USR-002' || u.id === 'USR-002') || u.email === 'hr@premiergroup.com');
+    assert(employerUser !== undefined, 'USR-002 Employer exists in user list');
+    assert(employerUser.fullName === 'Premier Employer Group' || employerUser.name === 'Premier Employer Group', 'USR-002 has name Premier Employer Group');
+    assert(employerUser.role === 'Employer', 'USR-002 has role Employer');
+    assert(employerUser.status === 'Active', 'USR-002 has status Active');
+
+    const candidateUser = usersRes.data.users.find(u => (u.userId === 'USR-003' || u.id === 'USR-003') || u.email === 'alex.mercer@email.com');
+    assert(candidateUser !== undefined, 'USR-003 Candidate exists in user list');
+    assert(candidateUser.fullName === 'Alex Mercer' || candidateUser.name === 'Alex Mercer', 'USR-003 has name Alex Mercer');
+    assert(candidateUser.role === 'Candidate', 'USR-003 has role Candidate');
+    assert(candidateUser.status === 'Active', 'USR-003 has status Active');
 
     // 2. Multi-Directory Scanning (/data/employers/ and /data/candidates/)
     const testEmpPath = path.join(__dirname, 'data', 'employers', 'emp_USR_TEST_EMP_99.json');
@@ -714,7 +728,7 @@ async function runTests() {
     const updateRes = await httpPost('/api/admin/users/USR-003', {
       status: 'Active',
       approved: true,
-      phone: '+1 (555) 999-0000'
+      phone: '312-555-0144'
     }, authHeaders);
     assert(updateRes.status === 200, 'POST/PUT /api/admin/users/:id updates user record');
 
@@ -728,14 +742,18 @@ async function runTests() {
 
     // 5. Frontend admin.html Structure Verification
     const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
-    assert(adminHtml.includes('fetchUsers'), 'admin.html implements fetchUsers()');
+    assert(adminHtml.includes('loadUsers'), 'admin.html implements loadUsers()');
+    assert(adminHtml.includes('fetchUsers'), 'admin.html implements fetchUsers() alias');
     assert(adminHtml.includes('switchAdminTab(\'users\')') || adminHtml.includes('switchAdminTab("users")'), 'admin.html binds switchAdminTab to Tab 2');
-    assert(adminHtml.includes('renderAdminUsers'), 'admin.html implements renderAdminUsers()');
-    assert(adminHtml.includes('admin-users-tbody'), 'admin.html defines #admin-users-tbody container');
-    assert(adminHtml.includes('openUserEditModal'), 'admin.html renders [EDIT] action trigger');
-    assert(adminHtml.includes('resetUserPassword'), 'admin.html renders [RESET PASS] action trigger');
-    assert(adminHtml.includes('toggleUserApproval'), 'admin.html renders [SUSPEND / APPROVE] action trigger');
-    assert(adminHtml.includes('deleteUser'), 'admin.html renders [DELETE] action trigger');
+    assert(adminHtml.includes('renderUserTable') || adminHtml.includes('renderAdminUsers'), 'admin.html implements user table rendering');
+    assert(adminHtml.includes('user-table-body'), 'admin.html defines #user-table-body container');
+    assert(adminHtml.includes('editUser'), 'admin.html renders [EDIT] action trigger editUser');
+    assert(adminHtml.includes('resetPassword'), 'admin.html renders [RESET PW] action trigger resetPassword');
+    assert(adminHtml.includes('toggleSuspend'), 'admin.html renders [SUSPEND] action trigger toggleSuspend');
+    assert(adminHtml.includes('deleteUser'), 'admin.html renders [DELETE] action trigger deleteUser');
+    assert(adminHtml.includes('role-badge'), 'admin.html includes role-badge CSS class');
+    assert(adminHtml.includes('status-badge'), 'admin.html includes status-badge CSS class');
+    assert(adminHtml.includes('action-cells'), 'admin.html includes action-cells CSS class');
     assert(adminHtml.includes('handleOmniSearch'), 'admin.html implements real-time handleOmniSearch');
 
   } catch (err) {

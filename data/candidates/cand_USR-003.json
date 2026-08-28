@@ -1,13 +1,15 @@
 {
   "id": "USR-003",
-  "email": "alex.morgan@candidate.dev",
-  "passwordHash": "8e754c831284bfc1b7e91d54e3888aef:5ae1f91ac9970e5ce622fa9fd975e138a20cc40601e5a9a525d6eee7c8edaaaeb34f5a0cf8331e05ddc44a49c30ed6f7cd9fa95c369e27910d8b4cacf1fb7d7e",
-  "name": "Alex Morgan",
-  "role": "candidate",
+  "userId": "USR-003",
+  "email": "alex.mercer@email.com",
+  "passwordHash": "912e5d08074d60c731d9d2ac278fc9e8:be575098b394178c1050f95e2fb6406d0d1a828bbac7907147815ae7d0c016392622ea7b509bc6e4023de0f39390726d81d337bc476350f88c142ead9337f677",
+  "name": "Alex Mercer",
+  "fullName": "Alex Mercer",
+  "role": "Candidate",
   "company": "Independent Professional",
-  "phone": "+1 (555) 999-0000",
+  "phone": "312-555-0144",
   "bio": "Senior Full-Stack Architect with 8+ years experience.",
   "approved": true,
-  "createdAt": "2026-08-28T03:31:47.771Z",
-  "status": "Active"
+  "status": "Active",
+  "createdAt": "2026-08-28T04:03:49.048Z"
 }
