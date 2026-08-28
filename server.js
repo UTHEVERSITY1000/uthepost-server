@@ -727,7 +727,10 @@ async function sendTransactionalEmail({ to, subject, html, text, type = 'GENERAL
   // 3. Live SMTP Dispatch if configured
   if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
     try {
-      const transporter = nodemailer.createTransport(SMTP_CONFIG);
+      const transporter = nodemailer.createTransport({
+        ...SMTP_CONFIG,
+        family: 4
+      });
       const info = await transporter.sendMail({
         from: `UTHEVERSITY <${DEFAULT_FROM_EMAIL}>`,
         to,
@@ -2303,7 +2306,10 @@ const server = http.createServer(async (req, res) => {
 
     if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
       try {
-        const transporter = nodemailer.createTransport(SMTP_CONFIG);
+        const transporter = nodemailer.createTransport({
+          ...SMTP_CONFIG,
+          family: 4
+        });
         await transporter.verify();
         isVerified = true;
       } catch (vErr) {
@@ -2323,7 +2329,8 @@ const server = http.createServer(async (req, res) => {
         port: SMTP_CONFIG.port,
         user: SMTP_CONFIG.auth ? SMTP_CONFIG.auth.user : '(None / Fallback)',
         from: DEFAULT_FROM_EMAIL,
-        secure: SMTP_CONFIG.secure
+        secure: SMTP_CONFIG.secure,
+        family: 4
       },
       timestamp: new Date().toISOString()
     });
@@ -2344,7 +2351,10 @@ const server = http.createServer(async (req, res) => {
 
       if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
         try {
-          const transporter = nodemailer.createTransport(SMTP_CONFIG);
+          const transporter = nodemailer.createTransport({
+            ...SMTP_CONFIG,
+            family: 4
+          });
           await transporter.verify();
           isVerified = true;
         } catch (vErr) {
