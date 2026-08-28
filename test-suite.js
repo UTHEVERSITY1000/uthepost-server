@@ -760,6 +760,113 @@ async function runTests() {
     assert(false, `Group 15 failed: ${err.message}`);
   }
 
+  // ----------------------------------------------------
+  // TEST GROUP 16: Automated Transactional Email Engine & Templates
+  // ----------------------------------------------------
+  console.log('\n--- GROUP 16: TRANSACTIONAL EMAIL ENGINE & BRANDED TEMPLATES ---');
+  try {
+    const emailLogPath = path.join(__dirname, 'data', 'logs', 'emails.log');
+    const emailJsonLogPath = path.join(__dirname, 'data', 'logs', 'log_emails.json');
+
+    const adminLoginRes = await httpPost('/api/auth/login', {
+      email: 'contact@utheversity.com',
+      password: 'ZionAdmin2026!'
+    });
+    const authHeaders = {
+      'Authorization': `Bearer ${adminLoginRes.data.token}`,
+      'Cookie': `uthe_token=${adminLoginRes.data.token}`
+    };
+
+    // 1. Sign-Up Welcome Email Trigger (/api/auth/register or /api/auth/signup)
+    const testRegEmail = `test.welcome.${Date.now()}@utheversity.com`;
+    const regRes = await httpPost('/api/auth/register', {
+      email: testRegEmail,
+      password: 'SecurePassword2026!',
+      name: 'Elena Rostova',
+      role: 'candidate',
+      phone: '+1 (555) 890-1234'
+    });
+    assert(regRes.status === 201, 'POST /api/auth/register returns 201 Created');
+    assert(fs.existsSync(emailLogPath), '/data/logs/emails.log exists');
+    assert(fs.existsSync(emailJsonLogPath), '/data/logs/log_emails.json exists');
+
+    const emailLogsJson = JSON.parse(fs.readFileSync(emailJsonLogPath, 'utf8'));
+    const welcomeLog = emailLogsJson.find(e => e.to === testRegEmail && e.type === 'WELCOME_USER');
+    assert(welcomeLog !== undefined, 'Sign-up triggers WELCOME_USER transactional email');
+    assert(welcomeLog.subject.includes('Welcome to UTHEVERSITY'), 'Welcome email has official branded subject');
+
+    // 2. Password Reset Flow (/api/auth/forgot-password, /api/auth/verify-reset-token, /api/auth/reset-password)
+    const forgotRes = await httpPost('/api/auth/forgot-password', { email: testRegEmail });
+    assert(forgotRes.status === 200, 'POST /api/auth/forgot-password returns 200');
+    assert(forgotRes.data.token !== undefined, 'Forgot password generates secure 30-minute token');
+
+    const verifyTokenRes = await httpGet(`/api/auth/verify-reset-token?token=${forgotRes.data.token}`);
+    assert(verifyTokenRes.status === 200 && verifyTokenRes.data.valid === true, 'GET /api/auth/verify-reset-token validates active token');
+
+    const resetPassRes = await httpPost('/api/auth/reset-password', {
+      token: forgotRes.data.token,
+      newPassword: 'BrandNewPassword2026!'
+    });
+    assert(resetPassRes.status === 200, 'POST /api/auth/reset-password with token returns 200');
+
+    const postResetLogs = JSON.parse(fs.readFileSync(emailJsonLogPath, 'utf8'));
+    const resetReqLog = postResetLogs.find(e => e.to === testRegEmail && e.type === 'PASSWORD_RESET_REQUEST');
+    const resetConfLog = postResetLogs.find(e => e.to === testRegEmail && e.type === 'PASSWORD_RESET_CONFIRMATION');
+    assert(resetReqLog !== undefined, 'PASSWORD_RESET_REQUEST email logged');
+    assert(resetConfLog !== undefined, 'PASSWORD_RESET_CONFIRMATION email logged');
+
+    // 3. Application Submission Receipt & Recruiter Alert
+    const testAppEmail = `candidate.applicant.${Date.now()}@utheversity.com`;
+    const appRes = await httpPost('/api/applicants', {
+      jobId: 'JOB-101',
+      jobTitle: 'Senior Full-Stack Architect',
+      name: 'Morgan Sterling',
+      email: testAppEmail,
+      phone: '+1 (555) 432-9876',
+      resumeFile: 'Morgan_Sterling_Resume.pdf',
+      status: 'Applied'
+    });
+    assert(appRes.status === 201, 'POST /api/applicants returns 201 Created');
+
+    const appLogs = JSON.parse(fs.readFileSync(emailJsonLogPath, 'utf8'));
+    const candidateReceipt = appLogs.find(e => e.to === testAppEmail && e.type === 'APPLICATION_RECEIPT_CANDIDATE');
+    const recruiterAlert = appLogs.find(e => e.type === 'NEW_APPLICANT_ALERT_RECRUITER');
+    assert(candidateReceipt !== undefined, 'Candidate APPLICATION_RECEIPT_CANDIDATE email dispatched');
+    assert(candidateReceipt.subject.includes('Application Received'), 'Application receipt subject formatted correctly');
+    assert(recruiterAlert !== undefined, 'Recruiter NEW_APPLICANT_ALERT_RECRUITER email dispatched');
+
+    // 4. Direct Message Alert Trigger
+    const msgRes = await httpPost('/api/messages', {
+      applicantId: appRes.data.applicant.id,
+      senderRole: 'recruiter',
+      senderName: 'Quantum Talent Acquisition',
+      company: 'Quantum Technologies Corp',
+      jobTitle: 'Senior Full-Stack Architect',
+      text: 'Hello Morgan, we were very impressed with your portfolio and would like to invite you for an interview.'
+    }, authHeaders);
+    assert(msgRes.status === 201, 'POST /api/messages returns 201 Created');
+
+    const msgLogs = JSON.parse(fs.readFileSync(emailJsonLogPath, 'utf8'));
+    const messageAlert = msgLogs.find(e => e.type === 'NEW_DIRECT_MESSAGE_ALERT' && e.to === testAppEmail);
+    assert(messageAlert !== undefined, 'NEW_DIRECT_MESSAGE_ALERT email dispatched to applicant');
+    assert(messageAlert.subject.includes('Quantum Technologies Corp') || messageAlert.subject.includes('Quantum Talent'), 'Message alert subject contains company / sender name');
+
+    // 5. Admin Email Telemetry Endpoint
+    const adminEmailsRes = await httpGet('/api/admin/emails', authHeaders);
+    assert(adminEmailsRes.status === 200, 'GET /api/admin/emails returns 200 for admin');
+    assert(Array.isArray(adminEmailsRes.data.emails), '/api/admin/emails returns an array of emails');
+    assert(adminEmailsRes.data.count > 0, '/api/admin/emails contains dispatched email records');
+
+    // 6. Template & Styling Verification
+    const emailsTextLog = fs.readFileSync(emailLogPath, 'utf8');
+    assert(emailsTextLog.includes('WELCOME_USER'), 'emails.log records WELCOME_USER entries');
+    assert(emailsTextLog.includes('APPLICATION_RECEIPT_CANDIDATE'), 'emails.log records APPLICATION_RECEIPT entries');
+    assert(emailsTextLog.includes('NEW_DIRECT_MESSAGE_ALERT'), 'emails.log records NEW_DIRECT_MESSAGE_ALERT entries');
+
+  } catch (err) {
+    assert(false, `Group 16 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

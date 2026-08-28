@@ -3,6 +3,13 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
+let nodemailer = null;
+try {
+  nodemailer = require('nodemailer');
+} catch (e) {
+  console.warn('[EMAIL ENGINE] Nodemailer load notice:', e.message);
+}
+
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'utheversity-professional-jwt-secret-key-2026-secure';
 
@@ -490,6 +497,323 @@ function writeSystemLog(eventType, details = {}) {
   } catch (err) {
     console.error('[LOG STORAGE ERROR]', err.message);
   }
+}
+
+// ----------------------------------------------------
+// AUTOMATED TRANSACTIONAL EMAIL ENGINE (NODEMAILER)
+// Fallback SMTP credentials with structured file logging
+// ----------------------------------------------------
+const SMTP_CONFIG = {
+  host: process.env.SMTP_HOST || 'smtp.utheversity.com',
+  port: parseInt(process.env.SMTP_PORT || '587', 10),
+  secure: process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465',
+  auth: (process.env.SMTP_USER && process.env.SMTP_PASS) ? {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  } : null
+};
+
+const DEFAULT_FROM_EMAIL = process.env.FROM_EMAIL || 'contact@utheversity.com';
+const EMAIL_LOG_FILE = path.join(DIRS.logs, 'emails.log');
+const EMAIL_JSON_LOG = path.join(DIRS.logs, 'log_emails.json');
+
+// In-Memory Reset Tokens Map with 30-Minute Expiration
+// Key: token -> Value: { email, userId, expiresAt }
+const resetTokensStore = new Map();
+
+function generatePasswordResetToken(email, userId) {
+  const token = crypto.randomBytes(24).toString('hex');
+  const expiresAt = Date.now() + (30 * 60 * 1000); // 30 minutes
+  resetTokensStore.set(token, { email: (email || '').toLowerCase().trim(), userId, expiresAt });
+  return token;
+}
+
+function verifyPasswordResetToken(token) {
+  if (!token) return null;
+  const record = resetTokensStore.get(token);
+  if (!record) return null;
+  if (Date.now() > record.expiresAt) {
+    resetTokensStore.delete(token);
+    return null;
+  }
+  return record;
+}
+
+// Branded HTML Email Wrapper (Premium White Studio Theme)
+function buildBrandedEmailHtml({ title, preheader, bodyContent, ctaText, ctaUrl, metadataHtml = '' }) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+  <style>
+    body { margin: 0; padding: 0; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #0f172a; -webkit-font-smoothing: antialiased; }
+    .email-wrapper { width: 100%; background-color: #f8fafc; padding: 36px 12px; }
+    .email-container { max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 10px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+    .email-header { padding: 24px 30px; background: #ffffff; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
+    .brand-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 900; letter-spacing: 0.08em; color: #0f172a; text-decoration: none; }
+    .emblem { background: linear-gradient(135deg, #D4AF37, #B8860B); color: #000000; padding: 4px 8px; border-radius: 4px; font-weight: 900; font-size: 11px; letter-spacing: 0.1em; }
+    .sub-badge { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .email-body { padding: 32px 30px; color: #1e293b; font-size: 14px; line-height: 1.65; }
+    .email-title { font-size: 19px; font-weight: 800; color: #0f172a; margin-top: 0; margin-bottom: 16px; letter-spacing: -0.01em; }
+    .details-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin: 20px 0; font-size: 13px; }
+    .details-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .details-row:last-child { margin-bottom: 0; }
+    .details-label { color: #64748b; font-weight: 600; }
+    .details-value { color: #0f172a; font-weight: 700; }
+    .cta-container { text-align: center; margin: 28px 0 16px; }
+    .cta-button { display: inline-block; background: #0f172a; color: #ffffff !important; font-size: 13px; font-weight: 700; text-decoration: none; padding: 12px 26px; border-radius: 6px; letter-spacing: 0.03em; border: 1px solid #0f172a; }
+    .email-footer { padding: 20px 30px; background: #fafafa; border-top: 1px solid #f1f5f9; text-align: center; font-size: 11px; color: #94a3b8; line-height: 1.5; }
+    .footer-links { margin-bottom: 6px; }
+    .footer-links a { color: #64748b; text-decoration: none; margin: 0 6px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="email-container">
+      <div class="email-header">
+        <div class="brand-badge">
+          <span class="emblem">U-THE</span>
+          <span>UTHEVERSITY</span>
+        </div>
+        <span class="sub-badge">VERIFIED NOTIFICATION</span>
+      </div>
+      <div class="email-body">
+        <h1 class="email-title">${title}</h1>
+        ${bodyContent}
+        ${metadataHtml}
+        ${ctaText && ctaUrl ? `
+        <div class="cta-container">
+          <a href="${ctaUrl}" class="cta-button" target="_blank">${ctaText}</a>
+        </div>` : ''}
+      </div>
+      <div class="email-footer">
+        <div class="footer-links">
+          <a href="https://post.utheversity.com">u-thePOST</a> &bull;
+          <a href="https://jobs.utheversity.com">u-theJOBS</a> &bull;
+          <a href="https://admin.utheversity.com">u-theADMIN</a>
+        </div>
+        <div>&copy; 2026 UTHEVERSITY Inc. &mdash; Professional Career Network</div>
+        <div style="font-size: 10px; color: #cbd5e1; margin-top: 4px;">Sent via UTHEVERSITY Automated Transactional Dispatcher</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+}
+
+// Zero-Crash Transactional Dispatcher with File Fallback Logging
+async function sendTransactionalEmail({ to, subject, html, text, type = 'GENERAL_NOTIFICATION', metadata = {} }) {
+  const timestamp = new Date().toISOString();
+  const emailRecord = {
+    id: `EML-${Math.floor(100000 + Math.random() * 900000)}`,
+    to,
+    from: DEFAULT_FROM_EMAIL,
+    subject,
+    type,
+    metadata,
+    status: 'pending',
+    timestamp
+  };
+
+  initDataDirectories();
+
+  // 1. Human readable log (/data/logs/emails.log)
+  try {
+    const textLogLine = `[${timestamp}] TYPE=${type} TO=${to} SUBJECT="${subject}" ID=${emailRecord.id}\n`;
+    fs.appendFileSync(EMAIL_LOG_FILE, textLogLine, 'utf8');
+  } catch (err) {
+    console.error('[EMAIL LOG ERROR] Failed to write emails.log:', err.message);
+  }
+
+  // 2. Structured JSON log (/data/logs/log_emails.json)
+  try {
+    let emailLogs = [];
+    if (fs.existsSync(EMAIL_JSON_LOG)) {
+      try {
+        emailLogs = JSON.parse(fs.readFileSync(EMAIL_JSON_LOG, 'utf8'));
+        if (!Array.isArray(emailLogs)) emailLogs = [];
+      } catch (e) {
+        emailLogs = [];
+      }
+    }
+    emailLogs.unshift(emailRecord);
+    if (emailLogs.length > 500) emailLogs = emailLogs.slice(0, 500);
+    fs.writeFileSync(EMAIL_JSON_LOG, JSON.stringify(emailLogs, null, 2), 'utf8');
+  } catch (err) {
+    console.error('[EMAIL JSON LOG ERROR]', err.message);
+  }
+
+  // 3. Live SMTP Dispatch if configured
+  if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
+    try {
+      const transporter = nodemailer.createTransport(SMTP_CONFIG);
+      const info = await transporter.sendMail({
+        from: `UTHEVERSITY <${DEFAULT_FROM_EMAIL}>`,
+        to,
+        subject,
+        text: text || subject,
+        html
+      });
+      emailRecord.status = 'sent';
+      emailRecord.messageId = info.messageId;
+      console.log(`[EMAIL ENGINE] SMTP Sent: ${type} -> ${to} (MessageId: ${info.messageId})`);
+    } catch (smtpErr) {
+      emailRecord.status = 'logged_fallback';
+      emailRecord.error = smtpErr.message;
+      console.warn(`[EMAIL ENGINE] SMTP fallback logged for ${to} (${smtpErr.message})`);
+    }
+  } else {
+    emailRecord.status = 'logged_fallback';
+    console.log(`[EMAIL ENGINE] Local fallback logged: ${type} -> ${to} ("${subject}")`);
+  }
+
+  writeSystemLog('EMAIL_DISPATCHED', { to, subject, type, emailId: emailRecord.id, status: emailRecord.status });
+  return emailRecord;
+}
+
+// Template 1: Welcome Email
+async function sendWelcomeEmail(user) {
+  const isEmployer = (user.role || '').toLowerCase().includes('employer') || (user.role || '').toLowerCase().includes('recruiter');
+  const portalUrl = isEmployer ? 'https://post.utheversity.com' : 'https://jobs.utheversity.com';
+  const roleLabel = isEmployer ? 'Employer Recruiter' : 'Candidate Professional';
+
+  const bodyContent = `
+    <p>Welcome to UTHEVERSITY, <strong>${user.name || user.fullName || 'Member'}</strong>!</p>
+    <p>Your platform account has been verified and registered with zero-latency live sync across all network subdomains.</p>
+    <div class="details-box">
+      <div class="details-row"><span class="details-label">User Account ID:</span><span class="details-value">${user.id || user.userId}</span></div>
+      <div class="details-row"><span class="details-label">Account Email:</span><span class="details-value">${user.email}</span></div>
+      <div class="details-row"><span class="details-label">Account Role:</span><span class="details-value">${roleLabel}</span></div>
+      ${user.company ? `<div class="details-row"><span class="details-label">Company:</span><span class="details-value">${user.company}</span></div>` : ''}
+    </div>
+    <p>You can now immediately access your portal to publish job positions or apply to active listings.</p>
+  `;
+
+  return sendTransactionalEmail({
+    to: user.email,
+    subject: `Welcome to UTHEVERSITY — Your ${roleLabel} Account is Active`,
+    type: 'WELCOME_USER',
+    metadata: { userId: user.id || user.userId, role: user.role },
+    html: buildBrandedEmailHtml({
+      title: 'Welcome to UTHEVERSITY',
+      bodyContent,
+      ctaText: isEmployer ? 'LAUNCH U-THEPOST STUDIO' : 'EXPLORE U-THEJOBS BOARD',
+      ctaUrl: portalUrl
+    })
+  });
+}
+
+// Template 2: Password Reset Email (30-Minute Security Token)
+async function sendPasswordResetEmail(user, token, tempPassword = null) {
+  const resetUrl = `https://jobs.utheversity.com/reset-password?token=${token}&email=${encodeURIComponent(user.email)}`;
+  const bodyContent = `
+    <p>Hello <strong>${user.name || user.fullName || 'User'}</strong>,</p>
+    <p>A request was submitted to reset the password for your UTHEVERSITY account (<strong>${user.email}</strong>).</p>
+    ${tempPassword ? `<div class="details-box"><div class="details-row"><span class="details-label">Temporary Secure Password:</span><span class="details-value"><code>${tempPassword}</code></span></div></div>` : ''}
+    <p>Click the secure button below to choose a new password. For security, this link is valid for <strong>30 minutes</strong>.</p>
+  `;
+
+  return sendTransactionalEmail({
+    to: user.email,
+    subject: 'Reset Your UTHEVERSITY Account Password',
+    type: 'PASSWORD_RESET_REQUEST',
+    metadata: { userId: user.id || user.userId, token },
+    html: buildBrandedEmailHtml({
+      title: 'Password Reset Request',
+      bodyContent,
+      ctaText: 'RESET YOUR PASSWORD',
+      ctaUrl: resetUrl
+    })
+  });
+}
+
+// Template 3A: Candidate Application Receipt
+async function sendApplicationReceiptToCandidate(applicant, job) {
+  const bodyContent = `
+    <p>Hello <strong>${applicant.name}</strong>,</p>
+    <p>We have successfully received your interview request and resume for the position below:</p>
+    <div class="details-box">
+      <div class="details-row"><span class="details-label">Position:</span><span class="details-value">${job.jobTitle || applicant.jobTitle}</span></div>
+      <div class="details-row"><span class="details-label">Company:</span><span class="details-value">${job.company || 'Hiring Team'}</span></div>
+      <div class="details-row"><span class="details-label">Application ID:</span><span class="details-value">${applicant.id}</span></div>
+      <div class="details-row"><span class="details-label">Resume Attachment:</span><span class="details-value">${applicant.resumeFile || 'Uploaded PDF'}</span></div>
+      <div class="details-row"><span class="details-label">Status:</span><span class="details-value">${applicant.status || 'Applied'}</span></div>
+    </div>
+    <p>The hiring team has been notified. You will receive an alert as soon as they review your application.</p>
+  `;
+
+  return sendTransactionalEmail({
+    to: applicant.email,
+    subject: `Application Received: ${job.jobTitle || applicant.jobTitle} at ${job.company || 'UTHEVERSITY'}`,
+    type: 'APPLICATION_RECEIPT_CANDIDATE',
+    metadata: { applicantId: applicant.id, jobId: job.id || applicant.jobId },
+    html: buildBrandedEmailHtml({
+      title: 'Application Receipt Confirmed',
+      bodyContent,
+      ctaText: 'VIEW MY APPLICATIONS',
+      ctaUrl: 'https://jobs.utheversity.com'
+    })
+  });
+}
+
+// Template 3B: Recruiter New Applicant Alert
+async function sendNewApplicantAlertToRecruiter(applicant, job) {
+  const recruiterEmail = job.recruiterEmail || 'contact@utheversity.com';
+  const bodyContent = `
+    <p>A new candidate has submitted an application for your active listing:</p>
+    <div class="details-box">
+      <div class="details-row"><span class="details-label">Candidate Name:</span><span class="details-value">${applicant.name}</span></div>
+      <div class="details-row"><span class="details-label">Target Position:</span><span class="details-value">${job.jobTitle || applicant.jobTitle}</span></div>
+      <div class="details-row"><span class="details-label">Candidate Email:</span><span class="details-value">${applicant.email}</span></div>
+      <div class="details-row"><span class="details-label">Candidate Phone:</span><span class="details-value">${applicant.phone}</span></div>
+      <div class="details-row"><span class="details-label">Resume File:</span><span class="details-value">${applicant.resumeFile}</span></div>
+    </div>
+    <p>Log in to u-thePOST to view the candidate resume, change application stages, or start a direct interview messaging thread.</p>
+  `;
+
+  return sendTransactionalEmail({
+    to: recruiterEmail,
+    subject: `New Candidate Application: ${applicant.name} for ${job.jobTitle || applicant.jobTitle}`,
+    type: 'NEW_APPLICANT_ALERT_RECRUITER',
+    metadata: { applicantId: applicant.id, jobId: job.id || applicant.jobId, candidateEmail: applicant.email },
+    html: buildBrandedEmailHtml({
+      title: 'New Applicant Notification',
+      bodyContent,
+      ctaText: 'REVIEW CANDIDATE IN U-THEPOST',
+      ctaUrl: 'https://post.utheversity.com'
+    })
+  });
+}
+
+// Template 4: Direct Message Notification
+async function sendDirectMessageNotification(msg, recipientEmail, recipientName = 'Candidate') {
+  const isRecruiterSender = (msg.senderRole || '').toLowerCase().includes('recruiter') || (msg.senderRole || '').toLowerCase().includes('employer');
+  const previewSnippet = (msg.text || '').length > 180 ? `${msg.text.substring(0, 180)}...` : (msg.text || 'New message attached.');
+  const portalUrl = isRecruiterSender ? 'https://jobs.utheversity.com' : 'https://post.utheversity.com';
+
+  const bodyContent = `
+    <p>Hello <strong>${recipientName}</strong>,</p>
+    <p>You have received a new direct message from <strong>${msg.senderName || msg.company}</strong> regarding <strong>${msg.jobTitle || 'your position'}</strong>:</p>
+    <div class="details-box" style="border-left: 3px solid #D4AF37;">
+      <p style="margin: 0; font-style: italic; color: #334155;">&ldquo;${previewSnippet}&rdquo;</p>
+    </div>
+    <p>Please click below to log in and reply directly in your live messaging console.</p>
+  `;
+
+  return sendTransactionalEmail({
+    to: recipientEmail,
+    subject: `You have a new message from ${msg.company || msg.senderName}`,
+    type: 'NEW_DIRECT_MESSAGE_ALERT',
+    metadata: { messageId: msg.id, applicantId: msg.applicantId, senderRole: msg.senderRole },
+    html: buildBrandedEmailHtml({
+      title: 'New Direct Message Alert',
+      bodyContent,
+      ctaText: 'OPEN LIVE MESSAGING CONSOLE',
+      ctaUrl: portalUrl
+    })
+  });
 }
 
 // 1. Employer Indexing: emp_<id>.json in /data/employers/
@@ -1008,9 +1332,9 @@ const server = http.createServer((req, res) => {
   }
 
   // ----------------------------------------------------
-  // AUTHENTICATION ROUTES
+  // AUTHENTICATION ROUTES & TRANSACTIONAL EMAIL TRIGGERS
   // ----------------------------------------------------
-  if (pathname === '/api/auth/signup' && req.method === 'POST') {
+  if ((pathname === '/api/auth/signup' || pathname === '/api/auth/register') && req.method === 'POST') {
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON body' });
       const { email, password, name, role, company, phone } = body;
@@ -1022,31 +1346,79 @@ const server = http.createServer((req, res) => {
 
       const newUser = {
         id: `USR-${Math.floor(100 + Math.random() * 900)}`,
+        userId: `USR-${Math.floor(100 + Math.random() * 900)}`,
         email: email.toLowerCase().trim(),
         passwordHash: hashPassword(password),
         name: name || email.split('@')[0],
+        fullName: name || email.split('@')[0],
         role: role || 'candidate',
         company: company || '',
         phone: phone || '',
         bio: '',
         approved: true,
+        status: 'Active',
         createdAt: new Date().toISOString()
       };
+      newUser.id = newUser.userId;
 
       usersDatabase.push(newUser);
-      if (newUser.role === 'candidate') {
+      if (newUser.role && newUser.role.toLowerCase() === 'candidate') {
         saveCandidateRecord(newUser);
       } else {
         saveEmployerRecord(newUser);
       }
       writeSystemLog('USER_SIGNUP', { userId: newUser.id, role: newUser.role, email: newUser.email });
 
+      // Trigger 1: Sign-Up Welcome Email
+      sendWelcomeEmail(newUser);
+
       const token = generateJwt({ userId: newUser.id, role: newUser.role, email: newUser.email });
-      const safeUser = { id: newUser.id, email: newUser.email, name: newUser.name, role: newUser.role, company: newUser.company, phone: newUser.phone, bio: newUser.bio };
+      const safeUser = { id: newUser.id, userId: newUser.id, email: newUser.email, name: newUser.name, fullName: newUser.name, role: newUser.role, company: newUser.company, phone: newUser.phone, bio: newUser.bio };
       const cookieHeader = `uthe_token=${token}; Domain=.utheversity.com; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`;
 
-      sendJson(201, { status: 'created', user: safeUser, token }, { 'Set-Cookie': cookieHeader });
+      sendJson(201, { status: 'created', user: safeUser, token, message: 'Account created. Welcome email dispatched.' }, { 'Set-Cookie': cookieHeader });
     });
+    return;
+  }
+
+  // Trigger 2: Password Reset Request (/api/auth/forgot-password)
+  if (pathname === '/api/auth/forgot-password' && req.method === 'POST') {
+    readBody((err, body) => {
+      if (err) return sendJson(400, { error: 'Invalid JSON body' });
+      const email = (body.email || '').toLowerCase().trim();
+      if (!email) return sendJson(400, { error: 'Email address is required' });
+
+      const allUsers = getAllAggregatedUsers();
+      let user = usersDatabase.find(u => (u.email || '').toLowerCase().trim() === email) ||
+                 allUsers.find(u => (u.email || '').toLowerCase().trim() === email);
+
+      if (!user) {
+        return sendJson(200, {
+          status: 'dispatched',
+          message: 'If the provided email is registered, a 30-minute password reset link has been dispatched.'
+        });
+      }
+
+      const resetToken = generatePasswordResetToken(user.email, user.userId || user.id);
+      sendPasswordResetEmail(user, resetToken);
+      writeSystemLog('FORGOT_PASSWORD_REQUESTED', { email: user.email, userId: user.userId || user.id });
+
+      sendJson(200, {
+        status: 'dispatched',
+        token: resetToken,
+        message: `Password reset link dispatched to ${user.email}. Valid for 30 minutes.`
+      });
+    });
+    return;
+  }
+
+  if (pathname === '/api/auth/verify-reset-token' && (req.method === 'GET' || req.method === 'POST')) {
+    const token = (parsedUrl.searchParams.get('token') || '').trim();
+    const record = verifyPasswordResetToken(token);
+    if (!record) {
+      return sendJson(400, { valid: false, error: 'Invalid or expired password reset token (30-minute validity).' });
+    }
+    sendJson(200, { valid: true, email: record.email, userId: record.userId });
     return;
   }
 
@@ -1056,15 +1428,21 @@ const server = http.createServer((req, res) => {
       const { email, password } = body;
       if (!email || !password) return sendJson(400, { error: 'Email and password required' });
 
-      const user = usersDatabase.find(u => u.email.toLowerCase() === email.toLowerCase().trim());
+      let user = usersDatabase.find(u => u.email.toLowerCase() === email.toLowerCase().trim());
+      if (!user) {
+        const allUsers = getAllAggregatedUsers();
+        user = allUsers.find(u => (u.email || '').toLowerCase().trim() === email.toLowerCase().trim());
+        if (user) usersDatabase.push(user);
+      }
+
       if (!user || !verifyPassword(password, user.passwordHash)) {
         return sendJson(401, { error: 'Invalid email or password' });
       }
 
-      writeSystemLog('USER_LOGIN', { userId: user.id, email: user.email });
+      writeSystemLog('USER_LOGIN', { userId: user.id || user.userId, email: user.email });
 
-      const token = generateJwt({ userId: user.id, role: user.role, email: user.email });
-      const safeUser = { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
+      const token = generateJwt({ userId: user.id || user.userId, role: user.role, email: user.email });
+      const safeUser = { id: user.id || user.userId, userId: user.id || user.userId, email: user.email, name: user.name || user.fullName, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
       const cookieHeader = `uthe_token=${token}; Domain=.utheversity.com; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`;
 
       sendJson(200, { status: 'authenticated', user: safeUser, token }, { 'Set-Cookie': cookieHeader });
@@ -1083,7 +1461,7 @@ const server = http.createServer((req, res) => {
     if (!user) {
       return sendJson(200, { authenticated: false, user: null });
     }
-    const safeUser = { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
+    const safeUser = { id: user.id || user.userId, userId: user.id || user.userId, email: user.email, name: user.name || user.fullName, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
     sendJson(200, { authenticated: true, user: safeUser });
     return;
   }
@@ -1094,19 +1472,19 @@ const server = http.createServer((req, res) => {
 
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON' });
-      if (body.name) user.name = body.name;
+      if (body.name) { user.name = body.name; user.fullName = body.name; }
       if (body.company) user.company = body.company;
       if (body.phone) user.phone = body.phone;
       if (body.bio) user.bio = body.bio;
 
-      if (user.role === 'candidate') {
+      if (user.role && user.role.toLowerCase() === 'candidate') {
         saveCandidateRecord(user);
       } else {
         saveEmployerRecord(user);
       }
-      writeSystemLog('PROFILE_UPDATED', { userId: user.id });
+      writeSystemLog('PROFILE_UPDATED', { userId: user.id || user.userId });
 
-      const safeUser = { id: user.id, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
+      const safeUser = { id: user.id || user.userId, userId: user.id || user.userId, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
       sendJson(200, { status: 'updated', user: safeUser });
     });
     return;
@@ -1115,16 +1493,49 @@ const server = http.createServer((req, res) => {
   if (pathname === '/api/auth/reset-password' && req.method === 'POST') {
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON body' });
-      const { email, newPassword } = body;
-      const user = usersDatabase.find(u => u.email.toLowerCase() === (email || '').toLowerCase().trim());
+      const { email, token, newPassword } = body;
+      let targetEmail = (email || '').toLowerCase().trim();
+
+      if (token) {
+        const record = verifyPasswordResetToken(token);
+        if (!record) {
+          return sendJson(400, { error: 'Invalid or expired password reset token (30-minute limit).' });
+        }
+        targetEmail = record.email;
+      }
+
+      if (!targetEmail) return sendJson(400, { error: 'Email or valid reset token required' });
+      if (!newPassword || newPassword.length < 8) return sendJson(400, { error: 'Password must be at least 8 characters' });
+
+      let user = usersDatabase.find(u => (u.email || '').toLowerCase().trim() === targetEmail);
+      if (!user) {
+        const allUsers = getAllAggregatedUsers();
+        user = allUsers.find(u => (u.email || '').toLowerCase().trim() === targetEmail);
+        if (user) usersDatabase.push(user);
+      }
       if (!user) return sendJson(404, { error: 'User not found' });
 
-      user.passwordHash = hashPassword(newPassword || 'NewSecurePass2026!');
-      if (user.role === 'candidate') saveCandidateRecord(user);
+      user.passwordHash = hashPassword(newPassword);
+      if (user.role && user.role.toLowerCase() === 'candidate') saveCandidateRecord(user);
       else saveEmployerRecord(user);
-      writeSystemLog('PASSWORD_RESET', { userId: user.id, email: user.email });
 
-      sendJson(200, { status: 'password_reset', email: user.email });
+      if (token) resetTokensStore.delete(token);
+
+      writeSystemLog('PASSWORD_RESET', { userId: user.id || user.userId, email: user.email });
+
+      sendTransactionalEmail({
+        to: user.email,
+        subject: 'Your UTHEVERSITY Password Has Been Updated',
+        type: 'PASSWORD_RESET_CONFIRMATION',
+        html: buildBrandedEmailHtml({
+          title: 'Password Updated Successfully',
+          bodyContent: `<p>Hello <strong>${user.name || user.fullName || 'User'}</strong>,</p><p>The password for your UTHEVERSITY account (<strong>${user.email}</strong>) was successfully reset.</p><p>You can now log in securely using your new credentials.</p>`,
+          ctaText: 'LOG IN TO YOUR PORTAL',
+          ctaUrl: user.role && user.role.toLowerCase().includes('admin') ? 'https://admin.utheversity.com' : (user.role && (user.role.toLowerCase().includes('employer') || user.role.toLowerCase().includes('recruiter')) ? 'https://post.utheversity.com' : 'https://jobs.utheversity.com')
+        })
+      });
+
+      sendJson(200, { status: 'password_reset', email: user.email, message: 'Password updated successfully. Confirmation email dispatched.' });
     });
     return;
   }
@@ -1283,7 +1694,11 @@ const server = http.createServer((req, res) => {
     if (user.role && user.role.toLowerCase() === 'candidate') saveCandidateRecord(user);
     else saveEmployerRecord(user);
     writeSystemLog('ADMIN_RESET_PASSWORD', { userId: user.id || user.userId, email: user.email });
-    sendJson(200, { status: 'reset', tempPassword: tempPass, message: `Password for ${user.email} reset successfully.` });
+
+    const resetToken = generatePasswordResetToken(user.email, user.id || user.userId);
+    sendPasswordResetEmail(user, resetToken, tempPass);
+
+    sendJson(200, { status: 'reset', tempPassword: tempPass, resetToken, message: `Password for ${user.email} reset successfully. Reset email dispatched.` });
     return;
   }
 
@@ -1627,8 +2042,9 @@ const server = http.createServer((req, res) => {
 
   // ----------------------------------------------------
   // APPLICANTS & APPLICATIONS INGESTION & ACCESS CONTROL
+  // Trigger 3: Candidate Application Receipt & Recruiter Alert
   // ----------------------------------------------------
-  if (pathname === '/api/applicants' && req.method === 'POST') {
+  if ((pathname === '/api/applicants' || pathname === '/api/applications') && req.method === 'POST') {
     readBody((err, payload) => {
       if (err) return sendJson(400, { error: err.message });
 
@@ -1672,8 +2088,20 @@ const server = http.createServer((req, res) => {
       saveApplicantRecord(newApplicant);
       writeSystemLog('CANDIDATE_APPLIED', { applicantId: newApplicant.id, jobId: newApplicant.jobId, name: newApplicant.name });
 
+      // Look up target job position for recruiter alerts
+      const targetJob = globalJobDatabase.find(j => j.id === newApplicant.jobId) || {
+        id: newApplicant.jobId,
+        jobTitle: newApplicant.jobTitle,
+        company: 'Hiring Team',
+        recruiterEmail: 'contact@utheversity.com'
+      };
+
+      // Trigger 3A: Candidate Receipt & Trigger 3B: Recruiter Alert
+      sendApplicationReceiptToCandidate(newApplicant, targetJob);
+      sendNewApplicantAlertToRecruiter(newApplicant, targetJob);
+
       broadcastWebSocketEvent('CANDIDATE_APPLIED', { applicant: newApplicant });
-      sendJson(201, { status: 'submitted', applicant: newApplicant });
+      sendJson(201, { status: 'submitted', applicant: newApplicant, message: 'Application submitted. Confirmation and recruiter alert emails dispatched.' });
     });
     return;
   }
@@ -1693,6 +2121,7 @@ const server = http.createServer((req, res) => {
 
   // ----------------------------------------------------
   // TWO-WAY CANDIDATE & RECRUITER MESSAGING (PROTECTED)
+  // Trigger 4: Direct Message Notification Alert
   // ----------------------------------------------------
   if (pathname === '/api/messages' && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
@@ -1731,7 +2160,24 @@ const server = http.createServer((req, res) => {
 
       globalMessageStore.push(newMsg);
       saveMessageRecord(newMsg);
-      writeSystemLog('MESSAGE_SENT', { messageId: newMsg.id, applicantId: newMsg.applicantId, senderRole: newMsg.senderRole, userId: user.id });
+      writeSystemLog('MESSAGE_SENT', { messageId: newMsg.id, applicantId: newMsg.applicantId, senderRole: newMsg.senderRole, userId: user.id || user.userId });
+
+      // Trigger 4: Direct Message Notification Alert
+      const targetApp = applicantsStore.find(a => a.id === newMsg.applicantId);
+      let recipientEmail = 'candidate@domain.com';
+      let recipientName = 'Candidate';
+
+      if (newMsg.senderRole === 'recruiter' || newMsg.senderRole === 'employer' || newMsg.senderRole === 'admin') {
+        if (targetApp && targetApp.email) recipientEmail = targetApp.email;
+        if (targetApp && targetApp.name) recipientName = targetApp.name;
+      } else {
+        const job = globalJobDatabase.find(j => targetApp && j.id === targetApp.jobId);
+        if (job && job.recruiterEmail) recipientEmail = job.recruiterEmail;
+        else recipientEmail = 'contact@utheversity.com';
+        recipientName = newMsg.company || 'Hiring Team';
+      }
+
+      sendDirectMessageNotification(newMsg, recipientEmail, recipientName);
 
       if (newMsg.senderRole === 'recruiter') {
         broadcastWebSocketEvent('RECRUITER_MESSAGE_SENT', { message: newMsg });
@@ -1741,6 +2187,25 @@ const server = http.createServer((req, res) => {
 
       sendJson(201, { status: 'sent', message: newMsg });
     });
+    return;
+  }
+
+  // ----------------------------------------------------
+  // TRANSACTIONAL EMAIL DISPATCH LOGS (PROTECTED ADMIN)
+  // ----------------------------------------------------
+  if (pathname === '/api/admin/emails' && req.method === 'GET') {
+    const user = getAuthenticatedUser(req);
+    if (!isAdmin(user)) {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
+    let emails = [];
+    if (fs.existsSync(EMAIL_JSON_LOG)) {
+      try {
+        emails = JSON.parse(fs.readFileSync(EMAIL_JSON_LOG, 'utf8'));
+      } catch (e) { emails = []; }
+    }
+    sendJson(200, { emails, count: emails.length });
     return;
   }
 
