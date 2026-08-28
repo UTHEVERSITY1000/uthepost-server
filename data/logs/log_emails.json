@@ -1,5 +1,194 @@
 [
   {
+    "id": "EML-179851",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "[UTHEVERSITY] Google Workspace SMTP Diagnostic Test — Verified Delivery",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "adminUserId": "USR-001",
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": false,
+      "verifyError": null
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:24.902Z"
+  },
+  {
+    "id": "EML-399041",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "[UTHEVERSITY] Google Workspace SMTP Diagnostic Test — Verified Delivery",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "adminUserId": "USR-001",
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": false,
+      "verifyError": null
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:24.748Z"
+  },
+  {
+    "id": "EML-435317",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "[UTHEVERSITY] Google Workspace SMTP Diagnostic Test — Verified Delivery",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "adminUserId": "USR-001",
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": false,
+      "verifyError": null
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:24.508Z"
+  },
+  {
+    "id": "EML-517256",
+    "to": "candidate.applicant.1787952563472@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Quantum Technologies Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-1295",
+      "applicantId": "APP-829",
+      "senderRole": "recruiter"
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:24.347Z"
+  },
+  {
+    "id": "EML-974240",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
+    "type": "NEW_APPLICANT_ALERT_RECRUITER",
+    "metadata": {
+      "applicantId": "APP-829",
+      "jobId": "JOB-101",
+      "candidateEmail": "candidate.applicant.1787952563472@utheversity.com"
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:23.788Z"
+  },
+  {
+    "id": "EML-595679",
+    "to": "candidate.applicant.1787952563472@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
+    "type": "APPLICATION_RECEIPT_CANDIDATE",
+    "metadata": {
+      "applicantId": "APP-829",
+      "jobId": "JOB-101"
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:23.609Z"
+  },
+  {
+    "id": "EML-183640",
+    "to": "test.welcome.1787952562494@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Your UTHEVERSITY Password Has Been Updated",
+    "type": "PASSWORD_RESET_CONFIRMATION",
+    "metadata": {},
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:23.329Z"
+  },
+  {
+    "id": "EML-640169",
+    "to": "test.welcome.1787952562494@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Reset Your UTHEVERSITY Account Password",
+    "type": "PASSWORD_RESET_REQUEST",
+    "metadata": {
+      "userId": "USR-279",
+      "token": "0e9cc6d9bd9c03d3e1d96200e20ad69e2aa93af9a9917354"
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:23.004Z"
+  },
+  {
+    "id": "EML-665978",
+    "to": "test.welcome.1787952562494@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-279",
+      "role": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:22.903Z"
+  },
+  {
+    "id": "EML-918625",
+    "to": "jordan.rivera@email.com",
+    "from": "contact@utheversity.com",
+    "subject": "Reset Your UTHEVERSITY Account Password",
+    "type": "PASSWORD_RESET_REQUEST",
+    "metadata": {
+      "userId": "USR-003",
+      "token": "afaf5f548e2c9fd724c5fd549fb5e2a695c3434ace841685"
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:22.170Z"
+  },
+  {
+    "id": "EML-121919",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Persistent Systems Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-9437",
+      "applicantId": "APP-700",
+      "senderRole": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:21.431Z"
+  },
+  {
+    "id": "EML-903462",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1787952560372",
+    "type": "NEW_APPLICANT_ALERT_RECRUITER",
+    "metadata": {
+      "applicantId": "APP-700",
+      "jobId": "JOB-821",
+      "candidateEmail": "jane.doe@example.com"
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:21.272Z"
+  },
+  {
+    "id": "EML-755722",
+    "to": "jane.doe@example.com",
+    "from": "contact@utheversity.com",
+    "subject": "Application Received: Senior Lead Architect 1787952560372 at Persistent Systems Corp",
+    "type": "APPLICATION_RECEIPT_CANDIDATE",
+    "metadata": {
+      "applicantId": "APP-700",
+      "jobId": "JOB-821"
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:21.097Z"
+  },
+  {
+    "id": "EML-768391",
+    "to": "test.candidate.1787952560109@domain.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-296",
+      "role": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-08-28T21:29:20.206Z"
+  },
+  {
     "id": "EML-163421",
     "to": "contact@utheversity.com",
     "from": "contact@utheversity.com",
