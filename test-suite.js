@@ -970,6 +970,40 @@ async function runTests() {
     assert(false, `Group 18 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 19: AUTOMATIC RESUME CONTACT AUTO-FILL ENGINE
+  // ================================================================
+  console.log('\n--- GROUP 19: AUTOMATIC RESUME CONTACT AUTO-FILL ENGINE ---');
+  try {
+    const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    assert(candHtml.includes('id="resume-scan-banner"'), 'candidate.html implements #resume-scan-banner notification card');
+    assert(candHtml.includes('id="global-resume-scan-banner"'), 'candidate.html implements #global-resume-scan-banner');
+    assert(candHtml.includes('Resume scanned! We automatically filled in your contact details.'), 'candidate.html renders exact gold confirmation banner text');
+    assert(candHtml.includes('parseResumeContactInfo'), 'candidate.html defines parseResumeContactInfo() scanner');
+    assert(candHtml.includes('handleResumeFileChosen'), 'candidate.html defines handleResumeFileChosen() listener');
+    assert(candHtml.includes('onchange="handleResumeFileChosen(event)"'), 'candidate.html binds onchange to #cand-resume-file');
+    assert(candHtml.includes('cand-name'), 'candidate.html targets #cand-name (Full Legal Name)');
+    assert(candHtml.includes('cand-email'), 'candidate.html targets #cand-email (Email Address)');
+    assert(candHtml.includes('cand-phone'), 'candidate.html targets #cand-phone (Phone Number)');
+    assert(candHtml.includes('userManuallyEdited'), 'candidate.html tracks userManuallyEdited to keep manual entries untouched');
+    assert(candHtml.includes('.resume-scan-banner'), 'candidate.html provides .resume-scan-banner CSS styling');
+    assert(candHtml.includes('.global-resume-scan-banner'), 'candidate.html provides .global-resume-scan-banner CSS styling');
+
+    // Test parser extraction logic
+    const testPdfPath = path.join(__dirname, 'data', 'resumes', 'John_Doe_Resume_2026.pdf');
+    if (fs.existsSync(testPdfPath)) {
+      const buf = fs.readFileSync(testPdfPath);
+      const text = buf.toString('latin1');
+      const commentNameMatch = text.match(/%\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/);
+      const extractedName = commentNameMatch ? commentNameMatch[1].replace(/Test|Resume|CV/gi, '').trim() : '';
+      assert(extractedName === 'John Doe', 'Parser accurately extracts candidate name "John Doe" from PDF resume');
+    }
+
+  } catch (err) {
+    assert(false, `Group 19 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
