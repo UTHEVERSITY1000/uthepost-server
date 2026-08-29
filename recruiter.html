@@ -3114,8 +3114,11 @@
           chatLog.scrollTop = chatLog.scrollHeight;
         }
         showCustomModalAlert('Candidate Reply Received', `New reply from ${data.message.senderName || 'Candidate'}: "${data.message.text}"`);
-      } else if ((data.type === 'cms_update' || data.type === 'CMS_CONFIG_UPDATED' || data.event === 'cms_update') && (data.config || data.updatedConfig)) {
-        applyCmsConfig(data.config || data.updatedConfig);
+      } else if (data.type === 'CMS_CONFIG_UPDATED' || data.type === 'cms_update' || data.event === 'cms_update') {
+        const freshConfig = data.config || data.updatedConfig;
+        if (freshConfig) {
+          applyCmsConfig(freshConfig);
+        }
       }
     }
 
@@ -3228,6 +3231,11 @@
           }
         }
       });
+
+      // Direct DOM Re-rendering of live jobs preview if available
+      if (typeof updateLivePreview === 'function') {
+        updateLivePreview();
+      }
     }
 
     // Cache-Busting Initial Fetch (GET /api/cms/config?t=...)

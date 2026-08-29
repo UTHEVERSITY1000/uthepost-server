@@ -1185,6 +1185,68 @@ async function runTests() {
     assert(false, `Group 24 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 25: INSTANT CMS LIVE BROADCAST & DOM BINDING FIX
+  // ================================================================
+  console.log('\n--- GROUP 25: INSTANT CMS LIVE BROADCAST & DOM BINDING ---');
+  try {
+    const srvJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+    const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const recHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const admHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+
+    // 1. Server-side CMS endpoint and broadcast
+    assert(srvJs.includes('/api/cms/config'), 'server.js provides /api/cms/config endpoint');
+    assert(srvJs.includes('type: \'CMS_CONFIG_UPDATED\''), 'server.js broadcasts CMS_CONFIG_UPDATED type');
+    assert(srvJs.includes('event: \'cms_update\''), 'server.js includes cms_update event flag');
+    assert(srvJs.includes('updatedConfig: cmsConfig'), 'server.js broadcasts updatedConfig');
+    assert(srvJs.includes('wss.clients.forEach'), 'server.js broadcasts to all active WebSocket clients');
+
+    // 2. Client-side Universal Event Listeners
+    assert(candHtml.includes('data.type === \'CMS_CONFIG_UPDATED\'') || candHtml.includes('data.type === "CMS_CONFIG_UPDATED"'), 'candidate.html handles CMS_CONFIG_UPDATED');
+    assert(candHtml.includes('data.type === \'cms_update\'') || candHtml.includes('data.type === "cms_update"'), 'candidate.html handles cms_update type');
+    assert(candHtml.includes('data.event === \'cms_update\'') || candHtml.includes('data.event === "cms_update"'), 'candidate.html handles cms_update event');
+    assert(recHtml.includes('data.type === \'CMS_CONFIG_UPDATED\'') || recHtml.includes('data.type === "CMS_CONFIG_UPDATED"'), 'recruiter.html handles CMS_CONFIG_UPDATED');
+    assert(recHtml.includes('data.type === \'cms_update\'') || recHtml.includes('data.type === "cms_update"'), 'recruiter.html handles cms_update type');
+
+    // 3. Direct DOM Re-rendering in applyCmsConfig
+    assert(candHtml.includes('applyCmsConfig(freshConfig)') || candHtml.includes('applyCmsConfig(data.config'), 'candidate.html invokes applyCmsConfig');
+    assert(candHtml.includes('renderJobListings(jobsDatabase)') || candHtml.includes('renderJobListings('), 'candidate.html applyCmsConfig re-renders job listings');
+    assert(candHtml.includes('document.querySelectorAll(\'[data-cms-key]\')'), 'candidate.html dynamically binds [data-cms-key] elements');
+    assert(recHtml.includes('document.querySelectorAll(\'[data-cms-key]\')'), 'recruiter.html dynamically binds [data-cms-key] elements');
+
+    // 4. Live API Test for /api/cms/config
+    const getRes = await fetch(`${BASE_URL}/api/cms/config`);
+    assert(getRes.status === 200, 'GET /api/cms/config returns HTTP 200');
+    const getData = await getRes.json();
+    assert(getData.config && getData.config.jobsBoard, 'GET /api/cms/config returns full config structure');
+
+    const updatePayload = {
+      jobsBoard: {
+        boardTitle: 'U-THEJOBS EXECUTIVE',
+        searchPlaceholder: 'Search positions, verified companies, locations, or skills...'
+      }
+    };
+
+    const postRes = await fetch(`${BASE_URL}/api/cms/config`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Portal': 'true' },
+      body: JSON.stringify(updatePayload)
+    });
+    assert(postRes.status === 200, 'POST /api/cms/config returns HTTP 200 with X-Admin-Portal');
+    const postData = await postRes.json();
+    assert(postData.config.jobsBoard.boardTitle === 'U-THEJOBS EXECUTIVE', 'POST /api/cms/config persists updated boardTitle');
+
+    // Check mirrors
+    const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
+    const recMirrorHtml = fs.readFileSync(path.join(__dirname, 'u-thePOST-ENTERPRISE-EDITION.html'), 'utf8');
+    assert(syncHtml.includes('CMS_CONFIG_UPDATED'), 'u-theJOBS-ENTERPRISE-SYNC.html contains CMS_CONFIG_UPDATED handler');
+    assert(recMirrorHtml.includes('CMS_CONFIG_UPDATED'), 'u-thePOST-ENTERPRISE-EDITION.html contains CMS_CONFIG_UPDATED handler');
+
+  } catch (err) {
+    assert(false, `Group 25 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

@@ -2461,8 +2461,11 @@
         }
 
         showCustomModalAlert('New Message from Recruiter', `"${data.message.text}" from ${data.message.company || 'Employer'}.`);
-      } else if ((data.type === 'cms_update' || data.type === 'CMS_CONFIG_UPDATED' || data.event === 'cms_update') && (data.config || data.updatedConfig)) {
-        applyCmsConfig(data.config || data.updatedConfig);
+      } else if (data.type === 'CMS_CONFIG_UPDATED' || data.type === 'cms_update' || data.event === 'cms_update') {
+        const freshConfig = data.config || data.updatedConfig;
+        if (freshConfig) {
+          applyCmsConfig(freshConfig);
+        }
       }
     }
 
@@ -2575,6 +2578,11 @@
           }
         }
       });
+
+      // Direct DOM Re-rendering of jobs listing
+      if (typeof renderJobListings === 'function' && typeof jobsDatabase !== 'undefined' && jobsDatabase.length > 0) {
+        renderJobListings(jobsDatabase);
+      }
     }
 
     // Cache-Busting Initial Fetch (GET /api/cms/config?t=...)

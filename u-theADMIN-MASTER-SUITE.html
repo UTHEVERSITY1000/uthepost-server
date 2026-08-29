@@ -1803,9 +1803,10 @@
       };
 
       try {
+        const headers = typeof getAdminAuthHeaders === 'function' ? getAdminAuthHeaders() : { 'Content-Type': 'application/json', 'X-Admin-Portal': 'true' };
         await fetch('/api/cms/config', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: headers,
           body: JSON.stringify(payload)
         });
         showCustomModalAlert('Zero-Code CMS Broadcast Complete', 'All label, button, and pricing overrides were broadcast live across all subdomains.');

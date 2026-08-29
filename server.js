@@ -2057,6 +2057,56 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // ----------------------------------------------------
+  // MASTER ZERO-CODE CMS CONFIGURATION ENGINE & LIVE BROADCAST
+  // ----------------------------------------------------
+  if ((pathname === '/api/cms/config' || pathname === '/api/cms' || pathname === '/api/admin/cms' || pathname === '/api/admin/cms/config') && (req.method === 'GET' || req.method === 'POST')) {
+    if (req.method === 'GET') {
+      return sendJson(200, { config: cmsConfig, updatedConfig: cmsConfig, cmsConfig: cmsConfig });
+    }
+
+    const user = getAuthenticatedUser(req);
+    const isFromAdminPortal = isRequestFromAdminDomain(req);
+    if (!isAdmin(user) && !isFromAdminPortal) {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
+    readBody((err, body) => {
+      if (err || !body) return sendJson(400, { error: 'Invalid JSON body' });
+
+      // Update in-memory config and persist to disk
+      cmsConfig = { ...cmsConfig, ...body };
+      const cmsFilePath = path.join(__dirname, 'data', 'cms_config.json');
+      const rootCmsPath = path.join(__dirname, 'cms_config.json');
+      try {
+        fs.writeFileSync(cmsFilePath, JSON.stringify(cmsConfig, null, 2));
+      } catch (e) {}
+      try {
+        fs.writeFileSync(rootCmsPath, JSON.stringify(cmsConfig, null, 2));
+      } catch (e) {}
+
+      // Broadcast update payload to all active client sockets
+      const broadcastPayload = JSON.stringify({
+        type: 'CMS_CONFIG_UPDATED',
+        event: 'cms_update',
+        config: cmsConfig,
+        updatedConfig: cmsConfig
+      });
+
+      if (wss && wss.clients) {
+        wss.clients.forEach(client => {
+          if (client.readyState === 1) { // WebSocket.OPEN
+            try { client.send(broadcastPayload); } catch (e) {}
+          }
+        });
+      }
+
+      writeSystemLog('CMS_CONFIG_UPDATED', { updatedBy: user ? user.id : 'Admin Portal', timestamp: new Date().toISOString() });
+      sendJson(200, { status: 'success', message: 'CMS configuration updated and broadcast live.', config: cmsConfig, updatedConfig: cmsConfig });
+    });
+    return;
+  }
+
   if (pathname === '/api/health') {
     sendJson(200, {
       status: 'healthy',
