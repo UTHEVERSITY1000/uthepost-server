@@ -1144,6 +1144,47 @@ async function runTests() {
     assert(false, `Group 23 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 24: CITY, STATE, AND ZIP CODE SEARCH MATCHING
+  // ================================================================
+  console.log('\n--- GROUP 24: CITY, STATE, AND ZIP CODE SEARCH MATCHING ---');
+  try {
+    const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    assert(candHtml.includes('j.location && j.location.toLowerCase().includes(q)'), 'candidate.html matches location (city and state) in search');
+    assert(candHtml.includes('j.zipCode && j.zipCode.toString().toLowerCase().includes(q)'), 'candidate.html matches zip code in search filter');
+
+    // Test filter logic mathematically
+    const sampleJobs = [
+      { id: 'JOB-1', jobTitle: 'Software Engineer', company: 'Tech Corp', summary: 'Building tools', location: 'Austin, TX', zipCode: '78701', employmentType: 'Full-Time' },
+      { id: 'JOB-2', jobTitle: 'Sales Lead', company: 'Retail Inc', summary: 'Store manager', location: 'Miami, FL', zipCode: 33101, employmentType: 'Full-Time' }
+    ];
+
+    const filterFunc = (q, list) => list.filter(j => {
+      const matchesQ = !q || 
+        j.jobTitle.toLowerCase().includes(q) || 
+        j.company.toLowerCase().includes(q) || 
+        j.summary.toLowerCase().includes(q) || 
+        (j.location && j.location.toLowerCase().includes(q)) ||
+        (j.zipCode && j.zipCode.toString().toLowerCase().includes(q));
+      return matchesQ;
+    });
+
+    assert(filterFunc('austin', sampleJobs).length === 1, 'Search query "austin" matches Austin, TX job');
+    assert(filterFunc('fl', sampleJobs).length === 1, 'Search query "fl" matches Miami, FL job');
+    assert(filterFunc('78701', sampleJobs).length === 1, 'Search query "78701" matches zip code 78701');
+    assert(filterFunc('33101', sampleJobs).length === 1, 'Search query "33101" matches numeric zip code 33101');
+
+    // Check mirrors
+    const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
+    const dualHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-DUAL LINK TO u-thePOST.html'), 'utf8');
+    assert(syncHtml.includes('j.location && j.location.toLowerCase().includes(q)'), 'u-theJOBS-ENTERPRISE-SYNC.html contains location matching');
+    assert(dualHtml.includes('j.location && j.location.toLowerCase().includes(q)'), 'u-theJOBS-DUAL LINK TO u-thePOST.html contains location matching');
+
+  } catch (err) {
+    assert(false, `Group 24 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

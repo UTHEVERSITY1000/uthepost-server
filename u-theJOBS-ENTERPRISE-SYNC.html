@@ -1781,12 +1781,20 @@
     }
 
     function handleFilterChange() {
-      const q = document.getElementById('search-input').value.toLowerCase().trim();
+      const searchEl = document.getElementById('search-input') || document.getElementById('jobSearchInput');
+      const q = searchEl ? searchEl.value.toLowerCase().trim() : '';
+      currentSearchFilter = q;
+      currentSearchQuery = q;
       const type = document.getElementById('filter-type').value;
       const loc = document.getElementById('filter-location').value;
 
       const filtered = jobsDatabase.filter(j => {
-        const matchesQ = !q || j.jobTitle.toLowerCase().includes(q) || j.company.toLowerCase().includes(q) || j.summary.toLowerCase().includes(q);
+        const matchesQ = !q || 
+          j.jobTitle.toLowerCase().includes(q) || 
+          j.company.toLowerCase().includes(q) || 
+          j.summary.toLowerCase().includes(q) || 
+          (j.location && j.location.toLowerCase().includes(q)) ||
+          (j.zipCode && j.zipCode.toString().toLowerCase().includes(q));
         const matchesType = type === 'ALL' || j.employmentType.toLowerCase().includes(type.toLowerCase());
         const matchesLoc = loc === 'ALL' || j.location.toLowerCase().includes(loc.toLowerCase());
         return matchesQ && matchesType && matchesLoc;
