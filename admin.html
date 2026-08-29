@@ -1295,12 +1295,11 @@
       <!-- Section B: Candidate Applications -->
       <div class="table-container">
         <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
-          <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; flex-wrap: wrap;">
             <span>CANDIDATE APPLICATIONS & ATS STAGE OVERRIDES</span>
-            <button class="btn-gold-sm" id="btn-download-all-resumes" onclick="downloadAllResumesZip()" style="height: 24px; padding: 0 0.55rem; font-size: 0.65rem; display: inline-flex; align-items: center; gap: 0.35rem;" data-tooltip="Download all submitted candidate resumes in a single .ZIP archive">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              DOWNLOAD ALL RESUMES (.ZIP)
-            </button>
+            <a href="/api/admin/resumes/download-all" target="_blank" style="background:#D4AF37; color:#000; padding:8px 16px; border-radius:4px; font-weight:bold; text-decoration:none; display:inline-block; margin-left:12px;">
+              📦 DOWNLOAD ALL RESUMES (.ZIP)
+            </a>
           </div>
           <span style="font-size:0.65rem; color:var(--text-muted);">Direct pipeline stage controls</span>
         </div>

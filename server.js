@@ -2096,7 +2096,7 @@ const server = http.createServer(async (req, res) => {
   // ----------------------------------------------------
   // BULK CANDIDATE RESUMES ZIP ARCHIVE DOWNLOAD
   // ----------------------------------------------------
-  if ((pathname === '/api/admin/resumes/zip' || pathname === '/api/resumes/zip' || pathname === '/api/resumes/bulk-download') && req.method === 'GET') {
+  if ((pathname === '/api/admin/resumes/download-all' || pathname === '/api/admin/resumes/zip' || pathname === '/api/resumes/zip' || pathname === '/api/resumes/bulk-download') && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
     const isFromAdminPortal = isRequestFromAdminDomain(req);
     if (!isAdmin(user) && !isFromAdminPortal && !isRecruiterOrAdmin(user)) {

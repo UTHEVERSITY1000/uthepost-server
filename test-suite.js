@@ -923,20 +923,19 @@ async function runTests() {
     const masterSuiteHtml = fs.readFileSync(path.join(__dirname, 'u-theADMIN-MASTER-SUITE.html'), 'utf8');
 
     assert(adminHtml.includes('CANDIDATE APPLICATIONS & ATS STAGE OVERRIDES'), 'admin.html contains Candidate Applications section header');
-    assert(adminHtml.includes('id="btn-download-all-resumes"'), 'admin.html contains #btn-download-all-resumes button');
-    assert(adminHtml.includes('downloadAllResumesZip()'), 'admin.html binds downloadAllResumesZip handler');
+    assert(adminHtml.includes('href="/api/admin/resumes/download-all"'), 'admin.html routes to /api/admin/resumes/download-all');
+    assert(adminHtml.includes('target="_blank"'), 'admin.html bulk download anchor has target="_blank"');
     assert(adminHtml.includes('DOWNLOAD ALL RESUMES (.ZIP)'), 'admin.html renders DOWNLOAD ALL RESUMES (.ZIP) button text');
 
-    assert(masterSuiteHtml.includes('id="btn-download-all-resumes"'), 'u-theADMIN-MASTER-SUITE.html contains #btn-download-all-resumes button');
-    assert(masterSuiteHtml.includes('downloadAllResumesZip()'), 'u-theADMIN-MASTER-SUITE.html binds downloadAllResumesZip handler');
+    assert(masterSuiteHtml.includes('href="/api/admin/resumes/download-all"'), 'u-theADMIN-MASTER-SUITE.html routes to /api/admin/resumes/download-all');
 
-    const zipRes = await httpGet('/api/admin/resumes/zip', {
+    const downloadAllRes = await httpGet('/api/admin/resumes/download-all', {
       'Authorization': 'Bearer master_admin_token',
       'X-Admin-Portal': 'true'
     });
-    assert(zipRes.status === 200, 'GET /api/admin/resumes/zip returns HTTP 200 OK');
-    assert(zipRes.headers['content-type'] === 'application/zip', 'GET /api/admin/resumes/zip returns application/zip Content-Type');
-    assert(zipRes.headers['content-disposition'] && zipRes.headers['content-disposition'].includes('.zip'), 'GET /api/admin/resumes/zip includes attachment filename');
+    assert(downloadAllRes.status === 200, 'GET /api/admin/resumes/download-all returns HTTP 200 OK');
+    assert(downloadAllRes.headers['content-type'] === 'application/zip', 'GET /api/admin/resumes/download-all returns application/zip Content-Type');
+    assert(downloadAllRes.headers['content-disposition'] && downloadAllRes.headers['content-disposition'].includes('.zip'), 'GET /api/admin/resumes/download-all includes attachment filename');
 
   } catch (err) {
     assert(false, `Group 17 failed: ${err.message}`);
