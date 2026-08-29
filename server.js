@@ -573,20 +573,23 @@ function writeSystemLog(eventType, details = {}) {
 
 // ----------------------------------------------------
 // AUTOMATED TRANSACTIONAL EMAIL ENGINE (NODEMAILER)
-// Fallback SMTP credentials with structured file logging
-// ----------------------------------------------------
 const SMTP_CONFIG = {
   host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '587', 10),
-  secure: process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465',
+  port: parseInt(process.env.SMTP_PORT) || 587,
+  secure: process.env.SMTP_PORT === '465',
+  family: 4,
+  lookup: (hostname, options, callback) => {
+    dns.lookup(hostname, { family: 4 }, callback);
+  },
   auth: (process.env.SMTP_USER && process.env.SMTP_PASS) ? {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS
   } : null,
-  family: 4, // Force IPv4 family to resolve ENETUNREACH on cloud environments
   tls: {
     rejectUnauthorized: false
-  }
+  },
+  connectionTimeout: 10000,
+  socketTimeout: 10000
 };
 
 const DEFAULT_FROM_EMAIL = process.env.FROM_EMAIL || 'contact@utheversity.com';
@@ -725,8 +728,22 @@ async function sendTransactionalEmail({ to, subject, html, text, type = 'GENERAL
   if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
     try {
       const transporter = nodemailer.createTransport({
-        ...SMTP_CONFIG,
-        family: 4
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: parseInt(process.env.SMTP_PORT) || 587,
+        secure: process.env.SMTP_PORT === '465',
+        family: 4,
+        lookup: (hostname, options, callback) => {
+          dns.lookup(hostname, { family: 4 }, callback);
+        },
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS
+        },
+        tls: {
+          rejectUnauthorized: false
+        },
+        connectionTimeout: 10000,
+        socketTimeout: 10000
       });
       const info = await transporter.sendMail({
         from: `UTHEVERSITY <${DEFAULT_FROM_EMAIL}>`,
@@ -1432,8 +1449,22 @@ const server = http.createServer(async (req, res) => {
         if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
           try {
             const transporter = nodemailer.createTransport({
-              ...SMTP_CONFIG,
-              family: 4
+              host: process.env.SMTP_HOST || 'smtp.gmail.com',
+              port: parseInt(process.env.SMTP_PORT) || 587,
+              secure: process.env.SMTP_PORT === '465',
+              family: 4,
+              lookup: (hostname, options, callback) => {
+                dns.lookup(hostname, { family: 4 }, callback);
+              },
+              auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS
+              },
+              tls: {
+                rejectUnauthorized: false
+              },
+              connectionTimeout: 10000,
+              socketTimeout: 10000
             });
             if (transporter && transporter.verify) {
               await transporter.verify();
@@ -2397,8 +2428,22 @@ const server = http.createServer(async (req, res) => {
     if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
       try {
         const transporter = nodemailer.createTransport({
-          ...SMTP_CONFIG,
-          family: 4
+          host: process.env.SMTP_HOST || 'smtp.gmail.com',
+          port: parseInt(process.env.SMTP_PORT) || 587,
+          secure: process.env.SMTP_PORT === '465',
+          family: 4,
+          lookup: (hostname, options, callback) => {
+            dns.lookup(hostname, { family: 4 }, callback);
+          },
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS
+          },
+          tls: {
+            rejectUnauthorized: false
+          },
+          connectionTimeout: 10000,
+          socketTimeout: 10000
         });
         await transporter.verify();
         isVerified = true;
@@ -2442,8 +2487,22 @@ const server = http.createServer(async (req, res) => {
       if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
         try {
           const transporter = nodemailer.createTransport({
-            ...SMTP_CONFIG,
-            family: 4
+            host: process.env.SMTP_HOST || 'smtp.gmail.com',
+            port: parseInt(process.env.SMTP_PORT) || 587,
+            secure: process.env.SMTP_PORT === '465',
+            family: 4,
+            lookup: (hostname, options, callback) => {
+              dns.lookup(hostname, { family: 4 }, callback);
+            },
+            auth: {
+              user: process.env.SMTP_USER,
+              pass: process.env.SMTP_PASS
+            },
+            tls: {
+              rejectUnauthorized: false
+            },
+            connectionTimeout: 10000,
+            socketTimeout: 10000
           });
           await transporter.verify();
           isVerified = true;
