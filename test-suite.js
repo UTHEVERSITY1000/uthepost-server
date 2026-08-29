@@ -1427,6 +1427,54 @@ async function runTests() {
     assert(false, `Group 28 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 29: GLOBAL SIGNATURE GOLD & ACCENT BLUE HOVER STYLING
+  // ================================================================
+  console.log('\n--- GROUP 29: GLOBAL SIGNATURE GOLD & ACCENT BLUE HOVER STYLING ---');
+  try {
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const jobsSyncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
+    const jobsDualHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-DUAL LINK TO u-thePOST.html'), 'utf8');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const postEntHtml = fs.readFileSync(path.join(__dirname, 'u-thePOST-ENTERPRISE-EDITION.html'), 'utf8');
+    const postDualHtml = fs.readFileSync(path.join(__dirname, 'u-thePOST-DUAL LINK & MOBILE.html'), 'utf8');
+    const postJobsHtml = fs.readFileSync(path.join(__dirname, 'u-thePOST-DUAL LINK TO u-theJOBS.html'), 'utf8');
+
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    const adminSuiteHtml = fs.readFileSync(path.join(__dirname, 'u-theADMIN-MASTER-SUITE.html'), 'utf8');
+
+    // 1. Candidate Buttons: Gold Default & Accent Blue Hover
+    assert(candidateHtml.includes('.btn-quick-send-main:hover') && candidateHtml.includes('background: #2563EB !important'), 'candidate.html has accent blue hover for .btn-quick-send-main');
+    assert(candidateHtml.includes('.send-reply-btn:hover') && candidateHtml.includes('background: #2563EB !important'), 'candidate.html has accent blue hover for .send-reply-btn');
+    assert(candidateHtml.includes('.btn-auth-header:hover') && candidateHtml.includes('background: #2563EB !important'), 'candidate.html has accent blue hover for .btn-auth-header');
+    assert(candidateHtml.includes('.btn-profile-header:hover') && candidateHtml.includes('background: #2563EB !important'), 'candidate.html has accent blue hover for .btn-profile-header');
+    assert(candidateHtml.includes('.btn-choose-file:hover') && candidateHtml.includes('background: #2563EB !important'), 'candidate.html has accent blue hover for .btn-choose-file');
+    assert(candidateHtml.includes('.btn-submit-request:hover') && candidateHtml.includes('background: #2563EB !important'), 'candidate.html has accent blue hover for .btn-submit-request');
+    assert(candidateHtml.includes('.mobile-quick-send-btn:hover') && candidateHtml.includes('background: #2563EB !important'), 'candidate.html has accent blue hover for .mobile-quick-send-btn');
+    assert(jobsSyncHtml.includes('background: #2563EB !important'), 'u-theJOBS-ENTERPRISE-SYNC.html includes accent blue hover');
+    assert(jobsDualHtml.includes('background: #2563EB !important'), 'u-theJOBS-DUAL LINK TO u-thePOST.html includes accent blue hover');
+
+    // 2. Recruiter Buttons: Gold Default & Accent Blue Hover
+    assert(recruiterHtml.includes('.btn-gold-action:hover') && recruiterHtml.includes('background: #2563EB !important'), 'recruiter.html has accent blue hover for .btn-gold-action');
+    assert(recruiterHtml.includes('.btn-auth-header:hover') && recruiterHtml.includes('background: #2563EB !important'), 'recruiter.html has accent blue hover for .btn-auth-header');
+    assert(postEntHtml.includes('background: #2563EB !important'), 'u-thePOST-ENTERPRISE-EDITION.html includes accent blue hover');
+    assert(postDualHtml.includes('background: #2563EB !important'), 'u-thePOST-DUAL LINK & MOBILE.html includes accent blue hover');
+    assert(postJobsHtml.includes('background: #2563EB !important'), 'u-thePOST-DUAL LINK TO u-theJOBS.html includes accent blue hover');
+
+    // 3. Admin Buttons: Gold Default & Accent Blue Hover
+    assert(adminHtml.includes('.btn-gold:hover') && adminHtml.includes('background: #2563EB !important'), 'admin.html has accent blue hover for .btn-gold');
+    assert(adminSuiteHtml.includes('background: #2563EB !important'), 'u-theADMIN-MASTER-SUITE.html includes accent blue hover');
+
+    // 4. Badges & Tags Standard: Gold light tint, gold border, and gold text across all templates
+    assert(candidateHtml.includes('background: #FFF8E6 !important') && candidateHtml.includes('border: 1px solid #D4AF37 !important'), 'candidate.html standardizes badges to gold tint and gold outline');
+    assert(recruiterHtml.includes('background: #FFF8E6 !important') && recruiterHtml.includes('border: 1px solid #D4AF37 !important'), 'recruiter.html standardizes badges to gold tint and gold outline');
+    assert(adminHtml.includes('background: #FFF8E6 !important') && adminHtml.includes('border: 1px solid #D4AF37 !important'), 'admin.html standardizes badges to gold tint and gold outline');
+
+  } catch (err) {
+    assert(false, `Group 29 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

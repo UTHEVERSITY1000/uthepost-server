@@ -406,14 +406,17 @@
     }
 
     /* COMPACT ACTION BUTTONS (28-32PX HEIGHT) */
-    .btn-gold {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border: 1px solid var(--uthe-gold);
-      font-weight: 900;
+    .btn-gold,
+    .btn-primary,
+    .btn-primary-executive {
+      background: #0f172a;
+      color: #D4AF37;
+      border: 1.5px solid #D4AF37;
+      font-weight: 800;
       font-size: 0.68rem;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
       border-radius: 4px;
       cursor: pointer;
       padding: 0 0.85rem;
@@ -421,14 +424,23 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       white-space: nowrap;
     }
 
-    .btn-gold:hover {
-      background: var(--uthe-gold);
-      color: var(--uthe-charcoal);
-      box-shadow: 0 2px 8px var(--uthe-gold-glow);
+    .btn-gold:hover,
+    .btn-gold:focus-visible,
+    .btn-primary:hover,
+    .btn-primary:focus-visible,
+    .btn-primary-executive:hover,
+    .btn-primary-executive:focus-visible {
+      background: #2563EB !important;
+      color: #FFFFFF !important;
+      border-color: #2563EB !important;
+      text-shadow: none !important;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+      transform: translateY(-1px);
     }
 
     .btn-surface-sm {
@@ -488,7 +500,7 @@
     }
 
     .tag-mint { background: var(--status-mint-bg); color: #065F46; border: 1px solid rgba(0, 200, 83, 0.3); }
-    .tag-cyan { background: var(--blue-bg); color: var(--blue-accent); border: 1px solid rgba(37, 99, 235, 0.25); }
+    .tag-cyan, .tag-blue, .badge-tag.tag-cyan, .badge-tag.tag-blue { background: #FFF8E6 !important; color: #92400E !important; border: 1px solid #D4AF37 !important; }
     .tag-gold { background: var(--uthe-gold-light); color: #92400E; border: 1px solid var(--uthe-gold); }
     .tag-purple { background: var(--purple-bg); color: var(--purple-accent); border: 1px solid rgba(139, 92, 246, 0.3); }
 
@@ -506,7 +518,7 @@
       border: 1px solid var(--uthe-gold);
     }
     .role-badge.admin, .role-badge.master-admin { background: var(--uthe-gold-light); color: #92400E; border: 1px solid var(--uthe-gold); }
-    .role-badge.employer, .role-badge.recruiter { background: var(--blue-bg); color: var(--blue-accent); border: 1px solid rgba(37, 99, 235, 0.25); }
+    .role-badge.employer, .role-badge.recruiter { background: #FFF8E6 !important; color: #92400E !important; border: 1px solid #D4AF37 !important; }
     .role-badge.candidate { background: var(--status-mint-bg); color: #065F46; border: 1px solid rgba(0, 200, 83, 0.3); }
 
     .status-badge {

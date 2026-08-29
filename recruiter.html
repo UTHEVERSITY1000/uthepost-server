@@ -266,25 +266,32 @@
     }
 
     .btn-auth-header {
-      background: var(--card-white);
-      color: var(--uthe-charcoal);
-      border: 1.5px solid var(--border-strong);
-      padding: 0 0.95rem;
-      border-radius: 20px;
-      font-size: 0.72rem;
-      font-weight: 900;
-      letter-spacing: 0.8px;
+      background: #0f172a;
+      color: #D4AF37;
+      border: 1.5px solid #D4AF37;
+      padding: 0 1.25rem;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
       cursor: pointer;
       height: 38px;
       display: flex;
       align-items: center;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    .btn-auth-header:hover {
-      border-color: var(--uthe-gold);
-      color: var(--uthe-charcoal);
+    .btn-auth-header:hover,
+    .btn-auth-header:focus-visible {
+      background: #2563EB !important;
+      color: #FFFFFF !important;
+      border-color: #2563EB !important;
+      text-shadow: none !important;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+      transform: translateY(-1px);
     }
 
     .btn-mobile-menu {
@@ -577,14 +584,18 @@
     }
 
     /* ACTION BUTTONS */
-    .btn-gold-action {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border: 1.5px solid var(--uthe-gold);
-      font-weight: 900;
+    .btn-gold-action,
+    .btn-primary,
+    .btn-gold,
+    .btn-primary-executive {
+      background: #0f172a;
+      color: #D4AF37;
+      border: 1.5px solid #D4AF37;
+      font-weight: 800;
       font-size: 0.78rem;
-      letter-spacing: 1.2px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
       border-radius: 6px;
       cursor: pointer;
       padding: 0 1.25rem;
@@ -592,13 +603,35 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .btn-gold-action:hover {
-      background: var(--uthe-gold);
-      color: var(--uthe-charcoal);
-      box-shadow: 0 0 15px var(--uthe-gold-glow);
+    .btn-gold-action:hover,
+    .btn-gold-action:focus-visible,
+    .btn-primary:hover,
+    .btn-primary:focus-visible,
+    .btn-gold:hover,
+    .btn-gold:focus-visible,
+    .btn-primary-executive:hover,
+    .btn-primary-executive:focus-visible {
+      background: #2563EB !important;
+      color: #FFFFFF !important;
+      border-color: #2563EB !important;
+      text-shadow: none !important;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+      transform: translateY(-1px);
+    }
+
+    /* Badges & Tags: Gold Light Tint & Gold Outline */
+    .badge-tag.tag-cyan,
+    .badge-tag.tag-blue,
+    .tag-blue,
+    .tag-cyan,
+    .role-badge.employer {
+      background: #FFF8E6 !important;
+      color: #92400E !important;
+      border: 1px solid #D4AF37 !important;
     }
 
     .btn-surface-action {
