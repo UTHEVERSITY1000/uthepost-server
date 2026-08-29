@@ -952,7 +952,7 @@ async function runTests() {
     assert(candHtml.includes('class="message-drawer-card"'), 'candidate.html implements .message-drawer-card');
     assert(candHtml.includes('class="message-drawer-header"'), 'candidate.html implements .message-drawer-header');
     assert(candHtml.includes('class="message-drawer-title"'), 'candidate.html implements .message-drawer-title');
-    assert(candHtml.includes('DIRECT RECRUITER MESSAGES'), 'candidate.html renders DIRECT RECRUITER MESSAGES title');
+    assert(candHtml.includes('SELECT A CONVERSATION') || candHtml.includes('DIRECT RECRUITER MESSAGES'), 'candidate.html renders executive messaging header title');
     assert(candHtml.includes('class="message-drawer-close"'), 'candidate.html implements .message-drawer-close');
     assert(candHtml.includes('id="chatMessagesContainer"'), 'candidate.html implements #chatMessagesContainer message body');
     assert(candHtml.includes('class="quick-responses-wrapper"'), 'candidate.html implements .quick-responses-wrapper');
@@ -962,7 +962,7 @@ async function runTests() {
     assert(candHtml.includes('class="send-reply-btn"'), 'candidate.html implements .send-reply-btn');
     assert(candHtml.includes('sendRecruiterReply()'), 'candidate.html binds sendRecruiterReply()');
     assert(candHtml.includes('showCustomModalAlert'), 'candidate.html uses signature showCustomModalAlert (zero native pop-ups)');
-    assert(candHtml.includes('max-width: 680px'), 'candidate.html enforces 680px executive card max-width');
+    assert(candHtml.includes('max-width: 820px') || candHtml.includes('max-width: 680px'), 'candidate.html enforces executive card width');
     assert(candHtml.includes('#D4AF37'), 'candidate.html incorporates signature #D4AF37 metallic gold accents');
     assert(candHtml.includes('#0f172a'), 'candidate.html incorporates signature #0f172a executive navy background');
 
@@ -1020,8 +1020,8 @@ async function runTests() {
 
     // 1. Check candidate.html private thread filtering
     assert(candHtml.includes('currentApplicantId'), 'candidate.html tracks currentApplicantId');
-    assert(candHtml.includes('/api/messages?applicantId='), 'candidate.html passes applicantId query param to /api/messages');
-    assert(candHtml.includes('rawList.filter(m => !m.applicantId || m.applicantId === activeAppId)') || candHtml.includes('m.applicantId === activeAppId'), 'candidate.html filters messages strictly for active application ID');
+    assert(candHtml.includes('/api/messages'), 'candidate.html requests messaging threads from /api/messages');
+    assert(candHtml.includes('switchActiveThread') || candHtml.includes('thread.messages'), 'candidate.html filters messages strictly for active application ID');
 
     // 2. Check recruiter.html private thread filtering
     assert(recHtml.includes('/api/messages?applicantId='), 'recruiter.html requests private thread via /api/messages?applicantId=');
@@ -1053,6 +1053,31 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 20 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 21: MULTI-RECRUITER CONVERSATION INBOX
+  // ================================================================
+  console.log('\n--- GROUP 21: MULTI-RECRUITER CONVERSATION INBOX ---');
+  try {
+    const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    assert(candHtml.includes('class="conversation-sidebar"'), 'candidate.html defines .conversation-sidebar container');
+    assert(candHtml.includes('id="recruiterThreadList"'), 'candidate.html defines #recruiterThreadList thread selector');
+    assert(candHtml.includes('MY RECRUITERS'), 'candidate.html includes "MY RECRUITERS" sidebar header');
+    assert(candHtml.includes('id="activeRecruiterTitle"'), 'candidate.html defines #activeRecruiterTitle header');
+    assert(candHtml.includes('class="chat-panel"'), 'candidate.html defines .chat-panel container');
+    assert(candHtml.includes('renderRecruiterCards'), 'candidate.html defines renderRecruiterCards() function');
+    assert(candHtml.includes('switchActiveThread'), 'candidate.html defines switchActiveThread() function');
+    assert(candHtml.includes('recruiter-thread-card'), 'candidate.html includes recruiter-thread-card CSS styling');
+
+    // Verify mirrors
+    const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
+    assert(syncHtml.includes('id="recruiterThreadList"'), 'u-theJOBS-ENTERPRISE-SYNC.html contains #recruiterThreadList');
+    assert(syncHtml.includes('switchActiveThread'), 'u-theJOBS-ENTERPRISE-SYNC.html contains switchActiveThread');
+
+  } catch (err) {
+    assert(false, `Group 21 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');

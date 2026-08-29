@@ -885,18 +885,73 @@
       box-sizing: border-box;
     }
 
-    /* Signature UTHEVERSITY Central Card */
+    /* Signature UTHEVERSITY Central Card & Multi-Recruiter Inbox */
     .message-drawer-card {
       background: #ffffff;
       width: 100%;
-      max-width: 680px;
+      max-width: 820px;
       max-height: 85vh;
+      height: 550px;
       border-radius: 16px;
       border: 1px solid #D4AF37;
       box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 175, 55, 0.15);
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       overflow: hidden;
+    }
+
+    .conversation-sidebar {
+      width: 240px;
+      background: #0f172a;
+      border-right: 1px solid #D4AF37;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .recruiter-thread-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .recruiter-thread-card:hover {
+      background: rgba(212, 175, 55, 0.12);
+      border-color: #D4AF37;
+    }
+
+    .recruiter-thread-card.active {
+      background: rgba(212, 175, 55, 0.2);
+      border: 1px solid #D4AF37;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
+    }
+
+    .recruiter-card-company {
+      font-size: 11px;
+      font-weight: 800;
+      color: #D4AF37;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .recruiter-card-recruiter {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 2px;
+    }
+
+    .recruiter-card-role {
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 2px;
     }
 
     /* High-End Header */
@@ -1324,33 +1379,46 @@
     </div>
   </div>
 
-  <!-- 2. EXECUTIVE RECRUITER MESSAGING MODAL -->
+  <!-- 2. MULTI-RECRUITER CONVERSATION INBOX -->
   <div id="messageDrawer" style="display: none;">
-    <div class="message-drawer-card">
-      <div class="message-drawer-header">
-        <div class="message-drawer-title" id="cms-jobs-msg-header" data-cms-key="jobs-msg-header">
-          <span>💬</span> DIRECT RECRUITER MESSAGES
-        </div>
-        <button class="message-drawer-close" onclick="closeMessageDrawer()">✕</button>
-      </div>
-
-      <div class="message-drawer-body" id="chatMessagesContainer">
-        <!-- Live recruiter messages render here -->
-      </div>
-
-      <div class="quick-responses-wrapper">
-        <div style="font-size: 10px; font-weight: 900; color: #64748b; letter-spacing: 0.08em; margin-bottom: 8px;">1-CLICK EXECUTIVE RESPONSES:</div>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-          <button class="quick-chip" onclick="selectQuickReply('I\'M INTERESTED — LET\'S TALK')">1. I'M INTERESTED — LET'S TALK</button>
-          <button class="quick-chip" onclick="selectQuickReply('ACCEPTED INTERVIEW TIME')">2. ACCEPTED INTERVIEW TIME</button>
-          <button class="quick-chip" onclick="selectQuickReply('PLEASE SEND MORE DETAILS')">3. PLEASE SEND MORE DETAILS</button>
+    <div class="message-drawer-card" style="display: flex; flex-direction: row; height: 550px;">
+      
+      <!-- LEFT SIDEBAR: RECRUITER THREAD LIST -->
+      <div class="conversation-sidebar" style="width: 240px; background: #0f172a; border-right: 1px solid #D4AF37; padding: 16px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto;">
+        <div style="font-size: 11px; font-weight: 900; color: #D4AF37; letter-spacing: 0.08em; margin-bottom: 8px;">MY RECRUITERS</div>
+        <div id="recruiterThreadList" style="display: flex; flex-direction: column; gap: 8px;">
+          <!-- Recruiter conversation cards render here -->
         </div>
       </div>
 
-      <div class="message-drawer-footer">
-        <input type="text" id="recruiterReplyInput" class="message-input-field" placeholder="Type your response to the recruiter..." onkeydown="if(event.key==='Enter') sendRecruiterReply()" />
-        <button onclick="sendRecruiterReply()" class="send-reply-btn">SEND REPLY</button>
+      <!-- RIGHT PANEL: ACTIVE CHAT THREAD -->
+      <div class="chat-panel" style="flex: 1; display: flex; flex-direction: column; background: #f8fafc; overflow: hidden;">
+        <div class="message-drawer-header">
+          <div id="activeRecruiterTitle" class="message-drawer-title" data-cms-key="jobs-msg-header">
+            <span>💬</span> SELECT A CONVERSATION
+          </div>
+          <button class="message-drawer-close" onclick="closeMessageDrawer()">✕</button>
+        </div>
+
+        <div class="message-drawer-body" id="chatMessagesContainer">
+          <!-- Active recruiter messages render here -->
+        </div>
+
+        <div class="quick-responses-wrapper">
+          <div style="font-size: 10px; font-weight: 900; color: #64748b; letter-spacing: 0.08em; margin-bottom: 8px;">1-CLICK EXECUTIVE RESPONSES:</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <button class="quick-chip" onclick="selectQuickReply('I\'M INTERESTED — LET\'S TALK')">1. I'M INTERESTED — LET'S TALK</button>
+            <button class="quick-chip" onclick="selectQuickReply('ACCEPTED INTERVIEW TIME')">2. ACCEPTED INTERVIEW TIME</button>
+            <button class="quick-chip" onclick="selectQuickReply('PLEASE SEND MORE DETAILS')">3. PLEASE SEND MORE DETAILS</button>
+          </div>
+        </div>
+
+        <div class="message-drawer-footer">
+          <input type="text" id="recruiterReplyInput" class="message-input-field" placeholder="Type your response..." onkeydown="if(event.key==='Enter') sendRecruiterReply()" />
+          <button onclick="sendRecruiterReply()" class="send-reply-btn">SEND REPLY</button>
+        </div>
       </div>
+
     </div>
   </div>
 
@@ -1899,12 +1967,114 @@
       else if (key === 'details') window.selectQuickReply("PLEASE SEND MORE DETAILS");
     };
 
+    // MULTI-RECRUITER THREAD STATE & GROUPING
+    let candidateThreads = {};
+    let activeThreadId = 'APP-701';
+
+    const DEFAULT_RECRUITERS = {
+      'APP-701': {
+        id: 'APP-701',
+        company: 'Quantum Retail Corp',
+        recruiterName: 'Quantum Talent Acquisition',
+        jobTitle: 'Sales Manager',
+        initialMessage: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.'
+      },
+      'APP-702': {
+        id: 'APP-702',
+        company: 'Apex Solutions Group',
+        recruiterName: 'Apex Talent Acquisition',
+        jobTitle: 'Assembly Line Worker',
+        initialMessage: 'Hi Marcus, your technical qualifications for our manufacturing opening look fantastic. When would be a great time for a brief screening?'
+      },
+      'APP-703': {
+        id: 'APP-703',
+        company: 'Nordic Outfitters',
+        recruiterName: 'Nordic HR Team',
+        jobTitle: 'Retail Sales Associate',
+        initialMessage: 'Greetings Marcus, we received your application for Nordic Outfitters. We are actively interviewing candidates this week!'
+      }
+    };
+
+    function renderRecruiterCards() {
+      const listContainer = document.getElementById('recruiterThreadList');
+      if (!listContainer) return;
+      listContainer.innerHTML = '';
+
+      Object.values(candidateThreads).forEach(thread => {
+        const isActive = thread.id === activeThreadId;
+        const card = document.createElement('div');
+        card.className = `recruiter-thread-card ${isActive ? 'active' : ''}`;
+        card.onclick = () => switchActiveThread(thread.id);
+        card.innerHTML = `
+          <div class="recruiter-card-company">${thread.company}</div>
+          <div class="recruiter-card-recruiter">${thread.recruiterName}</div>
+          <div class="recruiter-card-role">${thread.jobTitle} • <span style="color:#D4AF37; font-weight:800;">${thread.id}</span></div>
+        `;
+        listContainer.appendChild(card);
+      });
+    }
+
+    window.switchActiveThread = function(threadId) {
+      if (!candidateThreads[threadId]) return;
+      activeThreadId = threadId;
+      currentApplicantId = threadId;
+
+      const thread = candidateThreads[threadId];
+      const titleEl = document.getElementById('activeRecruiterTitle') || document.getElementById('cms-jobs-msg-header');
+      if (titleEl) {
+        titleEl.innerHTML = `<span>💬</span> ${thread.company.toUpperCase()} — ${thread.recruiterName.toUpperCase()}`;
+      }
+
+      // Re-render recruiter cards to update active highlight
+      renderRecruiterCards();
+
+      // Clear the current chat view and load only that selected recruiter's message thread
+      const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
+      if (container) {
+        container.innerHTML = '';
+        const messages = thread.messages && thread.messages.length > 0 ? thread.messages : [
+          {
+            applicantId: thread.id,
+            senderRole: 'recruiter',
+            senderName: `${thread.recruiterName} (Recruiter)`,
+            text: thread.initialMessage || `Hello! We reviewed your profile and resume for the ${thread.jobTitle} position. Excited to connect!`,
+            timestamp: new Date().toISOString()
+          }
+        ];
+
+        messages.forEach(m => {
+          const isRecruiter = m.senderRole === 'recruiter';
+          const bubble = document.createElement('div');
+          bubble.className = isRecruiter ? 'chat-bubble-recruiter' : 'chat-bubble-candidate';
+          bubble.innerHTML = `
+            <div style="font-size:0.75rem; font-weight:800; margin-bottom:0.25rem; color:#D4AF37;">
+              ${isRecruiter ? (m.senderName || `${thread.recruiterName} (Recruiter)`) : 'You (Candidate)'}
+            </div>
+            ${m.text}
+            <div style="font-size:0.65rem; color:${isRecruiter ? '#64748b' : '#94a3b8'}; margin-top:0.35rem; text-align:right;">
+              ${new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+          `;
+          container.appendChild(bubble);
+        });
+        container.scrollTop = container.scrollHeight;
+      }
+
+      const input = document.getElementById('recruiterReplyInput') || document.getElementById('cand-reply-input');
+      if (input) {
+        input.placeholder = `Type your response to ${thread.company}...`;
+      }
+    };
+
     window.sendRecruiterReply = async function() {
       const input = document.getElementById('recruiterReplyInput') || document.getElementById('cand-reply-input');
       const text = input ? input.value.trim() : '';
       if (!text) {
         return showCustomModalAlert('Empty Message', 'Please enter a reply or choose a quick response tag.');
       }
+
+      const activeAppId = activeThreadId || currentApplicantId || 'APP-701';
+      const activeThread = candidateThreads[activeAppId] || { company: 'Quantum Retail Corp', jobTitle: 'Sales Manager', recruiterName: 'Recruiter' };
 
       const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
       if (container) {
@@ -1920,16 +2090,20 @@
       }
       if (input) input.value = '';
 
-      const activeAppId = currentApplicantId || 'APP-701';
       const msgPayload = {
         applicantId: activeAppId,
         senderRole: 'candidate',
         senderName: (document.getElementById('prof-cand-name') && document.getElementById('prof-cand-name').value) || (document.getElementById('candidateNameInput') && document.getElementById('candidateNameInput').value) || 'Marcus Vance',
-        company: 'Quantum Retail Corp',
-        jobTitle: 'Sales Manager',
+        company: activeThread.company || 'Quantum Retail Corp',
+        jobTitle: activeThread.jobTitle || 'Sales Manager',
         text: text,
         timestamp: new Date().toISOString()
       };
+
+      if (candidateThreads[activeAppId]) {
+        if (!candidateThreads[activeAppId].messages) candidateThreads[activeAppId].messages = [];
+        candidateThreads[activeAppId].messages.push(msgPayload);
+      }
 
       try {
         await fetch('/api/messages', {
@@ -1940,50 +2114,64 @@
       } catch (e) {}
 
       broadcastSyncEvent('CANDIDATE_MESSAGE_SENT', { message: msgPayload });
-      showCustomModalAlert('Reply Sent to Recruiter', 'Your message was delivered directly to the recruiter’s Applicant Tracker.');
+      showCustomModalAlert('Reply Sent to Recruiter', `Your message was delivered directly to ${activeThread.company}’s recruiter.`);
     };
     window.sendCandidateReply = window.sendRecruiterReply;
 
-    async function fetchMessages(applicantId) {
-      const activeAppId = applicantId || currentApplicantId || 'APP-701';
+    async function fetchMessages(preferredApplicantId) {
       try {
-        // Pass the candidate's active application ID in the web request
-        const res = await fetch(`/api/messages?applicantId=${encodeURIComponent(activeAppId)}`);
+        // Pass the candidate's active application ID or fetch all candidate messages
+        const res = await fetch('/api/messages');
         const data = await res.json();
-        const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
-        if (container) {
-          container.innerHTML = '';
-          const rawList = data.messages || [];
-          // Ensure the drawer renders only messages where applicantId matches that specific application
-          const list = rawList.filter(m => !m.applicantId || m.applicantId === activeAppId);
-          const displayList = (list.length > 0) ? list : [
-            {
-              applicantId: activeAppId,
-              senderRole: 'recruiter',
-              senderName: 'Quantum Talent Acquisition (Recruiter)',
-              text: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
-              timestamp: new Date().toISOString()
-            }
-          ];
+        const rawList = data.messages || [];
 
-          displayList.forEach(m => {
-            const isRecruiter = m.senderRole === 'recruiter';
-            const bubble = document.createElement('div');
-            bubble.className = isRecruiter ? 'chat-bubble-recruiter' : 'chat-bubble-candidate';
-            bubble.innerHTML = `
-              <div style="font-size:0.75rem; font-weight:800; margin-bottom:0.25rem; color:${isRecruiter ? '#D4AF37' : '#D4AF37'};">
-                ${isRecruiter ? (m.senderName || 'Recruiter') : 'You (Candidate)'}
-              </div>
-              ${m.text}
-              <div style="font-size:0.65rem; color:${isRecruiter ? '#64748b' : '#94a3b8'}; margin-top:0.35rem; text-align:right;">
-                ${new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </div>
-            `;
-            container.appendChild(bubble);
-          });
-          container.scrollTop = container.scrollHeight;
+        // Initialize candidateThreads with default recruiters
+        candidateThreads = {};
+        Object.keys(DEFAULT_RECRUITERS).forEach(k => {
+          candidateThreads[k] = {
+            id: DEFAULT_RECRUITERS[k].id,
+            company: DEFAULT_RECRUITERS[k].company,
+            recruiterName: DEFAULT_RECRUITERS[k].recruiterName,
+            jobTitle: DEFAULT_RECRUITERS[k].jobTitle,
+            initialMessage: DEFAULT_RECRUITERS[k].initialMessage,
+            messages: []
+          };
+        });
+
+        // Group incoming messages by company or applicantId
+        rawList.forEach(m => {
+          const key = m.applicantId || (m.company ? `APP-${m.company.replace(/\s+/g, '')}` : 'APP-701');
+          if (!candidateThreads[key]) {
+            candidateThreads[key] = {
+              id: key,
+              company: m.company || 'Recruiter Company',
+              recruiterName: m.senderName || 'Talent Acquisition',
+              jobTitle: m.jobTitle || 'Career Opportunity',
+              messages: []
+            };
+          }
+          candidateThreads[key].messages.push(m);
+        });
+
+        const targetId = preferredApplicantId || currentApplicantId || activeThreadId || 'APP-701';
+        if (!candidateThreads[targetId]) {
+          candidateThreads[targetId] = {
+            id: targetId,
+            company: 'Quantum Retail Corp',
+            recruiterName: 'Quantum Talent Acquisition',
+            jobTitle: 'Sales Manager',
+            messages: []
+          };
         }
-      } catch (e) {}
+
+        renderRecruiterCards();
+        switchActiveThread(targetId);
+      } catch (e) {
+        candidateThreads = JSON.parse(JSON.stringify(DEFAULT_RECRUITERS));
+        Object.keys(candidateThreads).forEach(k => candidateThreads[k].messages = []);
+        renderRecruiterCards();
+        switchActiveThread(preferredApplicantId || 'APP-701');
+      }
     }
 
     function saveCandidateProfile() {
