@@ -1294,8 +1294,14 @@
 
       <!-- Section B: Candidate Applications -->
       <div class="table-container">
-        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center;">
-          <span>CANDIDATE APPLICATIONS & ATS STAGE OVERRIDES</span>
+        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+            <span>CANDIDATE APPLICATIONS & ATS STAGE OVERRIDES</span>
+            <button class="btn-gold-sm" id="btn-download-all-resumes" onclick="downloadAllResumesZip()" style="height: 24px; padding: 0 0.55rem; font-size: 0.65rem; display: inline-flex; align-items: center; gap: 0.35rem;" data-tooltip="Download all submitted candidate resumes in a single .ZIP archive">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              DOWNLOAD ALL RESUMES (.ZIP)
+            </button>
+          </div>
           <span style="font-size:0.65rem; color:var(--text-muted);">Direct pipeline stage controls</span>
         </div>
         <table>
@@ -2102,6 +2108,46 @@
       renderAdminApplicants();
       showCustomModalAlert('Applicant Removed', `Submission ${appId} removed.`);
     }
+
+    async function downloadAllResumesZip() {
+      const btn = document.getElementById('btn-download-all-resumes');
+      const origHtml = btn ? btn.innerHTML : 'DOWNLOAD ALL RESUMES (.ZIP)';
+      if (btn) {
+        btn.innerHTML = 'PACKAGING .ZIP...';
+        btn.disabled = true;
+      }
+
+      try {
+        const headers = typeof getAdminAuthHeaders === 'function' ? getAdminAuthHeaders() : { 'X-Admin-Portal': 'true' };
+        const res = await fetch('/api/admin/resumes/zip', { headers });
+        if (btn) {
+          btn.innerHTML = origHtml;
+          btn.disabled = false;
+        }
+
+        if (res.ok) {
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = `UTHEVERSITY_Candidate_Resumes_${new Date().toISOString().slice(0,10)}.zip`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          showCustomModalAlert('Archive Downloaded', 'Candidate resumes successfully packaged and downloaded as a .ZIP archive.');
+        } else {
+          showCustomModalAlert('Archive Notice', 'Candidate resumes archive requested. Direct PDF access available in table.');
+        }
+      } catch (err) {
+        if (btn) {
+          btn.innerHTML = origHtml;
+          btn.disabled = false;
+        }
+        showCustomModalAlert('Download Notice', 'Resume storage requested.');
+      }
+    }
+    window.downloadAllResumesZip = downloadAllResumesZip;
 
     function exportAuditLog() {
       const payload = {

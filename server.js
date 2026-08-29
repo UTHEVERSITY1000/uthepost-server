@@ -570,6 +570,83 @@ function initDataDirectories() {
   });
 }
 
+function crc32(buf) {
+  let crc = ~0;
+  for (let i = 0; i < buf.length; i++) {
+    crc ^= buf[i];
+    for (let j = 0; j < 8; j++) {
+      crc = (crc >>> 1) ^ (0xEDB88320 & -(crc & 1));
+    }
+  }
+  return (crc ^ ~0) >>> 0;
+}
+
+function createZipBuffer(files) {
+  const localHeaders = [];
+  const centralDirectory = [];
+  let offset = 0;
+
+  for (const file of files) {
+    const nameBuf = Buffer.from(file.name, 'utf8');
+    const dataBuf = Buffer.isBuffer(file.data) ? file.data : Buffer.from(file.data);
+    const crc = crc32(dataBuf);
+    const size = dataBuf.length;
+
+    const lh = Buffer.alloc(30 + nameBuf.length);
+    lh.writeUInt32LE(0x04034b50, 0);
+    lh.writeUInt16LE(20, 4);
+    lh.writeUInt16LE(0, 6);
+    lh.writeUInt16LE(0, 8);
+    lh.writeUInt16LE(0, 10);
+    lh.writeUInt16LE(0, 12);
+    lh.writeUInt32LE(crc, 14);
+    lh.writeUInt32LE(size, 18);
+    lh.writeUInt32LE(size, 22);
+    lh.writeUInt16LE(nameBuf.length, 26);
+    lh.writeUInt16LE(0, 28);
+    nameBuf.copy(lh, 30);
+
+    localHeaders.push(lh, dataBuf);
+
+    const cd = Buffer.alloc(46 + nameBuf.length);
+    cd.writeUInt32LE(0x02014b50, 0);
+    cd.writeUInt16LE(20, 4);
+    cd.writeUInt16LE(20, 6);
+    cd.writeUInt16LE(0, 8);
+    cd.writeUInt16LE(0, 10);
+    cd.writeUInt16LE(0, 12);
+    cd.writeUInt32LE(crc, 16);
+    cd.writeUInt32LE(size, 20);
+    cd.writeUInt32LE(size, 24);
+    cd.writeUInt16LE(nameBuf.length, 28);
+    cd.writeUInt16LE(0, 30);
+    cd.writeUInt16LE(0, 32);
+    cd.writeUInt16LE(0, 34);
+    cd.writeUInt16LE(0, 36);
+    cd.writeUInt32LE(0, 38);
+    cd.writeUInt32LE(offset, 42);
+    nameBuf.copy(cd, 46);
+
+    centralDirectory.push(cd);
+    offset += lh.length + dataBuf.length;
+  }
+
+  const cdOffset = offset;
+  const cdSize = centralDirectory.reduce((sum, b) => sum + b.length, 0);
+
+  const eocd = Buffer.alloc(22);
+  eocd.writeUInt32LE(0x06054b50, 0);
+  eocd.writeUInt16LE(0, 4);
+  eocd.writeUInt16LE(0, 6);
+  eocd.writeUInt16LE(files.length, 8);
+  eocd.writeUInt16LE(files.length, 10);
+  eocd.writeUInt32LE(cdSize, 12);
+  eocd.writeUInt32LE(cdOffset, 16);
+  eocd.writeUInt16LE(0, 20);
+
+  return Buffer.concat([...localHeaders, ...centralDirectory, eocd]);
+}
+
 function writeSystemLog(eventType, details = {}) {
   try {
     initDataDirectories();
@@ -1427,7 +1504,7 @@ const server = http.createServer(async (req, res) => {
               <p>Your Google Workspace SMTP connection is live and functioning properly.</p>
               <p><strong>Timestamp:</strong> ${new Date().toISOString()}</p>
               <hr style="border: 0; border-top: 1px solid #334155;" />
-              <p style="font-size: 12px; color: #94a3b8;">© 2026 UTHEVERSITY Inc. — Master Governance System</p>
+              <p style="font-size: 12px; color: #94a3b8;">&copy; 2026 UTHEVERSITY Inc. — Master Governance System</p>
             </div>
           `
         });
@@ -2016,6 +2093,53 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // ----------------------------------------------------
+  // BULK CANDIDATE RESUMES ZIP ARCHIVE DOWNLOAD
+  // ----------------------------------------------------
+  if ((pathname === '/api/admin/resumes/zip' || pathname === '/api/resumes/zip' || pathname === '/api/resumes/bulk-download') && req.method === 'GET') {
+    const user = getAuthenticatedUser(req);
+    const isFromAdminPortal = isRequestFromAdminDomain(req);
+    if (!isAdmin(user) && !isFromAdminPortal && !isRecruiterOrAdmin(user)) {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator or Recruiter privileges required.' });
+    }
+
+    try {
+      initDataDirectories();
+      const filesInDir = fs.readdirSync(DIRS.resumes);
+      const files = [];
+
+      for (const fname of filesInDir) {
+        const fullPath = path.join(DIRS.resumes, fname);
+        if (fs.statSync(fullPath).isFile()) {
+          files.push({
+            name: fname,
+            data: fs.readFileSync(fullPath)
+          });
+        }
+      }
+
+      if (files.length === 0) {
+        files.push({
+          name: 'README_NO_RESUMES_FOUND.txt',
+          data: Buffer.from('No candidate resumes currently stored in /data/resumes/.', 'utf8')
+        });
+      }
+
+      const zipBuffer = createZipBuffer(files);
+      const dateStr = new Date().toISOString().slice(0, 10);
+      res.writeHead(200, {
+        'Content-Type': 'application/zip',
+        'Content-Disposition': `attachment; filename="UTHEVERSITY_Candidate_Resumes_${dateStr}.zip"`,
+        'Content-Length': zipBuffer.length
+      });
+      res.end(zipBuffer);
+      return;
+    } catch (err) {
+      console.error('[BULK RESUME ZIP ERROR]', err.message);
+      return sendJson(500, { error: 'Failed to package resume archive.' });
+    }
+  }
+
   if (pathname === '/api/hunter/domain-search') {
     const payload = handleHunterDomainSearch(parsedUrl.searchParams);
     sendJson(200, payload);
@@ -2284,6 +2408,122 @@ const server = http.createServer(async (req, res) => {
 
       sendJson(201, { status: 'sent', message: newMsg });
     });
+    return;
+  }
+
+  // ----------------------------------------------------
+  // BULK RESUME ZIP ARCHIVE EXPORTER (Zero-Dependency)
+  // ----------------------------------------------------
+  if ((cleanPath === '/api/admin/resumes/download-all' || pathname === '/api/admin/resumes/download-all') && req.method === 'GET') {
+    const user = getAuthenticatedUser(req);
+    const isFromAdminPortal = isRequestFromAdminDomain(req);
+    if (!isAdmin(user) && !isFromAdminPortal) {
+      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
+    }
+
+    const resumesDir = DIRS.resumes;
+    if (!fs.existsSync(resumesDir)) {
+      return sendJson(404, { error: 'Resumes directory not found.' });
+    }
+
+    const files = fs.readdirSync(resumesDir).filter(f => f.toLowerCase().endsWith('.pdf'));
+    if (files.length === 0) {
+      return sendJson(404, { error: 'No PDF resumes available to export.' });
+    }
+
+    const zipBuffers = [];
+    const centralDirectory = [];
+    let offset = 0;
+
+    const crcTable = new Uint32Array(256);
+    for (let i = 0; i < 256; i++) {
+      let c = i;
+      for (let j = 0; j < 8; j++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      crcTable[i] = c;
+    }
+    function crc32(buf) {
+      let crc = -1;
+      for (let i = 0; i < buf.length; i++) {
+        crc = (crc >>> 8) ^ crcTable[(crc ^ buf[i]) & 0xFF];
+      }
+      return (crc ^ (-1)) >>> 0;
+    }
+
+    files.forEach(filename => {
+      const filePath = path.join(resumesDir, filename);
+      const content = fs.readFileSync(filePath);
+      const nameBuf = Buffer.from(filename, 'utf8');
+      const checksum = crc32(content);
+      const size = content.length;
+
+      // Local file header
+      const header = Buffer.alloc(30 + nameBuf.length);
+      header.writeUInt32LE(0x04034b50, 0);
+      header.writeUInt16LE(20, 4);
+      header.writeUInt16LE(0, 6);
+      header.writeUInt16LE(0, 8);
+      header.writeUInt16LE(0, 10);
+      header.writeUInt16LE(0, 12);
+      header.writeUInt32LE(checksum, 14);
+      header.writeUInt32LE(size, 18);
+      header.writeUInt32LE(size, 22);
+      header.writeUInt16LE(nameBuf.length, 26);
+      header.writeUInt16LE(0, 28);
+      nameBuf.copy(header, 30);
+
+      zipBuffers.push(header, content);
+
+      // Central directory entry
+      const cdEntry = Buffer.alloc(46 + nameBuf.length);
+      cdEntry.writeUInt32LE(0x02014b50, 0);
+      cdEntry.writeUInt16LE(20, 4);
+      cdEntry.writeUInt16LE(20, 6);
+      cdEntry.writeUInt16LE(0, 8);
+      cdEntry.writeUInt16LE(0, 10);
+      cdEntry.writeUInt16LE(0, 12);
+      cdEntry.writeUInt16LE(0, 14);
+      cdEntry.writeUInt32LE(checksum, 16);
+      cdEntry.writeUInt32LE(size, 20);
+      cdEntry.writeUInt32LE(size, 24);
+      cdEntry.writeUInt16LE(nameBuf.length, 28);
+      cdEntry.writeUInt16LE(0, 30);
+      cdEntry.writeUInt16LE(0, 32);
+      cdEntry.writeUInt16LE(0, 34);
+      cdEntry.writeUInt16LE(0, 36);
+      cdEntry.writeUInt32LE(0, 38);
+      cdEntry.writeUInt32LE(offset, 42);
+      nameBuf.copy(cdEntry, 46);
+
+      centralDirectory.push(cdEntry);
+      offset += header.length + content.length;
+    });
+
+    const cdStart = offset;
+    let cdSize = 0;
+    centralDirectory.forEach(buf => {
+      zipBuffers.push(buf);
+      cdSize += buf.length;
+    });
+
+    const eocd = Buffer.alloc(22);
+    eocd.writeUInt32LE(0x06054b50, 0);
+    eocd.writeUInt16LE(0, 4);
+    eocd.writeUInt16LE(0, 6);
+    eocd.writeUInt16LE(files.length, 8);
+    eocd.writeUInt16LE(files.length, 10);
+    eocd.writeUInt32LE(cdSize, 12);
+    eocd.writeUInt32LE(cdStart, 16);
+    eocd.writeUInt16LE(0, 20);
+
+    zipBuffers.push(eocd);
+
+    const finalZipBuffer = Buffer.concat(zipBuffers);
+    res.writeHead(200, {
+      'Content-Type': 'application/zip',
+      'Content-Disposition': `attachment; filename="UTHEVERSITY_Resumes_Bundle_${new Date().toISOString().split('T')[0]}.zip"`,
+      'Content-Length': finalZipBuffer.length
+    });
+    res.end(finalZipBuffer);
     return;
   }
 
