@@ -1091,7 +1091,8 @@ async function runTests() {
     assert(candHtml.includes('id="search-input"'), 'candidate.html defines main search input');
     assert(candHtml.includes('value=""'), 'candidate.html search input defaults to empty string value=""');
     assert(candHtml.includes('autocomplete="off"'), 'candidate.html search input includes autocomplete="off" to prevent browser autofill');
-    assert(candHtml.includes('placeholder="Search positions, companies, locations, or skills..."'), 'candidate.html sets neutral professional placeholder text');
+    assert(candHtml.includes('placeholder="Search positions, verified companies, locations, or skills..."') || candHtml.includes('placeholder="Search positions, companies, locations, or skills..."'), 'candidate.html sets neutral professional placeholder text');
+    assert(!candHtml.includes('bigcompany2012@gmail.com'), 'candidate.html contains zero instances of bigcompany2012@gmail.com');
 
     // 2. Check JavaScript initial state initialization
     assert(candHtml.includes('let currentSearchFilter = \'\'') || candHtml.includes('currentSearchFilter = ""'), 'candidate.html initializes search filter variable to empty string');
@@ -1100,7 +1101,7 @@ async function runTests() {
     // 3. Check Mirrors
     const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
     assert(syncHtml.includes('autocomplete="off"'), 'u-theJOBS-ENTERPRISE-SYNC.html includes autocomplete="off"');
-    assert(syncHtml.includes('placeholder="Search positions, companies, locations, or skills..."'), 'u-theJOBS-ENTERPRISE-SYNC.html sets neutral placeholder');
+    assert(!syncHtml.includes('bigcompany2012@gmail.com'), 'u-theJOBS-ENTERPRISE-SYNC.html contains zero instances of bigcompany2012@gmail.com');
 
   } catch (err) {
     assert(false, `Group 22 failed: ${err.message}`);

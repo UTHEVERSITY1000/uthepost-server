@@ -1211,7 +1211,7 @@
   <section class="search-filter-belt">
     <div class="search-input-wrap">
       <span class="search-icon">&#128269;</span>
-      <input type="text" class="search-input" id="search-input" name="jobSearchQuery" value="" autocomplete="off" data-cms-key="jobs-search-placeholder" placeholder="Search positions, companies, locations, or skills..." oninput="handleFilterChange()" data-tooltip="Instant search across all active listings.">
+      <input type="text" class="search-input" id="search-input" name="jobSearchInput" value="" placeholder="Search positions, verified companies, locations, or skills..." autocomplete="off" data-cms-key="jobs-search-placeholder" oninput="handleFilterChange()" data-tooltip="Instant search across all active listings.">
     </div>
 
     <select class="filter-select" id="filter-type" onchange="handleFilterChange()" data-tooltip="Select work commitment.">
@@ -2443,7 +2443,7 @@
       // Explicit data-cms-key dynamic DOM binding
       const cmsKeyMap = {
         'jobs-board-title': config.jobsBoard?.boardTitle || config.labels?.jobsTitle || 'U-THEJOBS',
-        'jobs-search-placeholder': config.jobsBoard?.searchPlaceholder || 'Search positions, companies, locations, or skills...',
+        'jobs-search-placeholder': config.jobsBoard?.searchPlaceholder || 'Search positions, verified companies, locations, or skills...',
         'jobs-quick-send-btn': config.jobsBoard?.quickSendBtn || config.labels?.quickSendBtn || 'QUICK SEND',
         'jobs-send-resume-btn': config.jobsBoard?.sendResumeBtn || config.labels?.sendResumeBtn || 'SEND RESUME/CV',
         'jobs-salary-badge': config.jobsBoard?.salaryBadgeLabel,
