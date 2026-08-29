@@ -865,6 +865,186 @@
       line-height: 1.5;
     }
 
+    /* EXECUTIVE RECRUITER MESSAGING MODAL (SIGNATURE UTHEVERSITY) */
+    /* Executive Backdrop Overlay */
+    #messageDrawer, .message-drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* Signature UTHEVERSITY Central Card */
+    .message-drawer-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 680px;
+      max-height: 85vh;
+      border-radius: 16px;
+      border: 1px solid #D4AF37;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 175, 55, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* High-End Header */
+    .message-drawer-header {
+      background: #0f172a;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #D4AF37;
+    }
+
+    .message-drawer-title {
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      color: #D4AF37;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .message-drawer-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .message-drawer-close:hover {
+      background: #D4AF37;
+      color: #0f172a;
+    }
+
+    /* Conversation Body */
+    .message-drawer-body {
+      padding: 24px;
+      background: #f8fafc;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 200px;
+      max-height: 360px;
+    }
+
+    .chat-bubble-recruiter {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #D4AF37;
+      padding: 16px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #0f172a;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      align-self: flex-start;
+      max-width: 90%;
+    }
+
+    .chat-bubble-candidate {
+      background: #0f172a;
+      border: 1px solid #D4AF37;
+      border-right: 4px solid #D4AF37;
+      padding: 16px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      align-self: flex-end;
+      max-width: 90%;
+    }
+
+    /* Quick Response Chips */
+    .quick-responses-wrapper {
+      padding: 14px 24px;
+      background: #ffffff;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .quick-chip {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quick-chip:hover {
+      background: #0f172a;
+      color: #D4AF37;
+      border-color: #D4AF37;
+    }
+
+    /* Input Area */
+    .message-drawer-footer {
+      padding: 18px 24px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 12px;
+    }
+
+    .message-input-field {
+      flex: 1;
+      padding: 12px 18px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .message-input-field:focus {
+      border-color: #D4AF37;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    }
+
+    .send-reply-btn {
+      background: #0f172a;
+      color: #D4AF37;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      padding: 12px 22px;
+      border: 1px solid #D4AF37;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .send-reply-btn:hover {
+      background: #D4AF37;
+      color: #0f172a;
+    }
+
     /* RESPONSIVE */
     @media (max-width: 1024px) {
       main.board-container { grid-template-columns: 1fr; }
@@ -1062,58 +1242,32 @@
     </div>
   </div>
 
-  <!-- 2. CANDIDATE MESSAGE CENTER & DIRECT RECRUITER REPLIES MODAL -->
-  <div class="modal-overlay" id="candidate-messages-modal">
-    <div class="modal-card" style="width: 620px;">
-      <div class="modal-header">
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <span class="modal-main-title" data-cms-key="jobs-msg-header">MESSAGES & INTERVIEW REQUESTS</span>
-          <span style="font-size:0.65rem; background:var(--status-mint-bg); color:#065F46; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">DIRECT CONVERSATION</span>
+  <!-- 2. EXECUTIVE RECRUITER MESSAGING MODAL -->
+  <div id="messageDrawer" style="display: none;">
+    <div class="message-drawer-card">
+      <div class="message-drawer-header">
+        <div class="message-drawer-title" id="cms-jobs-msg-header" data-cms-key="jobs-msg-header">
+          <span>💬</span> DIRECT RECRUITER MESSAGES
         </div>
-        <button class="btn-close-modal" onclick="closeModal('candidate-messages-modal')" data-tooltip="Close messages">X</button>
-      </div>
-        <button class="btn-close-modal" onclick="closeModal('candidate-messages-modal')" data-tooltip="Close messages">X</button>
+        <button class="message-drawer-close" onclick="closeMessageDrawer()">✕</button>
       </div>
 
-      <!-- THREAD HEADER: RECRUITER & COMPANY SPECIFICATION -->
-      <div class="recruiter-thread-header" id="recruiter-thread-header" style="display:flex; justify-content:space-between; align-items:center; background:var(--card-subtle); padding:0.85rem 1rem; border-radius:8px; border:1px solid var(--border-color);">
-        <div>
-          <div style="font-size:0.85rem; font-weight:900; color:var(--uthe-charcoal);" id="thread-recruiter-name">Quantum Talent Acquisition</div>
-          <div style="font-size:0.75rem; color:var(--text-muted); display:flex; align-items:center; gap:0.4rem; margin-top:0.2rem;">
-            <span id="thread-company-name">Quantum Retail Corp</span> • <strong id="thread-job-title" style="color:var(--uthe-charcoal);">Sales Manager</strong>
-          </div>
-        </div>
-        <span class="verified-employer-badge" style="background:#FFF8E6; color:#92400E; border:1.5px solid #F59E0B; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.65rem; font-weight:900; display:inline-flex; align-items:center; gap:0.3rem;">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="#E5A800"><path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18C5 19.5 8.13 21 12 21C15.87 21 19 19.5 19 17.18V13.18L12 17L5 13.18Z"/></svg>
-          VERIFIED EMPLOYER
-        </span>
+      <div class="message-drawer-body" id="chatMessagesContainer">
+        <!-- Live recruiter messages render here -->
       </div>
 
-      <!-- MESSAGE HISTORY THREAD -->
-      <div id="candidate-chat-log" style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:8px; padding:1rem; min-height:180px; max-height:240px; overflow-y:auto; display:flex; flex-direction:column; gap:0.6rem;">
-        <div class="chat-bubble chat-bubble-recruiter">
-          <div style="font-size:0.7rem; color:var(--uthe-gold); font-weight:800; margin-bottom:0.2rem;">Quantum Talent Acquisition (Recruiter)</div>
-          Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.
-          <div style="font-size:0.6rem; color:#94A3B8; margin-top:0.3rem; text-align:right;">Today, 10:15 AM</div>
+      <div class="quick-responses-wrapper">
+        <div style="font-size: 10px; font-weight: 900; color: #64748b; letter-spacing: 0.08em; margin-bottom: 8px;">1-CLICK EXECUTIVE RESPONSES:</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <button class="quick-chip" onclick="selectQuickReply('I\'M INTERESTED — LET\'S TALK')">1. I'M INTERESTED — LET'S TALK</button>
+          <button class="quick-chip" onclick="selectQuickReply('ACCEPTED INTERVIEW TIME')">2. ACCEPTED INTERVIEW TIME</button>
+          <button class="quick-chip" onclick="selectQuickReply('PLEASE SEND MORE DETAILS')">3. PLEASE SEND MORE DETAILS</button>
         </div>
       </div>
 
-      <!-- QUICK CANDIDATE RESPONSE BUTTONS -->
-      <div>
-        <label style="font-size:0.65rem; color:var(--text-muted); font-weight:800; display:block; margin-bottom:0.35rem;">1-CLICK QUICK CANDIDATE RESPONSES:</label>
-        <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
-          <button type="button" class="cand-quick-reply-chip" onclick="applyCandidateQuickReply('interested')">1. I'M INTERESTED — LET'S TALK</button>
-          <button type="button" class="cand-quick-reply-chip" onclick="applyCandidateQuickReply('accept')">2. ACCEPTED INTERVIEW TIME</button>
-          <button type="button" class="cand-quick-reply-chip" onclick="applyCandidateQuickReply('details')">3. PLEASE SEND MORE DETAILS</button>
-        </div>
-      </div>
-
-      <!-- CANDIDATE REPLY BOX & SEND CONTROLS -->
-      <div style="display:flex; gap:0.5rem; margin-top:0.2rem;">
-        <input type="text" id="cand-reply-input" placeholder="Reply to recruiter..." style="flex:1; height:44px; font-size:0.82rem;" onkeydown="if(event.key==='Enter') sendCandidateReply()">
-        <button class="btn-submit-request" style="height:44px; width:auto; padding:0 1.25rem; font-size:0.75rem; margin-top:0;" onclick="sendCandidateReply()">
-          SEND REPLY
-        </button>
+      <div class="message-drawer-footer">
+        <input type="text" id="recruiterReplyInput" class="message-input-field" placeholder="Type your response to the recruiter..." onkeydown="if(event.key==='Enter') sendRecruiterReply()" />
+        <button onclick="sendRecruiterReply()" class="send-reply-btn">SEND REPLY</button>
       </div>
     </div>
   </div>
@@ -1403,13 +1557,20 @@
       document.getElementById('profile-modal').style.display = 'flex';
     }
 
-    // 1. NOTIFICATIONS ALERT & CANDIDATE MESSAGE DRAWER
-    window.openCandidateMessageDrawer = function() {
-      document.getElementById('candidate-messages-modal').style.display = 'flex';
+    // 1. NOTIFICATIONS ALERT & EXECUTIVE RECRUITER MESSAGE DRAWER
+    window.openMessageDrawer = function() {
+      const drawer = document.getElementById('messageDrawer') || document.getElementById('candidate-messages-modal');
+      if (drawer) drawer.style.display = 'flex';
       unreadCount = 0;
       const badge = document.getElementById('notif-badge-count');
       if (badge) badge.style.display = 'none';
       fetchMessages();
+    };
+    window.openCandidateMessageDrawer = window.openMessageDrawer;
+
+    window.closeMessageDrawer = function() {
+      const drawer = document.getElementById('messageDrawer') || document.getElementById('candidate-messages-modal');
+      if (drawer) drawer.style.display = 'none';
     };
 
     function closeModal(id) {
@@ -1463,41 +1624,54 @@
       showCustomModalAlert('Interview Request Submitted', `Your application and PDF resume for "${applicantPayload.jobTitle}" were submitted directly to the hiring recruiter.`);
     }
 
-    // 2. CANDIDATE QUICK REPLIES & DIRECT MESSAGING
-    const CANDIDATE_QUICK_RESPONSES = {
-      interested: "I'm very interested in the position and would love to connect. I am available this week for an introductory conversation.",
-      accept: "Thank you! I accept the proposed interview time and look forward to speaking with the team.",
-      details: "Thank you for reaching out! Could you please share more details regarding the team structure and day-to-day responsibilities?"
+    // 2. 1-CLICK EXECUTIVE QUICK REPLIES & DIRECT MESSAGING
+    const QUICK_RESPONSE_EXPANSIONS = {
+      "I'M INTERESTED — LET'S TALK": "I'm very interested in the position and would love to connect. I am available this week for an introductory conversation.",
+      "ACCEPTED INTERVIEW TIME": "Thank you! I accept the proposed interview time and look forward to speaking with the team.",
+      "PLEASE SEND MORE DETAILS": "Thank you for reaching out! Could you please share more details regarding the team structure and day-to-day responsibilities?"
+    };
+
+    window.selectQuickReply = function(text) {
+      const input = document.getElementById('recruiterReplyInput') || document.getElementById('cand-reply-input');
+      if (input) {
+        input.value = QUICK_RESPONSE_EXPANSIONS[text] || text;
+        input.focus();
+      }
     };
 
     window.applyCandidateQuickReply = function(key) {
-      const replyText = CANDIDATE_QUICK_RESPONSES[key] || CANDIDATE_QUICK_RESPONSES.interested;
-      document.getElementById('cand-reply-input').value = replyText;
+      if (key === 'interested') window.selectQuickReply("I'M INTERESTED — LET'S TALK");
+      else if (key === 'accept') window.selectQuickReply("ACCEPTED INTERVIEW TIME");
+      else if (key === 'details') window.selectQuickReply("PLEASE SEND MORE DETAILS");
     };
 
-    window.sendCandidateReply = async function() {
-      const input = document.getElementById('cand-reply-input');
-      const text = input.value.trim();
-      if (!text) return showCustomModalAlert('Empty Message', 'Please enter a reply or choose a quick response tag.');
+    window.sendRecruiterReply = async function() {
+      const input = document.getElementById('recruiterReplyInput') || document.getElementById('cand-reply-input');
+      const text = input ? input.value.trim() : '';
+      if (!text) {
+        return showCustomModalAlert('Empty Message', 'Please enter a reply or choose a quick response tag.');
+      }
 
-      const chatLog = document.getElementById('candidate-chat-log');
-      const bubble = document.createElement('div');
-      bubble.className = 'chat-bubble chat-bubble-candidate';
-      bubble.innerHTML = `
-        <div style="font-size:0.7rem; font-weight:800; margin-bottom:0.2rem;">You (Candidate)</div>
-        ${text}
-        <div style="font-size:0.6rem; color:#92400E; margin-top:0.3rem; text-align:right;">Just Now</div>
-      `;
-      chatLog.appendChild(bubble);
-      chatLog.scrollTop = chatLog.scrollHeight;
-      input.value = '';
+      const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
+      if (container) {
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble-candidate';
+        bubble.innerHTML = `
+          <div style="font-size:0.75rem; font-weight:800; margin-bottom:0.25rem; color:#D4AF37;">You (Candidate)</div>
+          ${text}
+          <div style="font-size:0.65rem; color:#94a3b8; margin-top:0.35rem; text-align:right;">Just Now</div>
+        `;
+        container.appendChild(bubble);
+        container.scrollTop = container.scrollHeight;
+      }
+      if (input) input.value = '';
 
       const msgPayload = {
         applicantId: 'APP-701',
         senderRole: 'candidate',
-        senderName: document.getElementById('prof-cand-name').value || 'Marcus Vance',
-        company: document.getElementById('thread-company-name').textContent || 'Quantum Retail Corp',
-        jobTitle: document.getElementById('thread-job-title').textContent || 'Sales Manager',
+        senderName: (document.getElementById('prof-cand-name') && document.getElementById('prof-cand-name').value) || 'Marcus Vance',
+        company: 'Quantum Retail Corp',
+        jobTitle: 'Sales Manager',
         text: text,
         timestamp: new Date().toISOString()
       };
@@ -1513,30 +1687,40 @@
       broadcastSyncEvent('CANDIDATE_MESSAGE_SENT', { message: msgPayload });
       showCustomModalAlert('Reply Sent to Recruiter', 'Your message was delivered directly to the recruiter’s Applicant Tracker.');
     };
+    window.sendCandidateReply = window.sendRecruiterReply;
 
     async function fetchMessages() {
       try {
         const res = await fetch('/api/messages');
         const data = await res.json();
-        if (data.messages && data.messages.length > 0) {
-          const chatLog = document.getElementById('candidate-chat-log');
-          chatLog.innerHTML = '';
-          data.messages.forEach(m => {
+        const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
+        if (container) {
+          container.innerHTML = '';
+          const list = (data.messages && data.messages.length > 0) ? data.messages : [
+            {
+              senderRole: 'recruiter',
+              senderName: 'Quantum Talent Acquisition (Recruiter)',
+              text: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
+              timestamp: new Date().toISOString()
+            }
+          ];
+
+          list.forEach(m => {
             const isRecruiter = m.senderRole === 'recruiter';
             const bubble = document.createElement('div');
-            bubble.className = `chat-bubble ${isRecruiter ? 'chat-bubble-recruiter' : 'chat-bubble-candidate'}`;
+            bubble.className = isRecruiter ? 'chat-bubble-recruiter' : 'chat-bubble-candidate';
             bubble.innerHTML = `
-              <div style="font-size:0.7rem; font-weight:800; margin-bottom:0.2rem; color:${isRecruiter ? 'var(--uthe-gold)' : '#92400E'};">
+              <div style="font-size:0.75rem; font-weight:800; margin-bottom:0.25rem; color:${isRecruiter ? '#D4AF37' : '#D4AF37'};">
                 ${isRecruiter ? (m.senderName || 'Recruiter') : 'You (Candidate)'}
               </div>
               ${m.text}
-              <div style="font-size:0.6rem; margin-top:0.3rem; text-align:right; color:${isRecruiter ? '#94A3B8' : '#92400E'};">
+              <div style="font-size:0.65rem; color:${isRecruiter ? '#64748b' : '#94a3b8'}; margin-top:0.35rem; text-align:right;">
                 ${new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </div>
             `;
-            chatLog.appendChild(bubble);
+            container.appendChild(bubble);
           });
-          chatLog.scrollTop = chatLog.scrollHeight;
+          container.scrollTop = container.scrollHeight;
         }
       } catch (e) {}
     }

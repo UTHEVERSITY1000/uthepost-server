@@ -941,6 +941,35 @@ async function runTests() {
     assert(false, `Group 17 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 18: SIGNATURE UTHEVERSITY EXECUTIVE RECRUITER MESSAGING MODAL
+  // ================================================================
+  console.log('\n--- GROUP 18: SIGNATURE UTHEVERSITY EXECUTIVE RECRUITER MESSAGING MODAL ---');
+  try {
+    const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    assert(candHtml.includes('id="messageDrawer"'), 'candidate.html implements #messageDrawer modal container');
+    assert(candHtml.includes('class="message-drawer-card"'), 'candidate.html implements .message-drawer-card');
+    assert(candHtml.includes('class="message-drawer-header"'), 'candidate.html implements .message-drawer-header');
+    assert(candHtml.includes('class="message-drawer-title"'), 'candidate.html implements .message-drawer-title');
+    assert(candHtml.includes('DIRECT RECRUITER MESSAGES'), 'candidate.html renders DIRECT RECRUITER MESSAGES title');
+    assert(candHtml.includes('class="message-drawer-close"'), 'candidate.html implements .message-drawer-close');
+    assert(candHtml.includes('id="chatMessagesContainer"'), 'candidate.html implements #chatMessagesContainer message body');
+    assert(candHtml.includes('class="quick-responses-wrapper"'), 'candidate.html implements .quick-responses-wrapper');
+    assert(candHtml.includes('class="quick-chip"'), 'candidate.html implements .quick-chip response chips');
+    assert(candHtml.includes('selectQuickReply('), 'candidate.html binds selectQuickReply()');
+    assert(candHtml.includes('id="recruiterReplyInput"'), 'candidate.html implements #recruiterReplyInput');
+    assert(candHtml.includes('class="send-reply-btn"'), 'candidate.html implements .send-reply-btn');
+    assert(candHtml.includes('sendRecruiterReply()'), 'candidate.html binds sendRecruiterReply()');
+    assert(candHtml.includes('showCustomModalAlert'), 'candidate.html uses signature showCustomModalAlert (zero native pop-ups)');
+    assert(candHtml.includes('max-width: 680px'), 'candidate.html enforces 680px executive card max-width');
+    assert(candHtml.includes('#D4AF37'), 'candidate.html incorporates signature #D4AF37 metallic gold accents');
+    assert(candHtml.includes('#0f172a'), 'candidate.html incorporates signature #0f172a executive navy background');
+
+  } catch (err) {
+    assert(false, `Group 18 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
