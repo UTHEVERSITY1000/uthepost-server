@@ -2060,8 +2060,11 @@ const server = http.createServer(async (req, res) => {
   // ----------------------------------------------------
   // MASTER ZERO-CODE CMS CONFIGURATION ENGINE & LIVE BROADCAST
   // ----------------------------------------------------
-  if ((pathname === '/api/cms/config' || pathname === '/api/cms' || pathname === '/api/admin/cms' || pathname === '/api/admin/cms/config') && (req.method === 'GET' || req.method === 'POST')) {
+  if ((pathname === '/api/cms/config' || pathname === '/api/cms' || pathname === '/api/admin/cms' || pathname === '/api/admin/cms/config') && (req.method === 'GET' || req.method === 'POST' || req.method === 'PUT')) {
     if (req.method === 'GET') {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
       return sendJson(200, { config: cmsConfig, updatedConfig: cmsConfig, cmsConfig: cmsConfig });
     }
 
@@ -2085,21 +2088,8 @@ const server = http.createServer(async (req, res) => {
         fs.writeFileSync(rootCmsPath, JSON.stringify(cmsConfig, null, 2));
       } catch (e) {}
 
-      // Broadcast update payload to all active client sockets
-      const broadcastPayload = JSON.stringify({
-        type: 'CMS_CONFIG_UPDATED',
-        event: 'cms_update',
-        config: cmsConfig,
-        updatedConfig: cmsConfig
-      });
-
-      if (wss && wss.clients) {
-        wss.clients.forEach(client => {
-          if (client.readyState === 1) { // WebSocket.OPEN
-            try { client.send(broadcastPayload); } catch (e) {}
-          }
-        });
-      }
+      // Execute broadcastCmsUpdate across all active WebSocket clients
+      broadcastCmsUpdate(cmsConfig);
 
       writeSystemLog('CMS_CONFIG_UPDATED', { updatedBy: user ? user.id : 'Admin Portal', timestamp: new Date().toISOString() });
       sendJson(200, { status: 'success', message: 'CMS configuration updated and broadcast live.', config: cmsConfig, updatedConfig: cmsConfig });
@@ -2810,6 +2800,24 @@ function broadcastWebSocketEvent(type, payload) {
       try { client.send(message); } catch (e) {}
     }
   });
+}
+
+// Global broadcast helper for CMS updates
+function broadcastCmsUpdate(configData) {
+  const payload = JSON.stringify({
+    type: 'CMS_CONFIG_UPDATED',
+    event: 'cms_update',
+    config: configData,
+    updatedConfig: configData,
+    timestamp: Date.now()
+  });
+  if (wss && wss.clients) {
+    wss.clients.forEach(client => {
+      if (client.readyState === 1) { // WebSocket.OPEN
+        try { client.send(payload); } catch (e) {}
+      }
+    });
+  }
 }
 
 process.on('uncaughtException', (err) => {

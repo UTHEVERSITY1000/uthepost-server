@@ -2392,25 +2392,34 @@
     }
 
     // Live Sync
+    function connectLiveSync() {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = `${protocol}//${window.location.host || 'localhost:3000'}`;
+      try {
+        wsRelay = new WebSocket(wsUrl);
+
+        wsRelay.onmessage = (e) => {
+          try {
+            const data = JSON.parse(e.data);
+            if (data.type === 'CMS_CONFIG_UPDATED' || data.event === 'cms_update' || data.type === 'cms_update') {
+              const cfg = data.config || data.updatedConfig;
+              if (cfg) applyCmsConfig(cfg);
+            }
+            handleSyncEvent(data);
+          } catch (err) {}
+        };
+
+        wsRelay.onclose = () => setTimeout(connectLiveSync, 3000);
+      } catch (e) {}
+    }
+
     function initDualSync() {
       if (typeof BroadcastChannel !== 'undefined') {
         broadcastBus = new BroadcastChannel(SYNC_CHANNEL_NAME);
         broadcastBus.onmessage = (e) => handleSyncEvent(e.data);
       }
 
-      function connectWs() {
-        try {
-          const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-          const wsHost = window.location.host || 'localhost:3000';
-          wsRelay = new WebSocket(`${wsProtocol}//${wsHost}`);
-          wsRelay.onmessage = (e) => {
-            try { handleSyncEvent(JSON.parse(e.data)); } catch (err) {}
-          };
-          wsRelay.onclose = () => { setTimeout(connectWs, 3000); };
-        } catch (e) {}
-      }
-
-      connectWs();
+      connectLiveSync();
     }
 
     function broadcastSyncEvent(type, payload) {
@@ -2600,12 +2609,12 @@
       } catch (err) {}
     }
 
-    // Fallback Sync Polling (Every 5 seconds if socket disconnects)
+    // Fallback fast-polling (3 seconds) with cache-busting parameter
     setInterval(async () => {
       if (!wsRelay || wsRelay.readyState !== WebSocket.OPEN) {
         await loadInitialCmsConfig();
       }
-    }, 5000);
+    }, 3000);
 
     // Admin Shortcut Handler (Ctrl + Shift + A)
     window.handleAdminShortcut = function() {

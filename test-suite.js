@@ -1247,6 +1247,53 @@ async function runTests() {
     assert(false, `Group 25 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 26: CROSS-DOMAIN WEBSOCKET & REAL-TIME CMS SYNC
+  // ================================================================
+  console.log('\n--- GROUP 26: CROSS-DOMAIN WEBSOCKET & REAL-TIME CMS SYNC ---');
+  try {
+    const srvJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+    const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const recHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. broadcastCmsUpdate in server.js
+    assert(srvJs.includes('function broadcastCmsUpdate(configData)'), 'server.js defines global broadcastCmsUpdate()');
+    assert(srvJs.includes('broadcastCmsUpdate(cmsConfig)'), 'server.js calls broadcastCmsUpdate on config changes');
+
+    // 2. Strict cache-control headers on GET /api/cms/config
+    const getRes = await fetch(`${BASE_URL}/api/cms/config`);
+    const cacheHeader = getRes.headers.get('cache-control') || '';
+    assert(cacheHeader.includes('no-store') || cacheHeader.includes('no-cache'), 'GET /api/cms/config returns strict Cache-Control: no-store, no-cache headers');
+    assert(getRes.headers.get('pragma') === 'no-cache', 'GET /api/cms/config returns Pragma: no-cache header');
+
+    // 3. connectLiveSync client function
+    assert(candHtml.includes('function connectLiveSync()'), 'candidate.html implements connectLiveSync()');
+    assert(recHtml.includes('function connectLiveSync()'), 'recruiter.html implements connectLiveSync()');
+    assert(candHtml.includes('window.location.protocol === \'https:\' ? \'wss:\' : \'ws:\''), 'candidate.html connects over wss:// on HTTPS');
+    assert(recHtml.includes('window.location.protocol === \'https:\' ? \'wss:\' : \'ws:\''), 'recruiter.html connects over wss:// on HTTPS');
+
+    // 4. 3-second fallback fast-polling
+    assert(candHtml.includes('3000'), 'candidate.html implements 3-second fallback sync polling');
+    assert(recHtml.includes('3000'), 'recruiter.html implements 3-second fallback sync polling');
+
+    // 5. DOM element updates in applyCmsConfig
+    assert(candHtml.includes('cms-brand-title'), 'candidate.html updates #cms-brand-title');
+    assert(candHtml.includes('search-input'), 'candidate.html updates #search-input placeholder');
+    assert(recHtml.includes('price-pal'), 'recruiter.html updates #price-pal');
+    assert(recHtml.includes('price-starter'), 'recruiter.html updates #price-starter');
+    assert(recHtml.includes('price-growth'), 'recruiter.html updates #price-growth');
+    assert(recHtml.includes('price-pro'), 'recruiter.html updates #price-pro');
+
+    // Check mirrors
+    const dualCand = fs.readFileSync(path.join(__dirname, 'u-theJOBS-DUAL LINK TO u-thePOST.html'), 'utf8');
+    const dualRec = fs.readFileSync(path.join(__dirname, 'u-thePOST-DUAL LINK TO u-theJOBS.html'), 'utf8');
+    assert(dualCand.includes('connectLiveSync'), 'u-theJOBS-DUAL LINK TO u-thePOST.html includes connectLiveSync');
+    assert(dualRec.includes('connectLiveSync'), 'u-thePOST-DUAL LINK TO u-theJOBS.html includes connectLiveSync');
+
+  } catch (err) {
+    assert(false, `Group 26 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
