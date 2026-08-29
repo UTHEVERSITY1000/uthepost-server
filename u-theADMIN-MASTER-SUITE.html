@@ -406,63 +406,33 @@
     }
 
     /* COMPACT ACTION BUTTONS (28-32PX HEIGHT) */
-    button, .btn-primary, .btn-gold, .btn-quick-send-main, .send-reply-btn, .btn-auth-header, .btn-submit-request, .btn-primary-executive {
-      background: #0f172a !important;
-      color: #D4AF37 !important;
-      border: 1.5px solid #D4AF37 !important;
+    /* 1. DEFAULT STATE: White Fill, Gold Outline, Gold Text */
+    button, .btn-primary, .btn-gold, .btn-quick-send-main, .send-reply-btn, .btn-auth-header, .btn-submit-request, .btn-surface-sm, .btn-primary-executive {
+      background-color: #FFFFFF !important;
+      color: #FEBA27 !important;
+      border: 1.5px solid #FEBA27 !important;
       font-weight: 800 !important;
-      letter-spacing: 0.08em !important;
+      letter-spacing: 0.06em !important;
       text-transform: uppercase !important;
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4) !important;
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 0 0.85rem;
-      height: 32px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-      white-space: nowrap;
     }
 
-    button:hover, .btn-primary:hover, .btn-gold:hover, .btn-quick-send-main:hover, .send-reply-btn:hover, .btn-auth-header:hover, .btn-submit-request:hover, .btn-primary-executive:hover {
-      background: #2563EB !important;
-      color: #FFFFFF !important;
-      border-color: #2563EB !important;
-      text-shadow: none !important;
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+    /* 2. HOVER STATE: Signature Gold Fill, Limousine Black Text */
+    button:hover, .btn-primary:hover, .btn-gold:hover, .btn-quick-send-main:hover, .send-reply-btn:hover, .btn-auth-header:hover, .btn-submit-request:hover, .btn-surface-sm:hover, .btn-primary-executive:hover {
+      background-color: #FEBA27 !important;
+      color: #0F172A !important;
+      border-color: #FEBA27 !important;
+      box-shadow: 0 4px 14px rgba(254, 186, 39, 0.35) !important;
       transform: translateY(-1px) !important;
     }
 
-    .btn-surface-sm {
-      background: #FFFFFF;
-      color: var(--uthe-charcoal);
-      border: 1px solid var(--border-color);
-      font-weight: 700;
-      font-size: 0.62rem;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-      border-radius: 3px;
-      cursor: pointer;
-      padding: 0 0.5rem;
-      height: 26px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.1s ease;
-      white-space: nowrap;
-    }
-
-    .btn-surface-sm:hover {
-      border-color: var(--uthe-gold);
-      background: var(--uthe-gold-light);
-    }
-
-    .btn-surface-sm.active {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border-color: var(--uthe-gold);
+    /* 3. SELECTED / ACTIVE STATE: u-theLOGO Accent Blue Fill, White Text */
+    button:active, button.active, .btn-primary.active, .btn-surface-sm.active, .admin-nav-tab-btn.active {
+      background-color: #0075FF !important;
+      color: #FFFFFF !important;
+      border-color: #0075FF !important;
+      box-shadow: 0 4px 14px rgba(0, 117, 255, 0.35) !important;
     }
 
     .btn-danger-sm {
@@ -482,44 +452,17 @@
       white-space: nowrap;
     }
 
-    .badge-tag {
-      font-size: 0.58rem;
-      font-weight: 800;
-      padding: 0.15rem 0.4rem;
-      border-radius: 3px;
-      text-transform: uppercase;
-      display: inline-block;
+    /* 4. BADGES & TAGS */
+    .badge-tag, .role-badge, .status-badge {
+      background-color: #FFFFFF !important;
+      color: #FEBA27 !important;
+      border: 1px solid #FEBA27 !important;
     }
 
-    .tag-mint { background: var(--status-mint-bg); color: #065F46; border: 1px solid rgba(0, 200, 83, 0.3); }
-    .tag-cyan, .tag-blue, .badge-tag.tag-cyan, .badge-tag.tag-blue { background: #FFF8E6 !important; color: #92400E !important; border: 1px solid #D4AF37 !important; }
-    .tag-gold { background: var(--uthe-gold-light); color: #92400E; border: 1px solid var(--uthe-gold); }
-    .tag-purple { background: var(--purple-bg); color: var(--purple-accent); border: 1px solid rgba(139, 92, 246, 0.3); }
-
-    /* ROLE & STATUS BADGES & ACTION CELLS */
-    .role-badge {
-      font-size: 0.58rem;
-      font-weight: 800;
-      padding: 0.15rem 0.45rem;
-      border-radius: 3px;
-      text-transform: uppercase;
-      display: inline-block;
-      letter-spacing: 0.4px;
-      background: var(--uthe-gold-light);
-      color: #92400E;
-      border: 1px solid var(--uthe-gold);
-    }
-    .role-badge.admin, .role-badge.master-admin { background: var(--uthe-gold-light); color: #92400E; border: 1px solid var(--uthe-gold); }
-    .role-badge.employer, .role-badge.recruiter { background: #FFF8E6 !important; color: #92400E !important; border: 1px solid #D4AF37 !important; }
-    .role-badge.candidate { background: var(--status-mint-bg); color: #065F46; border: 1px solid rgba(0, 200, 83, 0.3); }
-
-    .status-badge {
-      font-size: 0.58rem;
-      font-weight: 800;
-      padding: 0.15rem 0.45rem;
-      border-radius: 3px;
-      text-transform: uppercase;
-      display: inline-block;
+    .badge-tag.active, .status-badge.active, .badge-tag.selected {
+      background-color: #0075FF !important;
+      color: #FFFFFF !important;
+      border-color: #0075FF !important;
     }
     .status-badge.active {
       background: var(--status-mint-bg);

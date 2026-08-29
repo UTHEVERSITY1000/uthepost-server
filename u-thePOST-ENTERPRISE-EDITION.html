@@ -266,31 +266,29 @@
     }
 
     .btn-auth-header {
-      background: #0f172a;
-      color: #D4AF37;
-      border: 1.5px solid #D4AF37;
+      background-color: #FFFFFF !important;
+      color: #FEBA27 !important;
+      border: 1.5px solid #FEBA27 !important;
       padding: 0 1.25rem;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 800;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
       cursor: pointer;
       height: 38px;
       display: flex;
       align-items: center;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
     }
 
     .btn-auth-header:hover,
     .btn-auth-header:focus-visible {
-      background: #2563EB !important;
-      color: #FFFFFF !important;
-      border-color: #2563EB !important;
-      text-shadow: none !important;
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+      background-color: #FEBA27 !important;
+      color: #0F172A !important;
+      border-color: #FEBA27 !important;
+      box-shadow: 0 4px 14px rgba(254, 186, 39, 0.35) !important;
       transform: translateY(-1px);
     }
 
@@ -584,32 +582,46 @@
     }
 
     /* ACTION BUTTONS */
-    button, .btn-primary, .btn-gold, .btn-quick-send-main, .send-reply-btn, .btn-auth-header, .btn-submit-request, .btn-gold-action, .btn-primary-executive {
-      background: #0f172a !important;
-      color: #D4AF37 !important;
-      border: 1.5px solid #D4AF37 !important;
+    /* 1. DEFAULT STATE: White Fill, Gold Outline, Gold Text */
+    button, .btn-primary, .btn-gold, .btn-quick-send-main, .send-reply-btn, .btn-auth-header, .btn-submit-request, .btn-surface-sm, .btn-gold-action, .btn-primary-executive {
+      background-color: #FFFFFF !important;
+      color: #FEBA27 !important;
+      border: 1.5px solid #FEBA27 !important;
       font-weight: 800 !important;
-      letter-spacing: 0.08em !important;
+      letter-spacing: 0.06em !important;
       text-transform: uppercase !important;
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4) !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
-    button:hover, .btn-primary:hover, .btn-gold:hover, .btn-quick-send-main:hover, .send-reply-btn:hover, .btn-auth-header:hover, .btn-submit-request:hover, .btn-gold-action:hover, .btn-primary-executive:hover {
-      background: #2563EB !important;
-      color: #FFFFFF !important;
-      border-color: #2563EB !important;
-      text-shadow: none !important;
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+    /* 2. HOVER STATE: Signature Gold Fill, Limousine Black Text */
+    button:hover, .btn-primary:hover, .btn-gold:hover, .btn-quick-send-main:hover, .send-reply-btn:hover, .btn-auth-header:hover, .btn-submit-request:hover, .btn-surface-sm:hover, .btn-gold-action:hover, .btn-primary-executive:hover {
+      background-color: #FEBA27 !important;
+      color: #0F172A !important;
+      border-color: #FEBA27 !important;
+      box-shadow: 0 4px 14px rgba(254, 186, 39, 0.35) !important;
       transform: translateY(-1px) !important;
     }
 
-    /* Badges & Tags: Gold Light Tint & Gold Outline */
-    .badge-tag.tag-cyan, .badge-tag.tag-blue, .tag-blue, .tag-cyan, .role-badge.employer {
-      background: #FFF8E6 !important;
-      color: #92400E !important;
-      border: 1px solid #D4AF37 !important;
+    /* 3. SELECTED / ACTIVE STATE: u-theLOGO Accent Blue Fill, White Text */
+    button:active, button.active, .btn-primary.active, .btn-surface-sm.active, .admin-nav-tab-btn.active, .nav-tab-btn.active {
+      background-color: #0075FF !important;
+      color: #FFFFFF !important;
+      border-color: #0075FF !important;
+      box-shadow: 0 4px 14px rgba(0, 117, 255, 0.35) !important;
+    }
+
+    /* 4. BADGES & TAGS */
+    .badge-tag, .role-badge, .status-badge {
+      background-color: #FFFFFF !important;
+      color: #FEBA27 !important;
+      border: 1px solid #FEBA27 !important;
+    }
+
+    .badge-tag.active, .status-badge.active, .badge-tag.selected {
+      background-color: #0075FF !important;
+      color: #FFFFFF !important;
+      border-color: #0075FF !important;
     }
 
     .btn-surface-action {
