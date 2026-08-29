@@ -971,21 +971,27 @@ async function runTests() {
   }
 
   // ================================================================
-  // GROUP 19: AUTOMATIC RESUME CONTACT AUTO-FILL ENGINE
+  // GROUP 19: ACCURATE RESUME TEXT READER & AUTO-FILL TOGGLE
   // ================================================================
-  console.log('\n--- GROUP 19: AUTOMATIC RESUME CONTACT AUTO-FILL ENGINE ---');
+  console.log('\n--- GROUP 19: ACCURATE RESUME TEXT READER & AUTO-FILL TOGGLE ---');
   try {
     const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
 
+    assert(candHtml.includes('pdf.min.js'), 'candidate.html includes PDF.js web reader library');
+    assert(candHtml.includes('id="autoFillConsentCheckbox"'), 'candidate.html implements #autoFillConsentCheckbox toggle');
+    assert(candHtml.includes('id="autoFillConsentCheckbox" checked') || candHtml.includes('id="autoFillConsentCheckbox"\n  checked') || candHtml.includes('id="autoFillConsentCheckbox" checked style'), 'candidate.html pre-checks #autoFillConsentCheckbox');
+    assert(candHtml.includes('Automatically fill my contact details from my uploaded resume'), 'candidate.html displays consent checkbox label text');
     assert(candHtml.includes('id="resume-scan-banner"'), 'candidate.html implements #resume-scan-banner notification card');
     assert(candHtml.includes('id="global-resume-scan-banner"'), 'candidate.html implements #global-resume-scan-banner');
     assert(candHtml.includes('Resume scanned! We automatically filled in your contact details.'), 'candidate.html renders exact gold confirmation banner text');
     assert(candHtml.includes('parseResumeContactInfo'), 'candidate.html defines parseResumeContactInfo() scanner');
     assert(candHtml.includes('handleResumeFileChosen'), 'candidate.html defines handleResumeFileChosen() listener');
     assert(candHtml.includes('onchange="handleResumeFileChosen(event)"'), 'candidate.html binds onchange to #cand-resume-file');
-    assert(candHtml.includes('cand-name'), 'candidate.html targets #cand-name (Full Legal Name)');
-    assert(candHtml.includes('cand-email'), 'candidate.html targets #cand-email (Email Address)');
-    assert(candHtml.includes('cand-phone'), 'candidate.html targets #cand-phone (Phone Number)');
+    assert(candHtml.includes('candidateNameInput'), 'candidate.html implements #candidateNameInput (Full Legal Name)');
+    assert(candHtml.includes('candidateEmailInput'), 'candidate.html implements #candidateEmailInput (Email Address)');
+    assert(candHtml.includes('candidatePhoneInput'), 'candidate.html implements #candidatePhoneInput (Phone Number)');
+    assert(candHtml.includes('pdfjsLib'), 'candidate.html utilizes pdfjsLib for document text parsing');
+    assert(candHtml.includes('autoFillConsentCheckbox') && candHtml.includes('.checked'), 'handleResumeFileChosen verifies consent checkbox state');
     assert(candHtml.includes('userManuallyEdited'), 'candidate.html tracks userManuallyEdited to keep manual entries untouched');
     assert(candHtml.includes('.resume-scan-banner'), 'candidate.html provides .resume-scan-banner CSS styling');
     assert(candHtml.includes('.global-resume-scan-banner'), 'candidate.html provides .global-resume-scan-banner CSS styling');

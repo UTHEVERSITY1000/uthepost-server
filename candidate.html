@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
   <style>
     :root {
       --bg-canvas: #F8F9FA;
@@ -1261,17 +1262,17 @@
 
       <div class="form-group">
         <label>Full Legal Name</label>
-        <input type="text" id="cand-name" placeholder="e.g. Marcus Vance" value="Marcus Vance">
+        <input type="text" id="candidateNameInput" name="cand-name" placeholder="e.g. Marcus Vance" value="Marcus Vance">
       </div>
 
       <div class="grid-2">
         <div class="form-group">
           <label>Email Address</label>
-          <input type="email" id="cand-email" placeholder="marcus.vance@example.com" value="marcus.vance@example.com">
+          <input type="email" id="candidateEmailInput" name="cand-email" placeholder="marcus.vance@example.com" value="marcus.vance@example.com">
         </div>
         <div class="form-group">
           <label>Phone Number</label>
-          <input type="tel" id="cand-phone" placeholder="+1 (555) 019-2831" value="+1 (555) 448-9102">
+          <input type="tel" id="candidatePhoneInput" name="cand-phone" placeholder="+1 (555) 019-2831" value="+1 (555) 448-9102">
         </div>
       </div>
 
@@ -1285,6 +1286,10 @@
           </button>
           <span class="file-name-display" id="resume-file-name">Marcus_Vance_Resume_2026.pdf</span>
         </div>
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #0f172a; margin: 10px 0; cursor: pointer;">
+          <input type="checkbox" id="autoFillConsentCheckbox" checked style="accent-color: #D4AF37; width: 16px; height: 16px;">
+          <span>Automatically fill my contact details from my uploaded resume</span>
+        </label>
       </div>
 
       <!-- 2. BEST TIME TO CONTACT DROPDOWN -->
@@ -1658,6 +1663,11 @@
       window.closeModal(id);
     }
 
+    // Configure PDF.js Worker
+    if (typeof pdfjsLib !== 'undefined' && pdfjsLib.GlobalWorkerOptions) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    }
+
     let userManuallyEdited = {
       name: false,
       email: false,
@@ -1665,9 +1675,9 @@
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-      const nameInput = document.getElementById('cand-name');
-      const emailInput = document.getElementById('cand-email');
-      const phoneInput = document.getElementById('cand-phone');
+      const nameInput = document.getElementById('candidateNameInput') || document.getElementById('cand-name');
+      const emailInput = document.getElementById('candidateEmailInput') || document.getElementById('cand-email');
+      const phoneInput = document.getElementById('candidatePhoneInput') || document.getElementById('cand-phone');
 
       if (nameInput) nameInput.addEventListener('input', () => { userManuallyEdited.name = true; });
       if (emailInput) emailInput.addEventListener('input', () => { userManuallyEdited.email = true; });
@@ -1678,71 +1688,82 @@
       let extractedName = '';
       let extractedEmail = '';
       let extractedPhone = '';
+      let docText = '';
 
-      // 1. Text stream extraction from PDF ArrayBuffer
       try {
         const arrayBuffer = await file.arrayBuffer();
-        const decoder = new TextDecoder('latin1');
-        const pdfText = decoder.decode(arrayBuffer);
 
-        // Find email
-        const emailMatches = pdfText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g);
+        // 1. Primary: Use pdfjsLib to open the document and scan page 1 written text
+        if (typeof pdfjsLib !== 'undefined') {
+          try {
+            if (pdfjsLib.GlobalWorkerOptions && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
+              pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+            }
+            const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) });
+            const pdfDoc = await loadingTask.promise;
+            if (pdfDoc.numPages >= 1) {
+              const page = await pdfDoc.getPage(1);
+              const textContent = await page.getTextContent();
+              const items = textContent.items || [];
+              const rawLines = items.map(it => it.str).filter(s => s && s.trim().length > 0);
+              docText = rawLines.join('\n');
+
+              // Extract Name from written text lines on Page 1
+              for (const line of rawLines) {
+                const cleaned = line.trim();
+                // Check for standard 2-4 word full name format
+                if (/^[A-Z][a-zA-Z.'-]+(?:\s+[A-Z][a-zA-Z.'-]+){1,3}$/.test(cleaned)) {
+                  if (!/^(resume|curriculum|vitae|education|experience|summary|skills|profile|contact|phone|email|projects|objective|work|references)/i.test(cleaned)) {
+                    extractedName = cleaned;
+                    break;
+                  }
+                }
+              }
+            }
+          } catch (pdfErr) {
+            console.warn('[PDF.js PARSE NOTICE]', pdfErr);
+          }
+        }
+
+        // 2. Fallback stream parser if docText is empty
+        if (!docText || docText.trim().length === 0) {
+          const decoder = new TextDecoder('latin1');
+          docText = decoder.decode(arrayBuffer);
+
+          const commentNameMatch = docText.match(/%\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/);
+          if (commentNameMatch && !extractedName) {
+            extractedName = commentNameMatch[1].replace(/Test|Resume|CV|Document|PDF/gi, '').trim();
+          }
+
+          if (!extractedName) {
+            const textMatches = docText.match(/\(([^()]{3,40})\)\s*Tj/g);
+            if (textMatches) {
+              for (const tm of textMatches) {
+                const raw = tm.replace(/[()]/g, '').replace(/Tj/g, '').trim();
+                if (/^[A-Z][a-z]+(\s+[A-Z][a-z]+)+$/.test(raw) && !/resume|curriculum|vitae|application|experience/i.test(raw)) {
+                  extractedName = raw;
+                  break;
+                }
+              }
+            }
+          }
+        }
+
+        // Find Email in document text
+        const emailMatches = docText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g);
         if (emailMatches && emailMatches.length > 0) {
           const validEmail = emailMatches.find(e => !e.toLowerCase().includes('example.com') && !e.toLowerCase().includes('adobe.com')) || emailMatches[0];
           extractedEmail = validEmail.trim();
         }
 
-        // Find phone
-        const phoneMatches = pdfText.match(/(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g);
+        // Find Phone in document text
+        const phoneMatches = docText.match(/(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?|\b\d{3}[-.\s])\d{3}[-.\s]?\d{4}\b/g);
         if (phoneMatches && phoneMatches.length > 0) {
           extractedPhone = phoneMatches[0].trim();
         }
 
-        // Find Name in comment / text streams
-        const commentNameMatch = pdfText.match(/%\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/);
-        if (commentNameMatch) {
-          extractedName = commentNameMatch[1].replace(/Test|Resume|CV|Document|PDF/gi, '').trim();
-        }
-
-        if (!extractedName) {
-          const textMatches = pdfText.match(/\(([^()]{3,40})\)\s*Tj/g);
-          if (textMatches) {
-            for (const tm of textMatches) {
-              const raw = tm.replace(/[()]/g, '').replace(/Tj/g, '').trim();
-              if (/^[A-Z][a-z]+(\s+[A-Z][a-z]+)+$/.test(raw) && !/resume|curriculum|vitae|application|experience/i.test(raw)) {
-                extractedName = raw;
-                break;
-              }
-            }
-          }
-        }
       } catch (err) {
-        console.warn('[PDF PARSE NOTICE]', err);
-      }
-
-      // 2. Filename heuristic fallback
-      const cleanFileName = file.name.replace(/\.pdf$/i, '').replace(/[_\-\s]+/g, ' ').trim();
-      if (!extractedName) {
-        const cleanName = cleanFileName
-          .replace(/\b(resume|cv|application|curriculum|vitae|202\d|203\d|final|v\d+)\b/gi, '')
-          .trim();
-        if (cleanName.length >= 3) {
-          extractedName = cleanName
-            .split(/\s+/)
-            .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-            .join(' ');
-        }
-      }
-
-      if (!extractedEmail && extractedName) {
-        const parts = extractedName.toLowerCase().split(/\s+/);
-        if (parts.length >= 2) {
-          extractedEmail = `${parts[0]}.${parts[parts.length - 1]}@uthepost-candidate.com`;
-        }
-      }
-
-      if (!extractedPhone) {
-        extractedPhone = '+1 (555) 448-9102';
+        console.warn('[RESUME TEXT EXTRACT NOTICE]', err);
       }
 
       return {
@@ -1759,28 +1780,41 @@
       const nameDisplay = document.getElementById('resume-file-name');
       if (nameDisplay) nameDisplay.textContent = file.name;
 
+      // Check auto-fill consent checkbox
+      const consentCheckbox = document.getElementById('autoFillConsentCheckbox');
+      if (consentCheckbox && !consentCheckbox.checked) {
+        // User opted out of auto-fill: stop and leave fields as-is
+        return;
+      }
+
       try {
-        // Automatic background scan of the uploaded document
+        // Scan actual written text from PDF page 1
         const contactInfo = await parseResumeContactInfo(file);
 
-        const nameInput = document.getElementById('cand-name');
-        const emailInput = document.getElementById('cand-email');
-        const phoneInput = document.getElementById('cand-phone');
+        const nameInput = document.getElementById('candidateNameInput') || document.getElementById('cand-name');
+        const emailInput = document.getElementById('candidateEmailInput') || document.getElementById('cand-email');
+        const phoneInput = document.getElementById('candidatePhoneInput') || document.getElementById('cand-phone');
 
-        if (contactInfo.name && (!userManuallyEdited.name || !nameInput.value.trim() || nameInput.value === 'Marcus Vance')) {
+        let filledAny = false;
+
+        if (contactInfo.name && nameInput && (!userManuallyEdited.name || !nameInput.value.trim() || nameInput.value === 'Marcus Vance')) {
           nameInput.value = contactInfo.name;
+          filledAny = true;
         }
 
-        if (contactInfo.email && (!userManuallyEdited.email || !emailInput.value.trim() || emailInput.value === 'marcus.vance@example.com')) {
+        if (contactInfo.email && emailInput && (!userManuallyEdited.email || !emailInput.value.trim() || emailInput.value === 'marcus.vance@example.com')) {
           emailInput.value = contactInfo.email;
+          filledAny = true;
         }
 
-        if (contactInfo.phone && (!userManuallyEdited.phone || !phoneInput.value.trim() || phoneInput.value === '+1 (555) 448-9102')) {
+        if (contactInfo.phone && phoneInput && (!userManuallyEdited.phone || !phoneInput.value.trim() || phoneInput.value === '+1 (555) 448-9102')) {
           phoneInput.value = contactInfo.phone;
+          filledAny = true;
         }
 
-        // Display sleek gold confirmation banner
-        showResumeScanBanner();
+        if (filledAny || contactInfo.name || contactInfo.email || contactInfo.phone) {
+          showResumeScanBanner();
+        }
       } catch (err) {
         console.warn('[RESUME SCANNER NOTICE]', err);
       }
@@ -1802,9 +1836,9 @@
     }
 
     async function submitInterviewRequest() {
-      const name = document.getElementById('cand-name').value;
-      const email = document.getElementById('cand-email').value;
-      const phone = document.getElementById('cand-phone').value;
+      const name = (document.getElementById('candidateNameInput') || document.getElementById('cand-name')).value;
+      const email = (document.getElementById('candidateEmailInput') || document.getElementById('cand-email')).value;
+      const phone = (document.getElementById('candidatePhoneInput') || document.getElementById('cand-phone')).value;
       const bestTime = document.getElementById('cand-contact-time').value;
       const interviewTitle = document.getElementById('cand-interview-title').value;
       const summary = document.getElementById('cand-summary').value;
