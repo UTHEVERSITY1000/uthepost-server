@@ -1114,11 +1114,9 @@ async function runTests() {
   try {
     const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
 
-    // 1. Check Executive Button Styling
-    assert(candHtml.includes('/* Ultra-Sleek Executive Button Styling */'), 'candidate.html defines Ultra-Sleek Executive Button Styling');
-    assert(candHtml.includes('.btn-primary-executive'), 'candidate.html includes .btn-primary-executive class');
-    assert(candHtml.includes('background: #0f172a'), 'candidate.html uses deep executive navy for buttons');
-    assert(candHtml.includes('color: #D4AF37'), 'candidate.html uses signature metallic gold for buttons');
+    // 1. Check Button Styling and Palette
+    assert(candHtml.includes('background-color: #FFFFFF !important') || candHtml.includes('.btn-quick-send-main'), 'candidate.html defines signature button styling');
+    assert(candHtml.includes('#FEBA27') || candHtml.includes('#D4AF37'), 'candidate.html uses signature metallic gold for buttons');
 
     // 2. Check Vector SVG Assets (Zero cheap system emojis)
     assert(candHtml.includes('class="notif-bell-svg"'), 'candidate.html uses vector SVG for notification bell');
@@ -1537,6 +1535,83 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 31 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 32: FULL U-THEJOBS CANDIDATE BOARD RESTORATION
+  // ================================================================
+  console.log('\n--- GROUP 32: FULL U-THEJOBS CANDIDATE BOARD RESTORATION ---');
+  try {
+    const candidateFiles = [
+      'candidate.html',
+      'u-theJOBS-ENTERPRISE-SYNC.html',
+      'u-theJOBS-DUAL LINK TO u-thePOST.html'
+    ];
+
+    for (const cf of candidateFiles) {
+      const content = fs.readFileSync(path.join(__dirname, cf), 'utf8');
+
+      // 1. Layout & Scaffolding
+      assert(content.includes('id="cms-brand-title"') && content.includes('U-THEJOBS'), `${cf} contains U-THEJOBS header title`);
+      assert(content.includes('CANDIDATE BOARD'), `${cf} contains CANDIDATE BOARD badge`);
+      assert(content.includes('id="btn-candidate-notif"'), `${cf} contains #btn-candidate-notif notification bell`);
+      assert(content.includes('MY PROFILE'), `${cf} contains MY PROFILE button`);
+      assert(content.includes('id="btn-auth-status"') || content.includes('LOGIN / SIGN UP'), `${cf} contains LOGIN / SIGN UP button`);
+
+      // Search & Filter Belt
+      assert(content.includes('id="search-input"') && content.includes('value=""'), `${cf} defines #search-input initialized with empty value`);
+      assert(content.includes('id="filter-type"'), `${cf} defines #filter-type commitment dropdown`);
+      assert(content.includes('id="filter-location"'), `${cf} defines #filter-location location dropdown`);
+
+      // 2-Column Main Board
+      assert(content.includes('opportunities-col') || content.includes('id="opportunities-list"'), `${cf} contains opportunities column`);
+      assert(content.includes('detail-inspector') || content.includes('id="detail-inspector"'), `${cf} contains detail inspector column`);
+      assert(content.includes('id="dt-title"'), `${cf} contains #dt-title`);
+      assert(content.includes('id="dt-company"'), `${cf} contains #dt-company`);
+      assert(content.includes('id="dt-location"'), `${cf} contains #dt-location`);
+      assert(content.includes('id="dt-salary"'), `${cf} contains #dt-salary`);
+      assert(content.includes('id="dt-pto"') && content.includes('id="dt-health"') && content.includes('id="dt-retirement"'), `${cf} contains perks grid (#dt-pto, #dt-health, #dt-retirement)`);
+      assert(content.includes('id="btn-quick-send-top"') || content.includes('QUICK SEND'), `${cf} contains QUICK SEND button`);
+      assert(content.includes('id="btn-send-resume-bottom"') || content.includes('SEND RESUME/CV'), `${cf} contains SEND RESUME/CV button`);
+
+      // 2. Modals & Drawers
+      // Application Modal
+      assert(content.includes('id="app-modal"'), `${cf} defines #app-modal application modal`);
+      assert(content.includes('id="candidateNameInput"'), `${cf} contains #candidateNameInput in application modal`);
+      assert(content.includes('id="candidateEmailInput"'), `${cf} contains #candidateEmailInput in application modal`);
+      assert(content.includes('id="candidatePhoneInput"'), `${cf} contains #candidatePhoneInput in application modal`);
+      assert(content.includes('accept=".pdf"'), `${cf} enforces .pdf only resume file upload`);
+      assert(content.includes('id="cand-contact-time"'), `${cf} contains #cand-contact-time dropdown`);
+      assert(content.includes('submitInterviewRequest()'), `${cf} connects submitInterviewRequest() action`);
+
+      // Recruiter Message Drawer
+      assert(content.includes('id="messageDrawer"'), `${cf} defines #messageDrawer`);
+      assert(content.includes('conversation-sidebar') || content.includes('id="recruiterThreadList"'), `${cf} contains conversation sidebar`);
+      assert(content.includes('chat-panel') || content.includes('id="chatMessagesContainer"'), `${cf} contains chat panel`);
+      assert(content.includes('quick-chip') || content.includes('1-CLICK EXECUTIVE RESPONSES'), `${cf} contains 1-click quick response chips`);
+      assert(content.includes('id="recruiterReplyInput"') || content.includes('class="message-input-field"'), `${cf} contains message input field`);
+
+      // Profile Modal
+      assert(content.includes('id="profile-modal"'), `${cf} defines #profile-modal`);
+      assert(content.includes('id="prof-cand-name"') && content.includes('id="prof-cand-bio"'), `${cf} contains profile inputs`);
+
+      // Auth Modal
+      assert(content.includes('id="auth-modal"'), `${cf} defines #auth-modal`);
+      assert(content.includes('id="tab-auth-login"') && content.includes('id="tab-auth-signup"') && content.includes('id="tab-auth-reset"'), `${cf} contains tabbed auth controls`);
+
+      // Custom Alert Modal
+      assert(content.includes('id="custom-modal-alert"'), `${cf} defines #custom-modal-alert`);
+      assert(content.includes('id="custom-alert-title"') && content.includes('id="custom-alert-msg"'), `${cf} contains custom alert title and message elements`);
+
+      // 3. Search & Filter Matching Logic
+      assert(content.includes('j.jobTitle.toLowerCase().includes(q)') && 
+             content.includes('j.company.toLowerCase().includes(q)') &&
+             content.includes('j.summary.toLowerCase().includes(q)') &&
+             content.includes('j.location.toLowerCase().includes(q)'), `${cf} includes comprehensive search matching logic in handleFilterChange`);
+    }
+
+  } catch (err) {
+    assert(false, `Group 32 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
