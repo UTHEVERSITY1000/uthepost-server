@@ -203,26 +203,56 @@
       gap: 0.65rem;
     }
 
+    /* Ultra-Sleek Executive Button Styling */
+    button, .btn-primary-executive {
+      background: #0f172a;
+      color: #D4AF37;
+      border: 1px solid #D4AF37;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    button:hover, .btn-primary-executive:hover {
+      background: #D4AF37;
+      color: #0f172a;
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.3);
+      transform: translateY(-1px);
+    }
+
     /* 1. NOTIFICATIONS ALERT BUTTON WITH LIVE BADGE */
     .btn-notif-header {
       position: relative;
-      background: var(--card-subtle);
-      border: 1.5px solid var(--border-color);
-      color: var(--uthe-charcoal);
-      width: 44px;
+      background: #0f172a;
+      border: 1px solid #D4AF37;
+      color: #D4AF37;
+      width: 42px;
       height: 38px;
-      border-radius: 20px;
+      padding: 0;
+      border-radius: 6px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.05rem;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .btn-notif-header:hover {
-      border-color: var(--uthe-gold);
-      background: var(--uthe-gold-light);
+      border-color: #D4AF37;
+      background: #D4AF37;
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-notif-header:hover svg path {
+      stroke: #0f172a;
     }
 
     .notif-counter-badge {
@@ -245,46 +275,59 @@
     }
 
     .btn-profile-header {
-      background: var(--card-subtle);
-      color: var(--uthe-charcoal);
-      border: 1px solid var(--border-color);
-      padding: 0 0.85rem;
-      border-radius: 20px;
-      font-size: 0.72rem;
+      background: #0f172a;
+      color: #D4AF37;
+      border: 1px solid #D4AF37;
+      padding: 0 1rem;
+      border-radius: 6px;
+      font-size: 11px;
       font-weight: 800;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
       height: 38px;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
-      transition: all 0.2s ease;
+      gap: 0.45rem;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .btn-profile-header:hover {
-      border-color: var(--uthe-gold);
+      background: #D4AF37;
+      color: #0f172a;
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .btn-profile-header:hover svg path,
+    .btn-profile-header:hover svg circle {
+      stroke: #0f172a;
     }
 
     .btn-auth-header {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border: 1.5px solid var(--uthe-gold);
-      padding: 0 1rem;
-      border-radius: 20px;
-      font-size: 0.72rem;
-      font-weight: 900;
-      letter-spacing: 0.8px;
+      background: #0f172a;
+      color: #D4AF37;
+      border: 1px solid #D4AF37;
+      padding: 0 1.25rem;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
       height: 38px;
       display: flex;
       align-items: center;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .btn-auth-header:hover {
-      background: var(--uthe-gold);
-      color: var(--uthe-charcoal);
+      background: #D4AF37;
+      color: #0f172a;
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.3);
+      transform: translateY(-1px);
     }
 
     /* SEARCH & FILTER BELT */
@@ -500,28 +543,29 @@
 
     /* ACTION BUTTONS */
     .btn-quick-send-main {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border: 1.5px solid var(--uthe-gold);
+      background: #0f172a;
+      color: #D4AF37;
+      border: 1px solid #D4AF37;
       padding: 0 1.5rem;
-      border-radius: 8px;
-      font-weight: 900;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(17, 17, 17, 0.2);
-      transition: all 0.2s ease;
-      height: 48px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      height: 42px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
     }
 
     .btn-quick-send-main:hover {
-      background: var(--uthe-gold);
-      color: var(--uthe-charcoal);
-      box-shadow: 0 8px 24px var(--uthe-gold-glow);
+      background: #D4AF37;
+      color: #0f172a;
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.3);
+      transform: translateY(-1px);
     }
 
     /* MODAL OVERLAYS */
@@ -649,23 +693,29 @@
     }
 
     .btn-choose-file {
-      background: #FFFFFF;
-      border: 1px solid var(--border-color);
-      color: var(--uthe-charcoal);
-      font-size: 0.68rem;
+      background: #0f172a;
+      border: 1px solid #D4AF37;
+      color: #D4AF37;
+      font-size: 11px;
       font-weight: 800;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      padding: 0 0.85rem;
-      border-radius: 4px;
+      padding: 0 1rem;
+      border-radius: 6px;
       cursor: pointer;
       height: 38px;
       display: flex;
       align-items: center;
       white-space: nowrap;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .btn-choose-file:hover {
-      border-color: var(--uthe-gold);
+      background: #D4AF37;
+      color: #0f172a;
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.3);
+      transform: translateY(-1px);
     }
 
     .file-name-display {
@@ -678,19 +728,19 @@
     }
 
     .btn-submit-request {
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border: 1.5px solid var(--uthe-gold);
+      background: #0f172a;
+      color: #D4AF37;
+      border: 1px solid #D4AF37;
       padding: 0 1.5rem;
-      border-radius: 8px;
-      font-weight: 900;
-      font-size: 0.82rem;
-      letter-spacing: 1.2px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(17, 17, 17, 0.2);
-      transition: all 0.2s ease;
-      height: 48px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -699,9 +749,10 @@
     }
 
     .btn-submit-request:hover {
-      background: var(--uthe-gold);
-      color: var(--uthe-charcoal);
-      box-shadow: 0 8px 24px var(--uthe-gold-glow);
+      background: #D4AF37;
+      color: #0f172a;
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.3);
+      transform: translateY(-1px);
     }
 
     /* 2. CANDIDATE MESSAGE CENTER & QUICK RESPONSES */
@@ -788,15 +839,25 @@
 
     .mobile-quick-send-btn {
       width: 100%;
-      height: 48px;
-      background: var(--uthe-charcoal);
-      color: var(--uthe-gold);
-      border: 1.5px solid var(--uthe-gold);
-      font-weight: 900;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-      border-radius: 8px;
+      height: 44px;
+      background: #0f172a;
+      color: #D4AF37;
+      border: 1px solid #D4AF37;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 6px;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mobile-quick-send-btn:hover {
+      background: #D4AF37;
+      color: #0f172a;
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.3);
+      transform: translateY(-1px);
     }
 
     /* PLATFORM FOOTER & SECRET ADMIN ACCESS */
@@ -1087,18 +1148,23 @@
     .send-reply-btn {
       background: #0f172a;
       color: #D4AF37;
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      padding: 12px 22px;
+      font-weight: 800;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 10px 20px;
       border: 1px solid #D4AF37;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .send-reply-btn:hover {
       background: #D4AF37;
       color: #0f172a;
+      box-shadow: 0 6px 18px rgba(212, 175, 55, 0.3);
+      transform: translateY(-1px);
     }
 
     /* SIGNATURE UTHEVERSITY RESUME AUTO-FILL CONFIRMATION BANNER */
@@ -1181,7 +1247,11 @@
   <!-- TOP FLOATING RESUME CONTACT AUTO-FILL BANNER -->
   <div id="global-resume-scan-banner" class="global-resume-scan-banner" style="display: none;">
     <div class="resume-scan-banner-content">
-      <span class="resume-scan-banner-icon">✨</span>
+      <span class="resume-scan-banner-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </span>
       <span class="resume-scan-banner-text">Resume scanned! We automatically filled in your contact details.</span>
     </div>
   </div>
@@ -1194,12 +1264,19 @@
     <div class="header-actions">
       <!-- 1. CANDIDATE NOTIFICATIONS ALERT BADGE (BELL ICON DIRECTLY TO LEFT OF MY PROFILE) -->
       <button class="btn-notif-header" id="btn-candidate-notif" onclick="openCandidateMessageDrawer()" data-tooltip="Recruiter Messages & Interview Invites">
-        <span class="notif-bell-icon">🔔</span>
+        <svg class="notif-bell-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
         <span class="notif-counter-badge" id="notif-badge-count">1</span>
       </button>
 
       <button class="btn-profile-header" onclick="openCandidateProfileModal()" data-tooltip="View and manage your resume and candidate details.">
-        <span>👤</span><span>MY PROFILE</span>
+        <svg class="header-user-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span>MY PROFILE</span>
       </button>
       <button class="btn-auth-header" id="btn-auth-status" onclick="openAuthModal()" data-tooltip="Sign In or Create Account.">
         LOGIN / SIGN UP
@@ -1210,7 +1287,12 @@
   <!-- SEARCH & FILTER BELT (STRICT COMMITMENTS) -->
   <section class="search-filter-belt">
     <div class="search-input-wrap">
-      <span class="search-icon">&#128269;</span>
+      <span class="search-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </span>
       <input type="text" class="search-input" id="search-input" name="jobSearchInput" value="" placeholder="Search positions, verified companies, locations, or skills..." autocomplete="off" data-cms-key="jobs-search-placeholder" oninput="handleFilterChange()" data-tooltip="Instant search across all active listings.">
     </div>
 
@@ -1306,7 +1388,11 @@
       <!-- RESUME CONTACT AUTO-FILL CONFIRMATION BANNER -->
       <div id="resume-scan-banner" class="resume-scan-banner" style="display: none;">
         <div class="resume-scan-banner-content">
-          <span class="resume-scan-banner-icon">✨</span>
+          <span class="resume-scan-banner-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </span>
           <span class="resume-scan-banner-text">Resume scanned! We automatically filled in your contact details.</span>
         </div>
       </div>
@@ -1395,7 +1481,7 @@
       <div class="chat-panel" style="flex: 1; display: flex; flex-direction: column; background: #f8fafc; overflow: hidden;">
         <div class="message-drawer-header">
           <div id="activeRecruiterTitle" class="message-drawer-title" data-cms-key="jobs-msg-header">
-            <span>💬</span> SELECT A CONVERSATION
+            SELECT A CONVERSATION
           </div>
           <button class="message-drawer-close" onclick="closeMessageDrawer()">✕</button>
         </div>
@@ -1432,7 +1518,11 @@
 
       <!-- ACCESS INBOX DIRECTLY FROM PROFILE -->
       <button class="btn-profile-header" style="width:100%; justify-content:center; margin-bottom:0.5rem; height:42px;" onclick="closeModal('profile-modal'); openCandidateMessageDrawer();">
-        <span>🔔</span><span>VIEW RECRUITER MESSAGE INBOX</span>
+        <svg class="notif-bell-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span>VIEW RECRUITER MESSAGE INBOX</span>
       </button>
 
       <div class="grid-2">
@@ -1501,7 +1591,12 @@
           <label>Password</label>
           <div class="password-wrap">
             <input type="password" id="auth-password" placeholder="••••••••••••" oninput="checkPassLength(this.value)">
-            <span class="password-toggle-icon" onclick="togglePassVisibility('auth-password')">👁️</span>
+            <span class="password-toggle-icon" onclick="togglePassVisibility('auth-password')" style="cursor: pointer; display: flex; align-items: center;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </span>
           </div>
           <div class="pass-meter-text" id="pass-meter-text">Minimum 8 characters required.</div>
         </div>
@@ -2024,7 +2119,7 @@
       const thread = candidateThreads[threadId];
       const titleEl = document.getElementById('activeRecruiterTitle') || document.getElementById('cms-jobs-msg-header');
       if (titleEl) {
-        titleEl.innerHTML = `<span>💬</span> ${thread.company.toUpperCase()} — ${thread.recruiterName.toUpperCase()}`;
+        titleEl.innerHTML = `${thread.company.toUpperCase()} — ${thread.recruiterName.toUpperCase()}`;
       }
 
       // Re-render recruiter cards to update active highlight

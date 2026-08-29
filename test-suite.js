@@ -1107,6 +1107,45 @@ async function runTests() {
     assert(false, `Group 22 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 23: HIGH-END SVG ICON SYSTEM & EXECUTIVE BUTTON REDESIGN
+  // ================================================================
+  console.log('\n--- GROUP 23: HIGH-END SVG ICON SYSTEM & EXECUTIVE BUTTON REDESIGN ---');
+  try {
+    const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Check Executive Button Styling
+    assert(candHtml.includes('/* Ultra-Sleek Executive Button Styling */'), 'candidate.html defines Ultra-Sleek Executive Button Styling');
+    assert(candHtml.includes('.btn-primary-executive'), 'candidate.html includes .btn-primary-executive class');
+    assert(candHtml.includes('background: #0f172a'), 'candidate.html uses deep executive navy for buttons');
+    assert(candHtml.includes('color: #D4AF37'), 'candidate.html uses signature metallic gold for buttons');
+
+    // 2. Check Vector SVG Assets (Zero cheap system emojis)
+    assert(candHtml.includes('class="notif-bell-svg"'), 'candidate.html uses vector SVG for notification bell');
+    assert(candHtml.includes('class="header-user-svg"'), 'candidate.html uses vector SVG for user profile');
+    assert(!candHtml.includes('🔔'), 'candidate.html contains zero bell emojis');
+    assert(!candHtml.includes('👤'), 'candidate.html contains zero user emojis');
+    assert(!candHtml.includes('✨'), 'candidate.html contains zero sparkle emojis');
+    assert(!candHtml.includes('👁️'), 'candidate.html contains zero eye emojis');
+    assert(!candHtml.includes('💬'), 'candidate.html contains zero speech balloon emojis');
+
+    // 3. Check Search Bar Tag Specifications
+    assert(candHtml.includes('name="jobSearchInput"'), 'candidate.html search input has name="jobSearchInput"');
+    assert(candHtml.includes('value=""'), 'candidate.html search input has empty value=""');
+    assert(candHtml.includes('autocomplete="off"'), 'candidate.html search input enforces autocomplete="off"');
+
+    // 4. Check Template Mirrors
+    const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
+    const dualHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-DUAL LINK TO u-thePOST.html'), 'utf8');
+    assert(syncHtml.includes('class="notif-bell-svg"'), 'u-theJOBS-ENTERPRISE-SYNC.html contains vector SVG bell');
+    assert(!syncHtml.includes('🔔'), 'u-theJOBS-ENTERPRISE-SYNC.html contains zero emojis');
+    assert(dualHtml.includes('class="notif-bell-svg"'), 'u-theJOBS-DUAL LINK TO u-thePOST.html contains vector SVG bell');
+    assert(!dualHtml.includes('🔔'), 'u-theJOBS-DUAL LINK TO u-thePOST.html contains zero emojis');
+
+  } catch (err) {
+    assert(false, `Group 23 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
