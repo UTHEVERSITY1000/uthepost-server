@@ -16,7 +16,7 @@ try {
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'utheversity-professional-jwt-secret-key-2026-secure';
 
-// Helper function: Strictly enforce IPv4 socket connections for Gmail SMTP on Render
+// Helper function: Strictly enforce IPv4 socket connections and EHLO domain for Google SMTP Relay
 function getTransporter() {
   if (!nodemailer) return null;
   const smtpUser = process.env.SMTP_USER ? process.env.SMTP_USER.trim() : null;
@@ -25,7 +25,8 @@ function getTransporter() {
   if (!smtpUser || !smtpPass) return null;
 
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    name: 'utheversity.com', // Forces valid EHLO domain greeting for Google Workspace Relay
+    host: process.env.SMTP_HOST || 'smtp-relay.gmail.com',
     port: parseInt(process.env.SMTP_PORT) || 587,
     secure: process.env.SMTP_PORT === '465',
     family: 4,
@@ -2331,7 +2332,7 @@ const server = http.createServer(async (req, res) => {
       verified: isVerified,
       verifyError,
       config: {
-        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        host: process.env.SMTP_HOST || 'smtp-relay.gmail.com',
         port: parseInt(process.env.SMTP_PORT) || 587,
         user: process.env.SMTP_USER || '(None / Fallback)',
         from: DEFAULT_FROM_EMAIL,
