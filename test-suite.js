@@ -1284,11 +1284,27 @@ async function runTests() {
     assert(recHtml.includes('price-growth'), 'recruiter.html updates #price-growth');
     assert(recHtml.includes('price-pro'), 'recruiter.html updates #price-pro');
 
-    // Check mirrors
-    const dualCand = fs.readFileSync(path.join(__dirname, 'u-theJOBS-DUAL LINK TO u-thePOST.html'), 'utf8');
-    const dualRec = fs.readFileSync(path.join(__dirname, 'u-thePOST-DUAL LINK TO u-theJOBS.html'), 'utf8');
-    assert(dualCand.includes('connectLiveSync'), 'u-theJOBS-DUAL LINK TO u-thePOST.html includes connectLiveSync');
-    assert(dualRec.includes('connectLiveSync'), 'u-thePOST-DUAL LINK TO u-theJOBS.html includes connectLiveSync');
+    // Check ALL 6 HTML template files
+    const candDual = fs.readFileSync(path.join(__dirname, 'u-theJOBS-DUAL LINK TO u-thePOST.html'), 'utf8');
+    const candSync = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
+    const recDual = fs.readFileSync(path.join(__dirname, 'u-thePOST-DUAL LINK TO u-theJOBS.html'), 'utf8');
+    const recMobile = fs.readFileSync(path.join(__dirname, 'u-thePOST-DUAL LINK & MOBILE.html'), 'utf8');
+    const recEnterprise = fs.readFileSync(path.join(__dirname, 'u-thePOST-ENTERPRISE-EDITION.html'), 'utf8');
+    const adminSuite = fs.readFileSync(path.join(__dirname, 'u-theADMIN-MASTER-SUITE.html'), 'utf8');
+
+    assert(candDual.includes('connectLiveSync'), 'u-theJOBS-DUAL LINK TO u-thePOST.html includes connectLiveSync');
+    assert(candSync.includes('connectLiveSync'), 'u-theJOBS-ENTERPRISE-SYNC.html includes connectLiveSync');
+    assert(recDual.includes('connectLiveSync'), 'u-thePOST-DUAL LINK TO u-theJOBS.html includes connectLiveSync');
+    assert(recMobile.includes('connectLiveSync'), 'u-thePOST-DUAL LINK & MOBILE.html includes connectLiveSync');
+    assert(recEnterprise.includes('connectLiveSync'), 'u-thePOST-ENTERPRISE-EDITION.html includes connectLiveSync');
+    assert(adminSuite.includes('connectLiveSync'), 'u-theADMIN-MASTER-SUITE.html includes connectLiveSync');
+
+    assert(candDual.includes('3000'), 'u-theJOBS-DUAL LINK TO u-thePOST.html includes 3s fallback polling');
+    assert(candSync.includes('3000'), 'u-theJOBS-ENTERPRISE-SYNC.html includes 3s fallback polling');
+    assert(recDual.includes('3000'), 'u-thePOST-DUAL LINK TO u-theJOBS.html includes 3s fallback polling');
+    assert(recMobile.includes('3000'), 'u-thePOST-DUAL LINK & MOBILE.html includes 3s fallback polling');
+    assert(recEnterprise.includes('3000'), 'u-thePOST-ENTERPRISE-EDITION.html includes 3s fallback polling');
+    assert(adminSuite.includes('3000'), 'u-theADMIN-MASTER-SUITE.html includes 3s fallback polling');
 
   } catch (err) {
     assert(false, `Group 26 failed: ${err.message}`);
