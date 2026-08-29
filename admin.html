@@ -1647,7 +1647,7 @@
 
     async function loadAdminData() {
       try {
-        const stats = await fetch('/api/admin/stats').then(r => r.json());
+        const stats = await fetch('/api/admin/stats', { headers: getAdminAuthHeaders() }).then(r => r.json());
         if (stats.metrics) {
           document.getElementById('kpi-jobs').textContent = stats.metrics.totalJobs;
           document.getElementById('kpi-applicants').textContent = stats.metrics.totalApplicants;
@@ -1674,7 +1674,7 @@
       try {
         const cms = await fetch(`/api/cms/config?t=${Date.now()}`, {
           cache: 'no-store',
-          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+          headers: getAdminAuthHeaders()
         }).then(r => r.json());
         if (cms.config) {
           cmsConfig = cms.config;
@@ -1683,135 +1683,172 @@
       } catch (e) {}
     }
 
+    // 2. Populate CMS Forms (Safeguarded Against Overwriting Active Typing)
     function populateCmsForm(config) {
+      if (!config) return;
+
+      // Do not overwrite inputs if user is currently focused/editing in CMS or Plans tab
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA') && activeEl.closest('#view-cms, #view-plans')) {
+        return;
+      }
+
       if (config.postStudio) {
         const p = config.postStudio;
-        if (p.card1Title) document.getElementById('cms-post-card1-title').value = p.card1Title;
-        if (p.jobTitleLabel) document.getElementById('cms-post-job-title-label').value = p.jobTitleLabel;
-        if (p.companyNameLabel) document.getElementById('cms-post-company-label').value = p.companyNameLabel;
-        if (p.locationLabel) document.getElementById('cms-post-loc-label').value = p.locationLabel;
-        if (p.employmentOptions) document.getElementById('cms-post-emp-options').value = p.employmentOptions;
-        if (p.salaryLabel) document.getElementById('cms-post-salary-label').value = p.salaryLabel;
-        if (p.emailFieldLabel) document.getElementById('cms-post-email-label').value = p.emailFieldLabel;
-        if (p.phoneFieldLabel) document.getElementById('cms-post-phone-label').value = p.phoneFieldLabel;
-        if (p.socialHeader) document.getElementById('cms-post-social-header').value = p.socialHeader;
-        if (p.linkedinPlaceholder) document.getElementById('cms-post-linkedin-ph').value = p.linkedinPlaceholder;
-        if (p.xPlaceholder) document.getElementById('cms-post-x-ph').value = p.xPlaceholder;
-        if (p.tiktokPlaceholder) document.getElementById('cms-post-tiktok-ph').value = p.tiktokPlaceholder;
-        if (p.card2Title) document.getElementById('cms-post-card2-title').value = p.card2Title;
-        if (p.previewBadge) document.getElementById('cms-post-preview-badge').value = p.previewBadge;
-        if (p.benefitSummaryLabel) document.getElementById('cms-post-benefit-label').value = p.benefitSummaryLabel;
-        if (p.primaryActionBtn) document.getElementById('cms-post-primary-btn').value = p.primaryActionBtn;
-        if (p.card3Title) document.getElementById('cms-post-card3-title').value = p.card3Title;
-        if (p.colJobId) document.getElementById('cms-post-col-id').value = p.colJobId;
-        if (p.colTitle) document.getElementById('cms-post-col-title').value = p.colTitle;
-        if (p.publishHeader) document.getElementById('cms-post-pub-header').value = p.publishHeader;
-        if (p.perksLabel) document.getElementById('cms-post-perks-label').value = p.perksLabel;
-        if (p.publishBtnText) document.getElementById('cms-post-pub-btn').value = p.publishBtnText;
+        if (p.card1Title && document.getElementById('cms-post-card1-title')) document.getElementById('cms-post-card1-title').value = p.card1Title;
+        if (p.jobTitleLabel && document.getElementById('cms-post-job-title-label')) document.getElementById('cms-post-job-title-label').value = p.jobTitleLabel;
+        if (p.companyNameLabel && document.getElementById('cms-post-company-label')) document.getElementById('cms-post-company-label').value = p.companyNameLabel;
+        if (p.locationLabel && document.getElementById('cms-post-loc-label')) document.getElementById('cms-post-loc-label').value = p.locationLabel;
+        if (p.employmentOptions && document.getElementById('cms-post-emp-options')) document.getElementById('cms-post-emp-options').value = p.employmentOptions;
+        if (p.salaryLabel && document.getElementById('cms-post-salary-label')) document.getElementById('cms-post-salary-label').value = p.salaryLabel;
+        if (p.emailFieldLabel && document.getElementById('cms-post-email-label')) document.getElementById('cms-post-email-label').value = p.emailFieldLabel;
+        if (p.phoneFieldLabel && document.getElementById('cms-post-phone-label')) document.getElementById('cms-post-phone-label').value = p.phoneFieldLabel;
+        if (p.socialHeader && document.getElementById('cms-post-social-header')) document.getElementById('cms-post-social-header').value = p.socialHeader;
+        if (p.linkedinPlaceholder && document.getElementById('cms-post-linkedin-ph')) document.getElementById('cms-post-linkedin-ph').value = p.linkedinPlaceholder;
+        if (p.xPlaceholder && document.getElementById('cms-post-x-ph')) document.getElementById('cms-post-x-ph').value = p.xPlaceholder;
+        if (p.tiktokPlaceholder && document.getElementById('cms-post-tiktok-ph')) document.getElementById('cms-post-tiktok-ph').value = p.tiktokPlaceholder;
+        if (p.card2Title && document.getElementById('cms-post-card2-title')) document.getElementById('cms-post-card2-title').value = p.card2Title;
+        if (p.previewBadge && document.getElementById('cms-post-preview-badge')) document.getElementById('cms-post-preview-badge').value = p.previewBadge;
+        if (p.benefitSummaryLabel && document.getElementById('cms-post-benefit-label')) document.getElementById('cms-post-benefit-label').value = p.benefitSummaryLabel;
+        if (p.primaryActionBtn && document.getElementById('cms-post-primary-btn')) document.getElementById('cms-post-primary-btn').value = p.primaryActionBtn;
+        if (p.card3Title && document.getElementById('cms-post-card3-title')) document.getElementById('cms-post-card3-title').value = p.card3Title;
+        if (p.colJobId && document.getElementById('cms-post-col-id')) document.getElementById('cms-post-col-id').value = p.colJobId;
+        if (p.colTitle && document.getElementById('cms-post-col-title')) document.getElementById('cms-post-col-title').value = p.colTitle;
+        if (p.actionBtnLabel && document.getElementById('cms-post-btn-actions')) document.getElementById('cms-post-btn-actions').value = p.actionBtnLabel;
+        if (p.publishHeader && document.getElementById('cms-post-pub-header')) document.getElementById('cms-post-pub-header').value = p.publishHeader;
+        if (p.perksLabel && document.getElementById('cms-post-perks-label')) document.getElementById('cms-post-perks-label').value = p.perksLabel;
+        if (p.publishBtnText && document.getElementById('cms-post-pub-btn')) document.getElementById('cms-post-pub-btn').value = p.publishBtnText;
       }
 
       if (config.jobsBoard) {
         const j = config.jobsBoard;
-        if (j.boardTitle) document.getElementById('cms-jobs-board-title').value = j.boardTitle;
-        if (j.searchPlaceholder) document.getElementById('cms-jobs-search-ph').value = j.searchPlaceholder;
-        if (j.commitmentOptions) document.getElementById('cms-jobs-commit-opts').value = j.commitmentOptions;
-        if (j.quickSendBtn) document.getElementById('cms-jobs-quick-send-btn').value = j.quickSendBtn;
-        if (j.sendResumeBtn) document.getElementById('cms-jobs-send-resume-btn').value = j.sendResumeBtn;
-        if (j.salaryBadgeLabel) document.getElementById('cms-jobs-salary-badge').value = j.salaryBadgeLabel;
-        if (j.locationBadgeLabel) document.getElementById('cms-jobs-loc-badge').value = j.locationBadgeLabel;
-        if (j.modalHeader) document.getElementById('cms-jobs-modal-header').value = j.modalHeader;
-        if (j.resumeUploadLabel) document.getElementById('cms-jobs-resume-label').value = j.resumeUploadLabel;
-        if (j.contactTimeOptions) document.getElementById('cms-jobs-contact-opts').value = j.contactTimeOptions;
-        if (j.interviewReqTitle) document.getElementById('cms-jobs-interview-title').value = j.interviewReqTitle;
-        if (j.submitBtnText) document.getElementById('cms-jobs-submit-btn').value = j.submitBtnText;
-        if (j.submitTooltip) document.getElementById('cms-jobs-submit-tooltip').value = j.submitTooltip;
-        if (j.messageDrawerHeader) document.getElementById('cms-jobs-msg-header').value = j.messageDrawerHeader;
-        if (j.quickReplies) document.getElementById('cms-jobs-quick-replies').value = j.quickReplies;
-        if (j.profileTabName) document.getElementById('cms-jobs-profile-tab').value = j.profileTabName;
+        if (j.boardTitle && document.getElementById('cms-jobs-board-title')) document.getElementById('cms-jobs-board-title').value = j.boardTitle;
+        if (j.searchPlaceholder && document.getElementById('cms-jobs-search-ph')) document.getElementById('cms-jobs-search-ph').value = j.searchPlaceholder;
+        if (j.commitmentOptions && document.getElementById('cms-jobs-commit-opts')) document.getElementById('cms-jobs-commit-opts').value = j.commitmentOptions;
+        if (j.quickSendBtn && document.getElementById('cms-jobs-quick-send-btn')) document.getElementById('cms-jobs-quick-send-btn').value = j.quickSendBtn;
+        if (j.sendResumeBtn && document.getElementById('cms-jobs-send-resume-btn')) document.getElementById('cms-jobs-send-resume-btn').value = j.sendResumeBtn;
+        if (j.salaryBadgeLabel && document.getElementById('cms-jobs-salary-badge')) document.getElementById('cms-jobs-salary-badge').value = j.salaryBadgeLabel;
+        if (j.locationBadgeLabel && document.getElementById('cms-jobs-loc-badge')) document.getElementById('cms-jobs-loc-badge').value = j.locationBadgeLabel;
+        if (j.modalHeader && document.getElementById('cms-jobs-modal-header')) document.getElementById('cms-jobs-modal-header').value = j.modalHeader;
+        if (j.resumeUploadLabel && document.getElementById('cms-jobs-resume-label')) document.getElementById('cms-jobs-resume-label').value = j.resumeUploadLabel;
+        if (j.contactTimeOptions && document.getElementById('cms-jobs-contact-opts')) document.getElementById('cms-jobs-contact-opts').value = j.contactTimeOptions;
+        if (j.interviewReqTitle && document.getElementById('cms-jobs-interview-title')) document.getElementById('cms-jobs-interview-title').value = j.interviewReqTitle;
+        if (j.submitBtnText && document.getElementById('cms-jobs-submit-btn')) document.getElementById('cms-jobs-submit-btn').value = j.submitBtnText;
+        if (j.submitTooltip && document.getElementById('cms-jobs-submit-tooltip')) document.getElementById('cms-jobs-submit-tooltip').value = j.submitTooltip;
+        if (j.messageDrawerHeader && document.getElementById('cms-jobs-msg-header')) document.getElementById('cms-jobs-msg-header').value = j.messageDrawerHeader;
+        if (j.quickReplies && document.getElementById('cms-jobs-quick-replies')) document.getElementById('cms-jobs-quick-replies').value = j.quickReplies;
+        if (j.profileTabName && document.getElementById('cms-jobs-profile-tab')) document.getElementById('cms-jobs-profile-tab').value = j.profileTabName;
       }
 
       if (config.pricing) {
-        if (config.pricing.palMonthly !== undefined) document.getElementById('cms-price-pal').value = config.pricing.palMonthly;
-        if (config.pricing.starterMonthly) document.getElementById('cms-price-starter').value = config.pricing.starterMonthly;
-        if (config.pricing.growthMonthly) document.getElementById('cms-price-growth').value = config.pricing.growthMonthly;
-        if (config.pricing.proMonthly) document.getElementById('cms-price-pro').value = config.pricing.proMonthly;
-        if (config.pricing.individualSocialAddon) document.getElementById('cms-price-social-single').value = config.pricing.individualSocialAddon;
-        if (config.pricing.socialBundleAddon) document.getElementById('cms-price-social-bundle').value = config.pricing.socialBundleAddon;
+        if (config.pricing.palMonthly !== undefined && document.getElementById('cms-price-pal')) document.getElementById('cms-price-pal').value = config.pricing.palMonthly;
+        if (config.pricing.starterMonthly && document.getElementById('cms-price-starter')) document.getElementById('cms-price-starter').value = config.pricing.starterMonthly;
+        if (config.pricing.growthMonthly && document.getElementById('cms-price-growth')) document.getElementById('cms-price-growth').value = config.pricing.growthMonthly;
+        if (config.pricing.proMonthly && document.getElementById('cms-price-pro')) document.getElementById('cms-price-pro').value = config.pricing.proMonthly;
+        if (config.pricing.individualSocialAddon && document.getElementById('cms-price-social-single')) document.getElementById('cms-price-social-single').value = config.pricing.individualSocialAddon;
+        if (config.pricing.socialBundleAddon && document.getElementById('cms-price-social-bundle')) document.getElementById('cms-price-social-bundle').value = config.pricing.socialBundleAddon;
+        if ((config.pricing.spotlightPrice || (config.addOns && config.addOns.topSpotlight)) && document.getElementById('cms-price-spotlight')) {
+          document.getElementById('cms-price-spotlight').value = config.pricing.spotlightPrice || config.addOns.topSpotlight;
+        }
       }
     }
 
+    // 3. Save & Broadcast Functionality
     window.saveAndBroadcastCms = async function() {
+      await ensureMasterAdminSession();
+
+      const getVal = (id, defaultVal = '') => {
+        const el = document.getElementById(id);
+        return el ? el.value : defaultVal;
+      };
+
+      const getNum = (id, defaultNum = 0) => {
+        const el = document.getElementById(id);
+        return el ? Number(el.value) : defaultNum;
+      };
+
       const payload = {
         postStudio: {
-          card1Title: document.getElementById('cms-post-card1-title').value,
-          jobTitleLabel: document.getElementById('cms-post-job-title-label').value,
-          companyNameLabel: document.getElementById('cms-post-company-label').value,
-          locationLabel: document.getElementById('cms-post-loc-label').value,
-          employmentOptions: document.getElementById('cms-post-emp-options').value,
-          salaryLabel: document.getElementById('cms-post-salary-label').value,
-          emailFieldLabel: document.getElementById('cms-post-email-label').value,
-          phoneFieldLabel: document.getElementById('cms-post-phone-label').value,
-          socialHeader: document.getElementById('cms-post-social-header').value,
-          linkedinPlaceholder: document.getElementById('cms-post-linkedin-ph').value,
-          xPlaceholder: document.getElementById('cms-post-x-ph').value,
-          tiktokPlaceholder: document.getElementById('cms-post-tiktok-ph').value,
-          card2Title: document.getElementById('cms-post-card2-title').value,
-          previewBadge: document.getElementById('cms-post-preview-badge').value,
-          benefitSummaryLabel: document.getElementById('cms-post-benefit-label').value,
-          primaryActionBtn: document.getElementById('cms-post-primary-btn').value,
-          card3Title: document.getElementById('cms-post-card3-title').value,
-          colJobId: document.getElementById('cms-post-col-id').value,
-          colTitle: document.getElementById('cms-post-col-title').value,
-          publishHeader: document.getElementById('cms-post-pub-header').value,
-          perksLabel: document.getElementById('cms-post-perks-label').value,
-          publishBtnText: document.getElementById('cms-post-pub-btn').value
+          card1Title: getVal('cms-post-card1-title'),
+          jobTitleLabel: getVal('cms-post-job-title-label'),
+          companyNameLabel: getVal('cms-post-company-label'),
+          locationLabel: getVal('cms-post-loc-label'),
+          employmentOptions: getVal('cms-post-emp-options'),
+          salaryLabel: getVal('cms-post-salary-label'),
+          emailFieldLabel: getVal('cms-post-email-label'),
+          phoneFieldLabel: getVal('cms-post-phone-label'),
+          socialHeader: getVal('cms-post-social-header'),
+          linkedinPlaceholder: getVal('cms-post-linkedin-ph'),
+          xPlaceholder: getVal('cms-post-x-ph'),
+          tiktokPlaceholder: getVal('cms-post-tiktok-ph'),
+          card2Title: getVal('cms-post-card2-title'),
+          previewBadge: getVal('cms-post-preview-badge'),
+          benefitSummaryLabel: getVal('cms-post-benefit-label'),
+          primaryActionBtn: getVal('cms-post-primary-btn'),
+          card3Title: getVal('cms-post-card3-title'),
+          colJobId: getVal('cms-post-col-id'),
+          colTitle: getVal('cms-post-col-title'),
+          actionBtnLabel: getVal('cms-post-btn-actions'),
+          publishHeader: getVal('cms-post-pub-header'),
+          perksLabel: getVal('cms-post-perks-label'),
+          publishBtnText: getVal('cms-post-pub-btn')
         },
         jobsBoard: {
-          boardTitle: document.getElementById('cms-jobs-board-title').value,
-          searchPlaceholder: document.getElementById('cms-jobs-search-ph').value,
-          commitmentOptions: document.getElementById('cms-jobs-commit-opts').value,
-          quickSendBtn: document.getElementById('cms-jobs-quick-send-btn').value,
-          sendResumeBtn: document.getElementById('cms-jobs-send-resume-btn').value,
-          salaryBadgeLabel: document.getElementById('cms-jobs-salary-badge').value,
-          locationBadgeLabel: document.getElementById('cms-jobs-loc-badge').value,
-          modalHeader: document.getElementById('cms-jobs-modal-header').value,
-          resumeUploadLabel: document.getElementById('cms-jobs-resume-label').value,
-          contactTimeOptions: document.getElementById('cms-jobs-contact-opts').value,
-          interviewReqTitle: document.getElementById('cms-jobs-interview-title').value,
-          submitBtnText: document.getElementById('cms-jobs-submit-btn').value,
-          submitTooltip: document.getElementById('cms-jobs-submit-tooltip').value,
-          messageDrawerHeader: document.getElementById('cms-jobs-msg-header').value,
-          quickReplies: document.getElementById('cms-jobs-quick-replies').value,
-          profileTabName: document.getElementById('cms-jobs-profile-tab').value
+          boardTitle: getVal('cms-jobs-board-title'),
+          searchPlaceholder: getVal('cms-jobs-search-ph'),
+          commitmentOptions: getVal('cms-jobs-commit-opts'),
+          quickSendBtn: getVal('cms-jobs-quick-send-btn'),
+          sendResumeBtn: getVal('cms-jobs-send-resume-btn'),
+          salaryBadgeLabel: getVal('cms-jobs-salary-badge'),
+          locationBadgeLabel: getVal('cms-jobs-loc-badge'),
+          modalHeader: getVal('cms-jobs-modal-header'),
+          resumeUploadLabel: getVal('cms-jobs-resume-label'),
+          contactTimeOptions: getVal('cms-jobs-contact-opts'),
+          interviewReqTitle: getVal('cms-jobs-interview-title'),
+          submitBtnText: getVal('cms-jobs-submit-btn'),
+          submitTooltip: getVal('cms-jobs-submit-tooltip'),
+          messageDrawerHeader: getVal('cms-jobs-msg-header'),
+          quickReplies: getVal('cms-jobs-quick-replies'),
+          profileTabName: getVal('cms-jobs-profile-tab')
         },
         labels: {
           postTitle: "U-THEPOST",
-          jobsTitle: document.getElementById('cms-jobs-board-title').value,
-          quickSendBtn: document.getElementById('cms-jobs-quick-send-btn').value,
-          sendResumeBtn: document.getElementById('cms-jobs-send-resume-btn').value,
-          submitInterviewBtn: document.getElementById('cms-jobs-submit-btn').value,
-          submitTooltip: document.getElementById('cms-jobs-submit-tooltip').value
+          jobsTitle: getVal('cms-jobs-board-title'),
+          quickSendBtn: getVal('cms-jobs-quick-send-btn'),
+          sendResumeBtn: getVal('cms-jobs-send-resume-btn'),
+          submitInterviewBtn: getVal('cms-jobs-submit-btn'),
+          submitTooltip: getVal('cms-jobs-submit-tooltip')
         },
         pricing: {
-          palMonthly: Number(document.getElementById('cms-price-pal').value),
-          starterMonthly: Number(document.getElementById('cms-price-starter').value),
-          growthMonthly: Number(document.getElementById('cms-price-growth').value),
-          proMonthly: Number(document.getElementById('cms-price-pro').value),
-          individualSocialAddon: Number(document.getElementById('cms-price-social-single').value),
-          socialBundleAddon: Number(document.getElementById('cms-price-social-bundle').value)
+          palMonthly: getNum('cms-price-pal'),
+          starterMonthly: getNum('cms-price-starter'),
+          growthMonthly: getNum('cms-price-growth'),
+          proMonthly: getNum('cms-price-pro'),
+          individualSocialAddon: getNum('cms-price-social-single'),
+          socialBundleAddon: getNum('cms-price-social-bundle'),
+          spotlightPrice: getNum('cms-price-spotlight')
         }
       };
 
       try {
-        const headers = typeof getAdminAuthHeaders === 'function' ? getAdminAuthHeaders() : { 'Content-Type': 'application/json', 'X-Admin-Portal': 'true' };
-        await fetch('/api/cms/config', {
+        const res = await fetch('/api/cms/config', {
           method: 'POST',
-          headers: headers,
+          headers: getAdminAuthHeaders(),
           body: JSON.stringify(payload)
         });
-        showCustomModalAlert('Zero-Code CMS Broadcast Complete', 'All label, button, and pricing overrides were broadcast live across all subdomains.');
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          showCustomModalAlert('Save Failed', errData.error || errData.message || `Server returned status ${res.status}`);
+          return;
+        }
+
+        const data = await res.json();
+        if (data.config) cmsConfig = data.config;
+
+        showCustomModalAlert('Zero-Code CMS Broadcast Complete', 'All label, button, and pricing overrides were saved and broadcast live across all subdomains.');
       } catch (e) {
-        showCustomModalAlert('Error', e.message);
+        showCustomModalAlert('Save Error', e.message);
       }
     };
 
@@ -2412,7 +2449,7 @@
         try {
           const res = await fetch(`/api/cms/config?t=${Date.now()}`, {
             cache: 'no-store',
-            headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+            headers: getAdminAuthHeaders()
           });
           const data = await res.json();
           const cfg = data.config || data.updatedConfig;

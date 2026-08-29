@@ -1310,6 +1310,63 @@ async function runTests() {
     assert(false, `Group 26 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 27: ADMIN CMS INPUT PERSISTENCE & AUTO-POLL OVERWRITE
+  // ================================================================
+  console.log('\n--- GROUP 27: ADMIN CMS INPUT PERSISTENCE & AUTO-POLL OVERWRITE ---');
+  try {
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    const adminSuiteHtml = fs.readFileSync(path.join(__dirname, 'u-theADMIN-MASTER-SUITE.html'), 'utf8');
+
+    // 1. Safeguard Active Form Inputs During Sync
+    assert(adminHtml.includes('document.activeElement'), 'admin.html inspects document.activeElement in populateCmsForm');
+    assert(adminHtml.includes('activeEl.closest(\'#view-cms, #view-plans\')'), 'admin.html protects active typing in #view-cms and #view-plans');
+    assert(adminSuiteHtml.includes('activeEl.closest(\'#view-cms, #view-plans\')'), 'u-theADMIN-MASTER-SUITE.html protects active typing in #view-cms and #view-plans');
+
+    // 2. HTTP Response Validation & Alerts
+    assert(adminHtml.includes('if (!res.ok)'), 'admin.html validates res.ok in saveAndBroadcastCms');
+    assert(adminHtml.includes('Save Failed'), 'admin.html alerts on save failures');
+
+    // 3. Complete Field Mappings
+    assert(adminHtml.includes('cms-price-spotlight'), 'admin.html maps #cms-price-spotlight');
+    assert(adminHtml.includes('cms-post-btn-actions'), 'admin.html maps #cms-post-btn-actions');
+    assert(adminSuiteHtml.includes('cms-price-spotlight'), 'u-theADMIN-MASTER-SUITE.html maps #cms-price-spotlight');
+    assert(adminSuiteHtml.includes('cms-post-btn-actions'), 'u-theADMIN-MASTER-SUITE.html maps #cms-post-btn-actions');
+
+    // 4. Enforce Master Auth Headers
+    assert(adminHtml.includes('getAdminAuthHeaders()'), 'admin.html uses getAdminAuthHeaders()');
+    assert(adminHtml.includes('headers: getAdminAuthHeaders()'), 'admin.html passes getAdminAuthHeaders in fetch requests');
+    assert(adminSuiteHtml.includes('headers: getAdminAuthHeaders()'), 'u-theADMIN-MASTER-SUITE.html passes getAdminAuthHeaders in fetch requests');
+
+    // 5. Test POST with Admin Auth Headers via HTTP
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer master_admin_session_active',
+      'X-Admin-Portal': 'true'
+    };
+    const testPostRes = await fetch(`${BASE_URL}/api/cms/config`, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        pricing: {
+          palMonthly: 0,
+          starterMonthly: 99,
+          growthMonthly: 299,
+          proMonthly: 699,
+          individualSocialAddon: 5.99,
+          socialBundleAddon: 19.99,
+          spotlightPrice: 49
+        }
+      })
+    });
+    assert(testPostRes.status === 200, 'POST /api/cms/config with admin headers returns HTTP 200');
+    const testPostData = await testPostRes.json();
+    assert(testPostData.config.pricing.spotlightPrice === 49, 'POST /api/cms/config persists spotlightPrice');
+
+  } catch (err) {
+    assert(false, `Group 27 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
