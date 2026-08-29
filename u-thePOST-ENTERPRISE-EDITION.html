@@ -584,51 +584,29 @@
     }
 
     /* ACTION BUTTONS */
-    .btn-gold-action,
-    .btn-primary,
-    .btn-gold,
-    .btn-primary-executive {
-      background: #0f172a;
-      color: #D4AF37;
-      border: 1.5px solid #D4AF37;
-      font-weight: 800;
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-      border-radius: 6px;
-      cursor: pointer;
-      padding: 0 1.25rem;
-      height: 48px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    button, .btn-primary, .btn-gold, .btn-quick-send-main, .send-reply-btn, .btn-auth-header, .btn-submit-request, .btn-gold-action, .btn-primary-executive {
+      background: #0f172a !important;
+      color: #D4AF37 !important;
+      border: 1.5px solid #D4AF37 !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.08em !important;
+      text-transform: uppercase !important;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
-    .btn-gold-action:hover,
-    .btn-gold-action:focus-visible,
-    .btn-primary:hover,
-    .btn-primary:focus-visible,
-    .btn-gold:hover,
-    .btn-gold:focus-visible,
-    .btn-primary-executive:hover,
-    .btn-primary-executive:focus-visible {
+    button:hover, .btn-primary:hover, .btn-gold:hover, .btn-quick-send-main:hover, .send-reply-btn:hover, .btn-auth-header:hover, .btn-submit-request:hover, .btn-gold-action:hover, .btn-primary-executive:hover {
       background: #2563EB !important;
       color: #FFFFFF !important;
       border-color: #2563EB !important;
       text-shadow: none !important;
       box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
-      transform: translateY(-1px);
+      transform: translateY(-1px) !important;
     }
 
     /* Badges & Tags: Gold Light Tint & Gold Outline */
-    .badge-tag.tag-cyan,
-    .badge-tag.tag-blue,
-    .tag-blue,
-    .tag-cyan,
-    .role-badge.employer {
+    .badge-tag.tag-cyan, .badge-tag.tag-blue, .tag-blue, .tag-cyan, .role-badge.employer {
       background: #FFF8E6 !important;
       color: #92400E !important;
       border: 1px solid #D4AF37 !important;
@@ -1417,6 +1395,12 @@
                 <option value="Contract">Contract</option>
                 <option value="Seasonal">Seasonal</option>
               </select>
+              <div class="form-group" style="margin-top: 0.5rem;">
+                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.68rem;">
+                  <input type="checkbox" id="urgentHiringCheckbox" onchange="toggleUrgentHiringBadge(this.checked)" checked style="accent-color: #D4AF37; width: 16px; height: 16px;">
+                  <span>Enable "URGENT HIRING" Badge</span>
+                </label>
+              </div>
             </div>
             <div class="form-group">
               <label data-cms-key="post-salary-label" data-tooltip="Public compensation or hourly pay display.">Salary Range Display</label>
@@ -1505,7 +1489,7 @@
             <div class="panel-header">
               <span class="panel-title" id="card2-title-text" data-cms-key="post-card2-title">2. LIVE POST PREVIEW</span>
               <div style="display:flex; gap:0.4rem; align-items:center;">
-                <span class="urgent-hiring-badge" data-cms-key="post-preview-badge">URGENT HIRING</span>
+                <span class="urgent-hiring-badge" id="badge-urgent-hiring" data-cms-key="post-preview-badge">URGENT HIRING</span>
                 <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">CANDIDATE VIEWPORT</span>
               </div>
             </div>
@@ -2460,6 +2444,13 @@
       if (chk) chk.checked = el.classList.contains('selected');
     }
 
+    window.toggleUrgentHiringBadge = function(isUrgent) {
+      const badges = document.querySelectorAll('.urgent-hiring-badge, #badge-urgent-hiring');
+      badges.forEach(b => {
+        b.style.display = isUrgent ? 'inline-flex' : 'none';
+      });
+    };
+
     function resetStudioForm() {
       document.getElementById('inp-title').value = '';
       document.getElementById('inp-company').value = '';
@@ -2467,10 +2458,15 @@
       document.getElementById('inp-salary').value = '';
       document.getElementById('inp-desc').value = '';
       document.getElementById('inp-perks').value = '';
+      if (document.getElementById('urgentHiringCheckbox')) {
+        document.getElementById('urgentHiringCheckbox').checked = true;
+        toggleUrgentHiringBadge(true);
+      }
       updateLivePreview();
     }
 
     async function publishJobLive() {
+      const isUrgent = document.getElementById('urgentHiringCheckbox') ? document.getElementById('urgentHiringCheckbox').checked : true;
       const newJob = {
         id: `JOB-${Math.floor(100 + Math.random() * 900)}`,
         jobTitle: document.getElementById('inp-title').value,
@@ -2478,6 +2474,7 @@
         location: document.getElementById('inp-location').value,
         employmentType: document.getElementById('inp-type').value,
         salary: document.getElementById('inp-salary').value,
+        urgentHiring: isUrgent,
         summary: document.getElementById('inp-desc').value,
         additionalPerks: document.getElementById('inp-perks').value,
         recruiterEmail: document.getElementById('inp-recruiter-email').value,

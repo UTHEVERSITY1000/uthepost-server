@@ -1475,6 +1475,53 @@ async function runTests() {
     assert(false, `Group 29 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 30: URGENT HIRING TOGGLE & ALL-FILE GOLD/BLUE BUTTON STYLING
+  // ================================================================
+  console.log('\n--- GROUP 30: URGENT HIRING TOGGLE & ALL-FILE GOLD/BLUE BUTTON STYLING ---');
+  try {
+    const allFiles = [
+      'recruiter.html',
+      'candidate.html',
+      'admin.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html',
+      'u-theJOBS-ENTERPRISE-SYNC.html',
+      'u-theJOBS-DUAL LINK TO u-thePOST.html',
+      'u-theADMIN-MASTER-SUITE.html'
+    ];
+
+    // 1. Check all 9 files for universal button and badge CSS rules
+    for (const f of allFiles) {
+      const content = fs.readFileSync(path.join(__dirname, f), 'utf8');
+      assert(content.includes('button, .btn-primary, .btn-gold, .btn-quick-send-main, .send-reply-btn, .btn-auth-header, .btn-submit-request') || content.includes('button:hover, .btn-primary:hover, .btn-gold:hover'), `${f} includes universal button gold/blue styling rule`);
+      assert(content.includes('background: #0f172a !important') && content.includes('color: #D4AF37 !important'), `${f} enforces engraved gold outline & navy fill default`);
+      assert(content.includes('background: #2563EB !important') && content.includes('color: #FFFFFF !important'), `${f} enforces accent blue & sharp white text hover`);
+      assert(content.includes('.badge-tag.tag-cyan, .badge-tag.tag-blue, .role-badge.employer') || content.includes('background: #FFF8E6 !important'), `${f} enforces gold tint badge styling`);
+    }
+
+    // 2. Urgent Hiring Form Control in recruiter templates
+    const recruiterFiles = [
+      'recruiter.html',
+      'u-thePOST-ENTERPRISE-EDITION.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html'
+    ];
+
+    for (const rf of recruiterFiles) {
+      const content = fs.readFileSync(path.join(__dirname, rf), 'utf8');
+      assert(content.includes('id="urgentHiringCheckbox"'), `${rf} defines #urgentHiringCheckbox in Card 1`);
+      assert(content.includes('toggleUrgentHiringBadge(this.checked)'), `${rf} binds onchange="toggleUrgentHiringBadge(this.checked)"`);
+      assert(content.includes('id="badge-urgent-hiring"'), `${rf} defines #badge-urgent-hiring in Card 2 preview`);
+      assert(content.includes('toggleUrgentHiringBadge = function'), `${rf} implements toggleUrgentHiringBadge() function`);
+      assert(content.includes('urgentHiring: isUrgent') || content.includes('urgentHiring:'), `${rf} passes urgentHiring in publishJobLive() payload`);
+    }
+
+  } catch (err) {
+    assert(false, `Group 30 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

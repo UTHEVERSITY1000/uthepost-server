@@ -406,17 +406,14 @@
     }
 
     /* COMPACT ACTION BUTTONS (28-32PX HEIGHT) */
-    .btn-gold,
-    .btn-primary,
-    .btn-primary-executive {
-      background: #0f172a;
-      color: #D4AF37;
-      border: 1.5px solid #D4AF37;
-      font-weight: 800;
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+    button, .btn-primary, .btn-gold, .btn-quick-send-main, .send-reply-btn, .btn-auth-header, .btn-submit-request, .btn-primary-executive {
+      background: #0f172a !important;
+      color: #D4AF37 !important;
+      border: 1.5px solid #D4AF37 !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.08em !important;
+      text-transform: uppercase !important;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4) !important;
       border-radius: 4px;
       cursor: pointer;
       padding: 0 0.85rem;
@@ -424,23 +421,18 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
       white-space: nowrap;
     }
 
-    .btn-gold:hover,
-    .btn-gold:focus-visible,
-    .btn-primary:hover,
-    .btn-primary:focus-visible,
-    .btn-primary-executive:hover,
-    .btn-primary-executive:focus-visible {
+    button:hover, .btn-primary:hover, .btn-gold:hover, .btn-quick-send-main:hover, .send-reply-btn:hover, .btn-auth-header:hover, .btn-submit-request:hover, .btn-primary-executive:hover {
       background: #2563EB !important;
       color: #FFFFFF !important;
       border-color: #2563EB !important;
       text-shadow: none !important;
       box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
-      transform: translateY(-1px);
+      transform: translateY(-1px) !important;
     }
 
     .btn-surface-sm {
