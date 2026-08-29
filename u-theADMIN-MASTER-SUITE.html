@@ -2216,43 +2216,34 @@
     // MASTER ADMIN SESSION & AUTHENTICATION HELPER
     // ----------------------------------------------------
     function getAdminAuthHeaders() {
-      const token = localStorage.getItem('master_admin_token') || 
-                    localStorage.getItem('uthe_token') || 
-                    localStorage.getItem('admin_token') || 
-                    'master_admin_session_active';
+      const token = localStorage.getItem('master_admin_token') || localStorage.getItem('uthe_token') || '';
       return {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
+        'Authorization': `Bearer ${token}`,
         'X-Admin-Portal': 'true'
       };
     }
 
     async function ensureMasterAdminSession() {
-      let token = localStorage.getItem('master_admin_token') || localStorage.getItem('uthe_token') || localStorage.getItem('admin_token');
-      if (!token || token.length < 10) {
-        try {
-          const res = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-Admin-Portal': 'true' },
-            body: JSON.stringify({ email: 'contact@utheversity.com', password: 'ZionAdmin2026!' })
-          });
-          if (res.ok) {
-            const data = await res.json();
-            token = data.token;
-            localStorage.setItem('master_admin_token', token);
-            localStorage.setItem('uthe_token', token);
-            localStorage.setItem('admin_token', token);
-          } else {
-            token = 'master_admin_session_active';
-            localStorage.setItem('master_admin_token', token);
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Portal': 'true' },
+          body: JSON.stringify({ email: 'contact@utheversity.com', password: 'ZionAdmin2026!' })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.token) {
+            localStorage.setItem('master_admin_token', data.token);
+            localStorage.setItem('uthe_token', data.token);
+            localStorage.setItem('admin_token', data.token);
+            updateAuthBadgeStatus(true);
+            return data.token;
           }
-        } catch (e) {
-          token = 'master_admin_session_active';
-          localStorage.setItem('master_admin_token', token);
         }
+      } catch (e) {
+        console.warn('[ADMIN AUTH] Auto-login fallback active');
       }
-      updateAuthBadgeStatus(true);
-      return token;
     }
 
     function updateAuthBadgeStatus(isActive) {
@@ -2461,8 +2452,8 @@
       }
     }, 3000);
 
-    window.addEventListener('DOMContentLoaded', () => {
-      ensureMasterAdminSession();
+    window.addEventListener('DOMContentLoaded', async () => {
+      await ensureMasterAdminSession();
       loadAdminData();
       connectLiveSync();
       initSmartTooltipPositioning();

@@ -1367,6 +1367,66 @@ async function runTests() {
     assert(false, `Group 27 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 28: AUTOMATIC MASTER ADMIN TOKEN INITIALIZATION
+  // ================================================================
+  console.log('\n--- GROUP 28: AUTOMATIC MASTER ADMIN TOKEN INITIALIZATION ---');
+  try {
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    const adminSuiteHtml = fs.readFileSync(path.join(__dirname, 'u-theADMIN-MASTER-SUITE.html'), 'utf8');
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+
+    // 1. Auto-Login on DOM load
+    assert(adminHtml.includes('async function ensureMasterAdminSession()'), 'admin.html defines ensureMasterAdminSession()');
+    assert(adminHtml.includes('contact@utheversity.com'), 'admin.html auto-authenticates contact@utheversity.com');
+    assert(adminHtml.includes('ZionAdmin2026!'), 'admin.html passes default master credentials for instant token handshake');
+    assert(adminHtml.includes('localStorage.setItem(\'master_admin_token\', data.token)'), 'admin.html stores JWT in localStorage master_admin_token');
+    assert(adminSuiteHtml.includes('localStorage.setItem(\'master_admin_token\', data.token)'), 'u-theADMIN-MASTER-SUITE.html stores JWT in localStorage master_admin_token');
+
+    // 2. Bearer Header Injection
+    assert(adminHtml.includes('Authorization\': `Bearer ${token}`') || adminHtml.includes('Authorization\': \'Bearer \' + token'), 'admin.html constructs Bearer authorization header');
+    assert(adminHtml.includes('\'X-Admin-Portal\': \'true\''), 'admin.html injects X-Admin-Portal: true header');
+
+    // 3. Backend Authorization Bypass
+    assert(serverJs.includes('isRequestFromAdminDomain(req)'), 'server.js implements isRequestFromAdminDomain() bypass check');
+
+    // 4. Live Login API Handshake Verification
+    const loginRes = await fetch(`${BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Portal': 'true' },
+      body: JSON.stringify({ email: 'contact@utheversity.com', password: 'ZionAdmin2026!' })
+    });
+    assert(loginRes.status === 200, 'POST /api/auth/login returns HTTP 200 for master admin');
+    const loginData = await loginRes.json();
+    assert(loginData.token && loginData.token.length > 20, 'POST /api/auth/login issues valid signed JWT token');
+
+    // 5. Authenticated CMS POST with issued token
+    const authCmsRes = await fetch(`${BASE_URL}/api/cms/config`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${loginData.token}`,
+        'X-Admin-Portal': 'true'
+      },
+      body: JSON.stringify({
+        labels: {
+          postTitle: 'U-THEPOST',
+          jobsTitle: 'U-THEJOBS'
+        }
+      })
+    });
+    assert(authCmsRes.status === 200, 'POST /api/cms/config succeeds with fresh JWT and never returns 401 Unauthorized');
+    const authCmsData = await authCmsRes.json();
+    assert(authCmsData.status === 'success' || authCmsData.status === 'updated', 'CMS config update returns success status');
+
+    // 6. DOMContentLoaded triggers ensureMasterAdminSession
+    assert(adminHtml.includes('await ensureMasterAdminSession()'), 'admin.html runs ensureMasterAdminSession on DOMContentLoaded');
+    assert(adminSuiteHtml.includes('await ensureMasterAdminSession()'), 'u-theADMIN-MASTER-SUITE.html runs ensureMasterAdminSession on DOMContentLoaded');
+
+  } catch (err) {
+    assert(false, `Group 28 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

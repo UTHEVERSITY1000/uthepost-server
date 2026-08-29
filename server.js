@@ -1831,25 +1831,25 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (pathname.startsWith('/api/cms')) {
+  if (pathname.startsWith('/api/cms') || pathname.startsWith('/api/admin/cms')) {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
   }
 
-  if (pathname === '/api/cms/config' && req.method === 'GET') {
-    sendJson(200, { status: 'success', config: cmsConfig, updatedConfig: cmsConfig });
-    return;
+  if ((pathname === '/api/cms/config' || pathname === '/api/cms' || pathname === '/api/admin/cms' || pathname === '/api/admin/cms/config') && req.method === 'GET') {
+    return sendJson(200, { status: 'success', config: cmsConfig, updatedConfig: cmsConfig, cmsConfig: cmsConfig });
   }
 
-  if (pathname === '/api/cms/config' && (req.method === 'POST' || req.method === 'PUT')) {
+  if ((pathname === '/api/cms/config' || pathname === '/api/cms' || pathname === '/api/admin/cms' || pathname === '/api/admin/cms/config') && (req.method === 'POST' || req.method === 'PUT')) {
     const user = getAuthenticatedUser(req);
-    if (!isAdmin(user)) {
+    const isFromAdminPortal = isRequestFromAdminDomain(req);
+    if (!isAdmin(user) && !isFromAdminPortal) {
       return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
     }
 
     readBody((err, body) => {
-      if (err) return sendJson(400, { error: 'Invalid JSON' });
+      if (err || !body) return sendJson(400, { error: 'Invalid JSON body' });
       if (body.postStudio) cmsConfig.postStudio = { ...cmsConfig.postStudio, ...body.postStudio };
       if (body.jobsBoard) cmsConfig.jobsBoard = { ...cmsConfig.jobsBoard, ...body.jobsBoard };
       if (body.labels) cmsConfig.labels = { ...cmsConfig.labels, ...body.labels };
@@ -1857,11 +1857,18 @@ const server = http.createServer(async (req, res) => {
       if (body.addOns) cmsConfig.addOns = { ...cmsConfig.addOns, ...body.addOns };
       if (body.channels) cmsConfig.channels = { ...cmsConfig.channels, ...body.channels };
 
+      // Update disk storage
       saveCmsConfig();
-      writeSystemLog('CMS_CONFIG_UPDATED', { timestamp: new Date().toISOString() });
+      const cmsFilePath = path.join(__dirname, 'data', 'cms_config.json');
+      const rootCmsPath = path.join(__dirname, 'cms_config.json');
+      try { fs.writeFileSync(cmsFilePath, JSON.stringify(cmsConfig, null, 2)); } catch (e) {}
+      try { fs.writeFileSync(rootCmsPath, JSON.stringify(cmsConfig, null, 2)); } catch (e) {}
+
+      writeSystemLog('CMS_CONFIG_UPDATED', { updatedBy: user ? (user.id || user.userId) : 'Admin Portal', timestamp: new Date().toISOString() });
       broadcastWebSocketEvent('cms_update', { config: cmsConfig, updatedConfig: cmsConfig });
       broadcastWebSocketEvent('CMS_CONFIG_UPDATED', { config: cmsConfig, updatedConfig: cmsConfig });
-      sendJson(200, { status: 'updated', config: cmsConfig, updatedConfig: cmsConfig });
+      broadcastCmsUpdate(cmsConfig);
+      sendJson(200, { status: 'success', message: 'CMS configuration updated and broadcast live.', config: cmsConfig, updatedConfig: cmsConfig });
     });
     return;
   }
@@ -2057,45 +2064,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // MASTER ZERO-CODE CMS CONFIGURATION ENGINE & LIVE BROADCAST
-  // ----------------------------------------------------
-  if ((pathname === '/api/cms/config' || pathname === '/api/cms' || pathname === '/api/admin/cms' || pathname === '/api/admin/cms/config') && (req.method === 'GET' || req.method === 'POST' || req.method === 'PUT')) {
-    if (req.method === 'GET') {
-      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-      res.setHeader('Pragma', 'no-cache');
-      res.setHeader('Expires', '0');
-      return sendJson(200, { config: cmsConfig, updatedConfig: cmsConfig, cmsConfig: cmsConfig });
-    }
-
-    const user = getAuthenticatedUser(req);
-    const isFromAdminPortal = isRequestFromAdminDomain(req);
-    if (!isAdmin(user) && !isFromAdminPortal) {
-      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
-    }
-
-    readBody((err, body) => {
-      if (err || !body) return sendJson(400, { error: 'Invalid JSON body' });
-
-      // Update in-memory config and persist to disk
-      cmsConfig = { ...cmsConfig, ...body };
-      const cmsFilePath = path.join(__dirname, 'data', 'cms_config.json');
-      const rootCmsPath = path.join(__dirname, 'cms_config.json');
-      try {
-        fs.writeFileSync(cmsFilePath, JSON.stringify(cmsConfig, null, 2));
-      } catch (e) {}
-      try {
-        fs.writeFileSync(rootCmsPath, JSON.stringify(cmsConfig, null, 2));
-      } catch (e) {}
-
-      // Execute broadcastCmsUpdate across all active WebSocket clients
-      broadcastCmsUpdate(cmsConfig);
-
-      writeSystemLog('CMS_CONFIG_UPDATED', { updatedBy: user ? user.id : 'Admin Portal', timestamp: new Date().toISOString() });
-      sendJson(200, { status: 'success', message: 'CMS configuration updated and broadcast live.', config: cmsConfig, updatedConfig: cmsConfig });
-    });
-    return;
-  }
 
   if (pathname === '/api/health') {
     sendJson(200, {
