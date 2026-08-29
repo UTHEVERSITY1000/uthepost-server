@@ -1211,7 +1211,7 @@
   <section class="search-filter-belt">
     <div class="search-input-wrap">
       <span class="search-icon">&#128269;</span>
-      <input type="text" class="search-input" id="search-input" data-cms-key="jobs-search-placeholder" placeholder="Search by job title, skill, or keyword..." oninput="handleFilterChange()" data-tooltip="Instant search across all active listings.">
+      <input type="text" class="search-input" id="search-input" name="jobSearchQuery" value="" autocomplete="off" data-cms-key="jobs-search-placeholder" placeholder="Search positions, companies, locations, or skills..." oninput="handleFilterChange()" data-tooltip="Instant search across all active listings.">
     </div>
 
     <select class="filter-select" id="filter-type" onchange="handleFilterChange()" data-tooltip="Select work commitment.">
@@ -1551,6 +1551,8 @@
     let authMode = 'login';
     let selectedJobId = 'JOB-101';
     let currentApplicantId = 'APP-701';
+    let currentSearchFilter = '';
+    let currentSearchQuery = '';
     let unreadCount = 1;
 
     let jobsDatabase = [
@@ -2441,7 +2443,7 @@
       // Explicit data-cms-key dynamic DOM binding
       const cmsKeyMap = {
         'jobs-board-title': config.jobsBoard?.boardTitle || config.labels?.jobsTitle || 'U-THEJOBS',
-        'jobs-search-placeholder': config.jobsBoard?.searchPlaceholder || 'Search by job title, skill, or keyword...',
+        'jobs-search-placeholder': config.jobsBoard?.searchPlaceholder || 'Search positions, companies, locations, or skills...',
         'jobs-quick-send-btn': config.jobsBoard?.quickSendBtn || config.labels?.quickSendBtn || 'QUICK SEND',
         'jobs-send-resume-btn': config.jobsBoard?.sendResumeBtn || config.labels?.sendResumeBtn || 'SEND RESUME/CV',
         'jobs-salary-badge': config.jobsBoard?.salaryBadgeLabel,
@@ -2528,6 +2530,12 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      const searchEl = document.getElementById('search-input');
+      if (searchEl) {
+        searchEl.value = '';
+      }
+      currentSearchFilter = '';
+      currentSearchQuery = '';
       renderJobListings(jobsDatabase);
       selectJob('JOB-101');
       initDualSync();

@@ -330,7 +330,7 @@ let cmsConfig = {
   },
   jobsBoard: {
     boardTitle: "U-THEJOBS",
-    searchPlaceholder: "Search positions, verified companies, locations, or skills...",
+    searchPlaceholder: "Search positions, companies, locations, or skills...",
     commitmentOptions: "All Commitments, Full-Time, Contract, Part-Time",
     locationOptions: "All Locations, Remote Only, Hybrid, On-Site",
     quickSendBtn: "QUICK SEND",

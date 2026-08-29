@@ -1080,6 +1080,32 @@ async function runTests() {
     assert(false, `Group 21 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 22: CLEAR SEARCH BAR DEFAULT VALUE & NEUTRAL PLACEHOLDER
+  // ================================================================
+  console.log('\n--- GROUP 22: CLEAR SEARCH BAR DEFAULT VALUE & NEUTRAL PLACEHOLDER ---');
+  try {
+    const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Check Search Input Element attributes
+    assert(candHtml.includes('id="search-input"'), 'candidate.html defines main search input');
+    assert(candHtml.includes('value=""'), 'candidate.html search input defaults to empty string value=""');
+    assert(candHtml.includes('autocomplete="off"'), 'candidate.html search input includes autocomplete="off" to prevent browser autofill');
+    assert(candHtml.includes('placeholder="Search positions, companies, locations, or skills..."'), 'candidate.html sets neutral professional placeholder text');
+
+    // 2. Check JavaScript initial state initialization
+    assert(candHtml.includes('let currentSearchFilter = \'\'') || candHtml.includes('currentSearchFilter = ""'), 'candidate.html initializes search filter variable to empty string');
+    assert(candHtml.includes('searchEl.value = \'\''), 'candidate.html clears search bar on DOMContentLoaded');
+
+    // 3. Check Mirrors
+    const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
+    assert(syncHtml.includes('autocomplete="off"'), 'u-theJOBS-ENTERPRISE-SYNC.html includes autocomplete="off"');
+    assert(syncHtml.includes('placeholder="Search positions, companies, locations, or skills..."'), 'u-theJOBS-ENTERPRISE-SYNC.html sets neutral placeholder');
+
+  } catch (err) {
+    assert(false, `Group 22 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
