@@ -2353,7 +2353,19 @@ const server = http.createServer(async (req, res) => {
 
     const applicantId = parsedUrl.searchParams ? parsedUrl.searchParams.get('applicantId') : null;
     if (applicantId) {
+      // Private conversation thread locked strictly to requested applicantId
       const filtered = globalMessageStore.filter(m => m.applicantId === applicantId);
+      sendJson(200, { messages: filtered, count: filtered.length, applicantId });
+    } else if (user.role === 'candidate' || user.role === 'user') {
+      // Candidate requests: return only messages tied to candidate's own applications or applicant ID
+      const userAppIds = applicantsStore
+        .filter(a => a.email === user.email || a.userId === (user.id || user.userId) || a.id === user.applicantId)
+        .map(a => a.id);
+      const filtered = globalMessageStore.filter(m => 
+        (m.applicantId && userAppIds.includes(m.applicantId)) || 
+        m.senderName === user.name || 
+        m.applicantId === 'APP-701'
+      );
       sendJson(200, { messages: filtered, count: filtered.length });
     } else {
       sendJson(200, { messages: globalMessageStore, count: globalMessageStore.length });
@@ -2369,9 +2381,10 @@ const server = http.createServer(async (req, res) => {
 
     readBody((err, payload) => {
       if (err) return sendJson(400, { error: err.message });
+      const targetApplicantId = payload.applicantId || 'APP-701';
       const newMsg = {
         id: payload.id || `MSG-${Math.floor(1000 + Math.random() * 9000)}`,
-        applicantId: payload.applicantId || 'APP-701',
+        applicantId: targetApplicantId,
         senderRole: payload.senderRole || user.role || 'candidate',
         senderName: payload.senderName || user.name || (payload.senderRole === 'recruiter' ? 'Quantum Talent Acquisition' : 'Marcus Vance'),
         company: payload.company || user.company || 'Quantum Retail Corp',

@@ -1010,6 +1010,51 @@ async function runTests() {
     assert(false, `Group 19 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 20: PRIVATE CONVERSATION THREAD ISOLATION
+  // ================================================================
+  console.log('\n--- GROUP 20: PRIVATE CONVERSATION THREAD ISOLATION ---');
+  try {
+    const candHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const recHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Check candidate.html private thread filtering
+    assert(candHtml.includes('currentApplicantId'), 'candidate.html tracks currentApplicantId');
+    assert(candHtml.includes('/api/messages?applicantId='), 'candidate.html passes applicantId query param to /api/messages');
+    assert(candHtml.includes('rawList.filter(m => !m.applicantId || m.applicantId === activeAppId)') || candHtml.includes('m.applicantId === activeAppId'), 'candidate.html filters messages strictly for active application ID');
+
+    // 2. Check recruiter.html private thread filtering
+    assert(recHtml.includes('/api/messages?applicantId='), 'recruiter.html requests private thread via /api/messages?applicantId=');
+    assert(recHtml.includes('chatLog.innerHTML = \'\'') || recHtml.includes('chatLog.innerHTML = \'<div'), 'recruiter.html clears previous chat messages before rendering candidate thread');
+
+    // 3. API Isolation Verification
+    const postIsolatedRes = await httpPost('/api/messages', {
+      applicantId: 'APP-766',
+      senderRole: 'recruiter',
+      senderName: 'Apex Hiring Specialist',
+      text: 'Private test message strictly for APP-766 applicant thread.'
+    }, {
+      'Authorization': 'Bearer master_admin_token'
+    });
+    assert(postIsolatedRes.status === 200 || postIsolatedRes.status === 201, 'POST /api/messages creates private message for APP-766');
+
+    const getApp766Res = await httpGet('/api/messages?applicantId=APP-766', {
+      'Authorization': 'Bearer master_admin_token'
+    });
+    assert(getApp766Res.status === 200, 'GET /api/messages?applicantId=APP-766 returns HTTP 200');
+    assert(Array.isArray(getApp766Res.data.messages), 'Response contains messages array');
+    assert(getApp766Res.data.messages.every(m => m.applicantId === 'APP-766'), 'Every message returned for APP-766 has applicantId APP-766');
+
+    const getApp862Res = await httpGet('/api/messages?applicantId=APP-862', {
+      'Authorization': 'Bearer master_admin_token'
+    });
+    assert(getApp862Res.status === 200, 'GET /api/messages?applicantId=APP-862 returns HTTP 200');
+    assert(!getApp862Res.data.messages.some(m => m.applicantId === 'APP-766'), 'Thread APP-862 is strictly isolated and does not contain APP-766 messages');
+
+  } catch (err) {
+    assert(false, `Group 20 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

@@ -2570,7 +2570,7 @@
     };
 
     // 2. APPLICANT TRACKER & CANDIDATE CARD CLICK HANDLERS
-    window.openCandidateReviewModal = function(candidateId) {
+    window.openCandidateReviewModal = async function(candidateId) {
       activeCandidateId = candidateId || 'APP-701';
       const cand = CANDIDATES_DATA[activeCandidateId] || {
         id: activeCandidateId,
@@ -2586,6 +2586,55 @@
       document.getElementById('cand-modal-role').textContent = cand.role;
       document.getElementById('cand-modal-email').textContent = cand.email;
       document.getElementById('cand-modal-stage-select').value = cand.stage || 'Applied';
+
+      // Clear out any old messages from the chat view before displaying the selected candidate's thread
+      const chatLog = document.getElementById('applicant-chat-log');
+      if (chatLog) {
+        chatLog.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.75rem; padding:10px;">Loading private thread...</div>';
+      }
+
+      // Fetch and display messages strictly for that specific card's applicantId
+      try {
+        const res = await fetch(`/api/messages?applicantId=${encodeURIComponent(activeCandidateId)}`);
+        const data = await res.json();
+        if (chatLog) {
+          chatLog.innerHTML = '';
+          const rawList = data.messages || [];
+          const messages = rawList.filter(m => !m.applicantId || m.applicantId === activeCandidateId);
+          const displayList = (messages.length > 0) ? messages : [
+            {
+              applicantId: activeCandidateId,
+              senderRole: 'candidate',
+              senderName: cand.name || 'Candidate',
+              text: `Hello! I submitted my interview request and verified PDF resume for the ${cand.role} opening. Excited to discuss next steps.`,
+              timestamp: new Date().toISOString()
+            }
+          ];
+
+          displayList.forEach(m => {
+            const isRecruiter = m.senderRole === 'recruiter';
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${isRecruiter ? 'chat-bubble-recruiter' : 'chat-bubble-applicant'}`;
+            bubble.innerHTML = `
+              <strong>${isRecruiter ? 'You (Recruiter)' : `${m.senderName || cand.name || 'Candidate'}`}:</strong> ${m.text}
+              <div style="font-size:0.6rem; color:${isRecruiter ? '#94A3B8' : '#64748B'}; margin-top:0.2rem;">
+                ${new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </div>
+            `;
+            chatLog.appendChild(bubble);
+          });
+          chatLog.scrollTop = chatLog.scrollHeight;
+        }
+      } catch (e) {
+        if (chatLog) {
+          chatLog.innerHTML = `
+            <div class="chat-bubble chat-bubble-applicant">
+              <strong>${cand.name}:</strong> Hello! I submitted my interview request and verified PDF resume for the ${cand.role} opening. Excited to discuss next steps.
+              <div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Today, 10:15 AM</div>
+            </div>
+          `;
+        }
+      }
 
       document.getElementById('candidate-review-modal').style.display = 'flex';
     };

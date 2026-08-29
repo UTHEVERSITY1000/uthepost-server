@@ -1482,6 +1482,7 @@
     let currentUser = null;
     let authMode = 'login';
     let selectedJobId = 'JOB-101';
+    let currentApplicantId = 'APP-701';
     let unreadCount = 1;
 
     let jobsDatabase = [
@@ -1640,13 +1641,14 @@
     }
 
     // 1. NOTIFICATIONS ALERT & EXECUTIVE RECRUITER MESSAGE DRAWER
-    window.openMessageDrawer = function() {
+    window.openMessageDrawer = function(applicantId) {
+      if (applicantId) currentApplicantId = applicantId;
       const drawer = document.getElementById('messageDrawer') || document.getElementById('candidate-messages-modal');
       if (drawer) drawer.style.display = 'flex';
       unreadCount = 0;
       const badge = document.getElementById('notif-badge-count');
       if (badge) badge.style.display = 'none';
-      fetchMessages();
+      fetchMessages(currentApplicantId);
     };
     window.openCandidateMessageDrawer = window.openMessageDrawer;
 
@@ -1871,6 +1873,7 @@
       } catch (e) {}
 
       broadcastSyncEvent('CANDIDATE_APPLIED', { applicant: applicantPayload });
+      currentApplicantId = applicantPayload.id;
       closeModal('app-modal');
       showCustomModalAlert('Interview Request Submitted', `Your application and PDF resume for "${applicantPayload.jobTitle}" were submitted directly to the hiring recruiter.`);
     }
@@ -1917,10 +1920,11 @@
       }
       if (input) input.value = '';
 
+      const activeAppId = currentApplicantId || 'APP-701';
       const msgPayload = {
-        applicantId: 'APP-701',
+        applicantId: activeAppId,
         senderRole: 'candidate',
-        senderName: (document.getElementById('prof-cand-name') && document.getElementById('prof-cand-name').value) || 'Marcus Vance',
+        senderName: (document.getElementById('prof-cand-name') && document.getElementById('prof-cand-name').value) || (document.getElementById('candidateNameInput') && document.getElementById('candidateNameInput').value) || 'Marcus Vance',
         company: 'Quantum Retail Corp',
         jobTitle: 'Sales Manager',
         text: text,
@@ -1940,15 +1944,21 @@
     };
     window.sendCandidateReply = window.sendRecruiterReply;
 
-    async function fetchMessages() {
+    async function fetchMessages(applicantId) {
+      const activeAppId = applicantId || currentApplicantId || 'APP-701';
       try {
-        const res = await fetch('/api/messages');
+        // Pass the candidate's active application ID in the web request
+        const res = await fetch(`/api/messages?applicantId=${encodeURIComponent(activeAppId)}`);
         const data = await res.json();
         const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
         if (container) {
           container.innerHTML = '';
-          const list = (data.messages && data.messages.length > 0) ? data.messages : [
+          const rawList = data.messages || [];
+          // Ensure the drawer renders only messages where applicantId matches that specific application
+          const list = rawList.filter(m => !m.applicantId || m.applicantId === activeAppId);
+          const displayList = (list.length > 0) ? list : [
             {
+              applicantId: activeAppId,
               senderRole: 'recruiter',
               senderName: 'Quantum Talent Acquisition (Recruiter)',
               text: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
@@ -1956,7 +1966,7 @@
             }
           ];
 
-          list.forEach(m => {
+          displayList.forEach(m => {
             const isRecruiter = m.senderRole === 'recruiter';
             const bubble = document.createElement('div');
             bubble.className = isRecruiter ? 'chat-bubble-recruiter' : 'chat-bubble-candidate';
