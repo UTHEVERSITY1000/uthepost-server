@@ -16,6 +16,36 @@ try {
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'utheversity-professional-jwt-secret-key-2026-secure';
 
+// Helper function: Strictly enforce IPv4 socket connections for Gmail SMTP on Render
+function getTransporter() {
+  if (!nodemailer) return null;
+  const smtpUser = process.env.SMTP_USER ? process.env.SMTP_USER.trim() : null;
+  const smtpPass = process.env.SMTP_PASS ? process.env.SMTP_PASS.trim() : null;
+  
+  if (!smtpUser || !smtpPass) return null;
+
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT) || 587,
+    secure: process.env.SMTP_PORT === '465',
+    family: 4,
+    lookup: (hostname, options, callback) => {
+      dns.lookup(hostname, { family: 4 }, (err, address) => {
+        callback(err, address, 4);
+      });
+    },
+    auth: {
+      user: smtpUser,
+      pass: smtpPass
+    },
+    tls: {
+      rejectUnauthorized: false
+    },
+    connectionTimeout: 10000,
+    socketTimeout: 10000
+  });
+}
+
 // ----------------------------------------------------
 // NATIVE CRYPTO AUTH TOOL (Zero-Dependency JWT & Hash)
 // ----------------------------------------------------
@@ -356,8 +386,6 @@ let cmsConfig = {
   }
 };
 
-
-
 // ----------------------------------------------------
 // IN-MEMORY JOB CATALOG & APPLICANTS DATABASE
 // ----------------------------------------------------
@@ -506,9 +534,6 @@ const globalMessageStore = [
 
 // ----------------------------------------------------
 // STRICT DATA STORAGE & AUTOMATIC INDEXING SYSTEM
-// Subfolders: /data/employers/, /data/candidates/, /data/resumes/,
-// /data/listings/, /data/applications/, /data/messages/, /data/logs/,
-// and /data/cms_config.json
 // ----------------------------------------------------
 const DATA_DIR = path.join(__dirname, 'data');
 const DIRS = {
@@ -572,32 +597,12 @@ function writeSystemLog(eventType, details = {}) {
 }
 
 // ----------------------------------------------------
-// AUTOMATED TRANSACTIONAL EMAIL ENGINE (NODEMAILER)
-const SMTP_CONFIG = {
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT) || 587,
-  secure: process.env.SMTP_PORT === '465',
-  family: 4,
-  lookup: (hostname, options, callback) => {
-    dns.lookup(hostname, { family: 4 }, callback);
-  },
-  auth: (process.env.SMTP_USER && process.env.SMTP_PASS) ? {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
-  } : null,
-  tls: {
-    rejectUnauthorized: false
-  },
-  connectionTimeout: 10000,
-  socketTimeout: 10000
-};
-
+// AUTOMATED TRANSACTIONAL EMAIL ENGINE
+// ----------------------------------------------------
 const DEFAULT_FROM_EMAIL = process.env.FROM_EMAIL || 'contact@utheversity.com';
 const EMAIL_LOG_FILE = path.join(DIRS.logs, 'emails.log');
 const EMAIL_JSON_LOG = path.join(DIRS.logs, 'log_emails.json');
 
-// In-Memory Reset Tokens Map with 30-Minute Expiration
-// Key: token -> Value: { email, userId, expiresAt }
 const resetTokensStore = new Map();
 
 function generatePasswordResetToken(email, userId) {
@@ -618,7 +623,6 @@ function verifyPasswordResetToken(token) {
   return record;
 }
 
-// Branded HTML Email Wrapper (Premium White Studio Theme)
 function buildBrandedEmailHtml({ title, preheader, bodyContent, ctaText, ctaUrl, metadataHtml = '' }) {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -682,7 +686,6 @@ function buildBrandedEmailHtml({ title, preheader, bodyContent, ctaText, ctaUrl,
 </html>`;
 }
 
-// Zero-Crash Transactional Dispatcher with File Fallback Logging
 async function sendTransactionalEmail({ to, subject, html, text, type = 'GENERAL_NOTIFICATION', metadata = {} }) {
   const timestamp = new Date().toISOString();
   const emailRecord = {
@@ -698,7 +701,6 @@ async function sendTransactionalEmail({ to, subject, html, text, type = 'GENERAL
 
   initDataDirectories();
 
-  // 1. Human readable log (/data/logs/emails.log)
   try {
     const textLogLine = `[${timestamp}] TYPE=${type} TO=${to} SUBJECT="${subject}" ID=${emailRecord.id}\n`;
     fs.appendFileSync(EMAIL_LOG_FILE, textLogLine, 'utf8');
@@ -706,7 +708,6 @@ async function sendTransactionalEmail({ to, subject, html, text, type = 'GENERAL
     console.error('[EMAIL LOG ERROR] Failed to write emails.log:', err.message);
   }
 
-  // 2. Structured JSON log (/data/logs/log_emails.json)
   try {
     let emailLogs = [];
     if (fs.existsSync(EMAIL_JSON_LOG)) {
@@ -724,27 +725,9 @@ async function sendTransactionalEmail({ to, subject, html, text, type = 'GENERAL
     console.error('[EMAIL JSON LOG ERROR]', err.message);
   }
 
-  // 3. Live SMTP Dispatch if configured
-  if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
+  const transporter = getTransporter();
+  if (transporter) {
     try {
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST || 'smtp.gmail.com',
-        port: parseInt(process.env.SMTP_PORT) || 587,
-        secure: process.env.SMTP_PORT === '465',
-        family: 4,
-        lookup: (hostname, options, callback) => {
-          dns.lookup(hostname, { family: 4 }, callback);
-        },
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS
-        },
-        tls: {
-          rejectUnauthorized: false
-        },
-        connectionTimeout: 10000,
-        socketTimeout: 10000
-      });
       const info = await transporter.sendMail({
         from: `UTHEVERSITY <${DEFAULT_FROM_EMAIL}>`,
         to,
@@ -1052,12 +1035,11 @@ function formatRole(role) {
   return 'Candidate';
 }
 
-// 7. Backend User Aggregation Function (Scans /data/employers/, /data/candidates/, and memory)
+// 7. Backend User Aggregation Function
 function getAllAggregatedUsers() {
   initDataDirectories();
   const userMap = new Map();
 
-  // In-Memory Database scan
   usersDatabase.forEach(u => {
     const rawRole = (u.role || '').toLowerCase();
     const roleNormalized = formatRole(rawRole);
@@ -1079,7 +1061,6 @@ function getAllAggregatedUsers() {
     });
   });
 
-  // Scan /data/employers/ directory
   try {
     if (fs.existsSync(DIRS.employers)) {
       const empFiles = fs.readdirSync(DIRS.employers);
@@ -1112,7 +1093,6 @@ function getAllAggregatedUsers() {
     }
   } catch (err) {}
 
-  // Scan /data/candidates/ directory
   try {
     if (fs.existsSync(DIRS.candidates)) {
       const candFiles = fs.readdirSync(DIRS.candidates);
@@ -1145,7 +1125,6 @@ function getAllAggregatedUsers() {
     }
   } catch (err) {}
 
-  // Fallback seed accounts if store is completely empty
   if (userMap.size === 0) {
     const seedUsers = [
       {
@@ -1194,12 +1173,10 @@ function getAllAggregatedUsers() {
   return Array.from(userMap.values());
 }
 
-// Full Disk Sync & Database Ingestion on Startup
 function loadAllDataFromDisk() {
   initDataDirectories();
   loadCmsConfig();
 
-  // 1. Ingest Employers
   try {
     const empFiles = fs.readdirSync(DIRS.employers).filter(f => f.startsWith('emp_') && f.endsWith('.json'));
     if (empFiles.length > 0) {
@@ -1216,7 +1193,6 @@ function loadAllDataFromDisk() {
     }
   } catch (e) {}
 
-  // 2. Ingest Candidates
   try {
     const candFiles = fs.readdirSync(DIRS.candidates).filter(f => f.startsWith('cand_') && f.endsWith('.json'));
     if (candFiles.length > 0) {
@@ -1233,7 +1209,6 @@ function loadAllDataFromDisk() {
     }
   } catch (e) {}
 
-  // 3. Ingest Listings (Jobs)
   try {
     const jobFiles = fs.readdirSync(DIRS.listings).filter(f => f.startsWith('job_') && f.endsWith('.json'));
     if (jobFiles.length > 0) {
@@ -1248,7 +1223,6 @@ function loadAllDataFromDisk() {
     }
   } catch (e) {}
 
-  // 4. Ingest Applications
   try {
     const appFiles = fs.readdirSync(DIRS.applications).filter(f => f.startsWith('app_') && f.endsWith('.json'));
     if (appFiles.length > 0) {
@@ -1263,7 +1237,6 @@ function loadAllDataFromDisk() {
     }
   } catch (e) {}
 
-  // 5. Ingest Messages
   try {
     const msgFiles = fs.readdirSync(DIRS.messages).filter(f => f.startsWith('thread_') && f.endsWith('.json'));
     if (msgFiles.length > 0) {
@@ -1278,7 +1251,6 @@ function loadAllDataFromDisk() {
     }
   } catch (e) {}
 
-  // 6. Default PDF Resume in /data/resumes/
   try {
     const sampleResume = path.join(DIRS.resumes, 'Marcus_Vance_Resume_2026.pdf');
     if (!fs.existsSync(sampleResume)) {
@@ -1289,10 +1261,8 @@ function loadAllDataFromDisk() {
   writeSystemLog('SYSTEM_BOOT', { message: 'UTHEVERSITY Storage & Indexing Engine Initialized' });
 }
 
-// Execute auto-initialization & database loading on startup
 loadAllDataFromDisk();
 
-// Hunter.io Lead Search Simulation
 function handleHunterDomainSearch(params) {
   const domain = (params.get('domain') || 'stripe.com').toLowerCase().trim();
   const companyName = domain.split('.')[0].toUpperCase();
@@ -1337,12 +1307,10 @@ function handleHunterDomainSearch(params) {
   };
 }
 
-// Strict Host-Header Subdomain Resolver
 function resolveTargetFileForHost(req, parsedUrl) {
   const pathname = parsedUrl.pathname;
   const cleanPath = pathname.toLowerCase().replace(/\/+$/, '');
 
-  // 1. Route aliases
   if (cleanPath === '/recruiter' || cleanPath === '/recruiter.html' || cleanPath === '/post' || cleanPath === '/u-thepost-enterprise-edition.html' || cleanPath === '/u-thepost-dual link to u-thejobs.html' || cleanPath === '/u-thepost-dual link & mobile.html') {
     return 'recruiter.html';
   }
@@ -1356,7 +1324,6 @@ function resolveTargetFileForHost(req, parsedUrl) {
     return 'preview-hub.html';
   }
 
-  // Static files on disk
   if (cleanPath !== '' && cleanPath !== '/' && cleanPath !== '/index.html') {
     const rawFile = pathname.replace(/^\//, '');
     const candidatePath = path.join(__dirname, decodeURIComponent(rawFile));
@@ -1365,29 +1332,24 @@ function resolveTargetFileForHost(req, parsedUrl) {
     }
   }
 
-  // 2. Strict Subdomain Host Resolution
   const rawHost = req.headers['x-forwarded-host'] || req.headers.host || '';
   const firstHost = rawHost.split(',')[0].trim().toLowerCase();
   const host = firstHost.split(':')[0].trim();
 
   const subQuery = (parsedUrl.searchParams.get('subdomain') || parsedUrl.searchParams.get('role') || '').toLowerCase().trim();
 
-  // Post / Recruiter -> Serves ONLY recruiter.html
   if (host === 'post.utheversity.com' || host.startsWith('post.') || host.includes('recruiter.') || subQuery === 'post' || subQuery === 'recruiter') {
     return 'recruiter.html';
   }
 
-  // Jobs / Candidate -> Serves ONLY candidate.html
   if (host === 'jobs.utheversity.com' || host.startsWith('jobs.') || host.includes('candidate.') || subQuery === 'jobs' || subQuery === 'candidate') {
     return 'candidate.html';
   }
 
-  // Admin -> Serves ONLY admin.html
   if (host === 'admin.utheversity.com' || host.startsWith('admin.') || subQuery === 'admin') {
     return 'admin.html';
   }
 
-  // Direct IP / Localhost / Fallback -> Serves preview-hub.html
   return 'preview-hub.html';
 }
 
@@ -1399,7 +1361,6 @@ const server = http.createServer(async (req, res) => {
   const pathname = parsedUrl.pathname;
   const cleanPath = (pathname.replace(/\/+$/, '') || '/').toLowerCase();
 
-  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-Admin-Portal');
@@ -1430,7 +1391,6 @@ const server = http.createServer(async (req, res) => {
 
   // ----------------------------------------------------
   // HIGH-PRIORITY ROUTING: /api/admin/test-email
-  // Guaranteed definition before all sub-routes & catch-alls
   // ----------------------------------------------------
   if ((cleanPath === '/api/admin/test-email' || pathname === '/api/admin/test-email') && (req.method === 'POST' || req.method === 'GET')) {
     const user = getAuthenticatedUser(req);
@@ -1445,37 +1405,16 @@ const server = http.createServer(async (req, res) => {
         let isVerified = false;
         let verifyError = null;
 
-        // Verify transporter connection
-        if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
+        const transporter = getTransporter();
+        if (transporter) {
           try {
-            const transporter = nodemailer.createTransport({
-              host: process.env.SMTP_HOST || 'smtp.gmail.com',
-              port: parseInt(process.env.SMTP_PORT) || 587,
-              secure: process.env.SMTP_PORT === '465',
-              family: 4,
-              lookup: (hostname, options, callback) => {
-                dns.lookup(hostname, { family: 4 }, callback);
-              },
-              auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS
-              },
-              tls: {
-                rejectUnauthorized: false
-              },
-              connectionTimeout: 10000,
-              socketTimeout: 10000
-            });
-            if (transporter && transporter.verify) {
-              await transporter.verify();
-            }
+            await transporter.verify();
             isVerified = true;
           } catch (vErr) {
             verifyError = vErr.message;
           }
         }
 
-        // Send test email via Nodemailer / structured logging engine
         const emailResult = await sendTransactionalEmail({
           to: recipient,
           subject: customSubject || 'u-theADMIN — Live Transactional Email System Test',
@@ -1493,7 +1432,8 @@ const server = http.createServer(async (req, res) => {
         });
 
         const deliveryId = emailResult.messageId || emailResult.id || 'EML-' + Math.floor(Math.random() * 900000 + 100000);
-        const smtpStatus = isVerified ? 'CONNECTED' : (SMTP_CONFIG.auth ? 'DISCONNECTED' : 'LOGGED_FALLBACK');
+        const hasAuth = Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
+        const smtpStatus = isVerified ? 'CONNECTED' : (hasAuth ? 'DISCONNECTED' : 'LOGGED_FALLBACK');
 
         return sendJson(200, {
           success: true,
@@ -1507,7 +1447,7 @@ const server = http.createServer(async (req, res) => {
           from: DEFAULT_FROM_EMAIL,
           details: isVerified
             ? `Google Workspace SMTP handshake verified. Test email delivered with ID ${deliveryId}.`
-            : (SMTP_CONFIG.auth
+            : (hasAuth
                 ? `SMTP verification notice (${verifyError || 'Logged'}). Logged to fallback /data/logs/emails.log.`
                 : `SMTP credentials unconfigured. Safely recorded to logs.`),
           timestamp: new Date().toISOString()
@@ -1572,7 +1512,6 @@ const server = http.createServer(async (req, res) => {
       }
       writeSystemLog('USER_SIGNUP', { userId: newUser.id, role: newUser.role, email: newUser.email });
 
-      // Trigger 1: Sign-Up Welcome Email
       sendWelcomeEmail(newUser);
 
       const token = generateJwt({ userId: newUser.id, role: newUser.role, email: newUser.email });
@@ -1584,7 +1523,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Trigger 2: Password Reset Request (/api/auth/forgot-password)
   if (pathname === '/api/auth/forgot-password' && req.method === 'POST') {
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON body' });
@@ -1743,10 +1681,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // PUBLIC JOB LISTING SANITIZATION HELPER
-  // Strips confidential internal fields, applicant counts, and recruiter account details
-  // ----------------------------------------------------
   function sanitizeJobForPublic(job) {
     if (!job) return null;
     return {
@@ -1772,9 +1706,6 @@ const server = http.createServer(async (req, res) => {
     };
   }
 
-  // ----------------------------------------------------
-  // SMART OMNI-SEARCH FOR MASTER ADMIN (PROTECTED)
-  // ----------------------------------------------------
   if (pathname === '/api/admin/search' && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
     if (!isAdmin(user)) {
@@ -1822,10 +1753,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // CMS OVERRIDE & MASTER CONFIGURATION ROUTES
-  // Strict Cache-Control Headers for instant live sync & cache invalidation
-  // ----------------------------------------------------
   if (pathname.startsWith('/api/cms')) {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
     res.setHeader('Pragma', 'no-cache');
@@ -1861,10 +1788,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // ADMIN USER CRUD ROUTES (PROTECTED: ADMIN ONLY)
-  // Aggregates /data/employers/, /data/candidates/, and memory
-  // ----------------------------------------------------
   if (pathname === '/api/admin/users' && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
     if (!isAdmin(user)) {
@@ -2056,9 +1979,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // SYSTEM HEALTH & ADMIN TELEMETRY
-  // ----------------------------------------------------
   if (pathname === '/api/health') {
     sendJson(200, {
       status: 'healthy',
@@ -2101,11 +2021,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // PUBLIC JOB BOARD ENDPOINT (/api/listings/public)
-  // Sanitized public position details (Title, Company, Location, Salary, Perks, Description)
-  // Zero private candidate or employer account leaks
-  // ----------------------------------------------------
   if (pathname === '/api/listings/public' && req.method === 'GET') {
     const publicJobs = globalJobDatabase
       .filter(j => (j.status || 'Active') === 'Active')
@@ -2114,10 +2029,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // JOBS CRUD & INSTANT REAL-TIME BROADCAST
-  // Public callers receive sanitized listings; authenticated recruiters/admins receive full records
-  // ----------------------------------------------------
   if (pathname === '/api/jobs' && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
     if (isRecruiterOrAdmin(user)) {
@@ -2186,9 +2097,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // RESUME UPLOADS & STRICT PDF VALIDATION (AUTHENTICATED)
-  // ----------------------------------------------------
   if (pathname === '/api/resumes/upload' && req.method === 'POST') {
     const user = getAuthenticatedUser(req);
     if (!user) {
@@ -2200,7 +2108,6 @@ const server = http.createServer(async (req, res) => {
       const { filename, fileBase64 } = body;
       if (!filename) return sendJson(400, { error: 'Filename is required' });
 
-      // Strictly validate .pdf extension
       const ext = path.extname(filename).toLowerCase();
       if (ext !== '.pdf') {
         return sendJson(400, { error: 'Strict Validation Error: Only .pdf files are permitted for candidate resumes.' });
@@ -2225,7 +2132,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Protected Candidate Resume Direct PDF Download
   if ((pathname.startsWith('/data/resumes/') || pathname.startsWith('/api/resumes/')) && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
     if (!user) {
@@ -2243,10 +2149,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // APPLICANTS & APPLICATIONS INGESTION & ACCESS CONTROL
-  // Trigger 3: Candidate Application Receipt & Recruiter Alert
-  // ----------------------------------------------------
   if ((pathname === '/api/applicants' || pathname === '/api/applications') && req.method === 'POST') {
     readBody((err, payload) => {
       if (err) return sendJson(400, { error: err.message });
@@ -2257,7 +2159,6 @@ const server = http.createServer(async (req, res) => {
         return sendJson(400, { error: 'Strict Validation Error: Only .pdf files are permitted for candidate resumes.' });
       }
 
-      // Ensure PDF file saved to /data/resumes/
       const cleanResumeName = path.basename(resumeFileName).replace(/[^a-zA-Z0-9._-]/g, '_');
       const resumeTarget = path.join(DIRS.resumes, cleanResumeName);
       if (!fs.existsSync(resumeTarget)) {
@@ -2291,7 +2192,6 @@ const server = http.createServer(async (req, res) => {
       saveApplicantRecord(newApplicant);
       writeSystemLog('CANDIDATE_APPLIED', { applicantId: newApplicant.id, jobId: newApplicant.jobId, name: newApplicant.name });
 
-      // Look up target job position for recruiter alerts
       const targetJob = globalJobDatabase.find(j => j.id === newApplicant.jobId) || {
         id: newApplicant.jobId,
         jobTitle: newApplicant.jobTitle,
@@ -2299,7 +2199,6 @@ const server = http.createServer(async (req, res) => {
         recruiterEmail: 'contact@utheversity.com'
       };
 
-      // Trigger 3A: Candidate Receipt & Trigger 3B: Recruiter Alert
       sendApplicationReceiptToCandidate(newApplicant, targetJob);
       sendNewApplicantAlertToRecruiter(newApplicant, targetJob);
 
@@ -2309,7 +2208,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // Protected applicant list (Recruiters & Admins only)
   if ((pathname === '/api/applicants' || pathname === '/api/applications') && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
     if (!user) {
@@ -2322,10 +2220,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // TWO-WAY CANDIDATE & RECRUITER MESSAGING (PROTECTED)
-  // Trigger 4: Direct Message Notification Alert
-  // ----------------------------------------------------
   if (pathname === '/api/messages' && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
     if (!user) {
@@ -2365,7 +2259,6 @@ const server = http.createServer(async (req, res) => {
       saveMessageRecord(newMsg);
       writeSystemLog('MESSAGE_SENT', { messageId: newMsg.id, applicantId: newMsg.applicantId, senderRole: newMsg.senderRole, userId: user.id || user.userId });
 
-      // Trigger 4: Direct Message Notification Alert
       const targetApp = applicantsStore.find(a => a.id === newMsg.applicantId);
       let recipientEmail = 'candidate@domain.com';
       let recipientName = 'Candidate';
@@ -2393,9 +2286,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // TRANSACTIONAL EMAIL DISPATCH LOGS (PROTECTED ADMIN)
-  // ----------------------------------------------------
   if (pathname === '/api/admin/emails' && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
     if (!isAdmin(user)) {
@@ -2412,9 +2302,6 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  // ----------------------------------------------------
-  // TRANSACTIONAL EMAIL DIAGNOSTIC & TEST DISPATCH (ADMIN ONLY)
-  // ----------------------------------------------------
   if (pathname === '/api/admin/smtp-status' && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
     const isFromAdminPortal = isRequestFromAdminDomain(req);
@@ -2425,26 +2312,9 @@ const server = http.createServer(async (req, res) => {
     let isVerified = false;
     let verifyError = null;
 
-    if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
+    const transporter = getTransporter();
+    if (transporter) {
       try {
-        const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST || 'smtp.gmail.com',
-          port: parseInt(process.env.SMTP_PORT) || 587,
-          secure: process.env.SMTP_PORT === '465',
-          family: 4,
-          lookup: (hostname, options, callback) => {
-            dns.lookup(hostname, { family: 4 }, callback);
-          },
-          auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS
-          },
-          tls: {
-            rejectUnauthorized: false
-          },
-          connectionTimeout: 10000,
-          socketTimeout: 10000
-        });
         await transporter.verify();
         isVerified = true;
       } catch (vErr) {
@@ -2452,7 +2322,8 @@ const server = http.createServer(async (req, res) => {
       }
     }
 
-    const smtpStatus = isVerified ? 'CONNECTED' : (SMTP_CONFIG.auth ? 'DISCONNECTED' : 'LOGGED_FALLBACK');
+    const hasAuth = Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
+    const smtpStatus = isVerified ? 'CONNECTED' : (hasAuth ? 'DISCONNECTED' : 'LOGGED_FALLBACK');
 
     sendJson(200, {
       status: 'success',
@@ -2460,11 +2331,11 @@ const server = http.createServer(async (req, res) => {
       verified: isVerified,
       verifyError,
       config: {
-        host: SMTP_CONFIG.host,
-        port: SMTP_CONFIG.port,
-        user: SMTP_CONFIG.auth ? SMTP_CONFIG.auth.user : '(None / Fallback)',
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: parseInt(process.env.SMTP_PORT) || 587,
+        user: process.env.SMTP_USER || '(None / Fallback)',
         from: DEFAULT_FROM_EMAIL,
-        secure: SMTP_CONFIG.secure,
+        secure: process.env.SMTP_PORT === '465',
         family: 4
       },
       timestamp: new Date().toISOString()
@@ -2472,120 +2343,10 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (pathname === '/api/admin/test-email' && (req.method === 'POST' || req.method === 'GET')) {
-    const user = getAuthenticatedUser(req);
-    const isFromAdminPortal = isRequestFromAdminDomain(req);
-    if (!isAdmin(user) && !isFromAdminPortal) {
-      return sendJson(401, { error: 'Unauthorized: Master Administrator authentication required.' });
-    }
-
-    const handleTestDispatch = async (targetEmail, customSubject) => {
-      const emailTo = (targetEmail || 'contact@utheversity.com').trim();
-      let isVerified = false;
-      let verifyError = null;
-
-      if (nodemailer && SMTP_CONFIG.auth && SMTP_CONFIG.auth.user) {
-        try {
-          const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST || 'smtp.gmail.com',
-            port: parseInt(process.env.SMTP_PORT) || 587,
-            secure: process.env.SMTP_PORT === '465',
-            family: 4,
-            lookup: (hostname, options, callback) => {
-              dns.lookup(hostname, { family: 4 }, callback);
-            },
-            auth: {
-              user: process.env.SMTP_USER,
-              pass: process.env.SMTP_PASS
-            },
-            tls: {
-              rejectUnauthorized: false
-            },
-            connectionTimeout: 10000,
-            socketTimeout: 10000
-          });
-          await transporter.verify();
-          isVerified = true;
-        } catch (vErr) {
-          verifyError = vErr.message;
-        }
-      }
-
-      const bodyContent = `
-        <p>Hello <strong>Zion Daye</strong>,</p>
-        <p>This is a live transactional email diagnostic test sent from the <strong>u-theADMIN Master High-Density Suite</strong>.</p>
-        <div class="details-box">
-          <div class="details-row"><span class="details-label">SMTP Connection:</span><span class="details-value">${isVerified ? 'VERIFIED (Google Workspace / SMTP)' : (SMTP_CONFIG.auth ? 'VERIFY_FAILED (Logged to Fallback)' : 'LOGGED_FALLBACK (No Live SMTP Credentials)')}</span></div>
-          <div class="details-row"><span class="details-label">SMTP Host:</span><span class="details-value">${SMTP_CONFIG.host}:${SMTP_CONFIG.port}</span></div>
-          <div class="details-row"><span class="details-label">Configured Sender:</span><span class="details-value">${DEFAULT_FROM_EMAIL}</span></div>
-          <div class="details-row"><span class="details-label">Target Recipient:</span><span class="details-value">${emailTo}</span></div>
-          <div class="details-row"><span class="details-label">Dispatch Timestamp:</span><span class="details-value">${new Date().toISOString()}</span></div>
-        </div>
-        <p>All transactional templates, user governance alerts, reset links, and applicant receipts are functioning normally across u-thePOST, u-theJOBS, and u-theADMIN.</p>
-      `;
-
-      const emailResult = await sendTransactionalEmail({
-        to: emailTo,
-        subject: customSubject || '[UTHEVERSITY] Google Workspace SMTP Diagnostic Test — Verified Delivery',
-        type: 'DIAGNOSTIC_TEST_EMAIL',
-        metadata: { adminUserId: user.id || user.userId, targetEmail: emailTo, isVerified, verifyError },
-        html: buildBrandedEmailHtml({
-          title: 'Google Workspace SMTP Diagnostic Test',
-          bodyContent,
-          ctaText: 'ACCESS U-THEADMIN MASTER SUITE',
-          ctaUrl: 'https://admin.utheversity.com'
-        })
-      });
-
-      const smtpStatus = isVerified ? 'CONNECTED' : (SMTP_CONFIG.auth ? 'DISCONNECTED' : 'LOGGED_FALLBACK');
-
-      sendJson(200, {
-        status: 'success',
-        smtpStatus,
-        verified: isVerified,
-        messageId: emailResult.messageId || emailResult.id,
-        deliveryId: emailResult.messageId || emailResult.id,
-        to: emailTo,
-        from: DEFAULT_FROM_EMAIL,
-        smtpConfig: {
-          host: SMTP_CONFIG.host,
-          port: SMTP_CONFIG.port,
-          user: SMTP_CONFIG.auth ? SMTP_CONFIG.auth.user : null,
-          secure: SMTP_CONFIG.secure
-        },
-        verifyError,
-        details: isVerified
-          ? `Google Workspace SMTP handshake verified. Test email delivered with ID ${emailResult.messageId || emailResult.id}.`
-          : (SMTP_CONFIG.auth
-              ? `SMTP verification error (${verifyError}). Logged to fallback /data/logs/emails.log.`
-              : `SMTP credentials unconfigured in environment. Test email safely recorded to fallback logs.`),
-        timestamp: new Date().toISOString()
-      });
-    };
-
-    if (req.method === 'POST') {
-      readBody((err, body) => {
-        if (err) return sendJson(400, { error: 'Invalid JSON body' });
-        const target = body.to || body.email || parsedUrl.searchParams.get('to') || 'contact@utheversity.com';
-        handleTestDispatch(target, body.subject);
-      });
-    } else {
-      const target = parsedUrl.searchParams.get('to') || 'contact@utheversity.com';
-      handleTestDispatch(target);
-    }
-    return;
-  }
-
-  // ----------------------------------------------------
-  // API ROUTE FALLBACK GUARD (Prevent HTML on unmatched /api/* routes)
-  // ----------------------------------------------------
   if (pathname.startsWith('/api/')) {
     return sendJson(404, { error: `API endpoint ${pathname} not found.` });
   }
 
-  // ----------------------------------------------------
-  // STATIC FILE SERVING & SUBDOMAIN ROUTING
-  // ----------------------------------------------------
   const targetFileName = resolveTargetFileForHost(req, parsedUrl);
   const filePath = path.join(__dirname, decodeURIComponent(targetFileName));
 
@@ -2616,9 +2377,6 @@ const server = http.createServer(async (req, res) => {
   });
 });
 
-// ----------------------------------------------------
-// LIVE SYNC RELAY & AUTO-HEARTBEAT
-// ----------------------------------------------------
 let wss = null;
 const connectedClients = new Set();
 
@@ -2631,7 +2389,6 @@ function initWebSocket() {
     wss.on('connection', (ws, req) => {
       connectedClients.add(ws);
 
-      // Send initial state snapshot
       try {
         ws.send(JSON.stringify({
           type: 'INITIAL_STATE',
@@ -2646,14 +2403,12 @@ function initWebSocket() {
         try {
           const data = JSON.parse(message.toString());
 
-          // Broadcast to all other connected clients immediately
           for (const client of connectedClients) {
             if (client !== ws && client.readyState === wsModule.OPEN) {
               try { client.send(JSON.stringify(data)); } catch (e) {}
             }
           }
 
-          // Handle server mutations
           if ((data.type === 'SUBMIT_JOB' || data.type === 'JOB_PUBLISHED') && (data.jobPayload || data.job)) {
             const p = data.jobPayload || data.job;
             const newJob = {
@@ -2724,7 +2479,6 @@ function initWebSocket() {
       ws.on('error', () => { connectedClients.delete(ws); });
     });
 
-    // 25-second heartbeat
     setInterval(() => {
       connectedClients.forEach(client => {
         if (client.readyState === 1) {
