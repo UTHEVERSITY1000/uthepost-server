@@ -1467,8 +1467,58 @@
     </div>
   </div>
 
+  <!-- SIGNATURE CUSTOM CONFIRMATION MODAL CARD -->
+  <div class="custom-modal-alert" id="custom-modal-confirm" style="display: none;">
+    <div class="custom-alert-card">
+      <div class="alert-card-title" id="custom-confirm-title">CONFIRM ACTION</div>
+      <div class="alert-card-msg" id="custom-confirm-msg">Are you sure you want to proceed?</div>
+      <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; justify-content: center;">
+        <button class="btn-gold" id="custom-confirm-btn-yes" style="height: 32px; padding: 0 1rem;">YES, PROCEED</button>
+        <button class="btn-surface-sm" onclick="closeCustomConfirm()" style="height: 32px; padding: 0 1rem;">CANCEL</button>
+      </div>
+    </div>
+  </div>
+
   <!-- JAVASCRIPT LOGIC -->
   <script>
+    /* ============================================================================
+     * CRITICAL CODE DIRECTIVE & MANDATE:
+     * NEVER USE NATIVE BROWSER SYSTEM POPUPS (alert(), confirm(), prompt())! 
+     * ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS (showCustomModalAlert / Custom Confirm Modals).
+     * ============================================================================ */
+
+    let pendingConfirmCallback = null;
+
+    window.showCustomModalConfirm = function(title, msg, onConfirm) {
+      const titleEl = document.getElementById('custom-confirm-title');
+      const msgEl = document.getElementById('custom-confirm-msg');
+      const modalEl = document.getElementById('custom-modal-confirm');
+      if (titleEl) titleEl.textContent = title;
+      if (msgEl) msgEl.textContent = msg;
+      pendingConfirmCallback = onConfirm;
+      if (modalEl) modalEl.style.display = 'flex';
+    };
+
+    window.closeCustomConfirm = function() {
+      const modalEl = document.getElementById('custom-modal-confirm');
+      if (modalEl) modalEl.style.display = 'none';
+      pendingConfirmCallback = null;
+    };
+
+    window.showCustomModalAlert = function(title, msg) {
+      const titleEl = document.getElementById('custom-alert-title');
+      const msgEl = document.getElementById('custom-alert-msg');
+      const modalEl = document.getElementById('custom-modal-alert');
+      if (titleEl) titleEl.textContent = title || 'UTHEVERSITY NOTIFICATION';
+      if (msgEl) msgEl.textContent = msg || '';
+      if (modalEl) modalEl.style.display = 'flex';
+    };
+
+    window.closeCustomAlert = function() {
+      const modalEl = document.getElementById('custom-modal-alert');
+      if (modalEl) modalEl.style.display = 'none';
+    };
+
     let adminJobs = [];
     let adminApplicants = [];
     let adminUsers = [];
@@ -1959,12 +2009,20 @@
         showCustomModalAlert('Protected Account', 'The Master Owner account (Zion Daye) cannot be deleted.');
         return;
       }
-      try {
-        await fetch(`/api/admin/users/${uid}`, { method: 'DELETE' });
-        adminUsers = adminUsers.filter(u => (u.userId || u.id) !== uid);
-        renderUserTable(adminUsers);
-        showCustomModalAlert('User Removed', `User account ${uid} was removed.`);
-      } catch (e) {}
+      showCustomModalConfirm(
+        'PERMANENTLY DELETE USER',
+        `Are you sure you want to permanently delete user account ${uid}?`,
+        async () => {
+          try {
+            await fetch(`/api/admin/users/${uid}`, { method: 'DELETE' });
+            adminUsers = adminUsers.filter(u => (u.userId || u.id) !== uid);
+            renderUserTable(adminUsers);
+            showCustomModalAlert('User Removed', `User account ${uid} was removed.`);
+          } catch (e) {
+            showCustomModalAlert('Action Error', 'Could not process user deletion.');
+          }
+        }
+      );
     };
 
     // 5. MASTER LISTINGS & APPLICATIONS CRUD
@@ -2040,10 +2098,20 @@
     }
 
     async function deleteJobAdmin(id) {
-      await fetch(`/api/jobs/${id}`, { method: 'DELETE' });
-      adminJobs = adminJobs.filter(j => j.id !== id);
-      renderAdminJobs();
-      showCustomModalAlert('Job Removed', `Position ${id} removed from catalog.`);
+      showCustomModalConfirm(
+        'PERMANENTLY DELETE LISTING',
+        `Are you sure you want to permanently delete position ${id} from the master catalog?`,
+        async () => {
+          try {
+            await fetch(`/api/jobs/${id}`, { method: 'DELETE', headers: getAdminAuthHeaders() });
+            adminJobs = adminJobs.filter(j => j.id !== id);
+            renderAdminJobs();
+            showCustomModalAlert('Job Removed', `Position ${id} removed from catalog.`);
+          } catch (e) {
+            showCustomModalAlert('Action Error', 'Could not process job deletion.');
+          }
+        }
+      );
     }
 
     function renderAdminApplicants(list = null) {
@@ -2400,6 +2468,17 @@
     }, 3000);
 
     window.addEventListener('DOMContentLoaded', async () => {
+      const yesBtn = document.getElementById('custom-confirm-btn-yes');
+      if (yesBtn) {
+        yesBtn.onclick = function() {
+          if (typeof pendingConfirmCallback === 'function') {
+            const cb = pendingConfirmCallback;
+            pendingConfirmCallback = null;
+            cb();
+          }
+          closeCustomConfirm();
+        };
+      }
       await ensureMasterAdminSession();
       loadAdminData();
       connectLiveSync();

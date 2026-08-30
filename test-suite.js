@@ -1788,6 +1788,63 @@ async function runTests() {
     assert(false, `Group 34 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 35: BAN NATIVE BROWSER POPUPS & SIGNATURE CONFIRMATION CARDS
+  // ================================================================
+  console.log('\n--- GROUP 35: BAN NATIVE BROWSER POPUPS & SIGNATURE CONFIRMATION CARDS ---');
+  try {
+    const allPlatformFiles = [
+      'server.js',
+      'candidate.html',
+      'u-theJOBS-ENTERPRISE-SYNC.html',
+      'u-theJOBS-DUAL LINK TO u-thePOST.html',
+      'recruiter.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html',
+      'admin.html',
+      'u-theADMIN-MASTER-SUITE.html'
+    ];
+
+    const htmlFiles = allPlatformFiles.filter(f => f.endsWith('.html'));
+
+    // 1. Verify Mandate Comment Block across ALL 10 files
+    const mandateString = 'NEVER USE NATIVE BROWSER SYSTEM POPUPS (alert(), confirm(), prompt())!';
+    for (const file of allPlatformFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+      assert(content.includes(mandateString), `${file} includes critical code directive mandate comment block`);
+    }
+
+    // 2. Verify Custom Confirmation Modal Card HTML across ALL 9 HTML files
+    for (const file of htmlFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+      assert(content.includes('id="custom-modal-confirm"'), `${file} defines #custom-modal-confirm element`);
+      assert(content.includes('id="custom-confirm-title"'), `${file} defines #custom-confirm-title element`);
+      assert(content.includes('id="custom-confirm-msg"'), `${file} defines #custom-confirm-msg element`);
+      assert(content.includes('id="custom-confirm-btn-yes"'), `${file} defines #custom-confirm-btn-yes element`);
+      assert(content.includes('closeCustomConfirm()'), `${file} connects closeCustomConfirm() cancel button`);
+      assert(content.includes('showCustomModalConfirm'), `${file} implements showCustomModalConfirm()`);
+      assert(content.includes('closeCustomConfirm'), `${file} implements closeCustomConfirm()`);
+    }
+
+    // 3. Verify Zero Executable Native Popups across ALL HTML files
+    for (const file of htmlFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+      // Strip comments to ensure no executable alert/confirm/prompt calls
+      const stripped = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '');
+      const hasNativeAlert = /\balert\s*\(/.test(stripped);
+      const hasNativeConfirm = /\bconfirm\s*\(/.test(stripped);
+      const hasNativePrompt = /\bprompt\s*\(/.test(stripped);
+
+      assert(!hasNativeAlert, `${file} contains ZERO executable native alert() calls`);
+      assert(!hasNativeConfirm, `${file} contains ZERO executable native confirm() calls`);
+      assert(!hasNativePrompt, `${file} contains ZERO executable native prompt() calls`);
+    }
+
+  } catch (err) {
+    assert(false, `Group 35 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

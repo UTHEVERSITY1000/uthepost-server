@@ -1,3 +1,9 @@
+/* ============================================================================
+ * CRITICAL CODE DIRECTIVE & MANDATE:
+ * NEVER USE NATIVE BROWSER SYSTEM POPUPS (alert(), confirm(), prompt())! 
+ * ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS (showCustomModalAlert / Custom Confirm Modals).
+ * ============================================================================ */
+
 const dns = require('dns');
 if (dns.setDefaultResultOrder) { dns.setDefaultResultOrder('ipv4first'); }
 
