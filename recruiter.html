@@ -1736,7 +1736,6 @@
       font-size: 0.58rem !important;
     }
 
-    /* Sleek Compact Navigation Tab Buttons */
     /* Login Button: Black outline & black text */
     .btn-auth-header, #btn-auth-status {
       background-color: transparent !important;
@@ -1759,18 +1758,10 @@
       height: 28px !important;
       padding: 0 0.55rem !important;
       font-size: 0.62rem !important;
-      font-weight: 700 !important;
       letter-spacing: 0.5px !important;
       border-radius: 4px !important;
     }
 
-    /* Compact Login / Sign Up Action Button */
-    .btn-auth-header, #btn-auth-status {
-      height: 28px !important;
-      padding: 0 0.65rem !important;
-      font-size: 0.60rem !important;
-      letter-spacing: 0.04em !important;
-      border-radius: 4px !important;
     /* UI Menu Tab Selected: Signature Gold fill & black text */
     .nav-tab-btn.active, .drawer-tab-btn.active {
       background-color: #FEBA27 !important;
@@ -1820,12 +1811,8 @@
       background-color: #F1F5F9 !important;
     }
 
-    /* Active Selected State: High-Contrast Limousine Charcoal & Gold */
     /* Perks Pills (Card 1 Selected State: Medium Airy Grey) */
     .perk-pill.active {
-      background-color: #111827 !important;
-      color: #FEBA27 !important;
-      border-color: #111827 !important;
       background-color: #94A3B8 !important; /* Medium Airy Grey */
       color: #1E293B !important;            /* Dark Smoke Grey */
       border-color: #64748B !important;
@@ -1853,15 +1840,23 @@
     }
 
     /* Mobile Top Deck & Horizontal Menu Belt (@media max-width: 768px) */
+    /* ==========================================================================
+       LOCKED SECTION — DO NOT MODIFY OR REVERT WITHOUT EXPLICIT USER DIRECTIVE
+       MOBILE TOP DECK (ROW 1) & INFINITE HORIZONTAL BELT (ROW 2)
+       ========================================================================== */
     @media (max-width: 768px) {
       /* Split header into 2 distinct rows on mobile viewports */
+      /* ROW 1: TOP DECK ONLY (Brand Title, Upload Logo, Auth Button) */
       header, .recruiter-header {
         display: flex !important;
         flex-wrap: wrap !important;
         height: auto !important;
         padding: 0.4rem 0.75rem !important;
+        padding: 0.5rem 0.75rem !important;
         justify-content: space-between !important;
         align-items: center !important;
+        background-color: #FFFFFF !important;
+        border-bottom: 2px solid #FEBA27 !important;
       }
 
       /* Row 1 Left: Brand Title & Logo Upload */
@@ -1880,6 +1875,7 @@
       }
 
       /* Row 2: UI Menu Belt snugged directly beneath top deck */
+      /* ROW 2: INFINITE HORIZONTAL UI BELT SNUGGED DIRECTLY BENEATH TOP DECK */
       .portal-navigation, nav.header-center-tabs {
         order: 3 !important;
         flex: 0 0 100% !important;
@@ -1887,12 +1883,18 @@
         margin-top: 0.35rem !important;
         padding-top: 0.35rem !important;
         border-top: 1px solid var(--border-color, #E2E8F0) !important;
+        border-top: 1px solid #E2E8F0 !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         overflow-x: auto !important;
         white-space: nowrap !important;
         -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
         gap: 0.35rem !important;
+      }
+
+      .portal-navigation::-webkit-scrollbar, nav.header-center-tabs::-webkit-scrollbar {
+        display: none !important;
       }
 
       .portal-navigation button, nav.header-center-tabs button {
@@ -1900,8 +1902,12 @@
         height: 30px !important;
         font-size: 0.62rem !important;
         padding: 0 0.55rem !important;
+        white-space: nowrap !important;
       }
     }
+    /* ==========================================================================
+       END LOCKED SECTION
+       ========================================================================== */
   </style>
 </head>
 <body>
@@ -2071,7 +2077,6 @@
               <span class="panel-title" id="card2-title-text" data-cms-key="post-card2-title">2. LIVE POST PREVIEW</span>
               <div style="display:flex; gap:0.4rem; align-items:center;">
                 <span class="urgent-hiring-badge" id="badge-urgent-hiring" data-cms-key="post-preview-badge">URGENT HIRING</span>
-                <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">CANDIDATE VIEWPORT</span>
                 <span class="candidate-viewport-badge" style="font-size: 0.65rem; color: #EF4444; font-weight: 800; background: transparent; border: 1.5px solid #EF4444; padding: 0.2rem 0.5rem; border-radius: 4px;">CANDIDATE VIEWPORT</span>
               </div>
             </div>

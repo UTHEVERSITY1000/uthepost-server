@@ -2371,7 +2371,6 @@ async function runTests() {
 
     // 5. Enterprise Tech Perks & Benefits Micro-Tag Specification
     assert(recruiterHtml.includes('.perk-pill') && recruiterHtml.includes('height: 22px !important') && recruiterHtml.includes('background-color: #F8FAFC !important'), 'recruiter.html defines sleek 22px micro-tag .perk-pill');
-    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #111827 !important') && recruiterHtml.includes('color: #FEBA27 !important'), 'recruiter.html defines high-contrast charcoal and gold active perk pill');
     assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #94A3B8 !important'), 'recruiter.html defines active perk pill style');
 
   } catch (err) {
@@ -2439,6 +2438,25 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 55 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 56: ABSOLUTE CODE LOCK & MOBILE BELT RESTORATION
+  // ================================================================
+  console.log('\n--- GROUP 56: ABSOLUTE CODE LOCK & MOBILE BELT RESTORATION ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Locked section comment guards
+    assert(recruiterHtml.includes('LOCKED SECTION — DO NOT MODIFY OR REVERT WITHOUT EXPLICIT USER DIRECTIVE'), 'recruiter.html includes protective locked section header');
+    assert(recruiterHtml.includes('END LOCKED SECTION'), 'recruiter.html includes protective locked section footer');
+
+    // 2. Mobile 2-row layout with gold border
+    assert(recruiterHtml.includes('border-bottom: 2px solid #FEBA27 !important'), 'recruiter.html enforces 2px gold bottom border on mobile header');
+    assert(recruiterHtml.includes('scrollbar-width: none !important') && recruiterHtml.includes('::-webkit-scrollbar'), 'recruiter.html suppresses scrollbars for clean infinite belt');
+
+  } catch (err) {
+    assert(false, `Group 56 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
