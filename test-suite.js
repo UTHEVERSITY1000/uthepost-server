@@ -2349,6 +2349,34 @@ async function runTests() {
     assert(false, `Group 52 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 53: TOP DECK & PERKS PILLS UI REFINEMENT
+  // ================================================================
+  console.log('\n--- GROUP 53: TOP DECK & PERKS PILLS UI REFINEMENT ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Compact Top Deck Header (44px)
+    assert(recruiterHtml.includes('header, .recruiter-header') && recruiterHtml.includes('height: 44px !important') && recruiterHtml.includes('padding: 0 0.75rem !important'), 'recruiter.html enforces sleek 44px height and 0.75rem padding on header');
+
+    // 2. Brand title and logo badge
+    assert(recruiterHtml.includes('.brand-title') && recruiterHtml.includes('font-size: 0.85rem !important') && recruiterHtml.includes('letter-spacing: 1.2px !important'), 'recruiter.html defines sleek .brand-title font scale');
+    assert(recruiterHtml.includes('.employer-logo-badge') && recruiterHtml.includes('min-height: 28px !important') && recruiterHtml.includes('font-size: 0.58rem !important'), 'recruiter.html defines sleek .employer-logo-badge');
+
+    // 3. Compact Nav Tab Buttons
+    assert(recruiterHtml.includes('.nav-tab-btn, .portal-navigation button, header nav button') && recruiterHtml.includes('height: 28px !important') && recruiterHtml.includes('font-size: 0.62rem !important'), 'recruiter.html enforces compact 28px nav tab buttons');
+
+    // 4. Compact Auth Button
+    assert(recruiterHtml.includes('.btn-auth-header, #btn-auth-status') && recruiterHtml.includes('height: 28px !important') && recruiterHtml.includes('font-size: 0.60rem !important'), 'recruiter.html enforces compact 28px auth button');
+
+    // 5. Enterprise Tech Perks & Benefits Micro-Tag Specification
+    assert(recruiterHtml.includes('.perk-pill') && recruiterHtml.includes('height: 22px !important') && recruiterHtml.includes('background-color: #F8FAFC !important'), 'recruiter.html defines sleek 22px micro-tag .perk-pill');
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #111827 !important') && recruiterHtml.includes('color: #FEBA27 !important'), 'recruiter.html defines high-contrast charcoal and gold active perk pill');
+
+  } catch (err) {
+    assert(false, `Group 53 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
