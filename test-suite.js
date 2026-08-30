@@ -280,7 +280,7 @@ async function runTests() {
     assert(recContent.includes('function applyCmsConfig(config)'), 'recruiter.html implements applyCmsConfig');
     assert(recContent.includes('async function loadInitialCmsConfig()'), 'recruiter.html implements loadInitialCmsConfig');
     assert(recContent.includes('loadInitialCmsConfig();'), 'recruiter.html executes loadInitialCmsConfig on DOMContentLoaded');
-    assert(recContent.includes('id="card1-title-text"') && recContent.includes('id="card2-title-text"') && recContent.includes('id="card3-title-text"'), 'recruiter.html has Card 1, 2, 3 title mapping IDs');
+    assert(recContent.includes('id="card1-title-static"') && recContent.includes('id="card2-title-text"') && recContent.includes('id="card3-title-text"'), 'recruiter.html has Card 1, 2, 3 title mapping IDs');
     assert(recContent.includes('id="price-pal"') && recContent.includes('id="label-social-bundle-price"'), 'recruiter.html has price-pal and social add-on price mapping IDs');
 
     assert(candContent.includes('function applyCmsConfig(config)'), 'candidate.html implements applyCmsConfig');
@@ -621,7 +621,7 @@ async function runTests() {
 
     // recruiter.html checks
     assert(recruiterHtml.includes('data-cms-key="brand-title"'), 'recruiter.html binds data-cms-key="brand-title"');
-    assert(recruiterHtml.includes('id="card1-title-text"'), 'recruiter.html defines Card 1 title');
+    assert(recruiterHtml.includes('id="card1-title-static"'), 'recruiter.html defines Card 1 title');
     assert(recruiterHtml.includes('data-cms-key="post-card2-title"'), 'recruiter.html binds data-cms-key="post-card2-title"');
     assert(recruiterHtml.includes('data-cms-key="post-card3-title"'), 'recruiter.html binds data-cms-key="post-card3-title"');
     assert(recruiterHtml.includes('data-cms-key="post-publish-header"'), 'recruiter.html binds data-cms-key="post-publish-header"');
@@ -1980,7 +1980,7 @@ async function runTests() {
 
       // 2. Card 1 Title Update
       assert(content.includes('JOB DESCRIPTION'), `${file} updates Card 1 title to "JOB DESCRIPTION"`);
-      assert(content.includes('id="card1-title-text"'), `${file} preserves Card 1 title element`);
+      assert(content.includes('id="card1-title-static"'), `${file} preserves Card 1 title element`);
 
       // 3. Standalone Social Media Section Markup
       assert(content.includes('id="standalone-social-section"') && (content.includes('standalone-social-card') || content.includes('standalone-social-belt')), `${file} defines #standalone-social-section standalone card/belt`);
@@ -2145,7 +2145,7 @@ async function runTests() {
 
     // 1. Card 1 Title Update
     assert(recruiterHtml.includes('JOB DESCRIPTION'), 'recruiter.html updates Card 1 title to "JOB DESCRIPTION"');
-    assert(recruiterHtml.includes('id="card1-title-text"'), 'recruiter.html preserves #card1-title-text ID');
+    assert(recruiterHtml.includes('id="card1-title-static"'), 'recruiter.html preserves #card1-title-static ID');
 
     // 2. Convert Perks & Benefits to Pill Toggles
     assert(recruiterHtml.includes('id="perks-pill-container"'), 'recruiter.html defines #perks-pill-container');
@@ -2261,13 +2261,10 @@ async function runTests() {
     const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
     const cmsConfigDisk = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'cms_config.json'), 'utf8'));
 
-    // 1. recruiter.html CMS dictionary fallback
-    assert(recruiterHtml.includes("'post-card1-title': config.postStudio?.card1Title || 'JOB DESCRIPTION'"), "recruiter.html sets post-card1-title fallback to 'JOB DESCRIPTION'");
-
-    // 2. admin.html CMS default input value
+    // 1. admin.html CMS default input value
     assert(adminHtml.includes('id="cms-post-card1-title" value="JOB DESCRIPTION"'), "admin.html sets cms-post-card1-title default input to 'JOB DESCRIPTION'");
 
-    // 3. Persistent JSON and Server defaults
+    // 2. Persistent JSON and Server defaults
     assert(cmsConfigDisk.postStudio.card1Title === 'JOB DESCRIPTION', "data/cms_config.json sets card1Title to 'JOB DESCRIPTION'");
 
   } catch (err) {
@@ -2282,11 +2279,8 @@ async function runTests() {
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
     // 1. Remove dynamic CMS override attribute
-    assert(recruiterHtml.includes('<span class="panel-title" id="card1-title-text">JOB DESCRIPTION</span>'), 'recruiter.html sets Card 1 title directly on span without data-cms-key');
+    assert(recruiterHtml.includes('<span class="panel-title" id="card1-title-static">JOB DESCRIPTION</span>'), 'recruiter.html sets Card 1 title directly on span without data-cms-key');
     assert(!recruiterHtml.includes('data-cms-key="post-card1-title"'), 'recruiter.html purged data-cms-key="post-card1-title"');
-
-    // 2. CMS dictionary mapping in JS
-    assert(recruiterHtml.includes("'post-card1-title': config.postStudio?.card1Title || 'JOB DESCRIPTION'"), "recruiter.html sets post-card1-title mapping to 'JOB DESCRIPTION'");
 
   } catch (err) {
     assert(false, `Group 49 failed: ${err.message}`);
@@ -2303,7 +2297,7 @@ async function runTests() {
     assert(!recruiterHtml.includes('CONNECTED ACCOUNTS (LIVE SYNC)'), 'recruiter.html contains zero instances of obsolete title string');
 
     // 2. Direct clean span tag
-    assert(recruiterHtml.includes('<span class="panel-title" id="card1-title-text">JOB DESCRIPTION</span>'), 'recruiter.html defines clean span for Card 1 title without data-cms-key');
+    assert(recruiterHtml.includes('<span class="panel-title" id="card1-title-static">JOB DESCRIPTION</span>'), 'recruiter.html defines clean span for Card 1 title without data-cms-key');
 
     // 3. Clear dynamic storage cache
     assert(recruiterHtml.includes('localStorage.removeItem') && recruiterHtml.includes('sessionStorage.clear()'), 'recruiter.html clears dynamic storage cache on initialization');
@@ -2322,7 +2316,7 @@ async function runTests() {
     const cmsConfigDisk = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'cms_config.json'), 'utf8'));
 
     // 1. Exact DOM Title in recruiter.html
-    assert(recruiterHtml.includes('<span class="panel-title" id="card1-title-text">JOB DESCRIPTION</span>'), 'recruiter.html contains exact <span class="panel-title" id="card1-title-text">JOB DESCRIPTION</span>');
+    assert(recruiterHtml.includes('<span class="panel-title" id="card1-title-static">JOB DESCRIPTION</span>'), 'recruiter.html contains exact <span class="panel-title" id="card1-title-static">JOB DESCRIPTION</span>');
     assert(!recruiterHtml.includes('data-cms-key="post-card1-title"'), 'recruiter.html removed data-cms-key attribute from Card 1 title');
 
     // 2. Storage Purge
@@ -2334,6 +2328,25 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 51 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 52: PERMANENT ID ISOLATION FIX
+  // ================================================================
+  console.log('\n--- GROUP 52: PERMANENT ID ISOLATION FIX ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Isolate Card 1 Title Element ID
+    assert(recruiterHtml.includes('<span class="panel-title" id="card1-title-static">JOB DESCRIPTION</span>'), 'recruiter.html uses isolated static ID card1-title-static');
+    assert(!recruiterHtml.includes('id="card1-title-text"'), 'recruiter.html removed obsolete ID card1-title-text');
+
+    // 2. Disable CMS Map Override in Script
+    assert(!recruiterHtml.includes("'post-card1-title'"), 'recruiter.html removed post-card1-title from cmsKeyMap');
+    assert(!recruiterHtml.includes("p.card1Title"), 'recruiter.html disabled p.card1Title runtime override block');
+
+  } catch (err) {
+    assert(false, `Group 52 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
