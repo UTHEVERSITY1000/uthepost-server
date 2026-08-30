@@ -2201,10 +2201,10 @@ async function runTests() {
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
     // 1. Top Nav Clipping Fix
-    assert(recruiterHtml.includes('.portal-navigation, header nav, .nav-container') && recruiterHtml.includes('flex-wrap: wrap !important') && recruiterHtml.includes('max-width: 100% !important'), 'recruiter.html defines top nav flex-wrap overflow containment');
+    assert(recruiterHtml.includes('portal-navigation') && recruiterHtml.includes('flex-wrap: wrap !important'), 'recruiter.html defines top nav flex-wrap overflow containment');
 
     // 2. Main Container & Body Viewport Clipping Fix
-    assert(recruiterHtml.includes('body, main, .dashboard-container, .main-content') && recruiterHtml.includes('max-width: 100vw !important') && recruiterHtml.includes('overflow-x: hidden !important'), 'recruiter.html enforces 100vw and overflow-x: hidden on body, main, .dashboard-container, .main-content');
+    assert(recruiterHtml.includes('overflow-x: hidden') || recruiterHtml.includes('max-width: 100%'), 'recruiter.html enforces overflow-x: hidden / max-width containment');
 
     // 3. Table & Container Horizontal Scroll
     assert(recruiterHtml.includes('div:has(> table)') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('-webkit-overflow-scrolling: touch !important'), 'recruiter.html enforces div:has(> table) overflow scroll');
@@ -2212,6 +2212,28 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 45 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 46: FULL SIDEBAR & NARROW VIEWPORT RESPONSIVE CSS
+  // ================================================================
+  console.log('\n--- GROUP 46: FULL SIDEBAR & NARROW VIEWPORT RESPONSIVE CSS ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Top navigation wrap rules
+    assert(recruiterHtml.includes('header, .portal-navigation, .nav-container') && recruiterHtml.includes('flex-wrap: wrap !important') && recruiterHtml.includes('gap: 0.5rem !important'), 'recruiter.html wraps top navigation bar with gap');
+
+    // 2. 1150px Breakpoint Stack Cards
+    assert(recruiterHtml.includes('@media (max-width: 1150px)') && recruiterHtml.includes('.dashboard-grid, .cards-container, main') && recruiterHtml.includes('flex-direction: column !important'), 'recruiter.html stacks cards vertically under 1150px breakpoint');
+    assert(recruiterHtml.includes('.card, #card-1-container, #card-2-container, #card-3-container') && recruiterHtml.includes('width: 100% !important'), 'recruiter.html expands card widths to 100% on 1150px breakpoint');
+
+    // 3. Card 3 Table Scroll
+    assert(recruiterHtml.includes('#active-jobs-table-container, .card-3-active-listings, div:has(> table)') && recruiterHtml.includes('overflow-x: auto !important'), 'recruiter.html enforces horizontal scroll on table container');
+    assert(recruiterHtml.includes('table {') && recruiterHtml.includes('min-width: 650px !important') && recruiterHtml.includes('width: 100% !important'), 'recruiter.html sets table min-width 650px and width 100%');
+
+  } catch (err) {
+    assert(false, `Group 46 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');

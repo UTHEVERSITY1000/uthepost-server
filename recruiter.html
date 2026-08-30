@@ -1661,21 +1661,31 @@
       }
     }
 
-    /* Fix Top Nav Clipping */
-    .portal-navigation, header nav, .nav-container {
+    /* Wrap top navigation bar when window is narrowed */
+    header, .portal-navigation, .nav-container {
       display: flex !important;
       flex-wrap: wrap !important;
-      max-width: 100% !important;
+      gap: 0.5rem !important;
+      width: 100% !important;
       box-sizing: border-box !important;
     }
 
-    /* Fix Main Container & Card 3 Table Clipping */
-    body, main, .dashboard-container, .main-content {
-      max-width: 100vw !important;
-      overflow-x: hidden !important;
-      box-sizing: border-box !important;
+    /* Stack cards vertically when chat sidebar shrinks screen width below 1100px */
+    @media (max-width: 1150px) {
+      .dashboard-grid, .cards-container, main {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+      }
+
+      .card, #card-1-container, #card-2-container, #card-3-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
     }
 
+    /* Allow Card 3 table to scroll horizontally without pushing page layout */
     #active-jobs-table-container, .card-3-active-listings, div:has(> table) {
       width: 100% !important;
       max-width: 100% !important;
@@ -1685,8 +1695,8 @@
     }
 
     table {
-      width: 100% !important;
       min-width: 650px !important;
+      width: 100% !important;
     }
   </style>
 </head>
