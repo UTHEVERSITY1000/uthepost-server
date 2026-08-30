@@ -1790,7 +1790,7 @@
         <div class="studio-col-left card-1-wrap" id="card-1-container">
           <div class="panel-card card-posting-box">
             <div class="panel-header">
-              <span class="panel-title" id="card1-title-text">1. EMPLOYER JOB LISTING DETAILS</span>
+              <span class="panel-title" id="card1-title-text">JOB DESCRIPTION</span>
               <div style="display: flex; gap: 0.4rem; align-items: center;">
                 <span class="urgent-hiring-badge">URGENT HIRING</span>
               </div>
@@ -2750,13 +2750,12 @@
     try {
       if (typeof localStorage !== 'undefined') {
         localStorage.removeItem('cms_config');
+        localStorage.removeItem('uthe_cms_config');
         localStorage.removeItem('post-card1-title');
         localStorage.removeItem('cached_card1_title');
       }
       if (typeof sessionStorage !== 'undefined') {
-        sessionStorage.removeItem('cms_config');
-        sessionStorage.removeItem('post-card1-title');
-        sessionStorage.removeItem('cached_card1_title');
+        sessionStorage.clear();
       }
     } catch (e) {}
 
@@ -3875,7 +3874,7 @@
       // Explicit data-cms-key dynamic DOM binding
       const cmsKeyMap = {
         'brand-title': config.labels?.postTitle || 'U-THEPOST',
-        'post-card1-title': config.postStudio?.card1Title || '1. EMPLOYER JOB LISTING DETAILS',
+        'post-card1-title': config.postStudio?.card1Title || 'JOB DESCRIPTION',
         'post-card2-title': config.postStudio?.card2Title,
         'post-card3-title': config.postStudio?.card3Title,
         'post-publish-header': config.postStudio?.publishHeader,

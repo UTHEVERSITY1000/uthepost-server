@@ -303,7 +303,7 @@ const usersDatabase = [
 // ----------------------------------------------------
 let cmsConfig = {
   postStudio: {
-    card1Title: "1. EMPLOYER JOB LISTING DETAILS",
+    card1Title: "JOB DESCRIPTION",
     jobTitleLabel: "Job Title",
     companyNameLabel: "Company / Organization Name",
     locationLabel: "Location (e.g. Austin, TX or Remote)",
