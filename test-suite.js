@@ -2253,6 +2253,28 @@ async function runTests() {
     assert(false, `Group 47 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 48: AUTONOMOUS CMS DICTIONARY UPDATE
+  // ================================================================
+  console.log('\n--- GROUP 48: AUTONOMOUS CMS DICTIONARY UPDATE ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    const cmsConfigDisk = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'cms_config.json'), 'utf8'));
+
+    // 1. recruiter.html CMS dictionary fallback
+    assert(recruiterHtml.includes("'post-card1-title': config.postStudio?.card1Title || '1. EMPLOYER JOB LISTING DETAILS'"), "recruiter.html sets post-card1-title fallback to '1. EMPLOYER JOB LISTING DETAILS'");
+
+    // 2. admin.html CMS default input value
+    assert(adminHtml.includes('id="cms-post-card1-title" value="1. EMPLOYER JOB LISTING DETAILS"'), "admin.html sets cms-post-card1-title default input to '1. EMPLOYER JOB LISTING DETAILS'");
+
+    // 3. Persistent JSON and Server defaults
+    assert(cmsConfigDisk.postStudio.card1Title === '1. EMPLOYER JOB LISTING DETAILS', "data/cms_config.json sets card1Title to '1. EMPLOYER JOB LISTING DETAILS'");
+
+  } catch (err) {
+    assert(false, `Group 48 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
