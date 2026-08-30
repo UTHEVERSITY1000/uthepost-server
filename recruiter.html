@@ -1661,13 +1661,33 @@
       }
     }
 
-    /* Wrap top navigation bar when window is narrowed */
-    header, .portal-navigation, .nav-container {
+    /* Restore clean single-line header top deck */
+    header, .recruiter-header {
       display: flex !important;
-      flex-wrap: wrap !important;
-      gap: 0.5rem !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: nowrap !important;
       width: 100% !important;
+      height: 54px !important;
+      padding: 0 1rem !important;
       box-sizing: border-box !important;
+    }
+
+    /* Keep navigation menu inline with horizontal scroll on narrow viewports */
+    .portal-navigation, .nav-container, header nav {
+      display: flex !important;
+      align-items: center !important;
+      flex-wrap: nowrap !important;
+      gap: 0.4rem !important;
+      overflow-x: auto !important;
+      white-space: nowrap !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* Prevent individual menu buttons from squishing or wrapping */
+    .portal-navigation button, .portal-navigation a, header nav button, header nav a {
+      flex-shrink: 0 !important;
+      white-space: nowrap !important;
     }
 
     /* Stack cards vertically when chat sidebar shrinks screen width below 1100px */
@@ -1703,7 +1723,7 @@
 <body>
 
   <!-- MASTER TOP HEADER (5 EXCLUSIVE TABS) -->
-  <header class="recruiter-header portal-navigation">
+  <header class="recruiter-header">
     <div class="brand-group">
       <h1 class="brand-title" id="cms-brand-title" data-cms-key="brand-title" data-tooltip="u-thePOST: Recruiter Studio & Multi-Platform Hiring Hub.">U-THEPOST</h1>
 
@@ -1715,7 +1735,7 @@
     </div>
 
     <!-- 5 EXCLUSIVE CUSTOMER TABS -->
-    <div class="header-center-tabs top-deck-nav">
+    <nav class="header-center-tabs top-deck-nav portal-navigation nav-container">
       <button class="nav-tab-btn active" onclick="switchRecruiterTab('studio')" data-tooltip="Design, configure connected accounts & launch job postings.">
         1. JOB STUDIO
       </button>
@@ -1731,7 +1751,7 @@
       <button class="nav-tab-btn" onclick="switchRecruiterTab('profile')" data-tooltip="Employer brand assets, logo, and organization details.">
         5. MY PROFILE
       </button>
-    </div>
+    </nav>
 
     <div class="header-actions">
       <button class="btn-auth-header" id="btn-auth-status" onclick="openAuthModal()" data-tooltip="Account Authentication & Organization Profile.">

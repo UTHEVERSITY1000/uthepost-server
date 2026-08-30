@@ -2200,8 +2200,8 @@ async function runTests() {
   try {
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
-    // 1. Top Nav Clipping Fix
-    assert(recruiterHtml.includes('portal-navigation') && recruiterHtml.includes('flex-wrap: wrap !important'), 'recruiter.html defines top nav flex-wrap overflow containment');
+    // 1. Top Nav Layout
+    assert(recruiterHtml.includes('portal-navigation') && (recruiterHtml.includes('flex-wrap: nowrap !important') || recruiterHtml.includes('flex-wrap: wrap !important')), 'recruiter.html defines top nav display layout');
 
     // 2. Main Container & Body Viewport Clipping Fix
     assert(recruiterHtml.includes('overflow-x: hidden') || recruiterHtml.includes('max-width: 100%'), 'recruiter.html enforces overflow-x: hidden / max-width containment');
@@ -2221,19 +2221,36 @@ async function runTests() {
   try {
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
-    // 1. Top navigation wrap rules
-    assert(recruiterHtml.includes('header, .portal-navigation, .nav-container') && recruiterHtml.includes('flex-wrap: wrap !important') && recruiterHtml.includes('gap: 0.5rem !important'), 'recruiter.html wraps top navigation bar with gap');
-
-    // 2. 1150px Breakpoint Stack Cards
+    // 1. Responsive card stack under 1150px Breakpoint
     assert(recruiterHtml.includes('@media (max-width: 1150px)') && recruiterHtml.includes('.dashboard-grid, .cards-container, main') && recruiterHtml.includes('flex-direction: column !important'), 'recruiter.html stacks cards vertically under 1150px breakpoint');
     assert(recruiterHtml.includes('.card, #card-1-container, #card-2-container, #card-3-container') && recruiterHtml.includes('width: 100% !important'), 'recruiter.html expands card widths to 100% on 1150px breakpoint');
 
-    // 3. Card 3 Table Scroll
+    // 2. Card 3 Table Scroll
     assert(recruiterHtml.includes('#active-jobs-table-container, .card-3-active-listings, div:has(> table)') && recruiterHtml.includes('overflow-x: auto !important'), 'recruiter.html enforces horizontal scroll on table container');
     assert(recruiterHtml.includes('table {') && recruiterHtml.includes('min-width: 650px !important') && recruiterHtml.includes('width: 100% !important'), 'recruiter.html sets table min-width 650px and width 100%');
 
   } catch (err) {
     assert(false, `Group 46 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 47: AUTONOMOUS TOP NAV RESTORATION
+  // ================================================================
+  console.log('\n--- GROUP 47: AUTONOMOUS TOP NAV RESTORATION ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Single-line header top deck
+    assert(recruiterHtml.includes('header, .recruiter-header') && recruiterHtml.includes('flex-wrap: nowrap !important') && recruiterHtml.includes('height: 54px !important') && recruiterHtml.includes('padding: 0 1rem !important'), 'recruiter.html restores clean single-line header top deck');
+
+    // 2. Inline horizontal scroll for navigation menu
+    assert(recruiterHtml.includes('.portal-navigation, .nav-container, header nav') && recruiterHtml.includes('flex-wrap: nowrap !important') && recruiterHtml.includes('gap: 0.4rem !important') && recruiterHtml.includes('overflow-x: auto !important'), 'recruiter.html keeps navigation menu inline with horizontal scroll on narrow viewports');
+
+    // 3. Flex-shrink 0 on navigation buttons
+    assert(recruiterHtml.includes('.portal-navigation button, .portal-navigation a, header nav button, header nav a') && recruiterHtml.includes('flex-shrink: 0 !important') && recruiterHtml.includes('white-space: nowrap !important'), 'recruiter.html prevents individual menu buttons from squishing or wrapping');
+
+  } catch (err) {
+    assert(false, `Group 47 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
