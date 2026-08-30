@@ -621,7 +621,7 @@ async function runTests() {
 
     // recruiter.html checks
     assert(recruiterHtml.includes('data-cms-key="brand-title"'), 'recruiter.html binds data-cms-key="brand-title"');
-    assert(recruiterHtml.includes('data-cms-key="post-card1-title"'), 'recruiter.html binds data-cms-key="post-card1-title"');
+    assert(recruiterHtml.includes('id="card1-title-text"'), 'recruiter.html defines Card 1 title');
     assert(recruiterHtml.includes('data-cms-key="post-card2-title"'), 'recruiter.html binds data-cms-key="post-card2-title"');
     assert(recruiterHtml.includes('data-cms-key="post-card3-title"'), 'recruiter.html binds data-cms-key="post-card3-title"');
     assert(recruiterHtml.includes('data-cms-key="post-publish-header"'), 'recruiter.html binds data-cms-key="post-publish-header"');
@@ -1980,7 +1980,7 @@ async function runTests() {
 
       // 2. Card 1 Title Update
       assert(content.includes('1. EMPLOYER JOB LISTING DETAILS'), `${file} updates Card 1 title to "1. EMPLOYER JOB LISTING DETAILS"`);
-      assert(content.includes('id="card1-title-text"') && content.includes('data-cms-key="post-card1-title"'), `${file} preserves Card 1 title CMS bindings`);
+      assert(content.includes('id="card1-title-text"'), `${file} preserves Card 1 title element`);
 
       // 3. Standalone Social Media Section Markup
       assert(content.includes('id="standalone-social-section"') && (content.includes('standalone-social-card') || content.includes('standalone-social-belt')), `${file} defines #standalone-social-section standalone card/belt`);
@@ -2146,7 +2146,6 @@ async function runTests() {
     // 1. Card 1 Title Update
     assert(recruiterHtml.includes('1. EMPLOYER JOB LISTING DETAILS'), 'recruiter.html updates Card 1 title to "1. EMPLOYER JOB LISTING DETAILS"');
     assert(recruiterHtml.includes('id="card1-title-text"'), 'recruiter.html preserves #card1-title-text ID');
-    assert(recruiterHtml.includes('data-cms-key="post-card1-title"'), 'recruiter.html preserves data-cms-key="post-card1-title"');
 
     // 2. Convert Perks & Benefits to Pill Toggles
     assert(recruiterHtml.includes('id="perks-pill-container"'), 'recruiter.html defines #perks-pill-container');
@@ -2273,6 +2272,24 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 48 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 49: AUTONOMOUS SURGICAL CMS FIX
+  // ================================================================
+  console.log('\n--- GROUP 49: AUTONOMOUS SURGICAL CMS FIX ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Remove dynamic CMS override attribute
+    assert(recruiterHtml.includes('<span class="panel-title" id="card1-title-text">1. EMPLOYER JOB LISTING DETAILS</span>'), 'recruiter.html sets Card 1 title directly on span without data-cms-key');
+    assert(!recruiterHtml.includes('data-cms-key="post-card1-title"'), 'recruiter.html purged data-cms-key="post-card1-title"');
+
+    // 2. CMS dictionary mapping in JS
+    assert(recruiterHtml.includes("'post-card1-title': config.postStudio?.card1Title || '1. EMPLOYER JOB LISTING DETAILS'"), "recruiter.html sets post-card1-title mapping to '1. EMPLOYER JOB LISTING DETAILS'");
+
+  } catch (err) {
+    assert(false, `Group 49 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
