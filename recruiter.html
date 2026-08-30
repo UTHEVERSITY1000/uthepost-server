@@ -658,6 +658,32 @@
       font-size: 0.7rem;
     }
 
+    .perk-pill {
+      height: 26px !important;
+      padding: 0 0.6rem !important;
+      font-size: 0.62rem !important;
+      font-weight: 700 !important;
+      border-radius: 20px !important;
+      background-color: #F1F5F9 !important;
+      color: #64748B !important;
+      border: 1px solid #CBD5E1 !important;
+      cursor: pointer !important;
+      box-shadow: none !important;
+      text-transform: none !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      line-height: 1 !important;
+      transition: all 0.15s ease !important;
+    }
+
+    .perk-pill.active {
+      background-color: #FEBA27 !important;
+      color: #0F172A !important;
+      border-color: #FEBA27 !important;
+      box-shadow: 0 2px 6px rgba(254, 186, 39, 0.3) !important;
+    }
+
     .badge-tag.active, .status-badge.active, .badge-tag.selected {
       background-color: #0075FF !important;
       color: #FFFFFF !important;
@@ -1738,18 +1764,18 @@
               <textarea id="inp-desc" rows="4" oninput="updateLivePreview()" data-tooltip="Job description content.">Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.</textarea>
             </div>
 
-            <!-- PERKS & EXECUTIVE BENEFITS SUMMARY (MULTI-SELECT DROPDOWN) -->
+            <!-- PERKS & BENEFITS (PILL TOGGLES) -->
             <div class="form-group" style="margin-top: 0.4rem;">
-              <label style="font-weight: 800; font-size: 0.62rem; text-transform: uppercase;">PERKS & BENEFITS</label>
-              <select id="job-perks-select" multiple onchange="updateLivePreview()" style="height: 60px; font-size: 0.7rem; width: 100%; border: 1px solid var(--border-color); border-radius: 4px;">
-                <option value="PTO" selected>Paid Time Off (PTO)</option>
-                <option value="Health Benefits" selected>Health, Dental & Vision</option>
-                <option value="401k Match" selected>401(k) Matching</option>
-                <option value="Profit Sharing">Profit Sharing & Bonuses</option>
-                <option value="Flexible Schedule">Hybrid / Remote Flexibility</option>
-                <option value="Tuition Assistance">Tuition Reimbursement</option>
-                <option value="Stock Options">Equity & Stock Options</option>
-              </select>
+              <label style="font-weight: 800; font-size: 0.62rem; text-transform: uppercase;" data-cms-key="post-perks-label">PERKS & BENEFITS</label>
+              <div id="perks-pill-container" style="display: flex; flex-wrap: wrap; gap: 0.35rem; width: 100%;">
+                <button type="button" class="perk-pill active" onclick="togglePerkPill(this)" data-value="PTO">PTO</button>
+                <button type="button" class="perk-pill active" onclick="togglePerkPill(this)" data-value="Health Benefits">Health Benefits</button>
+                <button type="button" class="perk-pill active" onclick="togglePerkPill(this)" data-value="401k Match">401k Match</button>
+                <button type="button" class="perk-pill" onclick="togglePerkPill(this)" data-value="Profit Sharing">Profit Sharing</button>
+                <button type="button" class="perk-pill" onclick="togglePerkPill(this)" data-value="Flexible Schedule">Flexible Schedule</button>
+                <button type="button" class="perk-pill" onclick="togglePerkPill(this)" data-value="Tuition Assistance">Tuition Assistance</button>
+                <button type="button" class="perk-pill" onclick="togglePerkPill(this)" data-value="Stock Options">Stock Options</button>
+              </div>
             </div>
 
             <!-- TARGET EXPERIENCE LEVEL -->
@@ -1838,7 +1864,7 @@
               <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">5 ACTIVE POSITIONS</span>
             </div>
 
-            <div style="overflow-x: auto;" id="active-jobs-table-container" class="table-container">
+            <div style="overflow-x: auto; width: 100%;" id="active-jobs-table-container" class="table-container">
               <table class="card3-live-jobs-table">
                 <thead>
                   <tr>
@@ -2778,10 +2804,21 @@
       } catch (e) {}
     }
 
+    function togglePerkPill(btn) {
+      btn.classList.toggle('active');
+      updateLivePreview();
+    }
+
     function getSelectedPerks() {
+      const pills = document.querySelectorAll('#perks-pill-container .perk-pill.active');
+      if (pills.length > 0) {
+        return Array.from(pills).map(p => p.getAttribute('data-value'));
+      }
       const selectEl = document.getElementById('job-perks-select');
-      if (!selectEl) return [];
-      return Array.from(selectEl.selectedOptions).map(opt => opt.value);
+      if (selectEl) {
+        return Array.from(selectEl.selectedOptions).map(opt => opt.value);
+      }
+      return [];
     }
 
     // Live Preview Updates
@@ -2855,6 +2892,13 @@
       if (document.getElementById('inp-desc')) document.getElementById('inp-desc').value = '';
       if (document.getElementById('inp-perks')) document.getElementById('inp-perks').value = '';
 
+      const perkPills = document.querySelectorAll('#perks-pill-container .perk-pill');
+      if (perkPills.length > 0) {
+        perkPills.forEach((p, idx) => {
+          if (idx < 3) p.classList.add('active');
+          else p.classList.remove('active');
+        });
+      }
       const perksSelect = document.getElementById('job-perks-select');
       if (perksSelect) {
         Array.from(perksSelect.options).forEach((opt, idx) => {

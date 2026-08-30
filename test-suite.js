@@ -2018,8 +2018,8 @@ async function runTests() {
       assert(content.includes('2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.'), `${file} includes mandate part 2`);
       assert(content.includes('3. SURGICAL EDITING ONLY: PRESERVE ALL DOM ELEMENT IDs, EVENT LISTENERS, AND LIVE PREVIEW BINDINGS.'), `${file} includes mandate part 3 surgical editing & bindings preservation`);
 
-      // 2. Card 1 Relocations: Multi-Select Perks, Experience Level, and Urgent Hiring
-      assert(content.includes('id="job-perks-select"') && content.includes('multiple') && content.includes('onchange="updateLivePreview()"'), `${file} implements #job-perks-select multi-select dropdown`);
+      // 2. Card 1 Relocations: Multi-Select Perks / Pill Toggles, Experience Level, and Urgent Hiring
+      assert(content.includes('id="job-perks-select"') || content.includes('id="perks-pill-container"'), `${file} implements perks selector or pill container`);
       assert(content.includes('id="job-exp-level"') && content.includes('onchange="updateLivePreview()"'), `${file} implements #job-exp-level experience select`);
       assert(content.includes('id="urgentHiringCheckbox"'), `${file} preserves #urgentHiringCheckbox in Card 1`);
 
@@ -2057,10 +2057,10 @@ async function runTests() {
     for (const file of recruiterFiles) {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
 
-      // 1. Card 1 Perks & Benefits label compaction & multi-select options
+      // 1. Card 1 Perks & Benefits label compaction & perks options
       assert(content.includes('PERKS & BENEFITS'), `${file} uses compact "PERKS & BENEFITS" label`);
-      assert(content.includes('id="job-perks-select"') && content.includes('multiple') && content.includes('onchange="updateLivePreview()"'), `${file} retains #job-perks-select multi-select`);
-      assert(content.includes('value="PTO"') && content.includes('value="Health Benefits"') && content.includes('value="401k Match"'), `${file} includes standard perks options`);
+      assert(content.includes('id="job-perks-select"') || content.includes('id="perks-pill-container"'), `${file} retains perks options / container`);
+      assert(content.includes('PTO') && content.includes('Health Benefits') && content.includes('401k Match'), `${file} includes standard perks options`);
 
       // 2. Urgent Hiring toggle & restored Card 1 Publish Live button
       assert(content.includes('URGENT HIRING BADGE'), `${file} uses compact "URGENT HIRING BADGE" label`);
@@ -2134,6 +2134,41 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 42 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 43: CARD 1 PILLS, TITLE & CARD 3 TABLE FIT
+  // ================================================================
+  console.log('\n--- GROUP 43: CARD 1 PILLS, TITLE & CARD 3 TABLE FIT ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Card 1 Title Update
+    assert(recruiterHtml.includes('1. EMPLOYER JOB LISTING DETAILS'), 'recruiter.html updates Card 1 title to "1. EMPLOYER JOB LISTING DETAILS"');
+    assert(recruiterHtml.includes('id="card1-title-text"'), 'recruiter.html preserves #card1-title-text ID');
+    assert(recruiterHtml.includes('data-cms-key="post-card1-title"'), 'recruiter.html preserves data-cms-key="post-card1-title"');
+
+    // 2. Convert Perks & Benefits to Pill Toggles
+    assert(recruiterHtml.includes('id="perks-pill-container"'), 'recruiter.html defines #perks-pill-container');
+    assert(recruiterHtml.includes('class="perk-pill active"'), 'recruiter.html includes active perk pills');
+    assert(recruiterHtml.includes('onclick="togglePerkPill(this)"'), 'recruiter.html binds togglePerkPill click handlers');
+    assert(recruiterHtml.includes('data-value="PTO"'), 'recruiter.html includes PTO perk pill');
+    assert(recruiterHtml.includes('data-value="Health Benefits"'), 'recruiter.html includes Health Benefits perk pill');
+    assert(recruiterHtml.includes('data-value="401k Match"'), 'recruiter.html includes 401k Match perk pill');
+
+    // 3. CSS Styles
+    assert(recruiterHtml.includes('.perk-pill'), 'recruiter.html defines .perk-pill CSS class');
+    assert(recruiterHtml.includes('.perk-pill.active'), 'recruiter.html defines .perk-pill.active CSS class');
+
+    // 4. JS Handlers
+    assert(recruiterHtml.includes('function togglePerkPill(btn)'), 'recruiter.html defines togglePerkPill function');
+    assert(recruiterHtml.includes('#perks-pill-container .perk-pill.active'), 'recruiter.html gets selected perks from active pills');
+
+    // 5. Card 3 Table Container Fit
+    assert(recruiterHtml.includes('id="active-jobs-table-container"') && recruiterHtml.includes('overflow-x: auto; width: 100%;'), 'recruiter.html enforces overflow-x: auto and width: 100% on Card 3 table container');
+
+  } catch (err) {
+    assert(false, `Group 43 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
