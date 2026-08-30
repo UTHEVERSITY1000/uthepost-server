@@ -557,6 +557,15 @@
       50% { opacity: 0.9; transform: scale(1.02); }
     }
 
+    /* STANDALONE SOCIAL MEDIA SECTION */
+    .standalone-social-card {
+      background: var(--card-surface, #FFFFFF);
+      border: 1px solid var(--border-color, #E2E8F0);
+      border-radius: 6px;
+      padding: 0.75rem 0.85rem;
+      box-shadow: var(--shadow-sm);
+    }
+
     /* CARD 1 CONNECTED ACCOUNTS & SLEEK SOCIAL ICONS */
     .connected-socials-card {
       background: var(--card-subtle);
@@ -1462,6 +1471,25 @@
         box-sizing: border-box !important;
       }
 
+      /* STANDALONE SOCIAL MEDIA CARD RESPONSIVE */
+      .standalone-social-card {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 0.5rem !important;
+        margin-top: 0.5rem !important;
+      }
+
+      .standalone-social-card [style*="grid"] {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 0.35rem !important;
+      }
+
+      .standalone-social-card input {
+        height: 30px !important;
+        font-size: 0.72rem !important;
+      }
+
       /* 3. GLOBAL INTERFACE TEXT & INPUT COMPACTION */
       body, main {
         font-size: 0.72rem !important;
@@ -1627,123 +1655,99 @@
     <section id="view-studio" class="tab-view active">
       <div class="studio-grid studio-deck-wrap cards-1-2-container">
 
-        <!-- CARD 1: EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LEFT COLUMN) -->
-        <div class="panel-card card-1-wrap card-posting-box">
-          <div class="panel-header">
-            <span class="panel-title" id="card1-title-text" data-cms-key="post-card1-title">1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS</span>
-            <div style="display: flex; gap: 0.4rem; align-items: center;">
-              <span class="urgent-hiring-badge">URGENT HIRING</span>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label data-cms-key="post-job-title-label" data-tooltip="Enter the public job position title.">Position Title</label>
-            <input type="text" id="inp-title" value="Sales Manager" oninput="updateLivePreview()" data-tooltip="Position role title.">
-          </div>
-
-          <div class="grid-2">
-            <div class="form-group">
-              <label data-cms-key="post-company-label" data-tooltip="Company or Organization legal entity name.">Company Name</label>
-              <input type="text" id="inp-company" value="Quantum Retail Corp" oninput="updateLivePreview()" data-tooltip="Legal employer name.">
-            </div>
-            <div class="form-group">
-              <label data-cms-key="post-loc-label" data-tooltip="Work location and remote / on-site mode.">Location & Mode</label>
-              <input type="text" id="inp-location" value="AUSTIN, TX (HYBRID)" oninput="updateLivePreview()" data-tooltip="Location description.">
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div class="form-group">
-              <label data-cms-key="post-emp-options" data-tooltip="Employment commitment type.">Employment Commitment</label>
-              <select id="inp-type" onchange="updateLivePreview()" data-tooltip="Select employment type.">
-                <option value="Full-Time" selected>Full-Time</option>
-                <option value="Part-Time">Part-Time</option>
-                <option value="Contract">Contract</option>
-                <option value="Seasonal">Seasonal</option>
-              </select>
-              <div class="form-group" style="margin-top: 0.5rem;">
-                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.68rem;">
-                  <input type="checkbox" id="urgentHiringCheckbox" onchange="toggleUrgentHiringBadge(this.checked)" checked style="accent-color: #D4AF37; width: 16px; height: 16px;">
-                  <span>Enable "URGENT HIRING" Badge</span>
-                </label>
+        <!-- CARD 1: EMPLOYER JOB LISTING DETAILS (LEFT COLUMN) -->
+        <div class="studio-col-left card-1-wrap" id="card-1-container">
+          <div class="panel-card card-posting-box">
+            <div class="panel-header">
+              <span class="panel-title" id="card1-title-text" data-cms-key="post-card1-title">1. EMPLOYER JOB LISTING DETAILS</span>
+              <div style="display: flex; gap: 0.4rem; align-items: center;">
+                <span class="urgent-hiring-badge">URGENT HIRING</span>
               </div>
             </div>
+
             <div class="form-group">
-              <label data-cms-key="post-salary-label" data-tooltip="Public compensation or hourly pay display.">Salary Range Display</label>
-              <input type="text" id="inp-salary" value="$75,000 - $95,000" oninput="updateLivePreview()" data-tooltip="Salary range text.">
+              <label data-cms-key="post-job-title-label" data-tooltip="Enter the public job position title.">Position Title</label>
+              <input type="text" id="inp-title" value="Sales Manager" oninput="updateLivePreview()" data-tooltip="Position role title.">
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label data-cms-key="post-company-label" data-tooltip="Company or Organization legal entity name.">Company Name</label>
+                <input type="text" id="inp-company" value="Quantum Retail Corp" oninput="updateLivePreview()" data-tooltip="Legal employer name.">
+              </div>
+              <div class="form-group">
+                <label data-cms-key="post-loc-label" data-tooltip="Work location and remote / on-site mode.">Location & Mode</label>
+                <input type="text" id="inp-location" value="AUSTIN, TX (HYBRID)" oninput="updateLivePreview()" data-tooltip="Location description.">
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="form-group">
+                <label data-cms-key="post-emp-options" data-tooltip="Employment commitment type.">Employment Commitment</label>
+                <select id="inp-type" onchange="updateLivePreview()" data-tooltip="Select employment type.">
+                  <option value="Full-Time" selected>Full-Time</option>
+                  <option value="Part-Time">Part-Time</option>
+                  <option value="Contract">Contract</option>
+                  <option value="Seasonal">Seasonal</option>
+                </select>
+                <div class="form-group" style="margin-top: 0.5rem;">
+                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.68rem;">
+                    <input type="checkbox" id="urgentHiringCheckbox" onchange="toggleUrgentHiringBadge(this.checked)" checked style="accent-color: #D4AF37; width: 16px; height: 16px;">
+                    <span>Enable "URGENT HIRING" Badge</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label data-cms-key="post-salary-label" data-tooltip="Public compensation or hourly pay display.">Salary Range Display</label>
+                <input type="text" id="inp-salary" value="$75,000 - $95,000" oninput="updateLivePreview()" data-tooltip="Salary range text.">
+              </div>
+            </div>
+
+            <!-- DEDICATED EMPLOYER CONTACT EMAIL -->
+            <div class="form-group">
+              <label data-cms-key="post-email-label" data-tooltip="Official hiring contact email for candidate resume alerts and broadcast updates.">Employer Contact Email</label>
+              <input type="email" id="inp-recruiter-email" value="hiring@quantumretail.com" data-tooltip="Contact email address for outreach and candidate notifications.">
+            </div>
+
+            <div class="form-group">
+              <label data-tooltip="Main responsibilities and role summary.">Job Description & Key Responsibilities</label>
+              <textarea id="inp-desc" rows="4" oninput="updateLivePreview()" data-tooltip="Job description content.">Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.</textarea>
             </div>
           </div>
 
-          <!-- DEDICATED EMPLOYER CONTACT EMAIL -->
-          <div class="form-group">
-            <label data-cms-key="post-email-label" data-tooltip="Official hiring contact email for candidate resume alerts and broadcast updates.">Employer Contact Email</label>
-            <input type="email" id="inp-recruiter-email" value="hiring@quantumretail.com" data-tooltip="Contact email address for outreach and candidate notifications.">
-          </div>
-
-          <!-- DEDICATED SOCIAL MEDIA ACCOUNT CONNECTIONS (CARD 1) WITH HIGH-RES ICONS -->
-          <div class="connected-socials-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span data-cms-key="post-social-header" style="font-size: 0.72rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 1px; text-transform: uppercase;">CONNECTED SOCIAL CHANNELS</span>
-              <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.15rem 0.45rem; border-radius: 4px;">CONNECTED</span>
+          <!-- STANDALONE CONNECTED SOCIAL MEDIA ACCOUNTS SECTION -->
+          <div class="section-card standalone-social-card" id="standalone-social-section" style="margin-top: 0.75rem;">
+            <div class="cms-sub-box-title" style="display: flex; justify-content: space-between; align-items: center;">
+              <span data-cms-key="post-social-header">LINK SOCIAL MEDIA ACCOUNTS</span>
+              <span class="badge-tag tag-mint" style="font-size: 0.55rem;">CONNECTED SYNC</span>
             </div>
-            <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4;">
+            <div style="font-size: 0.62rem; color: var(--text-muted); margin-bottom: 0.4rem;">
               Multi-platform outreach broadcasts directly to these connected handles and profiles upon publication.
             </div>
 
-            <!-- LinkedIn -->
-            <div class="social-input-row">
-              <div class="social-svg-icon" title="LinkedIn">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="#0A66C2">
-                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
-                </svg>
+            <!-- Preserve Exact Input IDs & Event Handlers -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.4rem;">
+              <div class="form-group">
+                <label>LinkedIn Profile / Page</label>
+                <input type="text" id="social-linkedin" data-cms-key="post-linkedin-ph" placeholder="https://linkedin.com/company/..." value="https://linkedin.com/company/quantumretail" oninput="updateLivePreview()" data-tooltip="LinkedIn company URL">
               </div>
-              <input type="text" id="inp-soc-linkedin" data-cms-key="post-linkedin-ph" placeholder="LinkedIn Profile / Company URL (e.g. linkedin.com/company/quantumretail)" value="https://linkedin.com/company/quantumretail" style="height: 40px; font-size: 0.78rem;" data-tooltip="LinkedIn company page or recruiter URL.">
-            </div>
-
-            <!-- X / Twitter -->
-            <div class="social-input-row">
-              <div class="social-svg-icon" title="X (Twitter)">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="#000000">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
+              <div class="form-group">
+                <label>X / Twitter Handle</label>
+                <input type="text" id="social-x" data-cms-key="post-x-ph" placeholder="@Handle..." value="@QuantumRetailJobs" oninput="updateLivePreview()" data-tooltip="X handle or URL">
               </div>
-              <input type="text" id="inp-soc-x" data-cms-key="post-x-ph" placeholder="X / Twitter Handle (e.g. @QuantumRetailJobs)" value="@QuantumRetailJobs" style="height: 40px; font-size: 0.78rem;" data-tooltip="X / Twitter recruitment handle.">
-            </div>
-
-            <!-- TikTok -->
-            <div class="social-input-row">
-              <div class="social-svg-icon" title="TikTok">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="#EE1D52">
-                  <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.15 1.15 2.1 2.3 2.37 1.08.27 2.27-.05 3.06-.82.68-.64.98-1.58.98-2.5V.02z"/>
-                </svg>
+              <div class="form-group">
+                <label>TikTok Handle</label>
+                <input type="text" id="social-tiktok" data-cms-key="post-tiktok-ph" placeholder="@Handle..." value="@QuantumRetailHiring" oninput="updateLivePreview()" data-tooltip="TikTok account handle">
               </div>
-              <input type="text" id="inp-soc-tiktok" data-cms-key="post-tiktok-ph" placeholder="TikTok Handle (e.g. @QuantumRetailHiring)" value="@QuantumRetailHiring" style="height: 40px; font-size: 0.78rem;" data-tooltip="TikTok short-form talent handle.">
-            </div>
-
-            <!-- Facebook -->
-            <div class="social-input-row">
-              <div class="social-svg-icon" title="Facebook">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="#1877F2">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
+              <div class="form-group">
+                <label>Facebook Page</label>
+                <input type="text" id="social-facebook" placeholder="https://facebook.com/..." value="https://facebook.com/quantumretail" oninput="updateLivePreview()" data-tooltip="Facebook page link">
               </div>
-              <input type="text" id="inp-soc-fb" placeholder="Facebook Page URL (e.g. facebook.com/quantumretail)" value="https://facebook.com/quantumretail" style="height: 40px; font-size: 0.78rem;" data-tooltip="Facebook business network page.">
-            </div>
-
-            <!-- Instagram -->
-            <div class="social-input-row">
-              <div class="social-svg-icon" title="Instagram">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="#E4405F">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
+              <div class="form-group">
+                <label>Instagram Handle</label>
+                <input type="text" id="social-instagram" placeholder="@Handle..." value="@QuantumRetailCareers" oninput="updateLivePreview()" data-tooltip="Instagram profile handle">
               </div>
-              <input type="text" id="inp-soc-ig" placeholder="Instagram Handle (e.g. @QuantumRetailCareers)" value="@QuantumRetailCareers" style="height: 40px; font-size: 0.78rem;" data-tooltip="Instagram talent showcase handle.">
             </div>
-          </div>
-
-          <div class="form-group">
-            <label data-tooltip="Main responsibilities and role summary.">Job Description & Key Responsibilities</label>
-            <textarea id="inp-desc" rows="4" oninput="updateLivePreview()" data-tooltip="Job description content.">Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.</textarea>
           </div>
         </div>
 
@@ -1799,7 +1803,7 @@
 
               <div style="display: flex; gap: 0.5rem; align-items: center; background: #F8FAFC; padding: 0.5rem; border-radius: 6px; font-size: 0.72rem; color: var(--text-muted);">
                 <span>🔗 Connected Multi-Platform Feeds:</span>
-                <strong style="color: var(--uthe-charcoal);">LinkedIn • X • TikTok • Facebook • Instagram</strong>
+                <strong style="color: var(--uthe-charcoal);" id="pv-socials">LinkedIn • X • TikTok • Facebook • Instagram</strong>
               </div>
 
               <button style="background:#111827; color:var(--uthe-gold); border:1.5px solid var(--uthe-gold); font-weight:900; font-size:0.78rem; padding:0.75rem; border-radius:6px; letter-spacing:1px; cursor:default;" data-cms-key="post-primary-btn">
@@ -2613,7 +2617,7 @@
      * CRITICAL CODE DIRECTIVE & MANDATE:
      * 1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.
      * 2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.
-     * 3. PREVENT INPUT AND TEXT STRETCHING OUTSIDE CARD BOUNDARIES ON MOBILE DECK.
+     * 3. PRESERVE ALL DOM ELEMENT IDs & EVENT LISTENERS WHEN EXTRACTING COMPONENTS.
      * 4. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.
      * ============================================================================ */
 
@@ -2752,19 +2756,37 @@
 
     // Live Preview Updates
     function updateLivePreview() {
-      const title = document.getElementById('inp-title').value;
-      const company = document.getElementById('inp-company').value;
-      const loc = document.getElementById('inp-location').value;
-      const type = document.getElementById('inp-type').value;
-      const salary = document.getElementById('inp-salary').value;
-      const desc = document.getElementById('inp-desc').value;
+      const title = document.getElementById('inp-title')?.value;
+      const company = document.getElementById('inp-company')?.value;
+      const loc = document.getElementById('inp-location')?.value;
+      const type = document.getElementById('inp-type')?.value;
+      const salary = document.getElementById('inp-salary')?.value;
+      const desc = document.getElementById('inp-desc')?.value;
 
-      document.getElementById('pv-title').textContent = title || 'Position Title';
-      document.getElementById('pv-company').textContent = company || 'Company Name';
-      document.getElementById('pv-location').textContent = (loc || 'REMOTE').toUpperCase();
-      document.getElementById('pv-type').textContent = (type || 'FULL-TIME').toUpperCase();
-      document.getElementById('pv-salary').textContent = salary || '$0,000 - $0,000';
-      document.getElementById('pv-desc').textContent = desc || 'Job description preview.';
+      if (document.getElementById('pv-title')) document.getElementById('pv-title').textContent = title || 'Position Title';
+      if (document.getElementById('pv-company')) document.getElementById('pv-company').textContent = company || 'Company Name';
+      if (document.getElementById('pv-location')) document.getElementById('pv-location').textContent = (loc || 'REMOTE').toUpperCase();
+      if (document.getElementById('pv-type')) document.getElementById('pv-type').textContent = (type || 'FULL-TIME').toUpperCase();
+      if (document.getElementById('pv-salary')) document.getElementById('pv-salary').textContent = salary || '$0,000 - $0,000';
+      if (document.getElementById('pv-desc')) document.getElementById('pv-desc').textContent = desc || 'Job description preview.';
+
+      const socLinkedin = (document.getElementById('social-linkedin') || document.getElementById('inp-soc-linkedin'))?.value;
+      const socX = (document.getElementById('social-x') || document.getElementById('inp-soc-x'))?.value;
+      const socTiktok = (document.getElementById('social-tiktok') || document.getElementById('inp-soc-tiktok'))?.value;
+      const socFb = (document.getElementById('social-facebook') || document.getElementById('inp-soc-fb'))?.value;
+      const socIg = (document.getElementById('social-instagram') || document.getElementById('inp-soc-ig'))?.value;
+
+      const activeSocials = [];
+      if (socLinkedin) activeSocials.push('LinkedIn');
+      if (socX) activeSocials.push('X');
+      if (socTiktok) activeSocials.push('TikTok');
+      if (socFb) activeSocials.push('Facebook');
+      if (socIg) activeSocials.push('Instagram');
+
+      const pvSocials = document.getElementById('pv-socials');
+      if (pvSocials) {
+        pvSocials.textContent = activeSocials.length > 0 ? activeSocials.join(' • ') : 'LinkedIn • X • TikTok • Facebook • Instagram';
+      }
     }
 
     function toggleDistChannel(el) {
@@ -2787,6 +2809,16 @@
       document.getElementById('inp-salary').value = '';
       document.getElementById('inp-desc').value = '';
       document.getElementById('inp-perks').value = '';
+      if (document.getElementById('social-linkedin')) document.getElementById('social-linkedin').value = '';
+      if (document.getElementById('social-x')) document.getElementById('social-x').value = '';
+      if (document.getElementById('social-tiktok')) document.getElementById('social-tiktok').value = '';
+      if (document.getElementById('social-facebook')) document.getElementById('social-facebook').value = '';
+      if (document.getElementById('social-instagram')) document.getElementById('social-instagram').value = '';
+      if (document.getElementById('inp-soc-linkedin')) document.getElementById('inp-soc-linkedin').value = '';
+      if (document.getElementById('inp-soc-x')) document.getElementById('inp-soc-x').value = '';
+      if (document.getElementById('inp-soc-tiktok')) document.getElementById('inp-soc-tiktok').value = '';
+      if (document.getElementById('inp-soc-fb')) document.getElementById('inp-soc-fb').value = '';
+      if (document.getElementById('inp-soc-ig')) document.getElementById('inp-soc-ig').value = '';
       if (document.getElementById('urgentHiringCheckbox')) {
         document.getElementById('urgentHiringCheckbox').checked = true;
         toggleUrgentHiringBadge(true);
@@ -2808,11 +2840,11 @@
         additionalPerks: document.getElementById('inp-perks').value,
         recruiterEmail: document.getElementById('inp-recruiter-email').value,
         socialChannels: {
-          linkedin: document.getElementById('inp-soc-linkedin').value,
-          x: document.getElementById('inp-soc-x').value,
-          tiktok: document.getElementById('inp-soc-tiktok').value,
-          facebook: document.getElementById('inp-soc-fb').value,
-          instagram: document.getElementById('inp-soc-ig').value
+          linkedin: (document.getElementById('social-linkedin') || document.getElementById('inp-soc-linkedin'))?.value || '',
+          x: (document.getElementById('social-x') || document.getElementById('inp-soc-x'))?.value || '',
+          tiktok: (document.getElementById('social-tiktok') || document.getElementById('inp-soc-tiktok'))?.value || '',
+          facebook: (document.getElementById('social-facebook') || document.getElementById('inp-soc-fb'))?.value || '',
+          instagram: (document.getElementById('social-instagram') || document.getElementById('inp-soc-ig'))?.value || ''
         },
         createdAt: new Date().toISOString()
       };

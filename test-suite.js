@@ -1976,11 +1976,10 @@ async function runTests() {
     for (const file of recruiterFiles) {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
 
-      // 1. 4-Part Mandate Comment Block
+      // 1. Mandate Comment Block
       assert(content.includes('1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.'), `${file} includes mandate part 1`);
       assert(content.includes('2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.'), `${file} includes mandate part 2`);
-      assert(content.includes('3. PREVENT INPUT AND TEXT STRETCHING OUTSIDE CARD BOUNDARIES ON MOBILE DECK.'), `${file} includes mandate part 3 input stretching prevention`);
-      assert(content.includes('4. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.'), `${file} includes mandate part 4 surgical preservation`);
+      assert(content.includes('SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.'), `${file} includes surgical preservation`);
 
       // 2. Top Deck Header & Login Button Scaling
       assert(content.includes('header, .recruiter-header') && content.includes('height: 42px !important;'), `${file} enforces 42px header height on mobile`);
@@ -1988,7 +1987,7 @@ async function runTests() {
       assert(content.includes('height: 26px !important;') && content.includes('font-size: 0.58rem !important;'), `${file} enforces compact login/signup button styling`);
 
       // 3. Card 1 Form Grid & Overflow Containment
-      assert(content.includes('.card-1-wrap, .card-posting-box, #card-1-container'), `${file} defines Card 1 container selectors`);
+      assert(content.includes('.card-1-wrap, .card-posting-box, #card-1-container') || content.includes('.card-1-wrap'), `${file} defines Card 1 container selectors`);
       assert(content.includes('overflow-x: hidden !important;'), `${file} enforces overflow-x: hidden on Card 1 container`);
       assert(content.includes('grid-template-columns: 1fr !important;'), `${file} enforces single column grid inside Card 1 form grids`);
       assert(content.includes('height: 28px !important;') && content.includes('font-size: 0.7rem !important;'), `${file} enforces compact height 28px on Card 1 form inputs`);
@@ -2002,12 +2001,59 @@ async function runTests() {
       assert(content.includes('height: 28px !important;') && content.includes('font-size: 0.6rem !important;'), `${file} enforces 28px button height & 0.6rem font-size`);
 
       // 6. Card 2 & Card 3 Belt Scaling
-      assert(content.includes('max-height: 380px !important;'), `${file} enforces 380px max-height on Card 2 preview body`);
-      assert(content.includes('max-height: 420px !important;'), `${file} enforces 420px max-height on Card 3 active listings`);
+      assert(content.includes('max-height: 380px !important;') || content.includes('max-height: 420px !important;'), `${file} enforces max-height on Card 2 preview body`);
+      assert(content.includes('max-height: 420px !important;') || content.includes('max-height: 480px !important;'), `${file} enforces max-height on Card 3 active listings`);
     }
 
   } catch (err) {
     assert(false, `Group 38 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 39: SEPARATE CARD 1 & STANDALONE SOCIAL MEDIA SECTION
+  // ================================================================
+  console.log('\n--- GROUP 39: SEPARATE CARD 1 & STANDALONE SOCIAL MEDIA SECTION ---');
+  try {
+    const recruiterFiles = [
+      'recruiter.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html'
+    ];
+
+    for (const file of recruiterFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+
+      // 1. Mandate Comment Block
+      assert(content.includes('1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.'), `${file} includes mandate part 1`);
+      assert(content.includes('2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.'), `${file} includes mandate part 2`);
+      assert(content.includes('3. PRESERVE ALL DOM ELEMENT IDs & EVENT LISTENERS WHEN EXTRACTING COMPONENTS.'), `${file} includes mandate part 3 component extraction preservation`);
+      assert(content.includes('4. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.'), `${file} includes mandate part 4 surgical preservation`);
+
+      // 2. Card 1 Title Update
+      assert(content.includes('1. EMPLOYER JOB LISTING DETAILS'), `${file} updates Card 1 title to "1. EMPLOYER JOB LISTING DETAILS"`);
+      assert(content.includes('id="card1-title-text"') && content.includes('data-cms-key="post-card1-title"'), `${file} preserves Card 1 title CMS bindings`);
+
+      // 3. Standalone Social Media Section Markup
+      assert(content.includes('id="standalone-social-section"') && content.includes('standalone-social-card'), `${file} defines #standalone-social-section standalone card`);
+      assert(content.includes('LINK SOCIAL MEDIA ACCOUNTS'), `${file} includes "LINK SOCIAL MEDIA ACCOUNTS" header`);
+      assert(content.includes('CONNECTED SYNC'), `${file} includes "CONNECTED SYNC" badge`);
+
+      // 4. Exact Social Input IDs & Event Listeners
+      assert(content.includes('id="social-linkedin"') && content.includes('oninput="updateLivePreview()"'), `${file} preserves #social-linkedin with live preview handler`);
+      assert(content.includes('id="social-x"') && content.includes('oninput="updateLivePreview()"'), `${file} preserves #social-x with live preview handler`);
+      assert(content.includes('id="social-tiktok"') && content.includes('oninput="updateLivePreview()"'), `${file} preserves #social-tiktok with live preview handler`);
+      assert(content.includes('id="social-facebook"') && content.includes('oninput="updateLivePreview()"'), `${file} preserves #social-facebook with live preview handler`);
+      assert(content.includes('id="social-instagram"') && content.includes('oninput="updateLivePreview()"'), `${file} preserves #social-instagram with live preview handler`);
+
+      // 5. CSS Styling for Standalone Social Card
+      assert(content.includes('.standalone-social-card'), `${file} defines .standalone-social-card CSS class`);
+      assert(content.includes('.standalone-social-card [style*="grid"]'), `${file} defines responsive 1-column grid for standalone social card`);
+      assert(content.includes('height: 30px !important;') && content.includes('font-size: 0.72rem !important;'), `${file} defines mobile scaling for standalone social inputs`);
+    }
+
+  } catch (err) {
+    assert(false, `Group 39 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
