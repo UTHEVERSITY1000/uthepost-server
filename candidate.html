@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
   <title>u-theJOBS — Candidate Board & Verified Career Discovery</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,12 +38,14 @@
     }
 
     html, body {
-      width: 100%;
+      width: 100% !important;
+      max-width: 100vw !important;
       min-height: 100%;
       background-color: var(--bg-canvas);
       color: var(--text-main);
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      overflow-x: hidden;
+      overflow-x: hidden !important;
+      -webkit-text-size-adjust: 100%;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -1250,15 +1252,88 @@
       }
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 1024px) {
-      main.board-container { grid-template-columns: 1fr; }
-      .detail-inspector { display: none; }
+    /* Smooth Touch Scroll for Navigation Bars & Tab Belts */
+    .admin-tabs-nav-bar, .omni-search-belt, nav, .header-actions {
+      display: flex !important;
+      overflow-x: auto !important;
+      white-space: nowrap !important;
+      -webkit-overflow-scrolling: touch !important;
+      scrollbar-width: none; /* Firefox */
     }
 
-    @media (min-width: 1025px) {
-      .mobile-bottom-bar { display: none; }
-      body { padding-bottom: 0; }
+    .admin-tabs-nav-bar::-webkit-scrollbar,
+    .table-container::-webkit-scrollbar {
+      display: none; /* Hide scrollbars for clean UI while keeping touch scroll active */
+    }
+
+    /* Responsive Table Wrapper */
+    .table-container {
+      width: 100% !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+
+    table {
+      min-width: 650px !important; /* Ensures readable columns on small mobile devices without squishing */
+    }
+
+    /* KPI Cards, Form Fields, and Feature Grids */
+    .kpi-grid, .cms-sub-box > div, .section-card > div[style*="grid"] {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+      gap: 0.75rem !important;
+    }
+
+    /* Touch Targets */
+    button, input, select, textarea, .admin-nav-tab-btn {
+      min-height: 38px !important;
+      touch-action: manipulation !important;
+      font-size: 0.8rem !important;
+    }
+
+    /* Modal Overlay & Responsive Card Containment */
+    .modal-overlay, .custom-modal-alert {
+      padding: 0.75rem !important;
+    }
+
+    .modal-card, .custom-alert-card {
+      width: 95% !important;
+      max-width: 520px !important;
+      max-height: 88vh !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      border-radius: 8px !important;
+    }
+
+    /* Mobile Screen Specific Adjustments (<= 768px) */
+    @media (max-width: 768px) {
+      header {
+        padding: 0 0.5rem !important;
+        gap: 0.5rem !important;
+      }
+      
+      .brand-title {
+        font-size: 0.8rem !important;
+      }
+      
+      main {
+        padding: 0.5rem !important;
+      }
+      
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+      
+      /* Stack Candidate / Recruiter Split Panels vertically on mobile */
+      .candidate-board-layout, .recruiter-studio-layout {
+        flex-direction: column !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .kpi-grid {
+        grid-template-columns: 1fr !important;
+      }
     }
   </style>
 </head>
@@ -1673,8 +1748,8 @@
   <script>
     /* ============================================================================
      * CRITICAL CODE DIRECTIVE & MANDATE:
-     * NEVER USE NATIVE BROWSER SYSTEM POPUPS (alert(), confirm(), prompt())! 
-     * ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS (showCustomModalAlert / Custom Confirm Modals).
+     * 1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.
+     * 2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.
      * ============================================================================ */
 
     let pendingConfirmCallback = null;

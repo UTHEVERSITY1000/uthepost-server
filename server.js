@@ -1,7 +1,7 @@
 /* ============================================================================
  * CRITICAL CODE DIRECTIVE & MANDATE:
- * NEVER USE NATIVE BROWSER SYSTEM POPUPS (alert(), confirm(), prompt())! 
- * ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS (showCustomModalAlert / Custom Confirm Modals).
+ * 1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.
+ * 2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.
  * ============================================================================ */
 
 const dns = require('dns');

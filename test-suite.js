@@ -1809,7 +1809,7 @@ async function runTests() {
     const htmlFiles = allPlatformFiles.filter(f => f.endsWith('.html'));
 
     // 1. Verify Mandate Comment Block across ALL 10 files
-    const mandateString = 'NEVER USE NATIVE BROWSER SYSTEM POPUPS (alert(), confirm(), prompt())!';
+    const mandateString = 'NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())!';
     for (const file of allPlatformFiles) {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
       assert(content.includes(mandateString), `${file} includes critical code directive mandate comment block`);
@@ -1843,6 +1843,56 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 35 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 36: PLATFORM-WIDE TOUCH & MOBILE RESPONSIVE OPTIMIZATION
+  // ================================================================
+  console.log('\n--- GROUP 36: PLATFORM-WIDE TOUCH & MOBILE RESPONSIVE OPTIMIZATION ---');
+  try {
+    const htmlFiles = [
+      'admin.html',
+      'u-theADMIN-MASTER-SUITE.html',
+      'recruiter.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html',
+      'candidate.html',
+      'u-theJOBS-ENTERPRISE-SYNC.html',
+      'u-theJOBS-DUAL LINK TO u-thePOST.html'
+    ];
+
+    for (const file of htmlFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+
+      // 1. Mandate comment block
+      assert(content.includes('MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES'), `${file} includes mobile-first touch responsiveness mandate comment`);
+
+      // 2. Viewport meta tag
+      assert(content.includes('width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover'), `${file} enforces maximum-scale=5.0, user-scalable=yes viewport meta tag`);
+
+      // 3. Global body box model
+      assert(content.includes('max-width: 100vw !important') && content.includes('overflow-x: hidden !important'), `${file} enforces max-width: 100vw and overflow-x: hidden on html, body`);
+      assert(content.includes('-webkit-text-size-adjust: 100%'), `${file} enforces -webkit-text-size-adjust: 100%`);
+
+      // 4. Horizontal touch scrolling & table wrapper
+      assert(content.includes('-webkit-overflow-scrolling: touch !important'), `${file} enforces smooth touch-scrolling`);
+      assert(content.includes('.admin-tabs-nav-bar, .omni-search-belt, nav, .header-actions'), `${file} defines touch-scroll selectors`);
+      assert(content.includes('min-width: 650px !important'), `${file} enforces min-width: 650px on table`);
+
+      // 5. Responsive auto-fit grids
+      assert(content.includes('repeat(auto-fit, minmax(240px, 1fr)) !important'), `${file} enforces auto-fit grid layout`);
+
+      // 6. Touch targets & modal fit
+      assert(content.includes('touch-action: manipulation !important'), `${file} enforces touch-action: manipulation on interactive controls`);
+      assert(content.includes('max-height: 88vh !important'), `${file} enforces max-height: 88vh modal card containment`);
+
+      // 7. Mobile media queries
+      assert(content.includes('@media (max-width: 768px)') && content.includes('@media (max-width: 480px)'), `${file} includes mobile breakpoint media queries`);
+    }
+
+  } catch (err) {
+    assert(false, `Group 36 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
