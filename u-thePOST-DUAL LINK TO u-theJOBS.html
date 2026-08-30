@@ -557,8 +557,8 @@
       50% { opacity: 0.9; transform: scale(1.02); }
     }
 
-    /* STANDALONE SOCIAL MEDIA SECTION */
-    .standalone-social-card {
+    /* STANDALONE SOCIAL MEDIA SECTION & HORIZONTAL BELT */
+    .standalone-social-card, .standalone-social-belt {
       background: var(--card-surface, #FFFFFF);
       border: 1px solid var(--border-color, #E2E8F0);
       border-radius: 6px;
@@ -1471,12 +1471,13 @@
         box-sizing: border-box !important;
       }
 
-      /* STANDALONE SOCIAL MEDIA CARD RESPONSIVE */
-      .standalone-social-card {
+      /* STANDALONE SOCIAL MEDIA CARD & BELT RESPONSIVE */
+      .standalone-social-card, .standalone-social-belt {
         width: 100% !important;
         box-sizing: border-box !important;
         padding: 0.5rem !important;
         margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
       }
 
       .standalone-social-card [style*="grid"] {
@@ -1485,7 +1486,7 @@
         gap: 0.35rem !important;
       }
 
-      .standalone-social-card input {
+      .standalone-social-card input, .standalone-social-belt input {
         height: 30px !important;
         font-size: 0.72rem !important;
       }
@@ -1690,12 +1691,6 @@
                   <option value="Contract">Contract</option>
                   <option value="Seasonal">Seasonal</option>
                 </select>
-                <div class="form-group" style="margin-top: 0.5rem;">
-                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.68rem;">
-                    <input type="checkbox" id="urgentHiringCheckbox" onchange="toggleUrgentHiringBadge(this.checked)" checked style="accent-color: #D4AF37; width: 16px; height: 16px;">
-                    <span>Enable "URGENT HIRING" Badge</span>
-                  </label>
-                </div>
               </div>
               <div class="form-group">
                 <label data-cms-key="post-salary-label" data-tooltip="Public compensation or hourly pay display.">Salary Range Display</label>
@@ -1713,40 +1708,39 @@
               <label data-tooltip="Main responsibilities and role summary.">Job Description & Key Responsibilities</label>
               <textarea id="inp-desc" rows="4" oninput="updateLivePreview()" data-tooltip="Job description content.">Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.</textarea>
             </div>
-          </div>
 
-          <!-- STANDALONE CONNECTED SOCIAL MEDIA ACCOUNTS SECTION -->
-          <div class="section-card standalone-social-card" id="standalone-social-section" style="margin-top: 0.75rem;">
-            <div class="cms-sub-box-title" style="display: flex; justify-content: space-between; align-items: center;">
-              <span data-cms-key="post-social-header">LINK SOCIAL MEDIA ACCOUNTS</span>
-              <span class="badge-tag tag-mint" style="font-size: 0.55rem;">CONNECTED SYNC</span>
-            </div>
-            <div style="font-size: 0.62rem; color: var(--text-muted); margin-bottom: 0.4rem;">
-              Multi-platform outreach broadcasts directly to these connected handles and profiles upon publication.
+            <!-- PERKS & EXECUTIVE BENEFITS SUMMARY (MULTI-SELECT DROPDOWN) -->
+            <div class="form-group" style="margin-top: 0.5rem;">
+              <label style="font-weight: 800; font-size: 0.68rem; text-transform: uppercase;" data-cms-key="post-perks-label">Perks & Executive Benefits Summary</label>
+              <select id="job-perks-select" multiple onchange="updateLivePreview()" style="height: 64px !important; font-size: 0.72rem; width: 100%;">
+                <option value="PTO" selected>18 Days Paid Time Off (PTO)</option>
+                <option value="Health Benefits" selected>Comprehensive Health, Dental & Vision</option>
+                <option value="401k Match" selected>401(k) Matching (4%)</option>
+                <option value="Profit Sharing">Profit Sharing & Performance Bonuses</option>
+                <option value="Remote Work Flexibility">Hybrid / Remote Work Flexibility</option>
+                <option value="Tuition Reimbursement">Tuition Reimbursement & Professional Development</option>
+                <option value="Stock Options">Equity & Stock Options</option>
+              </select>
+              <div style="font-size: 0.58rem; color: var(--text-muted); margin-top: 0.15rem;">Hold Ctrl/Cmd to select multiple benefits</div>
             </div>
 
-            <!-- Preserve Exact Input IDs & Event Handlers -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.4rem;">
-              <div class="form-group">
-                <label>LinkedIn Profile / Page</label>
-                <input type="text" id="social-linkedin" data-cms-key="post-linkedin-ph" placeholder="https://linkedin.com/company/..." value="https://linkedin.com/company/quantumretail" oninput="updateLivePreview()" data-tooltip="LinkedIn company URL">
-              </div>
-              <div class="form-group">
-                <label>X / Twitter Handle</label>
-                <input type="text" id="social-x" data-cms-key="post-x-ph" placeholder="@Handle..." value="@QuantumRetailJobs" oninput="updateLivePreview()" data-tooltip="X handle or URL">
-              </div>
-              <div class="form-group">
-                <label>TikTok Handle</label>
-                <input type="text" id="social-tiktok" data-cms-key="post-tiktok-ph" placeholder="@Handle..." value="@QuantumRetailHiring" oninput="updateLivePreview()" data-tooltip="TikTok account handle">
-              </div>
-              <div class="form-group">
-                <label>Facebook Page</label>
-                <input type="text" id="social-facebook" placeholder="https://facebook.com/..." value="https://facebook.com/quantumretail" oninput="updateLivePreview()" data-tooltip="Facebook page link">
-              </div>
-              <div class="form-group">
-                <label>Instagram Handle</label>
-                <input type="text" id="social-instagram" placeholder="@Handle..." value="@QuantumRetailCareers" oninput="updateLivePreview()" data-tooltip="Instagram profile handle">
-              </div>
+            <!-- TARGET EXPERIENCE LEVEL -->
+            <div class="form-group" style="margin-top: 0.4rem;">
+              <label style="font-weight: 800; font-size: 0.68rem; text-transform: uppercase;" data-cms-key="post-exp-level-label">Target Experience Level</label>
+              <select id="job-exp-level" onchange="updateLivePreview()" style="width: 100%; height: 32px;">
+                <option value="Entry-Level (0-2 Years)">Entry-Level (0-2 Years)</option>
+                <option value="Mid-Level (2-5 Years)" selected>Mid-Level (2-5 Years)</option>
+                <option value="Senior (5+ Years)">Senior (5+ Years)</option>
+                <option value="Management / Director">Management / Director</option>
+              </select>
+            </div>
+
+            <!-- URGENT HIRING TOGGLE -->
+            <div class="form-group" style="margin-top: 0.5rem;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.68rem;">
+                <input type="checkbox" id="urgentHiringCheckbox" onchange="toggleUrgentHiringBadge(this.checked)" checked style="accent-color: #D4AF37; width: 16px; height: 16px;">
+                <span>Enable "URGENT HIRING" Badge</span>
+              </label>
             </div>
           </div>
         </div>
@@ -1779,21 +1773,22 @@
                     </span>
                   </div>
                   <div style="font-size: 0.72rem; color: #64748B; font-weight: 700; margin-top: 0.35rem;">
-                    <span id="pv-location">AUSTIN, TX (HYBRID)</span> • <span id="pv-type">FULL-TIME</span>
+                    <span id="pv-location">AUSTIN, TX (HYBRID)</span> • <span id="pv-type">FULL-TIME</span> • <span id="pv-exp">MID-LEVEL (2-5 YEARS)</span>
                   </div>
                 </div>
                 <span class="pv-salary-badge" id="pv-salary">$75,000 - $95,000</span>
               </div>
 
-              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-                <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
-                  <strong style="display:block; color:#64748B;">PTO</strong> 18 Days PTO
+              <!-- PERKS & BENEFITS PREVIEW PILLS -->
+              <div id="pv-perks" style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.35rem 0;">
+                <div style="background:#F8FAFC; border:1px solid var(--border-color); padding:0.3rem 0.5rem; border-radius:4px; font-size:0.68rem;">
+                  <strong style="color:#64748B;">PTO:</strong> 18 Days Paid Time Off (PTO)
                 </div>
-                <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
-                  <strong style="display:block; color:#64748B;">HEALTH</strong> Comprehensive Health
+                <div style="background:#F8FAFC; border:1px solid var(--border-color); padding:0.3rem 0.5rem; border-radius:4px; font-size:0.68rem;">
+                  <strong style="color:#64748B;">HEALTH:</strong> Comprehensive Health, Dental & Vision
                 </div>
-                <div style="background:#F8FAFC; padding:0.5rem; border-radius:6px; font-size:0.68rem;">
-                  <strong style="display:block; color:#64748B;">401(K)</strong> 4% Match
+                <div style="background:#F8FAFC; border:1px solid var(--border-color); padding:0.3rem 0.5rem; border-radius:4px; font-size:0.68rem;">
+                  <strong style="color:#64748B;">401(K):</strong> 401(k) Matching (4%)
                 </div>
               </div>
 
@@ -1904,73 +1899,40 @@
 
       </div>
 
-      <!-- LOCKED BOTTOM SECTION: PUBLISHING & DISTRIBUTION SETTINGS (NO "3.", NO BADGE) -->
-      <div class="bottom-distribution-panel publishing-section">
-        <div class="panel-header">
-          <span class="panel-title" id="publish-header-text" data-cms-key="post-publish-header">PUBLISHING & DISTRIBUTION SETTINGS</span>
-        </div>
-
-        <div class="grid-2">
-          <div class="form-group">
-            <label data-cms-key="post-perks-label" data-tooltip="Perks, health coverage, 401k and stipends.">Perks, PTO & Benefits Highlights</label>
-            <input type="text" id="inp-perks" value="18 Days PTO | Comprehensive Health | 401(k) 4% Match" oninput="updateLivePreview()" data-tooltip="Enter candidate benefits summary.">
-          </div>
-          <div class="form-group">
-            <label data-tooltip="Select target candidate experience level.">Target Experience Level</label>
-            <select id="inp-seniority" data-tooltip="Experience level filter.">
-              <option value="Mid-Level" selected>Mid-Level (2-5 Years)</option>
-              <option value="Entry-Level">Entry-Level (0-2 Years)</option>
-              <option value="Senior">Senior (5+ Years)</option>
-              <option value="Executive">Management / Director</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label style="margin-bottom: 0.4rem; display: block;" data-tooltip="Select channels where this position will be distributed.">Multi-Platform Distribution Channels</label>
-          <div class="distribution-checkbox-grid">
-            <div class="dist-channel-box selected" id="dist-board" onclick="toggleDistChannel(this)" data-tooltip="Live publishing to u-theJOBS candidate board.">
-              <input type="checkbox" checked style="min-height: 18px; width: 18px;">
-              <div>
-                <strong style="font-size: 0.78rem; display: block;">u-theJOBS Board</strong>
-                <small style="font-size: 0.68rem; color: var(--text-muted);">Direct applicant stream</small>
-              </div>
-            </div>
-
-            <div class="dist-channel-box selected" id="dist-email" onclick="toggleDistChannel(this)" data-tooltip="Automated email blast to registered candidates.">
-              <input type="checkbox" checked style="min-height: 18px; width: 18px;">
-              <div>
-                <strong style="font-size: 0.78rem; display: block;">Email Blast (u-thePAL)</strong>
-                <small style="font-size: 0.68rem; color: var(--text-muted);">Direct candidate inboxes</small>
-              </div>
-            </div>
-
-            <div class="dist-channel-box selected" id="dist-social" onclick="toggleDistChannel(this)" data-tooltip="Multi-platform post to connected LinkedIn, X, TikTok, Facebook, IG.">
-              <input type="checkbox" checked style="min-height: 18px; width: 18px;">
-              <div>
-                <strong style="font-size: 0.78rem; display: block;">Connected Socials</strong>
-                <small style="font-size: 0.68rem; color: var(--text-muted);">LinkedIn, X, TikTok, Meta</small>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
-          <button class="btn-gold-action" id="btn-publish-post" data-cms-key="post-publish-btn" style="flex: 1.5;" onclick="publishJobLive()" data-tooltip="Publish position live and share across all selected channels.">
-            PUBLISH POSITION LIVE & BROADCAST
-          </button>
-          <button class="btn-surface-action" style="flex: 1;" onclick="broadcastToConnectedChannels()" data-tooltip="Trigger immediate multi-platform social & email share.">
-            SHARE TO CONNECTED CHANNELS
-          </button>
-          <button class="btn-surface-action" onclick="resetStudioForm()" data-tooltip="Clear form inputs.">
-            RESET
-          </button>
-        </div>
-      </div>
     </section>
 
     <!-- TAB 2: OMNICHANNEL CRM TAB (25 MAX RECIPIENT CAP STRICTLY ENFORCED) -->
     <section id="view-crm" class="tab-view">
+      <!-- LINK SOCIAL MEDIA ACCOUNTS (TOP HORIZONTAL BELT) -->
+      <div class="section-card standalone-social-belt" id="standalone-social-section" style="margin-bottom: 0.75rem;">
+        <div class="cms-sub-box-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+          <span data-cms-key="post-social-header">LINK SOCIAL MEDIA ACCOUNTS</span>
+          <span class="badge-tag tag-mint" style="font-size: 0.55rem;">CONNECTED SYNC</span>
+        </div>
+        <div style="display: flex; overflow-x: auto; gap: 0.5rem; padding-bottom: 0.25rem; -webkit-overflow-scrolling: touch;">
+          <div class="form-group" style="min-width: 180px; flex: 1;">
+            <label>LinkedIn</label>
+            <input type="text" id="social-linkedin" data-cms-key="post-linkedin-ph" placeholder="https://linkedin.com/company/..." value="https://linkedin.com/company/quantumretail" oninput="updateLivePreview()" data-tooltip="LinkedIn company URL">
+          </div>
+          <div class="form-group" style="min-width: 160px; flex: 1;">
+            <label>X / Twitter</label>
+            <input type="text" id="social-x" data-cms-key="post-x-ph" placeholder="@Handle..." value="@QuantumRetailJobs" oninput="updateLivePreview()" data-tooltip="X handle or URL">
+          </div>
+          <div class="form-group" style="min-width: 160px; flex: 1;">
+            <label>TikTok</label>
+            <input type="text" id="social-tiktok" data-cms-key="post-tiktok-ph" placeholder="@Handle..." value="@QuantumRetailHiring" oninput="updateLivePreview()" data-tooltip="TikTok account handle">
+          </div>
+          <div class="form-group" style="min-width: 180px; flex: 1;">
+            <label>Facebook</label>
+            <input type="text" id="social-facebook" placeholder="https://facebook.com/..." value="https://facebook.com/quantumretail" oninput="updateLivePreview()" data-tooltip="Facebook page link">
+          </div>
+          <div class="form-group" style="min-width: 160px; flex: 1;">
+            <label>Instagram</label>
+            <input type="text" id="social-instagram" placeholder="@Handle..." value="@QuantumRetailCareers" oninput="updateLivePreview()" data-tooltip="Instagram profile handle">
+          </div>
+        </div>
+      </div>
+
       <div class="panel-card">
         <div class="panel-header">
           <span class="panel-title">MULTI-PLATFORM TALENT OUTREACH & CAMPAIGNS</span>
@@ -2017,6 +1979,54 @@
           <button class="btn-surface-action" onclick="testPersonalizationPreview()" data-tooltip="Preview message with sample candidate data.">
             PREVIEW PERSONALIZATION
           </button>
+        </div>
+
+        <!-- LOCKED PUBLISHING & DISTRIBUTION SETTINGS (SNUGGED DIRECTLY ABOVE CAMPAIGN DATE TRACKER) -->
+        <div class="publishing-section" style="margin-top: 1rem; border-top: 1.5px solid var(--border-color); padding-top: 1rem;">
+          <div class="panel-header">
+            <span class="panel-title" id="publish-header-text" data-cms-key="post-publish-header">PUBLISHING & DISTRIBUTION SETTINGS</span>
+          </div>
+
+          <div>
+            <label style="margin-bottom: 0.4rem; display: block;" data-tooltip="Select channels where this position will be distributed.">Multi-Platform Distribution Channels</label>
+            <div class="distribution-checkbox-grid">
+              <div class="dist-channel-box selected" id="dist-board" onclick="toggleDistChannel(this)" data-tooltip="Live publishing to u-theJOBS candidate board.">
+                <input type="checkbox" checked style="min-height: 18px; width: 18px;">
+                <div>
+                  <strong style="font-size: 0.78rem; display: block;">u-theJOBS Board</strong>
+                  <small style="font-size: 0.68rem; color: var(--text-muted);">Direct applicant stream</small>
+                </div>
+              </div>
+
+              <div class="dist-channel-box selected" id="dist-email" onclick="toggleDistChannel(this)" data-tooltip="Automated email blast to registered candidates.">
+                <input type="checkbox" checked style="min-height: 18px; width: 18px;">
+                <div>
+                  <strong style="font-size: 0.78rem; display: block;">Email Blast (u-thePAL)</strong>
+                  <small style="font-size: 0.68rem; color: var(--text-muted);">Direct candidate inboxes</small>
+                </div>
+              </div>
+
+              <div class="dist-channel-box selected" id="dist-social" onclick="toggleDistChannel(this)" data-tooltip="Multi-platform post to connected LinkedIn, X, TikTok, Facebook, IG.">
+                <input type="checkbox" checked style="min-height: 18px; width: 18px;">
+                <div>
+                  <strong style="font-size: 0.78rem; display: block;">Connected Socials</strong>
+                  <small style="font-size: 0.68rem; color: var(--text-muted);">LinkedIn, X, TikTok, Meta</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; margin-top: 0.75rem;">
+            <button class="btn-gold-action" id="btn-publish-post" data-cms-key="post-publish-btn" style="flex: 1.5;" onclick="publishJobLive()" data-tooltip="Publish position live and share across all selected channels.">
+              PUBLISH POSITION LIVE & BROADCAST
+            </button>
+            <button class="btn-surface-action" style="flex: 1;" onclick="broadcastToConnectedChannels()" data-tooltip="Trigger immediate multi-platform social & email share.">
+              SHARE TO CONNECTED CHANNELS
+            </button>
+            <button class="btn-surface-action" onclick="resetStudioForm()" data-tooltip="Clear form inputs.">
+              RESET
+            </button>
+          </div>
         </div>
 
         <!-- CAMPAIGN DATE TRACKER TABLE -->
@@ -2617,8 +2627,7 @@
      * CRITICAL CODE DIRECTIVE & MANDATE:
      * 1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.
      * 2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.
-     * 3. PRESERVE ALL DOM ELEMENT IDs & EVENT LISTENERS WHEN EXTRACTING COMPONENTS.
-     * 4. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.
+     * 3. SURGICAL EDITING ONLY: PRESERVE ALL DOM ELEMENT IDs, EVENT LISTENERS, AND LIVE PREVIEW BINDINGS.
      * ============================================================================ */
 
     let pendingConfirmCallback = null;
@@ -2754,6 +2763,15 @@
       } catch (e) {}
     }
 
+    function getSelectedPerks() {
+      const selectEl = document.getElementById('job-perks-select');
+      if (!selectEl) {
+        const perksInput = document.getElementById('inp-perks');
+        return perksInput && perksInput.value ? [perksInput.value] : [];
+      }
+      return Array.from(selectEl.selectedOptions).map(opt => opt.value);
+    }
+
     // Live Preview Updates
     function updateLivePreview() {
       const title = document.getElementById('inp-title')?.value;
@@ -2762,13 +2780,34 @@
       const type = document.getElementById('inp-type')?.value;
       const salary = document.getElementById('inp-salary')?.value;
       const desc = document.getElementById('inp-desc')?.value;
+      const expLevel = document.getElementById('job-exp-level')?.value || document.getElementById('inp-seniority')?.value || 'Mid-Level (2-5 Years)';
 
       if (document.getElementById('pv-title')) document.getElementById('pv-title').textContent = title || 'Position Title';
       if (document.getElementById('pv-company')) document.getElementById('pv-company').textContent = company || 'Company Name';
       if (document.getElementById('pv-location')) document.getElementById('pv-location').textContent = (loc || 'REMOTE').toUpperCase();
       if (document.getElementById('pv-type')) document.getElementById('pv-type').textContent = (type || 'FULL-TIME').toUpperCase();
+      if (document.getElementById('pv-exp')) document.getElementById('pv-exp').textContent = expLevel.toUpperCase();
       if (document.getElementById('pv-salary')) document.getElementById('pv-salary').textContent = salary || '$0,000 - $0,000';
       if (document.getElementById('pv-desc')) document.getElementById('pv-desc').textContent = desc || 'Job description preview.';
+
+      // Dynamic Perks Rendering in Preview
+      const pvPerks = document.getElementById('pv-perks');
+      if (pvPerks) {
+        const perks = getSelectedPerks();
+        if (perks.length > 0) {
+          pvPerks.innerHTML = perks.map(p => `
+            <div style="background:#F8FAFC; border:1px solid var(--border-color); padding:0.3rem 0.5rem; border-radius:4px; font-size:0.68rem;">
+              <strong style="color:#64748B;">BENEFIT:</strong> ${p}
+            </div>
+          `).join('');
+        } else {
+          pvPerks.innerHTML = `
+            <div style="background:#F8FAFC; border:1px solid var(--border-color); padding:0.3rem 0.5rem; border-radius:4px; font-size:0.68rem; color:var(--text-muted);">
+              Standard Benefits Package Included
+            </div>
+          `;
+        }
+      }
 
       const socLinkedin = (document.getElementById('social-linkedin') || document.getElementById('inp-soc-linkedin'))?.value;
       const socX = (document.getElementById('social-x') || document.getElementById('inp-soc-x'))?.value;
@@ -2803,12 +2842,20 @@
     };
 
     function resetStudioForm() {
-      document.getElementById('inp-title').value = '';
-      document.getElementById('inp-company').value = '';
-      document.getElementById('inp-location').value = '';
-      document.getElementById('inp-salary').value = '';
-      document.getElementById('inp-desc').value = '';
-      document.getElementById('inp-perks').value = '';
+      if (document.getElementById('inp-title')) document.getElementById('inp-title').value = '';
+      if (document.getElementById('inp-company')) document.getElementById('inp-company').value = '';
+      if (document.getElementById('inp-location')) document.getElementById('inp-location').value = '';
+      if (document.getElementById('inp-salary')) document.getElementById('inp-salary').value = '';
+      if (document.getElementById('inp-desc')) document.getElementById('inp-desc').value = '';
+      if (document.getElementById('inp-perks')) document.getElementById('inp-perks').value = '';
+
+      const perksSelect = document.getElementById('job-perks-select');
+      if (perksSelect) {
+        Array.from(perksSelect.options).forEach((opt, idx) => {
+          opt.selected = (idx < 3); // Default select first 3
+        });
+      }
+      if (document.getElementById('job-exp-level')) document.getElementById('job-exp-level').value = 'Mid-Level (2-5 Years)';
       if (document.getElementById('social-linkedin')) document.getElementById('social-linkedin').value = '';
       if (document.getElementById('social-x')) document.getElementById('social-x').value = '';
       if (document.getElementById('social-tiktok')) document.getElementById('social-tiktok').value = '';
@@ -2828,16 +2875,21 @@
 
     async function publishJobLive() {
       const isUrgent = document.getElementById('urgentHiringCheckbox') ? document.getElementById('urgentHiringCheckbox').checked : true;
+      const expLevel = document.getElementById('job-exp-level')?.value || document.getElementById('inp-seniority')?.value || 'Mid-Level (2-5 Years)';
+      const perks = getSelectedPerks();
+
       const newJob = {
         id: `JOB-${Math.floor(100 + Math.random() * 900)}`,
         jobTitle: document.getElementById('inp-title').value,
         company: document.getElementById('inp-company').value,
         location: document.getElementById('inp-location').value,
         employmentType: document.getElementById('inp-type').value,
+        experienceLevel: expLevel,
         salary: document.getElementById('inp-salary').value,
         urgentHiring: isUrgent,
         summary: document.getElementById('inp-desc').value,
-        additionalPerks: document.getElementById('inp-perks').value,
+        additionalPerks: perks.join(' | ') || (document.getElementById('inp-perks')?.value || ''),
+        perksList: perks,
         recruiterEmail: document.getElementById('inp-recruiter-email').value,
         socialChannels: {
           linkedin: (document.getElementById('social-linkedin') || document.getElementById('inp-soc-linkedin'))?.value || '',

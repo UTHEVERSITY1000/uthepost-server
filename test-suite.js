@@ -1918,7 +1918,7 @@ async function runTests() {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
       assert(content.includes('1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.'), `${file} includes part 1 mandate`);
       assert(content.includes('2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.'), `${file} includes part 2 mandate`);
-      assert(content.includes('SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.'), `${file} includes surgical editing mandate`);
+      assert(content.includes('SURGICAL EDITING ONLY:'), `${file} includes surgical editing mandate`);
     }
 
     // 2. Verify Mobile Deck & Vertical Scrolling CSS across all Recruiter templates
@@ -1979,7 +1979,7 @@ async function runTests() {
       // 1. Mandate Comment Block
       assert(content.includes('1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.'), `${file} includes mandate part 1`);
       assert(content.includes('2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.'), `${file} includes mandate part 2`);
-      assert(content.includes('SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.'), `${file} includes surgical preservation`);
+      assert(content.includes('SURGICAL EDITING ONLY:'), `${file} includes surgical preservation`);
 
       // 2. Top Deck Header & Login Button Scaling
       assert(content.includes('header, .recruiter-header') && content.includes('height: 42px !important;'), `${file} enforces 42px header height on mobile`);
@@ -2027,15 +2027,14 @@ async function runTests() {
       // 1. Mandate Comment Block
       assert(content.includes('1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.'), `${file} includes mandate part 1`);
       assert(content.includes('2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.'), `${file} includes mandate part 2`);
-      assert(content.includes('3. PRESERVE ALL DOM ELEMENT IDs & EVENT LISTENERS WHEN EXTRACTING COMPONENTS.'), `${file} includes mandate part 3 component extraction preservation`);
-      assert(content.includes('4. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.'), `${file} includes mandate part 4 surgical preservation`);
+      assert(content.includes('SURGICAL EDITING ONLY:'), `${file} includes surgical preservation`);
 
       // 2. Card 1 Title Update
       assert(content.includes('1. EMPLOYER JOB LISTING DETAILS'), `${file} updates Card 1 title to "1. EMPLOYER JOB LISTING DETAILS"`);
       assert(content.includes('id="card1-title-text"') && content.includes('data-cms-key="post-card1-title"'), `${file} preserves Card 1 title CMS bindings`);
 
       // 3. Standalone Social Media Section Markup
-      assert(content.includes('id="standalone-social-section"') && content.includes('standalone-social-card'), `${file} defines #standalone-social-section standalone card`);
+      assert(content.includes('id="standalone-social-section"') && (content.includes('standalone-social-card') || content.includes('standalone-social-belt')), `${file} defines #standalone-social-section standalone card/belt`);
       assert(content.includes('LINK SOCIAL MEDIA ACCOUNTS'), `${file} includes "LINK SOCIAL MEDIA ACCOUNTS" header`);
       assert(content.includes('CONNECTED SYNC'), `${file} includes "CONNECTED SYNC" badge`);
 
@@ -2047,13 +2046,61 @@ async function runTests() {
       assert(content.includes('id="social-instagram"') && content.includes('oninput="updateLivePreview()"'), `${file} preserves #social-instagram with live preview handler`);
 
       // 5. CSS Styling for Standalone Social Card
-      assert(content.includes('.standalone-social-card'), `${file} defines .standalone-social-card CSS class`);
-      assert(content.includes('.standalone-social-card [style*="grid"]'), `${file} defines responsive 1-column grid for standalone social card`);
+      assert(content.includes('.standalone-social-card') || content.includes('.standalone-social-belt'), `${file} defines .standalone-social-card/.standalone-social-belt CSS class`);
       assert(content.includes('height: 30px !important;') && content.includes('font-size: 0.72rem !important;'), `${file} defines mobile scaling for standalone social inputs`);
     }
 
   } catch (err) {
     assert(false, `Group 39 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 40: U-THEPOST COMPONENT RELOCATION & TAB 2 INTEGRATION
+  // ================================================================
+  console.log('\n--- GROUP 40: U-THEPOST COMPONENT RELOCATION & TAB 2 INTEGRATION ---');
+  try {
+    const recruiterFiles = [
+      'recruiter.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html'
+    ];
+
+    for (const file of recruiterFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+
+      // 1. Mandate Comment Block
+      assert(content.includes('1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.'), `${file} includes mandate part 1`);
+      assert(content.includes('2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.'), `${file} includes mandate part 2`);
+      assert(content.includes('3. SURGICAL EDITING ONLY: PRESERVE ALL DOM ELEMENT IDs, EVENT LISTENERS, AND LIVE PREVIEW BINDINGS.'), `${file} includes mandate part 3 surgical editing & bindings preservation`);
+
+      // 2. Card 1 Relocations: Multi-Select Perks, Experience Level, and Urgent Hiring
+      assert(content.includes('id="job-perks-select"') && content.includes('multiple') && content.includes('onchange="updateLivePreview()"'), `${file} implements #job-perks-select multi-select dropdown`);
+      assert(content.includes('id="job-exp-level"') && content.includes('onchange="updateLivePreview()"'), `${file} implements #job-exp-level experience select`);
+      assert(content.includes('id="urgentHiringCheckbox"'), `${file} preserves #urgentHiringCheckbox in Card 1`);
+
+      // 3. Tab 2 Relocations: Social Accounts Belt & Publishing Section inside Tab 2
+      const crmSectionMatch = content.match(/<section id="view-crm"[\s\S]*?<\/section>/);
+      assert(crmSectionMatch !== null, `${file} contains #view-crm section`);
+      if (crmSectionMatch) {
+        const crmContent = crmSectionMatch[0];
+        assert(crmContent.includes('standalone-social-belt') && crmContent.includes('id="standalone-social-section"'), `${file} relocates #standalone-social-section to top of Tab 2`);
+        assert(crmContent.includes('publishing-section') && crmContent.includes('id="publish-header-text"'), `${file} relocates publishing-section to Tab 2`);
+        assert(crmContent.includes('id="btn-publish-post"') && crmContent.includes('publishJobLive()'), `${file} retains publish action button in Tab 2`);
+        assert(crmContent.includes('CAMPAIGN DATE TRACKER'), `${file} retains Campaign Date Tracker in Tab 2 beneath publishing section`);
+      }
+
+      // 4. Card 2 Live Preview Integrations
+      assert(content.includes('id="pv-exp"'), `${file} includes #pv-exp experience level in Card 2 preview`);
+      assert(content.includes('id="pv-perks"'), `${file} includes #pv-perks perks pills in Card 2 preview`);
+
+      // 5. JavaScript Implementation & Binding Sync
+      assert(content.includes('function getSelectedPerks()'), `${file} implements getSelectedPerks()`);
+      assert(content.includes('getSelectedPerks()') && content.includes('job-exp-level'), `${file} integrates getSelectedPerks() and job-exp-level in updateLivePreview/publishJob`);
+    }
+
+  } catch (err) {
+    assert(false, `Group 40 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
