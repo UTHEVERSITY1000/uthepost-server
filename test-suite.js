@@ -2086,13 +2086,13 @@ async function runTests() {
         const crmContent = crmSectionMatch[0];
         assert(crmContent.includes('standalone-social-belt') && crmContent.includes('id="standalone-social-section"'), `${file} relocates #standalone-social-section to top of Tab 2`);
         assert(crmContent.includes('publishing-section') && crmContent.includes('id="publish-header-text"'), `${file} relocates publishing-section to Tab 2`);
-        assert(crmContent.includes('id="btn-publish-post"') && crmContent.includes('publishJobLive()'), `${file} retains publish action button in Tab 2`);
+        assert(crmContent.includes('id="btn-publish-post"') && (crmContent.includes('publishJobLive()') || crmContent.includes('publishJob()')), `${file} retains publish action button in Tab 2`);
         assert(crmContent.includes('CAMPAIGN DATE TRACKER'), `${file} retains Campaign Date Tracker in Tab 2 beneath publishing section`);
       }
 
       // 4. Card 2 Live Preview Integrations
       assert(content.includes('id="pv-exp"'), `${file} includes #pv-exp experience level in Card 2 preview`);
-      assert(content.includes('id="pv-perks"'), `${file} includes #pv-perks perks pills in Card 2 preview`);
+      assert(content.includes('id="pv-perks"') || content.includes('id="preview-perks-list"'), `${file} includes perks pills in Card 2 preview`);
 
       // 5. JavaScript Implementation & Binding Sync
       assert(content.includes('function getSelectedPerks()'), `${file} implements getSelectedPerks()`);
@@ -2101,6 +2101,67 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 40 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 41: UI COMPACTION, BUTTON RESTORATION & PROACTIVE CLEANUP
+  // ================================================================
+  console.log('\n--- GROUP 41: UI COMPACTION, BUTTON RESTORATION & PROACTIVE CLEANUP ---');
+  try {
+    const recruiterFiles = [
+      'recruiter.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html'
+    ];
+
+    for (const file of recruiterFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+
+      // 1. Card 1 Perks & Benefits label compaction & multi-select options
+      assert(content.includes('PERKS & BENEFITS'), `${file} uses compact "PERKS & BENEFITS" label`);
+      assert(content.includes('id="job-perks-select"') && content.includes('multiple') && content.includes('onchange="updateLivePreview()"'), `${file} retains #job-perks-select multi-select`);
+      assert(content.includes('value="PTO"') && content.includes('value="Health Benefits"') && content.includes('value="401k Match"'), `${file} includes standard perks options`);
+
+      // 2. Urgent Hiring toggle & restored Card 1 Publish Live button
+      assert(content.includes('URGENT HIRING BADGE'), `${file} uses compact "URGENT HIRING BADGE" label`);
+      assert(content.includes('btn-publish-card1') && content.includes('publishJob()') && content.includes('PUBLISH LIVE'), `${file} restores PUBLISH LIVE button inside Card 1`);
+
+      // 3. Card 2 icon-only verified badge & preview perks container
+      assert(content.includes('verified-badge-icon') && content.includes('VERIFIED RECRUITER'), `${file} implements icon-only verified badge in Card 2`);
+      assert(content.includes('id="preview-perks-list"'), `${file} implements #preview-perks-list container in Card 2`);
+
+      // 4. Tab 2 Streamlining: Renamed Publish Live & purged redundant outreach buttons
+      const crmSectionMatch = content.match(/<section id="view-crm"[\s\S]*?<\/section>/);
+      assert(crmSectionMatch !== null, `${file} contains #view-crm section`);
+      if (crmSectionMatch) {
+        const crmContent = crmSectionMatch[0];
+        assert(!crmContent.includes('LAUNCH OUTREACH CAMPAIGN'), `${file} purges LAUNCH OUTREACH CAMPAIGN button from Tab 2`);
+        assert(!crmContent.includes('PREVIEW PERSONALIZATION'), `${file} purges PREVIEW PERSONALIZATION button from Tab 2`);
+        assert(crmContent.includes('id="btn-publish-post"') && crmContent.includes('PUBLISH LIVE'), `${file} renames Tab 2 primary action to "PUBLISH LIVE"`);
+      }
+
+      // 5. JavaScript Perks Binding & Consolidated Handler
+      assert(content.includes('function getSelectedPerks()'), `${file} implements getSelectedPerks()`);
+      assert(content.includes('publishJob'), `${file} defines consolidated publishJob handler`);
+      assert(content.includes('tag-gold'), `${file} defines tag-gold badge class`);
+    }
+
+    // Candidate Job Board Perks Display Verification
+    const candidateFiles = [
+      'candidate.html',
+      'u-theJOBS-ENTERPRISE-SYNC.html',
+      'u-theJOBS-DUAL LINK TO u-thePOST.html'
+    ];
+
+    for (const file of candidateFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+      assert(content.includes('card-perks-row') || content.includes('tag-gold'), `${file} renders perks pills on candidate job board`);
+      assert(content.includes('dt-perks'), `${file} supports perks display in inspector panel`);
+    }
+
+  } catch (err) {
+    assert(false, `Group 41 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');

@@ -629,6 +629,35 @@
       border: 1px solid #FEBA27 !important;
     }
 
+    .badge-tag.tag-gold {
+      background-color: #FEBA27 !important;
+      color: #0F172A !important;
+      border: 1px solid #FEBA27 !important;
+      font-weight: 700 !important;
+      border-radius: 4px;
+    }
+
+    .verified-badge-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: #0075FF;
+      color: #FFFFFF;
+      border-radius: 50%;
+      font-size: 0.65rem;
+      font-weight: 900;
+      cursor: help;
+    }
+
+    .btn-publish-card1 {
+      width: 100%;
+      margin-top: 0.6rem;
+      height: 34px;
+      font-size: 0.7rem;
+    }
+
     .badge-tag.active, .status-badge.active, .badge-tag.selected {
       background-color: #0075FF !important;
       color: #FFFFFF !important;
@@ -1710,23 +1739,22 @@
             </div>
 
             <!-- PERKS & EXECUTIVE BENEFITS SUMMARY (MULTI-SELECT DROPDOWN) -->
-            <div class="form-group" style="margin-top: 0.5rem;">
-              <label style="font-weight: 800; font-size: 0.68rem; text-transform: uppercase;" data-cms-key="post-perks-label">Perks & Executive Benefits Summary</label>
-              <select id="job-perks-select" multiple onchange="updateLivePreview()" style="height: 64px !important; font-size: 0.72rem; width: 100%;">
-                <option value="PTO" selected>18 Days Paid Time Off (PTO)</option>
-                <option value="Health Benefits" selected>Comprehensive Health, Dental & Vision</option>
-                <option value="401k Match" selected>401(k) Matching (4%)</option>
-                <option value="Profit Sharing">Profit Sharing & Performance Bonuses</option>
-                <option value="Remote Work Flexibility">Hybrid / Remote Work Flexibility</option>
-                <option value="Tuition Reimbursement">Tuition Reimbursement & Professional Development</option>
+            <div class="form-group" style="margin-top: 0.4rem;">
+              <label style="font-weight: 800; font-size: 0.62rem; text-transform: uppercase;">PERKS & BENEFITS</label>
+              <select id="job-perks-select" multiple onchange="updateLivePreview()" style="height: 60px; font-size: 0.7rem; width: 100%; border: 1px solid var(--border-color); border-radius: 4px;">
+                <option value="PTO" selected>Paid Time Off (PTO)</option>
+                <option value="Health Benefits" selected>Health, Dental & Vision</option>
+                <option value="401k Match" selected>401(k) Matching</option>
+                <option value="Profit Sharing">Profit Sharing & Bonuses</option>
+                <option value="Flexible Schedule">Hybrid / Remote Flexibility</option>
+                <option value="Tuition Assistance">Tuition Reimbursement</option>
                 <option value="Stock Options">Equity & Stock Options</option>
               </select>
-              <div style="font-size: 0.58rem; color: var(--text-muted); margin-top: 0.15rem;">Hold Ctrl/Cmd to select multiple benefits</div>
             </div>
 
             <!-- TARGET EXPERIENCE LEVEL -->
             <div class="form-group" style="margin-top: 0.4rem;">
-              <label style="font-weight: 800; font-size: 0.68rem; text-transform: uppercase;" data-cms-key="post-exp-level-label">Target Experience Level</label>
+              <label style="font-weight: 800; font-size: 0.62rem; text-transform: uppercase;" data-cms-key="post-exp-level-label">EXPERIENCE LEVEL</label>
               <select id="job-exp-level" onchange="updateLivePreview()" style="width: 100%; height: 32px;">
                 <option value="Entry-Level (0-2 Years)">Entry-Level (0-2 Years)</option>
                 <option value="Mid-Level (2-5 Years)" selected>Mid-Level (2-5 Years)</option>
@@ -1735,13 +1763,17 @@
               </select>
             </div>
 
-            <!-- URGENT HIRING TOGGLE -->
+            <!-- URGENT HIRING TOGGLE & RESTORED PUBLISH BUTTON -->
             <div class="form-group" style="margin-top: 0.5rem;">
-              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.68rem;">
-                <input type="checkbox" id="urgentHiringCheckbox" onchange="toggleUrgentHiringBadge(this.checked)" checked style="accent-color: #D4AF37; width: 16px; height: 16px;">
-                <span>Enable "URGENT HIRING" Badge</span>
+              <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.62rem;">
+                <input type="checkbox" id="urgentHiringCheckbox" onchange="toggleUrgentHiringBadge(this.checked)" checked style="accent-color: #FEBA27; width: 14px; height: 14px;">
+                <span>URGENT HIRING BADGE</span>
               </label>
             </div>
+
+            <button class="btn-primary btn-publish-card1" onclick="publishJob()" style="width: 100%; margin-top: 0.6rem; height: 34px; font-size: 0.7rem;">
+              PUBLISH LIVE
+            </button>
           </div>
         </div>
 
@@ -1762,14 +1794,11 @@
               <div class="pv-header">
                 <div>
                   <div class="pv-title" id="pv-title">Sales Manager</div>
-                  <div class="pv-company">
+                  <div class="pv-company" style="display: flex; align-items: center; gap: 0.4rem;">
                     <span id="pv-company">Quantum Retail Corp</span>
-                    <!-- OFFICIAL GOLD UTHEVERSITY EMBLEM -->
-                    <span class="verified-employer-badge" data-tooltip="Official Verified Employer (UTHEVERSITY Emblem)">
-                      <svg class="uthe-emblem-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
-                        <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18C5 19.5 8.13 21 12 21C15.87 21 19 19.5 19 17.18V13.18L12 17L5 13.18Z"/>
-                      </svg>
-                      VERIFIED EMPLOYER
+                    <!-- ICON-ONLY VERIFIED BADGE -->
+                    <span class="verified-badge-icon" data-tooltip="VERIFIED RECRUITER" style="display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: #0075FF; color: #FFFFFF; border-radius: 50%; font-size: 0.65rem; font-weight: 900; cursor: help;" title="VERIFIED RECRUITER">
+                      ✓
                     </span>
                   </div>
                   <div style="font-size: 0.72rem; color: #64748B; font-weight: 700; margin-top: 0.35rem;">
@@ -1780,17 +1809,12 @@
               </div>
 
               <!-- PERKS & BENEFITS PREVIEW PILLS -->
-              <div id="pv-perks" style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.35rem 0;">
-                <div style="background:#F8FAFC; border:1px solid var(--border-color); padding:0.3rem 0.5rem; border-radius:4px; font-size:0.68rem;">
-                  <strong style="color:#64748B;">PTO:</strong> 18 Days Paid Time Off (PTO)
-                </div>
-                <div style="background:#F8FAFC; border:1px solid var(--border-color); padding:0.3rem 0.5rem; border-radius:4px; font-size:0.68rem;">
-                  <strong style="color:#64748B;">HEALTH:</strong> Comprehensive Health, Dental & Vision
-                </div>
-                <div style="background:#F8FAFC; border:1px solid var(--border-color); padding:0.3rem 0.5rem; border-radius:4px; font-size:0.68rem;">
-                  <strong style="color:#64748B;">401(K):</strong> 401(k) Matching (4%)
-                </div>
+              <div id="preview-perks-list" class="preview-perks-container" style="display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.35rem 0;">
+                <span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px;">PTO</span>
+                <span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px;">Health Benefits</span>
+                <span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px;">401k Match</span>
               </div>
+              <div id="pv-perks" style="display: none;"></div>
 
               <div style="font-size: 0.85rem; line-height: 1.5; color: #334155;" id="pv-desc">
                 Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.
@@ -1972,15 +1996,6 @@
           <textarea id="crm-message-body" rows="4" data-tooltip="Compose your custom candidate pitch. Supports {candidate_name}, {job_title}, {company_name}.">Hi {candidate_name}, I saw your background in sales and customer service. We are expanding our team at {company_name} and would love to invite you for an interview for our {job_title} role.</textarea>
         </div>
 
-        <div style="display: flex; gap: 0.75rem;">
-          <button class="btn-gold-action" onclick="dispatchCrmCampaign()" data-tooltip="Send campaign outreach immediately (Max 25) and log timestamp in tracker.">
-            LAUNCH OUTREACH CAMPAIGN
-          </button>
-          <button class="btn-surface-action" onclick="testPersonalizationPreview()" data-tooltip="Preview message with sample candidate data.">
-            PREVIEW PERSONALIZATION
-          </button>
-        </div>
-
         <!-- LOCKED PUBLISHING & DISTRIBUTION SETTINGS (SNUGGED DIRECTLY ABOVE CAMPAIGN DATE TRACKER) -->
         <div class="publishing-section" style="margin-top: 1rem; border-top: 1.5px solid var(--border-color); padding-top: 1rem;">
           <div class="panel-header">
@@ -2017,8 +2032,8 @@
           </div>
 
           <div style="display: flex; gap: 0.75rem; margin-top: 0.75rem;">
-            <button class="btn-gold-action" id="btn-publish-post" data-cms-key="post-publish-btn" style="flex: 1.5;" onclick="publishJobLive()" data-tooltip="Publish position live and share across all selected channels.">
-              PUBLISH POSITION LIVE & BROADCAST
+            <button class="btn-gold-action" id="btn-publish-post" data-cms-key="post-publish-btn" style="flex: 1.5;" onclick="publishJob()" data-tooltip="Publish position live and share across all selected channels.">
+              PUBLISH LIVE
             </button>
             <button class="btn-surface-action" style="flex: 1;" onclick="broadcastToConnectedChannels()" data-tooltip="Trigger immediate multi-platform social & email share.">
               SHARE TO CONNECTED CHANNELS
@@ -2765,10 +2780,7 @@
 
     function getSelectedPerks() {
       const selectEl = document.getElementById('job-perks-select');
-      if (!selectEl) {
-        const perksInput = document.getElementById('inp-perks');
-        return perksInput && perksInput.value ? [perksInput.value] : [];
-      }
+      if (!selectEl) return [];
       return Array.from(selectEl.selectedOptions).map(opt => opt.value);
     }
 
@@ -2791,21 +2803,15 @@
       if (document.getElementById('pv-desc')) document.getElementById('pv-desc').textContent = desc || 'Job description preview.';
 
       // Dynamic Perks Rendering in Preview
-      const pvPerks = document.getElementById('pv-perks');
-      if (pvPerks) {
-        const perks = getSelectedPerks();
-        if (perks.length > 0) {
-          pvPerks.innerHTML = perks.map(p => `
-            <div style="background:#F8FAFC; border:1px solid var(--border-color); padding:0.3rem 0.5rem; border-radius:4px; font-size:0.68rem;">
-              <strong style="color:#64748B;">BENEFIT:</strong> ${p}
-            </div>
-          `).join('');
+      const selectedPerks = getSelectedPerks();
+      const perksContainer = document.getElementById('preview-perks-list') || document.getElementById('pv-perks');
+      if (perksContainer) {
+        if (selectedPerks.length > 0) {
+          perksContainer.innerHTML = selectedPerks.map(perk => 
+            `<span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px;">${perk}</span>`
+          ).join('');
         } else {
-          pvPerks.innerHTML = `
-            <div style="background:#F8FAFC; border:1px solid var(--border-color); padding:0.3rem 0.5rem; border-radius:4px; font-size:0.68rem; color:var(--text-muted);">
-              Standard Benefits Package Included
-            </div>
-          `;
+          perksContainer.innerHTML = `<span style="font-size:0.6rem; color:var(--text-muted);">Standard Benefits Included</span>`;
         }
       }
 
@@ -2921,6 +2927,7 @@
       broadcastSyncEvent('JOB_PUBLISHED', { job: newJob });
       showCustomModalAlert('Position Published Live', `Your position "${newJob.jobTitle}" is live and shared to connected channels.`);
     }
+    window.publishJob = publishJobLive;
 
     function renderActiveJobsTable() {
       const tbody = document.getElementById('card3-live-jobs-tbody');
