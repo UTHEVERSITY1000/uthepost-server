@@ -102,6 +102,29 @@ async function runTests() {
     });
   }
 
+  function httpDelete(urlPath, headers = {}) {
+    return new Promise((resolve, reject) => {
+      const req = http.request(`${BASE_URL}${urlPath}`, {
+        method: 'DELETE',
+        headers: {
+          ...headers
+        }
+      }, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => {
+          try {
+            resolve({ status: res.statusCode, data: JSON.parse(data), raw: data, headers: res.headers });
+          } catch (e) {
+            resolve({ status: res.statusCode, raw: data, headers: res.headers });
+          }
+        });
+      });
+      req.on('error', reject);
+      req.end();
+    });
+  }
+
   const candContent = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
   const recContent = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
   const adminContent = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
@@ -1676,6 +1699,93 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 33 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 34: PERSISTENT JOB CRUD & LIVE WEBSOCKET SYNC
+  // ================================================================
+  console.log('\n--- GROUP 34: PERSISTENT JOB CRUD & LIVE WEBSOCKET SYNC ---');
+  try {
+    // 1. Server Persistence & Endpoint Safeguards
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+    assert(serverJs.includes('jobs.json'), 'server.js defines data/jobs.json central storage file');
+    assert(serverJs.includes('loadJobsFromDisk'), 'server.js implements loadJobsFromDisk()');
+    assert(serverJs.includes('saveJobsToDisk'), 'server.js implements saveJobsToDisk()');
+    assert(serverJs.includes('no-store, no-cache, must-revalidate') || serverJs.includes('no-cache'), 'server.js sets no-cache header on GET /api/jobs');
+    assert(serverJs.includes('JOB_PUBLISHED') && serverJs.includes('JOB_DELETED'), 'server.js broadcasts JOB_PUBLISHED and JOB_DELETED');
+
+    // 2. Candidate Templates Verification
+    const candFiles = [
+      'candidate.html',
+      'u-theJOBS-ENTERPRISE-SYNC.html',
+      'u-theJOBS-DUAL LINK TO u-thePOST.html'
+    ];
+
+    for (const cf of candFiles) {
+      const content = fs.readFileSync(path.join(__dirname, cf), 'utf8');
+      assert(content.includes('allJobs'), `${cf} defines allJobs state array`);
+      assert(content.includes('data.type === \'JOB_PUBLISHED\'') || content.includes('data.type === "JOB_PUBLISHED"'), `${cf} handles JOB_PUBLISHED in live sync`);
+      assert(content.includes('data.type === \'JOB_DELETED\'') || content.includes('data.type === "JOB_DELETED"'), `${cf} handles JOB_DELETED in live sync`);
+      assert(content.includes('fetchLiveJobs'), `${cf} implements fetchLiveJobs()`);
+    }
+
+    // 3. Recruiter Templates Verification
+    const recFiles = [
+      'recruiter.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html'
+    ];
+
+    for (const rf of recFiles) {
+      const content = fs.readFileSync(path.join(__dirname, rf), 'utf8');
+      assert(content.includes('activeJobs'), `${rf} defines activeJobs state array`);
+      assert(content.includes('renderActiveJobsTable'), `${rf} defines renderActiveJobsTable()`);
+      assert(content.includes('deleteJob'), `${rf} implements deleteJob(jobId)`);
+    }
+
+    // 4. Live API CRUD Cycle Verification
+    const loginRes = await httpPost('/api/auth/login', {
+      email: 'contact@utheversity.com',
+      password: 'ZionAdmin2026!'
+    });
+    const adminToken = loginRes.data.token;
+    const authHeaders = {
+      'Authorization': `Bearer ${adminToken}`,
+      'X-Admin-Portal': 'true',
+      'Content-Type': 'application/json'
+    };
+
+    // Test POST /api/jobs
+    const testJobId = `JOB-TEST-${Date.now()}`;
+    const createJobRes = await httpPost('/api/jobs', {
+      id: testJobId,
+      jobTitle: 'Cloud Solutions Architect',
+      company: 'Quantum Systems Inc',
+      location: 'DALLAS, TX (REMOTE)',
+      employmentType: 'Full-Time',
+      salary: '$160,000 - $200,000'
+    }, authHeaders);
+
+    assert(createJobRes.status === 201 || createJobRes.status === 200, 'POST /api/jobs successfully publishes job');
+    assert(createJobRes.data.job && createJobRes.data.job.id === testJobId, 'POST /api/jobs returns created job object');
+
+    // Test GET /api/jobs
+    const getJobsRes = await httpGet('/api/jobs', authHeaders);
+    assert(getJobsRes.status === 200, 'GET /api/jobs returns HTTP 200');
+    assert(getJobsRes.headers['cache-control'] && getJobsRes.headers['cache-control'].includes('no-cache'), 'GET /api/jobs response includes no-cache header');
+    assert(getJobsRes.data.jobs.some(j => j.id === testJobId), 'Newly published job is present in GET /api/jobs');
+
+    // Test DELETE /api/jobs/:id
+    const deleteJobRes = await httpDelete(`/api/jobs/${testJobId}`, authHeaders);
+    assert(deleteJobRes.status === 200, 'DELETE /api/jobs/:id returns HTTP 200');
+
+    // Verify deletion persisted
+    const verifyGetJobsRes = await httpGet('/api/jobs', authHeaders);
+    assert(!verifyGetJobsRes.data.jobs.some(j => j.id === testJobId), 'Deleted job is immediately removed from GET /api/jobs');
+
+  } catch (err) {
+    assert(false, `Group 34 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');

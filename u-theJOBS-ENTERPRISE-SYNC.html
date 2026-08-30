@@ -1743,11 +1743,15 @@
       }
     ];
 
+    let allJobs = jobsDatabase;
+
     function renderJobListings(jobs) {
       const container = document.getElementById('opportunities-list');
+      if (!container) return;
       container.innerHTML = '';
+      const list = jobs || allJobs || jobsDatabase;
 
-      jobs.forEach(job => {
+      list.forEach(job => {
         const isSelected = job.id === selectedJobId;
         const card = document.createElement('div');
         card.className = `job-listing-card ${isSelected ? 'selected' : ''}`;
@@ -2421,6 +2425,16 @@
         wsRelay.onmessage = (e) => {
           try {
             const data = JSON.parse(e.data);
+            if (data.type === 'JOB_PUBLISHED' && data.job) {
+              allJobs = allJobs.filter(j => String(j.id) !== String(data.job.id));
+              allJobs.unshift(data.job);
+              jobsDatabase = allJobs;
+              renderJobListings();
+            } else if (data.type === 'JOB_DELETED' && data.jobId) {
+              allJobs = allJobs.filter(j => String(j.id) !== String(data.jobId));
+              jobsDatabase = allJobs;
+              renderJobListings();
+            }
             if (data.type === 'CMS_CONFIG_UPDATED' || data.event === 'cms_update' || data.type === 'cms_update') {
               const cfg = data.config || data.updatedConfig;
               if (cfg) applyCmsConfig(cfg);
@@ -2458,12 +2472,15 @@
 
     function handleSyncEvent(data) {
       if (data.type === 'JOB_PUBLISHED' && data.job) {
-        const exists = jobsDatabase.some(j => j.id === data.job.id);
-        if (!exists) {
-          jobsDatabase.unshift(data.job);
-          renderJobListings(jobsDatabase);
-          showCustomModalAlert('New Job Opportunity', `"${data.job.jobTitle}" just posted by ${data.job.company}.`);
-        }
+        allJobs = allJobs.filter(j => String(j.id) !== String(data.job.id));
+        allJobs.unshift(data.job);
+        jobsDatabase = allJobs;
+        renderJobListings();
+        showCustomModalAlert('New Job Opportunity', `"${data.job.jobTitle}" just posted by ${data.job.company}.`);
+      } else if (data.type === 'JOB_DELETED' && data.jobId) {
+        allJobs = allJobs.filter(j => String(j.id) !== String(data.jobId));
+        jobsDatabase = allJobs;
+        renderJobListings();
       } else if (data.type === 'RECRUITER_MESSAGE_SENT' && data.message) {
         // Increment Unread Notification Badge
         unreadCount++;
@@ -2629,10 +2646,29 @@
       } catch (err) {}
     }
 
+    // Fetch live jobs from server
+    async function fetchLiveJobs() {
+      try {
+        const res = await fetch(`/api/jobs?t=${Date.now()}`, {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.jobs && Array.isArray(data.jobs) && data.jobs.length > 0) {
+            allJobs = data.jobs;
+            jobsDatabase = allJobs;
+            renderJobListings();
+          }
+        }
+      } catch (err) {}
+    }
+
     // Fallback fast-polling (3 seconds) with cache-busting parameter
     setInterval(async () => {
       if (!wsRelay || wsRelay.readyState !== WebSocket.OPEN) {
         await loadInitialCmsConfig();
+        await fetchLiveJobs();
       }
     }, 3000);
 
@@ -2676,11 +2712,12 @@
       }
       currentSearchFilter = '';
       currentSearchQuery = '';
-      renderJobListings(jobsDatabase);
+      renderJobListings();
       selectJob('JOB-101');
       initDualSync();
       fetchMessages();
       loadInitialCmsConfig();
+      fetchLiveJobs();
       initSmartTooltipPositioning();
     });
   </script>

@@ -1574,7 +1574,7 @@
                 </thead>
                 <tbody id="card3-live-jobs-tbody">
                   <!-- 1. Sales Manager -->
-                  <tr>
+                  <tr id="job-row-JOB-101">
                     <td><strong>Sales Manager</strong></td>
                     <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
                     <td style="color:var(--text-muted); font-size:0.72rem;">Posted Today</td>
@@ -1582,12 +1582,12 @@
                     <td style="text-align: right; white-space: nowrap;">
                       <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for Sales Manager.')" data-tooltip="Edit job details">EDIT</button>
                       <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', 'Sales Manager posting is now paused.')" data-tooltip="Pause position">PAUSE</button>
-                      <button class="btn-table-action btn-table-del" onclick="showCustomModalAlert('Position Deleted', 'Sales Manager listing removed.')" data-tooltip="Delete position">DELETE</button>
+                      <button class="btn-table-action btn-table-del" onclick="deleteJob('JOB-101')" data-tooltip="Delete position">DELETE</button>
                     </td>
                   </tr>
 
                   <!-- 2. Retail Sales Associate -->
-                  <tr>
+                  <tr id="job-row-JOB-102">
                     <td><strong>Retail Sales Associate</strong></td>
                     <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
                     <td style="color:var(--text-muted); font-size:0.72rem;">Posted Yesterday</td>
@@ -1595,12 +1595,12 @@
                     <td style="text-align: right; white-space: nowrap;">
                       <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for Retail Sales Associate.')" data-tooltip="Edit job details">EDIT</button>
                       <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', 'Retail Sales Associate posting paused.')" data-tooltip="Pause position">PAUSE</button>
-                      <button class="btn-table-action btn-table-del" onclick="showCustomModalAlert('Position Deleted', 'Retail Sales Associate listing removed.')" data-tooltip="Delete position">DELETE</button>
+                      <button class="btn-table-action btn-table-del" onclick="deleteJob('JOB-102')" data-tooltip="Delete position">DELETE</button>
                     </td>
                   </tr>
 
                   <!-- 3. Assembly Line Worker -->
-                  <tr>
+                  <tr id="job-row-JOB-103">
                     <td><strong>Assembly Line Worker</strong></td>
                     <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
                     <td style="color:var(--text-muted); font-size:0.72rem;">Posted 3 Days Ago</td>
@@ -1608,12 +1608,12 @@
                     <td style="text-align: right; white-space: nowrap;">
                       <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for Assembly Line Worker.')" data-tooltip="Edit job details">EDIT</button>
                       <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', 'Assembly Line Worker posting paused.')" data-tooltip="Pause position">PAUSE</button>
-                      <button class="btn-table-action btn-table-del" onclick="showCustomModalAlert('Position Deleted', 'Assembly Line Worker listing removed.')" data-tooltip="Delete position">DELETE</button>
+                      <button class="btn-table-action btn-table-del" onclick="deleteJob('JOB-103')" data-tooltip="Delete position">DELETE</button>
                     </td>
                   </tr>
 
                   <!-- 4. Delivery Driver -->
-                  <tr>
+                  <tr id="job-row-JOB-104">
                     <td><strong>Delivery Driver</strong></td>
                     <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
                     <td style="color:var(--text-muted); font-size:0.72rem;">Posted 5 Days Ago</td>
@@ -1621,12 +1621,12 @@
                     <td style="text-align: right; white-space: nowrap;">
                       <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for Delivery Driver.')" data-tooltip="Edit job details">EDIT</button>
                       <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', 'Delivery Driver posting paused.')" data-tooltip="Pause position">PAUSE</button>
-                      <button class="btn-table-action btn-table-del" onclick="showCustomModalAlert('Position Deleted', 'Delivery Driver listing removed.')" data-tooltip="Delete position">DELETE</button>
+                      <button class="btn-table-action btn-table-del" onclick="deleteJob('JOB-104')" data-tooltip="Delete position">DELETE</button>
                     </td>
                   </tr>
 
                   <!-- 5. Chef Needed -->
-                  <tr>
+                  <tr id="job-row-JOB-105">
                     <td><strong>Chef Needed</strong></td>
                     <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
                     <td style="color:var(--text-muted); font-size:0.72rem;">Posted 1 Week Ago</td>
@@ -1634,7 +1634,7 @@
                     <td style="text-align: right; white-space: nowrap;">
                       <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for Chef Needed.')" data-tooltip="Edit job details">EDIT</button>
                       <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', 'Chef Needed posting paused.')" data-tooltip="Pause position">PAUSE</button>
-                      <button class="btn-table-action btn-table-del" onclick="showCustomModalAlert('Position Deleted', 'Chef Needed listing removed.')" data-tooltip="Delete position">DELETE</button>
+                      <button class="btn-table-action btn-table-del" onclick="deleteJob('JOB-105')" data-tooltip="Delete position">DELETE</button>
                     </td>
                   </tr>
                 </tbody>
@@ -2354,6 +2354,15 @@
     let selectedBasePlan = 'pal';
     let basePlanPrice = 0;
 
+    // Active Jobs List
+    let activeJobs = [
+      { id: 'JOB-101', jobTitle: 'Sales Manager', status: 'Active', postedTime: 'Posted Today', channels: 'u-theJOBS, Email, Socials' },
+      { id: 'JOB-102', jobTitle: 'Retail Sales Associate', status: 'Active', postedTime: 'Posted Yesterday', channels: 'u-theJOBS, Email' },
+      { id: 'JOB-103', jobTitle: 'Assembly Line Worker', status: 'Active', postedTime: 'Posted 3 Days Ago', channels: 'u-theJOBS, Socials' },
+      { id: 'JOB-104', jobTitle: 'Delivery Driver', status: 'Active', postedTime: 'Posted 5 Days Ago', channels: 'u-theJOBS, Email, Socials' },
+      { id: 'JOB-105', jobTitle: 'Chef Needed', status: 'Active', postedTime: 'Posted 1 Week Ago', channels: 'u-theJOBS, Email, Socials' }
+    ];
+
     // Candidate Database Store for Interactive Modal
     const CANDIDATES_DATA = {
       'APP-701': { id: 'APP-701', name: 'Marcus Vance', role: 'Sales Manager', email: 'marcus.vance@example.com', score: '94%', stage: 'Applied', resumeFile: 'Marcus_Vance_Resume_2026.pdf' },
@@ -2505,32 +2514,76 @@
       try {
         await fetch('/api/jobs', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'X-Admin-Portal': 'true' },
           body: JSON.stringify(newJob)
         });
       } catch (e) {}
 
-      // Prepend to Card 3 live listings table
-      const tbody = document.getElementById('card3-live-jobs-tbody');
-      if (tbody) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td><strong>${newJob.jobTitle}</strong></td>
-          <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">ACTIVE</span></td>
-          <td style="color:var(--text-muted); font-size:0.72rem;">Just Now</td>
-          <td style="font-size:0.7rem;">u-theJOBS, Email, Socials</td>
-          <td style="text-align: right; white-space: nowrap;">
-            <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for ${newJob.jobTitle}.')">EDIT</button>
-            <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', '${newJob.jobTitle} posting paused.')">PAUSE</button>
-            <button class="btn-table-action btn-table-del" onclick="this.closest('tr').remove(); showCustomModalAlert('Position Deleted', '${newJob.jobTitle} listing removed.')">DELETE</button>
-          </td>
-        `;
-        tbody.prepend(tr);
-      }
+      activeJobs.unshift({
+        id: newJob.id,
+        jobTitle: newJob.jobTitle,
+        status: 'Active',
+        postedTime: 'Just Now',
+        channels: 'u-theJOBS, Email, Socials'
+      });
+      renderActiveJobsTable();
 
       broadcastSyncEvent('JOB_PUBLISHED', { job: newJob });
       showCustomModalAlert('Position Published Live', `Your position "${newJob.jobTitle}" is live and shared to connected channels.`);
     }
+
+    function renderActiveJobsTable() {
+      const tbody = document.getElementById('card3-live-jobs-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      activeJobs.forEach(job => {
+        const tr = document.createElement('tr');
+        tr.id = `job-row-${job.id}`;
+        tr.innerHTML = `
+          <td><strong>${job.jobTitle}</strong></td>
+          <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">${(job.status || 'ACTIVE').toUpperCase()}</span></td>
+          <td style="color:var(--text-muted); font-size:0.72rem;">${job.postedTime || 'Just Now'}</td>
+          <td style="font-size:0.7rem;">${job.channels || 'u-theJOBS, Email, Socials'}</td>
+          <td style="text-align: right; white-space: nowrap;">
+            <button class="btn-table-action" onclick="showCustomModalAlert('Edit Position', 'Opening editor for ${job.jobTitle}.')" data-tooltip="Edit job details">EDIT</button>
+            <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', '${job.jobTitle} posting paused.')" data-tooltip="Pause position">PAUSE</button>
+            <button class="btn-table-action btn-table-del" onclick="deleteJob('${job.id}')" data-tooltip="Delete position">DELETE</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function deleteJob(jobId) {
+      if (!confirm(`Delete listing ${jobId}?`)) return;
+      try {
+        const token = localStorage.getItem('uthe_token') || localStorage.getItem('master_admin_token') || '';
+        const res = await fetch(`/api/jobs/${jobId}`, {
+          method: 'DELETE',
+          headers: {
+            'X-Admin-Portal': 'true',
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+          }
+        });
+        if (res.ok) {
+          activeJobs = activeJobs.filter(j => String(j.id) !== String(jobId));
+          renderActiveJobsTable();
+          broadcastSyncEvent('JOB_DELETED', { jobId: jobId });
+          showCustomModalAlert('Position Deleted', `Listing ${jobId} deleted successfully.`);
+        } else {
+          activeJobs = activeJobs.filter(j => String(j.id) !== String(jobId));
+          renderActiveJobsTable();
+          showCustomModalAlert('Position Deleted', `Listing ${jobId} removed.`);
+        }
+      } catch (err) {
+        activeJobs = activeJobs.filter(j => String(j.id) !== String(jobId));
+        renderActiveJobsTable();
+      }
+    }
+    window.deleteJob = deleteJob;
+    window.renderActiveJobsTable = renderActiveJobsTable;
 
     window.broadcastToConnectedChannels = function() {
       const email = document.getElementById('inp-recruiter-email').value;
@@ -3202,6 +3255,20 @@
           chatLog.scrollTop = chatLog.scrollHeight;
         }
         showCustomModalAlert('Candidate Reply Received', `New reply from ${data.message.senderName || 'Candidate'}: "${data.message.text}"`);
+      } else if (data.type === 'JOB_DELETED' && data.jobId) {
+        activeJobs = activeJobs.filter(j => String(j.id) !== String(data.jobId));
+        renderActiveJobsTable();
+      } else if (data.type === 'JOB_PUBLISHED' && data.job) {
+        if (!activeJobs.some(j => String(j.id) === String(data.job.id))) {
+          activeJobs.unshift({
+            id: data.job.id,
+            jobTitle: data.job.jobTitle,
+            status: 'Active',
+            postedTime: 'Just Now',
+            channels: 'u-theJOBS, Email, Socials'
+          });
+          renderActiveJobsTable();
+        }
       } else if (data.type === 'CMS_CONFIG_UPDATED' || data.type === 'cms_update' || data.event === 'cms_update') {
         const freshConfig = data.config || data.updatedConfig;
         if (freshConfig) {

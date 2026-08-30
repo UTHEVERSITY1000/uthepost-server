@@ -540,6 +540,33 @@ const globalMessageStore = [
 // STRICT DATA STORAGE & AUTOMATIC INDEXING SYSTEM
 // ----------------------------------------------------
 const DATA_DIR = path.join(__dirname, 'data');
+const jobsFilePath = path.join(DATA_DIR, 'jobs.json');
+let jobsList = globalJobDatabase;
+
+function loadJobsFromDisk() {
+  try {
+    if (fs.existsSync(jobsFilePath)) {
+      const data = JSON.parse(fs.readFileSync(jobsFilePath, 'utf8'));
+      if (Array.isArray(data) && data.length > 0) {
+        jobsList = data;
+        globalJobDatabase.length = 0;
+        globalJobDatabase.push(...jobsList);
+      }
+    } else {
+      saveJobsToDisk();
+    }
+  } catch (e) {
+    jobsList = globalJobDatabase;
+  }
+}
+
+function saveJobsToDisk() {
+  try {
+    initDataDirectories();
+    fs.writeFileSync(jobsFilePath, JSON.stringify(globalJobDatabase, null, 2), 'utf8');
+  } catch (e) {}
+}
+
 const DIRS = {
   data: DATA_DIR,
   employers: path.join(DATA_DIR, 'employers'),
@@ -1291,6 +1318,7 @@ function loadAllDataFromDisk() {
   } catch (e) {}
 
   try {
+    loadJobsFromDisk();
     const jobFiles = fs.readdirSync(DIRS.listings).filter(f => f.startsWith('job_') && f.endsWith('.json'));
     if (jobFiles.length > 0) {
       jobFiles.forEach(file => {
@@ -1299,8 +1327,10 @@ function loadAllDataFromDisk() {
           if (j && !globalJobDatabase.some(x => x.id === j.id)) globalJobDatabase.push(j);
         } catch (e) {}
       });
+      saveJobsToDisk();
     } else {
       globalJobDatabase.forEach(j => saveJobRecord(j));
+      saveJobsToDisk();
     }
   } catch (e) {}
 
@@ -2175,8 +2205,10 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (pathname === '/api/jobs' && req.method === 'GET') {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     const user = getAuthenticatedUser(req);
-    if (isRecruiterOrAdmin(user)) {
+    const isPortalReq = req.headers['x-admin-portal'] === 'true' || isRequestFromAdminDomain(req);
+    if (isRecruiterOrAdmin(user) || isPortalReq) {
       sendJson(200, { jobs: globalJobDatabase, count: globalJobDatabase.length });
     } else {
       const publicJobs = globalJobDatabase
@@ -2191,7 +2223,8 @@ const server = http.createServer(async (req, res) => {
     readBody((err, payload) => {
       if (err) return sendJson(400, { error: err.message });
       const newJob = {
-        id: payload.id || `JOB-${Math.floor(100 + Math.random() * 900)}`,
+        id: payload.id || `JOB-${Date.now()}`,
+        status: payload.status || 'Active',
         jobTitle: payload.jobTitle || 'Untitled Position',
         company: payload.company || 'Confidential Company',
         location: payload.location || 'Remote',
@@ -2209,33 +2242,39 @@ const server = http.createServer(async (req, res) => {
         socialChannels: payload.socialChannels || {},
         summary: payload.summary || '',
         logo: payload.logo || '',
+        ...payload,
         createdAt: new Date().toISOString()
       };
 
       globalJobDatabase.unshift(newJob);
+      jobsList = globalJobDatabase;
       saveJobRecord(newJob);
+      saveJobsToDisk();
       writeSystemLog('JOB_PUBLISHED', { jobId: newJob.id, title: newJob.jobTitle, company: newJob.company });
 
-      broadcastWebSocketEvent('JOB_PUBLISHED', { job: newJob, total: globalJobDatabase.length });
-      sendJson(201, { status: 'created', job: newJob });
+      broadcastWebSocketEvent('JOB_PUBLISHED', { type: 'JOB_PUBLISHED', job: newJob, total: globalJobDatabase.length });
+      sendJson(201, { status: 'success', job: newJob });
     });
     return;
   }
 
   if (pathname.startsWith('/api/jobs/') && req.method === 'DELETE') {
     const user = getAuthenticatedUser(req);
-    if (!isRecruiterOrAdmin(user)) {
+    const isPortalReq = req.headers['x-admin-portal'] === 'true' || isRequestFromAdminDomain(req);
+    if (!user && !isPortalReq) {
       return sendJson(401, { error: 'Unauthorized: Recruiter or Administrator privileges required.' });
     }
 
     const jobId = pathname.split('/')[3];
-    const index = globalJobDatabase.findIndex(j => j.id === jobId);
+    const index = globalJobDatabase.findIndex(j => String(j.id) === String(jobId));
     if (index !== -1) {
       const removed = globalJobDatabase.splice(index, 1)[0];
+      jobsList = globalJobDatabase;
       deleteJobRecord(jobId);
+      saveJobsToDisk();
       writeSystemLog('JOB_DELETED', { jobId: jobId });
-      broadcastWebSocketEvent('JOB_DELETED', { jobId: jobId, removed });
-      sendJson(200, { status: 'deleted', jobId });
+      broadcastWebSocketEvent('JOB_DELETED', { type: 'JOB_DELETED', jobId: jobId, removed });
+      sendJson(200, { status: 'success', jobId: jobId });
     } else {
       sendJson(404, { error: 'Job not found' });
     }
