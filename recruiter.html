@@ -1660,6 +1660,34 @@
         grid-template-columns: 1fr !important;
       }
     }
+
+    /* Fix Top Nav Clipping */
+    .portal-navigation, header nav, .nav-container {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Fix Main Container & Card 3 Table Clipping */
+    body, main, .dashboard-container, .main-content {
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
+      box-sizing: border-box !important;
+    }
+
+    #active-jobs-table-container, .card-3-active-listings, div:has(> table) {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      display: block !important;
+    }
+
+    table {
+      width: 100% !important;
+      min-width: 650px !important;
+    }
   </style>
 </head>
 <body>

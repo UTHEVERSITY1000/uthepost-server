@@ -2193,6 +2193,27 @@ async function runTests() {
     assert(false, `Group 44 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 45: AUTONOMOUS SURGICAL LAYOUT OVERFLOW FIX
+  // ================================================================
+  console.log('\n--- GROUP 45: AUTONOMOUS SURGICAL LAYOUT OVERFLOW FIX ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Top Nav Clipping Fix
+    assert(recruiterHtml.includes('.portal-navigation, header nav, .nav-container') && recruiterHtml.includes('flex-wrap: wrap !important') && recruiterHtml.includes('max-width: 100% !important'), 'recruiter.html defines top nav flex-wrap overflow containment');
+
+    // 2. Main Container & Body Viewport Clipping Fix
+    assert(recruiterHtml.includes('body, main, .dashboard-container, .main-content') && recruiterHtml.includes('max-width: 100vw !important') && recruiterHtml.includes('overflow-x: hidden !important'), 'recruiter.html enforces 100vw and overflow-x: hidden on body, main, .dashboard-container, .main-content');
+
+    // 3. Table & Container Horizontal Scroll
+    assert(recruiterHtml.includes('div:has(> table)') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('-webkit-overflow-scrolling: touch !important'), 'recruiter.html enforces div:has(> table) overflow scroll');
+    assert(recruiterHtml.includes('table {') && recruiterHtml.includes('min-width: 650px !important'), 'recruiter.html sets table { min-width: 650px !important }');
+
+  } catch (err) {
+    assert(false, `Group 45 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
