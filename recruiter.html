@@ -159,7 +159,8 @@
     }
 
     /* MASTER TOP HEADER (5 EXCLUSIVE TABS) */
-    header {
+    /* Ensure top header actions fit cleanly */
+    header, .recruiter-header {
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -171,6 +172,10 @@
       align-items: center;
       padding: 0 1.25rem;
       box-shadow: var(--shadow-sm);
+      overflow-x: auto !important;
+      white-space: nowrap !important;
+      -webkit-overflow-scrolling: touch !important;
+      padding-right: 1rem !important;
     }
 
     .brand-group {
@@ -762,6 +767,18 @@
     }
 
     /* CARD 3: LIVE JOB LISTINGS TABLE */
+    /* Ensure Card 3 table wraps in a smooth horizontal scroll container */
+    #active-jobs-table-container, .card-3-active-listings {
+      width: 100% !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      padding-bottom: 0.5rem !important;
+    }
+
+    #active-jobs-table-container table {
+      min-width: 680px !important;
+    }
+
     .card3-live-jobs-table {
       width: 100%;
       border-collapse: collapse;

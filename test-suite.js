@@ -2171,6 +2171,28 @@ async function runTests() {
     assert(false, `Group 43 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 44: CARD 1 TITLE & VIEWPORT CLIPPING FIX
+  // ================================================================
+  console.log('\n--- GROUP 44: CARD 1 TITLE & VIEWPORT CLIPPING FIX ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Card 1 Title
+    assert(recruiterHtml.includes('1. EMPLOYER JOB LISTING DETAILS'), 'recruiter.html sets Card 1 header title to "1. EMPLOYER JOB LISTING DETAILS"');
+    assert(!recruiterHtml.includes('1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LIVE SYNC)'), 'recruiter.html purges obsolete long title');
+
+    // 2. Header and Recruiter Header Clipping Prevention
+    assert(recruiterHtml.includes('header, .recruiter-header') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('white-space: nowrap !important') && recruiterHtml.includes('padding-right: 1rem !important'), 'recruiter.html prevents top header right-edge clipping');
+
+    // 3. Card 3 Table Container Horizontal Scroll Wrap
+    assert(recruiterHtml.includes('#active-jobs-table-container, .card-3-active-listings') && recruiterHtml.includes('width: 100% !important') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('-webkit-overflow-scrolling: touch !important'), 'recruiter.html enforces horizontal scroll wrap on Card 3 active listings container');
+    assert(recruiterHtml.includes('#active-jobs-table-container table') && recruiterHtml.includes('min-width: 680px !important'), 'recruiter.html sets table min-width: 680px !important');
+
+  } catch (err) {
+    assert(false, `Group 44 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
