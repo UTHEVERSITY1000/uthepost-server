@@ -2620,14 +2620,15 @@
         return;
       }
 
-      // Construct clean resume route URL
-      const resumeUrl = (filename.startsWith('http') || filename.startsWith('/data/'))
-        ? filename 
-        : `/data/resumes/${filename}`;
+      const cleanFilename = filename.split('/').pop().split('\\').pop();
+      const token = localStorage.getItem('uthe_token') || 
+                    localStorage.getItem('master_admin_token') || 
+                    localStorage.getItem('admin_token') || '';
 
-      // Open PDF directly in a new tab
-      const newTab = window.open(resumeUrl, '_blank');
-      
+      // Append token query parameter for seamless new-tab authentication
+      const pdfUrl = `/data/resumes/${encodeURIComponent(cleanFilename)}?token=${encodeURIComponent(token)}&t=${Date.now()}`;
+
+      const newTab = window.open(pdfUrl, '_blank');
       if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
         showCustomModalAlert('Pop-Up Blocked', `Please allow pop-ups for this site to view ${applicantName}'s resume.`);
       }

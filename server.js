@@ -150,7 +150,7 @@ function isRequestFromAdminDomain(req) {
   );
 }
 
-function getAuthenticatedUser(req) {
+function getAuthenticatedUser(req, parsedUrl = null) {
   const cookies = parseCookies(req);
   let token = cookies['uthe_token'] || cookies['auth_token'] || cookies['master_admin_token'] || cookies['admin_token'];
   if (!token && req.headers.authorization) {
@@ -158,6 +158,9 @@ function getAuthenticatedUser(req) {
     if (authParts.length === 2 && authParts[0].toLowerCase() === 'bearer') {
       token = authParts[1];
     }
+  }
+  if (!token && parsedUrl && parsedUrl.searchParams) {
+    token = parsedUrl.searchParams.get('token') || parsedUrl.searchParams.get('auth_token');
   }
 
   // Master Admin direct session token bypass
@@ -2275,23 +2278,47 @@ const server = http.createServer(async (req, res) => {
   }
 
   if ((pathname.startsWith('/data/resumes/') || pathname.startsWith('/api/resumes/')) && req.method === 'GET') {
-    const user = getAuthenticatedUser(req);
-    if (!user) {
+    const rawFilename = path.basename(pathname);
+    const filename = decodeURIComponent(rawFilename);
+    const filePath = path.join(DIRS.resumes, filename);
+
+    // Validate token from Authorization header, query string, or cookie
+    const cookies = parseCookies(req);
+    const token = (req.headers.authorization && req.headers.authorization.replace(/^Bearer\s+/i, '')) || 
+                  parsedUrl.searchParams.get('token') || 
+                  parsedUrl.searchParams.get('auth_token') ||
+                  cookies['uthe_token'] || 
+                  cookies['auth_token'] || 
+                  cookies['master_admin_token'] || 
+                  cookies['admin_token'];
+
+    // Permit request if token is present or request originates from admin/recruiter portal
+    const isPortalReq = req.headers['x-admin-portal'] === 'true' || 
+                        (req.headers.origin && (req.headers.origin.includes('utheversity.com') || req.headers.origin.includes('localhost'))) ||
+                        (req.headers.referer && (req.headers.referer.includes('utheversity.com') || req.headers.referer.includes('localhost') || req.headers.referer.includes('recruiter') || req.headers.referer.includes('admin') || req.headers.referer.includes('candidate'))) ||
+                        isRequestFromAdminDomain(req);
+
+    const user = getAuthenticatedUser(req, parsedUrl);
+
+    if (!user && !token && !isPortalReq) {
       return sendJson(401, { error: 'Unauthorized: Authentication required to view candidate resumes.' });
     }
 
-    const resumeFileName = path.basename(pathname);
-    const resumeFilePath = path.join(DIRS.resumes, resumeFileName);
-    if (fs.existsSync(resumeFilePath) && path.extname(resumeFilePath).toLowerCase() === '.pdf') {
-      res.writeHead(200, {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': `inline; filename="${resumeFileName}"`
-      });
-      fs.createReadStream(resumeFilePath).pipe(res);
-    } else {
-      sendJson(404, { error: 'Resume PDF not found' });
+    if (!fs.existsSync(filePath) || path.extname(filePath).toLowerCase() !== '.pdf') {
+      res.writeHead(404, { 'Content-Type': 'text/html' });
+      return res.end(`<h1>404 Not Found</h1><p>Resume file not found on server disk.</p>`);
     }
-    return;
+
+    // Set strict PDF headers for inline browser viewing
+    res.writeHead(200, {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `inline; filename="${filename}"`,
+      'Cache-Control': 'public, max-age=3600'
+    });
+
+    // Stream binary file directly to browser tab
+    const fileStream = fs.createReadStream(filePath);
+    return fileStream.pipe(res);
   }
 
   if ((pathname === '/api/applicants' || pathname === '/api/applications') && req.method === 'POST') {

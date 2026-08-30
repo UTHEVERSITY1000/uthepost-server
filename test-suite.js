@@ -1635,7 +1635,8 @@ async function runTests() {
       // 2. Functional openApplicantResume Handler
       assert(content.includes('function openApplicantResume') || content.includes('openApplicantResume = function'), `${rf} implements openApplicantResume handler`);
       assert(content.includes('/data/resumes/'), `${rf} points resume route to /data/resumes/`);
-      assert(content.includes("window.open(resumeUrl, '_blank')") || content.includes('window.open(resumeUrl'), `${rf} opens PDF in a new tab (_blank)`);
+      assert(content.includes("window.open(pdfUrl, '_blank')") || content.includes("window.open(resumeUrl, '_blank')") || content.includes('window.open(pdfUrl') || content.includes('window.open(resumeUrl'), `${rf} opens PDF in a new tab (_blank)`);
+      assert(content.includes('token=') && content.includes('encodeURIComponent'), `${rf} passes token query parameter in openApplicantResume`);
 
       // 3. Dynamic Name & Resume File Binding
       assert(content.includes('activeApplicant.resumeFile') || content.includes('cand.resumeFile'), `${rf} dynamically extracts candidate resume filename`);
@@ -1647,6 +1648,8 @@ async function runTests() {
     assert(serverJs.includes('/data/resumes/'), 'server.js contains /data/resumes/ endpoint');
     assert(serverJs.includes("'Content-Type': 'application/pdf'") || serverJs.includes('"Content-Type": "application/pdf"'), 'server.js sets Content-Type: application/pdf');
     assert(serverJs.includes('Content-Disposition') && serverJs.includes('inline'), 'server.js sets Content-Disposition: inline for browser tab viewing');
+    assert(serverJs.includes('searchParams.get(\'token\')') || serverJs.includes("req.query?.token") || serverJs.includes("searchParams.get('token')"), 'server.js supports query token parameter auth');
+    assert(serverJs.includes('Cache-Control') && serverJs.includes('public'), 'server.js sets Cache-Control for PDF caching');
 
     // 5. Live Endpoint Response Header Verification
     const loginRes = await httpPost('/api/auth/login', {
@@ -1663,6 +1666,13 @@ async function runTests() {
     assert(resumeRes.status === 200, 'GET /data/resumes/Marcus_Vance_Resume_2026.pdf returns HTTP 200 OK');
     assert(resumeRes.headers['content-type'] && resumeRes.headers['content-type'].includes('application/pdf'), 'GET /data/resumes returns Content-Type: application/pdf');
     assert(resumeRes.headers['content-disposition'] && resumeRes.headers['content-disposition'].includes('inline'), 'GET /data/resumes returns Content-Disposition: inline');
+
+    // 6. Direct Query Parameter Authentication Verification (Zero Headers / New Tab Simulation)
+    const queryAuthRes = await httpGet(`/data/resumes/Marcus_Vance_Resume_2026.pdf?token=${encodeURIComponent(adminToken)}&t=${Date.now()}`);
+    assert(queryAuthRes.status === 200, 'GET /data/resumes/... with ?token=... query param succeeds with HTTP 200 (New Tab Auth)');
+    assert(queryAuthRes.headers['content-type'] && queryAuthRes.headers['content-type'].includes('application/pdf'), 'Query auth request returns application/pdf Content-Type');
+    assert(queryAuthRes.headers['content-disposition'] && queryAuthRes.headers['content-disposition'].includes('inline'), 'Query auth request returns inline Content-Disposition');
+    assert(queryAuthRes.headers['cache-control'] && queryAuthRes.headers['cache-control'].includes('public'), 'Query auth request returns public Cache-Control header');
 
   } catch (err) {
     assert(false, `Group 33 failed: ${err.message}`);
