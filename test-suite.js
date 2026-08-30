@@ -2377,6 +2377,30 @@ async function runTests() {
     assert(false, `Group 53 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 54: MOBILE HEADER & UI MENU SEPARATION
+  // ================================================================
+  console.log('\n--- GROUP 54: MOBILE HEADER & UI MENU SEPARATION ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Mobile 2-row header split
+    assert(recruiterHtml.includes('@media (max-width: 768px)') && recruiterHtml.includes('flex-wrap: wrap !important') && recruiterHtml.includes('height: auto !important'), 'recruiter.html splits mobile header into multi-row flex container');
+
+    // 2. Row 1 Left & Right ordering
+    assert(recruiterHtml.includes('.brand-group') && recruiterHtml.includes('order: 1 !important'), 'recruiter.html sets brand-group order to 1');
+    assert(recruiterHtml.includes('.header-actions') && recruiterHtml.includes('order: 2 !important'), 'recruiter.html sets header-actions order to 2');
+
+    // 3. Row 2 Navigation Menu Belt
+    assert(recruiterHtml.includes('.portal-navigation, nav.header-center-tabs') && recruiterHtml.includes('order: 3 !important') && recruiterHtml.includes('flex: 0 0 100% !important') && recruiterHtml.includes('border-top: 1px solid var(--border-color, #E2E8F0) !important'), 'recruiter.html snugs horizontal navigation belt on row 2');
+
+    // 4. Mobile menu buttons styling
+    assert(recruiterHtml.includes('.portal-navigation button, nav.header-center-tabs button') && recruiterHtml.includes('height: 30px !important') && recruiterHtml.includes('font-size: 0.62rem !important'), 'recruiter.html defines mobile navigation button dimensions');
+
+  } catch (err) {
+    assert(false, `Group 54 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

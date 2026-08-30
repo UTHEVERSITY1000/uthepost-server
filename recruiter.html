@@ -1788,6 +1788,57 @@
       border-color: #111827 !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
     }
+
+    /* Mobile Top Deck & Horizontal Menu Belt (@media max-width: 768px) */
+    @media (max-width: 768px) {
+      /* Split header into 2 distinct rows on mobile viewports */
+      header, .recruiter-header {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        height: auto !important;
+        padding: 0.4rem 0.75rem !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+      }
+
+      /* Row 1 Left: Brand Title & Logo Upload */
+      .brand-group {
+        order: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+      }
+
+      /* Row 1 Right: Login / Sign Up Button */
+      .header-actions {
+        order: 2 !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+
+      /* Row 2: UI Menu Belt snugged directly beneath top deck */
+      .portal-navigation, nav.header-center-tabs {
+        order: 3 !important;
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        margin-top: 0.35rem !important;
+        padding-top: 0.35rem !important;
+        border-top: 1px solid var(--border-color, #E2E8F0) !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 0.35rem !important;
+      }
+
+      .portal-navigation button, nav.header-center-tabs button {
+        flex-shrink: 0 !important;
+        height: 30px !important;
+        font-size: 0.62rem !important;
+        padding: 0 0.55rem !important;
+      }
+    }
   </style>
 </head>
 <body>
