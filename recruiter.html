@@ -159,8 +159,8 @@
     }
 
     /* MASTER TOP HEADER (5 EXCLUSIVE TABS) */
-    /* Ensure top header actions fit cleanly */
-    header, .recruiter-header {
+    /* Ensure top nav bar items scroll smoothly on smaller screens */
+    header, .recruiter-header, .portal-navigation {
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -175,7 +175,7 @@
       overflow-x: auto !important;
       white-space: nowrap !important;
       -webkit-overflow-scrolling: touch !important;
-      padding-right: 1rem !important;
+      padding-right: 1.5rem !important;
     }
 
     .brand-group {
@@ -1665,7 +1665,7 @@
 <body>
 
   <!-- MASTER TOP HEADER (5 EXCLUSIVE TABS) -->
-  <header>
+  <header class="recruiter-header portal-navigation">
     <div class="brand-group">
       <h1 class="brand-title" id="cms-brand-title" data-cms-key="brand-title" data-tooltip="u-thePOST: Recruiter Studio & Multi-Platform Hiring Hub.">U-THEPOST</h1>
 

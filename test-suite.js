@@ -2183,7 +2183,7 @@ async function runTests() {
     assert(!recruiterHtml.includes('1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LIVE SYNC)'), 'recruiter.html purges obsolete long title');
 
     // 2. Header and Recruiter Header Clipping Prevention
-    assert(recruiterHtml.includes('header, .recruiter-header') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('white-space: nowrap !important') && recruiterHtml.includes('padding-right: 1rem !important'), 'recruiter.html prevents top header right-edge clipping');
+    assert(recruiterHtml.includes('header, .recruiter-header, .portal-navigation') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('white-space: nowrap !important') && recruiterHtml.includes('padding-right: 1.5rem !important'), 'recruiter.html prevents top header right-edge clipping with portal-navigation and 1.5rem padding');
 
     // 3. Card 3 Table Container Horizontal Scroll Wrap
     assert(recruiterHtml.includes('#active-jobs-table-container, .card-3-active-listings') && recruiterHtml.includes('width: 100% !important') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('-webkit-overflow-scrolling: touch !important'), 'recruiter.html enforces horizontal scroll wrap on Card 3 active listings container');
