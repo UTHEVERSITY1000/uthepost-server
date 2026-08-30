@@ -587,7 +587,7 @@ async function runTests() {
         // Trigger CMS update via POST
         const updatePayload = {
           postStudio: {
-            card1Title: '1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LIVE SYNC)',
+            card1Title: '1. EMPLOYER JOB LISTING DETAILS',
             publishBtnText: 'PUBLISH POSITION LIVE & BROADCAST'
           },
           jobsBoard: {
