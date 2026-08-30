@@ -1330,10 +1330,19 @@ function loadAllDataFromDisk() {
   } catch (e) {}
 
   try {
-    const sampleResume = path.join(DIRS.resumes, 'Marcus_Vance_Resume_2026.pdf');
-    if (!fs.existsSync(sampleResume)) {
-      fs.writeFileSync(sampleResume, '%PDF-1.4\n% Marcus Vance Verified PDF Resume - UTHEVERSITY Professional Career Network\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>\nendobj\nxref\n0 4\n0000000000 65535 f \n0000000090 00000 n \n0000000140 00000 n \n0000000200 00000 n \ntrailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n275\n%%EOF\n', 'utf8');
-    }
+    const seedResumes = [
+      { name: 'Marcus_Vance_Resume_2026.pdf', title: 'Marcus Vance Verified PDF Resume' },
+      { name: 'Elena_Rostova_Resume.pdf', title: 'Elena Rostova Verified PDF Resume' },
+      { name: 'David_K_Mercer_Resume.pdf', title: 'David K. Mercer Verified PDF Resume' },
+      { name: 'John_Doe_Resume_2026.pdf', title: 'John Doe Verified PDF Resume' }
+    ];
+
+    seedResumes.forEach(sr => {
+      const samplePath = path.join(DIRS.resumes, sr.name);
+      if (!fs.existsSync(samplePath)) {
+        fs.writeFileSync(samplePath, `%PDF-1.4\n% ${sr.title} - UTHEVERSITY Professional Career Network\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>\nendobj\nxref\n0 4\n0000000000 65535 f \n0000000090 00000 n \n0000000140 00000 n \n0000000200 00000 n \ntrailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n275\n%%EOF\n`, 'utf8');
+      }
+    });
   } catch (e) {}
 
   writeSystemLog('SYSTEM_BOOT', { message: 'UTHEVERSITY Storage & Indexing Engine Initialized' });
@@ -2274,7 +2283,10 @@ const server = http.createServer(async (req, res) => {
     const resumeFileName = path.basename(pathname);
     const resumeFilePath = path.join(DIRS.resumes, resumeFileName);
     if (fs.existsSync(resumeFilePath) && path.extname(resumeFilePath).toLowerCase() === '.pdf') {
-      res.writeHead(200, { 'Content-Type': 'application/pdf' });
+      res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `inline; filename="${resumeFileName}"`
+      });
       fs.createReadStream(resumeFilePath).pipe(res);
     } else {
       sendJson(404, { error: 'Resume PDF not found' });
@@ -2621,6 +2633,7 @@ const server = http.createServer(async (req, res) => {
     case '.png': contentType = 'image/png'; break;
     case '.jpg': contentType = 'image/jpg'; break;
     case '.svg': contentType = 'image/svg+xml'; break;
+    case '.pdf': contentType = 'application/pdf'; break;
   }
 
   fs.readFile(filePath, (error, content) => {

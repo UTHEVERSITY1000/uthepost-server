@@ -2211,7 +2211,9 @@
         </div>
         <div>
           <span style="color:var(--text-muted); font-size:0.68rem; display:block; text-transform:uppercase; font-weight:800;">Resume (.PDF)</span>
-          <a href="#" style="color:#0284C7; font-weight:700; text-decoration:none;" onclick="showCustomModalAlert('Resume Viewer', 'Opening verified PDF resume for Marcus Vance.')">📄 View Resume.pdf</a>
+          <div id="applicant-resume-container">
+            <a href="#" onclick="openApplicantResume('APP-701', 'Marcus Vance', 'Marcus_Vance_Resume_2026.pdf'); return false;" class="btn-resume-link" style="color:#0284C7; font-weight:700; text-decoration:none;">📄 View Marcus's Resume (.pdf)</a>
+          </div>
         </div>
       </div>
 
@@ -2354,9 +2356,9 @@
 
     // Candidate Database Store for Interactive Modal
     const CANDIDATES_DATA = {
-      'APP-701': { id: 'APP-701', name: 'Marcus Vance', role: 'Sales Manager', email: 'marcus.vance@example.com', score: '94%', stage: 'Applied' },
-      'APP-702': { id: 'APP-702', name: 'Elena Rostova', role: 'Retail Sales Associate', email: 'elena.rostova@example.com', score: '88%', stage: 'Screened' },
-      'APP-703': { id: 'APP-703', name: 'David K. Mercer', role: 'Store Director', email: 'david.mercer@example.com', score: '97%', stage: 'Interviewing' }
+      'APP-701': { id: 'APP-701', name: 'Marcus Vance', role: 'Sales Manager', email: 'marcus.vance@example.com', score: '94%', stage: 'Applied', resumeFile: 'Marcus_Vance_Resume_2026.pdf' },
+      'APP-702': { id: 'APP-702', name: 'Elena Rostova', role: 'Retail Sales Associate', email: 'elena.rostova@example.com', score: '88%', stage: 'Screened', resumeFile: 'Elena_Rostova_Resume.pdf' },
+      'APP-703': { id: 'APP-703', name: 'David K. Mercer', role: 'Store Director', email: 'david.mercer@example.com', score: '97%', stage: 'Interviewing', resumeFile: 'David_K_Mercer_Resume.pdf' }
     };
 
     // 5-Tab Recruiter Navigation Switcher
@@ -2611,6 +2613,27 @@
       showCustomModalAlert('Personalization Preview (Marcus Vance)', rendered);
     };
 
+    // Dynamic Applicant Resume Viewer & PDF Opener
+    function openApplicantResume(applicantId, applicantName, filename) {
+      if (!filename) {
+        showCustomModalAlert('Resume Missing', `No resume file on record for ${applicantName}.`);
+        return;
+      }
+
+      // Construct clean resume route URL
+      const resumeUrl = (filename.startsWith('http') || filename.startsWith('/data/'))
+        ? filename 
+        : `/data/resumes/${filename}`;
+
+      // Open PDF directly in a new tab
+      const newTab = window.open(resumeUrl, '_blank');
+      
+      if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
+        showCustomModalAlert('Pop-Up Blocked', `Please allow pop-ups for this site to view ${applicantName}'s resume.`);
+      }
+    }
+    window.openApplicantResume = openApplicantResume;
+
     // 2. APPLICANT TRACKER & CANDIDATE CARD CLICK HANDLERS
     window.openCandidateReviewModal = async function(candidateId) {
       activeCandidateId = candidateId || 'APP-701';
@@ -2620,7 +2643,8 @@
         role: 'Sales Manager',
         email: 'applicant@example.com',
         score: '92%',
-        stage: 'Applied'
+        stage: 'Applied',
+        resumeFile: `${(candidateId || 'Applicant').replace(/\s+/g, '_')}_Resume.pdf`
       };
 
       document.getElementById('cand-modal-name').textContent = cand.name.toUpperCase();
@@ -2628,6 +2652,17 @@
       document.getElementById('cand-modal-role').textContent = cand.role;
       document.getElementById('cand-modal-email').textContent = cand.email;
       document.getElementById('cand-modal-stage-select').value = cand.stage || 'Applied';
+
+      // Dynamic link binding in applicant review drawer
+      const resumeFileName = cand.resumeFile || `${cand.name.replace(/\s+/g, '_')}_Resume.pdf`;
+      const resumeContainer = document.getElementById('applicant-resume-container');
+      if (resumeContainer) {
+        resumeContainer.innerHTML = `
+          <a href="#" onclick="openApplicantResume('${cand.id || activeCandidateId}', '${cand.name}', '${resumeFileName}'); return false;" class="btn-resume-link" style="color:#0284C7; font-weight:700; text-decoration:none;">
+            📄 View ${cand.name.split(' ')[0]}'s Resume (.pdf)
+          </a>
+        `;
+      }
 
       // Clear out any old messages from the chat view before displaying the selected candidate's thread
       const chatLog = document.getElementById('applicant-chat-log');
@@ -3147,7 +3182,8 @@
           role: data.applicant.jobTitle,
           email: data.applicant.email || 'applicant@example.com',
           score: `${data.applicant.score || 92}%`,
-          stage: 'Applied'
+          stage: 'Applied',
+          resumeFile: data.applicant.resumeFile || `${data.applicant.name.replace(/\s+/g, '_')}_Resume.pdf`
         };
         updateKanbanCounters();
         setupMobileTouchAts();

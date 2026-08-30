@@ -1614,6 +1614,60 @@ async function runTests() {
     assert(false, `Group 32 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 33: DYNAMIC APPLICANT RESUME VIEWER & PDF OPENING
+  // ================================================================
+  console.log('\n--- GROUP 33: DYNAMIC APPLICANT RESUME VIEWER & PDF OPENING ---');
+  try {
+    const recruiterFiles = [
+      'recruiter.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html'
+    ];
+
+    for (const rf of recruiterFiles) {
+      const content = fs.readFileSync(path.join(__dirname, rf), 'utf8');
+
+      // 1. Dynamic Resume Link Container
+      assert(content.includes('id="applicant-resume-container"'), `${rf} defines #applicant-resume-container in review drawer`);
+
+      // 2. Functional openApplicantResume Handler
+      assert(content.includes('function openApplicantResume') || content.includes('openApplicantResume = function'), `${rf} implements openApplicantResume handler`);
+      assert(content.includes('/data/resumes/'), `${rf} points resume route to /data/resumes/`);
+      assert(content.includes("window.open(resumeUrl, '_blank')") || content.includes('window.open(resumeUrl'), `${rf} opens PDF in a new tab (_blank)`);
+
+      // 3. Dynamic Name & Resume File Binding
+      assert(content.includes('activeApplicant.resumeFile') || content.includes('cand.resumeFile'), `${rf} dynamically extracts candidate resume filename`);
+      assert(content.includes('applicant-resume-container') && content.includes('openApplicantResume'), `${rf} binds dynamic openApplicantResume to resume container`);
+    }
+
+    // 4. Backend PDF Route Verification in server.js
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+    assert(serverJs.includes('/data/resumes/'), 'server.js contains /data/resumes/ endpoint');
+    assert(serverJs.includes("'Content-Type': 'application/pdf'") || serverJs.includes('"Content-Type": "application/pdf"'), 'server.js sets Content-Type: application/pdf');
+    assert(serverJs.includes('Content-Disposition') && serverJs.includes('inline'), 'server.js sets Content-Disposition: inline for browser tab viewing');
+
+    // 5. Live Endpoint Response Header Verification
+    const loginRes = await httpPost('/api/auth/login', {
+      email: 'contact@utheversity.com',
+      password: 'ZionAdmin2026!'
+    });
+    const adminToken = loginRes.data.token;
+    const authHeaders = {
+      'Authorization': `Bearer ${adminToken}`,
+      'Cookie': `uthe_token=${adminToken}`
+    };
+
+    const resumeRes = await httpGet('/data/resumes/Marcus_Vance_Resume_2026.pdf', authHeaders);
+    assert(resumeRes.status === 200, 'GET /data/resumes/Marcus_Vance_Resume_2026.pdf returns HTTP 200 OK');
+    assert(resumeRes.headers['content-type'] && resumeRes.headers['content-type'].includes('application/pdf'), 'GET /data/resumes returns Content-Type: application/pdf');
+    assert(resumeRes.headers['content-disposition'] && resumeRes.headers['content-disposition'].includes('inline'), 'GET /data/resumes returns Content-Disposition: inline');
+
+  } catch (err) {
+    assert(false, `Group 33 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
