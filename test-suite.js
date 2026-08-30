@@ -2372,6 +2372,7 @@ async function runTests() {
     // 5. Enterprise Tech Perks & Benefits Micro-Tag Specification
     assert(recruiterHtml.includes('.perk-pill') && recruiterHtml.includes('height: 22px !important') && recruiterHtml.includes('background-color: #F8FAFC !important'), 'recruiter.html defines sleek 22px micro-tag .perk-pill');
     assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #111827 !important') && recruiterHtml.includes('color: #FEBA27 !important'), 'recruiter.html defines high-contrast charcoal and gold active perk pill');
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #94A3B8 !important'), 'recruiter.html defines active perk pill style');
 
   } catch (err) {
     assert(false, `Group 53 failed: ${err.message}`);
@@ -2399,6 +2400,45 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 54 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 55: COMPREHENSIVE UI COLOR & STYLING OVERHAUL
+  // ================================================================
+  console.log('\n--- GROUP 55: COMPREHENSIVE UI COLOR & STYLING OVERHAUL ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Login button: black outline & text
+    assert(recruiterHtml.includes('.btn-auth-header, #btn-auth-status') && recruiterHtml.includes('color: #000000 !important') && recruiterHtml.includes('border: 1.5px solid #000000 !important'), 'recruiter.html styles login button with black outline and text');
+
+    // 2. UI Menu Tabs: black outline & text (default)
+    assert(recruiterHtml.includes('.nav-tab-btn, .portal-navigation button, header nav button') && recruiterHtml.includes('color: #000000 !important') && recruiterHtml.includes('border: 1.5px solid #000000 !important'), 'recruiter.html styles default menu tabs with black outline and text');
+
+    // 3. UI Menu Tab Selected: Gold fill & black text
+    assert(recruiterHtml.includes('.nav-tab-btn.active, .drawer-tab-btn.active') && recruiterHtml.includes('background-color: #FEBA27 !important') && recruiterHtml.includes('border: 1.5px solid #FEBA27 !important'), 'recruiter.html styles active menu tab with gold fill and black text');
+
+    // 4. Card 1 label text
+    assert(recruiterHtml.includes('data-cms-key="post-perks-label">PERKS & BENEFITS</label>'), 'recruiter.html sets Card 1 perks label text strictly to PERKS & BENEFITS');
+
+    // 5. Urgent Hiring Badge: Transparent & Red
+    assert(recruiterHtml.includes('.urgent-hiring-badge, #badge-urgent-hiring') && recruiterHtml.includes('color: #EF4444 !important') && recruiterHtml.includes('border: 1.5px solid #EF4444 !important'), 'recruiter.html styles urgent hiring badge with transparent red outline');
+
+    // 6. Live Preview Badge: Transparent & Red
+    assert(recruiterHtml.includes('.candidate-viewport-badge, .live-preview-badge, #card2-badge, .card-2-badge') && recruiterHtml.includes('color: #EF4444 !important') && recruiterHtml.includes('border: 1.5px solid #EF4444 !important'), 'recruiter.html styles live preview badge with transparent red outline');
+
+    // 7. Perks Pills Active Selected State (Medium Airy Grey)
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #94A3B8 !important') && recruiterHtml.includes('color: #1E293B !important') && recruiterHtml.includes('border-color: #64748B !important'), 'recruiter.html styles active perk pill with medium airy grey palette');
+
+    // 8. Card 2 Live Preview Perks Badges
+    assert(recruiterHtml.includes('.preview-perks-container .badge-tag, #preview-perks-list .badge-tag') && recruiterHtml.includes('background-color: #F1F5F9 !important') && recruiterHtml.includes('border: 0.5px solid #475569 !important') && recruiterHtml.includes('color: #334155 !important'), 'recruiter.html styles live preview perks badges with subtle grey outline');
+    assert(recruiterHtml.includes('box-shadow: 0 0 10px rgba(254, 186, 39, 0.6) !important'), 'recruiter.html adds ambient gold glow on preview perks hover');
+
+    // 9. Publish Live CTA Button
+    assert(recruiterHtml.includes('.btn-publish-card1, #btn-publish-post, .btn-primary') && recruiterHtml.includes('background-color: #FEBA27 !important') && recruiterHtml.includes('border: none !important') && recruiterHtml.includes('color: #000000 !important'), 'recruiter.html styles publish live CTA with signature gold fill and black text');
+
+  } catch (err) {
+    assert(false, `Group 55 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');

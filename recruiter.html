@@ -1737,7 +1737,25 @@
     }
 
     /* Sleek Compact Navigation Tab Buttons */
+    /* Login Button: Black outline & black text */
+    .btn-auth-header, #btn-auth-status {
+      background-color: transparent !important;
+      color: #000000 !important;
+      border: 1.5px solid #000000 !important;
+      font-weight: 800 !important;
+      height: 28px !important;
+      padding: 0 0.65rem !important;
+      font-size: 0.60rem !important;
+      letter-spacing: 0.04em !important;
+      border-radius: 4px !important;
+    }
+
+    /* UI Menu Tabs: Black outline & black text (Default) */
     .nav-tab-btn, .portal-navigation button, header nav button {
+      background-color: transparent !important;
+      color: #000000 !important;
+      border: 1.5px solid #000000 !important;
+      font-weight: 800 !important;
       height: 28px !important;
       padding: 0 0.55rem !important;
       font-size: 0.62rem !important;
@@ -1753,6 +1771,27 @@
       font-size: 0.60rem !important;
       letter-spacing: 0.04em !important;
       border-radius: 4px !important;
+    /* UI Menu Tab Selected: Signature Gold fill & black text */
+    .nav-tab-btn.active, .drawer-tab-btn.active {
+      background-color: #FEBA27 !important;
+      color: #000000 !important;
+      border: 1.5px solid #FEBA27 !important;
+      font-weight: 900 !important;
+    }
+
+    /* Urgent Hiring Badge */
+    .urgent-hiring-badge, #badge-urgent-hiring {
+      background: transparent !important;
+      color: #EF4444 !important;
+      border: 1.5px solid #EF4444 !important;
+      box-shadow: none !important;
+    }
+
+    /* Live Preview Badge */
+    .candidate-viewport-badge, .live-preview-badge, #card2-badge, .card-2-badge {
+      background: transparent !important;
+      color: #EF4444 !important;
+      border: 1.5px solid #EF4444 !important;
     }
 
     /* Enterprise Tech Perks & Benefits Tag Overhaul */
@@ -1782,11 +1821,35 @@
     }
 
     /* Active Selected State: High-Contrast Limousine Charcoal & Gold */
+    /* Perks Pills (Card 1 Selected State: Medium Airy Grey) */
     .perk-pill.active {
       background-color: #111827 !important;
       color: #FEBA27 !important;
       border-color: #111827 !important;
+      background-color: #94A3B8 !important; /* Medium Airy Grey */
+      color: #1E293B !important;            /* Dark Smoke Grey */
+      border-color: #64748B !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Card 2 Live Preview Perks Badges */
+    .preview-perks-container .badge-tag, #preview-perks-list .badge-tag {
+      background-color: #F1F5F9 !important; /* Light Grey */
+      border: 0.5px solid #475569 !important; /* Dark Grey Outline */
+      color: #334155 !important;            /* Medium Dark Grey Text */
+      transition: all 0.2s ease-in-out !important;
+    }
+    .preview-perks-container .badge-tag:hover, #preview-perks-list .badge-tag:hover {
+      box-shadow: 0 0 10px rgba(254, 186, 39, 0.6) !important; /* Ambient Signature Gold Glow */
+      border-color: #FEBA27 !important;
+    }
+
+    /* Publish Live Button Styling */
+    .btn-publish-card1, #btn-publish-post, .btn-primary {
+      background-color: #FEBA27 !important; /* Signature Gold Fill */
+      border: none !important;                 /* No Outline Color */
+      color: #000000 !important;               /* Black Text */
+      font-weight: 900 !important;
     }
 
     /* Mobile Top Deck & Horizontal Menu Belt (@media max-width: 768px) */
@@ -2009,6 +2072,7 @@
               <div style="display:flex; gap:0.4rem; align-items:center;">
                 <span class="urgent-hiring-badge" id="badge-urgent-hiring" data-cms-key="post-preview-badge">URGENT HIRING</span>
                 <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">CANDIDATE VIEWPORT</span>
+                <span class="candidate-viewport-badge" style="font-size: 0.65rem; color: #EF4444; font-weight: 800; background: transparent; border: 1.5px solid #EF4444; padding: 0.2rem 0.5rem; border-radius: 4px;">CANDIDATE VIEWPORT</span>
               </div>
             </div>
 
