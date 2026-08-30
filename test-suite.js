@@ -1913,12 +1913,12 @@ async function runTests() {
       'u-theADMIN-MASTER-SUITE.html'
     ];
 
-    // 1. Verify 3-Part Directive across ALL 10 files
+    // 1. Verify Directive across ALL 10 files
     for (const file of allPlatformFiles) {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
       assert(content.includes('1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.'), `${file} includes part 1 mandate`);
       assert(content.includes('2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.'), `${file} includes part 2 mandate`);
-      assert(content.includes('3. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.'), `${file} includes part 3 surgical editing mandate`);
+      assert(content.includes('SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.'), `${file} includes surgical editing mandate`);
     }
 
     // 2. Verify Mobile Deck & Vertical Scrolling CSS across all Recruiter templates
@@ -1939,16 +1939,16 @@ async function runTests() {
       // Card 1 & Card 2 horizontal deck belt
       assert(content.includes('.cards-1-2-container, .studio-deck-wrap'), `${file} defines .cards-1-2-container & .studio-deck-wrap`);
       assert(content.includes('scroll-snap-type: x mandatory !important;'), `${file} enforces horizontal scroll-snap on deck belt`);
-      assert(content.includes('.card-1-wrap, .card-2-wrap, .card-posting-box, .card-preview-box'), `${file} defines Card 1 & Card 2 width classes`);
+      assert(content.includes('.card-1-wrap') && content.includes('.card-2-wrap'), `${file} defines Card 1 & Card 2 width classes`);
       assert(content.includes('min-width: 88vw !important;') && content.includes('max-width: 88vw !important;'), `${file} enforces 88vw width on mobile cards`);
 
       // Card 2 infinite vertical belt
       assert(content.includes('.card-2-preview-body, #live-card-preview-container, .preview-scroll-belt'), `${file} defines Card 2 vertical scroll belt`);
-      assert(content.includes('max-height: 420px !important;'), `${file} enforces max-height: 420px on Card 2 preview body`);
+      assert(content.includes('max-height: 420px !important;') || content.includes('max-height: 380px !important;'), `${file} enforces max-height on Card 2 preview body`);
 
       // Card 3 infinite vertical belt snugged beneath
       assert(content.includes('.card-3-active-listings, #active-jobs-table-container'), `${file} defines Card 3 vertical scroll belt`);
-      assert(content.includes('max-height: 480px !important;'), `${file} enforces max-height: 480px on Card 3`);
+      assert(content.includes('max-height: 480px !important;') || content.includes('max-height: 420px !important;'), `${file} enforces max-height on Card 3`);
       assert(content.includes('border-top: 1.5px solid var(--border-color, #E2E8F0);'), `${file} enforces border-top on Card 3`);
 
       // Shrunken lower sections
@@ -1959,6 +1959,55 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 37 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 38: MOBILE OVERFLOW, CARD 1 CONTAINER & BUTTON SCALING FIX
+  // ================================================================
+  console.log('\n--- GROUP 38: MOBILE OVERFLOW, CARD 1 CONTAINER & BUTTON SCALING FIX ---');
+  try {
+    const recruiterFiles = [
+      'recruiter.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html'
+    ];
+
+    for (const file of recruiterFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+
+      // 1. 4-Part Mandate Comment Block
+      assert(content.includes('1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.'), `${file} includes mandate part 1`);
+      assert(content.includes('2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.'), `${file} includes mandate part 2`);
+      assert(content.includes('3. PREVENT INPUT AND TEXT STRETCHING OUTSIDE CARD BOUNDARIES ON MOBILE DECK.'), `${file} includes mandate part 3 input stretching prevention`);
+      assert(content.includes('4. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.'), `${file} includes mandate part 4 surgical preservation`);
+
+      // 2. Top Deck Header & Login Button Scaling
+      assert(content.includes('header, .recruiter-header') && content.includes('height: 42px !important;'), `${file} enforces 42px header height on mobile`);
+      assert(content.includes('.header-actions button, .btn-auth-header, #btn-login-modal'), `${file} defines compact header action button selectors`);
+      assert(content.includes('height: 26px !important;') && content.includes('font-size: 0.58rem !important;'), `${file} enforces compact login/signup button styling`);
+
+      // 3. Card 1 Form Grid & Overflow Containment
+      assert(content.includes('.card-1-wrap, .card-posting-box, #card-1-container'), `${file} defines Card 1 container selectors`);
+      assert(content.includes('overflow-x: hidden !important;'), `${file} enforces overflow-x: hidden on Card 1 container`);
+      assert(content.includes('grid-template-columns: 1fr !important;'), `${file} enforces single column grid inside Card 1 form grids`);
+      assert(content.includes('height: 28px !important;') && content.includes('font-size: 0.7rem !important;'), `${file} enforces compact height 28px on Card 1 form inputs`);
+
+      // 4. Global Interface Text & Input Compaction
+      assert(content.includes('font-size: 0.72rem !important;') && content.includes('line-height: 1.2 !important;'), `${file} enforces compact body/main typography`);
+      assert(content.includes('font-size: 0.58rem !important;') && content.includes('margin-bottom: 0.15rem !important;'), `${file} enforces compact label typography`);
+
+      // 5. Button Platform-Wide Compaction
+      assert(content.includes('button, .btn-primary, .btn-gold, .btn-surface-sm, .btn-quick-send-main, .send-reply-btn'), `${file} defines platform-wide compact button selectors`);
+      assert(content.includes('height: 28px !important;') && content.includes('font-size: 0.6rem !important;'), `${file} enforces 28px button height & 0.6rem font-size`);
+
+      // 6. Card 2 & Card 3 Belt Scaling
+      assert(content.includes('max-height: 380px !important;'), `${file} enforces 380px max-height on Card 2 preview body`);
+      assert(content.includes('max-height: 420px !important;'), `${file} enforces 420px max-height on Card 3 active listings`);
+    }
+
+  } catch (err) {
+    assert(false, `Group 38 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');

@@ -1348,23 +1348,48 @@
 
     /* Mobile Screen Specific Adjustments (<= 768px) */
     @media (max-width: 768px) {
-      header {
-        padding: 0 0.5rem !important;
-        gap: 0.5rem !important;
+      /* 1. TOP DECK HEADER & LOGIN BUTTON SCALING */
+      header, .recruiter-header {
+        height: 42px !important;
+        padding: 0 0.4rem !important;
+        gap: 0.25rem !important;
+        justify-content: space-between !important;
       }
-      
+
       .brand-title {
-        font-size: 0.8rem !important;
+        font-size: 0.72rem !important;
+        letter-spacing: 0.5px !important;
       }
-      
+
+      .brand-badge, .owner-badge {
+        font-size: 0.52rem !important;
+        padding: 0.1rem 0.3rem !important;
+      }
+
+      /* Compact Header Action Buttons (Ensures Login/Sign Up is visible at all times) */
+      .header-actions button, .btn-auth-header, #btn-login-modal {
+        height: 26px !important;
+        min-height: 26px !important;
+        padding: 0 0.45rem !important;
+        font-size: 0.58rem !important;
+        letter-spacing: 0.02em !important;
+        white-space: nowrap !important;
+      }
+
+      .admin-nav-tab-btn {
+        height: 30px !important;
+        font-size: 0.6rem !important;
+        padding: 0 0.45rem !important;
+      }
+
       main {
         padding: 0.5rem !important;
       }
-      
+
       .kpi-grid {
         grid-template-columns: repeat(2, 1fr) !important;
       }
-      
+
       /* Stack Candidate / Recruiter Split Panels vertically on mobile */
       .candidate-board-layout, .recruiter-studio-layout {
         flex-direction: column !important;
@@ -1394,7 +1419,78 @@
         padding-bottom: 0.5rem !important;
       }
 
-      .card-1-wrap, .card-2-wrap, .card-posting-box, .card-preview-box {
+      /* 2. CARD 1 FORM GRID & OVERFLOW CONTAINMENT (PREVENTS STRETCHING INTO CARD 2) */
+      .card-1-wrap, .card-posting-box, #card-1-container {
+        flex: 0 0 88vw !important;
+        min-width: 88vw !important;
+        max-width: 88vw !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+        padding: 0.5rem !important;
+        scroll-snap-align: start !important;
+      }
+
+      /* Force single-column stacking inside Card 1 form grids */
+      .card-1-wrap [style*="grid"], 
+      .card-posting-box [style*="grid"],
+      .card-1-wrap .form-row,
+      .card-1-wrap .grid-2 {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 0.35rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      .card-1-wrap .form-group, 
+      .card-posting-box .form-group {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      .card-1-wrap input, 
+      .card-1-wrap select, 
+      .card-1-wrap textarea,
+      .card-posting-box input, 
+      .card-posting-box select {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 28px !important;
+        font-size: 0.7rem !important;
+        padding: 0 0.4rem !important;
+        box-sizing: border-box !important;
+      }
+
+      /* 3. GLOBAL INTERFACE TEXT & INPUT COMPACTION */
+      body, main {
+        font-size: 0.72rem !important;
+        line-height: 1.2 !important;
+      }
+
+      label, .form-label {
+        font-size: 0.58rem !important;
+        margin-bottom: 0.15rem !important;
+        letter-spacing: 0.02em !important;
+      }
+
+      .section-title-compact, .cms-sub-box-title {
+        font-size: 0.68rem !important;
+        letter-spacing: 0.02em !important;
+      }
+
+      /* 4. COMPACT ALL BUTTONS PLATFORM-WIDE */
+      button, .btn-primary, .btn-gold, .btn-surface-sm, .btn-quick-send-main, .send-reply-btn {
+        height: 28px !important;
+        min-height: 28px !important;
+        padding: 0 0.5rem !important;
+        font-size: 0.6rem !important;
+        letter-spacing: 0.03em !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Card 2 & Card 3 Belt Scaling */
+      .card-2-wrap, .card-preview-box {
         flex: 0 0 88vw !important;
         min-width: 88vw !important;
         max-width: 88vw !important;
@@ -1404,7 +1500,7 @@
 
       /* 3. CARD 2 INFINITE VERTICAL BELT */
       .card-2-preview-body, #live-card-preview-container, .preview-scroll-belt {
-        max-height: 420px !important;
+        max-height: 380px !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
         padding-right: 0.25rem !important;
@@ -1414,7 +1510,7 @@
       .card-3-active-listings, #active-jobs-table-container {
         width: 100% !important;
         margin-top: 0.75rem !important;
-        max-height: 480px !important;
+        max-height: 420px !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
         border-top: 1.5px solid var(--border-color, #E2E8F0);
@@ -2517,7 +2613,8 @@
      * CRITICAL CODE DIRECTIVE & MANDATE:
      * 1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.
      * 2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.
-     * 3. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.
+     * 3. PREVENT INPUT AND TEXT STRETCHING OUTSIDE CARD BOUNDARIES ON MOBILE DECK.
+     * 4. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.
      * ============================================================================ */
 
     let pendingConfirmCallback = null;
