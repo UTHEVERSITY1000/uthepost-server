@@ -1,12 +1,15 @@
 {
   "id": "USR-567",
-  "email": "test.candidate.1787891294177@domain.com",
-  "passwordHash": "7370d583f6c489a4443e08a5d17380ac:30cae1d518ef6854a9f3a4edbbdb780d6061ab9bd5a2111f377cb8afebd64421687138854411a5f068f166e1286fa29f3769b2679f63ce36259e521068007e90",
-  "name": "Test Persistent Candidate",
+  "userId": "USR-567",
+  "email": "test.welcome.1788046334364@utheversity.com",
+  "passwordHash": "21e9ebd2ece255ed2360f2b73976d580:92d84bcfc916322c05ae5ee93d58c30ed8c78742c473d1d1866d938a692cb0344520b789c4101ac7b8f9ce8b74050490353b8c1bdae12cf6f8e51d6a8bac40ee",
+  "name": "Elena Rostova",
+  "fullName": "Elena Rostova",
   "role": "candidate",
-  "company": "Test Co",
-  "phone": "",
+  "company": "",
+  "phone": "+1 (555) 890-1234",
   "bio": "",
   "approved": true,
-  "createdAt": "2026-08-28T04:28:14.186Z"
+  "status": "Active",
+  "createdAt": "2026-08-29T23:32:14.374Z"
 }

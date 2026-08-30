@@ -1438,17 +1438,14 @@ function resolveTargetFileForHost(req, parsedUrl) {
   const pathname = parsedUrl.pathname;
   const cleanPath = pathname.toLowerCase().replace(/\/+$/, '');
 
-  if (cleanPath === '/recruiter' || cleanPath === '/recruiter.html' || cleanPath === '/post' || cleanPath === '/u-thepost-enterprise-edition.html' || cleanPath === '/u-thepost-dual link to u-thejobs.html' || cleanPath === '/u-thepost-dual link & mobile.html') {
+  if (cleanPath === '/recruiter' || cleanPath === '/recruiter.html' || cleanPath === '/post' || cleanPath === '/u-thepost' || cleanPath === '/u-thepost.html' || cleanPath === '/u-thepost-enterprise-edition.html' || cleanPath === '/u-thepost-dual link to u-thejobs.html' || cleanPath === '/u-thepost-dual link & mobile.html') {
     return 'recruiter.html';
   }
-  if (cleanPath === '/candidate' || cleanPath === '/candidate.html' || cleanPath === '/jobs' || cleanPath === '/u-thejobs-enterprise-sync.html' || cleanPath === '/u-thejobs-dual link to u-thepost.html') {
+  if (cleanPath === '/candidate' || cleanPath === '/candidate.html' || cleanPath === '/jobs' || cleanPath === '/u-thejobs' || cleanPath === '/u-thejobs.html' || cleanPath === '/u-thejobs-enterprise-sync.html' || cleanPath === '/u-thejobs-dual link to u-thepost.html') {
     return 'candidate.html';
   }
-  if (cleanPath === '/admin' || cleanPath === '/admin.html' || cleanPath === '/u-theadmin-master-suite.html') {
+  if (cleanPath === '/admin' || cleanPath === '/admin.html' || cleanPath === '/u-theadmin' || cleanPath === '/u-theadmin.html' || cleanPath === '/u-theadmin-master-suite.html') {
     return 'admin.html';
-  }
-  if (cleanPath === '/preview' || cleanPath === '/preview-hub.html' || cleanPath === '/hub') {
-    return 'preview-hub.html';
   }
 
   if (cleanPath !== '' && cleanPath !== '/' && cleanPath !== '/index.html') {
@@ -1477,7 +1474,7 @@ function resolveTargetFileForHost(req, parsedUrl) {
     return 'admin.html';
   }
 
-  return 'preview-hub.html';
+  return 'recruiter.html';
 }
 
 // ----------------------------------------------------

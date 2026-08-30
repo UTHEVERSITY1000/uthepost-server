@@ -903,7 +903,7 @@ async function runTests() {
     assert(emailsTextLog.includes('NEW_DIRECT_MESSAGE_ALERT'), 'emails.log records NEW_DIRECT_MESSAGE_ALERT entries');
     assert(emailsTextLog.includes('DIAGNOSTIC_TEST_EMAIL'), 'emails.log records DIAGNOSTIC_TEST_EMAIL entries');
 
-    // 9. Admin Interface Verification (admin.html & u-theADMIN-MASTER-SUITE.html)
+    // 9. Admin Interface Verification (admin.html & admin.html)
     const adminHtmlContent = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
     assert(adminHtmlContent.includes('TRANSACTIONAL EMAIL SYSTEM'), 'admin.html includes Transactional Email System card');
     assert(adminHtmlContent.includes('smtp-status-indicator'), 'admin.html includes #smtp-status-indicator');
@@ -943,14 +943,14 @@ async function runTests() {
   console.log('\n--- GROUP 17: BULK .ZIP RESUME ARCHIVE DOWNLOAD & ATS CONTROLS ---');
   try {
     const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
-    const masterSuiteHtml = fs.readFileSync(path.join(__dirname, 'u-theADMIN-MASTER-SUITE.html'), 'utf8');
+    const masterSuiteHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
 
     assert(adminHtml.includes('CANDIDATE APPLICATIONS & ATS STAGE OVERRIDES'), 'admin.html contains Candidate Applications section header');
     assert(adminHtml.includes('href="/api/admin/resumes/download-all"'), 'admin.html routes to /api/admin/resumes/download-all');
     assert(adminHtml.includes('target="_blank"'), 'admin.html bulk download anchor has target="_blank"');
     assert(adminHtml.includes('DOWNLOAD ALL RESUMES (.ZIP)'), 'admin.html renders DOWNLOAD ALL RESUMES (.ZIP) button text');
 
-    assert(masterSuiteHtml.includes('href="/api/admin/resumes/download-all"'), 'u-theADMIN-MASTER-SUITE.html routes to /api/admin/resumes/download-all');
+    assert(masterSuiteHtml.includes('href="/api/admin/resumes/download-all"'), 'admin.html routes to /api/admin/resumes/download-all');
 
     const downloadAllRes = await httpGet('/api/admin/resumes/download-all', {
       'Authorization': 'Bearer master_admin_token',
@@ -1095,9 +1095,9 @@ async function runTests() {
     assert(candHtml.includes('recruiter-thread-card'), 'candidate.html includes recruiter-thread-card CSS styling');
 
     // Verify mirrors
-    const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
-    assert(syncHtml.includes('id="recruiterThreadList"'), 'u-theJOBS-ENTERPRISE-SYNC.html contains #recruiterThreadList');
-    assert(syncHtml.includes('switchActiveThread'), 'u-theJOBS-ENTERPRISE-SYNC.html contains switchActiveThread');
+    const syncHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    assert(syncHtml.includes('id="recruiterThreadList"'), 'candidate.html contains #recruiterThreadList');
+    assert(syncHtml.includes('switchActiveThread'), 'candidate.html contains switchActiveThread');
 
   } catch (err) {
     assert(false, `Group 21 failed: ${err.message}`);
@@ -1122,9 +1122,9 @@ async function runTests() {
     assert(candHtml.includes('searchEl.value = \'\''), 'candidate.html clears search bar on DOMContentLoaded');
 
     // 3. Check Mirrors
-    const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
-    assert(syncHtml.includes('autocomplete="one-time-code"') || syncHtml.includes('autocomplete="off"'), 'u-theJOBS-ENTERPRISE-SYNC.html includes strict autocomplete bypass');
-    assert(!syncHtml.includes('bigcompany2012@gmail.com'), 'u-theJOBS-ENTERPRISE-SYNC.html contains zero instances of bigcompany2012@gmail.com');
+    const syncHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    assert(syncHtml.includes('autocomplete="one-time-code"') || syncHtml.includes('autocomplete="off"'), 'candidate.html includes strict autocomplete bypass');
+    assert(!syncHtml.includes('bigcompany2012@gmail.com'), 'candidate.html contains zero instances of bigcompany2012@gmail.com');
 
   } catch (err) {
     assert(false, `Group 22 failed: ${err.message}`);
@@ -1156,10 +1156,10 @@ async function runTests() {
     assert(candHtml.includes('autocomplete="one-time-code"'), 'candidate.html search input enforces strict Chrome autofill bypass autocomplete="one-time-code"');
 
     // 4. Check Template Mirrors
-    const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
-    const dualHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-DUAL LINK TO u-thePOST.html'), 'utf8');
-    assert(syncHtml.includes('autocomplete="one-time-code"'), 'u-theJOBS-ENTERPRISE-SYNC.html enforces autocomplete="one-time-code"');
-    assert(dualHtml.includes('autocomplete="one-time-code"'), 'u-theJOBS-DUAL LINK TO u-thePOST.html enforces autocomplete="one-time-code"');
+    const syncHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const dualHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    assert(syncHtml.includes('autocomplete="one-time-code"'), 'candidate.html enforces autocomplete="one-time-code"');
+    assert(dualHtml.includes('autocomplete="one-time-code"'), 'candidate.html enforces autocomplete="one-time-code"');
 
   } catch (err) {
     assert(false, `Group 23 failed: ${err.message}`);
@@ -1197,10 +1197,10 @@ async function runTests() {
     assert(filterFunc('33101', sampleJobs).length === 1, 'Search query "33101" matches numeric zip code 33101');
 
     // Check mirrors
-    const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
-    const dualHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-DUAL LINK TO u-thePOST.html'), 'utf8');
-    assert(syncHtml.includes('j.location && j.location.toLowerCase().includes(q)'), 'u-theJOBS-ENTERPRISE-SYNC.html contains location matching');
-    assert(dualHtml.includes('j.location && j.location.toLowerCase().includes(q)'), 'u-theJOBS-DUAL LINK TO u-thePOST.html contains location matching');
+    const syncHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const dualHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    assert(syncHtml.includes('j.location && j.location.toLowerCase().includes(q)'), 'candidate.html contains location matching');
+    assert(dualHtml.includes('j.location && j.location.toLowerCase().includes(q)'), 'candidate.html contains location matching');
 
   } catch (err) {
     assert(false, `Group 24 failed: ${err.message}`);
@@ -1259,10 +1259,10 @@ async function runTests() {
     assert(postData.config.jobsBoard.boardTitle === 'U-THEJOBS EXECUTIVE', 'POST /api/cms/config persists updated boardTitle');
 
     // Check mirrors
-    const syncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
-    const recMirrorHtml = fs.readFileSync(path.join(__dirname, 'u-thePOST-ENTERPRISE-EDITION.html'), 'utf8');
-    assert(syncHtml.includes('CMS_CONFIG_UPDATED'), 'u-theJOBS-ENTERPRISE-SYNC.html contains CMS_CONFIG_UPDATED handler');
-    assert(recMirrorHtml.includes('CMS_CONFIG_UPDATED'), 'u-thePOST-ENTERPRISE-EDITION.html contains CMS_CONFIG_UPDATED handler');
+    const syncHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const recMirrorHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    assert(syncHtml.includes('CMS_CONFIG_UPDATED'), 'candidate.html contains CMS_CONFIG_UPDATED handler');
+    assert(recMirrorHtml.includes('CMS_CONFIG_UPDATED'), 'recruiter.html contains CMS_CONFIG_UPDATED handler');
 
   } catch (err) {
     assert(false, `Group 25 failed: ${err.message}`);
@@ -1306,26 +1306,26 @@ async function runTests() {
     assert(recHtml.includes('price-pro'), 'recruiter.html updates #price-pro');
 
     // Check ALL 6 HTML template files
-    const candDual = fs.readFileSync(path.join(__dirname, 'u-theJOBS-DUAL LINK TO u-thePOST.html'), 'utf8');
-    const candSync = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
-    const recDual = fs.readFileSync(path.join(__dirname, 'u-thePOST-DUAL LINK TO u-theJOBS.html'), 'utf8');
-    const recMobile = fs.readFileSync(path.join(__dirname, 'u-thePOST-DUAL LINK & MOBILE.html'), 'utf8');
-    const recEnterprise = fs.readFileSync(path.join(__dirname, 'u-thePOST-ENTERPRISE-EDITION.html'), 'utf8');
-    const adminSuite = fs.readFileSync(path.join(__dirname, 'u-theADMIN-MASTER-SUITE.html'), 'utf8');
+    const candDual = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const candSync = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const recDual = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const recMobile = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const recEnterprise = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const adminSuite = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
 
-    assert(candDual.includes('connectLiveSync'), 'u-theJOBS-DUAL LINK TO u-thePOST.html includes connectLiveSync');
-    assert(candSync.includes('connectLiveSync'), 'u-theJOBS-ENTERPRISE-SYNC.html includes connectLiveSync');
-    assert(recDual.includes('connectLiveSync'), 'u-thePOST-DUAL LINK TO u-theJOBS.html includes connectLiveSync');
-    assert(recMobile.includes('connectLiveSync'), 'u-thePOST-DUAL LINK & MOBILE.html includes connectLiveSync');
-    assert(recEnterprise.includes('connectLiveSync'), 'u-thePOST-ENTERPRISE-EDITION.html includes connectLiveSync');
-    assert(adminSuite.includes('connectLiveSync'), 'u-theADMIN-MASTER-SUITE.html includes connectLiveSync');
+    assert(candDual.includes('connectLiveSync'), 'candidate.html includes connectLiveSync');
+    assert(candSync.includes('connectLiveSync'), 'candidate.html includes connectLiveSync');
+    assert(recDual.includes('connectLiveSync'), 'recruiter.html includes connectLiveSync');
+    assert(recMobile.includes('connectLiveSync'), 'recruiter.html includes connectLiveSync');
+    assert(recEnterprise.includes('connectLiveSync'), 'recruiter.html includes connectLiveSync');
+    assert(adminSuite.includes('connectLiveSync'), 'admin.html includes connectLiveSync');
 
-    assert(candDual.includes('3000'), 'u-theJOBS-DUAL LINK TO u-thePOST.html includes 3s fallback polling');
-    assert(candSync.includes('3000'), 'u-theJOBS-ENTERPRISE-SYNC.html includes 3s fallback polling');
-    assert(recDual.includes('3000'), 'u-thePOST-DUAL LINK TO u-theJOBS.html includes 3s fallback polling');
-    assert(recMobile.includes('3000'), 'u-thePOST-DUAL LINK & MOBILE.html includes 3s fallback polling');
-    assert(recEnterprise.includes('3000'), 'u-thePOST-ENTERPRISE-EDITION.html includes 3s fallback polling');
-    assert(adminSuite.includes('3000'), 'u-theADMIN-MASTER-SUITE.html includes 3s fallback polling');
+    assert(candDual.includes('3000'), 'candidate.html includes 3s fallback polling');
+    assert(candSync.includes('3000'), 'candidate.html includes 3s fallback polling');
+    assert(recDual.includes('3000'), 'recruiter.html includes 3s fallback polling');
+    assert(recMobile.includes('3000'), 'recruiter.html includes 3s fallback polling');
+    assert(recEnterprise.includes('3000'), 'recruiter.html includes 3s fallback polling');
+    assert(adminSuite.includes('3000'), 'admin.html includes 3s fallback polling');
 
   } catch (err) {
     assert(false, `Group 26 failed: ${err.message}`);
@@ -1337,12 +1337,12 @@ async function runTests() {
   console.log('\n--- GROUP 27: ADMIN CMS INPUT PERSISTENCE & AUTO-POLL OVERWRITE ---');
   try {
     const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
-    const adminSuiteHtml = fs.readFileSync(path.join(__dirname, 'u-theADMIN-MASTER-SUITE.html'), 'utf8');
+    const adminSuiteHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
 
     // 1. Safeguard Active Form Inputs During Sync
     assert(adminHtml.includes('document.activeElement'), 'admin.html inspects document.activeElement in populateCmsForm');
     assert(adminHtml.includes('activeEl.closest(\'#view-cms, #view-plans\')'), 'admin.html protects active typing in #view-cms and #view-plans');
-    assert(adminSuiteHtml.includes('activeEl.closest(\'#view-cms, #view-plans\')'), 'u-theADMIN-MASTER-SUITE.html protects active typing in #view-cms and #view-plans');
+    assert(adminSuiteHtml.includes('activeEl.closest(\'#view-cms, #view-plans\')'), 'admin.html protects active typing in #view-cms and #view-plans');
 
     // 2. HTTP Response Validation & Alerts
     assert(adminHtml.includes('if (!res.ok)'), 'admin.html validates res.ok in saveAndBroadcastCms');
@@ -1351,13 +1351,13 @@ async function runTests() {
     // 3. Complete Field Mappings
     assert(adminHtml.includes('cms-price-spotlight'), 'admin.html maps #cms-price-spotlight');
     assert(adminHtml.includes('cms-post-btn-actions'), 'admin.html maps #cms-post-btn-actions');
-    assert(adminSuiteHtml.includes('cms-price-spotlight'), 'u-theADMIN-MASTER-SUITE.html maps #cms-price-spotlight');
-    assert(adminSuiteHtml.includes('cms-post-btn-actions'), 'u-theADMIN-MASTER-SUITE.html maps #cms-post-btn-actions');
+    assert(adminSuiteHtml.includes('cms-price-spotlight'), 'admin.html maps #cms-price-spotlight');
+    assert(adminSuiteHtml.includes('cms-post-btn-actions'), 'admin.html maps #cms-post-btn-actions');
 
     // 4. Enforce Master Auth Headers
     assert(adminHtml.includes('getAdminAuthHeaders()'), 'admin.html uses getAdminAuthHeaders()');
     assert(adminHtml.includes('headers: getAdminAuthHeaders()'), 'admin.html passes getAdminAuthHeaders in fetch requests');
-    assert(adminSuiteHtml.includes('headers: getAdminAuthHeaders()'), 'u-theADMIN-MASTER-SUITE.html passes getAdminAuthHeaders in fetch requests');
+    assert(adminSuiteHtml.includes('headers: getAdminAuthHeaders()'), 'admin.html passes getAdminAuthHeaders in fetch requests');
 
     // 5. Test POST with Admin Auth Headers via HTTP
     const headers = {
@@ -1394,7 +1394,7 @@ async function runTests() {
   console.log('\n--- GROUP 28: AUTOMATIC MASTER ADMIN TOKEN INITIALIZATION ---');
   try {
     const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
-    const adminSuiteHtml = fs.readFileSync(path.join(__dirname, 'u-theADMIN-MASTER-SUITE.html'), 'utf8');
+    const adminSuiteHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
     const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
 
     // 1. Auto-Login on DOM load
@@ -1402,7 +1402,7 @@ async function runTests() {
     assert(adminHtml.includes('contact@utheversity.com'), 'admin.html auto-authenticates contact@utheversity.com');
     assert(adminHtml.includes('ZionAdmin2026!'), 'admin.html passes default master credentials for instant token handshake');
     assert(adminHtml.includes('localStorage.setItem(\'master_admin_token\', data.token)'), 'admin.html stores JWT in localStorage master_admin_token');
-    assert(adminSuiteHtml.includes('localStorage.setItem(\'master_admin_token\', data.token)'), 'u-theADMIN-MASTER-SUITE.html stores JWT in localStorage master_admin_token');
+    assert(adminSuiteHtml.includes('localStorage.setItem(\'master_admin_token\', data.token)'), 'admin.html stores JWT in localStorage master_admin_token');
 
     // 2. Bearer Header Injection
     assert(adminHtml.includes('Authorization\': `Bearer ${token}`') || adminHtml.includes('Authorization\': \'Bearer \' + token'), 'admin.html constructs Bearer authorization header');
@@ -1442,7 +1442,7 @@ async function runTests() {
 
     // 6. DOMContentLoaded triggers ensureMasterAdminSession
     assert(adminHtml.includes('await ensureMasterAdminSession()'), 'admin.html runs ensureMasterAdminSession on DOMContentLoaded');
-    assert(adminSuiteHtml.includes('await ensureMasterAdminSession()'), 'u-theADMIN-MASTER-SUITE.html runs ensureMasterAdminSession on DOMContentLoaded');
+    assert(adminSuiteHtml.includes('await ensureMasterAdminSession()'), 'admin.html runs ensureMasterAdminSession on DOMContentLoaded');
 
   } catch (err) {
     assert(false, `Group 28 failed: ${err.message}`);
@@ -1454,35 +1454,35 @@ async function runTests() {
   console.log('\n--- GROUP 29: GLOBAL BUTTON & BADGE STYLING STANDARD ---');
   try {
     const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
-    const jobsSyncHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-ENTERPRISE-SYNC.html'), 'utf8');
-    const jobsDualHtml = fs.readFileSync(path.join(__dirname, 'u-theJOBS-DUAL LINK TO u-thePOST.html'), 'utf8');
+    const jobsSyncHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const jobsDualHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
 
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
-    const postEntHtml = fs.readFileSync(path.join(__dirname, 'u-thePOST-ENTERPRISE-EDITION.html'), 'utf8');
-    const postDualHtml = fs.readFileSync(path.join(__dirname, 'u-thePOST-DUAL LINK & MOBILE.html'), 'utf8');
-    const postJobsHtml = fs.readFileSync(path.join(__dirname, 'u-thePOST-DUAL LINK TO u-theJOBS.html'), 'utf8');
+    const postEntHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const postDualHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const postJobsHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
     const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
-    const adminSuiteHtml = fs.readFileSync(path.join(__dirname, 'u-theADMIN-MASTER-SUITE.html'), 'utf8');
+    const adminSuiteHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
 
     // 1. Candidate Buttons: Enforces Triple-State Standard
     assert(candidateHtml.includes('.btn-quick-send-main') && candidateHtml.includes('background-color: #FEBA27 !important'), 'candidate.html has gold hover for .btn-quick-send-main');
     assert(candidateHtml.includes('.send-reply-btn') && candidateHtml.includes('background-color: #FEBA27 !important'), 'candidate.html has gold hover for .send-reply-btn');
     assert(candidateHtml.includes('.btn-auth-header') && candidateHtml.includes('background-color: #FEBA27 !important'), 'candidate.html has gold hover for .btn-auth-header');
     assert(candidateHtml.includes('.btn-profile-header') && candidateHtml.includes('background-color: #FEBA27 !important'), 'candidate.html has gold hover for .btn-profile-header');
-    assert(jobsSyncHtml.includes('background-color: #FEBA27 !important'), 'u-theJOBS-ENTERPRISE-SYNC.html includes gold hover');
-    assert(jobsDualHtml.includes('background-color: #FEBA27 !important'), 'u-theJOBS-DUAL LINK TO u-thePOST.html includes gold hover');
+    assert(jobsSyncHtml.includes('background-color: #FEBA27 !important'), 'candidate.html includes gold hover');
+    assert(jobsDualHtml.includes('background-color: #FEBA27 !important'), 'candidate.html includes gold hover');
 
     // 2. Recruiter Buttons: Enforces Triple-State Standard
     assert(recruiterHtml.includes('.btn-gold-action') && recruiterHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html has gold hover for .btn-gold-action');
     assert(recruiterHtml.includes('.btn-auth-header') && recruiterHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html has gold hover for .btn-auth-header');
-    assert(postEntHtml.includes('background-color: #FEBA27 !important'), 'u-thePOST-ENTERPRISE-EDITION.html includes gold hover');
-    assert(postDualHtml.includes('background-color: #FEBA27 !important'), 'u-thePOST-DUAL LINK & MOBILE.html includes gold hover');
-    assert(postJobsHtml.includes('background-color: #FEBA27 !important'), 'u-thePOST-DUAL LINK TO u-theJOBS.html includes gold hover');
+    assert(postEntHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html includes gold hover');
+    assert(postDualHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html includes gold hover');
+    assert(postJobsHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html includes gold hover');
 
     // 3. Admin Buttons: Enforces Triple-State Standard
     assert(adminHtml.includes('.btn-gold') && adminHtml.includes('background-color: #FEBA27 !important'), 'admin.html has gold hover for .btn-gold');
-    assert(adminSuiteHtml.includes('background-color: #FEBA27 !important'), 'u-theADMIN-MASTER-SUITE.html includes gold hover');
+    assert(adminSuiteHtml.includes('background-color: #FEBA27 !important'), 'admin.html includes gold hover');
 
     // 4. Badges & Tags Standard: White fill, Gold outline, Gold text
     assert(candidateHtml.includes('background-color: #FFFFFF !important') && candidateHtml.includes('border: 1px solid #FEBA27 !important'), 'candidate.html standardizes badges to white fill and gold outline');
@@ -1499,12 +1499,7 @@ async function runTests() {
   console.log('\n--- GROUP 30: URGENT HIRING TOGGLE & RECRUITER ATS INTEGRATION ---');
   try {
     // 1. Urgent Hiring Form Control in recruiter templates
-    const recruiterFiles = [
-      'recruiter.html',
-      'u-thePOST-ENTERPRISE-EDITION.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html'
-    ];
+    const recruiterFiles = ['recruiter.html'];
 
     for (const rf of recruiterFiles) {
       const content = fs.readFileSync(path.join(__dirname, rf), 'utf8');
@@ -1528,12 +1523,12 @@ async function runTests() {
       'recruiter.html',
       'candidate.html',
       'admin.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html',
-      'u-theJOBS-ENTERPRISE-SYNC.html',
-      'u-theJOBS-DUAL LINK TO u-thePOST.html',
-      'u-theADMIN-MASTER-SUITE.html'
+      'recruiter.html',
+      'recruiter.html',
+      'recruiter.html',
+      'candidate.html',
+      'candidate.html',
+      'admin.html'
     ];
 
     for (const f of allFiles) {
@@ -1565,11 +1560,7 @@ async function runTests() {
   // ================================================================
   console.log('\n--- GROUP 32: FULL U-THEJOBS CANDIDATE BOARD RESTORATION ---');
   try {
-    const candidateFiles = [
-      'candidate.html',
-      'u-theJOBS-ENTERPRISE-SYNC.html',
-      'u-theJOBS-DUAL LINK TO u-thePOST.html'
-    ];
+    const candidateFiles = ['candidate.html'];
 
     for (const cf of candidateFiles) {
       const content = fs.readFileSync(path.join(__dirname, cf), 'utf8');
@@ -1642,12 +1633,7 @@ async function runTests() {
   // ================================================================
   console.log('\n--- GROUP 33: DYNAMIC APPLICANT RESUME VIEWER & PDF OPENING ---');
   try {
-    const recruiterFiles = [
-      'recruiter.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html'
-    ];
+    const recruiterFiles = ['recruiter.html'];
 
     for (const rf of recruiterFiles) {
       const content = fs.readFileSync(path.join(__dirname, rf), 'utf8');
@@ -1717,8 +1703,8 @@ async function runTests() {
     // 2. Candidate Templates Verification
     const candFiles = [
       'candidate.html',
-      'u-theJOBS-ENTERPRISE-SYNC.html',
-      'u-theJOBS-DUAL LINK TO u-thePOST.html'
+      'candidate.html',
+      'candidate.html'
     ];
 
     for (const cf of candFiles) {
@@ -1732,9 +1718,9 @@ async function runTests() {
     // 3. Recruiter Templates Verification
     const recFiles = [
       'recruiter.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html'
+      'recruiter.html',
+      'recruiter.html',
+      'recruiter.html'
     ];
 
     for (const rf of recFiles) {
@@ -1793,18 +1779,7 @@ async function runTests() {
   // ================================================================
   console.log('\n--- GROUP 35: BAN NATIVE BROWSER POPUPS & SIGNATURE CONFIRMATION CARDS ---');
   try {
-    const allPlatformFiles = [
-      'server.js',
-      'candidate.html',
-      'u-theJOBS-ENTERPRISE-SYNC.html',
-      'u-theJOBS-DUAL LINK TO u-thePOST.html',
-      'recruiter.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html',
-      'admin.html',
-      'u-theADMIN-MASTER-SUITE.html'
-    ];
+    const allPlatformFiles = ['recruiter.html', 'candidate.html', 'admin.html'];
 
     const htmlFiles = allPlatformFiles.filter(f => f.endsWith('.html'));
 
@@ -1852,14 +1827,14 @@ async function runTests() {
   try {
     const htmlFiles = [
       'admin.html',
-      'u-theADMIN-MASTER-SUITE.html',
+      'admin.html',
       'recruiter.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html',
+      'recruiter.html',
+      'recruiter.html',
+      'recruiter.html',
       'candidate.html',
-      'u-theJOBS-ENTERPRISE-SYNC.html',
-      'u-theJOBS-DUAL LINK TO u-thePOST.html'
+      'candidate.html',
+      'candidate.html'
     ];
 
     for (const file of htmlFiles) {
@@ -1900,18 +1875,7 @@ async function runTests() {
   // ================================================================
   console.log('\n--- GROUP 37: MOBILE DECK & VERTICAL SCROLLING BELT FIX ---');
   try {
-    const allPlatformFiles = [
-      'server.js',
-      'candidate.html',
-      'u-theJOBS-ENTERPRISE-SYNC.html',
-      'u-theJOBS-DUAL LINK TO u-thePOST.html',
-      'recruiter.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html',
-      'admin.html',
-      'u-theADMIN-MASTER-SUITE.html'
-    ];
+    const allPlatformFiles = ['recruiter.html', 'candidate.html', 'admin.html'];
 
     // 1. Verify Directive across ALL 10 files
     for (const file of allPlatformFiles) {
@@ -1922,12 +1886,7 @@ async function runTests() {
     }
 
     // 2. Verify Mobile Deck & Vertical Scrolling CSS across all Recruiter templates
-    const recruiterFiles = [
-      'recruiter.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html'
-    ];
+    const recruiterFiles = ['recruiter.html'];
 
     for (const file of recruiterFiles) {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
@@ -1966,12 +1925,7 @@ async function runTests() {
   // ================================================================
   console.log('\n--- GROUP 38: MOBILE OVERFLOW, CARD 1 CONTAINER & BUTTON SCALING FIX ---');
   try {
-    const recruiterFiles = [
-      'recruiter.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html'
-    ];
+    const recruiterFiles = ['recruiter.html'];
 
     for (const file of recruiterFiles) {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
@@ -2014,12 +1968,7 @@ async function runTests() {
   // ================================================================
   console.log('\n--- GROUP 39: SEPARATE CARD 1 & STANDALONE SOCIAL MEDIA SECTION ---');
   try {
-    const recruiterFiles = [
-      'recruiter.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html'
-    ];
+    const recruiterFiles = ['recruiter.html'];
 
     for (const file of recruiterFiles) {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
@@ -2059,12 +2008,7 @@ async function runTests() {
   // ================================================================
   console.log('\n--- GROUP 40: U-THEPOST COMPONENT RELOCATION & TAB 2 INTEGRATION ---');
   try {
-    const recruiterFiles = [
-      'recruiter.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html'
-    ];
+    const recruiterFiles = ['recruiter.html'];
 
     for (const file of recruiterFiles) {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
@@ -2108,12 +2052,7 @@ async function runTests() {
   // ================================================================
   console.log('\n--- GROUP 41: UI COMPACTION, BUTTON RESTORATION & PROACTIVE CLEANUP ---');
   try {
-    const recruiterFiles = [
-      'recruiter.html',
-      'u-thePOST-DUAL LINK & MOBILE.html',
-      'u-thePOST-DUAL LINK TO u-theJOBS.html',
-      'u-thePOST-ENTERPRISE-EDITION.html'
-    ];
+    const recruiterFiles = ['recruiter.html'];
 
     for (const file of recruiterFiles) {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
@@ -2148,11 +2087,7 @@ async function runTests() {
     }
 
     // Candidate Job Board Perks Display Verification
-    const candidateFiles = [
-      'candidate.html',
-      'u-theJOBS-ENTERPRISE-SYNC.html',
-      'u-theJOBS-DUAL LINK TO u-thePOST.html'
-    ];
+    const candidateFiles = ['candidate.html'];
 
     for (const file of candidateFiles) {
       const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
@@ -2162,6 +2097,43 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 41 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 42: AUTOMATED FILE AUDIT & DUPLICATE PURGE
+  // ================================================================
+  console.log('\n--- GROUP 42: AUTOMATED FILE AUDIT & DUPLICATE PURGE ---');
+  try {
+    // 1. Enforce Exact 3 Primary Root HTML Files
+    const primaryFiles = ['recruiter.html', 'candidate.html', 'admin.html'];
+    for (const file of primaryFiles) {
+      assert(fs.existsSync(path.join(__dirname, file)), `Primary root file ${file} exists and is active`);
+    }
+
+    // 2. Enforce Permanent Deletion of Duplicate Templates
+    const purgedDuplicates = [
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html',
+      'u-theJOBS-ENTERPRISE-SYNC.html',
+      'u-theJOBS-DUAL LINK TO u-thePOST.html',
+      'u-theADMIN-MASTER-SUITE.html',
+      'preview-hub.html'
+    ];
+
+    for (const file of purgedDuplicates) {
+      assert(!fs.existsSync(path.join(__dirname, file)), `Duplicate file ${file} is permanently deleted from repository root`);
+    }
+
+    // 3. Verify server.js Route Consolidation
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+    assert(serverJs.includes('function resolveTargetFileForHost'), 'server.js defines resolveTargetFileForHost');
+    assert(serverJs.includes('return \'recruiter.html\';'), 'server.js routes post/recruiter to recruiter.html');
+    assert(serverJs.includes('return \'candidate.html\';'), 'server.js routes jobs/candidate to candidate.html');
+    assert(serverJs.includes('return \'admin.html\';'), 'server.js routes admin to admin.html');
+
+  } catch (err) {
+    assert(false, `Group 42 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
