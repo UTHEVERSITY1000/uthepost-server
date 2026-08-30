@@ -1369,6 +1369,93 @@
       .candidate-board-layout, .recruiter-studio-layout {
         flex-direction: column !important;
       }
+
+      /* 1. TOP DECK HORIZONTAL BELT */
+      .top-deck-nav, .admin-tabs-nav-bar, nav.recruiter-nav {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 0.5rem !important;
+        padding: 0.5rem 0.25rem !important;
+        scrollbar-width: none;
+      }
+      .top-deck-nav::-webkit-scrollbar { display: none; }
+
+      /* 2. CARD 1 & CARD 2 HORIZONTAL DECK BELT */
+      .cards-1-2-container, .studio-deck-wrap {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 0.75rem !important;
+        width: 100% !important;
+        padding-bottom: 0.5rem !important;
+      }
+
+      .card-1-wrap, .card-2-wrap, .card-posting-box, .card-preview-box {
+        flex: 0 0 88vw !important;
+        min-width: 88vw !important;
+        max-width: 88vw !important;
+        scroll-snap-align: start !important;
+        box-sizing: border-box !important;
+      }
+
+      /* 3. CARD 2 INFINITE VERTICAL BELT */
+      .card-2-preview-body, #live-card-preview-container, .preview-scroll-belt {
+        max-height: 420px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-right: 0.25rem !important;
+      }
+
+      /* 4. CARD 3 INFINITE VERTICAL BELT (SNUGGED BENEATH CARDS 1 & 2) */
+      .card-3-active-listings, #active-jobs-table-container {
+        width: 100% !important;
+        margin-top: 0.75rem !important;
+        max-height: 480px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        border-top: 1.5px solid var(--border-color, #E2E8F0);
+        padding-top: 0.5rem !important;
+      }
+
+      .card-3-active-listings table {
+        min-width: 600px !important;
+      }
+
+      /* 5. SHRUNKEN LOWER SECTIONS (FIT VIEWPORT WITHOUT COLLISION/STACK OVERLAP) */
+      .publishing-section, .add-ons-section, .plans-matrix-section, .bottom-dock {
+        width: 100% !important;
+        padding: 0.65rem 0.5rem !important;
+        margin-top: 0.75rem !important;
+        box-sizing: border-box !important;
+      }
+
+      .publishing-section .form-group, 
+      .add-ons-section .form-group {
+        margin-bottom: 0.4rem !important;
+      }
+
+      .publishing-section input, 
+      .publishing-section select, 
+      .publishing-section textarea,
+      .add-ons-section input {
+        height: 34px !important;
+        font-size: 0.75rem !important;
+        padding: 0 0.5rem !important;
+        box-sizing: border-box !important;
+      }
+
+      .publishing-section label, 
+      .add-ons-section label {
+        font-size: 0.62rem !important;
+        letter-spacing: 0.02em !important;
+        white-space: normal !important;
+        word-break: break-word !important;
+        line-height: 1.2 !important;
+      }
     }
 
     @media (max-width: 480px) {
@@ -1393,7 +1480,7 @@
     </div>
 
     <!-- 5 EXCLUSIVE CUSTOMER TABS -->
-    <div class="header-center-tabs">
+    <div class="header-center-tabs top-deck-nav">
       <button class="nav-tab-btn active" onclick="switchRecruiterTab('studio')" data-tooltip="Design, configure connected accounts & launch job postings.">
         1. JOB STUDIO
       </button>
@@ -1442,10 +1529,10 @@
 
     <!-- TAB 1: JOB STUDIO (CARD 1, CARD 2, CARD 3 & LOCKED BOTTOM SETTINGS) -->
     <section id="view-studio" class="tab-view active">
-      <div class="studio-grid">
+      <div class="studio-grid studio-deck-wrap cards-1-2-container">
 
         <!-- CARD 1: EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LEFT COLUMN) -->
-        <div class="panel-card">
+        <div class="panel-card card-1-wrap card-posting-box">
           <div class="panel-header">
             <span class="panel-title" id="card1-title-text" data-cms-key="post-card1-title">1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS</span>
             <div style="display: flex; gap: 0.4rem; align-items: center;">
@@ -1568,7 +1655,7 @@
         <div class="studio-col-right">
 
           <!-- CARD 2: LIVE POST PREVIEW WITH VERIFIED EMPLOYER BADGE & URGENT ACCENTS -->
-          <div class="panel-card">
+          <div class="panel-card card-2-wrap card-preview-box">
             <div class="panel-header">
               <span class="panel-title" id="card2-title-text" data-cms-key="post-card2-title">2. LIVE POST PREVIEW</span>
               <div style="display:flex; gap:0.4rem; align-items:center;">
@@ -1577,7 +1664,7 @@
               </div>
             </div>
 
-            <div class="preview-sheet" id="preview-sheet">
+            <div class="preview-sheet card-2-preview-body preview-scroll-belt" id="preview-sheet">
               <div class="pv-header">
                 <div>
                   <div class="pv-title" id="pv-title">Sales Manager</div>
@@ -1626,13 +1713,13 @@
           </div>
 
           <!-- CARD 3: LIVE JOB LISTINGS (SNUG DIRECTLY BENEATH CARD 2) -->
-          <div class="panel-card" id="card3-live-jobs-container">
+          <div class="panel-card card-3-active-listings" id="card3-live-jobs-container">
             <div class="panel-header">
               <span class="panel-title" id="card3-title-text" data-cms-key="post-card3-title">CARD 3: LIVE JOB LISTINGS</span>
               <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">5 ACTIVE POSITIONS</span>
             </div>
 
-            <div style="overflow-x: auto;">
+            <div style="overflow-x: auto;" id="active-jobs-table-container" class="table-container">
               <table class="card3-live-jobs-table">
                 <thead>
                   <tr>
@@ -1718,7 +1805,7 @@
       </div>
 
       <!-- LOCKED BOTTOM SECTION: PUBLISHING & DISTRIBUTION SETTINGS (NO "3.", NO BADGE) -->
-      <div class="bottom-distribution-panel">
+      <div class="bottom-distribution-panel publishing-section">
         <div class="panel-header">
           <span class="panel-title" id="publish-header-text" data-cms-key="post-publish-header">PUBLISHING & DISTRIBUTION SETTINGS</span>
         </div>
@@ -1967,7 +2054,7 @@
     </section>
 
     <!-- TAB 4: PERFORMANCE & PLANS (UPDATED PLAN STRUCTURE & BUILD FROM $0 HEADER) -->
-    <section id="view-plans" class="tab-view">
+    <section id="view-plans" class="tab-view plans-matrix-section">
 
       <!-- BASE PLANS -->
       <div class="pricing-grid">
@@ -2053,7 +2140,7 @@
       </div>
 
       <!-- ADD-ONS SECTION -->
-      <div class="addons-list-card">
+      <div class="addons-list-card add-ons-section">
         <div style="font-size: 0.95rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 1.5px; text-transform: uppercase; border-bottom: 2px solid var(--uthe-gold); padding-bottom: 0.5rem;">
           ADD-ONS
         </div>
@@ -2430,6 +2517,7 @@
      * CRITICAL CODE DIRECTIVE & MANDATE:
      * 1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.
      * 2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.
+     * 3. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.
      * ============================================================================ */
 
     let pendingConfirmCallback = null;

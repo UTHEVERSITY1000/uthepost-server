@@ -1895,6 +1895,72 @@ async function runTests() {
     assert(false, `Group 36 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 37: MOBILE DECK & VERTICAL SCROLLING BELT FIX
+  // ================================================================
+  console.log('\n--- GROUP 37: MOBILE DECK & VERTICAL SCROLLING BELT FIX ---');
+  try {
+    const allPlatformFiles = [
+      'server.js',
+      'candidate.html',
+      'u-theJOBS-ENTERPRISE-SYNC.html',
+      'u-theJOBS-DUAL LINK TO u-thePOST.html',
+      'recruiter.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html',
+      'admin.html',
+      'u-theADMIN-MASTER-SUITE.html'
+    ];
+
+    // 1. Verify 3-Part Directive across ALL 10 files
+    for (const file of allPlatformFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+      assert(content.includes('1. NEVER USE NATIVE BROWSER POPUPS (alert(), confirm(), prompt())! ALWAYS USE UTHEVERSITY SIGNATURE POPUP CARDS.'), `${file} includes part 1 mandate`);
+      assert(content.includes('2. MAINTAIN STRICT MOBILE-FIRST TOUCH RESPONSIVENESS ACROSS ALL SCREEN SIZES.'), `${file} includes part 2 mandate`);
+      assert(content.includes('3. SURGICAL EDITING ONLY: DO NOT OVERWRITE, WIPE OUT, OR BREAK EXISTING WORKING LOGIC.'), `${file} includes part 3 surgical editing mandate`);
+    }
+
+    // 2. Verify Mobile Deck & Vertical Scrolling CSS across all Recruiter templates
+    const recruiterFiles = [
+      'recruiter.html',
+      'u-thePOST-DUAL LINK & MOBILE.html',
+      'u-thePOST-DUAL LINK TO u-theJOBS.html',
+      'u-thePOST-ENTERPRISE-EDITION.html'
+    ];
+
+    for (const file of recruiterFiles) {
+      const content = fs.readFileSync(path.join(__dirname, file), 'utf8');
+
+      // Top deck horizontal belt
+      assert(content.includes('.top-deck-nav, .admin-tabs-nav-bar, nav.recruiter-nav'), `${file} defines .top-deck-nav selectors`);
+      assert(content.includes('.top-deck-nav::-webkit-scrollbar { display: none; }'), `${file} hides scrollbar on top deck nav`);
+
+      // Card 1 & Card 2 horizontal deck belt
+      assert(content.includes('.cards-1-2-container, .studio-deck-wrap'), `${file} defines .cards-1-2-container & .studio-deck-wrap`);
+      assert(content.includes('scroll-snap-type: x mandatory !important;'), `${file} enforces horizontal scroll-snap on deck belt`);
+      assert(content.includes('.card-1-wrap, .card-2-wrap, .card-posting-box, .card-preview-box'), `${file} defines Card 1 & Card 2 width classes`);
+      assert(content.includes('min-width: 88vw !important;') && content.includes('max-width: 88vw !important;'), `${file} enforces 88vw width on mobile cards`);
+
+      // Card 2 infinite vertical belt
+      assert(content.includes('.card-2-preview-body, #live-card-preview-container, .preview-scroll-belt'), `${file} defines Card 2 vertical scroll belt`);
+      assert(content.includes('max-height: 420px !important;'), `${file} enforces max-height: 420px on Card 2 preview body`);
+
+      // Card 3 infinite vertical belt snugged beneath
+      assert(content.includes('.card-3-active-listings, #active-jobs-table-container'), `${file} defines Card 3 vertical scroll belt`);
+      assert(content.includes('max-height: 480px !important;'), `${file} enforces max-height: 480px on Card 3`);
+      assert(content.includes('border-top: 1.5px solid var(--border-color, #E2E8F0);'), `${file} enforces border-top on Card 3`);
+
+      // Shrunken lower sections
+      assert(content.includes('.publishing-section, .add-ons-section, .plans-matrix-section, .bottom-dock'), `${file} defines shrunken lower sections`);
+      assert(content.includes('height: 34px !important;') && content.includes('font-size: 0.75rem !important;'), `${file} defines shrunken input controls`);
+      assert(content.includes('font-size: 0.62rem !important;') && content.includes('letter-spacing: 0.02em !important;'), `${file} defines shrunken label text`);
+    }
+
+  } catch (err) {
+    assert(false, `Group 37 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
