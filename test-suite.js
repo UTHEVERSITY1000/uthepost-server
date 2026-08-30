@@ -2179,7 +2179,7 @@ async function runTests() {
 
     // 1. Card 1 Title
     assert(recruiterHtml.includes('1. EMPLOYER JOB LISTING DETAILS'), 'recruiter.html sets Card 1 header title to "1. EMPLOYER JOB LISTING DETAILS"');
-    assert(!recruiterHtml.includes('1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LIVE SYNC)'), 'recruiter.html purges obsolete long title');
+    assert(!recruiterHtml.includes('CONNECTED ACCOUNTS (LIVE SYNC)'), 'recruiter.html purges obsolete long title');
 
     // 2. Header and Recruiter Header Clipping Prevention
     assert(recruiterHtml.includes('header, .recruiter-header, .portal-navigation') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('white-space: nowrap !important') && recruiterHtml.includes('padding-right: 1.5rem !important'), 'recruiter.html prevents top header right-edge clipping with portal-navigation and 1.5rem padding');
@@ -2300,7 +2300,7 @@ async function runTests() {
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
     // 1. Purge of old long title across all scripts
-    assert(!recruiterHtml.includes('1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LIVE SYNC)'), 'recruiter.html contains zero instances of obsolete title string');
+    assert(!recruiterHtml.includes('CONNECTED ACCOUNTS (LIVE SYNC)'), 'recruiter.html contains zero instances of obsolete title string');
 
     // 2. Direct clean span tag
     assert(recruiterHtml.includes('<span class="panel-title" id="card1-title-text">1. EMPLOYER JOB LISTING DETAILS</span>'), 'recruiter.html defines clean span for Card 1 title without data-cms-key');
