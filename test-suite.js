@@ -2292,6 +2292,26 @@ async function runTests() {
     assert(false, `Group 49 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 50: AUTONOMOUS JAVASCRIPT OVERWRITE FIX & CACHE CLEARING
+  // ================================================================
+  console.log('\n--- GROUP 50: AUTONOMOUS JAVASCRIPT OVERWRITE FIX & CACHE CLEARING ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Purge of old long title across all scripts
+    assert(!recruiterHtml.includes('1. EMPLOYER JOB LISTING & CONNECTED ACCOUNTS (LIVE SYNC)'), 'recruiter.html contains zero instances of obsolete title string');
+
+    // 2. Direct clean span tag
+    assert(recruiterHtml.includes('<span class="panel-title" id="card1-title-text">1. EMPLOYER JOB LISTING DETAILS</span>'), 'recruiter.html defines clean span for Card 1 title without data-cms-key');
+
+    // 3. Clear dynamic storage cache
+    assert(recruiterHtml.includes('localStorage.removeItem') && recruiterHtml.includes('sessionStorage.removeItem'), 'recruiter.html clears dynamic storage cache on initialization');
+
+  } catch (err) {
+    assert(false, `Group 50 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

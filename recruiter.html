@@ -2746,6 +2746,20 @@
      * 3. SURGICAL EDITING ONLY: PRESERVE ALL DOM ELEMENT IDs, EVENT LISTENERS, AND LIVE PREVIEW BINDINGS.
      * ============================================================================ */
 
+    // CLEAR DYNAMIC STORAGE CACHE: Wipe out any old cached CMS title strings on load
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('cms_config');
+        localStorage.removeItem('post-card1-title');
+        localStorage.removeItem('cached_card1_title');
+      }
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem('cms_config');
+        sessionStorage.removeItem('post-card1-title');
+        sessionStorage.removeItem('cached_card1_title');
+      }
+    } catch (e) {}
+
     let pendingConfirmCallback = null;
 
     window.showCustomModalConfirm = function(title, msg, onConfirm) {
