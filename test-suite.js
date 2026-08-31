@@ -2564,9 +2564,9 @@ async function runTests() {
   }
 
   // ================================================================
-  // GROUP 62: MOBILE-ONLY OMNICHANNEL BOARD & BUTTON TEXT FIT
+  // GROUP 62: FIX VERTICAL TEXT STRETCHING & FIT BUTTON TEXT
   // ================================================================
-  console.log('\n--- GROUP 62: MOBILE-ONLY OMNICHANNEL BOARD & BUTTON TEXT FIT ---');
+  console.log('\n--- GROUP 62: FIX VERTICAL TEXT STRETCHING & FIT BUTTON TEXT ---');
   try {
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
@@ -2574,9 +2574,9 @@ async function runTests() {
     assert(recruiterHtml.includes('.omnichannel-board, .omnichannel-container, #omnichannel-section, .distribution-board') && recruiterHtml.includes('width: 100% !important') && recruiterHtml.includes('overflow-x: hidden !important'), 'recruiter.html scales omnichannel board containers to 100% mobile viewport');
     assert(recruiterHtml.includes('.omnichannel-grid, .distribution-cards-grid') && recruiterHtml.includes('flex-direction: column !important'), 'recruiter.html stacks omnichannel cards vertically on mobile');
 
-    // 2. Action Card Button Text Wrapping & Resizing
-    assert(recruiterHtml.includes('.distribution-card button') && recruiterHtml.includes('white-space: normal !important') && recruiterHtml.includes('word-break: break-word !important'), 'recruiter.html wraps button text cleanly inside mobile distribution cards');
-    assert(recruiterHtml.includes('min-height: 32px !important') && recruiterHtml.includes('font-size: 0.62rem !important'), 'recruiter.html sizes mobile action buttons appropriately');
+    // 2. Action Card Button Text Fit (No Vertical Stretching)
+    assert(recruiterHtml.includes('.distribution-card button') && recruiterHtml.includes('white-space: nowrap !important') && recruiterHtml.includes('text-overflow: ellipsis !important'), 'recruiter.html prevents vertical text stretching with nowrap and ellipsis');
+    assert(recruiterHtml.includes('height: 32px !important') && recruiterHtml.includes('font-size: 0.58rem !important') && recruiterHtml.includes('padding: 0 0.25rem !important'), 'recruiter.html sizes and pads mobile action buttons to fit text cleanly');
 
   } catch (err) {
     assert(false, `Group 62 failed: ${err.message}`);
