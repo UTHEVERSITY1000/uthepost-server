@@ -2625,6 +2625,24 @@ async function runTests() {
     assert(false, `Group 64 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 65: ABSOLUTE UI MENU LOCK & MOBILE TAB RESTORATION
+  // ================================================================
+  console.log('\n--- GROUP 65: ABSOLUTE UI MENU LOCK & MOBILE TAB RESTORATION ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. All 5 Navigation Tabs present in DOM
+    assert(recruiterHtml.includes('1. JOB STUDIO') && recruiterHtml.includes('2. OMNICHANNEL CRM') && recruiterHtml.includes('3. APPLICANT TRACKER') && recruiterHtml.includes('4. PERFORMANCE & PLANS') && recruiterHtml.includes('5. MY PROFILE'), 'recruiter.html preserves all 5 navigation tabs in DOM');
+
+    // 2. Mobile Belt Styling & No-Truncation Lock
+    assert(recruiterHtml.includes('.portal-navigation, nav.header-center-tabs') && recruiterHtml.includes('flex-wrap: nowrap !important') && recruiterHtml.includes('overflow-x: auto !important'), 'recruiter.html enforces horizontal scroll without wrapping on mobile belt');
+    assert(recruiterHtml.includes('.portal-navigation button, nav.header-center-tabs button, .nav-tab-btn') && recruiterHtml.includes('display: inline-flex !important') && recruiterHtml.includes('visibility: visible !important') && recruiterHtml.includes('opacity: 1 !important'), 'recruiter.html locks all 5 tabs visible and uncollapsed on mobile');
+
+  } catch (err) {
+    assert(false, `Group 65 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

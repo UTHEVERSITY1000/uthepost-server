@@ -1899,7 +1899,7 @@
         flex: 0 0 100% !important;
         width: 100% !important;
         margin-top: 0.35rem !important;
-        padding-top: 0.35rem !important;
+        padding: 0.35rem 0.5rem !important;
         border-top: 1px solid #E2E8F0 !important;
         display: flex !important;
         flex-wrap: nowrap !important;
@@ -1914,12 +1914,19 @@
         display: none !important;
       }
 
-      .portal-navigation button, nav.header-center-tabs button {
+      /* Ensure no tabs are hidden or collapsed */
+      .portal-navigation button, nav.header-center-tabs button, .nav-tab-btn {
+        display: inline-flex !important;
         flex-shrink: 0 !important;
         height: 30px !important;
         font-size: 0.62rem !important;
+        font-weight: 800 !important;
         padding: 0 0.55rem !important;
+        align-items: center !important;
+        justify-content: center !important;
         white-space: nowrap !important;
+        visibility: visible !important;
+        opacity: 1 !important;
       }
 
       /* Omnichannel Board Container Scaling */
