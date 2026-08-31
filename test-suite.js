@@ -2889,6 +2889,28 @@ async function runTests() {
     assert(false, `Group 76 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 77: U-THEPOST NOTIFICATION BELL, LOGO LOGOUT RESET & CANDIDATE CARD ENHANCEMENTS
+  // ================================================================
+  console.log('\n--- GROUP 77: U-THEPOST NOTIFICATION BELL, LOGO LOGOUT RESET & CANDIDATE CARD ENHANCEMENTS ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Recruiter notifications bell in header
+    assert(recruiterHtml.includes('id="btn-recruiter-notif"') && recruiterHtml.includes('id="recruiter-notif-badge"'), 'recruiter.html defines #btn-recruiter-notif and #recruiter-notif-badge');
+    assert(recruiterHtml.includes('openRecruiterMessagesDrawer'), 'recruiter.html binds notifications bell to openRecruiterMessagesDrawer');
+
+    // 2. Logo reset on logout
+    assert(recruiterHtml.includes('resetCompanyLogo') && recruiterHtml.includes("localStorage.removeItem('uthe_employer_logo'"), 'recruiter.html implements resetCompanyLogo and clears uthe_employer_logo on logout');
+
+    // 3. Candidate card trash bin and date/time
+    assert(recruiterHtml.includes('btn-card-trash') && recruiterHtml.includes('cand-applied-date'), 'recruiter.html includes trash bin button and application date on candidate cards');
+    assert(recruiterHtml.includes('confirmDeleteCandidate') && recruiterHtml.includes('deleteCandidateCard'), 'recruiter.html implements confirmDeleteCandidate and deleteCandidateCard');
+
+  } catch (err) {
+    assert(false, `Group 77 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
