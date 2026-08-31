@@ -2507,15 +2507,26 @@ white-space: nowrap;
 }
 
 #candidate-review-modal .modal-card {
-  width: 860px;
-  max-width: 95vw;
-  height: 580px;
-  max-height: 85vh;
+  width: 1040px;
+  max-width: 96vw;
+  height: 680px;
+  max-height: 90vh;
   display: flex;
   flex-direction: row;
   padding: 0;
   overflow: hidden;
   box-sizing: border-box;
+}
+
+@keyframes notifPulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(254, 186, 39, 0.7); }
+  70% { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(254, 186, 39, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(254, 186, 39, 0); }
+}
+
+.notif-bell-active {
+  animation: notifPulse 2s infinite ease-in-out !important;
+  border-color: #FEBA27 !important;
 }
 
 @media (max-width: 768px) {
@@ -2527,21 +2538,21 @@ white-space: nowrap;
     width: 96vw !important;
     max-width: 96vw !important;
     height: auto !important;
-    max-height: 90vh !important;
+    max-height: 92vh !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
     border-radius: 8px !important;
   }
   #candidate-review-modal .conversation-sidebar {
     width: 100% !important;
-    max-height: 160px !important;
+    max-height: 180px !important;
     border-right: none !important;
     border-bottom: 1.5px solid #FEBA27 !important;
     padding: 10px !important;
   }
   #candidate-review-modal .chat-panel {
     width: 100% !important;
-    padding: 10px !important;
+    padding: 12px !important;
     overflow-y: visible !important;
   }
 }
@@ -5425,37 +5436,20 @@ RESET
           </div>
         </div>
       </div>
-</div>
 
-</div>
+      <!-- COLUMN 4: OFFER / HIRED (DISTINCT EMERALD DECK) -->
+      <div class="kanban-col" data-col="Offer" id="col-offer">
+        <div class="col-header col-header-offer">
+          <span>4. OFFER / HIRED</span>
+          <span class="col-count" id="count-offer">0</span>
+        </div>
+        <div class="kanban-cards-area" id="cards-offer">
+          <!-- Drop Target Area -->
+        </div>
+      </div>
 
-
-
-<!-- COLUMN 4: OFFER / HIRED (DISTINCT EMERALD DECK) -->
-
-<div class="kanban-col" data-col="Offer" id="col-offer">
-
-<div class="col-header col-header-offer">
-
-<span>4. OFFER / HIRED</span>
-
-<span class="col-count" id="count-offer">0</span>
-
-</div>
-
-<div class="kanban-cards-area" id="cards-offer">
-
-<!-- Drop Target Area -->
-
-</div>
-
-</div>
-
-
-
-</div>
-
-</section>
+    </div>
+  </section>
 
 
 
@@ -6009,11 +6003,11 @@ VERIFIED EMPLOYER
 
 <!-- RECRUITER MULTI-CANDIDATE MESSAGING & NOTIFICATIONS DRAWER -->
 <div class="modal-overlay" id="candidate-review-modal">
-  <div class="modal-card" style="width: 840px; max-width: 95vw; height: 600px; max-height: 90vh; display: flex; flex-direction: row; padding: 0; overflow: hidden;">
+  <div class="modal-card" style="width: 1040px; max-width: 96vw; height: 680px; max-height: 90vh; display: flex; flex-direction: row; padding: 0; overflow: hidden;">
     
     <!-- LEFT SIDEBAR: CANDIDATE APPLICANTS LIST (MOST RECENT FIRST) -->
-    <div class="conversation-sidebar" style="width: 280px; background: #0f172a; border-right: 1.5px solid #FEBA27; padding: 14px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; box-sizing: border-box;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+    <div class="conversation-sidebar" style="width: 320px; flex-shrink: 0; background: #0f172a; border-right: 1.5px solid #FEBA27; padding: 16px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; box-sizing: border-box;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
         <div style="font-size: 11px; font-weight: 900; color: #FEBA27; letter-spacing: 0.08em; text-transform: uppercase;">MY CANDIDATES</div>
         <span style="font-size: 10px; color: #94A3B8; font-weight: 800;" id="recruiter-cand-count">3 Applicants</span>
       </div>
@@ -6023,25 +6017,25 @@ VERIFIED EMPLOYER
     </div>
 
     <!-- RIGHT PANEL: ACTIVE CANDIDATE DOSSIER & DIRECT MESSAGING -->
-    <div class="chat-panel" style="flex: 1; display: flex; flex-direction: column; background: #FFFFFF; overflow: hidden; padding: 16px; box-sizing: border-box;">
+    <div class="chat-panel" style="flex: 1; min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; overflow: hidden; padding: 20px; box-sizing: border-box; gap: 0.6rem;">
       
-      <div class="modal-header" style="padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span class="modal-title" id="cand-modal-name">MARCUS VANCE</span>
-          <span style="font-size:0.65rem; background:var(--status-mint-bg); color:#065F46; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;" id="cand-modal-score">94% MATCH</span>
+      <div class="modal-header" style="padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.2rem;">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span class="modal-title" id="cand-modal-name" style="font-size:1.1rem; font-weight:900;">MARCUS VANCE</span>
+          <span style="font-size:0.7rem; background:var(--status-mint-bg); color:#065F46; font-weight:800; padding:0.2rem 0.55rem; border-radius:4px;" id="cand-modal-score">94% MATCH</span>
         </div>
         <button class="drawer-close" onclick="closeModal('candidate-review-modal')" data-tooltip="Close modal">X</button>
       </div>
 
       <!-- CANDIDATE DETAILS -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; background:var(--card-subtle); padding:0.6rem 0.8rem; border-radius:8px; font-size:0.75rem; margin-bottom: 0.5rem;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; background:var(--card-subtle); padding:0.8rem 1rem; border-radius:8px; font-size:0.78rem; border:1px solid var(--border-color);">
         <div>
-          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800;">Target Position</span>
-          <strong id="cand-modal-role">Sales Manager</strong>
+          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.15rem;">Target Position</span>
+          <strong id="cand-modal-role" style="font-size:0.82rem; color:var(--text-main);">Sales Manager</strong>
         </div>
         <div>
-          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800;">Pipeline Stage</span>
-          <select id="cand-modal-stage-select" onchange="updateCandidateStageFromModal()" style="height:28px; font-size:0.72rem; padding:0 0.4rem; margin-top:0.1rem;">
+          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.15rem;">Pipeline Stage</span>
+          <select id="cand-modal-stage-select" onchange="updateCandidateStageFromModal()" style="height:30px; font-size:0.75rem; padding:0 0.5rem; width:100%; max-width:200px;">
             <option value="Applied">1. Applied</option>
             <option value="Screened">2. Screened</option>
             <option value="Interviewing">3. Interviewing</option>
@@ -6049,21 +6043,21 @@ VERIFIED EMPLOYER
           </select>
         </div>
         <div>
-          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800;">Contact Email</span>
-          <span id="cand-modal-email">marcus.vance@example.com</span>
+          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.15rem;">Contact Email</span>
+          <span id="cand-modal-email" style="font-size:0.8rem; color:#0284C7; font-weight:700;">marcus.vance@example.com</span>
         </div>
         <div>
-          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800;">Resume (.PDF)</span>
+          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.15rem;">Verified Resume (.PDF)</span>
           <div id="applicant-resume-container">
-            <a href="#" onclick="openApplicantResume('APP-701', 'Marcus Vance', 'Marcus_Vance_Resume_2026.pdf'); return false;" class="btn-resume-link" style="color:#0284C7; font-weight:700; text-decoration:none;">📄 View Marcus's Resume (.pdf)</a>
+            <a href="#" onclick="openApplicantResume('APP-701', 'Marcus Vance', 'Marcus_Vance_Resume_2026.pdf'); return false;" class="btn-resume-link" style="color:#0284C7; font-weight:800; text-decoration:none; font-size:0.8rem;">📄 View Marcus's Resume (.pdf)</a>
           </div>
         </div>
       </div>
 
       <!-- DIRECT MESSAGING -->
-      <div style="flex: 1; display: flex; flex-direction: column; min-height: 0; gap: 0.4rem;">
+      <div style="flex: 1; display: flex; flex-direction: column; min-height: 0; gap: 0.45rem;">
         <div>
-          <div style="font-size:0.62rem; color:var(--text-muted); font-weight:800; margin-bottom:0.25rem;">1-CLICK QUICK MESSAGE TEMPLATES:</div>
+          <div style="font-size:0.65rem; color:var(--text-muted); font-weight:800; margin-bottom:0.3rem;">1-CLICK QUICK MESSAGE TEMPLATES:</div>
           <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
             <button class="template-chip" onclick="applyAtsTemplate('intro')">1. INTRO</button>
             <button class="template-chip" onclick="applyAtsTemplate('invite')">2. INVITE</button>
@@ -7456,6 +7450,19 @@ window.openCandidateReviewModal = async function(candidateId) {
   document.getElementById('candidate-review-modal').style.display = 'flex';
 };
 
+function updateKanbanCounters() {
+  const stages = ['applied', 'screened', 'interviewing', 'offer'];
+  stages.forEach(st => {
+    const area = document.getElementById(`cards-${st}`);
+    const countEl = document.getElementById(`count-${st}`);
+    if (area && countEl) {
+      const count = area.querySelectorAll('.candidate-card').length;
+      countEl.textContent = count;
+    }
+  });
+}
+window.updateKanbanCounters = updateKanbanCounters;
+
 window.updateCandidateStageFromModal = function() {
   const newStage = document.getElementById('cand-modal-stage-select').value;
   const card = document.getElementById(`card-${activeCandidateId.replace('APP-', '')}`) || document.querySelector(`[data-id="${activeCandidateId}"]`);
@@ -7492,10 +7499,18 @@ window.deleteCandidateCard = function(candidateId) {
 };
 
 window.openRecruiterMessagesDrawer = function(applicantId) {
+  const rBadge = document.getElementById('recruiter-notif-badge');
+  const rBell = document.getElementById('btn-recruiter-notif');
+  if (rBadge) {
+    rBadge.textContent = '0';
+    rBadge.style.display = 'none';
+    try { localStorage.setItem('uthe_recruiter_notifs', '0'); } catch (e) {}
+  }
+  if (rBell) {
+    rBell.classList.remove('notif-bell-active');
+  }
   const targetId = applicantId || Object.keys(CANDIDATES_DATA)[0] || 'APP-701';
   openCandidateReviewModal(targetId);
-  const badge = document.getElementById('recruiter-notif-badge');
-  if (badge) badge.style.display = 'none';
 };
 
 
@@ -8509,10 +8524,15 @@ function handleSyncEvent(data) {
     setupMobileTouchAts();
 
     const rBadge = document.getElementById('recruiter-notif-badge');
+    const rBell = document.getElementById('btn-recruiter-notif');
     if (rBadge) {
       const currentCount = parseInt(rBadge.textContent || '0', 10) + 1;
       rBadge.textContent = currentCount;
-      rBadge.style.display = 'flex';
+      rBadge.style.display = 'inline-flex';
+      try { localStorage.setItem('uthe_recruiter_notifs', String(currentCount)); } catch (e) {}
+    }
+    if (rBell) {
+      rBell.classList.add('notif-bell-active');
     }
 
     showCustomModalAlert('New Applicant Received', `Candidate ${data.applicant.name} applied for ${data.applicant.jobTitle}.`);
@@ -8524,10 +8544,15 @@ function handleSyncEvent(data) {
     }
 
     const rBadge = document.getElementById('recruiter-notif-badge');
+    const rBell = document.getElementById('btn-recruiter-notif');
     if (rBadge) {
       const currentCount = parseInt(rBadge.textContent || '0', 10) + 1;
       rBadge.textContent = currentCount;
-      rBadge.style.display = 'flex';
+      rBadge.style.display = 'inline-flex';
+      try { localStorage.setItem('uthe_recruiter_notifs', String(currentCount)); } catch (e) {}
+    }
+    if (rBell) {
+      rBell.classList.add('notif-bell-active');
     }
 
     const chatLog = document.getElementById('applicant-chat-log');
@@ -8920,11 +8945,23 @@ closeCustomConfirm();
   loadSavedEmployerSession();
   loadSavedEmployerProfile();
   loadSavedJobs();
+  updateKanbanCounters();
   setupMobileTouchAts();
   initDualSync();
   loadInitialCmsConfig();
   recalculateMembershipTotal();
   initSmartTooltipPositioning();
+
+  try {
+    const savedNotifs = parseInt(localStorage.getItem('uthe_recruiter_notifs') || '0', 10);
+    const rBadge = document.getElementById('recruiter-notif-badge');
+    const rBell = document.getElementById('btn-recruiter-notif');
+    if (savedNotifs > 0 && rBadge) {
+      rBadge.textContent = savedNotifs;
+      rBadge.style.display = 'inline-flex';
+      if (rBell) rBell.classList.add('notif-bell-active');
+    }
+  } catch (e) {}
 
   ['prof-company', 'prof-name', 'prof-email', 'prof-phone', 'prof-bio'].forEach(id => {
     const el = document.getElementById(id);

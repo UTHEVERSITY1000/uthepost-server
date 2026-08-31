@@ -2987,6 +2987,33 @@ async function runTests() {
     assert(false, `Group 80 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 81: KANBAN 4-COLUMN RESTORATION & RECRUITER NOTIFICATION ENGINE
+  // ================================================================
+  console.log('\n--- GROUP 81: KANBAN 4-COLUMN RESTORATION & RECRUITER NOTIFICATION ENGINE ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Tab 3 4-column containment inside #kanban-board
+    const kanbanBoardMatch = recruiterHtml.match(/<div class="kanban-board" id="kanban-board">([\s\S]*?)<\/div>\s*<\/section>/);
+    assert(kanbanBoardMatch && kanbanBoardMatch[1].includes('id="col-offer"'), 'recruiter.html contains #col-offer inside #kanban-board');
+    assert(kanbanBoardMatch && kanbanBoardMatch[1].includes('id="col-applied"'), 'recruiter.html contains #col-applied inside #kanban-board');
+    assert(kanbanBoardMatch && kanbanBoardMatch[1].includes('id="col-screened"'), 'recruiter.html contains #col-screened inside #kanban-board');
+    assert(kanbanBoardMatch && kanbanBoardMatch[1].includes('id="col-interviewing"'), 'recruiter.html contains #col-interviewing inside #kanban-board');
+
+    // 2. updateKanbanCounters implementation and invocation
+    assert(recruiterHtml.includes('function updateKanbanCounters()'), 'recruiter.html defines updateKanbanCounters()');
+    assert(recruiterHtml.includes('updateKanbanCounters();'), 'recruiter.html calls updateKanbanCounters() on initialization');
+
+    // 3. Spacious candidate review modal dimensions and pulse animation
+    assert(recruiterHtml.includes('width: 1040px') || recruiterHtml.includes('width:1040px'), 'recruiter.html expands candidate review modal to 1040px');
+    assert(recruiterHtml.includes('notif-bell-active') && recruiterHtml.includes('notifPulse'), 'recruiter.html defines notif-bell-active pulse animation');
+    assert(recruiterHtml.includes('uthe_recruiter_notifs'), 'recruiter.html persists unread notifications to localStorage');
+
+  } catch (err) {
+    assert(false, `Group 81 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
