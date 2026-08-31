@@ -1904,6 +1904,45 @@
         padding: 0 0.55rem !important;
         white-space: nowrap !important;
       }
+
+      /* Omnichannel Board Container Scaling */
+      .omnichannel-board, .omnichannel-container, #omnichannel-section, .distribution-board, .publishing-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 0.5rem !important;
+        overflow-x: hidden !important;
+      }
+
+      /* Flexible Stack for Mobile Viewport */
+      .omnichannel-grid, .distribution-cards-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 0.5rem !important;
+      }
+
+      /* Action Card Button Text Wrapping & Resizing */
+      .distribution-card button, 
+      .action-card button, 
+      .btn-distribution-action, 
+      .omnichannel-board button,
+      .publishing-section button,
+      .publishing-section .btn-gold-action,
+      .publishing-section .btn-surface-action {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        font-size: 0.62rem !important;
+        line-height: 1.15 !important;
+        padding: 0.45rem 0.35rem !important;
+        white-space: normal !important; /* Prevents text from extending beyond box borders */
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        text-align: center !important;
+        height: auto !important;
+        min-height: 32px !important;
+      }
     }
     /* ==========================================================================
        END LOCKED SECTION
