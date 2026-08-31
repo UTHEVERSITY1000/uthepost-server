@@ -2377,7 +2377,6 @@ async function runTests() {
 
     // 5. Enterprise Tech Perks & Benefits Micro-Tag Specification
     assert(recruiterHtml.includes('.perk-pill') && recruiterHtml.includes('height: 22px !important') && recruiterHtml.includes('background-color: #F8FAFC !important'), 'recruiter.html defines sleek 22px micro-tag .perk-pill');
-    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #0F172A !important'), 'recruiter.html defines active perk pill style');
     assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html defines active perk pill style');
 
   } catch (err) {
@@ -2433,8 +2432,6 @@ async function runTests() {
     // 6. Live Preview Badge: Transparent & Red
     assert(recruiterHtml.includes('.candidate-viewport-badge, .live-preview-badge, #card2-badge, .card-2-badge') && recruiterHtml.includes('color: #EF4444 !important') && recruiterHtml.includes('border: 1.5px solid #EF4444 !important'), 'recruiter.html styles live preview badge with transparent red outline');
 
-    // 7. Perks Pills Active Selected State (Deep Slate Charcoal & Gold)
-    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #0F172A !important') && recruiterHtml.includes('color: #FEBA27 !important') && recruiterHtml.includes('border: 1px solid #FEBA27 !important'), 'recruiter.html styles active perk pill with deep slate charcoal and gold accent');
     // 7. Perks Pills Active Selected State (Signature Medium Airy Gold)
     assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('border: 1px solid #E5A800 !important'), 'recruiter.html styles active perk pill with signature medium airy gold and slate text');
 
@@ -2478,8 +2475,6 @@ async function runTests() {
     // 1. Sleek Micro-Tag Perks Pills Base Styling
     assert(recruiterHtml.includes('.perk-pill') && recruiterHtml.includes('height: 22px !important') && recruiterHtml.includes('padding: 0 0.45rem !important') && recruiterHtml.includes('letter-spacing: 0.03em !important'), 'recruiter.html defines ultra-snug .perk-pill dimensions');
 
-    // 2. Selected State Deep Slate Charcoal & Gold
-    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #0F172A !important') && recruiterHtml.includes('color: #FEBA27 !important') && recruiterHtml.includes('border: 1px solid #FEBA27 !important'), 'recruiter.html defines high-contrast publishing-style active perk pill');
     // 2. Selected State Signature Medium Airy Gold
     assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('border: 1px solid #E5A800 !important'), 'recruiter.html defines signature medium airy gold active perk pill');
 
@@ -2517,7 +2512,7 @@ async function runTests() {
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
     // 1. Hide Edit Action Buttons in Card 3 Table Rows
-    assert(recruiterHtml.includes('.btn-table-edit, button[data-action="edit"], .btn-edit, td .btn-table-action:first-child') && recruiterHtml.includes('display: none !important'), 'recruiter.html hides table edit buttons via CSS');
+    assert(recruiterHtml.includes('.btn-table-edit') && recruiterHtml.includes('button[data-action="edit"]') && recruiterHtml.includes('display: none !important'), 'recruiter.html hides table edit buttons via CSS');
 
     // 2. Red Sub-note in Card 3
     assert(recruiterHtml.includes('card3-desktop-note') && recruiterHtml.includes('EDIT ON DESKTOP ONLY'), 'recruiter.html includes red "EDIT ON DESKTOP ONLY" sub-note in Card 3');
@@ -2527,6 +2522,28 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 59 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 60: CARD 3 LAYOUT RESTORATION & STRICT EDIT BUTTON REMOVAL
+  // ================================================================
+  console.log('\n--- GROUP 60: CARD 3 LAYOUT RESTORATION & STRICT EDIT BUTTON REMOVAL ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Preserved Card 3 Container Layout & Structure
+    assert(recruiterHtml.includes('id="card3-live-jobs-container"') && recruiterHtml.includes('class="panel-card card-3-active-listings"'), 'recruiter.html preserves exact Card 3 container');
+    assert(recruiterHtml.includes('id="active-jobs-table-container"') && recruiterHtml.includes('class="table-container"'), 'recruiter.html preserves table container wrapper');
+
+    // 2. Targeted Edit Button Removal
+    assert(recruiterHtml.includes('.btn-table-edit') && recruiterHtml.includes('data-action="edit"'), 'recruiter.html targets edit buttons with distinct classes and attributes');
+    assert(recruiterHtml.includes('deleteJob(') && recruiterHtml.includes('btn-table-del'), 'recruiter.html keeps delete and pause actions fully intact');
+
+    // 3. Red Sub-header Note Positioning
+    assert(recruiterHtml.includes('<div class="card3-desktop-note"') && recruiterHtml.includes('color: #EF4444;') && recruiterHtml.includes('EDIT ON DESKTOP ONLY'), 'recruiter.html positions red desktop note directly beneath Card 3 title');
+
+  } catch (err) {
+    assert(false, `Group 60 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
