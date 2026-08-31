@@ -2682,6 +2682,26 @@ async function runTests() {
     assert(false, `Group 67 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 68: TAB 4 PRICING PLAN CARDS MOBILE HORIZONTAL BELT
+  // ================================================================
+  console.log('\n--- GROUP 68: TAB 4 PRICING PLAN CARDS MOBILE HORIZONTAL BELT ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Tab 4 pricing grid flex row horizontal scroll on mobile
+    assert(recruiterHtml.includes('#view-plans .pricing-grid') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('flex-wrap: nowrap !important'), 'recruiter.html enables horizontal scroll belt for pricing plan cards on mobile');
+
+    // 2. Pricing cards touch-friendly width sizing
+    assert(recruiterHtml.includes('.pricing-grid .pricing-card') && recruiterHtml.includes('width: 260px !important'), 'recruiter.html sets touch-friendly width for mobile pricing cards');
+
+    // 3. High-visibility touch scrollbar styling on pricing grid
+    assert(recruiterHtml.includes('.pricing-grid::-webkit-scrollbar-thumb') && recruiterHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html defines high-visibility gold scrollbar for pricing cards');
+
+  } catch (err) {
+    assert(false, `Group 68 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
