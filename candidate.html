@@ -2250,10 +2250,20 @@
         return showCustomModalAlert('Incomplete Form', 'Please enter your name and email address.');
       }
 
+      const currentJob = jobsDatabase.find(j => j.id === selectedJobId) || (typeof allJobs !== 'undefined' && allJobs.find(j => j.id === selectedJobId)) || {
+        jobTitle: document.getElementById('modal-apply-role')?.textContent || 'Sales Manager',
+        company: document.getElementById('modal-apply-company')?.textContent || 'Quantum Retail Corp'
+      };
+
+      const companyName = currentJob.company || (document.getElementById('modal-apply-company') && document.getElementById('modal-apply-company').textContent) || 'Quantum Retail Corp';
+      const jobTitle = currentJob.jobTitle || (document.getElementById('modal-apply-role') && document.getElementById('modal-apply-role').textContent) || 'Applied Position';
+      const newAppId = `APP-${Math.floor(700 + Math.random() * 200)}`;
+
       const applicantPayload = {
-        id: `APP-${Math.floor(700 + Math.random() * 200)}`,
+        id: newAppId,
         jobId: selectedJobId,
-        jobTitle: document.getElementById('modal-apply-role').textContent,
+        jobTitle: jobTitle,
+        company: companyName,
         name: name,
         email: email,
         phone: phone,
@@ -2272,10 +2282,53 @@
         });
       } catch (e) {}
 
+      // Immediately create and prepend applied job thread to Notifications Drawer
+      const newThread = {
+        id: newAppId,
+        company: companyName,
+        recruiterName: `${companyName} Hiring Team`,
+        jobTitle: jobTitle,
+        initialMessage: `Thank you for your application and resume for "${jobTitle}". Our hiring team has received your submission and will review your qualifications shortly.`,
+        appliedDate: new Date().toISOString(),
+        status: 'Applied',
+        messages: [
+          {
+            applicantId: newAppId,
+            senderRole: 'recruiter',
+            senderName: `${companyName} Hiring Team`,
+            text: `Thank you for applying! We received your resume and interview request for "${jobTitle}". Excited to review your profile!`,
+            timestamp: new Date().toISOString()
+          }
+        ]
+      };
+
+      candidateThreads = { [newAppId]: newThread, ...candidateThreads };
+
+      // Persist applied jobs list to device localStorage
+      try {
+        let savedApps = JSON.parse(localStorage.getItem('uthe_candidate_applications') || '[]');
+        savedApps = savedApps.filter(a => a.id !== newAppId);
+        savedApps.unshift(newThread);
+        localStorage.setItem('uthe_candidate_applications', JSON.stringify(savedApps));
+      } catch (e) {}
+
+      // Set as active thread & increment notification badge
+      activeThreadId = newAppId;
+      currentApplicantId = newAppId;
+      unreadCount++;
+      const badge = document.getElementById('notif-badge-count');
+      if (badge) {
+        badge.textContent = unreadCount;
+        badge.style.display = 'flex';
+      }
+
+      // Re-render recruiter cards & switch to this new application thread
+      renderRecruiterCards();
+      switchActiveThread(newAppId);
+
       broadcastSyncEvent('CANDIDATE_APPLIED', { applicant: applicantPayload });
-      currentApplicantId = applicantPayload.id;
       closeModal('app-modal');
-      showCustomModalAlert('Interview Request Submitted', `Your application and PDF resume for "${applicantPayload.jobTitle}" were submitted directly to the hiring recruiter.`);
+      showCustomModalAlert('Interview Request Submitted', `Your application and PDF resume for "${jobTitle}" at ${companyName} were submitted. Check your Notifications to view application status.`);
     }
 
     // 2. 1-CLICK EXECUTIVE QUICK REPLIES & DIRECT MESSAGING
@@ -2457,17 +2510,30 @@
         const data = await res.json();
         const rawList = data.messages || [];
 
-        // Initialize candidateThreads with default recruiters
+        // Initialize candidateThreads with saved applications from localStorage first
         candidateThreads = {};
+
+        try {
+          const savedApps = JSON.parse(localStorage.getItem('uthe_candidate_applications') || '[]');
+          savedApps.forEach(sa => {
+            if (sa && sa.id) {
+              candidateThreads[sa.id] = sa;
+            }
+          });
+        } catch (e) {}
+
+        // Add default recruiters if not already present
         Object.keys(DEFAULT_RECRUITERS).forEach(k => {
-          candidateThreads[k] = {
-            id: DEFAULT_RECRUITERS[k].id,
-            company: DEFAULT_RECRUITERS[k].company,
-            recruiterName: DEFAULT_RECRUITERS[k].recruiterName,
-            jobTitle: DEFAULT_RECRUITERS[k].jobTitle,
-            initialMessage: DEFAULT_RECRUITERS[k].initialMessage,
-            messages: []
-          };
+          if (!candidateThreads[k]) {
+            candidateThreads[k] = {
+              id: DEFAULT_RECRUITERS[k].id,
+              company: DEFAULT_RECRUITERS[k].company,
+              recruiterName: DEFAULT_RECRUITERS[k].recruiterName,
+              jobTitle: DEFAULT_RECRUITERS[k].jobTitle,
+              initialMessage: DEFAULT_RECRUITERS[k].initialMessage,
+              messages: []
+            };
+          }
         });
 
         // Group incoming messages by company or applicantId
@@ -2485,7 +2551,7 @@
           candidateThreads[key].messages.push(m);
         });
 
-        const targetId = preferredApplicantId || currentApplicantId || activeThreadId || 'APP-701';
+        const targetId = preferredApplicantId || currentApplicantId || activeThreadId || Object.keys(candidateThreads)[0] || 'APP-701';
         if (!candidateThreads[targetId]) {
           candidateThreads[targetId] = {
             id: targetId,
@@ -2499,10 +2565,19 @@
         renderRecruiterCards();
         switchActiveThread(targetId);
       } catch (e) {
-        candidateThreads = JSON.parse(JSON.stringify(DEFAULT_RECRUITERS));
-        Object.keys(candidateThreads).forEach(k => candidateThreads[k].messages = []);
+        candidateThreads = {};
+        try {
+          const savedApps = JSON.parse(localStorage.getItem('uthe_candidate_applications') || '[]');
+          savedApps.forEach(sa => { if (sa && sa.id) candidateThreads[sa.id] = sa; });
+        } catch (err) {}
+        Object.keys(DEFAULT_RECRUITERS).forEach(k => {
+          if (!candidateThreads[k]) {
+            candidateThreads[k] = JSON.parse(JSON.stringify(DEFAULT_RECRUITERS[k]));
+            candidateThreads[k].messages = [];
+          }
+        });
         renderRecruiterCards();
-        switchActiveThread(preferredApplicantId || 'APP-701');
+        switchActiveThread(preferredApplicantId || Object.keys(candidateThreads)[0] || 'APP-701');
       }
     }
 

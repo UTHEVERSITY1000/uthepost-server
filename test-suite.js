@@ -2868,6 +2868,27 @@ async function runTests() {
     assert(false, `Group 75 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 76: U-THEJOBS APPLIED JOB IMMEDIATE NOTIFICATION INGESTION
+  // ================================================================
+  console.log('\n--- GROUP 76: U-THEJOBS APPLIED JOB IMMEDIATE NOTIFICATION INGESTION ---');
+  try {
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Ingestion on submitInterviewRequest
+    assert(candidateHtml.includes('candidateThreads = { [newAppId]: newThread, ...candidateThreads }') || candidateHtml.includes('candidateThreads[newAppId] = newThread'), 'candidate.html prepends applied job to candidateThreads immediately');
+    assert(candidateHtml.includes("localStorage.setItem('uthe_candidate_applications'"), 'candidate.html persists applied jobs list to localStorage');
+
+    // 2. Notification badge update and auto switch
+    assert(candidateHtml.includes('unreadCount++') && candidateHtml.includes('renderRecruiterCards();') && candidateHtml.includes('switchActiveThread(newAppId);'), 'candidate.html increments notification count and re-renders recruiter threads');
+
+    // 3. fetchMessages restores saved applications
+    assert(candidateHtml.includes("localStorage.getItem('uthe_candidate_applications'"), 'candidate.html restores saved applications on fetchMessages');
+
+  } catch (err) {
+    assert(false, `Group 76 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
