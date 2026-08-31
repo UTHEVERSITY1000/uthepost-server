@@ -3005,8 +3005,9 @@ async function runTests() {
     assert(recruiterHtml.includes('function updateKanbanCounters()'), 'recruiter.html defines updateKanbanCounters()');
     assert(recruiterHtml.includes('updateKanbanCounters();'), 'recruiter.html calls updateKanbanCounters() on initialization');
 
-    // 3. Spacious candidate review modal dimensions and pulse animation
-    assert(recruiterHtml.includes('width: 1040px') || recruiterHtml.includes('width:1040px'), 'recruiter.html expands candidate review modal to 1040px');
+    // 3. Exact Candidate Notifications Modal dimension ratios and classes
+    assert(recruiterHtml.includes('max-width: 820px') || recruiterHtml.includes('max-width:820px'), 'recruiter.html defines exact 820px max-width ratio matching candidate drawer');
+    assert(recruiterHtml.includes('message-drawer-card'), 'recruiter.html uses .message-drawer-card class for recruiter notifications drawer');
     assert(recruiterHtml.includes('notif-bell-active') && recruiterHtml.includes('notifPulse'), 'recruiter.html defines notif-bell-active pulse animation');
     assert(recruiterHtml.includes('uthe_recruiter_notifs'), 'recruiter.html persists unread notifications to localStorage');
 

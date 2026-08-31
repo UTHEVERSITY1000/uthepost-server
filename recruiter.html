@@ -2506,16 +2506,124 @@ white-space: nowrap;
   font-weight: 800;
 }
 
-#candidate-review-modal .modal-card {
-  width: 1040px;
-  max-width: 96vw;
-  height: 680px;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: row;
-  padding: 0;
-  overflow: hidden;
-  box-sizing: border-box;
+/* EXECUTIVE RECRUITER NOTIFICATIONS MODAL (SIGNATURE CANDIDATE MODAL RATIOS) */
+#candidate-review-modal, .recruiter-messages-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(15, 23, 42, 0.82) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  z-index: 10000 !important;
+  display: none;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+}
+
+#candidate-review-modal .modal-card,
+#candidate-review-modal.modal-overlay .modal-card,
+.recruiter-drawer-card {
+  background: #ffffff !important;
+  width: 100% !important;
+  max-width: 820px !important;
+  max-height: 85vh !important;
+  height: 550px !important;
+  border-radius: 16px !important;
+  border: 1px solid #FEBA27 !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(254, 186, 39, 0.15) !important;
+  display: flex !important;
+  flex-direction: row !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#candidate-review-modal .conversation-sidebar {
+  width: 240px !important;
+  background: #0f172a !important;
+  border-right: 1px solid #FEBA27 !important;
+  padding: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  overflow-y: auto !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#candidate-review-modal .chat-panel {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: #f8fafc !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#candidate-review-modal .message-drawer-header {
+  background: #0f172a !important;
+  padding: 14px 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-bottom: 1px solid #FEBA27 !important;
+}
+
+#candidate-review-modal .message-drawer-title {
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.08em !important;
+  color: #FEBA27 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  text-transform: uppercase !important;
+}
+
+#candidate-review-modal .message-drawer-close {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(254, 186, 39, 0.3) !important;
+  color: #ffffff !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+#candidate-review-modal .message-drawer-close:hover {
+  background: #FEBA27 !important;
+  color: #0f172a !important;
+}
+
+#candidate-review-modal .message-drawer-body {
+  padding: 14px 18px !important;
+  background: #f8fafc !important;
+  overflow-y: auto !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  box-sizing: border-box !important;
+}
+
+#candidate-review-modal .message-drawer-footer {
+  padding: 12px 18px !important;
+  background: #ffffff !important;
+  border-top: 1px solid var(--border-color) !important;
+  display: flex !important;
+  gap: 8px !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
 }
 
 @keyframes notifPulse {
@@ -2531,9 +2639,10 @@ white-space: nowrap;
 
 @media (max-width: 768px) {
   #candidate-review-modal {
-    padding: 0.5rem;
+    padding: 0.5rem !important;
   }
-  #candidate-review-modal .modal-card {
+  #candidate-review-modal .modal-card,
+  #candidate-review-modal.modal-overlay .modal-card {
     flex-direction: column !important;
     width: 96vw !important;
     max-width: 96vw !important;
@@ -2545,14 +2654,14 @@ white-space: nowrap;
   }
   #candidate-review-modal .conversation-sidebar {
     width: 100% !important;
-    max-height: 180px !important;
+    max-height: 160px !important;
     border-right: none !important;
     border-bottom: 1.5px solid #FEBA27 !important;
     padding: 10px !important;
   }
   #candidate-review-modal .chat-panel {
     width: 100% !important;
-    padding: 12px !important;
+    padding: 0 !important;
     overflow-y: visible !important;
   }
 }
@@ -6003,10 +6112,10 @@ VERIFIED EMPLOYER
 
 <!-- RECRUITER MULTI-CANDIDATE MESSAGING & NOTIFICATIONS DRAWER -->
 <div class="modal-overlay" id="candidate-review-modal">
-  <div class="modal-card" style="width: 1040px; max-width: 96vw; height: 680px; max-height: 90vh; display: flex; flex-direction: row; padding: 0; overflow: hidden;">
+  <div class="modal-card message-drawer-card">
     
     <!-- LEFT SIDEBAR: CANDIDATE APPLICANTS LIST (MOST RECENT FIRST) -->
-    <div class="conversation-sidebar" style="width: 320px; flex-shrink: 0; background: #0f172a; border-right: 1.5px solid #FEBA27; padding: 16px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; box-sizing: border-box;">
+    <div class="conversation-sidebar">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
         <div style="font-size: 11px; font-weight: 900; color: #FEBA27; letter-spacing: 0.08em; text-transform: uppercase;">MY CANDIDATES</div>
         <span style="font-size: 10px; color: #94A3B8; font-weight: 800;" id="recruiter-cand-count">3 Applicants</span>
@@ -6017,67 +6126,67 @@ VERIFIED EMPLOYER
     </div>
 
     <!-- RIGHT PANEL: ACTIVE CANDIDATE DOSSIER & DIRECT MESSAGING -->
-    <div class="chat-panel" style="flex: 1; min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; overflow: hidden; padding: 20px; box-sizing: border-box; gap: 0.6rem;">
+    <div class="chat-panel">
       
-      <div class="modal-header" style="padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.2rem;">
-        <div style="display:flex; align-items:center; gap:0.6rem;">
-          <span class="modal-title" id="cand-modal-name" style="font-size:1.1rem; font-weight:900;">MARCUS VANCE</span>
-          <span style="font-size:0.7rem; background:var(--status-mint-bg); color:#065F46; font-weight:800; padding:0.2rem 0.55rem; border-radius:4px;" id="cand-modal-score">94% MATCH</span>
+      <div class="message-drawer-header">
+        <div class="message-drawer-title">
+          <span id="cand-modal-name">MARCUS VANCE</span>
+          <span style="font-size:11px; background:var(--status-mint-bg); color:#065F46; font-weight:800; padding:2px 8px; border-radius:4px;" id="cand-modal-score">94% MATCH</span>
         </div>
-        <button class="drawer-close" onclick="closeModal('candidate-review-modal')" data-tooltip="Close modal">X</button>
+        <button class="message-drawer-close" onclick="closeModal('candidate-review-modal')" data-tooltip="Close modal">✕</button>
       </div>
 
-      <!-- CANDIDATE DETAILS -->
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; background:var(--card-subtle); padding:0.8rem 1rem; border-radius:8px; font-size:0.78rem; border:1px solid var(--border-color);">
-        <div>
-          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.15rem;">Target Position</span>
-          <strong id="cand-modal-role" style="font-size:0.82rem; color:var(--text-main);">Sales Manager</strong>
-        </div>
-        <div>
-          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.15rem;">Pipeline Stage</span>
-          <select id="cand-modal-stage-select" onchange="updateCandidateStageFromModal()" style="height:30px; font-size:0.75rem; padding:0 0.5rem; width:100%; max-width:200px;">
-            <option value="Applied">1. Applied</option>
-            <option value="Screened">2. Screened</option>
-            <option value="Interviewing">3. Interviewing</option>
-            <option value="Offer">4. Offer / Hired</option>
-          </select>
-        </div>
-        <div>
-          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.15rem;">Contact Email</span>
-          <span id="cand-modal-email" style="font-size:0.8rem; color:#0284C7; font-weight:700;">marcus.vance@example.com</span>
-        </div>
-        <div>
-          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.15rem;">Verified Resume (.PDF)</span>
-          <div id="applicant-resume-container">
-            <a href="#" onclick="openApplicantResume('APP-701', 'Marcus Vance', 'Marcus_Vance_Resume_2026.pdf'); return false;" class="btn-resume-link" style="color:#0284C7; font-weight:800; text-decoration:none; font-size:0.8rem;">📄 View Marcus's Resume (.pdf)</a>
+      <div class="message-drawer-body">
+        <!-- CANDIDATE DETAILS BANNER -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; background:#FFFFFF; border:1px solid var(--border-color); padding:0.65rem 0.85rem; border-radius:8px; font-size:0.75rem;">
+          <div>
+            <span style="color:var(--text-muted); font-size:0.62rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.1rem;">Target Position</span>
+            <strong id="cand-modal-role" style="font-size:0.8rem; color:var(--text-main);">Sales Manager</strong>
+          </div>
+          <div>
+            <span style="color:var(--text-muted); font-size:0.62rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.1rem;">Pipeline Stage</span>
+            <select id="cand-modal-stage-select" onchange="updateCandidateStageFromModal()" style="height:28px; font-size:0.72rem; padding:0 0.4rem; width:100%; max-width:180px;">
+              <option value="Applied">1. Applied</option>
+              <option value="Screened">2. Screened</option>
+              <option value="Interviewing">3. Interviewing</option>
+              <option value="Offer">4. Offer / Hired</option>
+            </select>
+          </div>
+          <div>
+            <span style="color:var(--text-muted); font-size:0.62rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.1rem;">Contact Email</span>
+            <span id="cand-modal-email" style="font-size:0.75rem; color:#0284C7; font-weight:700;">marcus.vance@example.com</span>
+          </div>
+          <div>
+            <span style="color:var(--text-muted); font-size:0.62rem; display:block; text-transform:uppercase; font-weight:800; margin-bottom:0.1rem;">Verified Resume (.PDF)</span>
+            <div id="applicant-resume-container">
+              <a href="#" onclick="openApplicantResume('APP-701', 'Marcus Vance', 'Marcus_Vance_Resume_2026.pdf'); return false;" class="btn-resume-link" style="color:#0284C7; font-weight:800; text-decoration:none; font-size:0.75rem;">📄 View Marcus's Resume (.pdf)</a>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- DIRECT MESSAGING -->
-      <div style="flex: 1; display: flex; flex-direction: column; min-height: 0; gap: 0.45rem;">
+        <!-- QUICK RESPONSE TEMPLATES -->
         <div>
-          <div style="font-size:0.65rem; color:var(--text-muted); font-weight:800; margin-bottom:0.3rem;">1-CLICK QUICK MESSAGE TEMPLATES:</div>
-          <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+          <div style="font-size:10px; font-weight:900; color:#64748b; letter-spacing:0.08em; margin-bottom:6px;">1-CLICK EXECUTIVE TEMPLATES:</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
             <button class="template-chip" onclick="applyAtsTemplate('intro')">1. INTRO</button>
             <button class="template-chip" onclick="applyAtsTemplate('invite')">2. INVITE</button>
             <button class="template-chip" onclick="applyAtsTemplate('interest')">3. INTEREST</button>
           </div>
         </div>
 
-        <!-- CHAT THREAD LOG -->
-        <div id="applicant-chat-log" style="flex: 1; background:#F8FAFC; border:1px solid var(--border-color); border-radius:8px; padding:0.65rem; overflow-y:auto; display:flex; flex-direction:column; gap:0.4rem; min-height: 100px;">
+        <!-- CHAT LOG -->
+        <div id="applicant-chat-log" style="flex:1; min-height:140px; background:#FFFFFF; border:1px solid var(--border-color); border-radius:8px; padding:0.75rem; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;">
           <div class="chat-bubble chat-bubble-applicant">
             <strong>Candidate:</strong> Hello! I submitted my interview request and verified PDF resume for the Sales Manager opening. Excited to discuss next steps.
             <div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Today, 10:15 AM</div>
           </div>
         </div>
+      </div>
 
-        <!-- SEND MESSAGE INPUT & ACTION -->
-        <div style="display:flex; gap:0.5rem; margin-top:0.2rem;">
-          <input type="text" id="ats-direct-msg-input" placeholder="Type direct reply to candidate..." onkeydown="if(event.key==='Enter') sendAtsDirectMessage()" style="flex:1; height:38px; font-size:0.78rem;">
-          <button class="btn-gold-action" style="height:38px; font-size:0.72rem; padding: 0 1rem;" onclick="sendAtsDirectMessage()">SEND MESSAGE</button>
-        </div>
+      <!-- SEND MESSAGE FOOTER -->
+      <div class="message-drawer-footer">
+        <input type="text" id="ats-direct-msg-input" placeholder="Type direct reply to candidate..." onkeydown="if(event.key==='Enter') sendAtsDirectMessage()" style="flex:1; height:38px; font-size:0.78rem;">
+        <button class="btn-gold-action" style="height:38px; font-size:0.72rem; padding: 0 1rem; white-space:nowrap;" onclick="sendAtsDirectMessage()">SEND MESSAGE</button>
       </div>
 
     </div>
