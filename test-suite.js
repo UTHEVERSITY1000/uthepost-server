@@ -2723,6 +2723,26 @@ async function runTests() {
     assert(false, `Group 69 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 70: UNIVERSAL TOOLTIP UNCLIPPING & READABILITY
+  // ================================================================
+  console.log('\n--- GROUP 70: UNIVERSAL TOOLTIP UNCLIPPING & READABILITY ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Enhanced data-tooltip CSS sizing and high z-index
+    assert(recruiterHtml.includes('[data-tooltip]::after') && recruiterHtml.includes('z-index: 999999') && recruiterHtml.includes('max-width: 280px'), 'recruiter.html enhances tooltip max-width and high z-index');
+
+    // 2. Smart edge placement overrides
+    assert(recruiterHtml.includes('[data-tooltip-pos="left"]') && recruiterHtml.includes('[data-tooltip-pos="right"]'), 'recruiter.html defines smart edge placement overrides');
+
+    // 3. Floating Tooltip Engine for unclipped overflow contexts
+    assert(recruiterHtml.includes('initGlobalTooltipEngine') && recruiterHtml.includes('uthe-floating-tooltip'), 'recruiter.html initializes global floating tooltip engine');
+
+  } catch (err) {
+    assert(false, `Group 70 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

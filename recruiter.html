@@ -119,167 +119,118 @@ padding-bottom: 72px;
 /* REFINED SMART TOOLTIP SYSTEM (< 200px, 11px font, z-index 99999) */
 
 [data-tooltip] {
-
-position: relative;
-
+  position: relative;
 }
-
-
 
 [data-tooltip]::after {
-
-content: attr(data-tooltip);
-
-position: absolute;
-
-bottom: calc(100% + 6px);
-
-left: 50%;
-
-transform: translateX(-50%);
-
-background: #111827;
-
-color: #F8FAFC;
-
-font-size: 11px;
-
-font-weight: 500;
-
-line-height: 1.3;
-
-padding: 0.35rem 0.55rem;
-
-border-radius: 5px;
-
-border: 1px solid var(--uthe-gold);
-
-box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-
-white-space: normal;
-
-width: max-content;
-
-max-width: 200px;
-
-z-index: 99999;
-
-pointer-events: none;
-
-opacity: 0;
-
-visibility: hidden;
-
-text-transform: none;
-
-letter-spacing: normal;
-
-text-align: center;
-
-transition: opacity 0.15s ease, transform 0.15s ease;
-
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0F172A;
+  color: #F8FAFC;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.35;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid var(--uthe-gold);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  white-space: normal;
+  width: max-content;
+  max-width: 280px;
+  word-break: break-word;
+  z-index: 999999;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  text-transform: none;
+  letter-spacing: normal;
+  text-align: center;
+  transition: opacity 0.15s ease, transform 0.15s ease;
 }
-
-
 
 [data-tooltip]::before {
-
-content: '';
-
-position: absolute;
-
-bottom: calc(100% + 1px);
-
-left: 50%;
-
-transform: translateX(-50%);
-
-border-width: 5px 5px 0 5px;
-
-border-style: solid;
-
-border-color: var(--uthe-gold) transparent transparent transparent;
-
-z-index: 99999;
-
-pointer-events: none;
-
-opacity: 0;
-
-visibility: hidden;
-
-transition: opacity 0.15s ease;
-
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px 5px 0 5px;
+  border-style: solid;
+  border-color: var(--uthe-gold) transparent transparent transparent;
+  z-index: 999999;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease;
 }
-
-
 
 [data-tooltip]:hover::after,
-
 [data-tooltip]:hover::before,
-
 [data-tooltip]:focus-visible::after,
-
 [data-tooltip]:focus-visible::before {
-
-opacity: 1;
-
-visibility: visible;
-
+  opacity: 1;
+  visibility: visible;
 }
-
-
 
 /* TOP-BAR & SMART BOTTOM TOOLTIP OVERRIDE */
-
 header, .top-bar, nav, .search-filter-belt, .header-actions, .brand-group, .nav-tabs-container {
-
-overflow: visible !important;
-
+  overflow: visible !important;
 }
-
-
 
 header [data-tooltip]::after,
-
 nav [data-tooltip]::after,
-
 .top-bar [data-tooltip]::after,
-
 .search-filter-belt [data-tooltip]::after,
-
 .tooltip-bottom[data-tooltip]::after,
-
 [data-tooltip-pos="bottom"]::after {
-
-bottom: auto;
-
-top: calc(100% + 8px);
-
+  bottom: auto;
+  top: calc(100% + 8px);
 }
 
-
-
 header [data-tooltip]::before,
-
 nav [data-tooltip]::before,
-
 .top-bar [data-tooltip]::before,
-
 .search-filter-belt [data-tooltip]::before,
-
 .tooltip-bottom[data-tooltip]::before,
-
 [data-tooltip-pos="bottom"]::before {
+  bottom: auto;
+  top: calc(100% + 3px);
+  border-width: 0 5px 5px 5px;
+  border-color: transparent transparent var(--uthe-gold) transparent;
+}
 
-bottom: auto;
+/* Edge Smart Placement Overrides */
+[data-tooltip-pos="left"]::after,
+.btn-table-action[data-tooltip]:last-child::after,
+.btn-table-del[data-tooltip]::after,
+.header-actions [data-tooltip]::after {
+  left: auto !important;
+  right: 0 !important;
+  transform: none !important;
+}
+[data-tooltip-pos="left"]::before,
+.btn-table-action[data-tooltip]:last-child::before,
+.btn-table-del[data-tooltip]::before,
+.header-actions [data-tooltip]::before {
+  left: auto !important;
+  right: 12px !important;
+  transform: none !important;
+}
 
-top: calc(100% + 3px);
-
-border-width: 0 5px 5px 5px;
-
-border-color: transparent transparent var(--uthe-gold) transparent;
-
+[data-tooltip-pos="right"]::after,
+.brand-group [data-tooltip]::after {
+  left: 0 !important;
+  right: auto !important;
+  transform: none !important;
+}
+[data-tooltip-pos="right"]::before,
+.brand-group [data-tooltip]::before {
+  left: 12px !important;
+  right: auto !important;
+  transform: none !important;
 }
 
 
@@ -6327,24 +6278,91 @@ OK, GOT IT
 
 
 
+// Universal Smart Floating Tooltip Engine (Prevents clipping across all overflow contexts)
+(function initGlobalTooltipEngine() {
+  if (typeof document === 'undefined') return;
+
+  function createFloatingTooltip() {
+    let tooltipEl = document.getElementById('uthe-floating-tooltip');
+    if (!tooltipEl) {
+      tooltipEl = document.createElement('div');
+      tooltipEl.id = 'uthe-floating-tooltip';
+      tooltipEl.style.cssText = 'position: fixed; display: none; z-index: 9999999; pointer-events: none; background: #0F172A; color: #F8FAFC; border: 1px solid #FEBA27; border-radius: 6px; padding: 0.35rem 0.65rem; font-size: 11px; font-weight: 600; line-height: 1.35; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4); max-width: 280px; text-align: center; white-space: normal; word-wrap: break-word; transition: opacity 0.12s ease; opacity: 0;';
+      document.body.appendChild(tooltipEl);
+    }
+    return tooltipEl;
+  }
+
+  function showTooltip(target) {
+    const text = target.getAttribute('data-tooltip');
+    if (!text || !text.trim()) return;
+    const tooltipEl = createFloatingTooltip();
+    tooltipEl.textContent = text;
+    tooltipEl.style.display = 'block';
+
+    const rect = target.getBoundingClientRect();
+    const tipRect = tooltipEl.getBoundingClientRect();
+
+    let top = rect.top - tipRect.height - 7;
+    let left = rect.left + (rect.width / 2) - (tipRect.width / 2);
+
+    // Flip below target if near top of viewport
+    if (top < 6) {
+      top = rect.bottom + 7;
+    }
+
+    // Clamp horizontally to stay completely on screen
+    if (left < 8) left = 8;
+    if (left + tipRect.width > window.innerWidth - 8) {
+      left = window.innerWidth - tipRect.width - 8;
+    }
+
+    tooltipEl.style.top = top + 'px';
+    tooltipEl.style.left = left + 'px';
+    tooltipEl.style.opacity = '1';
+  }
+
+  function hideTooltip() {
+    const tooltipEl = document.getElementById('uthe-floating-tooltip');
+    if (tooltipEl) {
+      tooltipEl.style.opacity = '0';
+      tooltipEl.style.display = 'none';
+    }
+  }
+
+  document.addEventListener('mouseover', function(e) {
+    const target = e.target && e.target.closest ? e.target.closest('[data-tooltip]') : null;
+    if (target) showTooltip(target);
+  }, { passive: true });
+
+  document.addEventListener('mouseout', function(e) {
+    const target = e.target && e.target.closest ? e.target.closest('[data-tooltip]') : null;
+    if (target) hideTooltip();
+  }, { passive: true });
+
+  document.addEventListener('focusin', function(e) {
+    const target = e.target && e.target.closest ? e.target.closest('[data-tooltip]') : null;
+    if (target) showTooltip(target);
+  }, { passive: true });
+
+  document.addEventListener('focusout', function() {
+    hideTooltip();
+  }, { passive: true });
+
+  window.addEventListener('scroll', function() {
+    hideTooltip();
+  }, { passive: true });
+})();
+
 // CLEAR DYNAMIC STORAGE CACHE: Wipe out any old cached CMS title strings on load
-
 try {
-
-if (typeof localStorage !== 'undefined') {
-
-localStorage.removeItem('cms_config');
-
-localStorage.removeItem('uthe_cms_config');
-
-}
-
-if (typeof sessionStorage !== 'undefined') {
-
-sessionStorage.clear();
-
-}
-
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem('cms_config');
+    localStorage.removeItem('uthe_cms_config');
+  }
+  if (typeof sessionStorage !== 'undefined') {
+    sessionStorage.clear();
+  }
 } catch (e) {}
 
 
