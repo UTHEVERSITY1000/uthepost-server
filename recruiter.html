@@ -8562,48 +8562,25 @@ wsRelay.send(JSON.stringify(packet));
 
 
 
-function handleSyncEvent(data) {
-  const myCompany = ((currentUser && currentUser.company) || (document.getElementById('prof-company') && document.getElementById('prof-company').value) || (document.getElementById('inp-company') && document.getElementById('inp-company').value) || '').toLowerCase().trim();
-  const myEmail = ((currentUser && currentUser.email) || (document.getElementById('prof-email') && document.getElementById('prof-email').value) || (document.getElementById('inp-recruiter-email') && document.getElementById('inp-recruiter-email').value) || '').toLowerCase().trim();
+function ingestCandidateApplicant(applicant, showNotification = true) {
+  if (!applicant || !applicant.name) return;
 
-  if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
-    const appCompany = (data.company || data.applicant.company || '').toLowerCase().trim();
-    const appEmail = (data.recruiterEmail || data.applicant.recruiterEmail || '').toLowerCase().trim();
+  const col = document.getElementById('cards-applied') || document.getElementById('col-applied');
+  if (!col) return;
 
-    // Multi-tenant check: if current recruiter is logged in or configured, only ingest matching applicants
-    if (myCompany && appCompany && myCompany !== appCompany) {
-      return; // Isolated to target employer
-    }
-    if (myEmail && appEmail && myEmail !== appEmail) {
-      return; // Isolated to target recruiter
-    }
+  const appId = applicant.id || `APP-${Math.floor(700 + Math.random() * 200)}`;
+  const now = new Date();
+  const dateStr = applicant.appliedDate || (applicant.appliedAt ? new Date(applicant.appliedAt).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) + ' • ' + new Date(applicant.appliedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : now.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) + ' • ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
 
-    const col = document.getElementById('cards-applied') || document.getElementById('col-applied');
-    const card = document.createElement('div');
+  // Check if card already exists in DOM
+  let card = document.getElementById(`card-${appId}`);
+  if (!card) {
+    card = document.createElement('div');
     card.className = 'candidate-card';
-    card.id = `card-${data.applicant.id}`;
+    card.id = `card-${appId}`;
     card.setAttribute('draggable', 'true');
-    card.setAttribute('data-id', data.applicant.id);
-    card.onclick = () => openCandidateReviewModal(data.applicant.id);
-
-    const now = new Date();
-    const dateStr = now.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) + ' • ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    card.innerHTML = `
-      <div class="cand-grab-handle" style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">${dateStr}</span>
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <button class="btn-card-trash" onclick="confirmDeleteCandidate('${data.applicant.id}', event)" data-tooltip="Delete Candidate" style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 0.85rem; padding: 0 4px; line-height: 1;">🗑️</button>
-          <span style="color: var(--text-muted);">:::</span>
-        </div>
-      </div>
-      <div class="cand-name">${data.applicant.name}</div>
-      <div class="cand-role">${data.applicant.jobTitle}</div>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.2rem;">
-        <div class="cand-score">${data.applicant.score || 92}% MATCH</div>
-        <span style="font-size:0.65rem; color:var(--text-muted); font-weight:700;">Click to Review & Chat →</span>
-      </div>
-    `;
+    card.setAttribute('data-id', appId);
+    card.onclick = () => openCandidateReviewModal(appId);
 
     // Ingest at the very TOP of the Applied card (most recent first)
     if (col.firstChild) {
@@ -8611,40 +8588,116 @@ function handleSyncEvent(data) {
     } else {
       col.appendChild(card);
     }
+  }
 
-    const newCandidateRecord = {
-      id: data.applicant.id,
-      name: data.applicant.name,
-      role: data.applicant.jobTitle,
-      email: data.applicant.email || 'applicant@example.com',
-      score: `${data.applicant.score || 92}%`,
-      stage: 'Applied',
-      appliedDate: dateStr,
-      resumeFile: data.applicant.resumeFile || `${data.applicant.name.replace(/\s+/g, '_')}_Resume.pdf`
-    };
+  card.innerHTML = `
+    <div class="cand-grab-handle" style="display: flex; justify-content: space-between; align-items: center;">
+      <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">${dateStr}</span>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <button class="btn-card-trash" onclick="confirmDeleteCandidate('${appId}', event)" data-tooltip="Delete Candidate" style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 0.85rem; padding: 0 4px; line-height: 1;">🗑️</button>
+        <span style="color: var(--text-muted);">:::</span>
+      </div>
+    </div>
+    <div class="cand-name">${applicant.name}</div>
+    <div class="cand-role">${applicant.jobTitle || applicant.role || 'Career Opportunity'}</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.2rem;">
+      <div class="cand-score">${applicant.score ? (String(applicant.score).includes('%') ? applicant.score : `${applicant.score}%`) : '94%'} MATCH</div>
+      <span style="font-size:0.65rem; color:var(--text-muted); font-weight:700;">Click to Review & Chat →</span>
+    </div>
+  `;
 
-    // Prepend to CANDIDATES_DATA store (most recent first)
-    const updatedCandidates = { [data.applicant.id]: newCandidateRecord, ...CANDIDATES_DATA };
-    for (const key in CANDIDATES_DATA) delete CANDIDATES_DATA[key];
-    Object.assign(CANDIDATES_DATA, updatedCandidates);
+  const newCandidateRecord = {
+    id: appId,
+    name: applicant.name,
+    role: applicant.jobTitle || applicant.role || 'Sales Manager',
+    email: applicant.email || 'applicant@example.com',
+    phone: applicant.phone || '',
+    score: applicant.score ? (String(applicant.score).includes('%') ? applicant.score : `${applicant.score}%`) : '94%',
+    stage: applicant.stage || 'Applied',
+    appliedDate: dateStr,
+    resumeFile: applicant.resumeFile || `${applicant.name.replace(/\s+/g, '_')}_Resume.pdf`
+  };
 
-    renderRecruiterCandidateList();
-    updateKanbanCounters();
-    setupMobileTouchAts();
+  // Prepend to CANDIDATES_DATA store (most recent first)
+  const updatedCandidates = { [appId]: newCandidateRecord, ...CANDIDATES_DATA };
+  for (const key in CANDIDATES_DATA) delete CANDIDATES_DATA[key];
+  Object.assign(CANDIDATES_DATA, updatedCandidates);
 
+  try {
+    localStorage.setItem('uthe_recruiter_applicants', JSON.stringify(CANDIDATES_DATA));
+  } catch (e) {}
+
+  renderRecruiterCandidateList();
+  updateKanbanCounters();
+  setupMobileTouchAts();
+
+  if (showNotification) {
     const rBadge = document.getElementById('recruiter-notif-badge');
     const rBell = document.getElementById('btn-recruiter-notif');
+    let currentCount = 1;
     if (rBadge) {
-      const currentCount = parseInt(rBadge.textContent || '0', 10) + 1;
+      currentCount = parseInt(rBadge.textContent || '0', 10) + 1;
       rBadge.textContent = currentCount;
       rBadge.style.display = 'inline-flex';
-      try { localStorage.setItem('uthe_recruiter_notifs', String(currentCount)); } catch (e) {}
     }
     if (rBell) {
       rBell.classList.add('notif-bell-active');
     }
+    try {
+      localStorage.setItem('uthe_recruiter_notifs', String(currentCount));
+    } catch (e) {}
 
-    showCustomModalAlert('New Applicant Received', `Candidate ${data.applicant.name} applied for ${data.applicant.jobTitle}.`);
+    showCustomModalAlert('New Applicant Received', `Candidate ${applicant.name} applied for "${applicant.jobTitle || 'Career Opportunity'}".`);
+  }
+}
+window.ingestCandidateApplicant = ingestCandidateApplicant;
+
+function loadSavedApplicants() {
+  // 1. Restore from localStorage
+  try {
+    const saved = localStorage.getItem('uthe_recruiter_applicants');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && typeof parsed === 'object') {
+        Object.keys(parsed).forEach(k => {
+          if (!CANDIDATES_DATA[k]) {
+            CANDIDATES_DATA[k] = parsed[k];
+          }
+        });
+      }
+    }
+  } catch (e) {}
+
+  // 2. Fetch from /api/applicants
+  fetch('/api/applicants')
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.applicants && Array.isArray(data.applicants)) {
+        data.applicants.forEach(app => {
+          ingestCandidateApplicant(app, false);
+        });
+      }
+    })
+    .catch(() => {});
+
+  updateKanbanCounters();
+  renderRecruiterCandidateList();
+}
+window.loadSavedApplicants = loadSavedApplicants;
+
+function handleSyncEvent(data) {
+  const myCompany = ((currentUser && currentUser.company) || (document.getElementById('prof-company') && document.getElementById('prof-company').value) || (document.getElementById('inp-company') && document.getElementById('inp-company').value) || '').toLowerCase().trim();
+  const myEmail = ((currentUser && currentUser.email) || (document.getElementById('prof-email') && document.getElementById('prof-email').value) || (document.getElementById('inp-recruiter-email') && document.getElementById('inp-recruiter-email').value) || '').toLowerCase().trim();
+
+  if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
+    const appCompany = (data.company || data.applicant.company || '').toLowerCase().trim();
+    if (myCompany && appCompany && myCompany !== appCompany) {
+      return; // Isolated to target employer
+    }
+    ingestCandidateApplicant(data.applicant, true);
+
+  } else if (data.type === 'INITIAL_STATE' && data.applicants && Array.isArray(data.applicants)) {
+    data.applicants.forEach(app => ingestCandidateApplicant(app, false));
 
   } else if (data.type === 'CANDIDATE_MESSAGE_SENT' && data.message) {
     const msgCompany = (data.company || data.message.company || '').toLowerCase().trim();
@@ -9054,6 +9107,7 @@ closeCustomConfirm();
   loadSavedEmployerSession();
   loadSavedEmployerProfile();
   loadSavedJobs();
+  loadSavedApplicants();
   updateKanbanCounters();
   setupMobileTouchAts();
   initDualSync();

@@ -2326,7 +2326,7 @@
       renderRecruiterCards();
       switchActiveThread(newAppId);
 
-      broadcastSyncEvent('CANDIDATE_APPLIED', { applicant: applicantPayload });
+      broadcastSyncEvent('CANDIDATE_APPLIED', { applicant: applicantPayload, company: companyName });
       closeModal('app-modal');
       showCustomModalAlert('Interview Request Submitted', `Your application and PDF resume for "${jobTitle}" at ${companyName} were submitted. Check your Notifications to view application status.`);
     }

@@ -1082,6 +1082,23 @@ function saveApplicantRecord(applicant) {
   }
 }
 
+function loadApplicantsFromDisk() {
+  try {
+    initDataDirectories();
+    if (fs.existsSync(DIRS.applications)) {
+      const files = fs.readdirSync(DIRS.applications).filter(f => f.startsWith('app_') && f.endsWith('.json'));
+      files.forEach(f => {
+        try {
+          const app = JSON.parse(fs.readFileSync(path.join(DIRS.applications, f), 'utf8'));
+          if (app && app.id && !applicantsStore.some(a => a.id === app.id)) {
+            applicantsStore.unshift(app);
+          }
+        } catch (e) {}
+      });
+    }
+  } catch (e) {}
+}
+
 function deleteApplicantRecord(applicantId) {
   try {
     const safeId = String(applicantId).replace(/[^a-zA-Z0-9_-]/g, '_');
@@ -2593,6 +2610,82 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ----------------------------------------------------
+  // APPLICANTS MANAGEMENT REST ENDPOINTS (Live Dual-Sync)
+  // ----------------------------------------------------
+  if (pathname === '/api/applicants' && req.method === 'GET') {
+    const user = getAuthenticatedUser(req);
+    const isFromAdminPortal = isRequestFromAdminDomain(req);
+    const jobId = parsedUrl.searchParams.get('jobId');
+    const company = parsedUrl.searchParams.get('company');
+
+    let scopedApplicants = [...applicantsStore];
+
+    if (jobId) {
+      scopedApplicants = scopedApplicants.filter(a => String(a.jobId) === String(jobId));
+    }
+
+    if (company) {
+      const c = company.toLowerCase().trim();
+      scopedApplicants = scopedApplicants.filter(a => (a.company || '').toLowerCase().trim() === c);
+    } else if (user && (user.role === 'recruiter' || user.role === 'employer')) {
+      const userComp = (user.company || '').toLowerCase().trim();
+      const userEmail = (user.email || '').toLowerCase().trim();
+      if (userComp || userEmail) {
+        scopedApplicants = scopedApplicants.filter(a =>
+          (userComp && a.company && a.company.toLowerCase().trim() === userComp) ||
+          (userEmail && a.recruiterEmail && a.recruiterEmail.toLowerCase().trim() === userEmail)
+        );
+      }
+    }
+
+    return sendJson(200, { ok: true, applicants: scopedApplicants, count: scopedApplicants.length });
+  }
+
+  if (pathname === '/api/applicants' && req.method === 'POST') {
+    readBody((err, payload) => {
+      if (err) return sendJson(400, { error: err.message });
+      if (!payload || !payload.name || !payload.email) {
+        return sendJson(400, { error: 'Missing candidate name or email address.' });
+      }
+
+      const newAppId = payload.id || `APP-${Math.floor(700 + Math.random() * 200)}`;
+      const applicantRecord = {
+        id: newAppId,
+        jobId: payload.jobId || 'JOB-101',
+        jobTitle: payload.jobTitle || 'Sales Manager',
+        company: payload.company || 'Quantum Retail Corp',
+        name: payload.name,
+        email: payload.email,
+        phone: payload.phone || '',
+        bestTime: payload.bestTime || 'Anytime',
+        interviewTitle: payload.interviewTitle || 'Interview Request',
+        resumeFile: payload.resumeFile || `${payload.name.replace(/\s+/g, '_')}_Resume.pdf`,
+        resumeSummary: payload.resumeSummary || '',
+        score: payload.score || 94,
+        stage: payload.stage || 'Applied',
+        appliedAt: payload.appliedAt || payload.appliedDate || new Date().toISOString(),
+        createdAt: payload.createdAt || new Date().toISOString()
+      };
+
+      const existingIdx = applicantsStore.findIndex(a => a.id === newAppId);
+      if (existingIdx !== -1) {
+        applicantsStore[existingIdx] = applicantRecord;
+      } else {
+        applicantsStore.unshift(applicantRecord);
+      }
+
+      saveApplicantRecord(applicantRecord);
+      writeSystemLog('CANDIDATE_APPLIED', { applicantId: newAppId, name: applicantRecord.name, jobTitle: applicantRecord.jobTitle, company: applicantRecord.company });
+
+      // Live broadcast to all connected WebSocket clients (Recruiter Studio)
+      broadcastWebSocketEvent('CANDIDATE_APPLIED', { applicant: applicantRecord, company: applicantRecord.company });
+
+      sendJson(201, { ok: true, status: 'submitted', applicant: applicantRecord });
+    });
+    return;
+  }
+
+  // ----------------------------------------------------
   // BULK RESUME ZIP ARCHIVE EXPORTER (Zero-Dependency)
   // ----------------------------------------------------
   if ((cleanPath === '/api/admin/resumes/download-all' || pathname === '/api/admin/resumes/download-all') && req.method === 'GET') {
@@ -2963,5 +3056,6 @@ server.listen(PORT, () => {
   console.log(`  jobs.utheversity.com  -> candidate.html (u-theJOBS Candidate Board)`);
   console.log(`  admin.utheversity.com -> admin.html (u-theADMIN Master Suite - Zion Daye)`);
   console.log(`================================================================`);
+  loadApplicantsFromDisk();
   initWebSocket();
 });

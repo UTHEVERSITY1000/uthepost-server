@@ -3015,6 +3015,33 @@ async function runTests() {
     assert(false, `Group 81 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 82: END-TO-END APPLICANT INGESTION & NOTIFICATION BELL ALERTS
+  // ================================================================
+  console.log('\n--- GROUP 82: END-TO-END APPLICANT INGESTION & NOTIFICATION BELL ALERTS ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+
+    // 1. Server-side REST endpoints for /api/applicants
+    assert(serverJs.includes("pathname === '/api/applicants'") && serverJs.includes("req.method === 'GET'"), 'server.js defines GET /api/applicants endpoint');
+    assert(serverJs.includes("pathname === '/api/applicants'") && serverJs.includes("req.method === 'POST'"), 'server.js defines POST /api/applicants endpoint');
+    assert(serverJs.includes('loadApplicantsFromDisk'), 'server.js defines loadApplicantsFromDisk() for persistent applicant indexing');
+
+    // 2. Recruiter Studio ingestion and auto-restore
+    assert(recruiterHtml.includes('function ingestCandidateApplicant('), 'recruiter.html defines ingestCandidateApplicant()');
+    assert(recruiterHtml.includes('function loadSavedApplicants('), 'recruiter.html defines loadSavedApplicants()');
+    assert(recruiterHtml.includes('loadSavedApplicants();'), 'recruiter.html calls loadSavedApplicants() on DOMContentLoaded');
+    assert(recruiterHtml.includes('uthe_recruiter_applicants'), 'recruiter.html persists candidates to localStorage (uthe_recruiter_applicants)');
+
+    // 3. Candidate board sync broadcast
+    assert(candidateHtml.includes('broadcastSyncEvent(\'CANDIDATE_APPLIED\''), 'candidate.html broadcasts CANDIDATE_APPLIED on submission');
+
+  } catch (err) {
+    assert(false, `Group 82 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
