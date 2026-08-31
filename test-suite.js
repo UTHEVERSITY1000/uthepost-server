@@ -2478,12 +2478,30 @@ async function runTests() {
     // 2. Selected State Deep Slate Charcoal & Gold
     assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #0F172A !important') && recruiterHtml.includes('color: #FEBA27 !important') && recruiterHtml.includes('border: 1px solid #FEBA27 !important'), 'recruiter.html defines high-contrast publishing-style active perk pill');
 
-    // 3. Desktop UI Navigation Expansion (@media min-width: 769px)
-    assert(recruiterHtml.includes('@media (min-width: 769px)') && recruiterHtml.includes('max-width: 720px !important'), 'recruiter.html defines desktop nav max-width 720px');
-    assert(recruiterHtml.includes('.nav-tab-btn, .portal-navigation button, nav.header-center-tabs button') && recruiterHtml.includes('height: 36px !important') && recruiterHtml.includes('font-size: 0.72rem !important') && recruiterHtml.includes('font-weight: 800 !important'), 'recruiter.html defines expanded 36px desktop tab button dimensions');
-
   } catch (err) {
     assert(false, `Group 57 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 58: DESKTOP TOP DECK STRETCH & OVERFLOW FIX
+  // ================================================================
+  console.log('\n--- GROUP 58: DESKTOP TOP DECK STRETCH & OVERFLOW FIX ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Header Container & Belt: overflow visible & no scrollbars
+    assert(recruiterHtml.includes('@media (min-width: 769px)') && recruiterHtml.includes('header, .recruiter-header') && recruiterHtml.includes('overflow: visible !important'), 'recruiter.html sets header overflow: visible on desktop');
+    assert(recruiterHtml.includes('.portal-navigation, nav.header-center-tabs') && recruiterHtml.includes('max-width: 820px !important') && recruiterHtml.includes('flex: 1 1 auto !important'), 'recruiter.html sets desktop nav flex: 1 1 auto and max-width 820px');
+
+    // 2. Stretch Navigation Buttons Proportionally
+    assert(recruiterHtml.includes('.nav-tab-btn, .portal-navigation button, nav.header-center-tabs button') && recruiterHtml.includes('flex: 1 1 0px !important') && recruiterHtml.includes('height: 32px !important') && recruiterHtml.includes('font-size: 0.65rem !important'), 'recruiter.html stretches navigation buttons proportionally across deck');
+    assert(recruiterHtml.includes('text-overflow: ellipsis !important'), 'recruiter.html handles text ellipsis gracefully');
+
+    // 3. Tooltip Z-Index & Absolute Positioning
+    assert(recruiterHtml.includes('.nav-tab-btn [data-tooltip], .portal-navigation button .tooltip, .tooltip-dropdown') && recruiterHtml.includes('z-index: 9999 !important') && recruiterHtml.includes('position: absolute !important'), 'recruiter.html fixes tooltip z-index and top 100% position');
+
+  } catch (err) {
+    assert(false, `Group 58 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');

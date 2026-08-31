@@ -1902,25 +1902,52 @@
        END LOCKED SECTION
        ========================================================================== */
 
-    /* Desktop-Only UI Menu Button Expansion (@media min-width: 769px) */
+    /* Desktop Header Navigation Specification (@media min-width: 769px) */
     @media (min-width: 769px) {
-      .portal-navigation, nav.header-center-tabs {
-        display: flex !important;
-        flex: 1 !important;
-        max-width: 720px !important;
-        justify-content: space-between !important;
-        gap: 0.5rem !important;
-        margin: 0 1rem !important;
+      /* 1. Header Container & Belt: Remove scrollbars, allow bottom tooltips to overlap page */
+      header, .recruiter-header {
+        overflow: visible !important;
       }
 
+      .portal-navigation, nav.header-center-tabs {
+        display: flex !important;
+        flex: 1 1 auto !important;
+        max-width: 820px !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 0.4rem !important;
+        margin: 0 0.75rem !important;
+        overflow: visible !important; /* Removes scrollbars so tooltips pop out */
+        scrollbar-width: none !important;
+      }
+
+      .portal-navigation::-webkit-scrollbar, nav.header-center-tabs::-webkit-scrollbar {
+        display: none !important;
+      }
+
+      /* 2. Stretch Navigation Buttons Proportionally Across Deck */
       .nav-tab-btn, .portal-navigation button, nav.header-center-tabs button {
-        flex: 1 !important;
-        height: 36px !important;
-        font-size: 0.72rem !important;
+        flex: 1 1 0px !important; /* Stretch evenly across available width */
+        min-width: 0 !important;
+        height: 32px !important;
+        font-size: 0.65rem !important;
         font-weight: 800 !important;
-        letter-spacing: 0.04em !important;
-        padding: 0 0.75rem !important;
+        letter-spacing: 0.03em !important;
+        padding: 0 0.35rem !important;
         text-align: center !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+      }
+
+      /* 3. Position Tooltips / Dropdowns to Appear Below on Top of Page */
+      .nav-tab-btn [data-tooltip], .portal-navigation button .tooltip, .tooltip-dropdown {
+        position: absolute !important;
+        top: 100% !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin-top: 6px !important;
+        z-index: 9999 !important;
         white-space: nowrap !important;
       }
     }
