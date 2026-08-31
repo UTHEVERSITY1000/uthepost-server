@@ -2937,6 +2937,30 @@ async function runTests() {
     assert(false, `Group 78 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 79: RECRUITER JOB PERSISTENCE & NOTIFICATIONS DRAWER OVERHAUL
+  // ================================================================
+  console.log('\n--- GROUP 79: RECRUITER JOB PERSISTENCE & NOTIFICATIONS DRAWER OVERHAUL ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Persistent job saving and duplicate prevention
+    assert(recruiterHtml.includes("localStorage.setItem('uthe_employer_jobs'"), 'recruiter.html persists published jobs to localStorage (uthe_employer_jobs)');
+    assert(recruiterHtml.includes('loadSavedJobs'), 'recruiter.html implements loadSavedJobs() to restore active listings across reloads');
+    assert(recruiterHtml.includes('loadSavedJobs();'), 'recruiter.html invokes loadSavedJobs() on DOMContentLoaded');
+
+    // 2. Recruiter notifications multi-candidate drawer
+    assert(recruiterHtml.includes('id="recruiterCandidateList"'), 'recruiter.html defines #recruiterCandidateList in notifications drawer');
+    assert(recruiterHtml.includes('recruiter-cand-card'), 'recruiter.html includes .recruiter-cand-card styles for applicant sidebar');
+    assert(recruiterHtml.includes('renderRecruiterCandidateList'), 'recruiter.html implements renderRecruiterCandidateList()');
+
+    // 3. Ingestion at the very top of Applied column (most recent first)
+    assert(recruiterHtml.includes('col.insertBefore(card, col.firstChild)'), 'recruiter.html ingests new applicants at the very top of Applied column');
+
+  } catch (err) {
+    assert(false, `Group 79 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

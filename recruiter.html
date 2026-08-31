@@ -2472,14 +2472,33 @@ white-space: nowrap;
 
 
 .template-chip:hover {
-
-border-color: var(--uthe-gold);
-
-background: var(--uthe-gold-light);
-
+  border-color: var(--uthe-gold);
+  background: var(--uthe-gold-light);
 }
 
+.recruiter-cand-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(254, 186, 39, 0.25);
+  border-radius: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+}
 
+.recruiter-cand-card:hover {
+  background: rgba(254, 186, 39, 0.12);
+  border-color: #FEBA27;
+}
+
+.recruiter-cand-card.active {
+  background: rgba(254, 186, 39, 0.22);
+  border-color: #FEBA27;
+  box-shadow: 0 0 8px rgba(254, 186, 39, 0.3);
+}
 
 /* MODAL OVERLAYS */
 
@@ -5941,146 +5960,88 @@ VERIFIED EMPLOYER
 
 
 
-<!-- CANDIDATE REVIEW & DIRECT MESSAGING MODAL (MESSAGE APPLICANT DRAWER) -->
-
+<!-- RECRUITER MULTI-CANDIDATE MESSAGING & NOTIFICATIONS DRAWER -->
 <div class="modal-overlay" id="candidate-review-modal">
-
-<div class="modal-card" style="width: 620px;">
-
-<div class="modal-header">
-
-<div style="display:flex; align-items:center; gap:0.5rem;">
-
-<span class="modal-title" id="cand-modal-name">MARCUS VANCE</span>
-
-<span style="font-size:0.65rem; background:var(--status-mint-bg); color:#065F46; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;" id="cand-modal-score">94% MATCH</span>
-
-</div>
-
-<button class="drawer-close" onclick="closeModal('candidate-review-modal')" data-tooltip="Close modal">X</button>
-
-</div>
-
-
-
-<!-- CANDIDATE DETAILS -->
-
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; background:var(--card-subtle); padding:0.85rem; border-radius:8px; font-size:0.78rem;">
-
-<div>
-
-<span style="color:var(--text-muted); font-size:0.68rem; display:block; text-transform:uppercase; font-weight:800;">Target Position</span>
-
-<strong id="cand-modal-role">Sales Manager</strong>
-
-</div>
-
-<div>
-
-<span style="color:var(--text-muted); font-size:0.68rem; display:block; text-transform:uppercase; font-weight:800;">Pipeline Stage</span>
-
-<select id="cand-modal-stage-select" onchange="updateCandidateStageFromModal()" style="height:32px; font-size:0.75rem; padding:0 0.5rem; margin-top:0.2rem;">
-
-<option value="Applied">1. Applied</option>
-
-<option value="Screened">2. Screened</option>
-
-<option value="Interviewing">3. Interviewing</option>
-
-<option value="Offer">4. Offer / Hired</option>
-
-</select>
-
-</div>
-
-<div>
-
-<span style="color:var(--text-muted); font-size:0.68rem; display:block; text-transform:uppercase; font-weight:800;">Contact Email</span>
-
-<span id="cand-modal-email">marcus.vance@example.com</span>
-
-</div>
-
-<div>
-
-<span style="color:var(--text-muted); font-size:0.68rem; display:block; text-transform:uppercase; font-weight:800;">Resume (.PDF)</span>
-
-<div id="applicant-resume-container">
-
-<a href="#" onclick="openApplicantResume('APP-701', 'Marcus Vance', 'Marcus_Vance_Resume_2026.pdf'); return false;" class="btn-resume-link" style="color:#0284C7; font-weight:700; text-decoration:none;">📄 View Marcus's Resume (.pdf)</a>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<!-- DIRECT MESSAGING DRAWER: MESSAGE APPLICANT -->
-
-<div style="border-top: 1.5px solid var(--border-color); padding-top: 0.85rem; display:flex; flex-direction:column; gap:0.65rem;">
-
-<div style="display:flex; justify-content:space-between; align-items:center;">
-
-<span style="font-size: 0.85rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 1px; text-transform: uppercase;">MESSAGE APPLICANT</span>
-
-<span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.15rem 0.45rem; border-radius: 4px;">DIRECT RECRUITER CHAT</span>
-
-</div>
-
-
-
-<!-- 1-CLICK QUICK MESSAGE TEMPLATES -->
-
-<div>
-
-<label style="font-size:0.65rem; color:var(--text-muted); font-weight:800; display:block; margin-bottom:0.3rem;">1-CLICK QUICK MESSAGE TEMPLATES:</label>
-
-<div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
-
-<button class="template-chip" onclick="applyAtsTemplate('intro')">1. INTRODUCTION TEMPLATE</button>
-
-<button class="template-chip" onclick="applyAtsTemplate('invite')">2. INVITE TEMPLATE</button>
-
-<button class="template-chip" onclick="applyAtsTemplate('interest')">3. ARE YOU INTERESTED TEMPLATE</button>
-
-</div>
-
-</div>
-
-
-
-<!-- CHAT THREAD LOG -->
-
-<div id="applicant-chat-log" style="background:#F8FAFC; border:1px solid var(--border-color); border-radius:8px; padding:0.85rem; max-height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:0.4rem;">
-
-<div class="chat-bubble chat-bubble-applicant">
-
-<strong>Candidate:</strong> Hello! I submitted my interview request and verified PDF resume for the Sales Manager opening. Excited to discuss next steps.
-
-<div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Today, 10:15 AM</div>
-
-</div>
-
-</div>
-
-
-
-<!-- SEND MESSAGE INPUT & ACTION -->
-
-<div style="display:flex; gap:0.5rem; margin-top:0.3rem;">
-
-<input type="text" id="ats-direct-msg-input" placeholder="Type direct reply to candidate..." style="flex:1; height:42px; font-size:0.8rem;">
-
-<button class="btn-gold-action" style="height:42px; font-size:0.75rem;" onclick="sendAtsDirectMessage()">SEND MESSAGE</button>
-
-</div>
-
-</div>
-
-</div>
-
+  <div class="modal-card" style="width: 840px; max-width: 95vw; height: 600px; max-height: 90vh; display: flex; flex-direction: row; padding: 0; overflow: hidden;">
+    
+    <!-- LEFT SIDEBAR: CANDIDATE APPLICANTS LIST (MOST RECENT FIRST) -->
+    <div class="conversation-sidebar" style="width: 280px; background: #0f172a; border-right: 1.5px solid #FEBA27; padding: 14px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; box-sizing: border-box;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+        <div style="font-size: 11px; font-weight: 900; color: #FEBA27; letter-spacing: 0.08em; text-transform: uppercase;">MY CANDIDATES</div>
+        <span style="font-size: 10px; color: #94A3B8; font-weight: 800;" id="recruiter-cand-count">3 Applicants</span>
+      </div>
+      <div id="recruiterCandidateList" style="display: flex; flex-direction: column; gap: 8px;">
+        <!-- Candidate cards render here -->
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: ACTIVE CANDIDATE DOSSIER & DIRECT MESSAGING -->
+    <div class="chat-panel" style="flex: 1; display: flex; flex-direction: column; background: #FFFFFF; overflow: hidden; padding: 16px; box-sizing: border-box;">
+      
+      <div class="modal-header" style="padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span class="modal-title" id="cand-modal-name">MARCUS VANCE</span>
+          <span style="font-size:0.65rem; background:var(--status-mint-bg); color:#065F46; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;" id="cand-modal-score">94% MATCH</span>
+        </div>
+        <button class="drawer-close" onclick="closeModal('candidate-review-modal')" data-tooltip="Close modal">X</button>
+      </div>
+
+      <!-- CANDIDATE DETAILS -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; background:var(--card-subtle); padding:0.6rem 0.8rem; border-radius:8px; font-size:0.75rem; margin-bottom: 0.5rem;">
+        <div>
+          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800;">Target Position</span>
+          <strong id="cand-modal-role">Sales Manager</strong>
+        </div>
+        <div>
+          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800;">Pipeline Stage</span>
+          <select id="cand-modal-stage-select" onchange="updateCandidateStageFromModal()" style="height:28px; font-size:0.72rem; padding:0 0.4rem; margin-top:0.1rem;">
+            <option value="Applied">1. Applied</option>
+            <option value="Screened">2. Screened</option>
+            <option value="Interviewing">3. Interviewing</option>
+            <option value="Offer">4. Offer / Hired</option>
+          </select>
+        </div>
+        <div>
+          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800;">Contact Email</span>
+          <span id="cand-modal-email">marcus.vance@example.com</span>
+        </div>
+        <div>
+          <span style="color:var(--text-muted); font-size:0.65rem; display:block; text-transform:uppercase; font-weight:800;">Resume (.PDF)</span>
+          <div id="applicant-resume-container">
+            <a href="#" onclick="openApplicantResume('APP-701', 'Marcus Vance', 'Marcus_Vance_Resume_2026.pdf'); return false;" class="btn-resume-link" style="color:#0284C7; font-weight:700; text-decoration:none;">📄 View Marcus's Resume (.pdf)</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIRECT MESSAGING -->
+      <div style="flex: 1; display: flex; flex-direction: column; min-height: 0; gap: 0.4rem;">
+        <div>
+          <div style="font-size:0.62rem; color:var(--text-muted); font-weight:800; margin-bottom:0.25rem;">1-CLICK QUICK MESSAGE TEMPLATES:</div>
+          <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+            <button class="template-chip" onclick="applyAtsTemplate('intro')">1. INTRO</button>
+            <button class="template-chip" onclick="applyAtsTemplate('invite')">2. INVITE</button>
+            <button class="template-chip" onclick="applyAtsTemplate('interest')">3. INTEREST</button>
+          </div>
+        </div>
+
+        <!-- CHAT THREAD LOG -->
+        <div id="applicant-chat-log" style="flex: 1; background:#F8FAFC; border:1px solid var(--border-color); border-radius:8px; padding:0.65rem; overflow-y:auto; display:flex; flex-direction:column; gap:0.4rem; min-height: 100px;">
+          <div class="chat-bubble chat-bubble-applicant">
+            <strong>Candidate:</strong> Hello! I submitted my interview request and verified PDF resume for the Sales Manager opening. Excited to discuss next steps.
+            <div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Today, 10:15 AM</div>
+          </div>
+        </div>
+
+        <!-- SEND MESSAGE INPUT & ACTION -->
+        <div style="display:flex; gap:0.5rem; margin-top:0.2rem;">
+          <input type="text" id="ats-direct-msg-input" placeholder="Type direct reply to candidate..." onkeydown="if(event.key==='Enter') sendAtsDirectMessage()" style="flex:1; height:38px; font-size:0.78rem;">
+          <button class="btn-gold-action" style="height:38px; font-size:0.72rem; padding: 0 1rem;" onclick="sendAtsDirectMessage()">SEND MESSAGE</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 </div>
 
 
@@ -6968,166 +6929,159 @@ instagram: (document.getElementById('social-instagram') || document.getElementBy
 
 },
 
-createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString()
+  };
 
-};
+  try {
+    await fetch('/api/jobs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Portal': 'true' },
+      body: JSON.stringify(newJob)
+    });
+  } catch (e) {}
 
+  // Prevent duplicate: remove existing entry if any
+  activeJobs = activeJobs.filter(j => String(j.id) !== String(newJob.id));
 
+  const formattedJob = {
+    id: newJob.id,
+    jobTitle: newJob.jobTitle,
+    status: 'Active',
+    postedTime: 'Just Now',
+    channels: 'u-theJOBS, Email, Socials'
+  };
 
-try {
+  activeJobs.unshift(formattedJob);
 
-await fetch('/api/jobs', {
+  try {
+    localStorage.setItem('uthe_employer_jobs', JSON.stringify(activeJobs));
+  } catch (e) {}
 
-method: 'POST',
+  renderActiveJobsTable();
 
-headers: { 'Content-Type': 'application/json', 'X-Admin-Portal': 'true' },
-
-body: JSON.stringify(newJob)
-
-});
-
-} catch (e) {}
-
-
-
-activeJobs.unshift({
-
-id: newJob.id,
-
-jobTitle: newJob.jobTitle,
-
-status: 'Active',
-
-postedTime: 'Just Now',
-
-channels: 'u-theJOBS, Email, Socials'
-
-});
-
-renderActiveJobsTable();
-
-
-
-broadcastSyncEvent('JOB_PUBLISHED', { job: newJob });
-
-showCustomModalAlert('Position Published Live', `Your position "${newJob.jobTitle}" is live and shared to connected channels.`);
-
+  broadcastSyncEvent('JOB_PUBLISHED', { job: newJob, publisherId: (currentUser && (currentUser.id || currentUser.userId)) || 'local' });
+  showCustomModalAlert('Position Published Live', `Your position "${newJob.jobTitle}" is live and saved to your Active Listings.`);
 }
 
 window.publishJob = publishJobLive;
 
-
-
 function renderActiveJobsTable() {
+  const tbody = document.getElementById('card3-live-jobs-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
 
-const tbody = document.getElementById('card3-live-jobs-tbody');
-
-if (!tbody) return;
-
-tbody.innerHTML = '';
-
-
-
-activeJobs.forEach(job => {
-
-const tr = document.createElement('tr');
-
-tr.id = `job-row-${job.id}`;
-
-tr.innerHTML = `
-
-<td><strong>${job.jobTitle}</strong></td>
-
-<td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">${(job.status || 'ACTIVE').toUpperCase()}</span></td>
-
-<td style="color:var(--text-muted); font-size:0.72rem;">${job.postedTime || 'Just Now'}</td>
-
-<td style="font-size:0.7rem;">${job.channels || 'u-theJOBS, Email, Socials'}</td>
-
-<td style="text-align: right; white-space: nowrap;">
-
-<button class="btn-table-action btn-table-edit" data-action="edit" onclick="showCustomModalAlert('Edit Position', 'Opening editor for ${job.jobTitle}.')" data-tooltip="Edit job details">EDIT</button>
-
-<button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', '${job.jobTitle} posting paused.')" data-tooltip="Pause position">PAUSE</button>
-
-<button class="btn-table-action btn-table-del" onclick="deleteJob('${job.id}')" data-tooltip="Delete position">DELETE</button>
-
-</td>
-
-`;
-
-tbody.appendChild(tr);
-
-});
-
+  activeJobs.forEach(job => {
+    const tr = document.createElement('tr');
+    tr.id = `job-row-${job.id}`;
+    tr.innerHTML = `
+      <td><strong>${job.jobTitle}</strong></td>
+      <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">${(job.status || 'ACTIVE').toUpperCase()}</span></td>
+      <td style="color:var(--text-muted); font-size:0.72rem;">${job.postedTime || 'Just Now'}</td>
+      <td style="font-size:0.7rem;">${job.channels || 'u-theJOBS, Email, Socials'}</td>
+      <td style="text-align: right; white-space: nowrap;">
+        <button class="btn-table-action btn-table-edit" data-action="edit" onclick="showCustomModalAlert('Edit Position', 'Opening editor for ${job.jobTitle}.')" data-tooltip="Edit job details">EDIT</button>
+        <button class="btn-table-action" onclick="showCustomModalAlert('Position Paused', '${job.jobTitle} posting paused.')" data-tooltip="Pause position">PAUSE</button>
+        <button class="btn-table-action btn-table-del" onclick="deleteJob('${job.id}')" data-tooltip="Delete position">DELETE</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
+function loadSavedJobs() {
+  try {
+    const saved = localStorage.getItem('uthe_employer_jobs');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        activeJobs = parsed;
+        renderActiveJobsTable();
+      }
+    }
+  } catch (e) {}
 
+  fetch('/api/jobs', {
+    headers: { 'X-Admin-Portal': 'true' }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data && data.jobs && Array.isArray(data.jobs)) {
+      const myCompany = ((currentUser && currentUser.company) || (document.getElementById('prof-company') && document.getElementById('prof-company').value) || '').toLowerCase().trim();
+      const myEmail = ((currentUser && currentUser.email) || (document.getElementById('prof-email') && document.getElementById('prof-email').value) || '').toLowerCase().trim();
+
+      let matched = data.jobs;
+      if (myCompany || myEmail) {
+        matched = data.jobs.filter(j => 
+          (myCompany && j.company && j.company.toLowerCase().trim() === myCompany) ||
+          (myEmail && j.recruiterEmail && j.recruiterEmail.toLowerCase().trim() === myEmail)
+        );
+      }
+
+      if (matched.length > 0) {
+        const jobMap = new Map();
+        activeJobs.forEach(j => jobMap.set(String(j.id), j));
+        matched.forEach(j => {
+          if (!jobMap.has(String(j.id))) {
+            jobMap.set(String(j.id), {
+              id: j.id,
+              jobTitle: j.jobTitle,
+              status: j.status || 'Active',
+              postedTime: j.createdAt ? new Date(j.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently',
+              channels: j.channels || 'u-theJOBS, Email, Socials'
+            });
+          }
+        });
+        activeJobs = Array.from(jobMap.values());
+        try { localStorage.setItem('uthe_employer_jobs', JSON.stringify(activeJobs)); } catch (e) {}
+        renderActiveJobsTable();
+      }
+    }
+  })
+  .catch(() => {});
+}
+window.loadSavedJobs = loadSavedJobs;
 
 async function deleteJob(jobId) {
+  showCustomModalConfirm(
+    'PERMANENTLY DELETE LISTING',
+    `Are you sure you want to permanently delete position ${jobId}?`,
+    async () => {
+      try {
+        const token = localStorage.getItem('uthe_token') || localStorage.getItem('master_admin_token') || '';
+        const res = await fetch(`/api/jobs/${jobId}`, {
+          method: 'DELETE',
+          headers: {
+            'X-Admin-Portal': 'true',
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : ''
+          }
+        });
 
-showCustomModalConfirm(
+        activeJobs = activeJobs.filter(j => String(j.id) !== String(jobId));
+        try {
+          localStorage.setItem('uthe_employer_jobs', JSON.stringify(activeJobs));
+        } catch (e) {}
+        renderActiveJobsTable();
 
-'PERMANENTLY DELETE LISTING',
-
-`Are you sure you want to permanently delete position ${jobId}?`,
-
-async () => {
-
-try {
-
-const token = localStorage.getItem('uthe_token') || localStorage.getItem('master_admin_token') || '';
-
-const res = await fetch(`/api/jobs/${jobId}`, {
-
-method: 'DELETE',
-
-headers: {
-
-'X-Admin-Portal': 'true',
-
-'Content-Type': 'application/json',
-
-'Authorization': token ? `Bearer ${token}` : ''
-
-}
-
-});
-
-if (res.ok) {
-
-activeJobs = activeJobs.filter(j => String(j.id) !== String(jobId));
-
-renderActiveJobsTable();
-
-broadcastSyncEvent('JOB_DELETED', { jobId: jobId });
-
-showCustomModalAlert('Listing Removed', `Position ${jobId} was deleted.`);
-
-} else {
-
-activeJobs = activeJobs.filter(j => String(j.id) !== String(jobId));
-
-renderActiveJobsTable();
-
-showCustomModalAlert('Position Deleted', `Listing ${jobId} removed.`);
-
-}
-
-} catch (err) {
-
-showCustomModalAlert('Action Error', 'Could not process deletion request.');
-
-}
-
-}
-
-);
-
+        if (res.ok) {
+          broadcastSyncEvent('JOB_DELETED', { jobId: jobId });
+          showCustomModalAlert('Listing Removed', `Position ${jobId} was deleted.`);
+        } else {
+          showCustomModalAlert('Position Deleted', `Listing ${jobId} removed.`);
+        }
+      } catch (err) {
+        activeJobs = activeJobs.filter(j => String(j.id) !== String(jobId));
+        try {
+          localStorage.setItem('uthe_employer_jobs', JSON.stringify(activeJobs));
+        } catch (e) {}
+        renderActiveJobsTable();
+        showCustomModalAlert('Listing Removed', `Position ${jobId} removed.`);
+      }
+    }
+  );
 }
 
 window.deleteJob = deleteJob;
-
 window.renderActiveJobsTable = renderActiveJobsTable;
 
 
@@ -7340,192 +7294,138 @@ window.openApplicantResume = openApplicantResume;
 
 // 2. APPLICANT TRACKER & CANDIDATE CARD CLICK HANDLERS
 
+function renderRecruiterCandidateList() {
+  const listContainer = document.getElementById('recruiterCandidateList');
+  if (!listContainer) return;
+  listContainer.innerHTML = '';
+
+  const candKeys = Object.keys(CANDIDATES_DATA);
+  const countEl = document.getElementById('recruiter-cand-count');
+  if (countEl) countEl.textContent = `${candKeys.length} Applicant${candKeys.length === 1 ? '' : 's'}`;
+
+  candKeys.forEach(k => {
+    const cand = CANDIDATES_DATA[k];
+    const isActive = cand.id === activeCandidateId;
+    const card = document.createElement('div');
+    card.className = `recruiter-cand-card ${isActive ? 'active' : ''}`;
+    card.onclick = () => switchActiveCandidate(cand.id);
+    const dateStr = cand.appliedDate || cand.appliedAt || 'Just Now';
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-weight:800; font-size:0.75rem; color:#FEBA27;">${cand.name}</span>
+        <span style="font-size:0.6rem; color:#065F46; background:var(--status-mint-bg); padding:1px 4px; border-radius:3px; font-weight:800;">${cand.score || '92%'}</span>
+      </div>
+      <div style="font-size:0.68rem; color:#F8FAFC;">${cand.role}</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+        <span style="font-size:0.6rem; color:#94A3B8;">${cand.id}</span>
+        <span style="font-size:0.6rem; color:#D4AF37; font-weight:700;">${dateStr}</span>
+      </div>
+    `;
+    listContainer.appendChild(card);
+  });
+}
+window.renderRecruiterCandidateList = renderRecruiterCandidateList;
+
+window.switchActiveCandidate = function(candidateId) {
+  openCandidateReviewModal(candidateId);
+};
+
 window.openCandidateReviewModal = async function(candidateId) {
+  activeCandidateId = candidateId || Object.keys(CANDIDATES_DATA)[0] || 'APP-701';
 
-activeCandidateId = candidateId || 'APP-701';
+  const cand = CANDIDATES_DATA[activeCandidateId] || {
+    id: activeCandidateId,
+    name: 'Applicant Candidate',
+    role: 'Sales Manager',
+    email: 'applicant@example.com',
+    score: '92%',
+    stage: 'Applied',
+    resumeFile: `${(candidateId || 'Applicant').replace(/\s+/g, '_')}_Resume.pdf`
+  };
 
-const cand = CANDIDATES_DATA[activeCandidateId] || {
+  document.getElementById('cand-modal-name').textContent = cand.name.toUpperCase();
+  document.getElementById('cand-modal-score').textContent = `${cand.score} MATCH`;
+  document.getElementById('cand-modal-role').textContent = cand.role;
+  document.getElementById('cand-modal-email').textContent = cand.email;
+  document.getElementById('cand-modal-stage-select').value = cand.stage || 'Applied';
 
-id: activeCandidateId,
+  // Dynamic link binding in applicant review drawer
+  const resumeFileName = cand.resumeFile || `${cand.name.replace(/\s+/g, '_')}_Resume.pdf`;
+  const resumeContainer = document.getElementById('applicant-resume-container');
+  if (resumeContainer) {
+    resumeContainer.innerHTML = `
+      <a href="#" onclick="openApplicantResume('${cand.id || activeCandidateId}', '${cand.name}', '${resumeFileName}'); return false;" class="btn-resume-link" style="color:#0284C7; font-weight:700; text-decoration:none;">
+        📄 View ${cand.name.split(' ')[0]}'s Resume (.pdf)
+      </a>
+    `;
+  }
 
-name: 'Applicant Candidate',
+  renderRecruiterCandidateList();
 
-role: 'Sales Manager',
+  // Clear out any old messages from the chat view before displaying the selected candidate's thread
+  const chatLog = document.getElementById('applicant-chat-log');
+  if (chatLog) {
+    chatLog.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.75rem; padding:10px;">Loading private thread...</div>';
+  }
 
-email: 'applicant@example.com',
+  // Fetch and display messages strictly for that specific card's applicantId
+  try {
+    const res = await fetch(`/api/messages?applicantId=${encodeURIComponent(activeCandidateId)}`);
+    const data = await res.json();
+    if (chatLog) {
+      chatLog.innerHTML = '';
+      const rawList = data.messages || [];
+      const messages = rawList.filter(m => !m.applicantId || m.applicantId === activeCandidateId);
+      const displayList = (messages.length > 0) ? messages : [
+        {
+          applicantId: activeCandidateId,
+          senderRole: 'candidate',
+          senderName: cand.name || 'Candidate',
+          text: `Hello! I submitted my interview request and verified PDF resume for the ${cand.role} opening. Excited to discuss next steps.`,
+          timestamp: new Date().toISOString()
+        }
+      ];
 
-score: '92%',
+      displayList.forEach(m => {
+        const isRecruiter = m.senderRole === 'recruiter';
+        const bubble = document.createElement('div');
+        bubble.className = `chat-bubble ${isRecruiter ? 'chat-bubble-recruiter' : 'chat-bubble-applicant'}`;
+        bubble.innerHTML = `
+          <strong>${isRecruiter ? 'You (Recruiter)' : `${m.senderName || cand.name || 'Candidate'}`}:</strong> ${m.text}
+          <div style="font-size:0.6rem; color:${isRecruiter ? '#94A3B8' : '#64748B'}; margin-top:0.2rem;">
+            ${new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </div>
+        `;
+        chatLog.appendChild(bubble);
+      });
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+  } catch (e) {
+    if (chatLog) {
+      chatLog.innerHTML = `
+        <div class="chat-bubble chat-bubble-applicant">
+          <strong>${cand.name}:</strong> Hello! I submitted my interview request and verified PDF resume for the ${cand.role} opening. Excited to discuss next steps.
+          <div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Today, 10:15 AM</div>
+        </div>
+      `;
+    }
+  }
 
-stage: 'Applied',
-
-resumeFile: `${(candidateId || 'Applicant').replace(/\s+/g, '_')}_Resume.pdf`
-
+  document.getElementById('candidate-review-modal').style.display = 'flex';
 };
-
-
-
-document.getElementById('cand-modal-name').textContent = cand.name.toUpperCase();
-
-document.getElementById('cand-modal-score').textContent = `${cand.score} MATCH`;
-
-document.getElementById('cand-modal-role').textContent = cand.role;
-
-document.getElementById('cand-modal-email').textContent = cand.email;
-
-document.getElementById('cand-modal-stage-select').value = cand.stage || 'Applied';
-
-
-
-// Dynamic link binding in applicant review drawer
-
-const resumeFileName = cand.resumeFile || `${cand.name.replace(/\s+/g, '_')}_Resume.pdf`;
-
-const resumeContainer = document.getElementById('applicant-resume-container');
-
-if (resumeContainer) {
-
-resumeContainer.innerHTML = `
-
-<a href="#" onclick="openApplicantResume('${cand.id || activeCandidateId}', '${cand.name}', '${resumeFileName}'); return false;" class="btn-resume-link" style="color:#0284C7; font-weight:700; text-decoration:none;">
-
-📄 View ${cand.name.split(' ')[0]}'s Resume (.pdf)
-
-</a>
-
-`;
-
-}
-
-
-
-// Clear out any old messages from the chat view before displaying the selected candidate's thread
-
-const chatLog = document.getElementById('applicant-chat-log');
-
-if (chatLog) {
-
-chatLog.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.75rem; padding:10px;">Loading private thread...</div>';
-
-}
-
-
-
-// Fetch and display messages strictly for that specific card's applicantId
-
-try {
-
-const res = await fetch(`/api/messages?applicantId=${encodeURIComponent(activeCandidateId)}`);
-
-const data = await res.json();
-
-if (chatLog) {
-
-chatLog.innerHTML = '';
-
-const rawList = data.messages || [];
-
-const messages = rawList.filter(m => !m.applicantId || m.applicantId === activeCandidateId);
-
-const displayList = (messages.length > 0) ? messages : [
-
-{
-
-applicantId: activeCandidateId,
-
-senderRole: 'candidate',
-
-senderName: cand.name || 'Candidate',
-
-text: `Hello! I submitted my interview request and verified PDF resume for the ${cand.role} opening. Excited to discuss next steps.`,
-
-timestamp: new Date().toISOString()
-
-}
-
-];
-
-
-
-displayList.forEach(m => {
-
-const isRecruiter = m.senderRole === 'recruiter';
-
-const bubble = document.createElement('div');
-
-bubble.className = `chat-bubble ${isRecruiter ? 'chat-bubble-recruiter' : 'chat-bubble-applicant'}`;
-
-bubble.innerHTML = `
-
-<strong>${isRecruiter ? 'You (Recruiter)' : `${m.senderName || cand.name || 'Candidate'}`}:</strong> ${m.text}
-
-<div style="font-size:0.6rem; color:${isRecruiter ? '#94A3B8' : '#64748B'}; margin-top:0.2rem;">
-
-${new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-
-</div>
-
-`;
-
-chatLog.appendChild(bubble);
-
-});
-
-chatLog.scrollTop = chatLog.scrollHeight;
-
-}
-
-} catch (e) {
-
-if (chatLog) {
-
-chatLog.innerHTML = `
-
-<div class="chat-bubble chat-bubble-applicant">
-
-<strong>${cand.name}:</strong> Hello! I submitted my interview request and verified PDF resume for the ${cand.role} opening. Excited to discuss next steps.
-
-<div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Today, 10:15 AM</div>
-
-</div>
-
-`;
-
-}
-
-}
-
-
-
-document.getElementById('candidate-review-modal').style.display = 'flex';
-
-};
-
-
 
 window.updateCandidateStageFromModal = function() {
-
-const newStage = document.getElementById('cand-modal-stage-select').value;
-
-const card = document.getElementById(`card-${activeCandidateId.replace('APP-', '')}`) || document.querySelector(`[data-id="${activeCandidateId}"]`);
-
-if (card) {
-
-const targetContainer = document.getElementById(`cards-${newStage.toLowerCase()}`) || document.getElementById(`col-${newStage.toLowerCase()}`);
-
-if (targetContainer) targetContainer.appendChild(card);
-
-updateKanbanCounters();
-
-}
-
-if (CANDIDATES_DATA[activeCandidateId]) {
-
-CANDIDATES_DATA[activeCandidateId].stage = newStage;
-
-}
-
-showCustomModalAlert('Pipeline Stage Updated', `${CANDIDATES_DATA[activeCandidateId]?.name || 'Candidate'} moved to ${newStage}.`);
-
+  const newStage = document.getElementById('cand-modal-stage-select').value;
+  const card = document.getElementById(`card-${activeCandidateId.replace('APP-', '')}`) || document.querySelector(`[data-id="${activeCandidateId}"]`);
+  if (card) {
+    const targetContainer = document.getElementById(`cards-${newStage.toLowerCase()}`) || document.getElementById(`col-${newStage.toLowerCase()}`);
+    if (targetContainer) targetContainer.appendChild(card);
+    updateKanbanCounters();
+  }
+  if (CANDIDATES_DATA[activeCandidateId]) {
+    CANDIDATES_DATA[activeCandidateId].stage = newStage;
+  }
+  showCustomModalAlert('Pipeline Stage Updated', `${CANDIDATES_DATA[activeCandidateId]?.name || 'Candidate'} moved to ${newStage}.`);
 };
 
 window.confirmDeleteCandidate = function(candidateId, event) {
@@ -7544,6 +7444,7 @@ window.deleteCandidateCard = function(candidateId) {
   if (typeof CANDIDATES_DATA !== 'undefined' && CANDIDATES_DATA[candidateId]) {
     delete CANDIDATES_DATA[candidateId];
   }
+  renderRecruiterCandidateList();
   updateKanbanCounters();
   showCustomModalAlert('Candidate Removed', 'The candidate record has been removed from your tracker.');
 };
@@ -8538,18 +8439,30 @@ function handleSyncEvent(data) {
       </div>
     `;
 
-    col.appendChild(card);
+    // Ingest at the very TOP of the Applied card (most recent first)
+    if (col.firstChild) {
+      col.insertBefore(card, col.firstChild);
+    } else {
+      col.appendChild(card);
+    }
 
-    CANDIDATES_DATA[data.applicant.id] = {
+    const newCandidateRecord = {
       id: data.applicant.id,
       name: data.applicant.name,
       role: data.applicant.jobTitle,
       email: data.applicant.email || 'applicant@example.com',
       score: `${data.applicant.score || 92}%`,
       stage: 'Applied',
+      appliedDate: dateStr,
       resumeFile: data.applicant.resumeFile || `${data.applicant.name.replace(/\s+/g, '_')}_Resume.pdf`
     };
 
+    // Prepend to CANDIDATES_DATA store (most recent first)
+    const updatedCandidates = { [data.applicant.id]: newCandidateRecord, ...CANDIDATES_DATA };
+    for (const key in CANDIDATES_DATA) delete CANDIDATES_DATA[key];
+    Object.assign(CANDIDATES_DATA, updatedCandidates);
+
+    renderRecruiterCandidateList();
     updateKanbanCounters();
     setupMobileTouchAts();
 
@@ -8592,29 +8505,25 @@ function handleSyncEvent(data) {
 } else if (data.type === 'JOB_DELETED' && data.jobId) {
 
 activeJobs = activeJobs.filter(j => String(j.id) !== String(data.jobId));
-
+try { localStorage.setItem('uthe_employer_jobs', JSON.stringify(activeJobs)); } catch (e) {}
 renderActiveJobsTable();
 
 } else if (data.type === 'JOB_PUBLISHED' && data.job) {
 
 if (!activeJobs.some(j => String(j.id) === String(data.job.id))) {
-
-activeJobs.unshift({
-
-id: data.job.id,
-
-jobTitle: data.job.jobTitle,
-
-status: 'Active',
-
-postedTime: 'Just Now',
-
-channels: 'u-theJOBS, Email, Socials'
-
-});
-
-renderActiveJobsTable();
-
+  const myCompany = ((currentUser && currentUser.company) || (document.getElementById('prof-company') && document.getElementById('prof-company').value) || '').toLowerCase().trim();
+  const jobComp = (data.job.company || '').toLowerCase().trim();
+  if (!myCompany || !jobComp || myCompany === jobComp) {
+    activeJobs.unshift({
+      id: data.job.id,
+      jobTitle: data.job.jobTitle,
+      status: 'Active',
+      postedTime: 'Just Now',
+      channels: 'u-theJOBS, Email, Socials'
+    });
+    try { localStorage.setItem('uthe_employer_jobs', JSON.stringify(activeJobs)); } catch (e) {}
+    renderActiveJobsTable();
+  }
 }
 
 } else if (data.type === 'CMS_CONFIG_UPDATED' || data.type === 'cms_update' || data.event === 'cms_update') {
@@ -8992,6 +8901,7 @@ closeCustomConfirm();
   loadSavedLogo();
   loadSavedEmployerSession();
   loadSavedEmployerProfile();
+  loadSavedJobs();
   setupMobileTouchAts();
   initDualSync();
   loadInitialCmsConfig();
