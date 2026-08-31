@@ -6136,12 +6136,12 @@ VERIFIED EMPLOYER
       <!-- TOP ROW: DUAL SEARCH INPUTS + ACTION BUTTONS -->
       <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center;">
         <div style="flex: 2; min-width: 240px; position: relative;">
-          <input type="text" id="resume-search-keyword" placeholder="🔍 Search Job Title, Key Skills, or Keywords (e.g. Sales Manager, React, Retail)..." oninput="filterResumes()" style="width: 100%; height: 40px; padding: 0 0.85rem 0 2.2rem; font-size: 0.82rem; border: 1.5px solid var(--border-color); border-radius: 6px; background: #FFFFFF; color: #0F172A; font-weight: 600;" />
+          <input type="text" id="resume-search-keyword" placeholder="Search Job Title, Key Skills, or Keywords (e.g. Sales Manager, React, Retail)..." oninput="filterResumes()" style="width: 100%; height: 40px; padding: 0 0.85rem 0 2.2rem; font-size: 0.82rem; border: 1.5px solid var(--border-color); border-radius: 6px; background: #FFFFFF; color: #0F172A; font-weight: 600;" />
           <span style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 0.85rem; color: #94A3B8; pointer-events: none;">🔍</span>
         </div>
 
         <div style="flex: 1.2; min-width: 180px; position: relative;">
-          <input type="text" id="resume-search-location" placeholder="📍 Location or 'Remote'..." oninput="filterResumes()" style="width: 100%; height: 40px; padding: 0 0.85rem 0 2rem; font-size: 0.82rem; border: 1.5px solid var(--border-color); border-radius: 6px; background: #FFFFFF; color: #0F172A; font-weight: 600;" />
+          <input type="text" id="resume-search-location" placeholder="Location or 'Remote'..." oninput="filterResumes()" style="width: 100%; height: 40px; padding: 0 0.85rem 0 2rem; font-size: 0.82rem; border: 1.5px solid var(--border-color); border-radius: 6px; background: #FFFFFF; color: #0F172A; font-weight: 600;" />
           <span style="position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%); font-size: 0.85rem; color: #94A3B8; pointer-events: none;">📍</span>
         </div>
 
@@ -6257,6 +6257,14 @@ VERIFIED EMPLOYER
           </div>
         </div>
 
+        <!-- CHAT LOG -->
+        <div id="applicant-chat-log" style="flex:1; min-height:140px; background:#FFFFFF; border:1px solid var(--border-color); border-radius:8px; padding:0.75rem; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;">
+          <div class="chat-bubble chat-bubble-applicant">
+            <strong>Candidate:</strong> Hello! I submitted my interview request and verified PDF resume for the Sales Manager opening. Excited to discuss next steps.
+            <div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Today, 10:15 AM</div>
+          </div>
+        </div>
+
         <!-- QUICK RESPONSE TEMPLATES -->
         <div>
           <div style="font-size:10px; font-weight:900; color:#64748b; letter-spacing:0.08em; margin-bottom:6px;">1-CLICK EXECUTIVE TEMPLATES:</div>
@@ -6265,14 +6273,6 @@ VERIFIED EMPLOYER
             <button class="template-chip" onclick="applyAtsTemplate('invite')">2. INVITE</button>
             <button class="template-chip" onclick="applyAtsTemplate('interest')">3. INTEREST</button>
             <button class="template-chip" onclick="openRecruiterScheduleModal()" style="border-color:#FEBA27; color:#FEBA27; background:rgba(254,186,39,0.08); display:inline-flex; align-items:center; gap:4px; font-weight:800;" data-tooltip="Propose specific interview date and time">📅 Propose Date & Time</button>
-          </div>
-        </div>
-
-        <!-- CHAT LOG -->
-        <div id="applicant-chat-log" style="flex:1; min-height:140px; background:#FFFFFF; border:1px solid var(--border-color); border-radius:8px; padding:0.75rem; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;">
-          <div class="chat-bubble chat-bubble-applicant">
-            <strong>Candidate:</strong> Hello! I submitted my interview request and verified PDF resume for the Sales Manager opening. Excited to discuss next steps.
-            <div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Today, 10:15 AM</div>
           </div>
         </div>
       </div>

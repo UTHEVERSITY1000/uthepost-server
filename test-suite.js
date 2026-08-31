@@ -3152,6 +3152,15 @@ async function runTests() {
     assert(adminHtml.includes('openImportGoogleSheetsModal()') && adminHtml.includes('modal-import-sheets'), 'admin.html includes Import Google Sheets action button and modal');
     assert(adminHtml.includes('loadAdminResumes') && adminHtml.includes('admin-resumes-tbody'), 'admin.html implements admin resume table rendering and data fetch');
 
+    // 4. UI Cleanliness & Layout Ordering: Single search icon & chat window above templates
+    assert(!recruiterHtml.includes('placeholder="🔍') && !recruiterHtml.includes('placeholder="📍'), 'recruiter.html deletes duplicate search and location emoji icons from input placeholders');
+    const chatLogIdx = recruiterHtml.indexOf('id="applicant-chat-log"');
+    const templatesIdx = recruiterHtml.indexOf('1-CLICK EXECUTIVE TEMPLATES:');
+    assert(chatLogIdx !== -1 && templatesIdx !== -1 && chatLogIdx < templatesIdx, 'recruiter.html restores conversation window directly above 1-click executive templates');
+    const candChatIdx = candContent.indexOf('id="chatMessagesContainer"');
+    const candTemplatesIdx = candContent.indexOf('1-CLICK EXECUTIVE RESPONSES:');
+    assert(candChatIdx !== -1 && candTemplatesIdx !== -1 && candChatIdx < candTemplatesIdx, 'candidate.html maintains conversation window directly above 1-click executive responses');
+
   } catch (err) {
     assert(false, `Group 85 failed: ${err.message}`);
   }
