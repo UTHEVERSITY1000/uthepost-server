@@ -2961,6 +2961,32 @@ async function runTests() {
     assert(false, `Group 79 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 80: CANDIDATE CARD BLUE DATES, FULL MODAL VISIBILITY & CANDIDATE RECRUITER TRASH BIN
+  // ================================================================
+  console.log('\n--- GROUP 80: CANDIDATE CARD BLUE DATES, FULL MODAL VISIBILITY & CANDIDATE RECRUITER TRASH BIN ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Candidate card applied date in signature blue (#0284C7)
+    assert(recruiterHtml.includes('.cand-applied-date') && recruiterHtml.includes('#0284C7'), 'recruiter.html styles .cand-applied-date with signature blue #0284C7');
+
+    // 2. Responsive modal card visibility styling (prevent 40% cut-off)
+    assert(recruiterHtml.includes('#candidate-review-modal .modal-card'), 'recruiter.html defines responsive #candidate-review-modal styling');
+    assert(recruiterHtml.includes('@media (max-width: 768px)') && recruiterHtml.includes('#candidate-review-modal .conversation-sidebar'), 'recruiter.html defines mobile-responsive stacked layout for candidate review drawer');
+
+    // 3. Purged admin shortcut
+    assert(!recruiterHtml.includes('window.handleAdminShortcut') && !recruiterHtml.includes('Ctrl + Shift + A'), 'recruiter.html purges secret admin shortcuts');
+
+    // 4. Candidate recruiter thread trash bin and deletion
+    assert(candidateHtml.includes('btn-thread-trash'), 'candidate.html includes .btn-thread-trash on recruiter cards');
+    assert(candidateHtml.includes('confirmDeleteRecruiterThread') && candidateHtml.includes('deleteRecruiterThread'), 'candidate.html implements confirmDeleteRecruiterThread and deleteRecruiterThread');
+
+  } catch (err) {
+    assert(false, `Group 80 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

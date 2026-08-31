@@ -2379,7 +2379,6 @@
         initialMessage: 'Greetings Marcus, we received your application for Nordic Outfitters. We are actively interviewing candidates this week!'
       }
     };
-
     function renderRecruiterCards() {
       const listContainer = document.getElementById('recruiterThreadList');
       if (!listContainer) return;
@@ -2391,13 +2390,50 @@
         card.className = `recruiter-thread-card ${isActive ? 'active' : ''}`;
         card.onclick = () => switchActiveThread(thread.id);
         card.innerHTML = `
-          <div class="recruiter-card-company">${thread.company}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="recruiter-card-company">${thread.company}</div>
+            <button class="btn-thread-trash" onclick="confirmDeleteRecruiterThread('${thread.id}', event)" data-tooltip="Delete Conversation" style="background:none; border:none; cursor:pointer; color:#EF4444; font-size:0.85rem; padding:0 2px; line-height:1;">🗑️</button>
+          </div>
           <div class="recruiter-card-recruiter">${thread.recruiterName}</div>
           <div class="recruiter-card-role">${thread.jobTitle} • <span style="color:#D4AF37; font-weight:800;">${thread.id}</span></div>
         `;
         listContainer.appendChild(card);
       });
     }
+
+    window.confirmDeleteRecruiterThread = function(threadId, event) {
+      if (event) event.stopPropagation();
+      const thread = candidateThreads[threadId];
+      const compName = thread ? thread.company : 'this employer';
+      showCustomModalConfirm('DELETE CONVERSATION', `Are you sure you want to remove your conversation with ${compName}?`, () => {
+        deleteRecruiterThread(threadId);
+      });
+    };
+
+    window.deleteRecruiterThread = function(threadId) {
+      delete candidateThreads[threadId];
+      try {
+        const saved = localStorage.getItem('uthe_candidate_applications');
+        if (saved) {
+          let list = JSON.parse(saved);
+          list = list.filter(a => a.id !== threadId);
+          localStorage.setItem('uthe_candidate_applications', JSON.stringify(list));
+        }
+      } catch (e) {}
+
+      const remainingKeys = Object.keys(candidateThreads);
+      if (remainingKeys.length > 0) {
+        switchActiveThread(remainingKeys[0]);
+      } else {
+        activeThreadId = null;
+        const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
+        if (container) container.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.75rem; padding:20px;">No active recruiter conversations.</div>';
+        const titleEl = document.getElementById('activeRecruiterTitle');
+        if (titleEl) titleEl.textContent = 'NO CONVERSATIONS';
+      }
+      renderRecruiterCards();
+      showCustomModalAlert('Conversation Removed', 'The recruiter conversation card has been removed.');
+    };
 
     window.switchActiveThread = function(threadId) {
       if (!candidateThreads[threadId]) return;

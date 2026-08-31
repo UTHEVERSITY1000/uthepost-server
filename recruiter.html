@@ -2500,6 +2500,52 @@ white-space: nowrap;
   box-shadow: 0 0 8px rgba(254, 186, 39, 0.3);
 }
 
+.cand-applied-date {
+  font-size: 0.65rem;
+  color: #0284C7 !important;
+  font-weight: 800;
+}
+
+#candidate-review-modal .modal-card {
+  width: 860px;
+  max-width: 95vw;
+  height: 580px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  #candidate-review-modal {
+    padding: 0.5rem;
+  }
+  #candidate-review-modal .modal-card {
+    flex-direction: column !important;
+    width: 96vw !important;
+    max-width: 96vw !important;
+    height: auto !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    border-radius: 8px !important;
+  }
+  #candidate-review-modal .conversation-sidebar {
+    width: 100% !important;
+    max-height: 160px !important;
+    border-right: none !important;
+    border-bottom: 1.5px solid #FEBA27 !important;
+    padding: 10px !important;
+  }
+  #candidate-review-modal .chat-panel {
+    width: 100% !important;
+    padding: 10px !important;
+    overflow-y: visible !important;
+  }
+}
+
 /* MODAL OVERLAYS */
 
 .modal-overlay {
@@ -5314,7 +5360,7 @@ RESET
 
           <div class="candidate-card" id="card-701" draggable="true" data-id="APP-701" onclick="openCandidateReviewModal('APP-701')">
             <div class="cand-grab-handle" style="display: flex; justify-content: space-between; align-items: center;">
-              <span class="cand-applied-date" style="font-size: 0.65rem; color: #D4AF37; font-weight: 800;">Aug 28, 2026 • 9:30 AM</span>
+              <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">Aug 31, 2026 • 9:30 AM</span>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <button class="btn-card-trash" onclick="confirmDeleteCandidate('APP-701', event)" data-tooltip="Delete Candidate" style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 0.85rem; padding: 0 4px; line-height: 1;">🗑️</button>
                 <span style="color: var(--text-muted);">:::</span>
@@ -5339,7 +5385,7 @@ RESET
         <div class="kanban-cards-area" id="cards-screened">
           <div class="candidate-card" id="card-702" draggable="true" data-id="APP-702" onclick="openCandidateReviewModal('APP-702')">
             <div class="cand-grab-handle" style="display: flex; justify-content: space-between; align-items: center;">
-              <span class="cand-applied-date" style="font-size: 0.65rem; color: #D4AF37; font-weight: 800;">Aug 27, 2026 • 2:15 PM</span>
+              <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">Aug 30, 2026 • 2:15 PM</span>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <button class="btn-card-trash" onclick="confirmDeleteCandidate('APP-702', event)" data-tooltip="Delete Candidate" style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 0.85rem; padding: 0 4px; line-height: 1;">🗑️</button>
                 <span style="color: var(--text-muted);">:::</span>
@@ -5364,7 +5410,7 @@ RESET
         <div class="kanban-cards-area" id="cards-interviewing">
           <div class="candidate-card" id="card-703" draggable="true" data-id="APP-703" onclick="openCandidateReviewModal('APP-703')">
             <div class="cand-grab-handle" style="display: flex; justify-content: space-between; align-items: center;">
-              <span class="cand-applied-date" style="font-size: 0.65rem; color: #D4AF37; font-weight: 800;">Aug 26, 2026 • 11:45 AM</span>
+              <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">Aug 29, 2026 • 11:45 AM</span>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <button class="btn-card-trash" onclick="confirmDeleteCandidate('APP-703', event)" data-tooltip="Delete Candidate" style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 0.85rem; padding: 0 4px; line-height: 1;">🗑️</button>
                 <span style="color: var(--text-muted);">:::</span>
@@ -5377,7 +5423,8 @@ RESET
               <span style="font-size:0.65rem; color:var(--text-muted); font-weight:700;">Click to Review & Chat →</span>
             </div>
           </div>
-
+        </div>
+      </div>
 </div>
 
 </div>
@@ -6481,15 +6528,10 @@ let activeJobs = [
 
 
 // Candidate Database Store for Interactive Modal
-
 const CANDIDATES_DATA = {
-
-'APP-701': { id: 'APP-701', name: 'Marcus Vance', role: 'Sales Manager', email: 'marcus.vance@example.com', score: '94%', stage: 'Applied', resumeFile: 'Marcus_Vance_Resume_2026.pdf' },
-
-'APP-702': { id: 'APP-702', name: 'Elena Rostova', role: 'Retail Sales Associate', email: 'elena.rostova@example.com', score: '88%', stage: 'Screened', resumeFile: 'Elena_Rostova_Resume.pdf' },
-
-'APP-703': { id: 'APP-703', name: 'David K. Mercer', role: 'Store Director', email: 'david.mercer@example.com', score: '97%', stage: 'Interviewing', resumeFile: 'David_K_Mercer_Resume.pdf' }
-
+  'APP-701': { id: 'APP-701', name: 'Marcus Vance', role: 'Sales Manager', email: 'marcus.vance@example.com', score: '94%', stage: 'Applied', appliedDate: 'Aug 31, 2026 • 9:30 AM', resumeFile: 'Marcus_Vance_Resume_2026.pdf' },
+  'APP-702': { id: 'APP-702', name: 'Elena Rostova', role: 'Retail Sales Associate', email: 'elena.rostova@example.com', score: '88%', stage: 'Screened', appliedDate: 'Aug 30, 2026 • 2:15 PM', resumeFile: 'Elena_Rostova_Resume.pdf' },
+  'APP-703': { id: 'APP-703', name: 'David K. Mercer', role: 'Store Director', email: 'david.mercer@example.com', score: '97%', stage: 'Interviewing', appliedDate: 'Aug 29, 2026 • 11:45 AM', resumeFile: 'David_K_Mercer_Resume.pdf' }
 };
 
 
@@ -7318,7 +7360,7 @@ function renderRecruiterCandidateList() {
       <div style="font-size:0.68rem; color:#F8FAFC;">${cand.role}</div>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
         <span style="font-size:0.6rem; color:#94A3B8;">${cand.id}</span>
-        <span style="font-size:0.6rem; color:#D4AF37; font-weight:700;">${dateStr}</span>
+        <span style="font-size:0.6rem; color:#0284C7; font-weight:700;">${dateStr}</span>
       </div>
     `;
     listContainer.appendChild(card);
@@ -8425,7 +8467,7 @@ function handleSyncEvent(data) {
 
     card.innerHTML = `
       <div class="cand-grab-handle" style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="cand-applied-date" style="font-size: 0.65rem; color: #D4AF37; font-weight: 800;">${dateStr}</span>
+        <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">${dateStr}</span>
         <div style="display: flex; align-items: center; gap: 6px;">
           <button class="btn-card-trash" onclick="confirmDeleteCandidate('${data.applicant.id}', event)" data-tooltip="Delete Candidate" style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 0.85rem; padding: 0 4px; line-height: 1;">🗑️</button>
           <span style="color: var(--text-muted);">:::</span>
@@ -8805,30 +8847,6 @@ await loadInitialCmsConfig();
 }
 
 }, 3000);
-
-
-
-// Admin Shortcut Handler (Ctrl + Shift + A)
-
-window.handleAdminShortcut = function() {
-
-window.location.href = '/admin.html';
-
-};
-
-
-
-document.addEventListener('keydown', (e) => {
-
-if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-
-e.preventDefault();
-
-handleAdminShortcut();
-
-}
-
-});
 
 
 
