@@ -2781,6 +2781,31 @@ async function runTests() {
     assert(false, `Group 72 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 73: MY PROFILE (TAB 5) PERSISTENT STORAGE & AUTO-RESTORE
+  // ================================================================
+  console.log('\n--- GROUP 73: MY PROFILE (TAB 5) PERSISTENT STORAGE & AUTO-RESTORE ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+
+    // 1. saveEmployerProfile captures all 5 fields into localStorage
+    assert(recruiterHtml.includes('prof-company') && recruiterHtml.includes('prof-name') && recruiterHtml.includes('prof-email') && recruiterHtml.includes('prof-phone') && recruiterHtml.includes('prof-bio'), 'recruiter.html binds all 5 profile fields');
+    assert(recruiterHtml.includes("localStorage.setItem('uthe_employer_profile'") || recruiterHtml.includes('localStorage.setItem("uthe_employer_profile"'), 'recruiter.html saves profile to persistent localStorage');
+
+    // 2. loadSavedEmployerProfile implemented and called on DOMContentLoaded
+    assert(recruiterHtml.includes('loadSavedEmployerProfile') && recruiterHtml.includes('loadSavedEmployerProfile();'), 'recruiter.html implements and calls loadSavedEmployerProfile on initialization');
+
+    // 3. Signature card modal alert used instead of native alert
+    assert(recruiterHtml.includes("showCustomModalAlert('Profile Saved'") && !recruiterHtml.includes("alert('Profile Saved'"), 'recruiter.html uses signature card alert on profile save');
+
+    // 4. Server PUT /api/auth/profile handles profile persistence with email
+    assert(serverJs.includes("pathname === '/api/auth/profile' && req.method === 'PUT'") && serverJs.includes('user.email = body.email'), 'server.js supports PUT /api/auth/profile with email update');
+
+  } catch (err) {
+    assert(false, `Group 73 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

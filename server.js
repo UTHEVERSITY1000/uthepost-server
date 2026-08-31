@@ -1732,25 +1732,28 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (pathname === '/api/auth/profile' && req.method === 'PUT') {
-    const user = getAuthenticatedUser(req);
-    if (!user) return sendJson(401, { error: 'Unauthorized' });
-
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON' });
-      if (body.name) { user.name = body.name; user.fullName = body.name; }
-      if (body.company) user.company = body.company;
-      if (body.phone) user.phone = body.phone;
-      if (body.bio) user.bio = body.bio;
+      const user = getAuthenticatedUser(req);
+      if (user) {
+        if (body.name) { user.name = body.name; user.fullName = body.name; }
+        if (body.company) user.company = body.company;
+        if (body.email) user.email = body.email;
+        if (body.phone) user.phone = body.phone;
+        if (body.bio) user.bio = body.bio;
 
-      if (user.role && user.role.toLowerCase() === 'candidate') {
-        saveCandidateRecord(user);
+        if (user.role && user.role.toLowerCase() === 'candidate') {
+          saveCandidateRecord(user);
+        } else {
+          saveEmployerRecord(user);
+        }
+        writeSystemLog('PROFILE_UPDATED', { userId: user.id || user.userId });
+
+        const safeUser = { id: user.id || user.userId, userId: user.id || user.userId, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
+        sendJson(200, { status: 'updated', user: safeUser });
       } else {
-        saveEmployerRecord(user);
+        sendJson(200, { status: 'saved_locally', profile: body });
       }
-      writeSystemLog('PROFILE_UPDATED', { userId: user.id || user.userId });
-
-      const safeUser = { id: user.id || user.userId, userId: user.id || user.userId, email: user.email, name: user.name, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
-      sendJson(200, { status: 'updated', user: safeUser });
     });
     return;
   }

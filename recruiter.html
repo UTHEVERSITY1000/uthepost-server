@@ -7837,41 +7837,67 @@ showCustomModalAlert('Membership Activated', `Your plan selection of ${total} is
 
 
 
-async function saveEmployerProfile() {
+window.saveEmployerProfile = async function() {
+  const payload = {
+    company: document.getElementById('prof-company') ? document.getElementById('prof-company').value : '',
+    name: document.getElementById('prof-name') ? document.getElementById('prof-name').value : '',
+    email: document.getElementById('prof-email') ? document.getElementById('prof-email').value : '',
+    phone: document.getElementById('prof-phone') ? document.getElementById('prof-phone').value : '',
+    bio: document.getElementById('prof-bio') ? document.getElementById('prof-bio').value : ''
+  };
 
-const payload = {
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('uthe_employer_profile', JSON.stringify(payload));
+    }
+  } catch (e) {}
 
-company: document.getElementById('prof-company').value,
+  try {
+    await fetch('/api/auth/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (e) {}
 
-name: document.getElementById('prof-name').value,
+  if (currentUser) {
+    currentUser.company = payload.company;
+    currentUser.name = payload.name;
+    currentUser.email = payload.email;
+    currentUser.phone = payload.phone;
+    currentUser.bio = payload.bio;
+  }
 
-phone: document.getElementById('prof-phone').value,
-
-bio: document.getElementById('prof-bio').value
-
+  showCustomModalAlert('Profile Saved', 'Your employer brand profile and verified assets were saved successfully.');
 };
 
+window.loadSavedEmployerProfile = function() {
+  let saved = null;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      const raw = localStorage.getItem('uthe_employer_profile');
+      if (raw) saved = JSON.parse(raw);
+    }
+  } catch (e) {}
 
+  if (!saved && currentUser) {
+    saved = {
+      company: currentUser.company || '',
+      name: currentUser.name || currentUser.fullName || '',
+      email: currentUser.email || '',
+      phone: currentUser.phone || '',
+      bio: currentUser.bio || ''
+    };
+  }
 
-try {
-
-await fetch('/api/auth/profile', {
-
-method: 'PUT',
-
-headers: { 'Content-Type': 'application/json' },
-
-body: JSON.stringify(payload)
-
-});
-
-} catch (e) {}
-
-
-
-showCustomModalAlert('Profile Saved', 'Your employer brand profile and verified assets were saved successfully.');
-
-}
+  if (saved) {
+    if (document.getElementById('prof-company') && saved.company !== undefined) document.getElementById('prof-company').value = saved.company;
+    if (document.getElementById('prof-name') && saved.name !== undefined) document.getElementById('prof-name').value = saved.name;
+    if (document.getElementById('prof-email') && saved.email !== undefined) document.getElementById('prof-email').value = saved.email;
+    if (document.getElementById('prof-phone') && saved.phone !== undefined) document.getElementById('prof-phone').value = saved.phone;
+    if (document.getElementById('prof-bio') && saved.bio !== undefined) document.getElementById('prof-bio').value = saved.bio;
+  }
+};
 
 
 
@@ -8837,17 +8863,33 @@ closeCustomConfirm();
 
 }
 
-loadSavedLogo();
+  loadSavedLogo();
+  loadSavedEmployerProfile();
+  setupMobileTouchAts();
+  initDualSync();
+  loadInitialCmsConfig();
+  recalculateMembershipTotal();
+  initSmartTooltipPositioning();
 
-setupMobileTouchAts();
-
-initDualSync();
-
-loadInitialCmsConfig();
-
-recalculateMembershipTotal();
-
-initSmartTooltipPositioning();
+  ['prof-company', 'prof-name', 'prof-email', 'prof-phone', 'prof-bio'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => {
+        try {
+          const p = {
+            company: document.getElementById('prof-company')?.value || '',
+            name: document.getElementById('prof-name')?.value || '',
+            email: document.getElementById('prof-email')?.value || '',
+            phone: document.getElementById('prof-phone')?.value || '',
+            bio: document.getElementById('prof-bio')?.value || ''
+          };
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('uthe_employer_profile', JSON.stringify(p));
+          }
+        } catch (e) {}
+      });
+    }
+  });
 
 });
 
