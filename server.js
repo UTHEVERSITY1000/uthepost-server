@@ -2609,6 +2609,33 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if (pathname === '/api/messages' && req.method === 'DELETE') {
+    const applicantId = parsedUrl.searchParams.get('applicantId');
+    const msgId = parsedUrl.searchParams.get('id');
+    if (applicantId) {
+      const remaining = globalMessageStore.filter(m => m.applicantId !== applicantId);
+      globalMessageStore.length = 0;
+      globalMessageStore.push(...remaining);
+      try {
+        if (fs.existsSync(DIRS.messages)) {
+          const files = fs.readdirSync(DIRS.messages).filter(f => f.startsWith('thread_') && f.endsWith('.json'));
+          files.forEach(f => {
+            try {
+              const fullPath = path.join(DIRS.messages, f);
+              const m = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+              if (m && m.applicantId === applicantId) fs.unlinkSync(fullPath);
+            } catch (e) {}
+          });
+        }
+      } catch (e) {}
+    } else if (msgId) {
+      const idx = globalMessageStore.findIndex(m => m.id === msgId);
+      if (idx !== -1) globalMessageStore.splice(idx, 1);
+      deleteMessageRecord(msgId);
+    }
+    return sendJson(200, { ok: true, status: 'deleted' });
+  }
+
   // ----------------------------------------------------
   // APPLICANTS MANAGEMENT REST ENDPOINTS (Live Dual-Sync)
   // ----------------------------------------------------
@@ -2683,6 +2710,37 @@ const server = http.createServer(async (req, res) => {
       sendJson(201, { ok: true, status: 'submitted', applicant: applicantRecord });
     });
     return;
+  }
+
+  if (pathname === '/api/applicants' && req.method === 'DELETE') {
+    const appId = parsedUrl.searchParams.get('id');
+    if (appId) {
+      const idx = applicantsStore.findIndex(a => a.id === appId);
+      if (idx !== -1) applicantsStore.splice(idx, 1);
+      deleteApplicantRecord(appId);
+
+      // Also clean up messages for this applicant
+      const remainingMsgs = globalMessageStore.filter(m => m.applicantId !== appId);
+      globalMessageStore.length = 0;
+      globalMessageStore.push(...remainingMsgs);
+      try {
+        if (fs.existsSync(DIRS.messages)) {
+          const files = fs.readdirSync(DIRS.messages).filter(f => f.startsWith('thread_') && f.endsWith('.json'));
+          files.forEach(f => {
+            try {
+              const fullPath = path.join(DIRS.messages, f);
+              const m = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+              if (m && m.applicantId === appId) fs.unlinkSync(fullPath);
+            } catch (e) {}
+          });
+        }
+      } catch (e) {}
+
+      broadcastWebSocketEvent('APPLICANT_DELETED', { applicantId: appId });
+      writeSystemLog('APPLICANT_DELETED', { applicantId: appId });
+      return sendJson(200, { ok: true, status: 'deleted', deletedId: appId });
+    }
+    return sendJson(400, { error: 'Missing applicant ID parameter.' });
   }
 
   // ----------------------------------------------------

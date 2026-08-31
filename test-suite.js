@@ -3069,6 +3069,33 @@ async function runTests() {
     assert(false, `Group 83 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 84: PERMANENT DELETION PERSISTENCE & EXECUTIVE INTERVIEW CALENDAR/TIME SELECTOR
+  // ================================================================
+  console.log('\n--- GROUP 84: PERMANENT DELETION PERSISTENCE & EXECUTIVE INTERVIEW CALENDAR/TIME SELECTOR ---');
+  try {
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Server-side DELETE routes for applicants and messages
+    assert(serverJs.includes("pathname === '/api/applicants'") && serverJs.includes("req.method === 'DELETE'"), 'server.js defines DELETE /api/applicants endpoint');
+    assert(serverJs.includes("pathname === '/api/messages'") && serverJs.includes("req.method === 'DELETE'"), 'server.js defines DELETE /api/messages endpoint');
+
+    // 2. Recruiter permanent deletion persistence & schedule modal
+    assert(recruiterHtml.includes('uthe_recruiter_deleted_applicants'), 'recruiter.html persists deleted applicants list to localStorage');
+    assert(recruiterHtml.includes('schedule-picker-modal-recruiter'), 'recruiter.html defines #schedule-picker-modal-recruiter signature modal');
+    assert(recruiterHtml.includes('openRecruiterScheduleModal') && recruiterHtml.includes('confirmRecruiterScheduleProposal'), 'recruiter.html implements recruiter interview date/time proposal logic');
+
+    // 3. Candidate permanent deletion persistence & schedule modal
+    assert(candidateHtml.includes('uthe_candidate_deleted_threads'), 'candidate.html persists deleted recruiter threads to localStorage');
+    assert(candidateHtml.includes('schedule-picker-modal-candidate'), 'candidate.html defines #schedule-picker-modal-candidate signature modal');
+    assert(candidateHtml.includes('openCandidateScheduleModal') && candidateHtml.includes('confirmCandidateScheduleAvailability'), 'candidate.html implements candidate interview availability confirmation logic');
+
+  } catch (err) {
+    assert(false, `Group 84 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

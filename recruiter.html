@@ -6128,6 +6128,7 @@ VERIFIED EMPLOYER
             <button class="template-chip" onclick="applyAtsTemplate('intro')">1. INTRO</button>
             <button class="template-chip" onclick="applyAtsTemplate('invite')">2. INVITE</button>
             <button class="template-chip" onclick="applyAtsTemplate('interest')">3. INTEREST</button>
+            <button class="template-chip" onclick="openRecruiterScheduleModal()" style="border-color:#FEBA27; color:#FEBA27; background:rgba(254,186,39,0.08); display:inline-flex; align-items:center; gap:4px; font-weight:800;" data-tooltip="Propose specific interview date and time">📅 Propose Date & Time</button>
           </div>
         </div>
 
@@ -6148,6 +6149,44 @@ VERIFIED EMPLOYER
 
     </div>
 
+  </div>
+</div>
+
+<!-- SIGNATURE RECRUITER CALENDAR & TIME PICKER MODAL -->
+<div class="custom-modal-alert" id="schedule-picker-modal-recruiter" style="display: none;">
+  <div class="custom-alert-card" style="width: 440px; text-align: left; gap: 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+      <div class="alert-card-title" style="color: var(--uthe-gold); font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+        <span>📅</span> PROPOSE INTERVIEW SCHEDULE
+      </div>
+      <button onclick="closeRecruiterScheduleModal()" style="background: none; border: none; font-size: 1rem; color: #94A3B8; cursor: pointer; font-weight: 900;">✕</button>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <div class="form-group">
+        <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-main);">Select Interview Date</label>
+        <input type="date" id="recruiter-sched-date" style="height: 38px; width: 100%; border: 1.5px solid var(--border-color); border-radius: 6px; padding: 0 0.5rem; font-size: 0.8rem; background: #FFFFFF; color: #0F172A;" />
+      </div>
+
+      <div class="form-group">
+        <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-main);">Select Interview Time</label>
+        <input type="time" id="recruiter-sched-time" value="14:00" style="height: 38px; width: 100%; border: 1.5px solid var(--border-color); border-radius: 6px; padding: 0 0.5rem; font-size: 0.8rem; background: #FFFFFF; color: #0F172A;" />
+      </div>
+
+      <div class="form-group">
+        <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-main);">Meeting Format</label>
+        <select id="recruiter-sched-type" style="height: 38px; width: 100%; border: 1.5px solid var(--border-color); border-radius: 6px; padding: 0 0.5rem; font-size: 0.8rem; background: #FFFFFF; color: #0F172A;">
+          <option value="Virtual Video Interview" selected>Virtual Video Interview</option>
+          <option value="Phone Screening">Phone Screening</option>
+          <option value="On-Site Store Interview">On-Site Store Interview</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.5rem;">
+      <button class="btn-surface-sm" onclick="closeRecruiterScheduleModal()" style="height: 36px; padding: 0 1rem; font-size: 0.75rem;">CANCEL</button>
+      <button class="btn-gold-action" onclick="confirmRecruiterScheduleProposal()" style="height: 36px; padding: 0 1.25rem; font-size: 0.75rem; font-weight: 800;">CONFIRM & INSERT</button>
+    </div>
   </div>
 </div>
 
@@ -7395,6 +7434,55 @@ window.openApplicantResume = openApplicantResume;
 
 
 // 2. APPLICANT TRACKER & CANDIDATE CARD CLICK HANDLERS
+const DEFAULT_CANDIDATES_DATA = {
+  'APP-701': {
+    id: 'APP-701',
+    name: 'Marcus Vance',
+    role: 'Sales Manager',
+    email: 'marcus.vance@example.com',
+    score: '94%',
+    stage: 'Applied',
+    appliedDate: 'Aug 31, 2026 • 9:30 AM',
+    resumeFile: 'Marcus_Vance_Resume_2026.pdf'
+  },
+  'APP-702': {
+    id: 'APP-702',
+    name: 'Elena Rostova',
+    role: 'Retail Sales Associate',
+    email: 'elena.rostova@example.com',
+    score: '88%',
+    stage: 'Screened',
+    appliedDate: 'Aug 30, 2026 • 2:15 PM',
+    resumeFile: 'Elena_Rostova_Resume.pdf'
+  },
+  'APP-703': {
+    id: 'APP-703',
+    name: 'David K. Mercer',
+    role: 'Store Director',
+    email: 'david.mercer@example.com',
+    score: '97%',
+    stage: 'Interviewing',
+    appliedDate: 'Aug 29, 2026 • 11:45 AM',
+    resumeFile: 'David_Mercer_Resume.pdf'
+  }
+};
+
+const deletedRecruiterApplicantIds = (function() {
+  try {
+    const saved = localStorage.getItem('uthe_recruiter_deleted_applicants');
+    return saved ? JSON.parse(saved) : [];
+  } catch (e) {
+    return [];
+  }
+})();
+
+const CANDIDATES_DATA = {};
+Object.keys(DEFAULT_CANDIDATES_DATA).forEach(k => {
+  if (!deletedRecruiterApplicantIds.includes(k)) {
+    CANDIDATES_DATA[k] = { ...DEFAULT_CANDIDATES_DATA[k] };
+  }
+});
+
 const selectedCandidateIds = new Set();
 
 function handleCandidateSelectChange(appId, isChecked) {
@@ -7465,8 +7553,24 @@ function deleteCandidateCard(candidateId) {
   delete CANDIDATES_DATA[candidateId];
   selectedCandidateIds.delete(candidateId);
 
+  // Add to permanent deleted list in localStorage
+  try {
+    const savedDeleted = localStorage.getItem('uthe_recruiter_deleted_applicants');
+    const delList = savedDeleted ? JSON.parse(savedDeleted) : [];
+    if (!delList.includes(candidateId)) {
+      delList.push(candidateId);
+      localStorage.setItem('uthe_recruiter_deleted_applicants', JSON.stringify(delList));
+    }
+  } catch (e) {}
+
   try {
     localStorage.setItem('uthe_recruiter_applicants', JSON.stringify(CANDIDATES_DATA));
+  } catch (e) {}
+
+  // Trigger server deletion
+  try {
+    fetch(`/api/applicants?id=${encodeURIComponent(candidateId)}`, { method: 'DELETE' }).catch(() => {});
+    fetch(`/api/messages?applicantId=${encodeURIComponent(candidateId)}`, { method: 'DELETE' }).catch(() => {});
   } catch (e) {}
 
   if (activeCandidateId === candidateId) {
@@ -7483,6 +7587,51 @@ function deleteCandidateCard(candidateId) {
   updateSelectedCandidatesUI();
 }
 window.deleteCandidateCard = deleteCandidateCard;
+
+// RECRUITER INTERVIEW CALENDAR & TIME SELECTOR MODAL HANDLERS
+window.openRecruiterScheduleModal = function() {
+  const modal = document.getElementById('schedule-picker-modal-recruiter');
+  if (modal) {
+    modal.style.display = 'flex';
+    const dateInput = document.getElementById('recruiter-sched-date');
+    if (dateInput && !dateInput.value) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      dateInput.value = tomorrow.toISOString().split('T')[0];
+    }
+  }
+};
+
+window.closeRecruiterScheduleModal = function() {
+  const modal = document.getElementById('schedule-picker-modal-recruiter');
+  if (modal) modal.style.display = 'none';
+};
+
+window.confirmRecruiterScheduleProposal = function() {
+  const dateVal = document.getElementById('recruiter-sched-date')?.value;
+  const timeVal = document.getElementById('recruiter-sched-time')?.value || '14:00';
+  const typeVal = document.getElementById('recruiter-sched-type')?.value || 'Virtual Video Interview';
+  
+  if (!dateVal) {
+    showCustomModalAlert('Select Date', 'Please pick a date for the proposed interview.');
+    return;
+  }
+
+  const dateObj = new Date(`${dateVal}T${timeVal}`);
+  const formattedDate = isNaN(dateObj.getTime()) ? dateVal : dateObj.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+  const formattedTime = isNaN(dateObj.getTime()) ? timeVal : dateObj.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+
+  const cand = CANDIDATES_DATA[activeCandidateId] || { name: 'Candidate', role: 'Sales Manager' };
+  const scheduleMsg = `Hello ${cand.name}! We would like to invite you for a ${typeVal} on ${formattedDate} at ${formattedTime}. Please confirm if this time works for you!`;
+
+  const input = document.getElementById('ats-direct-msg-input');
+  if (input) {
+    input.value = scheduleMsg;
+  }
+
+  closeRecruiterScheduleModal();
+  showCustomModalAlert('Schedule Proposal Inserted', `Interview proposal for ${formattedDate} at ${formattedTime} inserted into message.`);
+};
 
 function renderRecruiterCandidateList() {
   const listContainer = document.getElementById('recruiterCandidateList');
@@ -8706,6 +8855,13 @@ function ingestCandidateApplicant(applicant, showNotification = true) {
 window.ingestCandidateApplicant = ingestCandidateApplicant;
 
 function loadSavedApplicants() {
+  const deletedList = (function() {
+    try {
+      const saved = localStorage.getItem('uthe_recruiter_deleted_applicants');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) { return []; }
+  })();
+
   // 1. Restore from localStorage
   try {
     const saved = localStorage.getItem('uthe_recruiter_applicants');
@@ -8713,7 +8869,7 @@ function loadSavedApplicants() {
       const parsed = JSON.parse(saved);
       if (parsed && typeof parsed === 'object') {
         Object.keys(parsed).forEach(k => {
-          if (!CANDIDATES_DATA[k]) {
+          if (!deletedList.includes(k) && !CANDIDATES_DATA[k]) {
             CANDIDATES_DATA[k] = parsed[k];
           }
         });
@@ -8721,13 +8877,24 @@ function loadSavedApplicants() {
     }
   } catch (e) {}
 
+  // Remove any deleted IDs from CANDIDATES_DATA and DOM
+  deletedList.forEach(delId => {
+    delete CANDIDATES_DATA[delId];
+    const card = document.getElementById(`card-${delId}`) || document.querySelector(`[data-id="${delId}"]`);
+    if (card && card.parentNode) {
+      card.parentNode.removeChild(card);
+    }
+  });
+
   // 2. Fetch from /api/applicants
   fetch('/api/applicants')
     .then(res => res.json())
     .then(data => {
       if (data && data.applicants && Array.isArray(data.applicants)) {
         data.applicants.forEach(app => {
-          ingestCandidateApplicant(app, false);
+          if (!deletedList.includes(app.id)) {
+            ingestCandidateApplicant(app, false);
+          }
         });
       }
     })

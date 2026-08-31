@@ -1618,6 +1618,7 @@
             <button class="quick-chip" onclick="selectQuickReply('I\'M INTERESTED — LET\'S TALK')">1. I'M INTERESTED — LET'S TALK</button>
             <button class="quick-chip" onclick="selectQuickReply('ACCEPTED INTERVIEW TIME')">2. ACCEPTED INTERVIEW TIME</button>
             <button class="quick-chip" onclick="selectQuickReply('PLEASE SEND MORE DETAILS')">3. PLEASE SEND MORE DETAILS</button>
+            <button class="quick-chip" onclick="openCandidateScheduleModal()" style="border-color:#D4AF37; color:#D4AF37; background:rgba(212,175,55,0.08); display:inline-flex; align-items:center; gap:4px; font-weight:800;" data-tooltip="Confirm and send exact interview availability">📅 Confirm Availability / Time</button>
           </div>
         </div>
 
@@ -1627,6 +1628,35 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- SIGNATURE CANDIDATE CALENDAR & TIME PICKER MODAL -->
+  <div class="custom-modal-alert" id="schedule-picker-modal-candidate" style="display: none;">
+    <div class="custom-alert-card" style="width: 440px; text-align: left; gap: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+        <div class="alert-card-title" style="color: var(--uthe-gold); font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+          <span>📅</span> CONFIRM INTERVIEW AVAILABILITY
+        </div>
+        <button onclick="closeCandidateScheduleModal()" style="background: none; border: none; font-size: 1rem; color: #94A3B8; cursor: pointer; font-weight: 900;">✕</button>
+      </div>
+      
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="form-group">
+          <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-main);">Select Available Date</label>
+          <input type="date" id="cand-sched-date" style="height: 38px; width: 100%; border: 1.5px solid var(--border-color); border-radius: 6px; padding: 0 0.5rem; font-size: 0.8rem; background: #FFFFFF; color: #0F172A;" />
+        </div>
+
+        <div class="form-group">
+          <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-main);">Select Available Time</label>
+          <input type="time" id="cand-sched-time" value="10:30" style="height: 38px; width: 100%; border: 1.5px solid var(--border-color); border-radius: 6px; padding: 0 0.5rem; font-size: 0.8rem; background: #FFFFFF; color: #0F172A;" />
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.5rem;">
+        <button class="btn-surface-sm" onclick="closeCandidateScheduleModal()" style="height: 36px; padding: 0 1rem; font-size: 0.75rem;">CANCEL</button>
+        <button class="btn-gold" onclick="confirmCandidateScheduleAvailability()" style="height: 36px; padding: 0 1.25rem; font-size: 0.75rem; font-weight: 800;">CONFIRM & SEND</button>
+      </div>
     </div>
   </div>
 
@@ -2391,6 +2421,13 @@
         initialMessage: 'Greetings Marcus, we received your application for Nordic Outfitters. We are actively interviewing candidates this week!'
       }
     };
+    const deletedCandidateThreadIds = (function() {
+      try {
+        const saved = localStorage.getItem('uthe_candidate_deleted_threads');
+        return saved ? JSON.parse(saved) : [];
+      } catch (e) { return []; }
+    })();
+
     const selectedThreadIds = new Set();
 
     function handleThreadSelectChange(threadId, isChecked) {
@@ -2433,9 +2470,20 @@
       const ids = Array.from(selectedThreadIds);
       if (ids.length === 0) return;
       showCustomModalConfirm('DELETE SELECTED RECRUITERS', `Are you sure you want to remove ${ids.length} selected recruiter conversation(s)?`, () => {
+        try {
+          const savedDeleted = localStorage.getItem('uthe_candidate_deleted_threads');
+          const delList = savedDeleted ? JSON.parse(savedDeleted) : [];
+          ids.forEach(id => {
+            if (!delList.includes(id)) delList.push(id);
+            fetch(`/api/messages?applicantId=${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => {});
+          });
+          localStorage.setItem('uthe_candidate_deleted_threads', JSON.stringify(delList));
+        } catch (e) {}
+
         ids.forEach(id => {
           delete candidateThreads[id];
         });
+
         try {
           const saved = localStorage.getItem('uthe_candidate_applications');
           if (saved) {
@@ -2505,6 +2553,18 @@
 
     window.deleteRecruiterThread = function(threadId) {
       delete candidateThreads[threadId];
+      selectedThreadIds.delete(threadId);
+
+      // Add to permanent deleted list
+      try {
+        const savedDeleted = localStorage.getItem('uthe_candidate_deleted_threads');
+        const delList = savedDeleted ? JSON.parse(savedDeleted) : [];
+        if (!delList.includes(threadId)) {
+          delList.push(threadId);
+          localStorage.setItem('uthe_candidate_deleted_threads', JSON.stringify(delList));
+        }
+      } catch (e) {}
+
       try {
         const saved = localStorage.getItem('uthe_candidate_applications');
         if (saved) {
@@ -2512,6 +2572,10 @@
           list = list.filter(a => a.id !== threadId);
           localStorage.setItem('uthe_candidate_applications', JSON.stringify(list));
         }
+      } catch (e) {}
+
+      try {
+        fetch(`/api/messages?applicantId=${encodeURIComponent(threadId)}`, { method: 'DELETE' }).catch(() => {});
       } catch (e) {}
 
       const remainingKeys = Object.keys(candidateThreads);
@@ -2525,7 +2589,51 @@
         if (titleEl) titleEl.textContent = 'NO CONVERSATIONS';
       }
       renderRecruiterCards();
+      updateSelectedThreadsUI();
       showCustomModalAlert('Conversation Removed', 'The recruiter conversation card has been removed.');
+    };
+
+    // CANDIDATE INTERVIEW CALENDAR & TIME AVAILABILITY HANDLERS
+    window.openCandidateScheduleModal = function() {
+      const modal = document.getElementById('schedule-picker-modal-candidate');
+      if (modal) {
+        modal.style.display = 'flex';
+        const dateInput = document.getElementById('cand-sched-date');
+        if (dateInput && !dateInput.value) {
+          const tomorrow = new Date();
+          tomorrow.setDate(tomorrow.getDate() + 1);
+          dateInput.value = tomorrow.toISOString().split('T')[0];
+        }
+      }
+    };
+
+    window.closeCandidateScheduleModal = function() {
+      const modal = document.getElementById('schedule-picker-modal-candidate');
+      if (modal) modal.style.display = 'none';
+    };
+
+    window.confirmCandidateScheduleAvailability = function() {
+      const dateVal = document.getElementById('cand-sched-date')?.value;
+      const timeVal = document.getElementById('cand-sched-time')?.value || '10:30';
+
+      if (!dateVal) {
+        showCustomModalAlert('Select Date', 'Please pick a date to confirm your availability.');
+        return;
+      }
+
+      const dateObj = new Date(`${dateVal}T${timeVal}`);
+      const formattedDate = isNaN(dateObj.getTime()) ? dateVal : dateObj.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+      const formattedTime = isNaN(dateObj.getTime()) ? timeVal : dateObj.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+
+      const scheduleResponse = `Thank you! I confirm my availability for an interview on ${formattedDate} at ${formattedTime}. Looking forward to speaking with the team!`;
+
+      const input = document.getElementById('recruiterReplyInput');
+      if (input) {
+        input.value = scheduleResponse;
+      }
+
+      closeCandidateScheduleModal();
+      showCustomModalAlert('Availability Inserted', `Interview confirmation for ${formattedDate} at ${formattedTime} inserted into reply.`);
     };
 
     window.switchActiveThread = function(threadId) {
@@ -2639,21 +2747,29 @@
         const data = await res.json();
         const rawList = data.messages || [];
 
+        // Filter out deleted candidate threads
+        const activeDeletedIds = (function() {
+          try {
+            const saved = localStorage.getItem('uthe_candidate_deleted_threads');
+            return saved ? JSON.parse(saved) : [];
+          } catch (e) { return []; }
+        })();
+
         // Initialize candidateThreads with saved applications from localStorage first
         candidateThreads = {};
 
         try {
           const savedApps = JSON.parse(localStorage.getItem('uthe_candidate_applications') || '[]');
           savedApps.forEach(sa => {
-            if (sa && sa.id) {
+            if (sa && sa.id && !activeDeletedIds.includes(sa.id)) {
               candidateThreads[sa.id] = sa;
             }
           });
         } catch (e) {}
 
-        // Add default recruiters if not already present
+        // Add default recruiters if not already present and not deleted
         Object.keys(DEFAULT_RECRUITERS).forEach(k => {
-          if (!candidateThreads[k]) {
+          if (!candidateThreads[k] && !activeDeletedIds.includes(k)) {
             candidateThreads[k] = {
               id: DEFAULT_RECRUITERS[k].id,
               company: DEFAULT_RECRUITERS[k].company,
@@ -2665,9 +2781,10 @@
           }
         });
 
-        // Group incoming messages by company or applicantId
+        // Group incoming messages by company or applicantId (excluding deleted threads)
         rawList.forEach(m => {
           const key = m.applicantId || (m.company ? `APP-${m.company.replace(/\s+/g, '')}` : 'APP-701');
+          if (activeDeletedIds.includes(key)) return;
           if (!candidateThreads[key]) {
             candidateThreads[key] = {
               id: key,
@@ -2680,8 +2797,8 @@
           candidateThreads[key].messages.push(m);
         });
 
-        const targetId = preferredApplicantId || currentApplicantId || activeThreadId || Object.keys(candidateThreads)[0] || 'APP-701';
-        if (!candidateThreads[targetId]) {
+        const targetId = preferredApplicantId || currentApplicantId || activeThreadId || Object.keys(candidateThreads)[0] || null;
+        if (targetId && !candidateThreads[targetId] && !activeDeletedIds.includes(targetId)) {
           candidateThreads[targetId] = {
             id: targetId,
             company: 'Quantum Retail Corp',
