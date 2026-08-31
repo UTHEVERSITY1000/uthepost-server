@@ -4147,6 +4147,29 @@ box-sizing: border-box !important;
       .social-channels-grid::-webkit-scrollbar-thumb:hover {
         background-color: #F59E0B !important;
       }
+
+      /* SUPPRESS TOOLTIPS ON MOBILE UI MENU ONLY */
+      .portal-navigation [data-tooltip]::after,
+      .portal-navigation [data-tooltip]::before,
+      nav.header-center-tabs [data-tooltip]::after,
+      nav.header-center-tabs [data-tooltip]::before,
+      .top-deck-nav [data-tooltip]::after,
+      .top-deck-nav [data-tooltip]::before,
+      .nav-tab-btn[data-tooltip]::after,
+      .nav-tab-btn[data-tooltip]::before,
+      .header-center-tabs [data-tooltip]::after,
+      .header-center-tabs [data-tooltip]::before,
+      .mobile-drawer [data-tooltip]::after,
+      .mobile-drawer [data-tooltip]::before,
+      .drawer-tab-btn[data-tooltip]::after,
+      .drawer-tab-btn[data-tooltip]::before,
+      .btn-mobile-menu[data-tooltip]::after,
+      .btn-mobile-menu[data-tooltip]::before {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
     }
 
 /* ==========================================================================
@@ -6294,6 +6317,11 @@ OK, GOT IT
   }
 
   function showTooltip(target) {
+    // Suppress tooltips on Mobile UI Menu buttons when on mobile viewports (<= 768px)
+    if (window.innerWidth <= 768 && target.closest('.portal-navigation, nav.header-center-tabs, .top-deck-nav, .nav-tab-btn, .mobile-drawer, .btn-mobile-menu')) {
+      return;
+    }
+
     const text = target.getAttribute('data-tooltip');
     if (!text || !text.trim()) return;
     const tooltipEl = createFloatingTooltip();

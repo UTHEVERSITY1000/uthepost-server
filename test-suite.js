@@ -2743,6 +2743,26 @@ async function runTests() {
     assert(false, `Group 70 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 71: MOBILE UI MENU TOOLTIP SUPPRESSION
+  // ================================================================
+  console.log('\n--- GROUP 71: MOBILE UI MENU TOOLTIP SUPPRESSION ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Mobile menu tooltips suppressed via CSS
+    assert(recruiterHtml.includes('.portal-navigation [data-tooltip]::after') && recruiterHtml.includes('display: none !important') && recruiterHtml.includes('visibility: hidden !important'), 'recruiter.html suppresses tooltips on mobile portal navigation');
+
+    // 2. Floating tooltip engine skips mobile UI menu on mobile viewports
+    assert(recruiterHtml.includes('window.innerWidth <= 768') && recruiterHtml.includes('.portal-navigation'), 'recruiter.html filters mobile UI menu from floating tooltip engine');
+
+    // 3. Desktop menu tooltips preserved
+    assert(recruiterHtml.includes('@media (min-width: 769px)') && recruiterHtml.includes('nav.header-center-tabs') && recruiterHtml.includes('overflow: visible !important'), 'recruiter.html preserves desktop top deck tooltips');
+
+  } catch (err) {
+    assert(false, `Group 71 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
