@@ -2377,7 +2377,7 @@ async function runTests() {
 
     // 5. Enterprise Tech Perks & Benefits Micro-Tag Specification
     assert(recruiterHtml.includes('.perk-pill') && recruiterHtml.includes('height: 22px !important') && recruiterHtml.includes('background-color: #F8FAFC !important'), 'recruiter.html defines sleek 22px micro-tag .perk-pill');
-    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html defines active perk pill style');
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FFF2C6 !important'), 'recruiter.html defines active perk pill style');
 
   } catch (err) {
     assert(false, `Group 53 failed: ${err.message}`);
@@ -2432,8 +2432,8 @@ async function runTests() {
     // 6. Live Preview Badge: Transparent & Red
     assert(recruiterHtml.includes('.candidate-viewport-badge, .live-preview-badge, #card2-badge, .card-2-badge') && recruiterHtml.includes('color: #EF4444 !important') && recruiterHtml.includes('border: 1.5px solid #EF4444 !important'), 'recruiter.html styles live preview badge with transparent red outline');
 
-    // 7. Perks Pills Active Selected State (Signature Medium Airy Gold)
-    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('border: 1px solid #E5A800 !important'), 'recruiter.html styles active perk pill with signature medium airy gold and slate text');
+    // 7. Perks Pills Active Selected State (50% Lighter Soft Gold)
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FFF2C6 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('border: 1.5px solid #FCD34D !important'), 'recruiter.html styles active perk pill with 50% lighter soft gold and slate text');
 
     // 8. Card 2 Live Preview Perks Badges
     assert(recruiterHtml.includes('.preview-perks-container .badge-tag, #preview-perks-list .badge-tag') && recruiterHtml.includes('background-color: #F1F5F9 !important') && recruiterHtml.includes('border: 0.5px solid #475569 !important') && recruiterHtml.includes('color: #334155 !important'), 'recruiter.html styles live preview perks badges with subtle grey outline');
@@ -2475,8 +2475,8 @@ async function runTests() {
     // 1. Sleek Micro-Tag Perks Pills Base Styling
     assert(recruiterHtml.includes('.perk-pill') && recruiterHtml.includes('height: 22px !important') && recruiterHtml.includes('padding: 0 0.45rem !important') && recruiterHtml.includes('letter-spacing: 0.03em !important'), 'recruiter.html defines ultra-snug .perk-pill dimensions');
 
-    // 2. Selected State Signature Medium Airy Gold
-    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('border: 1px solid #E5A800 !important'), 'recruiter.html defines signature medium airy gold active perk pill');
+    // 2. Selected State 50% Lighter Soft Gold
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FFF2C6 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('border: 1.5px solid #FCD34D !important'), 'recruiter.html defines 50% lighter soft gold active perk pill');
 
   } catch (err) {
     assert(false, `Group 57 failed: ${err.message}`);
@@ -2517,8 +2517,8 @@ async function runTests() {
     // 2. Red Sub-note in Card 3
     assert(recruiterHtml.includes('card3-desktop-note') && recruiterHtml.includes('EDIT ON DESKTOP ONLY'), 'recruiter.html includes red "EDIT ON DESKTOP ONLY" sub-note in Card 3');
 
-    // 3. Medium Airy Signature Gold Selected State on Perks Pills
-    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('box-shadow: 0 1px 4px rgba(254, 186, 39, 0.35) !important'), 'recruiter.html styles active perk pills with medium airy signature gold and warm glow');
+    // 3. 50% Lighter Soft Gold Selected State on Perks Pills
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FFF2C6 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('border: 1.5px solid #FCD34D !important'), 'recruiter.html styles active perk pills with 50% lighter soft gold and soft amber border');
 
   } catch (err) {
     assert(false, `Group 59 failed: ${err.message}`);
@@ -2544,6 +2544,23 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 60 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 61: FOOTER SECURITY SANITIZATION & PERK PILL REFINEMENT
+  // ================================================================
+  console.log('\n--- GROUP 61: FOOTER SECURITY SANITIZATION & PERK PILL REFINEMENT ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Footer Security Sanitization: [ADMIN] link purged
+    assert(!recruiterHtml.includes('class="footer-secret-link"') && !recruiterHtml.includes('data-tooltip="Master Governance Suite'), 'recruiter.html purges secret admin trigger from footer');
+
+    // 2. 50% Lighter Soft Gold Perk Pill active styling
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FFF2C6 !important') && recruiterHtml.includes('border: 1.5px solid #FCD34D !important'), 'recruiter.html enforces 50% lighter soft gold fill (#FFF2C6) and soft amber border (#FCD34D)');
+
+  } catch (err) {
+    assert(false, `Group 61 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
