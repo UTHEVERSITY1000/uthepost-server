@@ -2826,6 +2826,16 @@ async function runTests() {
     // 3. Window modal openers & safe selectJob
     assert(candidateHtml.includes('window.openApplicationModal') && candidateHtml.includes('window.openCandidateProfileModal') && candidateHtml.includes('window.openCandidateMessageDrawer') && candidateHtml.includes('window.openAuthModal'), 'candidate.html exports all modal opener functions on window');
 
+    // 4. Candidate profile persistence & auto-restore
+    assert(candidateHtml.includes("localStorage.setItem('uthe_candidate_profile'") || candidateHtml.includes('localStorage.setItem("uthe_candidate_profile"'), 'candidate.html saves profile to persistent localStorage');
+    assert(candidateHtml.includes('loadSavedCandidateProfile') && candidateHtml.includes('loadSavedCandidateProfile();'), 'candidate.html implements and calls loadSavedCandidateProfile on initialization');
+    assert(candidateHtml.includes("showCustomModalAlert('Profile Saved'"), 'candidate.html uses signature card alert on candidate profile save');
+
+    // 5. CSS brace balance check
+    const openBraces = (candidateHtml.match(/\{/g) || []).length;
+    const closeBraces = (candidateHtml.match(/\}/g) || []).length;
+    assert(openBraces === closeBraces, 'candidate.html has perfectly balanced CSS/JS braces');
+
   } catch (err) {
     assert(false, `Group 74 failed: ${err.message}`);
   }
