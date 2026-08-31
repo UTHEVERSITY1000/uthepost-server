@@ -1711,6 +1711,14 @@
           <div class="pass-meter-text" id="pass-meter-text">Minimum 8 characters required.</div>
         </div>
 
+        <!-- REMEMBER MY DEVICE (STAY SIGNED IN) -->
+        <div style="background: var(--card-subtle); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; cursor: pointer;">
+          <input type="checkbox" id="auth-remember-device" checked style="min-height: 20px; width: 20px; accent-color: var(--uthe-gold); cursor: pointer;">
+          <label for="auth-remember-device" style="font-size: 0.72rem; font-weight: 700; color: var(--uthe-charcoal); cursor: pointer; margin: 0;">
+            Remember My Device (Stay Signed In on jobs.utheversity.com)
+          </label>
+        </div>
+
         <div style="background: var(--card-subtle); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
           <input type="checkbox" id="auth-recaptcha" checked style="min-height: 20px; width: 20px;">
           <span style="font-size: 0.72rem; color: var(--text-muted);">Protected by UTHEVERSITY Anti-Spam Security</span>
@@ -2656,9 +2664,12 @@
       const emailEl = document.getElementById('auth-email');
       const passEl = document.getElementById('auth-password');
       const nameEl = document.getElementById('auth-name');
+      const rememberEl = document.getElementById('auth-remember-device');
+
       const email = emailEl ? emailEl.value.trim() : '';
       const password = passEl ? passEl.value : '';
       const name = nameEl ? nameEl.value.trim() : '';
+      const rememberDevice = rememberEl ? rememberEl.checked : true;
 
       if (!email) return showCustomModalAlert('Missing Email', 'Please enter your email address.');
 
@@ -2680,9 +2691,17 @@
           currentUser = { name: (name || email.split('@')[0]), email: email, role: 'candidate' };
         }
 
-        try {
-          localStorage.setItem('uthe_candidate_user', JSON.stringify(currentUser));
-        } catch (e) {}
+        if (rememberDevice) {
+          try {
+            localStorage.setItem('uthe_remember_device', 'true');
+            localStorage.setItem('uthe_candidate_user', JSON.stringify(currentUser));
+          } catch (e) {}
+        } else {
+          try {
+            localStorage.removeItem('uthe_remember_device');
+            localStorage.removeItem('uthe_candidate_user');
+          } catch (e) {}
+        }
 
         closeModal('auth-modal');
         const authBtn = document.getElementById('btn-auth-status');
@@ -2708,9 +2727,17 @@
           currentUser = { name: signupName, email: email, role: 'candidate' };
         }
 
-        try {
-          localStorage.setItem('uthe_candidate_user', JSON.stringify(currentUser));
-        } catch (e) {}
+        if (rememberDevice) {
+          try {
+            localStorage.setItem('uthe_remember_device', 'true');
+            localStorage.setItem('uthe_candidate_user', JSON.stringify(currentUser));
+          } catch (e) {}
+        } else {
+          try {
+            localStorage.removeItem('uthe_remember_device');
+            localStorage.removeItem('uthe_candidate_user');
+          } catch (e) {}
+        }
 
         closeModal('auth-modal');
         const authBtn = document.getElementById('btn-auth-status');

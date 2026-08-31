@@ -2858,6 +2858,12 @@ async function runTests() {
     // 3. Auto-restore session on DOMContentLoaded
     assert(recruiterHtml.includes('loadSavedEmployerSession') && recruiterHtml.includes('loadSavedEmployerSession();'), 'recruiter.html implements and calls loadSavedEmployerSession on initialization');
 
+    // 4. Candidate board Remember My Device presence & persistence
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    assert(candidateHtml.includes('id="auth-remember-device"'), 'candidate.html defines #auth-remember-device checkbox');
+    assert(candidateHtml.includes('Remember My Device') && candidateHtml.includes('jobs.utheversity.com'), 'candidate.html includes Remember My Device label mentioning jobs.utheversity.com');
+    assert(candidateHtml.includes("localStorage.setItem('uthe_remember_device'"), 'candidate.html supports remember device persistent storage');
+
   } catch (err) {
     assert(false, `Group 75 failed: ${err.message}`);
   }
