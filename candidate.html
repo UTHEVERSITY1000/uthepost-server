@@ -2892,6 +2892,12 @@
         jobsDatabase = allJobs;
         renderJobListings();
       } else if (data.type === 'RECRUITER_MESSAGE_SENT' && data.message) {
+        const msgAppId = data.message.applicantId;
+        const belongsToMe = !msgAppId || Boolean(candidateThreads[msgAppId]) || activeThreadId === msgAppId || (currentUser && currentUser.applicantId === msgAppId);
+        if (!belongsToMe) {
+          return; // Multi-tenant isolation: Ignore messages intended for other candidates
+        }
+
         // Increment Unread Notification Badge
         unreadCount++;
         const badge = document.getElementById('notif-badge-count');
@@ -2901,7 +2907,7 @@
         }
 
         // Append to chat log
-        const chatLog = document.getElementById('candidate-chat-log');
+        const chatLog = document.getElementById('candidate-chat-log') || document.getElementById('chatMessagesContainer');
         if (chatLog) {
           const bubble = document.createElement('div');
           bubble.className = 'chat-bubble chat-bubble-recruiter';
@@ -2914,6 +2920,11 @@
           `;
           chatLog.appendChild(bubble);
           chatLog.scrollTop = chatLog.scrollHeight;
+        }
+
+        if (candidateThreads[msgAppId]) {
+          if (!candidateThreads[msgAppId].messages) candidateThreads[msgAppId].messages = [];
+          candidateThreads[msgAppId].messages.push(data.message);
         }
 
         showCustomModalAlert('New Message from Recruiter', `"${data.message.text}" from ${data.message.company || 'Employer'}.`);

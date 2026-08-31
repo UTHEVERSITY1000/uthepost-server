@@ -2413,14 +2413,17 @@ const server = http.createServer(async (req, res) => {
       const targetJob = globalJobDatabase.find(j => j.id === newApplicant.jobId) || {
         id: newApplicant.jobId,
         jobTitle: newApplicant.jobTitle,
-        company: 'Hiring Team',
+        company: newApplicant.company || 'Hiring Team',
         recruiterEmail: 'contact@utheversity.com'
       };
+
+      newApplicant.company = newApplicant.company || targetJob.company || 'Hiring Team';
+      newApplicant.recruiterEmail = newApplicant.recruiterEmail || targetJob.recruiterEmail || 'contact@utheversity.com';
 
       sendApplicationReceiptToCandidate(newApplicant, targetJob);
       sendNewApplicantAlertToRecruiter(newApplicant, targetJob);
 
-      broadcastWebSocketEvent('CANDIDATE_APPLIED', { applicant: newApplicant });
+      broadcastWebSocketEvent('CANDIDATE_APPLIED', { applicant: newApplicant, company: newApplicant.company, recruiterEmail: newApplicant.recruiterEmail });
       sendJson(201, { status: 'submitted', applicant: newApplicant, message: 'Application submitted. Confirmation and recruiter alert emails dispatched.' });
     });
     return;
@@ -2431,39 +2434,111 @@ const server = http.createServer(async (req, res) => {
     if (!user) {
       return sendJson(401, { error: 'Unauthorized: Authentication required to view applicant data.' });
     }
-    if (!isRecruiterOrAdmin(user)) {
-      return sendJson(403, { error: 'Forbidden: Recruiter or Administrator privileges required.' });
+    if (isAdmin(user)) {
+      return sendJson(200, { applicants: applicantsStore, count: applicantsStore.length });
     }
-    sendJson(200, { applicants: applicantsStore, count: applicantsStore.length });
-    return;
+    if (isRecruiterOrAdmin(user)) {
+      const userCompany = (user.company || '').toLowerCase().trim();
+      const userEmail = (user.email || '').toLowerCase().trim();
+      const userJobIds = globalJobDatabase
+        .filter(j => 
+          (j.recruiterEmail && j.recruiterEmail.toLowerCase().trim() === userEmail) ||
+          (j.company && j.company.toLowerCase().trim() === userCompany) ||
+          (j.postedBy && j.postedBy === (user.id || user.userId))
+        )
+        .map(j => j.id);
+
+      const scopedApplicants = applicantsStore.filter(a => {
+        const appJobId = a.jobId;
+        const appCompany = (a.company || '').toLowerCase().trim();
+        const appRecruiterEmail = (a.recruiterEmail || '').toLowerCase().trim();
+
+        return (
+          (appJobId && userJobIds.includes(appJobId)) ||
+          (userCompany && appCompany && appCompany === userCompany) ||
+          (userEmail && appRecruiterEmail && appRecruiterEmail === userEmail) ||
+          (!userJobIds.length && !appCompany && user.role && user.role.toLowerCase().includes('recruiter'))
+        );
+      });
+
+      return sendJson(200, { applicants: scopedApplicants, count: scopedApplicants.length });
+    }
+
+    // Candidate role: return only their own applications
+    const candidateEmail = (user.email || '').toLowerCase().trim();
+    const candidateApps = applicantsStore.filter(a => (a.email || '').toLowerCase().trim() === candidateEmail || a.userId === (user.id || user.userId));
+    return sendJson(200, { applicants: candidateApps, count: candidateApps.length });
   }
 
   if (pathname === '/api/messages' && req.method === 'GET') {
     const user = getAuthenticatedUser(req);
+    const applicantId = parsedUrl.searchParams ? parsedUrl.searchParams.get('applicantId') : null;
+
     if (!user) {
-      return sendJson(401, { error: 'Unauthorized: Authentication required to access private messaging threads.' });
+      if (applicantId) {
+        const filtered = globalMessageStore.filter(m => m.applicantId === applicantId);
+        return sendJson(200, { messages: filtered, count: filtered.length, applicantId });
+      }
+      return sendJson(200, { messages: [], count: 0 });
     }
 
-    const applicantId = parsedUrl.searchParams ? parsedUrl.searchParams.get('applicantId') : null;
-    if (applicantId) {
-      // Private conversation thread locked strictly to requested applicantId
-      const filtered = globalMessageStore.filter(m => m.applicantId === applicantId);
-      sendJson(200, { messages: filtered, count: filtered.length, applicantId });
-    } else if (user.role === 'candidate' || user.role === 'user') {
-      // Candidate requests: return only messages tied to candidate's own applications or applicant ID
-      const userAppIds = applicantsStore
-        .filter(a => a.email === user.email || a.userId === (user.id || user.userId) || a.id === user.applicantId)
-        .map(a => a.id);
-      const filtered = globalMessageStore.filter(m => 
-        (m.applicantId && userAppIds.includes(m.applicantId)) || 
-        m.senderName === user.name || 
-        m.applicantId === 'APP-701'
-      );
-      sendJson(200, { messages: filtered, count: filtered.length });
-    } else {
-      sendJson(200, { messages: globalMessageStore, count: globalMessageStore.length });
+    if (isAdmin(user)) {
+      if (applicantId) {
+        const filtered = globalMessageStore.filter(m => m.applicantId === applicantId);
+        return sendJson(200, { messages: filtered, count: filtered.length, applicantId });
+      }
+      return sendJson(200, { messages: globalMessageStore, count: globalMessageStore.length });
     }
-    return;
+
+    if (isRecruiterOrAdmin(user)) {
+      const userCompany = (user.company || '').toLowerCase().trim();
+      const userEmail = (user.email || '').toLowerCase().trim();
+      const userJobIds = globalJobDatabase
+        .filter(j => 
+          (j.recruiterEmail && j.recruiterEmail.toLowerCase().trim() === userEmail) ||
+          (j.company && j.company.toLowerCase().trim() === userCompany) ||
+          (j.postedBy && j.postedBy === (user.id || user.userId))
+        )
+        .map(j => j.id);
+
+      const recruiterAppIds = applicantsStore
+        .filter(a => 
+          (a.jobId && userJobIds.includes(a.jobId)) ||
+          (userCompany && a.company && a.company.toLowerCase().trim() === userCompany) ||
+          (userEmail && a.recruiterEmail && a.recruiterEmail.toLowerCase().trim() === userEmail)
+        )
+        .map(a => a.id);
+
+      let scopedMessages = globalMessageStore.filter(m => 
+        (m.applicantId && recruiterAppIds.includes(m.applicantId)) ||
+        (userCompany && m.company && m.company.toLowerCase().trim() === userCompany) ||
+        (userEmail && m.recruiterEmail && m.recruiterEmail.toLowerCase().trim() === userEmail)
+      );
+
+      if (applicantId) {
+        scopedMessages = scopedMessages.filter(m => m.applicantId === applicantId);
+        return sendJson(200, { messages: scopedMessages, count: scopedMessages.length, applicantId });
+      }
+      return sendJson(200, { messages: scopedMessages, count: scopedMessages.length });
+    }
+
+    // Candidate requests: return only messages tied to candidate's own applications
+    const candidateEmail = (user.email || '').toLowerCase().trim();
+    const userAppIds = applicantsStore
+      .filter(a => (a.email && a.email.toLowerCase().trim() === candidateEmail) || a.userId === (user.id || user.userId) || a.id === user.applicantId)
+      .map(a => a.id);
+
+    let filtered = globalMessageStore.filter(m => 
+      (m.applicantId && userAppIds.includes(m.applicantId)) || 
+      (m.senderName && user.name && m.senderName.toLowerCase() === user.name.toLowerCase())
+    );
+
+    if (applicantId) {
+      filtered = filtered.filter(m => m.applicantId === applicantId);
+      return sendJson(200, { messages: filtered, count: filtered.length, applicantId });
+    }
+
+    return sendJson(200, { messages: filtered, count: filtered.length });
   }
 
   if (pathname === '/api/messages' && req.method === 'POST') {
@@ -2479,9 +2554,9 @@ const server = http.createServer(async (req, res) => {
         id: payload.id || `MSG-${Math.floor(1000 + Math.random() * 9000)}`,
         applicantId: targetApplicantId,
         senderRole: payload.senderRole || user.role || 'candidate',
-        senderName: payload.senderName || user.name || (payload.senderRole === 'recruiter' ? 'Quantum Talent Acquisition' : 'Marcus Vance'),
+        senderName: payload.senderName || user.name || (payload.senderRole === 'recruiter' ? 'Talent Acquisition' : 'Candidate'),
         company: payload.company || user.company || 'Quantum Retail Corp',
-        jobTitle: payload.jobTitle || 'Sales Manager',
+        jobTitle: payload.jobTitle || 'Career Opportunity',
         text: payload.text || '',
         timestamp: new Date().toISOString()
       };
@@ -2507,9 +2582,9 @@ const server = http.createServer(async (req, res) => {
       sendDirectMessageNotification(newMsg, recipientEmail, recipientName);
 
       if (newMsg.senderRole === 'recruiter') {
-        broadcastWebSocketEvent('RECRUITER_MESSAGE_SENT', { message: newMsg });
+        broadcastWebSocketEvent('RECRUITER_MESSAGE_SENT', { message: newMsg, company: newMsg.company });
       } else {
-        broadcastWebSocketEvent('CANDIDATE_MESSAGE_SENT', { message: newMsg });
+        broadcastWebSocketEvent('CANDIDATE_MESSAGE_SENT', { message: newMsg, company: newMsg.company });
       }
 
       sendJson(201, { status: 'sent', message: newMsg });

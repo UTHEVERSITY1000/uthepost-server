@@ -2911,6 +2911,32 @@ async function runTests() {
     assert(false, `Group 77 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 78: MULTI-TENANT DATA ISOLATION & PRIVATE PORTAL SECURITY
+  // ================================================================
+  console.log('\n--- GROUP 78: MULTI-TENANT DATA ISOLATION & PRIVATE PORTAL SECURITY ---');
+  try {
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Server-side applicant isolation
+    assert(serverJs.includes('const scopedApplicants = applicantsStore.filter') || serverJs.includes('scopedApplicants'), 'server.js scopes GET /api/applicants to recruiter company and job postings');
+
+    // 2. Server-side message isolation
+    assert(serverJs.includes('scopedMessages') || serverJs.includes('recruiterAppIds'), 'server.js scopes GET /api/messages strictly to tenant conversation threads');
+
+    // 3. Frontend tenant verification in recruiter handleSyncEvent
+    assert(recruiterHtml.includes('myCompany && appCompany && myCompany !== appCompany'), 'recruiter.html guards against cross-tenant applicant sync leaks');
+    assert(recruiterHtml.includes('myCompany && msgCompany && myCompany !== msgCompany'), 'recruiter.html guards against cross-tenant message sync leaks');
+
+    // 4. Candidate tenant verification in candidate handleSyncEvent
+    assert(candidateHtml.includes('Multi-tenant isolation: Ignore messages intended for other candidates'), 'candidate.html guards against cross-candidate message sync leaks');
+
+  } catch (err) {
+    assert(false, `Group 78 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

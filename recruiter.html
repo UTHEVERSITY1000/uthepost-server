@@ -8496,7 +8496,21 @@ wsRelay.send(JSON.stringify(packet));
 
 
 function handleSyncEvent(data) {
+  const myCompany = ((currentUser && currentUser.company) || (document.getElementById('prof-company') && document.getElementById('prof-company').value) || (document.getElementById('inp-company') && document.getElementById('inp-company').value) || '').toLowerCase().trim();
+  const myEmail = ((currentUser && currentUser.email) || (document.getElementById('prof-email') && document.getElementById('prof-email').value) || (document.getElementById('inp-recruiter-email') && document.getElementById('inp-recruiter-email').value) || '').toLowerCase().trim();
+
   if (data.type === 'CANDIDATE_APPLIED' && data.applicant) {
+    const appCompany = (data.company || data.applicant.company || '').toLowerCase().trim();
+    const appEmail = (data.recruiterEmail || data.applicant.recruiterEmail || '').toLowerCase().trim();
+
+    // Multi-tenant check: if current recruiter is logged in or configured, only ingest matching applicants
+    if (myCompany && appCompany && myCompany !== appCompany) {
+      return; // Isolated to target employer
+    }
+    if (myEmail && appEmail && myEmail !== appEmail) {
+      return; // Isolated to target recruiter
+    }
+
     const col = document.getElementById('cards-applied') || document.getElementById('col-applied');
     const card = document.createElement('div');
     card.className = 'candidate-card';
@@ -8549,6 +8563,11 @@ function handleSyncEvent(data) {
     showCustomModalAlert('New Applicant Received', `Candidate ${data.applicant.name} applied for ${data.applicant.jobTitle}.`);
 
   } else if (data.type === 'CANDIDATE_MESSAGE_SENT' && data.message) {
+    const msgCompany = (data.company || data.message.company || '').toLowerCase().trim();
+    if (myCompany && msgCompany && myCompany !== msgCompany) {
+      return; // Isolated to target employer
+    }
+
     const rBadge = document.getElementById('recruiter-notif-badge');
     if (rBadge) {
       const currentCount = parseInt(rBadge.textContent || '0', 10) + 1;
@@ -8557,28 +8576,18 @@ function handleSyncEvent(data) {
     }
 
     const chatLog = document.getElementById('applicant-chat-log');
+    if (chatLog) {
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble chat-bubble-applicant';
+      bubble.innerHTML = `
+        <strong>Candidate (${data.message.senderName || 'Applicant'}):</strong> ${data.message.text}
+        <div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Just Now</div>
+      `;
+      chatLog.appendChild(bubble);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
 
-if (chatLog) {
-
-const bubble = document.createElement('div');
-
-bubble.className = 'chat-bubble chat-bubble-applicant';
-
-bubble.innerHTML = `
-
-<strong>Candidate (${data.message.senderName || 'Applicant'}):</strong> ${data.message.text}
-
-<div style="font-size:0.6rem; color:#64748B; margin-top:0.2rem;">Just Now</div>
-
-`;
-
-chatLog.appendChild(bubble);
-
-chatLog.scrollTop = chatLog.scrollHeight;
-
-}
-
-showCustomModalAlert('Candidate Reply Received', `New reply from ${data.message.senderName || 'Candidate'}: "${data.message.text}"`);
+    showCustomModalAlert('Candidate Reply Received', `New reply from ${data.message.senderName || 'Candidate'}: "${data.message.text}"`);
 
 } else if (data.type === 'JOB_DELETED' && data.jobId) {
 
