@@ -2458,6 +2458,29 @@ white-space: nowrap;
   box-shadow: 0 0 8px rgba(254, 186, 39, 0.3);
 }
 
+.btn-recruiter-cand-trash {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 14px !important;
+  height: 14px !important;
+  opacity: 0.75;
+  transition: all 0.15s ease;
+}
+
+.btn-recruiter-cand-trash:hover {
+  opacity: 1 !important;
+  transform: scale(1.15);
+}
+
 .cand-applied-date {
   font-size: 0.65rem;
   color: #0284C7 !important;
@@ -7624,7 +7647,7 @@ function renderRecruiterCandidateList() {
           <span style="font-weight:800; font-size:0.75rem; color:#FEBA27; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${cand.name}</span>
         </div>
         <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
-          <button class="btn-recruiter-cand-trash" onclick="confirmDeleteCandidate('${cand.id}', event)" data-tooltip="Delete Applicant" style="background:none; border:none; cursor:pointer; color:#EF4444; font-size:12px; padding:0 2px; line-height:1; display:inline-flex; align-items:center; justify-content:center;">🗑️</button>
+          <button class="btn-recruiter-cand-trash" onclick="confirmDeleteCandidate('${cand.id}', event)" data-tooltip="Delete Applicant" aria-label="Delete Applicant"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
           <span style="font-size:0.6rem; color:#065F46; background:var(--status-mint-bg); padding:1px 4px; border-radius:3px; font-weight:800;">${cand.score || '92%'}</span>
         </div>
       </div>
