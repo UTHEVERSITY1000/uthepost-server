@@ -2617,6 +2617,7 @@ async function runTests() {
 
     // 2. Repositioned Active Tab Tooltips & Sub-header Banners
     assert(recruiterHtml.includes('.sub-header-banner,') && recruiterHtml.includes('.nav-tab-btn [data-tooltip],') && recruiterHtml.includes('position: absolute !important;') && recruiterHtml.includes('top: calc(100% + 6px) !important;') && recruiterHtml.includes('z-index: 99999 !important;'), 'recruiter.html positions top deck tooltips cleanly below tab bar with z-index 99999');
+    assert(recruiterHtml.includes('.sub-header-banner,') && recruiterHtml.includes('position: absolute !important;') && recruiterHtml.includes('top: calc(100% + 6px) !important;') && recruiterHtml.includes('z-index: 99999 !important;'), 'recruiter.html positions top deck tooltips cleanly below tab bar with z-index 99999');
 
     // 3. Top Margin on Main Content Canvas
     assert(recruiterHtml.includes('main, .main-content, .workspace-container, #job-studio-container') && recruiterHtml.includes('margin-top: 0.75rem !important;'), 'recruiter.html adds 0.75rem top margin to main content canvas');
