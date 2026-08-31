@@ -2763,6 +2763,24 @@ async function runTests() {
     assert(false, `Group 71 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 72: MY PROFILE WORK EMAIL EDITABILITY
+  // ================================================================
+  console.log('\n--- GROUP 72: MY PROFILE WORK EMAIL EDITABILITY ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. prof-email input is present, type="email", and not readonly
+    assert(recruiterHtml.includes('id="prof-email"') && recruiterHtml.includes('type="email"'), 'recruiter.html renders prof-email input field');
+    assert(!recruiterHtml.includes('id="prof-email" value="hiring@quantumretail.com" readonly') && !recruiterHtml.includes('id="prof-email" readonly'), 'recruiter.html allows users to type in prof-email without readonly restriction');
+
+    // 2. Profile save button bound
+    assert(recruiterHtml.includes('saveEmployerProfile()'), 'recruiter.html binds profile save action');
+
+  } catch (err) {
+    assert(false, `Group 72 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
