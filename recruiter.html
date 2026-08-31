@@ -1893,22 +1893,6 @@
         height: 26px !important;
       }
 
-      /* Hide/Reposition Overlapping Dark Banner & Floating Tooltips on Mobile */
-      .sub-header-banner, .outreach-banner, .header-subtitle-bar, .sub-header-info {
-        position: static !important;
-        margin-top: 0.5rem !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-      }
-
-      .portal-navigation [data-tooltip]::after,
-      .top-deck-nav [data-tooltip]::after,
-      .nav-tab-btn [data-tooltip],
-      .portal-navigation button .tooltip,
-      .tooltip-dropdown {
-        display: none !important;
-      }
-
       /* ROW 2: INFINITE HORIZONTAL UI BELT SNUGGED DIRECTLY BENEATH TOP DECK */
       .portal-navigation, nav.header-center-tabs {
         order: 3 !important;
@@ -2009,6 +1993,45 @@
     /* ==========================================================================
        END LOCKED SECTION
        ========================================================================== */
+
+    /* 1. Unclip Header & Tab Containers */
+    header, 
+    .recruiter-header, 
+    .portal-navigation, 
+    nav.header-center-tabs, 
+    .nav-tab-btn {
+      overflow: visible !important;
+    }
+
+    /* 2. Active Tab Tooltip / Sub-header Banner Positioning */
+    .sub-header-banner, 
+    .outreach-banner, 
+    .header-subtitle-bar, 
+    .nav-tab-btn [data-tooltip], 
+    .tab-tooltip {
+      position: absolute !important;
+      top: calc(100% + 6px) !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      z-index: 99999 !important;
+      background-color: #0F172A !important;
+      color: #FEBA27 !important;
+      padding: 0.25rem 0.65rem !important;
+      border-radius: 4px !important;
+      border: 1px solid #FEBA27 !important;
+      font-size: 0.58rem !important;
+      font-weight: 700 !important;
+      white-space: nowrap !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    /* 3. Add Top Margin to Main Content Canvas to Prevent Overlap */
+    main, .main-content, .workspace-container, #job-studio-container {
+      margin-top: 0.75rem !important;
+    }
 
     /* Desktop Header Navigation Specification (@media min-width: 769px) */
     @media (min-width: 769px) {

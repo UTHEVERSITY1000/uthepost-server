@@ -2593,10 +2593,9 @@ async function runTests() {
     assert(recruiterHtml.includes('.distribution-card .btn-group') && recruiterHtml.includes('.action-card-actions') && recruiterHtml.includes('flex-direction: column !important'), 'recruiter.html stacks action buttons vertically on mobile');
     assert(recruiterHtml.includes('.publishing-section button') && recruiterHtml.includes('height: 38px !important') && recruiterHtml.includes('font-size: 0.65rem !important'), 'recruiter.html formats mobile action buttons to 38px height and 0.65rem text');
 
-    // 2. Header row spacing & dark banner/tooltip suppression
+    // 2. Header row spacing
     assert(recruiterHtml.includes('.brand-title') && recruiterHtml.includes('font-size: 0.75rem !important'), 'recruiter.html scales brand title on mobile');
     assert(recruiterHtml.includes('.btn-auth-header, #btn-auth-status') && recruiterHtml.includes('height: 26px !important'), 'recruiter.html sets compact auth button on mobile');
-    assert(recruiterHtml.includes('.sub-header-banner, .outreach-banner, .header-subtitle-bar, .sub-header-info') && recruiterHtml.includes('position: static !important'), 'recruiter.html ensures sub-header banner is static on mobile');
 
     // 3. Form input and table containment
     assert(recruiterHtml.includes('input, select, textarea, .form-control') && recruiterHtml.includes('max-width: 100% !important'), 'recruiter.html contains all form fields within mobile screen');
@@ -2604,6 +2603,26 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 63 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 64: UNHIDE & REPOSITION TOP DECK TOOLTIPS
+  // ================================================================
+  console.log('\n--- GROUP 64: UNHIDE & REPOSITION TOP DECK TOOLTIPS ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Unclipped Header & Tab Containers
+    assert(recruiterHtml.includes('header,') && recruiterHtml.includes('.recruiter-header,') && recruiterHtml.includes('.portal-navigation,') && recruiterHtml.includes('overflow: visible !important;'), 'recruiter.html unclips overflow on header and tab containers');
+
+    // 2. Repositioned Active Tab Tooltips & Sub-header Banners
+    assert(recruiterHtml.includes('.sub-header-banner,') && recruiterHtml.includes('.nav-tab-btn [data-tooltip],') && recruiterHtml.includes('position: absolute !important;') && recruiterHtml.includes('top: calc(100% + 6px) !important;') && recruiterHtml.includes('z-index: 99999 !important;'), 'recruiter.html positions top deck tooltips cleanly below tab bar with z-index 99999');
+
+    // 3. Top Margin on Main Content Canvas
+    assert(recruiterHtml.includes('main, .main-content, .workspace-container, #job-studio-container') && recruiterHtml.includes('margin-top: 0.75rem !important;'), 'recruiter.html adds 0.75rem top margin to main content canvas');
+
+  } catch (err) {
+    assert(false, `Group 64 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
