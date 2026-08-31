@@ -2702,6 +2702,27 @@ async function runTests() {
     assert(false, `Group 68 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 69: TAB 4 RESTORE X CARD & SOCIAL CARDS MOBILE BELT
+  // ================================================================
+  console.log('\n--- GROUP 69: TAB 4 RESTORE X CARD & SOCIAL CARDS MOBILE BELT ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. X card restored in social channels add-on
+    assert(recruiterHtml.includes('id="toggle-soc-x"') && recruiterHtml.includes('strong style="font-size: 0.75rem;">X</strong>'), 'recruiter.html renders restored X card with toggle');
+
+    // 2. Tab 4 social channels mobile horizontal belt
+    assert(recruiterHtml.includes('#view-plans .social-channels-grid') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('flex-wrap: nowrap !important'), 'recruiter.html enables horizontal scroll belt for social media cards on mobile');
+
+    // 3. Social channel cards touch-friendly width & visible scrollbar
+    assert(recruiterHtml.includes('.social-channels-grid .social-channel-box') && recruiterHtml.includes('width: 130px !important'), 'recruiter.html sets touch-friendly width for mobile social channel cards');
+    assert(recruiterHtml.includes('.social-channels-grid::-webkit-scrollbar-thumb') && recruiterHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html defines high-visibility gold scrollbar for social channel cards');
+
+  } catch (err) {
+    assert(false, `Group 69 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

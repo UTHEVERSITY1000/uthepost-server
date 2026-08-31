@@ -4136,6 +4136,66 @@ box-sizing: border-box !important;
       .pricing-grid::-webkit-scrollbar-thumb:hover {
         background-color: #F59E0B !important;
       }
+
+      /* TAB 4: SOCIAL CHANNELS ADD-ON CARDS MOBILE HORIZONTAL BELT & HIGH-VISIBILITY SCROLLBAR */
+      #view-plans .social-channels-grid,
+      .plans-matrix-section .social-channels-grid,
+      .social-channels-grid {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        gap: 0.65rem !important;
+        padding: 0.25rem 0.25rem 0.65rem 0.25rem !important;
+        box-sizing: border-box !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: #FEBA27 #E2E8F0 !important;
+      }
+
+      /* Touch-Friendly Social Box Sizing for Mobile Horizontal Belt */
+      #view-plans .social-channel-box,
+      .plans-matrix-section .social-channel-box,
+      .social-channels-grid .social-channel-box {
+        flex: 0 0 130px !important;
+        width: 130px !important;
+        min-width: 130px !important;
+        box-sizing: border-box !important;
+        scroll-snap-align: start !important;
+      }
+
+      /* Webkit Custom High-Visibility Scrollbar for Social Channels Grid */
+      #view-plans .social-channels-grid::-webkit-scrollbar,
+      .plans-matrix-section .social-channels-grid::-webkit-scrollbar,
+      .social-channels-grid::-webkit-scrollbar {
+        display: block !important;
+        height: 8px !important;
+        background-color: #E2E8F0 !important;
+        border-radius: 4px !important;
+      }
+
+      #view-plans .social-channels-grid::-webkit-scrollbar-track,
+      .plans-matrix-section .social-channels-grid::-webkit-scrollbar-track,
+      .social-channels-grid::-webkit-scrollbar-track {
+        background-color: #E2E8F0 !important;
+        border-radius: 4px !important;
+      }
+
+      #view-plans .social-channels-grid::-webkit-scrollbar-thumb,
+      .plans-matrix-section .social-channels-grid::-webkit-scrollbar-thumb,
+      .social-channels-grid::-webkit-scrollbar-thumb {
+        background-color: #FEBA27 !important;
+        border-radius: 4px !important;
+        border: 1.5px solid #D97706 !important;
+      }
+
+      #view-plans .social-channels-grid::-webkit-scrollbar-thumb:hover,
+      .plans-matrix-section .social-channels-grid::-webkit-scrollbar-thumb:hover,
+      .social-channels-grid::-webkit-scrollbar-thumb:hover {
+        background-color: #F59E0B !important;
+      }
     }
 
 /* ==========================================================================
@@ -5674,29 +5734,18 @@ ADD-ONS
 
 
 
-<!-- Twitter (X) -->
-
-<div class="social-channel-box">
-
-<svg viewBox="0 0 24 24" width="24" height="24" fill="#000000">
-
-<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-
-</svg>
-
-<strong style="font-size: 0.75rem;">Twitter (X)</strong>
-
-<span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price" data-cms-key="social-single-price">$5.99/mo</span>
-
-<label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable X / Twitter recruitment stream ($5.99/mo)">
-
-<input type="checkbox" class="social-channel-toggle" id="toggle-soc-x" onchange="recalculateMembershipTotal()">
-
-<span class="toggle-slider"></span>
-
-</label>
-
-</div>
+        <!-- X -->
+        <div class="social-channel-box">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="#000000">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          <strong style="font-size: 0.75rem;">X</strong>
+          <span style="font-size: 0.68rem; color: var(--text-muted);" class="label-social-single-price" data-cms-key="social-single-price">$5.99/mo</span>
+          <label class="toggle-switch" style="margin-top: 0.2rem;" data-tooltip="Enable X recruitment stream ($5.99/mo)">
+            <input type="checkbox" class="social-channel-toggle" id="toggle-soc-x" onchange="recalculateMembershipTotal()">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
 
 </div>
 
