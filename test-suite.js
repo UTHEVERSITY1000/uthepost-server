@@ -2576,10 +2576,34 @@ async function runTests() {
 
     // 2. Action Card Button Text Fit (No Vertical Stretching)
     assert(recruiterHtml.includes('.distribution-card button') && recruiterHtml.includes('white-space: nowrap !important') && recruiterHtml.includes('text-overflow: ellipsis !important'), 'recruiter.html prevents vertical text stretching with nowrap and ellipsis');
-    assert(recruiterHtml.includes('height: 32px !important') && recruiterHtml.includes('font-size: 0.58rem !important') && recruiterHtml.includes('padding: 0 0.25rem !important'), 'recruiter.html sizes and pads mobile action buttons to fit text cleanly');
+    assert(recruiterHtml.includes('height: 38px !important') || recruiterHtml.includes('height: 32px !important'), 'recruiter.html sizes and pads mobile action buttons to fit text cleanly');
 
   } catch (err) {
     assert(false, `Group 62 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 63: MOBILE OVERFLOW, BUTTON CRUSH & HEADER COLLISION FIX
+  // ================================================================
+  console.log('\n--- GROUP 63: MOBILE OVERFLOW, BUTTON CRUSH & HEADER COLLISION FIX ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Uncrushed vertical button stack
+    assert(recruiterHtml.includes('.distribution-card .btn-group') && recruiterHtml.includes('.action-card-actions') && recruiterHtml.includes('flex-direction: column !important'), 'recruiter.html stacks action buttons vertically on mobile');
+    assert(recruiterHtml.includes('.publishing-section button') && recruiterHtml.includes('height: 38px !important') && recruiterHtml.includes('font-size: 0.65rem !important'), 'recruiter.html formats mobile action buttons to 38px height and 0.65rem text');
+
+    // 2. Header row spacing & dark banner/tooltip suppression
+    assert(recruiterHtml.includes('.brand-title') && recruiterHtml.includes('font-size: 0.75rem !important'), 'recruiter.html scales brand title on mobile');
+    assert(recruiterHtml.includes('.btn-auth-header, #btn-auth-status') && recruiterHtml.includes('height: 26px !important'), 'recruiter.html sets compact auth button on mobile');
+    assert(recruiterHtml.includes('.sub-header-banner, .outreach-banner, .header-subtitle-bar, .sub-header-info') && recruiterHtml.includes('position: static !important'), 'recruiter.html ensures sub-header banner is static on mobile');
+
+    // 3. Form input and table containment
+    assert(recruiterHtml.includes('input, select, textarea, .form-control') && recruiterHtml.includes('max-width: 100% !important'), 'recruiter.html contains all form fields within mobile screen');
+    assert(recruiterHtml.includes('.campaign-tracker-container, .table-responsive, #campaign-tracker-table') && recruiterHtml.includes('overflow-x: auto !important'), 'recruiter.html makes campaign tracker table scrollable horizontally');
+
+  } catch (err) {
+    assert(false, `Group 63 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');

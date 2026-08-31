@@ -1863,17 +1863,50 @@
         border-bottom: 2px solid #FEBA27 !important;
       }
 
+      /* Header Row Spacing */
       .brand-group {
         order: 1 !important;
         display: flex !important;
         align-items: center !important;
-        gap: 0.5rem !important;
+        gap: 0.25rem !important;
+      }
+
+      .brand-title {
+        font-size: 0.75rem !important;
+      }
+
+      .employer-logo-badge, #btn-upload-logo, #employer-logo-badge {
+        font-size: 0.52rem !important;
+        padding: 0.15rem 0.35rem !important;
+        white-space: nowrap !important;
       }
 
       .header-actions {
         order: 2 !important;
         display: flex !important;
         align-items: center !important;
+      }
+
+      .btn-auth-header, #btn-auth-status {
+        font-size: 0.55rem !important;
+        padding: 0 0.35rem !important;
+        height: 26px !important;
+      }
+
+      /* Hide/Reposition Overlapping Dark Banner & Floating Tooltips on Mobile */
+      .sub-header-banner, .outreach-banner, .header-subtitle-bar, .sub-header-info {
+        position: static !important;
+        margin-top: 0.5rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      .portal-navigation [data-tooltip]::after,
+      .top-deck-nav [data-tooltip]::after,
+      .nav-tab-btn [data-tooltip],
+      .portal-navigation button .tooltip,
+      .tooltip-dropdown {
+        display: none !important;
       }
 
       /* ROW 2: INFINITE HORIZONTAL UI BELT SNUGGED DIRECTLY BENEATH TOP DECK */
@@ -1922,29 +1955,55 @@
         gap: 0.5rem !important;
       }
 
-      /* Fix text stretching vertically on mobile action cards */
+      /* Force action buttons container to stack vertically on mobile */
+      .distribution-card .btn-group, 
+      .action-card-actions, 
+      .omnichannel-board .button-row,
+      .publishing-section .publishing-action-row,
+      .publishing-section div:has(> button),
+      .publishing-action-row,
+      div:has(> button:contains("RESET")) {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 0.5rem !important;
+      }
+
       .distribution-card button, 
       .action-card button, 
       .btn-distribution-action, 
       .omnichannel-board button,
       .publishing-section button,
       .publishing-section .btn-gold-action,
-      .publishing-section .btn-surface-action {
+      .publishing-section .btn-surface-action,
+      .btn-gold-action,
+      .btn-surface-action {
         width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-        font-size: 0.58rem !important; /* Scaled down slightly to fit container */
+        min-width: 100% !important;
+        flex: 1 1 100% !important;
+        height: 38px !important;
+        font-size: 0.65rem !important;
         font-weight: 800 !important;
-        letter-spacing: 0.02em !important;
-        padding: 0 0.25rem !important; /* Reduced side padding so text fits */
-        height: 32px !important;
-        line-height: 32px !important;
-        white-space: nowrap !important; /* Prevents text from stretching vertically down */
-        text-overflow: ellipsis !important;
-        overflow: hidden !important;
-        display: block !important;
+        padding: 0 0.5rem !important;
+        box-sizing: border-box !important;
+        white-space: nowrap !important;
         text-align: center !important;
-        word-break: normal !important;
+      }
+
+      /* Contain inputs, textareas, and select dropdowns */
+      input, select, textarea, .form-control {
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      /* Make Campaign Date Tracker Table horizontally scrollable on mobile */
+      .campaign-tracker-container, .table-responsive, #campaign-tracker-table, .campaign-tracker-table, div:has(> .campaign-tracker-table) {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        box-sizing: border-box !important;
       }
     }
     /* ==========================================================================
@@ -2417,7 +2476,7 @@
             </div>
           </div>
 
-          <div style="display: flex; gap: 0.75rem; margin-top: 0.75rem;">
+          <div class="publishing-action-row action-card-actions" style="display: flex; gap: 0.75rem; margin-top: 0.75rem;">
             <button class="btn-gold-action" id="btn-publish-post" data-cms-key="post-publish-btn" style="flex: 1.5;" onclick="publishJob()" data-tooltip="Publish position live and share across all selected channels.">
               PUBLISH LIVE
             </button>
@@ -2440,8 +2499,8 @@
             <span style="font-size: 0.65rem; color: #92400E; font-weight: 800; background: var(--uthe-gold-light); padding: 0.2rem 0.5rem; border-radius: 4px;">AUTOMATIC LOGGING</span>
           </div>
 
-          <div style="overflow-x: auto;">
-            <table class="campaign-tracker-table">
+          <div style="overflow-x: auto;" class="campaign-tracker-container table-responsive">
+            <table class="campaign-tracker-table" id="campaign-tracker-table">
               <thead>
                 <tr>
                   <th data-tooltip="Unique campaign identification code.">Campaign ID</th>
