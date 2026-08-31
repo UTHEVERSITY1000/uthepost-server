@@ -2806,6 +2806,30 @@ async function runTests() {
     assert(false, `Group 73 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 74: U-THEJOBS CANDIDATE BOARD ACTION BUTTONS RESTORATION
+  // ================================================================
+  console.log('\n--- GROUP 74: U-THEJOBS CANDIDATE BOARD ACTION BUTTONS RESTORATION ---');
+  try {
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Action buttons presence & bindings
+    assert(candidateHtml.includes('id="btn-auth-status"') && candidateHtml.includes('onclick="openAuthModal()"'), 'candidate.html binds Login button to openAuthModal()');
+    assert(candidateHtml.includes('class="btn-profile-header"') && candidateHtml.includes('onclick="openCandidateProfileModal()"'), 'candidate.html binds My Profile button to openCandidateProfileModal()');
+    assert(candidateHtml.includes('id="btn-candidate-notif"') && candidateHtml.includes('onclick="openCandidateMessageDrawer()"'), 'candidate.html binds Notifications Bell to openCandidateMessageDrawer()');
+    assert(candidateHtml.includes('id="btn-quick-send-top"') && candidateHtml.includes('onclick="openApplicationModal()"'), 'candidate.html binds Quick Send button to openApplicationModal()');
+    assert(candidateHtml.includes('id="btn-send-resume-bottom"') && candidateHtml.includes('onclick="openApplicationModal()"'), 'candidate.html binds Send Resume/CV button to openApplicationModal()');
+
+    // 2. All target modals exist in DOM
+    assert(candidateHtml.includes('id="auth-modal"') && candidateHtml.includes('id="profile-modal"') && candidateHtml.includes('id="messageDrawer"') && candidateHtml.includes('id="app-modal"'), 'candidate.html defines all modal and drawer overlay containers');
+
+    // 3. Window modal openers & safe selectJob
+    assert(candidateHtml.includes('window.openApplicationModal') && candidateHtml.includes('window.openCandidateProfileModal') && candidateHtml.includes('window.openCandidateMessageDrawer') && candidateHtml.includes('window.openAuthModal'), 'candidate.html exports all modal opener functions on window');
+
+  } catch (err) {
+    assert(false, `Group 74 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

@@ -1931,20 +1931,26 @@
     function selectJob(jobId) {
       selectedJobId = jobId;
       const job = jobsDatabase.find(j => j.id === jobId) || jobsDatabase[0];
+      if (!job) return;
 
       document.querySelectorAll('.job-listing-card').forEach(c => c.classList.remove('selected'));
       const activeCard = document.getElementById(`card-${jobId}`);
       if (activeCard) activeCard.classList.add('selected');
 
-      document.getElementById('dt-title').textContent = job.jobTitle;
-      document.getElementById('dt-company').textContent = job.company;
-      document.getElementById('dt-location').textContent = job.location;
-      document.getElementById('dt-type').textContent = job.employmentType;
-      document.getElementById('dt-salary').textContent = job.salary;
-      document.getElementById('dt-pto').textContent = job.paidVacation || 'Standard PTO';
-      document.getElementById('dt-health').textContent = job.healthCoverage || 'Medical Included';
-      document.getElementById('dt-retirement').textContent = job.retirement || '401(k)';
-      document.getElementById('dt-desc').textContent = job.summary;
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+      };
+
+      setVal('dt-title', job.jobTitle);
+      setVal('dt-company', job.company);
+      setVal('dt-location', job.location);
+      setVal('dt-type', job.employmentType);
+      setVal('dt-salary', job.salary);
+      setVal('dt-pto', job.paidVacation || 'Standard PTO');
+      setVal('dt-health', job.healthCoverage || 'Medical Included');
+      setVal('dt-retirement', job.retirement || '401(k)');
+      setVal('dt-desc', job.summary);
 
       const perksList = Array.isArray(job.perksList) && job.perksList.length > 0
         ? job.perksList
@@ -1958,10 +1964,10 @@
         }
       }
 
-      document.getElementById('modal-apply-role').textContent = job.jobTitle;
-      document.getElementById('modal-apply-company').textContent = job.company;
-      document.getElementById('thread-job-title').textContent = job.jobTitle;
-      document.getElementById('thread-company-name').textContent = job.company;
+      setVal('modal-apply-role', job.jobTitle);
+      setVal('modal-apply-company', job.company);
+      setVal('thread-job-title', job.jobTitle);
+      setVal('thread-company-name', job.company);
     }
 
     function handleFilterChange() {
@@ -1969,8 +1975,8 @@
       const q = searchEl ? searchEl.value.toLowerCase().trim() : '';
       currentSearchFilter = q;
       currentSearchQuery = q;
-      const type = document.getElementById('filter-type').value;
-      const loc = document.getElementById('filter-location').value;
+      const type = document.getElementById('filter-type') ? document.getElementById('filter-type').value : 'ALL';
+      const loc = document.getElementById('filter-location') ? document.getElementById('filter-location').value : 'ALL';
 
       const filtered = jobsDatabase.filter(j => {
         const matchesQ = !q || 
@@ -1989,12 +1995,20 @@
     }
 
     // Modal Control
+    window.openApplicationModal = function() {
+      const modal = document.getElementById('app-modal');
+      if (modal) modal.style.display = 'flex';
+    };
     function openApplicationModal() {
-      document.getElementById('app-modal').style.display = 'flex';
+      window.openApplicationModal();
     }
 
+    window.openCandidateProfileModal = function() {
+      const modal = document.getElementById('profile-modal');
+      if (modal) modal.style.display = 'flex';
+    };
     function openCandidateProfileModal() {
-      document.getElementById('profile-modal').style.display = 'flex';
+      window.openCandidateProfileModal();
     }
 
     // 1. NOTIFICATIONS ALERT & EXECUTIVE RECRUITER MESSAGE DRAWER
@@ -2005,14 +2019,33 @@
       unreadCount = 0;
       const badge = document.getElementById('notif-badge-count');
       if (badge) badge.style.display = 'none';
-      fetchMessages(currentApplicantId);
+      if (typeof fetchMessages === 'function') fetchMessages(currentApplicantId);
     };
     window.openCandidateMessageDrawer = window.openMessageDrawer;
+    function openCandidateMessageDrawer(applicantId) {
+      window.openCandidateMessageDrawer(applicantId);
+    }
 
     window.closeMessageDrawer = function() {
       const drawer = document.getElementById('messageDrawer') || document.getElementById('candidate-messages-modal');
       if (drawer) drawer.style.display = 'none';
     };
+    function closeMessageDrawer() {
+      window.closeMessageDrawer();
+    }
+
+    window.openAuthModal = function() {
+      if (currentUser) {
+        showCustomModalAlert('Account Session', `Logged in as ${currentUser.name} (${currentUser.email}).`);
+        return;
+      }
+      const modal = document.getElementById('auth-modal');
+      if (modal) modal.style.display = 'flex';
+      if (typeof switchAuthTab === 'function') switchAuthTab('login');
+    };
+    function openAuthModal() {
+      window.openAuthModal();
+    }
 
     window.closeModal = function(id) {
       const el = document.getElementById(id);
@@ -2479,14 +2512,7 @@
       document.getElementById('custom-modal-alert').style.display = 'none';
     }
 
-    // Auth
-    function openAuthModal() {
-      if (currentUser) {
-        showCustomModalAlert('Account Session', `Logged in as ${currentUser.name} (${currentUser.email}).`);
-        return;
-      }
-      document.getElementById('auth-modal').style.display = 'flex';
-    }
+    // Auth Tabs & Handlers
 
     function switchAuthTab(mode) {
       authMode = mode;
