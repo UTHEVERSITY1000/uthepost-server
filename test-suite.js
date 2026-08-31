@@ -230,6 +230,12 @@ async function runTests() {
         }
       }, 3000);
     });
+
+    // Teardown: Reset card1Title to JOB DESCRIPTION
+    await httpPost('/api/cms/config', {
+      postStudio: { card1Title: 'JOB DESCRIPTION' },
+      jobsBoard: { boardTitle: 'U-THEJOBS' }
+    }, adminHeaders);
   } catch (err) {
     assert(false, `Group 4 failed: ${err.message}`);
   }
@@ -2371,7 +2377,7 @@ async function runTests() {
 
     // 5. Enterprise Tech Perks & Benefits Micro-Tag Specification
     assert(recruiterHtml.includes('.perk-pill') && recruiterHtml.includes('height: 22px !important') && recruiterHtml.includes('background-color: #F8FAFC !important'), 'recruiter.html defines sleek 22px micro-tag .perk-pill');
-    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #94A3B8 !important'), 'recruiter.html defines active perk pill style');
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #0F172A !important'), 'recruiter.html defines active perk pill style');
 
   } catch (err) {
     assert(false, `Group 53 failed: ${err.message}`);
@@ -2392,7 +2398,7 @@ async function runTests() {
     assert(recruiterHtml.includes('.header-actions') && recruiterHtml.includes('order: 2 !important'), 'recruiter.html sets header-actions order to 2');
 
     // 3. Row 2 Navigation Menu Belt
-    assert(recruiterHtml.includes('.portal-navigation, nav.header-center-tabs') && recruiterHtml.includes('order: 3 !important') && recruiterHtml.includes('flex: 0 0 100% !important') && recruiterHtml.includes('border-top: 1px solid var(--border-color, #E2E8F0) !important'), 'recruiter.html snugs horizontal navigation belt on row 2');
+    assert(recruiterHtml.includes('.portal-navigation, nav.header-center-tabs') && recruiterHtml.includes('order: 3 !important') && recruiterHtml.includes('flex: 0 0 100% !important') && recruiterHtml.includes('border-top: 1px solid #E2E8F0 !important'), 'recruiter.html snugs horizontal navigation belt on row 2');
 
     // 4. Mobile menu buttons styling
     assert(recruiterHtml.includes('.portal-navigation button, nav.header-center-tabs button') && recruiterHtml.includes('height: 30px !important') && recruiterHtml.includes('font-size: 0.62rem !important'), 'recruiter.html defines mobile navigation button dimensions');
@@ -2426,8 +2432,8 @@ async function runTests() {
     // 6. Live Preview Badge: Transparent & Red
     assert(recruiterHtml.includes('.candidate-viewport-badge, .live-preview-badge, #card2-badge, .card-2-badge') && recruiterHtml.includes('color: #EF4444 !important') && recruiterHtml.includes('border: 1.5px solid #EF4444 !important'), 'recruiter.html styles live preview badge with transparent red outline');
 
-    // 7. Perks Pills Active Selected State (Medium Airy Grey)
-    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #94A3B8 !important') && recruiterHtml.includes('color: #1E293B !important') && recruiterHtml.includes('border-color: #64748B !important'), 'recruiter.html styles active perk pill with medium airy grey palette');
+    // 7. Perks Pills Active Selected State (Deep Slate Charcoal & Gold)
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #0F172A !important') && recruiterHtml.includes('color: #FEBA27 !important') && recruiterHtml.includes('border: 1px solid #FEBA27 !important'), 'recruiter.html styles active perk pill with deep slate charcoal and gold accent');
 
     // 8. Card 2 Live Preview Perks Badges
     assert(recruiterHtml.includes('.preview-perks-container .badge-tag, #preview-perks-list .badge-tag') && recruiterHtml.includes('background-color: #F1F5F9 !important') && recruiterHtml.includes('border: 0.5px solid #475569 !important') && recruiterHtml.includes('color: #334155 !important'), 'recruiter.html styles live preview perks badges with subtle grey outline');
@@ -2457,6 +2463,27 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 56 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 57: PERKS MICRO-TAGS & DESKTOP NAV EXPANSION
+  // ================================================================
+  console.log('\n--- GROUP 57: PERKS MICRO-TAGS & DESKTOP NAV EXPANSION ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Sleek Micro-Tag Perks Pills Base Styling
+    assert(recruiterHtml.includes('.perk-pill') && recruiterHtml.includes('height: 22px !important') && recruiterHtml.includes('padding: 0 0.45rem !important') && recruiterHtml.includes('letter-spacing: 0.03em !important'), 'recruiter.html defines ultra-snug .perk-pill dimensions');
+
+    // 2. Selected State Deep Slate Charcoal & Gold
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #0F172A !important') && recruiterHtml.includes('color: #FEBA27 !important') && recruiterHtml.includes('border: 1px solid #FEBA27 !important'), 'recruiter.html defines high-contrast publishing-style active perk pill');
+
+    // 3. Desktop UI Navigation Expansion (@media min-width: 769px)
+    assert(recruiterHtml.includes('@media (min-width: 769px)') && recruiterHtml.includes('max-width: 720px !important'), 'recruiter.html defines desktop nav max-width 720px');
+    assert(recruiterHtml.includes('.nav-tab-btn, .portal-navigation button, nav.header-center-tabs button') && recruiterHtml.includes('height: 36px !important') && recruiterHtml.includes('font-size: 0.72rem !important') && recruiterHtml.includes('font-weight: 800 !important'), 'recruiter.html defines expanded 36px desktop tab button dimensions');
+
+  } catch (err) {
+    assert(false, `Group 57 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
