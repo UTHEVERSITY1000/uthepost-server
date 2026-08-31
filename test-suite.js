@@ -2378,6 +2378,7 @@ async function runTests() {
     // 5. Enterprise Tech Perks & Benefits Micro-Tag Specification
     assert(recruiterHtml.includes('.perk-pill') && recruiterHtml.includes('height: 22px !important') && recruiterHtml.includes('background-color: #F8FAFC !important'), 'recruiter.html defines sleek 22px micro-tag .perk-pill');
     assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #0F172A !important'), 'recruiter.html defines active perk pill style');
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html defines active perk pill style');
 
   } catch (err) {
     assert(false, `Group 53 failed: ${err.message}`);
@@ -2434,6 +2435,8 @@ async function runTests() {
 
     // 7. Perks Pills Active Selected State (Deep Slate Charcoal & Gold)
     assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #0F172A !important') && recruiterHtml.includes('color: #FEBA27 !important') && recruiterHtml.includes('border: 1px solid #FEBA27 !important'), 'recruiter.html styles active perk pill with deep slate charcoal and gold accent');
+    // 7. Perks Pills Active Selected State (Signature Medium Airy Gold)
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('border: 1px solid #E5A800 !important'), 'recruiter.html styles active perk pill with signature medium airy gold and slate text');
 
     // 8. Card 2 Live Preview Perks Badges
     assert(recruiterHtml.includes('.preview-perks-container .badge-tag, #preview-perks-list .badge-tag') && recruiterHtml.includes('background-color: #F1F5F9 !important') && recruiterHtml.includes('border: 0.5px solid #475569 !important') && recruiterHtml.includes('color: #334155 !important'), 'recruiter.html styles live preview perks badges with subtle grey outline');
@@ -2477,6 +2480,8 @@ async function runTests() {
 
     // 2. Selected State Deep Slate Charcoal & Gold
     assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #0F172A !important') && recruiterHtml.includes('color: #FEBA27 !important') && recruiterHtml.includes('border: 1px solid #FEBA27 !important'), 'recruiter.html defines high-contrast publishing-style active perk pill');
+    // 2. Selected State Signature Medium Airy Gold
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('border: 1px solid #E5A800 !important'), 'recruiter.html defines signature medium airy gold active perk pill');
 
   } catch (err) {
     assert(false, `Group 57 failed: ${err.message}`);
@@ -2502,6 +2507,26 @@ async function runTests() {
 
   } catch (err) {
     assert(false, `Group 58 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 59: CARD 3 EDIT LOCK & PERKS GOLD PILL OVERHAUL
+  // ================================================================
+  console.log('\n--- GROUP 59: CARD 3 EDIT LOCK & PERKS GOLD PILL OVERHAUL ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Hide Edit Action Buttons in Card 3 Table Rows
+    assert(recruiterHtml.includes('.btn-table-edit, button[data-action="edit"], .btn-edit, td .btn-table-action:first-child') && recruiterHtml.includes('display: none !important'), 'recruiter.html hides table edit buttons via CSS');
+
+    // 2. Red Sub-note in Card 3
+    assert(recruiterHtml.includes('card3-desktop-note') && recruiterHtml.includes('EDIT ON DESKTOP ONLY'), 'recruiter.html includes red "EDIT ON DESKTOP ONLY" sub-note in Card 3');
+
+    // 3. Medium Airy Signature Gold Selected State on Perks Pills
+    assert(recruiterHtml.includes('.perk-pill.active') && recruiterHtml.includes('background-color: #FEBA27 !important') && recruiterHtml.includes('color: #0F172A !important') && recruiterHtml.includes('box-shadow: 0 1px 4px rgba(254, 186, 39, 0.35) !important'), 'recruiter.html styles active perk pills with medium airy signature gold and warm glow');
+
+  } catch (err) {
+    assert(false, `Group 59 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');

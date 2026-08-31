@@ -1812,11 +1812,21 @@
     }
 
     /* Selected State: Resembles Publishing & Distribution badge styling */
+    /* Selected State: Medium Airy Signature Gold */
     .perk-pill.active {
       background-color: #0F172A !important; /* Deep Slate Charcoal */
       color: #FEBA27 !important;            /* Signature Gold Text */
       border: 1px solid #FEBA27 !important;  /* Gold Accent Border */
       box-shadow: 0 1px 4px rgba(15, 23, 42, 0.25) !important;
+      background-color: #FEBA27 !important; /* Signature Medium Airy Gold Fill */
+      color: #0F172A !important;            /* Deep Slate Charcoal Text */
+      border: 1px solid #E5A800 !important;  /* Warm Gold Accent Border */
+      box-shadow: 0 1px 4px rgba(254, 186, 39, 0.35) !important;
+    }
+
+    /* Card 3: Hide Table Edit Action Buttons */
+    .btn-table-edit, button[data-action="edit"], .btn-edit, td .btn-table-action:first-child {
+      display: none !important;
     }
 
     /* Card 2 Live Preview Perks Badges */
@@ -2169,6 +2179,11 @@
           <div class="panel-card card-3-active-listings" id="card3-live-jobs-container">
             <div class="panel-header">
               <span class="panel-title" id="card3-title-text" data-cms-key="post-card3-title">CARD 3: LIVE JOB LISTINGS</span>
+            <div class="panel-header" style="flex-wrap: wrap;">
+              <div>
+                <span class="panel-title" id="card3-title-text" data-cms-key="post-card3-title">CARD 3: LIVE ACTIVE JOB LISTINGS</span>
+                <div class="card3-desktop-note" style="color: #EF4444; font-size: 0.65rem; font-weight: 700; margin-top: 2px; text-transform: uppercase;">EDIT ON DESKTOP ONLY</div>
+              </div>
               <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">5 ACTIVE POSITIONS</span>
             </div>
 
