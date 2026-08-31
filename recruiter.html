@@ -6627,11 +6627,27 @@ let activeJobs = [
 
 
 // Candidate Database Store for Interactive Modal
-const CANDIDATES_DATA = {
+const deletedRecruiterApplicantIds = (function() {
+  try {
+    const saved = localStorage.getItem('uthe_recruiter_deleted_applicants');
+    return saved ? JSON.parse(saved) : [];
+  } catch (e) {
+    return [];
+  }
+})();
+
+const DEFAULT_CANDIDATES_DATA = {
   'APP-701': { id: 'APP-701', name: 'Marcus Vance', role: 'Sales Manager', email: 'marcus.vance@example.com', score: '94%', stage: 'Applied', appliedDate: 'Aug 31, 2026 • 9:30 AM', resumeFile: 'Marcus_Vance_Resume_2026.pdf' },
   'APP-702': { id: 'APP-702', name: 'Elena Rostova', role: 'Retail Sales Associate', email: 'elena.rostova@example.com', score: '88%', stage: 'Screened', appliedDate: 'Aug 30, 2026 • 2:15 PM', resumeFile: 'Elena_Rostova_Resume.pdf' },
   'APP-703': { id: 'APP-703', name: 'David K. Mercer', role: 'Store Director', email: 'david.mercer@example.com', score: '97%', stage: 'Interviewing', appliedDate: 'Aug 29, 2026 • 11:45 AM', resumeFile: 'David_K_Mercer_Resume.pdf' }
 };
+
+const CANDIDATES_DATA = {};
+Object.keys(DEFAULT_CANDIDATES_DATA).forEach(k => {
+  if (!deletedRecruiterApplicantIds.includes(k)) {
+    CANDIDATES_DATA[k] = { ...DEFAULT_CANDIDATES_DATA[k] };
+  }
+});
 
 
 
@@ -7434,55 +7450,6 @@ window.openApplicantResume = openApplicantResume;
 
 
 // 2. APPLICANT TRACKER & CANDIDATE CARD CLICK HANDLERS
-const DEFAULT_CANDIDATES_DATA = {
-  'APP-701': {
-    id: 'APP-701',
-    name: 'Marcus Vance',
-    role: 'Sales Manager',
-    email: 'marcus.vance@example.com',
-    score: '94%',
-    stage: 'Applied',
-    appliedDate: 'Aug 31, 2026 • 9:30 AM',
-    resumeFile: 'Marcus_Vance_Resume_2026.pdf'
-  },
-  'APP-702': {
-    id: 'APP-702',
-    name: 'Elena Rostova',
-    role: 'Retail Sales Associate',
-    email: 'elena.rostova@example.com',
-    score: '88%',
-    stage: 'Screened',
-    appliedDate: 'Aug 30, 2026 • 2:15 PM',
-    resumeFile: 'Elena_Rostova_Resume.pdf'
-  },
-  'APP-703': {
-    id: 'APP-703',
-    name: 'David K. Mercer',
-    role: 'Store Director',
-    email: 'david.mercer@example.com',
-    score: '97%',
-    stage: 'Interviewing',
-    appliedDate: 'Aug 29, 2026 • 11:45 AM',
-    resumeFile: 'David_Mercer_Resume.pdf'
-  }
-};
-
-const deletedRecruiterApplicantIds = (function() {
-  try {
-    const saved = localStorage.getItem('uthe_recruiter_deleted_applicants');
-    return saved ? JSON.parse(saved) : [];
-  } catch (e) {
-    return [];
-  }
-})();
-
-const CANDIDATES_DATA = {};
-Object.keys(DEFAULT_CANDIDATES_DATA).forEach(k => {
-  if (!deletedRecruiterApplicantIds.includes(k)) {
-    CANDIDATES_DATA[k] = { ...DEFAULT_CANDIDATES_DATA[k] };
-  }
-});
-
 const selectedCandidateIds = new Set();
 
 function handleCandidateSelectChange(appId, isChecked) {
