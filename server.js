@@ -543,37 +543,142 @@ const globalMessageStore = [
   }
 ];
 
+// Candidate Resume Directory Database Store
+const defaultResumesDirectory = [
+  {
+    id: 'RES-101',
+    name: 'Marcus Vance',
+    role: 'Sales Manager',
+    email: 'marcus.vance@example.com',
+    phone: '+1 (512) 555-0199',
+    location: 'Austin, TX (Remote)',
+    workType: 'Full-Time • Remote',
+    experience: '7+ Years',
+    score: 95,
+    verified: true,
+    skills: ['B2B Sales', 'Team Leadership', 'Salesforce CRM', 'Revenue Growth', 'Enterprise Accounts'],
+    bio: 'Dynamic Sales Manager with 7+ years accelerating retail and SaaS revenue pipelines by 140%+ across North America.',
+    resumeFile: 'Marcus_Vance_Resume_2026.pdf',
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'RES-102',
+    name: 'Elena Rostova',
+    role: 'Retail Sales Associate',
+    email: 'elena.rostova@example.com',
+    phone: '+1 (415) 555-0211',
+    location: 'San Francisco, CA (Hybrid)',
+    workType: 'Full-Time • Hybrid',
+    experience: '4+ Years',
+    score: 91,
+    verified: true,
+    skills: ['Customer Engagement', 'Inventory Control', 'POS Systems', 'Merchandising', 'Bilingual'],
+    bio: 'Customer-focused Retail Specialist experienced in fast-paced flagship storefronts and omnichannel order fulfillment.',
+    resumeFile: 'Elena_Rostova_Resume.pdf',
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'RES-103',
+    name: 'David K. Mercer',
+    role: 'Store Director / VP Retail',
+    email: 'david.mercer@example.com',
+    phone: '+1 (206) 555-0331',
+    location: 'Seattle, WA (On-Site)',
+    workType: 'Full-Time • On-Site',
+    experience: '12+ Years',
+    score: 98,
+    verified: true,
+    skills: ['P&L Management', 'Store Operations', 'Executive Leadership', 'Staff Training', 'Supply Chain'],
+    bio: 'Accomplished Retail Executive leading multi-unit store networks with $45M+ annual budgets and 200+ direct reports.',
+    resumeFile: 'David_Mercer_Resume.pdf',
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'RES-104',
+    name: 'Sarah Jenkins',
+    role: 'Operations & Logistics Manager',
+    email: 'sarah.jenkins@example.com',
+    phone: '+1 (312) 555-0842',
+    location: 'Chicago, IL (Remote)',
+    workType: 'Full-Time • Remote',
+    experience: '6+ Years',
+    score: 94,
+    verified: true,
+    skills: ['Logistics Ops', 'Warehouse Management', 'ERP Software', 'Vendor Relations', 'Lean Six Sigma'],
+    bio: 'Operational strategist specialized in streamlining multi-channel warehouse fulfillment and vendor negotiations.',
+    resumeFile: 'Sarah_Jenkins_Resume.pdf',
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'RES-105',
+    name: 'Alexander Hayes',
+    role: 'Lead Full-Stack Engineer',
+    email: 'alex.hayes@example.com',
+    phone: '+1 (404) 555-0915',
+    location: 'Atlanta, GA (Remote)',
+    workType: 'Full-Time • Remote',
+    experience: '8+ Years',
+    score: 97,
+    verified: true,
+    skills: ['TypeScript', 'Node.js', 'React', 'Cloud Architecture', 'GraphQL', 'PostgreSQL'],
+    bio: 'High-throughput system architect passionate about reactive user interfaces and resilient cloud-native backends.',
+    resumeFile: 'Alexander_Hayes_Resume.pdf',
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'RES-106',
+    name: 'Maya Lin',
+    role: 'Digital Marketing & Growth Lead',
+    email: 'maya.lin@example.com',
+    phone: '+1 (212) 555-0177',
+    location: 'New York, NY (Hybrid)',
+    workType: 'Full-Time • Hybrid',
+    experience: '5+ Years',
+    score: 93,
+    verified: true,
+    skills: ['Omnichannel Growth', 'Paid Media', 'SEO / SEM', 'Google Analytics', 'Content Strategy'],
+    bio: 'Data-driven Growth Marketer driving acquisition campaigns and viral social outreach across global consumer brands.',
+    resumeFile: 'Maya_Lin_Resume.pdf',
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'RES-107',
+    name: 'Jordan Cole',
+    role: 'Customer Success & Support Lead',
+    email: 'jordan.cole@example.com',
+    phone: '+1 (303) 555-0164',
+    location: 'Denver, CO (Remote)',
+    workType: 'Full-Time • Remote',
+    experience: '5+ Years',
+    score: 89,
+    verified: true,
+    skills: ['Client Retention', 'Zendesk / Intercom', 'SaaS Onboarding', 'Customer Success', 'Escalation Mgmt'],
+    bio: 'Customer advocate dedicated to 99%+ CSAT scores and frictionless enterprise onboarding workflows.',
+    resumeFile: 'Jordan_Cole_Resume.pdf',
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: 'RES-108',
+    name: 'Priya Patel',
+    role: 'HR & Talent Acquisition Specialist',
+    email: 'priya.patel@example.com',
+    phone: '+1 (617) 555-0138',
+    location: 'Boston, MA (Hybrid)',
+    workType: 'Full-Time • Hybrid',
+    experience: '6+ Years',
+    score: 96,
+    verified: true,
+    skills: ['Technical Sourcing', 'ATS Optimization', 'Employer Branding', 'Diversity Hiring', 'Interviewing'],
+    bio: 'Strategic talent partner specializing in recruiting executive, engineering, and high-impact corporate teams.',
+    resumeFile: 'Priya_Patel_Resume.pdf',
+    updatedAt: new Date().toISOString()
+  }
+];
+
 // ----------------------------------------------------
 // STRICT DATA STORAGE & AUTOMATIC INDEXING SYSTEM
 // ----------------------------------------------------
 const DATA_DIR = path.join(__dirname, 'data');
-const jobsFilePath = path.join(DATA_DIR, 'jobs.json');
-let jobsList = globalJobDatabase;
-
-function loadJobsFromDisk() {
-  try {
-    if (fs.existsSync(jobsFilePath)) {
-      const data = JSON.parse(fs.readFileSync(jobsFilePath, 'utf8'));
-      if (Array.isArray(data) && data.length > 0) {
-        jobsList = data;
-        globalJobDatabase.length = 0;
-        globalJobDatabase.push(...jobsList);
-      }
-    } else {
-      saveJobsToDisk();
-    }
-  } catch (e) {
-    jobsList = globalJobDatabase;
-  }
-}
-
-function saveJobsToDisk() {
-  try {
-    initDataDirectories();
-    fs.writeFileSync(jobsFilePath, JSON.stringify(globalJobDatabase, null, 2), 'utf8');
-  } catch (e) {}
-}
-
 const DIRS = {
   data: DATA_DIR,
   employers: path.join(DATA_DIR, 'employers'),
@@ -605,6 +710,57 @@ function initDataDirectories() {
       console.log(`[DATA STORAGE] Initialized directory: ${dir}`);
     }
   });
+}
+
+const resumesFilePath = path.join(DATA_DIR, 'resumes_directory.json');
+const resumesStore = [...defaultResumesDirectory];
+
+function loadResumesFromDisk() {
+  try {
+    if (fs.existsSync(resumesFilePath)) {
+      const data = JSON.parse(fs.readFileSync(resumesFilePath, 'utf8'));
+      if (Array.isArray(data) && data.length > 0) {
+        resumesStore.length = 0;
+        resumesStore.push(...data);
+      }
+    } else {
+      saveResumesToDisk();
+    }
+  } catch (e) {}
+}
+
+function saveResumesToDisk() {
+  try {
+    initDataDirectories();
+    fs.writeFileSync(resumesFilePath, JSON.stringify(resumesStore, null, 2), 'utf8');
+  } catch (e) {}
+}
+
+const jobsFilePath = path.join(DATA_DIR, 'jobs.json');
+let jobsList = globalJobDatabase;
+
+function loadJobsFromDisk() {
+  try {
+    if (fs.existsSync(jobsFilePath)) {
+      const data = JSON.parse(fs.readFileSync(jobsFilePath, 'utf8'));
+      if (Array.isArray(data) && data.length > 0) {
+        jobsList = data;
+        globalJobDatabase.length = 0;
+        globalJobDatabase.push(...jobsList);
+      }
+    } else {
+      saveJobsToDisk();
+    }
+  } catch (e) {
+    jobsList = globalJobDatabase;
+  }
+}
+
+function saveJobsToDisk() {
+  try {
+    initDataDirectories();
+    fs.writeFileSync(jobsFilePath, JSON.stringify(globalJobDatabase, null, 2), 'utf8');
+  } catch (e) {}
 }
 
 function crc32(buf) {
@@ -2496,7 +2652,7 @@ const server = http.createServer(async (req, res) => {
         const filtered = globalMessageStore.filter(m => m.applicantId === applicantId);
         return sendJson(200, { messages: filtered, count: filtered.length, applicantId });
       }
-      return sendJson(200, { messages: [], count: 0 });
+      return sendJson(401, { error: 'Unauthorized: Access restricted to authenticated accounts.' });
     }
 
     if (isAdmin(user)) {
@@ -2704,6 +2860,32 @@ const server = http.createServer(async (req, res) => {
       saveApplicantRecord(applicantRecord);
       writeSystemLog('CANDIDATE_APPLIED', { applicantId: newAppId, name: applicantRecord.name, jobTitle: applicantRecord.jobTitle, company: applicantRecord.company });
 
+      // Auto-sync candidate to Resume Search Board
+      const autoResumeRecord = {
+        id: `RES-${applicantRecord.id.replace(/\D/g, '') || Math.floor(100 + Math.random() * 900)}`,
+        name: applicantRecord.name,
+        role: applicantRecord.jobTitle || 'Sales Manager',
+        email: applicantRecord.email,
+        phone: applicantRecord.phone || '',
+        location: 'United States (Active Applicant)',
+        workType: 'Full-Time',
+        experience: '5+ Years',
+        score: applicantRecord.score || 94,
+        verified: true,
+        skills: ['Verified Candidate', applicantRecord.jobTitle || 'Sales'],
+        bio: applicantRecord.resumeSummary || `Active applicant for ${applicantRecord.jobTitle}. Submitted verified resume credentials.`,
+        resumeFile: applicantRecord.resumeFile,
+        updatedAt: new Date().toISOString()
+      };
+      const existingResIdx = resumesStore.findIndex(r => r.name.toLowerCase() === autoResumeRecord.name.toLowerCase());
+      if (existingResIdx !== -1) {
+        resumesStore[existingResIdx] = autoResumeRecord;
+      } else {
+        resumesStore.unshift(autoResumeRecord);
+      }
+      saveResumesToDisk();
+      broadcastWebSocketEvent('RESUME_ADDED', { resume: autoResumeRecord });
+
       // Live broadcast to all connected WebSocket clients (Recruiter Studio)
       broadcastWebSocketEvent('CANDIDATE_APPLIED', { applicant: applicantRecord, company: applicantRecord.company });
 
@@ -2741,6 +2923,120 @@ const server = http.createServer(async (req, res) => {
       return sendJson(200, { ok: true, status: 'deleted', deletedId: appId });
     }
     return sendJson(400, { error: 'Missing applicant ID parameter.' });
+  }
+
+  // ----------------------------------------------------
+  // RESUME SEARCH DIRECTORY REST ENDPOINTS
+  // ----------------------------------------------------
+  if (pathname === '/api/resumes' && req.method === 'GET') {
+    const keyword = (parsedUrl.searchParams.get('q') || '').toLowerCase().trim();
+    const location = (parsedUrl.searchParams.get('loc') || '').toLowerCase().trim();
+
+    let list = [...resumesStore];
+    if (keyword) {
+      list = list.filter(r =>
+        (r.name && r.name.toLowerCase().includes(keyword)) ||
+        (r.role && r.role.toLowerCase().includes(keyword)) ||
+        (r.bio && r.bio.toLowerCase().includes(keyword)) ||
+        (r.skills && r.skills.some(s => s.toLowerCase().includes(keyword)))
+      );
+    }
+    if (location) {
+      list = list.filter(r => (r.location && r.location.toLowerCase().includes(location)));
+    }
+    return sendJson(200, { ok: true, resumes: list, count: list.length });
+  }
+
+  if (pathname === '/api/resumes' && req.method === 'POST') {
+    readBody((err, payload) => {
+      if (err) return sendJson(400, { error: err.message });
+      if (!payload || !payload.name) {
+        return sendJson(400, { error: 'Candidate name is required.' });
+      }
+
+      const resId = payload.id || `RES-${Math.floor(100 + Math.random() * 900)}`;
+      const resumeRecord = {
+        id: resId,
+        name: payload.name,
+        role: payload.role || payload.jobTitle || 'Career Professional',
+        email: payload.email || '',
+        phone: payload.phone || '',
+        location: payload.location || 'Remote',
+        workType: payload.workType || 'Full-Time • Remote',
+        experience: payload.experience || '3+ Years',
+        score: payload.score || 94,
+        verified: payload.verified !== undefined ? payload.verified : true,
+        skills: Array.isArray(payload.skills) ? payload.skills : (payload.skills ? String(payload.skills).split(',').map(s => s.trim()) : ['Leadership', 'Communication']),
+        bio: payload.bio || payload.summary || '',
+        resumeFile: payload.resumeFile || `${payload.name.replace(/\s+/g, '_')}_Resume.pdf`,
+        updatedAt: new Date().toISOString()
+      };
+
+      const existingIdx = resumesStore.findIndex(r => r.id === resId);
+      if (existingIdx !== -1) {
+        resumesStore[existingIdx] = resumeRecord;
+      } else {
+        resumesStore.unshift(resumeRecord);
+      }
+
+      saveResumesToDisk();
+      broadcastWebSocketEvent('RESUME_ADDED', { resume: resumeRecord });
+      return sendJson(201, { ok: true, status: 'saved', resume: resumeRecord });
+    });
+    return;
+  }
+
+  if (pathname === '/api/resumes/import' && req.method === 'POST') {
+    readBody((err, payload) => {
+      if (err) return sendJson(400, { error: err.message });
+      const items = Array.isArray(payload) ? payload : (payload && Array.isArray(payload.resumes) ? payload.resumes : []);
+      if (items.length === 0) {
+        return sendJson(400, { error: 'No resume rows provided for import.' });
+      }
+
+      const imported = [];
+      items.forEach(p => {
+        if (!p || !p.name) return;
+        const resId = p.id || `RES-${Math.floor(100 + Math.random() * 900)}`;
+        const record = {
+          id: resId,
+          name: p.name,
+          role: p.role || p.jobTitle || 'Career Professional',
+          email: p.email || '',
+          phone: p.phone || '',
+          location: p.location || 'Remote',
+          workType: p.workType || 'Full-Time • Remote',
+          experience: p.experience || '3+ Years',
+          score: p.score || 92,
+          verified: p.verified !== undefined ? p.verified : true,
+          skills: Array.isArray(p.skills) ? p.skills : (p.skills ? String(p.skills).split(',').map(s => s.trim()) : ['Professional']),
+          bio: p.bio || p.summary || '',
+          resumeFile: p.resumeFile || `${p.name.replace(/\s+/g, '_')}_Resume.pdf`,
+          updatedAt: new Date().toISOString()
+        };
+        const idx = resumesStore.findIndex(r => r.id === resId);
+        if (idx !== -1) resumesStore[idx] = record;
+        else resumesStore.unshift(record);
+        imported.push(record);
+      });
+
+      saveResumesToDisk();
+      broadcastWebSocketEvent('RESUMES_IMPORTED', { count: imported.length });
+      return sendJson(200, { ok: true, importedCount: imported.length, resumes: imported });
+    });
+    return;
+  }
+
+  if (pathname === '/api/resumes' && req.method === 'DELETE') {
+    const resId = parsedUrl.searchParams.get('id');
+    if (resId) {
+      const idx = resumesStore.findIndex(r => r.id === resId);
+      if (idx !== -1) resumesStore.splice(idx, 1);
+      saveResumesToDisk();
+      broadcastWebSocketEvent('RESUME_DELETED', { id: resId });
+      return sendJson(200, { ok: true, status: 'deleted', id: resId });
+    }
+    return sendJson(400, { error: 'Missing resume ID parameter.' });
   }
 
   // ----------------------------------------------------

@@ -3096,6 +3096,66 @@ async function runTests() {
     assert(false, `Group 84 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 85: DEDICATED RESUME SEARCH BOARD, DOSSIER GRID, ADMIN SPREADSHEET IMPORTS & LIVE SYNC
+  // ================================================================
+  console.log('\n--- GROUP 85: DEDICATED RESUME SEARCH BOARD, DOSSIER GRID, ADMIN SPREADSHEET IMPORTS & LIVE SYNC ---');
+  try {
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+
+    // 1. Server REST endpoints for resumes
+    assert(serverJs.includes("pathname === '/api/resumes'") && serverJs.includes("req.method === 'GET'"), 'server.js defines GET /api/resumes endpoint');
+    assert(serverJs.includes("pathname === '/api/resumes'") && serverJs.includes("req.method === 'POST'"), 'server.js defines POST /api/resumes endpoint');
+    assert(serverJs.includes("pathname === '/api/resumes/import'") && serverJs.includes("req.method === 'POST'"), 'server.js defines POST /api/resumes/import endpoint');
+    assert(serverJs.includes("pathname === '/api/resumes'") && serverJs.includes("req.method === 'DELETE'"), 'server.js defines DELETE /api/resumes endpoint');
+    assert(serverJs.includes("RESUME_ADDED") && serverJs.includes("autoResumeRecord"), 'server.js auto-pushes submitted candidate applications to resumesStore');
+
+    // Live endpoint testing
+    const getRes = await httpGet('/api/resumes');
+    assert(getRes.status === 200 && Array.isArray(getRes.data.resumes), 'GET /api/resumes returns candidate resumes directory list');
+    assert(getRes.data.resumes.length >= 8, 'GET /api/resumes includes pre-seeded candidate talent pool');
+
+    const testCand = {
+      name: 'Taylor Brooks',
+      role: 'Enterprise Account Executive',
+      email: 'taylor.brooks@example.com',
+      location: 'New York, NY',
+      experience: '7+ Years',
+      score: 96,
+      skills: ['Enterprise SaaS', 'Solution Selling', 'B2B Sales']
+    };
+    const postRes = await httpPost('/api/resumes', testCand);
+    assert(postRes.status === 201 && postRes.data.ok, 'POST /api/resumes creates a new candidate resume record');
+
+    const testBulk = [
+      { name: 'Bulk Cand One', role: 'Sales Lead', email: 'bulk1@test.com', location: 'Chicago, IL', score: 94 },
+      { name: 'Bulk Cand Two', role: 'Tech Lead', email: 'bulk2@test.com', location: 'Austin, TX', score: 95 }
+    ];
+    const importRes = await httpPost('/api/resumes/import', { resumes: testBulk });
+    assert(importRes.status === 200 && importRes.data.importedCount === 2, 'POST /api/resumes/import bulk-inserts candidate records');
+
+    // 2. Recruiter Portal: 6. RESUME SEARCH Tab, Command Bar, and Dossier Cards
+    assert(recruiterHtml.includes('6. RESUME SEARCH'), 'recruiter.html includes Tab 6: 6. RESUME SEARCH in navigation');
+    assert(recruiterHtml.includes('switchRecruiterTab(\'resumes\')'), 'recruiter.html maps click handler for resumes tab');
+    assert(recruiterHtml.includes('id="view-resumes"'), 'recruiter.html defines #view-resumes section');
+    assert(recruiterHtml.includes('resume-search-keyword') && recruiterHtml.includes('resume-search-location'), 'recruiter.html includes dual search inputs for keyword and location');
+    assert(recruiterHtml.includes('resume-cat-pill') && recruiterHtml.includes('setResumeCategoryFilter'), 'recruiter.html defines 1-tap category pills for quick talent filtering');
+    assert(recruiterHtml.includes('resume-grid-container'), 'recruiter.html defines #resume-grid-container showcase grid');
+    assert(recruiterHtml.includes('loadResumeBoard') && recruiterHtml.includes('filterResumes') && recruiterHtml.includes('toggleSaveResume'), 'recruiter.html implements resume board loading, live filtering, and shortlisting');
+
+    // 3. Admin / Owner Portal: Resume Directory and Sourcing Management
+    assert(adminHtml.includes('MASTER CANDIDATE RESUME DIRECTORY & SOURCING'), 'admin.html includes Master Candidate Resume Directory section');
+    assert(adminHtml.includes('openUploadResumeModal()') && adminHtml.includes('modal-upload-resume'), 'admin.html includes Upload Resume action button and modal');
+    assert(adminHtml.includes('openImportExcelModal()') && adminHtml.includes('modal-import-excel'), 'admin.html includes Import Microsoft Excel action button and modal');
+    assert(adminHtml.includes('openImportGoogleSheetsModal()') && adminHtml.includes('modal-import-sheets'), 'admin.html includes Import Google Sheets action button and modal');
+    assert(adminHtml.includes('loadAdminResumes') && adminHtml.includes('admin-resumes-tbody'), 'admin.html implements admin resume table rendering and data fetch');
+
+  } catch (err) {
+    assert(false, `Group 85 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

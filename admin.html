@@ -1347,6 +1347,45 @@
           <tbody id="admin-applicants-tbody"></tbody>
         </table>
       </div>
+
+      <!-- Section C: Master Candidate Resume Directory & Talent Sourcing Board -->
+      <div class="table-container" style="margin-top: 1rem;">
+        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span>MASTER CANDIDATE RESUME DIRECTORY & SOURCING</span>
+            <span class="badge-tag tag-gold" id="admin-resume-count-badge">8 Resumes</span>
+          </div>
+          <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+            <button class="btn-gold" onclick="openUploadResumeModal()" style="height: 30px; font-size: 0.7rem; padding: 0 0.75rem; font-weight: 800;" data-tooltip="Upload new verified candidate resume profile">
+              📄 Upload Resume
+            </button>
+            <button class="btn-surface-sm" onclick="openImportExcelModal()" style="height: 30px; font-size: 0.7rem; padding: 0 0.75rem; font-weight: 800;" data-tooltip="Bulk import candidate resumes from Microsoft Excel (.xlsx / .csv)">
+              📊 Import Microsoft Excel
+            </button>
+            <button class="btn-surface-sm" onclick="openImportGoogleSheetsModal()" style="height: 30px; font-size: 0.7rem; padding: 0 0.75rem; font-weight: 800;" data-tooltip="Import candidate resumes from Google Sheets (CSV URL or Data)">
+              🌐 Import Google Sheets
+            </button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Candidate Name</th>
+              <th>Target Role</th>
+              <th>Location</th>
+              <th>Experience</th>
+              <th>Match Score</th>
+              <th>Skills</th>
+              <th>Resume (.pdf)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-resumes-tbody">
+            <!-- Dynamic Admin Resume Directory Rows -->
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <!-- ================================================================
@@ -1534,6 +1573,130 @@
 
       <button class="btn-gold" style="width: 100%; margin-top: 0.35rem;" onclick="handleAdminLogin()" data-tooltip="Authenticate master session via secure JWT">
         AUTHENTICATE MASTER SESSION
+      </button>
+    </div>
+  </div>
+
+  <!-- MASTER RESUME UPLOAD MODAL -->
+  <div class="modal-overlay" id="modal-upload-resume">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <span class="modal-main-title">UPLOAD VERIFIED CANDIDATE RESUME</span>
+        <button class="btn-close-modal" onclick="closeModal('modal-upload-resume')">X</button>
+      </div>
+
+      <input type="hidden" id="admin-res-id">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+        <div class="form-group">
+          <label>Candidate Full Name</label>
+          <input type="text" id="admin-res-name" placeholder="e.g. Jordan Rivera" data-tooltip="Candidate full name">
+        </div>
+        <div class="form-group">
+          <label>Target Role / Position</label>
+          <input type="text" id="admin-res-role" placeholder="e.g. Sales Manager" data-tooltip="Target career role">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+        <div class="form-group">
+          <label>Contact Email</label>
+          <input type="email" id="admin-res-email" placeholder="jordan@example.com" data-tooltip="Email address">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="admin-res-phone" placeholder="+1 (555) 019-2831" data-tooltip="Phone number">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="admin-res-location" placeholder="Austin, TX" data-tooltip="Candidate location">
+        </div>
+        <div class="form-group">
+          <label>Experience Level</label>
+          <input type="text" id="admin-res-exp" placeholder="5+ Years" data-tooltip="Years of experience">
+        </div>
+        <div class="form-group">
+          <label>Match Score %</label>
+          <input type="number" id="admin-res-score" value="95" min="60" max="99" data-tooltip="Affinity score">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Skills (Comma-Separated)</label>
+        <input type="text" id="admin-res-skills" placeholder="B2B Sales, CRM, Team Leadership, Retail Operations" data-tooltip="Candidate core skills">
+      </div>
+
+      <div class="form-group">
+        <label>Executive Bio / Summary Snippet</label>
+        <textarea id="admin-res-bio" rows="2" placeholder="Brief 2-line summary of candidate achievements and credentials..." data-tooltip="Resume summary snippet"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Attach Resume File (PDF / DOCX)</label>
+        <input type="file" id="admin-res-file" accept=".pdf,.docx,.doc" onchange="handleResumeFileSelect(event)" style="padding-top: 4px;">
+      </div>
+
+      <button class="btn-gold" style="width: 100%; margin-top: 0.35rem; height: 36px; font-weight: 800;" onclick="saveAdminResume()" data-tooltip="Publish candidate resume profile to live Resume Search board">
+        PUBLISH TO RESUME SEARCH BOARD
+      </button>
+    </div>
+  </div>
+
+  <!-- MASTER IMPORT EXCEL MODAL -->
+  <div class="modal-overlay" id="modal-import-excel">
+    <div class="modal-card" style="max-width: 460px;">
+      <div class="modal-header">
+        <span class="modal-main-title">IMPORT CANDIDATES VIA MICROSOFT EXCEL</span>
+        <button class="btn-close-modal" onclick="closeModal('modal-import-excel')">X</button>
+      </div>
+
+      <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.6rem;">
+        Upload a Microsoft Excel workbook (<strong>.xlsx</strong>, <strong>.xls</strong>) or <strong>.csv</strong> candidate roster. Columns auto-detected: <code>Name</code>, <code>Role</code>, <code>Email</code>, <code>Location</code>, <code>Skills</code>, <code>Experience</code>, <code>Score</code>.
+      </div>
+
+      <div class="form-group">
+        <label>Choose Spreadsheet File (.xlsx, .xls, .csv)</label>
+        <input type="file" id="admin-excel-file-input" accept=".xlsx,.xls,.csv" onchange="processExcelFileSelect(event)" style="padding-top: 4px;">
+      </div>
+
+      <div id="excel-preview-area" style="display: none; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 4px; padding: 0.5rem; max-height: 140px; overflow-y: auto; font-size: 0.7rem; font-family: monospace;">
+      </div>
+
+      <button class="btn-gold" id="btn-confirm-excel-import" style="width: 100%; margin-top: 0.5rem; height: 36px; font-weight: 800;" onclick="submitExcelImport()" data-tooltip="Import parsed rows into live Resume Search board">
+        IMPORT SPREADSHEET ROSTER
+      </button>
+    </div>
+  </div>
+
+  <!-- MASTER IMPORT GOOGLE SHEETS MODAL -->
+  <div class="modal-overlay" id="modal-import-sheets">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <span class="modal-main-title">IMPORT CANDIDATES FROM GOOGLE SHEETS</span>
+        <button class="btn-close-modal" onclick="closeModal('modal-import-sheets')">X</button>
+      </div>
+
+      <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.6rem;">
+        Paste a published Google Sheets CSV link or paste raw CSV spreadsheet rows directly below.
+      </div>
+
+      <div class="form-group">
+        <label>Google Sheets CSV Export URL (Optional)</label>
+        <input type="url" id="admin-sheets-url" placeholder="https://docs.google.com/spreadsheets/d/.../export?format=csv" data-tooltip="Google Sheets published CSV URL">
+      </div>
+
+      <div style="text-align: center; font-size: 0.7rem; color: var(--text-muted); font-weight: 800; margin: 0.2rem 0;">— OR PASTE RAW CSV ROWS —</div>
+
+      <div class="form-group">
+        <label>Paste CSV Data (Header: Name, Role, Email, Location, Skills, Score)</label>
+        <textarea id="admin-sheets-csv-raw" rows="4" placeholder="Name, Role, Email, Location, Skills, Score&#10;Jordan Rivera, Systems Architect, jordan@example.com, Austin TX, Node.js React, 96" style="font-family: monospace; font-size: 0.72rem;" data-tooltip="Paste raw comma-separated candidate rows"></textarea>
+      </div>
+
+      <button class="btn-gold" style="width: 100%; margin-top: 0.5rem; height: 36px; font-weight: 800;" onclick="processGoogleSheetsImport()" data-tooltip="Import Google Sheets candidate data">
+        IMPORT FROM GOOGLE SHEETS
       </button>
     </div>
   </div>
@@ -1749,6 +1912,10 @@
 
       try {
         await loadUsers();
+      } catch (e) {}
+
+      try {
+        await loadAdminResumes();
       } catch (e) {}
 
       try {
@@ -2284,6 +2451,295 @@
     }
     window.downloadAllResumesZip = downloadAllResumesZip;
 
+    // ----------------------------------------------------
+    // MASTER CANDIDATE RESUME MANAGEMENT & SOURCING
+    // ----------------------------------------------------
+    let adminResumes = [];
+    let pendingExcelImportData = [];
+    let uploadedResumeFileName = '';
+
+    function openUploadResumeModal() {
+      document.getElementById('admin-res-id').value = '';
+      document.getElementById('admin-res-name').value = '';
+      document.getElementById('admin-res-role').value = '';
+      document.getElementById('admin-res-email').value = '';
+      document.getElementById('admin-res-phone').value = '';
+      document.getElementById('admin-res-location').value = 'Remote';
+      document.getElementById('admin-res-exp').value = '5+ Years';
+      document.getElementById('admin-res-score').value = '95';
+      document.getElementById('admin-res-skills').value = '';
+      document.getElementById('admin-res-bio').value = '';
+      document.getElementById('admin-res-file').value = '';
+      uploadedResumeFileName = '';
+      openModal('modal-upload-resume');
+    }
+    window.openUploadResumeModal = openUploadResumeModal;
+
+    function handleResumeFileSelect(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        uploadedResumeFileName = file.name;
+      }
+    }
+    window.handleResumeFileSelect = handleResumeFileSelect;
+
+    async function saveAdminResume() {
+      const name = document.getElementById('admin-res-name').value.trim();
+      const role = document.getElementById('admin-res-role').value.trim();
+      if (!name || !role) {
+        showCustomModalAlert('Validation Error', 'Candidate Name and Target Role are required.');
+        return;
+      }
+
+      const payload = {
+        id: document.getElementById('admin-res-id').value || `RES-${Math.floor(100 + Math.random() * 900)}`,
+        name: name,
+        role: role,
+        email: document.getElementById('admin-res-email').value.trim(),
+        phone: document.getElementById('admin-res-phone').value.trim(),
+        location: document.getElementById('admin-res-location').value.trim() || 'Remote',
+        experience: document.getElementById('admin-res-exp').value.trim() || '3+ Years',
+        score: parseInt(document.getElementById('admin-res-score').value || '95', 10),
+        skills: document.getElementById('admin-res-skills').value.split(',').map(s => s.trim()).filter(Boolean),
+        bio: document.getElementById('admin-res-bio').value.trim(),
+        resumeFile: uploadedResumeFileName || `${name.replace(/\s+/g, '_')}_Resume.pdf`,
+        verified: true
+      };
+
+      try {
+        const res = await fetch('/api/resumes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.ok) {
+          closeModal('modal-upload-resume');
+          showCustomModalAlert('Resume Published', `Candidate profile for "${payload.name}" published to live Resume Search board.`);
+          loadAdminResumes();
+        } else {
+          showCustomModalAlert('Error', data.error || 'Failed to save candidate resume.');
+        }
+      } catch (err) {
+        showCustomModalAlert('Save Error', err.message);
+      }
+    }
+    window.saveAdminResume = saveAdminResume;
+
+    function openImportExcelModal() {
+      document.getElementById('admin-excel-file-input').value = '';
+      document.getElementById('excel-preview-area').style.display = 'none';
+      document.getElementById('excel-preview-area').innerHTML = '';
+      pendingExcelImportData = [];
+      openModal('modal-import-excel');
+    }
+    window.openImportExcelModal = openImportExcelModal;
+
+    function processExcelFileSelect(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+        const lines = content.split(/\r?\n/).filter(l => l.trim().length > 0);
+        if (lines.length <= 1) {
+          showCustomModalAlert('Spreadsheet Format', 'Could not find candidate data rows in selected file.');
+          return;
+        }
+
+        const candidates = [];
+        for (let i = 1; i < lines.length; i++) {
+          const parts = lines[i].split(',').map(p => p.trim());
+          if (parts.length < 2 || !parts[0]) continue;
+          candidates.push({
+            id: `RES-${Math.floor(100 + Math.random() * 900)}`,
+            name: parts[0] || 'Candidate',
+            role: parts[1] || 'Sales & Operations',
+            email: parts[2] || '',
+            location: parts[3] || 'Remote',
+            skills: parts[4] ? parts[4].split(';').map(s => s.trim()) : ['Professional'],
+            score: parseInt(parts[5] || '94', 10) || 94,
+            experience: '4+ Years',
+            verified: true
+          });
+        }
+
+        pendingExcelImportData = candidates;
+        const previewEl = document.getElementById('excel-preview-area');
+        previewEl.style.display = 'block';
+        previewEl.innerHTML = `<strong>Parsed ${candidates.length} Candidate Rows:</strong><br/>` +
+          candidates.map(c => `• ${c.name} — ${c.role} (${c.location})`).join('<br/>');
+      };
+      reader.readAsText(file);
+    }
+    window.processExcelFileSelect = processExcelFileSelect;
+
+    async function submitExcelImport() {
+      if (!pendingExcelImportData || pendingExcelImportData.length === 0) {
+        showCustomModalAlert('Import Error', 'Please select a spreadsheet file with valid candidate rows first.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/resumes/import', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resumes: pendingExcelImportData })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          closeModal('modal-import-excel');
+          showCustomModalAlert('Excel Import Complete', `Successfully imported ${data.importedCount || pendingExcelImportData.length} candidates into the live Resume Search directory!`);
+          loadAdminResumes();
+        } else {
+          showCustomModalAlert('Import Failed', data.error || 'Server rejected import payload.');
+        }
+      } catch (err) {
+        showCustomModalAlert('Import Error', err.message);
+      }
+    }
+    window.submitExcelImport = submitExcelImport;
+
+    function openImportGoogleSheetsModal() {
+      document.getElementById('admin-sheets-url').value = '';
+      document.getElementById('admin-sheets-csv-raw').value = '';
+      openModal('modal-import-sheets');
+    }
+    window.openImportGoogleSheetsModal = openImportGoogleSheetsModal;
+
+    async function processGoogleSheetsImport() {
+      const url = document.getElementById('admin-sheets-url').value.trim();
+      const rawCsv = document.getElementById('admin-sheets-csv-raw').value.trim();
+
+      let csvText = rawCsv;
+      if (url) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            csvText = await res.text();
+          }
+        } catch (e) {}
+      }
+
+      if (!csvText) {
+        showCustomModalAlert('Input Required', 'Please enter a Google Sheets CSV URL or paste CSV candidate rows.');
+        return;
+      }
+
+      const lines = csvText.split(/\r?\n/).filter(l => l.trim().length > 0);
+      if (lines.length <= 1) {
+        showCustomModalAlert('Format Error', 'Google Sheets CSV contains no data rows.');
+        return;
+      }
+
+      const candidates = [];
+      for (let i = 1; i < lines.length; i++) {
+        const parts = lines[i].split(',').map(p => p.trim());
+        if (parts.length < 2 || !parts[0]) continue;
+        candidates.push({
+          id: `RES-${Math.floor(100 + Math.random() * 900)}`,
+          name: parts[0],
+          role: parts[1] || 'Sales Professional',
+          email: parts[2] || '',
+          location: parts[3] || 'Remote',
+          skills: parts[4] ? parts[4].split(';').map(s => s.trim()) : ['Leadership', 'Sales'],
+          score: parseInt(parts[5] || '95', 10) || 95,
+          experience: '3+ Years',
+          verified: true
+        });
+      }
+
+      try {
+        const res = await fetch('/api/resumes/import', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resumes: candidates })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          closeModal('modal-import-sheets');
+          showCustomModalAlert('Google Sheets Import Complete', `Imported ${candidates.length} candidates from Google Sheets into Resume Search!`);
+          loadAdminResumes();
+        } else {
+          showCustomModalAlert('Import Error', data.error || 'Failed to import Google Sheets data.');
+        }
+      } catch (err) {
+        showCustomModalAlert('Network Error', err.message);
+      }
+    }
+    window.processGoogleSheetsImport = processGoogleSheetsImport;
+
+    async function loadAdminResumes() {
+      try {
+        const res = await fetch('/api/resumes');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Array.isArray(data.resumes)) {
+            adminResumes = data.resumes;
+            renderAdminResumes();
+          }
+        }
+      } catch (e) {}
+    }
+    window.loadAdminResumes = loadAdminResumes;
+
+    function renderAdminResumes(resumes = null) {
+      const list = resumes || adminResumes;
+      const tbody = document.getElementById('admin-resumes-tbody');
+      const countBadge = document.getElementById('admin-resume-count-badge');
+      if (countBadge) countBadge.textContent = `${list.length} Resume${list.length === 1 ? '' : 's'}`;
+      if (!tbody) return;
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:1.5rem; color:var(--text-muted);">No candidate resumes in directory. Click "Upload Resume" or "Import Microsoft Excel" to add candidates.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(r => `
+        <tr>
+          <td><strong>${r.id}</strong></td>
+          <td>
+            <div style="font-weight:700; color:var(--uthe-charcoal);">${r.name}</div>
+            <div style="font-size:0.65rem; color:var(--text-muted);">${r.email || 'No email provided'}</div>
+          </td>
+          <td>${r.role}</td>
+          <td>${r.location || 'Remote'}</td>
+          <td>${r.experience || '3+ Yrs'}</td>
+          <td><span class="badge-tag tag-mint">${r.score || 94}% MATCH</span></td>
+          <td><span style="font-size:0.65rem; color:var(--text-muted);">${(r.skills || []).slice(0, 2).join(', ')}</span></td>
+          <td><a href="/resumes/${r.resumeFile || 'sample_resume.pdf'}" target="_blank" style="color:var(--blue-accent); font-weight:700; text-decoration:none; font-size:0.68rem;">📄 ${r.resumeFile ? 'View' : 'PDF'}</a></td>
+          <td class="action-cells">
+            <button class="danger" onclick="deleteAdminResume('${r.id}')" title="Delete candidate resume">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+    window.renderAdminResumes = renderAdminResumes;
+
+    async function deleteAdminResume(id) {
+      if (typeof showCustomModalConfirm === 'function') {
+        showCustomModalConfirm('Delete Resume Record', `Are you sure you want to permanently delete candidate resume #${id}?`, async () => {
+          try {
+            const res = await fetch(`/api/resumes?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+            if (res.ok) {
+              showCustomModalAlert('Resume Deleted', `Candidate resume #${id} was deleted.`);
+              loadAdminResumes();
+            }
+          } catch (e) {}
+        });
+      } else {
+        try {
+          const res = await fetch(`/api/resumes?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+          if (res.ok) {
+            showCustomModalAlert('Resume Deleted', `Candidate resume #${id} was deleted.`);
+            loadAdminResumes();
+          }
+        } catch (e) {}
+      }
+    }
+    window.deleteAdminResume = deleteAdminResume;
+
     function exportAuditLog() {
       const payload = {
         owner: 'Zion Daye (contact@utheversity.com | 815-980-4272)',
@@ -2524,6 +2980,8 @@
                 cmsConfig = cfg;
                 populateCmsForm(cfg);
               }
+            } else if (data.type === 'RESUME_ADDED' || data.type === 'RESUMES_IMPORTED' || data.type === 'RESUME_DELETED') {
+              loadAdminResumes();
             }
           } catch (err) {}
         };

@@ -1,0 +1,235 @@
+[
+  {
+    "id": "RES-331",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-08-31T23:23:53.224Z"
+  },
+  {
+    "id": "RES-676",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-08-31T23:23:53.224Z"
+  },
+  {
+    "id": "RES-801",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-08-31T23:23:53.203Z"
+  },
+  {
+    "id": "RES-101",
+    "name": "Marcus Vance",
+    "role": "Sales Manager",
+    "email": "marcus.vance@example.com",
+    "phone": "+1 (512) 555-0199",
+    "location": "Austin, TX (Remote)",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "B2B Sales",
+      "Team Leadership",
+      "Salesforce CRM",
+      "Revenue Growth",
+      "Enterprise Accounts"
+    ],
+    "bio": "Dynamic Sales Manager with 7+ years accelerating retail and SaaS revenue pipelines by 140%+ across North America.",
+    "resumeFile": "Marcus_Vance_Resume_2026.pdf",
+    "updatedAt": "2026-08-31T23:23:21.390Z"
+  },
+  {
+    "id": "RES-102",
+    "name": "Elena Rostova",
+    "role": "Retail Sales Associate",
+    "email": "elena.rostova@example.com",
+    "phone": "+1 (415) 555-0211",
+    "location": "San Francisco, CA (Hybrid)",
+    "workType": "Full-Time • Hybrid",
+    "experience": "4+ Years",
+    "score": 91,
+    "verified": true,
+    "skills": [
+      "Customer Engagement",
+      "Inventory Control",
+      "POS Systems",
+      "Merchandising",
+      "Bilingual"
+    ],
+    "bio": "Customer-focused Retail Specialist experienced in fast-paced flagship storefronts and omnichannel order fulfillment.",
+    "resumeFile": "Elena_Rostova_Resume.pdf",
+    "updatedAt": "2026-08-31T23:23:21.390Z"
+  },
+  {
+    "id": "RES-103",
+    "name": "David K. Mercer",
+    "role": "Store Director / VP Retail",
+    "email": "david.mercer@example.com",
+    "phone": "+1 (206) 555-0331",
+    "location": "Seattle, WA (On-Site)",
+    "workType": "Full-Time • On-Site",
+    "experience": "12+ Years",
+    "score": 98,
+    "verified": true,
+    "skills": [
+      "P&L Management",
+      "Store Operations",
+      "Executive Leadership",
+      "Staff Training",
+      "Supply Chain"
+    ],
+    "bio": "Accomplished Retail Executive leading multi-unit store networks with $45M+ annual budgets and 200+ direct reports.",
+    "resumeFile": "David_Mercer_Resume.pdf",
+    "updatedAt": "2026-08-31T23:23:21.390Z"
+  },
+  {
+    "id": "RES-104",
+    "name": "Sarah Jenkins",
+    "role": "Operations & Logistics Manager",
+    "email": "sarah.jenkins@example.com",
+    "phone": "+1 (312) 555-0842",
+    "location": "Chicago, IL (Remote)",
+    "workType": "Full-Time • Remote",
+    "experience": "6+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Logistics Ops",
+      "Warehouse Management",
+      "ERP Software",
+      "Vendor Relations",
+      "Lean Six Sigma"
+    ],
+    "bio": "Operational strategist specialized in streamlining multi-channel warehouse fulfillment and vendor negotiations.",
+    "resumeFile": "Sarah_Jenkins_Resume.pdf",
+    "updatedAt": "2026-08-31T23:23:21.390Z"
+  },
+  {
+    "id": "RES-105",
+    "name": "Alexander Hayes",
+    "role": "Lead Full-Stack Engineer",
+    "email": "alex.hayes@example.com",
+    "phone": "+1 (404) 555-0915",
+    "location": "Atlanta, GA (Remote)",
+    "workType": "Full-Time • Remote",
+    "experience": "8+ Years",
+    "score": 97,
+    "verified": true,
+    "skills": [
+      "TypeScript",
+      "Node.js",
+      "React",
+      "Cloud Architecture",
+      "GraphQL",
+      "PostgreSQL"
+    ],
+    "bio": "High-throughput system architect passionate about reactive user interfaces and resilient cloud-native backends.",
+    "resumeFile": "Alexander_Hayes_Resume.pdf",
+    "updatedAt": "2026-08-31T23:23:21.390Z"
+  },
+  {
+    "id": "RES-106",
+    "name": "Maya Lin",
+    "role": "Digital Marketing & Growth Lead",
+    "email": "maya.lin@example.com",
+    "phone": "+1 (212) 555-0177",
+    "location": "New York, NY (Hybrid)",
+    "workType": "Full-Time • Hybrid",
+    "experience": "5+ Years",
+    "score": 93,
+    "verified": true,
+    "skills": [
+      "Omnichannel Growth",
+      "Paid Media",
+      "SEO / SEM",
+      "Google Analytics",
+      "Content Strategy"
+    ],
+    "bio": "Data-driven Growth Marketer driving acquisition campaigns and viral social outreach across global consumer brands.",
+    "resumeFile": "Maya_Lin_Resume.pdf",
+    "updatedAt": "2026-08-31T23:23:21.390Z"
+  },
+  {
+    "id": "RES-107",
+    "name": "Jordan Cole",
+    "role": "Customer Success & Support Lead",
+    "email": "jordan.cole@example.com",
+    "phone": "+1 (303) 555-0164",
+    "location": "Denver, CO (Remote)",
+    "workType": "Full-Time • Remote",
+    "experience": "5+ Years",
+    "score": 89,
+    "verified": true,
+    "skills": [
+      "Client Retention",
+      "Zendesk / Intercom",
+      "SaaS Onboarding",
+      "Customer Success",
+      "Escalation Mgmt"
+    ],
+    "bio": "Customer advocate dedicated to 99%+ CSAT scores and frictionless enterprise onboarding workflows.",
+    "resumeFile": "Jordan_Cole_Resume.pdf",
+    "updatedAt": "2026-08-31T23:23:21.390Z"
+  },
+  {
+    "id": "RES-108",
+    "name": "Priya Patel",
+    "role": "HR & Talent Acquisition Specialist",
+    "email": "priya.patel@example.com",
+    "phone": "+1 (617) 555-0138",
+    "location": "Boston, MA (Hybrid)",
+    "workType": "Full-Time • Hybrid",
+    "experience": "6+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Technical Sourcing",
+      "ATS Optimization",
+      "Employer Branding",
+      "Diversity Hiring",
+      "Interviewing"
+    ],
+    "bio": "Strategic talent partner specializing in recruiting executive, engineering, and high-impact corporate teams.",
+    "resumeFile": "Priya_Patel_Resume.pdf",
+    "updatedAt": "2026-08-31T23:23:21.390Z"
+  }
+]
