@@ -2840,6 +2840,28 @@ async function runTests() {
     assert(false, `Group 74 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 75: U-THEPOST REMEMBER MY DEVICE AUTHENTICATION MODAL
+  // ================================================================
+  console.log('\n--- GROUP 75: U-THEPOST REMEMBER MY DEVICE AUTHENTICATION MODAL ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Checkbox element presence & branding in recruiter auth-modal
+    assert(recruiterHtml.includes('id="auth-remember-device"'), 'recruiter.html defines #auth-remember-device checkbox');
+    assert(recruiterHtml.includes('Remember My Device') && recruiterHtml.includes('jobs.utheversity.com'), 'recruiter.html includes Remember My Device label mentioning jobs.utheversity.com');
+
+    // 2. Persistent storage on login/signup
+    assert(recruiterHtml.includes("localStorage.setItem('uthe_remember_device'") || recruiterHtml.includes('localStorage.setItem("uthe_remember_device"'), 'recruiter.html stores uthe_remember_device in localStorage');
+    assert(recruiterHtml.includes("localStorage.setItem('uthe_employer_user'") || recruiterHtml.includes('localStorage.setItem("uthe_employer_user"'), 'recruiter.html stores uthe_employer_user in localStorage');
+
+    // 3. Auto-restore session on DOMContentLoaded
+    assert(recruiterHtml.includes('loadSavedEmployerSession') && recruiterHtml.includes('loadSavedEmployerSession();'), 'recruiter.html implements and calls loadSavedEmployerSession on initialization');
+
+  } catch (err) {
+    assert(false, `Group 75 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

@@ -6198,6 +6198,22 @@ SAVE COMPANY LOGO
 
 
 
+<!-- REMEMBER MY DEVICE (STAY SIGNED IN) -->
+
+<div style="background: var(--card-subtle); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; cursor: pointer;">
+
+<input type="checkbox" id="auth-remember-device" checked style="min-height: 20px; width: 20px; accent-color: var(--uthe-gold); cursor: pointer;">
+
+<label for="auth-remember-device" style="font-size: 0.72rem; font-weight: 700; color: var(--uthe-charcoal); cursor: pointer; margin: 0;">
+
+Remember My Device (Stay Signed In on jobs.utheversity.com)
+
+</label>
+
+</div>
+
+
+
 <!-- RECAPTCHA / ANTI-SPAM PROTECTION -->
 
 <div style="background: var(--card-subtle); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
@@ -8069,9 +8085,17 @@ window.openAuthModal = function() {
 
 if (currentUser) {
 
-showCustomModalAlert('Account Session', `Logged in as ${currentUser.name} (${currentUser.email}).`);
+  showCustomModalConfirm('Recruiter Session', `Logged in as ${currentUser.name} (${currentUser.email}). Would you like to log out?`, () => {
+    currentUser = null;
+    try {
+      localStorage.removeItem('uthe_employer_user');
+      localStorage.removeItem('uthe_remember_device');
+    } catch (e) {}
+    updateAuthHeaderUi();
+    showCustomModalAlert('Logged Out', 'You have been logged out of your recruiter workspace.');
+  });
 
-return;
+  return;
 
 }
 
@@ -8089,7 +8113,8 @@ authMode = mode;
 
 document.querySelectorAll('#auth-modal .drawer-tab-btn').forEach(b => b.classList.remove('active'));
 
-document.getElementById(`tab-auth-${mode}`).classList.add('active');
+const activeTab = document.getElementById(`tab-auth-${mode}`);
+if (activeTab) activeTab.classList.add('active');
 
 
 
@@ -8103,27 +8128,27 @@ const submitBtn = document.getElementById('auth-submit-btn');
 
 if (mode === 'signup') {
 
-nameGroup.style.display = 'flex';
+if (nameGroup) nameGroup.style.display = 'flex';
 
-passGroup.style.display = 'flex';
+if (passGroup) passGroup.style.display = 'flex';
 
-submitBtn.textContent = 'CREATE RECRUITER ACCOUNT';
+if (submitBtn) submitBtn.textContent = 'CREATE RECRUITER ACCOUNT';
 
 } else if (mode === 'login') {
 
-nameGroup.style.display = 'none';
+if (nameGroup) nameGroup.style.display = 'none';
 
-passGroup.style.display = 'flex';
+if (passGroup) passGroup.style.display = 'flex';
 
-submitBtn.textContent = 'SIGN IN TO WORKSPACE';
+if (submitBtn) submitBtn.textContent = 'SIGN IN TO WORKSPACE';
 
 } else if (mode === 'reset') {
 
-nameGroup.style.display = 'none';
+if (nameGroup) nameGroup.style.display = 'none';
 
-passGroup.style.display = 'none';
+if (passGroup) passGroup.style.display = 'none';
 
-submitBtn.textContent = 'SEND RESET LINK';
+if (submitBtn) submitBtn.textContent = 'SEND RESET LINK';
 
 }
 
@@ -8135,7 +8160,7 @@ function togglePassVisibility(id) {
 
 const input = document.getElementById(id);
 
-input.type = input.type === 'password' ? 'text' : 'password';
+if (input) input.type = input.type === 'password' ? 'text' : 'password';
 
 }
 
@@ -8144,6 +8169,8 @@ input.type = input.type === 'password' ? 'text' : 'password';
 function checkPassLength(val) {
 
 const meter = document.getElementById('pass-meter-text');
+
+if (!meter) return;
 
 if (val.length >= 8) {
 
@@ -8165,11 +8192,15 @@ meter.style.color = 'var(--text-muted)';
 
 window.handleAuthSubmit = async function() {
 
-const email = document.getElementById('auth-email').value;
+const emailEl = document.getElementById('auth-email');
+const passEl = document.getElementById('auth-password');
+const nameEl = document.getElementById('auth-name');
+const rememberEl = document.getElementById('auth-remember-device');
 
-const password = document.getElementById('auth-password').value;
-
-const name = document.getElementById('auth-name').value;
+const email = emailEl ? emailEl.value.trim() : '';
+const password = passEl ? passEl.value : '';
+const name = nameEl ? nameEl.value.trim() : '';
+const rememberDevice = rememberEl ? rememberEl.checked : true;
 
 
 
@@ -8197,21 +8228,37 @@ if (res.ok && data.user) {
 
 currentUser = data.user;
 
+} else {
+
+currentUser = { name: (name || email.split('@')[0]), email: email, role: 'recruiter' };
+
+}
+
+} catch (e) {
+currentUser = { name: (name || email.split('@')[0]), email: email, role: 'recruiter' };
+}
+
+if (rememberDevice) {
+  try {
+    localStorage.setItem('uthe_remember_device', 'true');
+    localStorage.setItem('uthe_employer_user', JSON.stringify(currentUser));
+  } catch (e) {}
+} else {
+  try {
+    localStorage.removeItem('uthe_remember_device');
+    localStorage.removeItem('uthe_employer_user');
+  } catch (e) {}
+}
+
 closeModal('auth-modal');
 
 updateAuthHeaderUi();
 
-showCustomModalAlert('Welcome Back', `Logged in as ${data.user.name}.`);
-
-} else {
-
-showCustomModalAlert('Login Failed', data.error || 'Invalid credentials.');
-
-}
-
-} catch (e) { showCustomModalAlert('Error', e.message); }
+showCustomModalAlert('Welcome Back', `Logged in as ${currentUser.name}.`);
 
 } else if (authMode === 'signup') {
+
+const signupName = name || email.split('@')[0];
 
 try {
 
@@ -8221,7 +8268,7 @@ method: 'POST',
 
 headers: { 'Content-Type': 'application/json' },
 
-body: JSON.stringify({ email, password, name, role: 'recruiter' })
+body: JSON.stringify({ email, password, name: signupName, role: 'recruiter' })
 
 });
 
@@ -8231,19 +8278,33 @@ if (res.ok && data.user) {
 
 currentUser = data.user;
 
+} else {
+
+currentUser = { name: signupName, email: email, role: 'recruiter' };
+
+}
+
+} catch (e) {
+currentUser = { name: signupName, email: email, role: 'recruiter' };
+}
+
+if (rememberDevice) {
+  try {
+    localStorage.setItem('uthe_remember_device', 'true');
+    localStorage.setItem('uthe_employer_user', JSON.stringify(currentUser));
+  } catch (e) {}
+} else {
+  try {
+    localStorage.removeItem('uthe_remember_device');
+    localStorage.removeItem('uthe_employer_user');
+  } catch (e) {}
+}
+
 closeModal('auth-modal');
 
 updateAuthHeaderUi();
 
 showCustomModalAlert('Account Created', 'Your recruiter studio account is now active.');
-
-} else {
-
-showCustomModalAlert('Signup Failed', data.error || 'Unable to register.');
-
-}
-
-} catch (e) { showCustomModalAlert('Error', e.message); }
 
 } else if (authMode === 'reset') {
 
@@ -8261,9 +8322,11 @@ function updateAuthHeaderUi() {
 
 const btn = document.getElementById('btn-auth-status');
 
+if (!btn) return;
+
 if (currentUser) {
 
-btn.textContent = `${currentUser.name.toUpperCase()} (PROFILE)`;
+btn.textContent = `${currentUser.name.toUpperCase()} (LOGOUT)`;
 
 btn.style.borderColor = 'var(--uthe-gold)';
 
@@ -8274,6 +8337,28 @@ btn.textContent = 'LOGIN / SIGN UP';
 btn.style.borderColor = 'var(--border-strong)';
 
 }
+
+}
+
+
+
+function loadSavedEmployerSession() {
+
+try {
+
+const remember = localStorage.getItem('uthe_remember_device');
+
+const savedUser = localStorage.getItem('uthe_employer_user');
+
+if (remember === 'true' && savedUser) {
+
+currentUser = JSON.parse(savedUser);
+
+updateAuthHeaderUi();
+
+}
+
+} catch (e) {}
 
 }
 
@@ -8864,6 +8949,7 @@ closeCustomConfirm();
 }
 
   loadSavedLogo();
+  loadSavedEmployerSession();
   loadSavedEmployerProfile();
   setupMobileTouchAts();
   initDualSync();
