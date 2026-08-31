@@ -2644,18 +2644,18 @@ async function runTests() {
   }
 
   // ================================================================
-  // GROUP 66: RESTORE SECURITY & LISTINGS 6TH TAB (MOBILE & DESKTOP)
+  // GROUP 66: REMOVE SECURITY & LISTINGS TAB (MOBILE & DESKTOP)
   // ================================================================
-  console.log('\n--- GROUP 66: RESTORE SECURITY & LISTINGS 6TH TAB ---');
+  console.log('\n--- GROUP 66: REMOVE SECURITY & LISTINGS TAB ---');
   try {
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
-    // 1. Tab 6 in Navigation and Mobile Drawer
-    assert(recruiterHtml.includes('6. SECURITY & LISTINGS'), 'recruiter.html renders 6. SECURITY & LISTINGS in navigation');
-    assert(recruiterHtml.includes("switchRecruiterTab('security')"), 'recruiter.html binds switchRecruiterTab with security');
+    // 1. Tab 6 removed from Navigation and Mobile Drawer
+    assert(!recruiterHtml.includes('6. SECURITY & LISTINGS'), 'recruiter.html cleanly removes 6. SECURITY & LISTINGS from navigation');
+    assert(!recruiterHtml.includes('id="view-security"'), 'recruiter.html removes #view-security tab-view');
 
-    // 2. Section View in Main DOM
-    assert(recruiterHtml.includes('id="view-security"'), 'recruiter.html defines #view-security tab-view');
+    // 2. Exact 5 clean tabs remain intact
+    assert(recruiterHtml.includes('1. JOB STUDIO') && recruiterHtml.includes('2. OMNICHANNEL CRM') && recruiterHtml.includes('3. APPLICANT TRACKER') && recruiterHtml.includes('4. PERFORMANCE & PLANS') && recruiterHtml.includes('5. MY PROFILE'), 'recruiter.html maintains clean 5 primary navigation tabs');
 
   } catch (err) {
     assert(false, `Group 66 failed: ${err.message}`);
