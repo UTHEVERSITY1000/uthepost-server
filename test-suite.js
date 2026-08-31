@@ -2617,7 +2617,6 @@ async function runTests() {
 
     // 2. Repositioned Active Tab Tooltips & Sub-header Banners
     assert(recruiterHtml.includes('.sub-header-banner,') && recruiterHtml.includes('.nav-tab-btn [data-tooltip],') && recruiterHtml.includes('position: absolute !important;') && recruiterHtml.includes('top: calc(100% + 6px) !important;') && recruiterHtml.includes('z-index: 99999 !important;'), 'recruiter.html positions top deck tooltips cleanly below tab bar with z-index 99999');
-    assert(recruiterHtml.includes('.sub-header-banner,') && recruiterHtml.includes('position: absolute !important;') && recruiterHtml.includes('top: calc(100% + 6px) !important;') && recruiterHtml.includes('z-index: 99999 !important;'), 'recruiter.html positions top deck tooltips cleanly below tab bar with z-index 99999');
 
     // 3. Top Margin on Main Content Canvas
     assert(recruiterHtml.includes('main, .main-content, .workspace-container, #job-studio-container') && recruiterHtml.includes('margin-top: 0.75rem !important;'), 'recruiter.html adds 0.75rem top margin to main content canvas');
@@ -2633,15 +2632,33 @@ async function runTests() {
   try {
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
-    // 1. All 5 Navigation Tabs present in DOM
-    assert(recruiterHtml.includes('1. JOB STUDIO') && recruiterHtml.includes('2. OMNICHANNEL CRM') && recruiterHtml.includes('3. APPLICANT TRACKER') && recruiterHtml.includes('4. PERFORMANCE & PLANS') && recruiterHtml.includes('5. MY PROFILE'), 'recruiter.html preserves all 5 navigation tabs in DOM');
+    // 1. All Navigation Tabs present in DOM
+    assert(recruiterHtml.includes('1. JOB STUDIO') && recruiterHtml.includes('2. OMNICHANNEL CRM') && recruiterHtml.includes('3. APPLICANT TRACKER') && recruiterHtml.includes('4. PERFORMANCE & PLANS') && recruiterHtml.includes('5. MY PROFILE'), 'recruiter.html preserves primary navigation tabs in DOM');
 
     // 2. Mobile Belt Styling & No-Truncation Lock
     assert(recruiterHtml.includes('.portal-navigation, nav.header-center-tabs') && recruiterHtml.includes('flex-wrap: nowrap !important') && recruiterHtml.includes('overflow-x: auto !important'), 'recruiter.html enforces horizontal scroll without wrapping on mobile belt');
-    assert(recruiterHtml.includes('.portal-navigation button, nav.header-center-tabs button, .nav-tab-btn') && recruiterHtml.includes('display: inline-flex !important') && recruiterHtml.includes('visibility: visible !important') && recruiterHtml.includes('opacity: 1 !important'), 'recruiter.html locks all 5 tabs visible and uncollapsed on mobile');
+    assert(recruiterHtml.includes('.portal-navigation button, nav.header-center-tabs button, .nav-tab-btn') && recruiterHtml.includes('display: inline-flex !important') && recruiterHtml.includes('visibility: visible !important') && recruiterHtml.includes('opacity: 1 !important'), 'recruiter.html locks tabs visible and uncollapsed on mobile');
 
   } catch (err) {
     assert(false, `Group 65 failed: ${err.message}`);
+  }
+
+  // ================================================================
+  // GROUP 66: RESTORE SECURITY & LISTINGS 6TH TAB (MOBILE & DESKTOP)
+  // ================================================================
+  console.log('\n--- GROUP 66: RESTORE SECURITY & LISTINGS 6TH TAB ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Tab 6 in Navigation and Mobile Drawer
+    assert(recruiterHtml.includes('6. SECURITY & LISTINGS'), 'recruiter.html renders 6. SECURITY & LISTINGS in navigation');
+    assert(recruiterHtml.includes("switchRecruiterTab('security')"), 'recruiter.html binds switchRecruiterTab with security');
+
+    // 2. Section View in Main DOM
+    assert(recruiterHtml.includes('id="view-security"'), 'recruiter.html defines #view-security tab-view');
+
+  } catch (err) {
+    assert(false, `Group 66 failed: ${err.message}`);
   }
 
   console.log('\n================================================================');
