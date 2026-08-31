@@ -3978,23 +3978,104 @@ box-sizing: border-box !important;
 
 
 
-/* Make Campaign Date Tracker Table horizontally scrollable on mobile */
+      /* Make Campaign Date Tracker Table horizontally scrollable on mobile */
+      .campaign-tracker-container, .table-responsive, #campaign-tracker-table, .campaign-tracker-table, div:has(> .campaign-tracker-table) {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        box-sizing: border-box !important;
+      }
 
-.campaign-tracker-container, .table-responsive, #campaign-tracker-table, .campaign-tracker-table, div:has(> .campaign-tracker-table) {
+      /* CARD 3 MOBILE HORIZONTAL BELT & TOUCH-FRIENDLY HIGH-VISIBILITY SCROLLBAR */
+      .card-3-active-listings,
+      #card3-live-jobs-container,
+      .card-3-wrap {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
 
-display: block !important;
+      #active-jobs-table-container,
+      .card-3-table-wrapper,
+      .card-3-active-listings .table-container,
+      .card-3-active-listings div:has(> table),
+      .card-3-wrap div:has(> table) {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        box-sizing: border-box !important;
+        padding-bottom: 0.65rem !important;
+        margin-bottom: 0.25rem !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: #FEBA27 #E2E8F0 !important;
+      }
 
-width: 100% !important;
+      /* Webkit Touch-Friendly High-Visibility Scrollbar Snugged at Bottom */
+      #active-jobs-table-container::-webkit-scrollbar,
+      .card-3-table-wrapper::-webkit-scrollbar,
+      .card-3-active-listings .table-container::-webkit-scrollbar,
+      .card-3-active-listings div:has(> table)::-webkit-scrollbar,
+      .card-3-wrap div:has(> table)::-webkit-scrollbar {
+        display: block !important;
+        height: 8px !important;
+        background-color: #E2E8F0 !important;
+        border-radius: 4px !important;
+      }
 
-overflow-x: auto !important;
+      #active-jobs-table-container::-webkit-scrollbar-track,
+      .card-3-table-wrapper::-webkit-scrollbar-track,
+      .card-3-active-listings .table-container::-webkit-scrollbar-track,
+      .card-3-active-listings div:has(> table)::-webkit-scrollbar-track,
+      .card-3-wrap div:has(> table)::-webkit-scrollbar-track {
+        background-color: #E2E8F0 !important;
+        border-radius: 4px !important;
+      }
 
--webkit-overflow-scrolling: touch !important;
+      #active-jobs-table-container::-webkit-scrollbar-thumb,
+      .card-3-table-wrapper::-webkit-scrollbar-thumb,
+      .card-3-active-listings .table-container::-webkit-scrollbar-thumb,
+      .card-3-active-listings div:has(> table)::-webkit-scrollbar-thumb,
+      .card-3-wrap div:has(> table)::-webkit-scrollbar-thumb {
+        background-color: #FEBA27 !important;
+        border-radius: 4px !important;
+        border: 1.5px solid #D97706 !important;
+      }
 
-box-sizing: border-box !important;
+      #active-jobs-table-container::-webkit-scrollbar-thumb:hover,
+      .card-3-table-wrapper::-webkit-scrollbar-thumb:hover {
+        background-color: #F59E0B !important;
+      }
 
-}
+      /* Table layout inside Card 3 on mobile */
+      .card3-live-jobs-table,
+      .card-3-active-listings table,
+      #card3-live-jobs-container table {
+        min-width: 650px !important;
+        width: 100% !important;
+        border-collapse: collapse !important;
+        white-space: nowrap !important;
+      }
 
-}
+      /* Touch-friendly PAUSE and DELETE buttons in Card 3 */
+      .card3-live-jobs-table .btn-table-action,
+      .card-3-active-listings .btn-table-action,
+      #card3-live-jobs-container .btn-table-action {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 28px !important;
+        height: 28px !important;
+        padding: 0 0.55rem !important;
+        font-size: 0.62rem !important;
+        font-weight: 800 !important;
+        border-radius: 4px !important;
+        white-space: nowrap !important;
+        cursor: pointer !important;
+      }
+    }
 
 /* ==========================================================================
 END LOCKED SECTION
@@ -4522,28 +4603,17 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 
 <!-- CARD 3: LIVE JOB LISTINGS (SNUG DIRECTLY BENEATH CARD 2) -->
-
 <div class="panel-card card-3-active-listings" id="card3-live-jobs-container">
+  <div class="panel-header">
+    <div>
+      <span class="panel-title" id="card3-title-text" data-cms-key="post-card3-title">CARD 3: LIVE ACTIVE JOB LISTINGS</span>
+      <div class="card3-desktop-note" style="color: #EF4444; font-size: 0.65rem; font-weight: 700; margin-top: 2px;">EDIT ON DESKTOP ONLY</div>
+    </div>
+    <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">5 ACTIVE POSITIONS</span>
+  </div>
 
-<div class="panel-header">
-
-<div>
-
-<span class="panel-title" id="card3-title-text" data-cms-key="post-card3-title">CARD 3: LIVE ACTIVE JOB LISTINGS</span>
-
-<div class="card3-desktop-note" style="color: #EF4444; font-size: 0.65rem; font-weight: 700; margin-top: 2px;">EDIT ON DESKTOP ONLY</div>
-
-</div>
-
-<span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">5 ACTIVE POSITIONS</span>
-
-</div>
-
-
-
-<div style="overflow-x: auto; width: 100%;" id="active-jobs-table-container" class="table-container">
-
-<table class="card3-live-jobs-table">
+  <div style="overflow-x: auto; width: 100%;" id="active-jobs-table-container" class="table-container">
+    <table class="card3-live-jobs-table">
 
 <thead>
 

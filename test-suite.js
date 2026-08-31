@@ -2661,6 +2661,27 @@ async function runTests() {
     assert(false, `Group 66 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 67: CARD 3 MOBILE HORIZONTAL BELT & TOUCH SCROLLBAR
+  // ================================================================
+  console.log('\n--- GROUP 67: CARD 3 MOBILE HORIZONTAL BELT & TOUCH SCROLLBAR ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Card 3 mobile container & horizontal scroll
+    assert(recruiterHtml.includes('#active-jobs-table-container') && recruiterHtml.includes('overflow-x: auto !important') && recruiterHtml.includes('-webkit-overflow-scrolling: touch !important'), 'recruiter.html enables smooth mobile horizontal scrolling on Card 3');
+
+    // 2. Touch-friendly visible scrollbar styling
+    assert(recruiterHtml.includes('scrollbar-color: #FEBA27 #E2E8F0 !important') || recruiterHtml.includes('scrollbar-color: #FEBA27'), 'recruiter.html defines high-visibility scrollbar color for Firefox');
+    assert(recruiterHtml.includes('height: 8px !important') && recruiterHtml.includes('background-color: #FEBA27 !important'), 'recruiter.html defines 8px custom touch-friendly gold scrollbar thumb for Webkit');
+
+    // 3. Touch-friendly PAUSE and DELETE button action sizing on mobile
+    assert(recruiterHtml.includes('.card3-live-jobs-table .btn-table-action') && recruiterHtml.includes('min-height: 28px !important'), 'recruiter.html sizes Card 3 action buttons for easy mobile tapping');
+
+  } catch (err) {
+    assert(false, `Group 67 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
