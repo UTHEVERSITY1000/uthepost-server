@@ -908,14 +908,17 @@
       color: var(--uthe-gold);
     }
 
-    /* SIGNATURE CUSTOM MODAL ALERT */
-    .custom-modal-alert {
+    /* SIGNATURE CUSTOM MODAL ALERT & CONFIRMATION */
+    .custom-modal-alert,
+    #custom-modal-confirm,
+    #custom-modal-alert {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(5px);
-      z-index: 3000;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 20000 !important;
       align-items: center;
       justify-content: center;
       padding: 1rem;
@@ -1581,7 +1584,16 @@
       
       <!-- LEFT SIDEBAR: RECRUITER THREAD LIST -->
       <div class="conversation-sidebar" style="width: 240px; background: #0f172a; border-right: 1px solid #D4AF37; padding: 16px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto;">
-        <div style="font-size: 11px; font-weight: 900; color: #D4AF37; letter-spacing: 0.08em; margin-bottom: 8px;">MY RECRUITERS</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+          <div style="font-size: 11px; font-weight: 900; color: #D4AF37; letter-spacing: 0.08em;">MY RECRUITERS</div>
+          <span style="font-size: 10px; color: #94a3b8; font-weight: 800;" id="candidate-thread-count">1 Recruiter</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px; padding: 2px 0;">
+          <label style="display:flex; align-items:center; gap:5px; font-size:10px; color:#94a3b8; cursor:pointer; font-weight:700;">
+            <input type="checkbox" id="chk-select-all-threads" onchange="toggleSelectAllThreads(this.checked)" style="accent-color:#D4AF37; width:13px; height:13px; cursor:pointer;"> Select All
+          </label>
+          <button id="btn-delete-selected-threads" onclick="confirmDeleteSelectedThreads()" style="display:none; background:#EF4444; color:#FFFFFF; border:none; font-size:10px; font-weight:800; padding:2px 8px; border-radius:4px; cursor:pointer; line-height:1.2;">🗑️ Delete (0)</button>
+        </div>
         <div id="recruiterThreadList" style="display: flex; flex-direction: column; gap: 8px;">
           <!-- Recruiter conversation cards render here -->
         </div>
@@ -2379,26 +2391,107 @@
         initialMessage: 'Greetings Marcus, we received your application for Nordic Outfitters. We are actively interviewing candidates this week!'
       }
     };
+    const selectedThreadIds = new Set();
+
+    function handleThreadSelectChange(threadId, isChecked) {
+      if (isChecked) selectedThreadIds.add(threadId);
+      else selectedThreadIds.delete(threadId);
+      updateSelectedThreadsUI();
+    }
+    window.handleThreadSelectChange = handleThreadSelectChange;
+
+    function toggleSelectAllThreads(isChecked) {
+      const chks = document.querySelectorAll('.thread-select-chk');
+      selectedThreadIds.clear();
+      chks.forEach(c => {
+        c.checked = isChecked;
+        const tid = c.getAttribute('data-id');
+        if (isChecked && tid) selectedThreadIds.add(tid);
+      });
+      updateSelectedThreadsUI();
+    }
+    window.toggleSelectAllThreads = toggleSelectAllThreads;
+
+    function updateSelectedThreadsUI() {
+      const btn = document.getElementById('btn-delete-selected-threads');
+      const allChk = document.getElementById('chk-select-all-threads');
+      if (btn) {
+        if (selectedThreadIds.size > 0) {
+          btn.style.display = 'inline-flex';
+          btn.textContent = `🗑️ Delete (${selectedThreadIds.size})`;
+        } else {
+          btn.style.display = 'none';
+        }
+      }
+      if (allChk) {
+        const total = Object.keys(candidateThreads).length;
+        allChk.checked = total > 0 && selectedThreadIds.size === total;
+      }
+    }
+
+    function confirmDeleteSelectedThreads() {
+      const ids = Array.from(selectedThreadIds);
+      if (ids.length === 0) return;
+      showCustomModalConfirm('DELETE SELECTED RECRUITERS', `Are you sure you want to remove ${ids.length} selected recruiter conversation(s)?`, () => {
+        ids.forEach(id => {
+          delete candidateThreads[id];
+        });
+        try {
+          const saved = localStorage.getItem('uthe_candidate_applications');
+          if (saved) {
+            let list = JSON.parse(saved);
+            list = list.filter(a => !ids.includes(a.id));
+            localStorage.setItem('uthe_candidate_applications', JSON.stringify(list));
+          }
+        } catch (e) {}
+
+        selectedThreadIds.clear();
+        const remainingKeys = Object.keys(candidateThreads);
+        if (remainingKeys.length > 0) {
+          switchActiveThread(remainingKeys[0]);
+        } else {
+          activeThreadId = null;
+          const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
+          if (container) container.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.75rem; padding:20px;">No active recruiter conversations.</div>';
+          const titleEl = document.getElementById('activeRecruiterTitle');
+          if (titleEl) titleEl.textContent = 'NO CONVERSATIONS';
+        }
+        renderRecruiterCards();
+        updateSelectedThreadsUI();
+        showCustomModalAlert('Conversations Removed', `${ids.length} conversation(s) removed.`);
+      });
+    }
+    window.confirmDeleteSelectedThreads = confirmDeleteSelectedThreads;
+
     function renderRecruiterCards() {
       const listContainer = document.getElementById('recruiterThreadList');
       if (!listContainer) return;
       listContainer.innerHTML = '';
 
-      Object.values(candidateThreads).forEach(thread => {
+      const threadList = Object.values(candidateThreads);
+      const countEl = document.getElementById('candidate-thread-count');
+      if (countEl) countEl.textContent = `${threadList.length} Recruiter${threadList.length === 1 ? '' : 's'}`;
+
+      threadList.forEach(thread => {
         const isActive = thread.id === activeThreadId;
+        const isChecked = selectedThreadIds.has(thread.id);
         const card = document.createElement('div');
         card.className = `recruiter-thread-card ${isActive ? 'active' : ''}`;
         card.onclick = () => switchActiveThread(thread.id);
         card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div class="recruiter-card-company">${thread.company}</div>
-            <button class="btn-thread-trash" onclick="confirmDeleteRecruiterThread('${thread.id}', event)" data-tooltip="Delete Conversation" style="background:none; border:none; cursor:pointer; color:#EF4444; font-size:0.85rem; padding:0 2px; line-height:1;">🗑️</button>
+          <div style="display:flex; justify-content:space-between; align-items:center; gap: 4px;">
+            <div style="display:flex; align-items:center; gap:6px; min-width:0; flex:1;">
+              <input type="checkbox" class="thread-select-chk" data-id="${thread.id}" ${isChecked ? 'checked' : ''} onclick="event.stopPropagation(); handleThreadSelectChange('${thread.id}', this.checked);" style="accent-color:#D4AF37; width:13px; height:13px; cursor:pointer; flex-shrink:0;">
+              <div class="recruiter-card-company" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${thread.company}</div>
+            </div>
+            <button class="btn-thread-trash" onclick="confirmDeleteRecruiterThread('${thread.id}', event)" data-tooltip="Delete Conversation" style="background:none; border:none; cursor:pointer; color:#EF4444; font-size:12px; padding:0 2px; line-height:1; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;">🗑️</button>
           </div>
-          <div class="recruiter-card-recruiter">${thread.recruiterName}</div>
-          <div class="recruiter-card-role">${thread.jobTitle} • <span style="color:#D4AF37; font-weight:800;">${thread.id}</span></div>
+          <div class="recruiter-card-recruiter" style="margin-left:19px;">${thread.recruiterName}</div>
+          <div class="recruiter-card-role" style="margin-left:19px;">${thread.jobTitle} • <span style="color:#D4AF37; font-weight:800;">${thread.id}</span></div>
         `;
         listContainer.appendChild(card);
       });
+      updateSelectedThreadsUI();
     }
 
     window.confirmDeleteRecruiterThread = function(threadId, event) {

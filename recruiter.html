@@ -1748,141 +1748,99 @@ padding-bottom: 1rem;
 
 
 .kanban-col {
-
-background: var(--card-white);
-
-border: 1.5px solid var(--border-color);
-
-border-radius: 10px;
-
-display: flex;
-
-flex-direction: column;
-
-min-width: 260px;
-
-min-height: 520px;
-
-box-shadow: var(--shadow-sm);
-
-transition: background-color 0.2s ease, border-color 0.2s ease;
-
-overflow: hidden;
-
+  background: var(--card-white);
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  height: 560px;
+  max-height: 560px;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  overflow: hidden;
 }
-
-
 
 .kanban-col.drop-target-hover {
-
-background: var(--uthe-gold-light);
-
-border-color: var(--uthe-gold);
-
+  background: var(--uthe-gold-light);
+  border-color: var(--uthe-gold);
 }
-
-
 
 /* DISTINCT HIGH-CONTRAST COLUMN DECKS */
-
 .col-header {
-
-display: flex;
-
-justify-content: space-between;
-
-align-items: center;
-
-padding: 0.75rem 1rem;
-
-font-size: 0.75rem;
-
-font-weight: 900;
-
-letter-spacing: 1px;
-
-text-transform: uppercase;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  flex-shrink: 0;
 }
-
-
 
 .col-header-applied {
-
-background: #1E293B;
-
-color: #F8FAFC;
-
-border-bottom: 3.5px solid #3B82F6;
-
+  background: #1E293B;
+  color: #F8FAFC;
+  border-bottom: 3.5px solid #3B82F6;
 }
-
-
 
 .col-header-screened {
-
-background: #78350F;
-
-color: #FEF3C7;
-
-border-bottom: 3.5px solid #F59E0B;
-
+  background: #78350F;
+  color: #FEF3C7;
+  border-bottom: 3.5px solid #F59E0B;
 }
-
-
 
 .col-header-interviewing {
-
-background: #4C1D95;
-
-color: #EDE9FE;
-
-border-bottom: 3.5px solid #A855F7;
-
+  background: #4C1D95;
+  color: #EDE9FE;
+  border-bottom: 3.5px solid #A855F7;
 }
-
-
 
 .col-header-offer {
-
-background: #064E3B;
-
-color: #D1FAE5;
-
-border-bottom: 3.5px solid #10B981;
-
+  background: #064E3B;
+  color: #D1FAE5;
+  border-bottom: 3.5px solid #10B981;
 }
-
-
 
 .col-count {
-
-padding: 0.15rem 0.5rem;
-
-border-radius: 10px;
-
-font-size: 0.68rem;
-
-font-weight: 900;
-
-background: rgba(255, 255, 255, 0.2);
-
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.68rem;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.2);
 }
 
-
-
 .kanban-cards-area {
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin;
+  scrollbar-color: #FEBA27 rgba(15, 23, 42, 0.1);
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
 
-padding: 1rem;
+.kanban-cards-area::-webkit-scrollbar {
+  width: 6px;
+}
 
-display: flex;
+.kanban-cards-area::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.06);
+  border-radius: 4px;
+}
 
-flex-direction: column;
+.kanban-cards-area::-webkit-scrollbar-thumb {
+  background: #FEBA27;
+  border-radius: 4px;
+}
 
-gap: 0.75rem;
-
-flex: 1;
-
+.kanban-cards-area::-webkit-scrollbar-thumb:hover {
+  background: #E5A812;
 }
 
 
@@ -2852,26 +2810,19 @@ color: var(--uthe-gold);
 
 /* CUSTOM NOTIFICATION MODAL CARD (NO STANDARD ALERT) */
 
-.custom-modal-alert {
-
-display: none;
-
-position: fixed;
-
-inset: 0;
-
-background: rgba(15, 23, 42, 0.75);
-
-backdrop-filter: blur(5px);
-
-z-index: 3000;
-
-align-items: center;
-
-justify-content: center;
-
-padding: 1rem;
-
+.custom-modal-alert,
+#custom-modal-confirm,
+#custom-modal-alert {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 20000 !important;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
 
@@ -6116,9 +6067,15 @@ VERIFIED EMPLOYER
     
     <!-- LEFT SIDEBAR: CANDIDATE APPLICANTS LIST (MOST RECENT FIRST) -->
     <div class="conversation-sidebar">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
         <div style="font-size: 11px; font-weight: 900; color: #FEBA27; letter-spacing: 0.08em; text-transform: uppercase;">MY CANDIDATES</div>
         <span style="font-size: 10px; color: #94A3B8; font-weight: 800;" id="recruiter-cand-count">3 Applicants</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px; padding: 2px 0;">
+        <label style="display:flex; align-items:center; gap:5px; font-size:10px; color:#94A3B8; cursor:pointer; font-weight:700;">
+          <input type="checkbox" id="chk-select-all-candidates" onchange="toggleSelectAllCandidates(this.checked)" style="accent-color:#FEBA27; width:13px; height:13px; cursor:pointer;"> Select All
+        </label>
+        <button id="btn-delete-selected-candidates" onclick="confirmDeleteSelectedCandidates()" style="display:none; background:#EF4444; color:#FFFFFF; border:none; font-size:10px; font-weight:800; padding:2px 8px; border-radius:4px; cursor:pointer; line-height:1.2;">🗑️ Delete (0)</button>
       </div>
       <div id="recruiterCandidateList" style="display: flex; flex-direction: column; gap: 8px;">
         <!-- Candidate cards render here -->
@@ -7438,6 +7395,94 @@ window.openApplicantResume = openApplicantResume;
 
 
 // 2. APPLICANT TRACKER & CANDIDATE CARD CLICK HANDLERS
+const selectedCandidateIds = new Set();
+
+function handleCandidateSelectChange(appId, isChecked) {
+  if (isChecked) selectedCandidateIds.add(appId);
+  else selectedCandidateIds.delete(appId);
+  updateSelectedCandidatesUI();
+}
+window.handleCandidateSelectChange = handleCandidateSelectChange;
+
+function toggleSelectAllCandidates(isChecked) {
+  const chks = document.querySelectorAll('.cand-select-chk');
+  selectedCandidateIds.clear();
+  chks.forEach(c => {
+    c.checked = isChecked;
+    const cid = c.getAttribute('data-id');
+    if (isChecked && cid) selectedCandidateIds.add(cid);
+  });
+  updateSelectedCandidatesUI();
+}
+window.toggleSelectAllCandidates = toggleSelectAllCandidates;
+
+function updateSelectedCandidatesUI() {
+  const btn = document.getElementById('btn-delete-selected-candidates');
+  const allChk = document.getElementById('chk-select-all-candidates');
+  if (btn) {
+    if (selectedCandidateIds.size > 0) {
+      btn.style.display = 'inline-flex';
+      btn.textContent = `🗑️ Delete (${selectedCandidateIds.size})`;
+    } else {
+      btn.style.display = 'none';
+    }
+  }
+  if (allChk) {
+    const total = Object.keys(CANDIDATES_DATA).length;
+    allChk.checked = total > 0 && selectedCandidateIds.size === total;
+  }
+}
+
+function confirmDeleteSelectedCandidates() {
+  const ids = Array.from(selectedCandidateIds);
+  if (ids.length === 0) return;
+  showCustomModalConfirm('DELETE SELECTED APPLICANTS', `Are you sure you want to permanently delete ${ids.length} selected candidate applicant(s)?`, () => {
+    ids.forEach(id => {
+      deleteCandidateCard(id);
+    });
+    selectedCandidateIds.clear();
+    updateSelectedCandidatesUI();
+    showCustomModalAlert('Applicants Removed', `${ids.length} applicant(s) deleted.`);
+  });
+}
+window.confirmDeleteSelectedCandidates = confirmDeleteSelectedCandidates;
+
+function confirmDeleteCandidate(candidateId, event) {
+  if (event && event.stopPropagation) event.stopPropagation();
+  const cand = CANDIDATES_DATA[candidateId] || { name: 'Candidate Applicant' };
+  showCustomModalConfirm('DELETE CANDIDATE APPLICANT', `Are you sure you want to delete ${cand.name} (${candidateId}) from the applicant pipeline?`, () => {
+    deleteCandidateCard(candidateId);
+  });
+}
+window.confirmDeleteCandidate = confirmDeleteCandidate;
+
+function deleteCandidateCard(candidateId) {
+  const card = document.getElementById(`card-${candidateId}`) || document.querySelector(`[data-id="${candidateId}"]`);
+  if (card && card.parentNode) {
+    card.parentNode.removeChild(card);
+  }
+
+  delete CANDIDATES_DATA[candidateId];
+  selectedCandidateIds.delete(candidateId);
+
+  try {
+    localStorage.setItem('uthe_recruiter_applicants', JSON.stringify(CANDIDATES_DATA));
+  } catch (e) {}
+
+  if (activeCandidateId === candidateId) {
+    const remainingKeys = Object.keys(CANDIDATES_DATA);
+    if (remainingKeys.length > 0) {
+      openCandidateReviewModal(remainingKeys[0]);
+    } else {
+      closeModal('candidate-review-modal');
+    }
+  }
+
+  renderRecruiterCandidateList();
+  updateKanbanCounters();
+  updateSelectedCandidatesUI();
+}
+window.deleteCandidateCard = deleteCandidateCard;
 
 function renderRecruiterCandidateList() {
   const listContainer = document.getElementById('recruiterCandidateList');
@@ -7451,23 +7496,31 @@ function renderRecruiterCandidateList() {
   candKeys.forEach(k => {
     const cand = CANDIDATES_DATA[k];
     const isActive = cand.id === activeCandidateId;
+    const isChecked = selectedCandidateIds.has(cand.id);
     const card = document.createElement('div');
     card.className = `recruiter-cand-card ${isActive ? 'active' : ''}`;
     card.onclick = () => switchActiveCandidate(cand.id);
     const dateStr = cand.appliedDate || cand.appliedAt || 'Just Now';
     card.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:800; font-size:0.75rem; color:#FEBA27;">${cand.name}</span>
-        <span style="font-size:0.6rem; color:#065F46; background:var(--status-mint-bg); padding:1px 4px; border-radius:3px; font-weight:800;">${cand.score || '92%'}</span>
+      <div style="display:flex; justify-content:space-between; align-items:center; gap: 4px;">
+        <div style="display:flex; align-items:center; gap:6px; min-width:0; flex:1;">
+          <input type="checkbox" class="cand-select-chk" data-id="${cand.id}" ${isChecked ? 'checked' : ''} onclick="event.stopPropagation(); handleCandidateSelectChange('${cand.id}', this.checked);" style="accent-color:#FEBA27; width:13px; height:13px; cursor:pointer; flex-shrink:0;">
+          <span style="font-weight:800; font-size:0.75rem; color:#FEBA27; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${cand.name}</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:5px; flex-shrink:0;">
+          <button class="btn-recruiter-cand-trash" onclick="confirmDeleteCandidate('${cand.id}', event)" data-tooltip="Delete Applicant" style="background:none; border:none; cursor:pointer; color:#EF4444; font-size:12px; padding:0 2px; line-height:1; display:inline-flex; align-items:center; justify-content:center;">🗑️</button>
+          <span style="font-size:0.6rem; color:#065F46; background:var(--status-mint-bg); padding:1px 4px; border-radius:3px; font-weight:800;">${cand.score || '92%'}</span>
+        </div>
       </div>
-      <div style="font-size:0.68rem; color:#F8FAFC;">${cand.role}</div>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+      <div style="font-size:0.68rem; color:#F8FAFC; margin-left:19px;">${cand.role}</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px; margin-left:19px;">
         <span style="font-size:0.6rem; color:#94A3B8;">${cand.id}</span>
         <span style="font-size:0.6rem; color:#0284C7; font-weight:700;">${dateStr}</span>
       </div>
     `;
     listContainer.appendChild(card);
   });
+  updateSelectedCandidatesUI();
 }
 window.renderRecruiterCandidateList = renderRecruiterCandidateList;
 

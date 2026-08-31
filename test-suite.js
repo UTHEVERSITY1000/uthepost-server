@@ -3042,6 +3042,33 @@ async function runTests() {
     assert(false, `Group 82 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 83: NOTIFICATION TRASH ICONS, Z-INDEX POPUP FIX, BULK DELETE & KANBAN INFINITE VERTICAL BELTS
+  // ================================================================
+  console.log('\n--- GROUP 83: NOTIFICATION TRASH ICONS, Z-INDEX POPUP FIX, BULK DELETE & KANBAN INFINITE VERTICAL BELTS ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Recruiter Notifications Modal Trash Icon & Multi-Select Checkboxes
+    assert(recruiterHtml.includes('btn-recruiter-cand-trash'), 'recruiter.html includes trash bin icon next to candidate score in notifications modal');
+    assert(recruiterHtml.includes('chk-select-all-candidates') && recruiterHtml.includes('btn-delete-selected-candidates'), 'recruiter.html defines Select All and Bulk Delete controls in notifications modal');
+    assert(recruiterHtml.includes('confirmDeleteSelectedCandidates') && recruiterHtml.includes('cand-select-chk'), 'recruiter.html implements bulk candidate selection and deletion');
+
+    // 2. Candidate Notifications Modal Z-Index Elevation & Multi-Select Checkboxes
+    assert(candidateHtml.includes('z-index: 20000 !important') || candidateHtml.includes('z-index:20000 !important'), 'candidate.html elevates confirmation modal to z-index 20000 to display in front of message drawer');
+    assert(candidateHtml.includes('chk-select-all-threads') && candidateHtml.includes('btn-delete-selected-threads'), 'candidate.html defines Select All and Bulk Delete controls in notifications modal');
+    assert(candidateHtml.includes('confirmDeleteSelectedThreads') && candidateHtml.includes('thread-select-chk'), 'candidate.html implements bulk recruiter thread selection and deletion');
+
+    // 3. Applicant Tracker Tab 3 Infinite Vertical Belts
+    assert(recruiterHtml.includes('.kanban-cards-area') && (recruiterHtml.includes('overflow-y: auto !important') || recruiterHtml.includes('overflow-y: auto')), 'recruiter.html enables infinite vertical scrolling on .kanban-cards-area');
+    assert(recruiterHtml.includes('.kanban-cards-area::-webkit-scrollbar') && recruiterHtml.includes('scrollbar-color: #FEBA27'), 'recruiter.html defines custom gold scrollbar styling for Kanban column belts');
+    assert(recruiterHtml.includes('height: 560px') || recruiterHtml.includes('max-height: 560px'), 'recruiter.html sets fixed container height for infinite vertical Kanban columns');
+
+  } catch (err) {
+    assert(false, `Group 83 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
