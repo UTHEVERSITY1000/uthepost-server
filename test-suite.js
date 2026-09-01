@@ -3607,6 +3607,58 @@ async function runTests() {
     assert(false, `Group 97 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 98: JOB LISTING AGGREGATOR & RESUME BATCH INGESTION SUITE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 98: JOB LISTING AGGREGATOR & RESUME BATCH INGESTION SUITE ---');
+
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+
+    // 1. Admin UI Controls & Modals
+    assert(adminHtml.includes('id="modal-sync-job-feeds"'), 'admin.html defines #modal-sync-job-feeds modal');
+    assert(adminHtml.includes('id="modal-batch-resume-parser"'), 'admin.html defines #modal-batch-resume-parser modal');
+    assert(adminHtml.includes('openJobAggregatorModal') && adminHtml.includes('triggerLiveJobFeedSync'), 'admin.html implements job aggregator sync functions');
+    assert(adminHtml.includes('openBatchResumeParserModal') && adminHtml.includes('triggerBatchResumeIngestion'), 'admin.html implements batch resume ingestion functions');
+
+    // 2. Aggregator Stats Endpoint
+    const statsRes = await httpGet('/api/aggregator/stats');
+    assert(statsRes.status === 200, 'GET /api/aggregator/stats returns HTTP 200');
+    assert(statsRes.data && statsRes.data.ok === true && statsRes.data.presetsAvailable.length > 0, 'Aggregator stats endpoint exposes operational status and preset feeds');
+
+    // 3. Job Feed Sync API
+    const feedSyncRes = await httpPost('/api/aggregator/jobs/sync', { preset: 'tech_growth' });
+    assert(feedSyncRes.status === 200, 'POST /api/aggregator/jobs/sync returns HTTP 200');
+    assert(feedSyncRes.data && feedSyncRes.data.ok === true && typeof feedSyncRes.data.totalJobs === 'number', 'Job feed sync processes and publishes structured ATS listings');
+
+    // 4. Automated Resume Batch Ingestion & Regex Parser API
+    const testResumeDossier = `
+Marcus Vance
+marcus.vance@talentscale.io | (555) 432-1098
+Staff Machine Learning Engineer • San Francisco, CA
+8+ years of experience designing deep learning recommendation systems, PyTorch pipelines, and distributed Kubernetes deployments with Python and AWS.
+---
+Rachel Green
+rachel.green@fashionretail.com | (555) 987-6543
+Director of Brand Marketing • New York, NY
+6+ years leading viral multi-channel campaigns, influencer partnerships, and SEO growth marketing.
+`;
+
+    const resumeBatchRes = await httpPost('/api/aggregator/resumes/parse-batch', { rawText: testResumeDossier });
+    assert(resumeBatchRes.status === 200, 'POST /api/aggregator/resumes/parse-batch returns HTTP 200');
+    assert(resumeBatchRes.data && resumeBatchRes.data.parsedCount === 2, 'Batch resume parser successfully extracts multiple candidate dossiers');
+    
+    const parsedCandidates = resumeBatchRes.data.resumes || [];
+    const marcus = parsedCandidates.find(c => c.name.includes('Marcus'));
+    assert(marcus && marcus.email === 'marcus.vance@talentscale.io', 'Resume parser accurately extracts email address');
+    assert(marcus && marcus.phone === '(555) 432-1098', 'Resume parser accurately extracts phone number');
+    assert(marcus && marcus.skills.includes('Python') && marcus.skills.includes('AWS'), 'Resume parser tags technical skills taxonomy');
+    assert(marcus && marcus.verified === true, 'Ingested candidate card is marked with verified badge');
+
+  } catch (err) {
+    assert(false, `Group 98 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
