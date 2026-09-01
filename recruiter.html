@@ -2494,23 +2494,74 @@ white-space: nowrap;
   font-size: 0.68rem;
   font-weight: 800;
   border-radius: 20px;
-  border: 1px solid var(--border-color);
-  background: #FFFFFF;
-  color: var(--text-main);
+  border: 1.5px solid #0075FF !important;
+  background: transparent !important;
+  color: #0075FF !important;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s ease;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .resume-cat-pill:hover {
-  border-color: #FEBA27;
-  color: #B45309;
+  border-color: #FEBA27 !important;
+  color: #FEBA27 !important;
+  background: transparent !important;
 }
 .resume-cat-pill.active {
-  background: #FEBA27;
-  color: #0F172A;
-  border-color: #FEBA27;
+  background: #0075FF !important;
+  color: #FFFFFF !important;
+  border-color: #0075FF !important;
   font-weight: 900;
+}
+.btn-resume-action {
+  height: 30px;
+  padding: 0 0.65rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  border-radius: 6px;
+  border: 1.5px solid #0075FF !important;
+  background: transparent !important;
+  color: #0075FF !important;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.btn-resume-action:hover {
+  border-color: #FEBA27 !important;
+  color: #FEBA27 !important;
+  background: transparent !important;
+}
+.btn-resume-star {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1.5px solid #0075FF !important;
+  background: transparent !important;
+  color: #0075FF !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.15s ease;
+}
+.btn-resume-star:hover {
+  border-color: #FEBA27 !important;
+  color: #FEBA27 !important;
+  background: transparent !important;
+}
+.btn-resume-star.saved {
+  border-color: #FEBA27 !important;
+  color: #FEBA27 !important;
+  background: rgba(254, 186, 39, 0.12) !important;
 }
 .resume-dossier-card {
   background: #FFFFFF;
@@ -9183,13 +9234,13 @@ function renderFilteredResumes(resumes) {
         </div>
 
         <div style="display: flex; gap: 0.4rem; align-items: center; border-top: 1px solid var(--border-color); padding-top: 0.6rem;">
-          <button onclick="openApplicantResume('${r.id}', '${r.name}', '${r.resumeFile || `${r.name.replace(/\s+/g, '_')}_Resume.pdf`}')" class="btn-surface-sm" style="flex: 1; height: 32px; font-size: 0.68rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 4px;" data-tooltip="View verified PDF resume">
-            📄 Resume (.pdf)
+          <button onclick="openApplicantResume('${r.id}', '${r.name}', '${r.resumeFile || `${r.name.replace(/\s+/g, '_')}_Resume.pdf`}')" class="btn-resume-action" style="flex: 1;" data-tooltip="View verified PDF resume">
+            Resume (.pdf)
           </button>
-          <button onclick="inviteCandidateFromSearch('${r.id}', '${r.name}', '${r.role}')" class="btn-gold-action" style="flex: 1.2; height: 32px; font-size: 0.68rem; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; gap: 4px;" data-tooltip="Message or invite candidate to interview">
-            💬 Invite / Chat
+          <button onclick="inviteCandidateFromSearch('${r.id}', '${r.name}', '${r.role}')" class="btn-resume-action" style="flex: 1.2;" data-tooltip="Message or invite candidate to interview">
+            Invite / Chat
           </button>
-          <button onclick="toggleSaveResume('${r.id}')" title="${isSaved ? 'Remove from Shortlist' : 'Save to Shortlist'}" style="width: 32px; height: 32px; border-radius: 6px; border: 1.5px solid ${isSaved ? '#FEBA27' : 'var(--border-color)'}; background: ${isSaved ? 'rgba(254,186,39,0.15)' : '#FFFFFF'}; color: ${isSaved ? '#B45309' : '#94A3B8'}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">
+          <button onclick="toggleSaveResume('${r.id}')" class="btn-resume-star ${isSaved ? 'saved' : ''}" title="${isSaved ? 'Remove from Shortlist' : 'Save to Shortlist'}">
             ${isSaved ? '★' : '☆'}
           </button>
         </div>
