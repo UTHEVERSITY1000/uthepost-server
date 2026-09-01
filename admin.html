@@ -3098,6 +3098,55 @@
       openModal('admin-resume-viewer-modal');
     };
 
+    function getSelectedAdminResumeIds() {
+      const chks = document.querySelectorAll('#admin-resumes-tbody .admin-resume-chk:checked');
+      return Array.from(chks).map(c => c.getAttribute('data-id')).filter(Boolean);
+    }
+
+    window.handleAdminResumeChkChange = function() {
+      const selected = getSelectedAdminResumeIds();
+      const btn = document.getElementById('btn-admin-batch-delete-resumes');
+      const countSpan = document.getElementById('admin-selected-resumes-count');
+      const selectAll = document.getElementById('chk-admin-resumes-select-all');
+
+      if (countSpan) countSpan.textContent = selected.length;
+      if (btn) btn.style.display = selected.length > 0 ? 'inline-block' : 'none';
+
+      const allChks = document.querySelectorAll('#admin-resumes-tbody .admin-resume-chk');
+      if (selectAll) selectAll.checked = allChks.length > 0 && selected.length === allChks.length;
+    };
+
+    window.toggleSelectAllAdminResumes = function(checked) {
+      const allChks = document.querySelectorAll('#admin-resumes-tbody .admin-resume-chk');
+      allChks.forEach(c => { c.checked = checked; });
+      handleAdminResumeChkChange();
+    };
+
+    window.confirmBatchDeleteAdminResumes = function() {
+      const ids = getSelectedAdminResumeIds();
+      if (ids.length === 0) return;
+      showCustomModalConfirm(
+        'BATCH DELETE RESUMES',
+        `Are you sure you want to permanently delete ${ids.length} selected candidate resume${ids.length === 1 ? '' : 's'} from the database?`,
+        async () => {
+          try {
+            const res = await fetch(`/api/resumes?ids=${encodeURIComponent(ids.join(','))}`, { method: 'DELETE' });
+            if (res.ok) {
+              adminResumes = adminResumes.filter(r => !ids.includes(r.id));
+              const selectAll = document.getElementById('chk-admin-resumes-select-all');
+              if (selectAll) selectAll.checked = false;
+              const btn = document.getElementById('btn-admin-batch-delete-resumes');
+              if (btn) btn.style.display = 'none';
+              renderAdminResumes();
+              showCustomModalAlert('Resumes Deleted', `Successfully deleted ${ids.length} candidate resume${ids.length === 1 ? '' : 's'}.`);
+            }
+          } catch (e) {
+            showCustomModalAlert('Delete Error', e.message);
+          }
+        }
+      );
+    };
+
     function renderAdminResumes(resumes = null) {
       const list = resumes || adminResumes;
       const tbody = document.getElementById('admin-resumes-tbody');
