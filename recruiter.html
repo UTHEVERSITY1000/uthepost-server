@@ -5262,6 +5262,16 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 </div>
 
+<!-- RECRUITER LIVE SOCIAL SYNC NOTICE -->
+<div class="crm-social-notice-card" style="background: rgba(254, 186, 39, 0.08); border: 1.5px solid var(--uthe-gold); border-radius: 8px; padding: 0.65rem 0.85rem; margin-top: 0.5rem; display: flex; align-items: flex-start; gap: 0.6rem;">
+  <span style="font-size: 1rem; line-height: 1.2;">📌</span>
+  <div style="font-size: 0.72rem; color: #78350F; line-height: 1.45;">
+    <strong style="color: #92400E; display: block; margin-bottom: 2px; font-size: 0.74rem;">LIVE SOCIAL MEDIA SYNC NOTICE:</strong>
+    Once a post is live on external platforms like X (Twitter) or LinkedIn, those platforms do not allow any outside website to alter text on their external servers after it is published.<br>
+    To update a live post, the recruiter uses the <strong>"EDIT & RE-SHARE"</strong> button in Tab 2 to push the corrected version to their feed.
+  </div>
+</div>
+
 </div>
 
 
@@ -5340,6 +5350,15 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <textarea id="crm-message-body" rows="4" data-tooltip="Compose your custom candidate pitch. Supports {candidate_name}, {job_title}, {company_name}.">Hi {candidate_name}, I saw your background in sales and customer service. We are expanding our team at {company_name} and would love to invite you for an interview for our {job_title} role.</textarea>
 
+</div>
+
+<div class="crm-outreach-actions-row" style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.75rem;">
+  <button class="btn-gold-action" onclick="dispatchCrmCampaign()" style="flex: 1.5; height: 38px; font-weight: 800; font-size: 0.75rem;" data-tooltip="Launch 1-click live social outreach to connected accounts">
+    🚀 DISPATCH OUTREACH CAMPAIGN (1-CLICK SHARE)
+  </button>
+  <button class="btn-surface-action" onclick="testSocialIntentShare()" style="flex: 1; height: 38px; font-size: 0.72rem;" data-tooltip="Preview and test 1-click live post share">
+    🔗 TEST 1-CLICK SHARE
+  </button>
 </div>
 
 
@@ -5422,7 +5441,7 @@ PUBLISH LIVE
 
 </button>
 
-<button class="btn-surface-action" style="flex: 1;" onclick="broadcastToConnectedChannels()" data-tooltip="Trigger immediate multi-platform social & email share.">
+<button class="btn-surface-action" style="flex: 1;" onclick="broadcastToConnectedChannels()" data-tooltip="Trigger immediate multi-platform 1-click live social share.">
 
 SHARE TO CONNECTED CHANNELS
 
@@ -5480,7 +5499,7 @@ RESET
 
 <th data-tooltip="Delivery status.">Status</th>
 
-<th data-tooltip="Scheduled follow-up date.">Next Follow-Up</th>
+<th data-tooltip="Live post actions to edit or re-share.">Live Feed Actions</th>
 
 </tr>
 
@@ -5488,7 +5507,7 @@ RESET
 
 <tbody id="crm-campaign-tracker-tbody">
 
-<tr>
+<tr id="row-camp-CMP-901">
 
 <td><code>CMP-901</code></td>
 
@@ -5502,11 +5521,16 @@ RESET
 
 <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">DISPATCHED</span></td>
 
-<td>2026-08-28 (48h Follow-up)</td>
+<td>
+  <div style="display: flex; gap: 4px; align-items: center;">
+    <button class="btn-surface-sm" onclick="openEditAndReshareModal('CMP-901')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: #0284C7; border-color: #0284C7;" data-tooltip="Edit post details and re-share to feed">✏️ EDIT & RE-SHARE</button>
+    <button class="btn-surface-sm" onclick="openLiveSocialThread('CMP-901')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread">↗ THREAD</button>
+  </div>
+</td>
 
 </tr>
 
-<tr>
+<tr id="row-camp-CMP-902">
 
 <td><code>CMP-902</code></td>
 
@@ -5520,7 +5544,12 @@ RESET
 
 <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">ACTIVE</span></td>
 
-<td>2026-08-29 (72h Follow-up)</td>
+<td>
+  <div style="display: flex; gap: 4px; align-items: center;">
+    <button class="btn-surface-sm" onclick="openEditAndReshareModal('CMP-902')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: #0284C7; border-color: #0284C7;" data-tooltip="Edit post details and re-share to feed">✏️ EDIT & RE-SHARE</button>
+    <button class="btn-surface-sm" onclick="openLiveSocialThread('CMP-902')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread">↗ THREAD</button>
+  </div>
+</td>
 
 </tr>
 
@@ -6353,6 +6382,54 @@ VERIFIED EMPLOYER
     <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.5rem;">
       <button class="btn-surface-sm" onclick="closeRecruiterScheduleModal()" style="height: 36px; padding: 0 1rem; font-size: 0.75rem;">CANCEL</button>
       <button class="btn-gold-action" onclick="confirmRecruiterScheduleProposal()" style="height: 36px; padding: 0 1.25rem; font-size: 0.75rem; font-weight: 800;">CONFIRM & INSERT</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNATURE EDIT & RE-SHARE SOCIAL POST MODAL -->
+<div class="custom-modal-alert" id="edit-reshare-modal" style="display: none;">
+  <div class="custom-alert-card" style="width: 480px; max-width: 95vw; text-align: left; gap: 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+      <div class="alert-card-title" style="color: var(--uthe-gold); font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+        <span>✏️</span> EDIT & RE-SHARE SOCIAL POST
+      </div>
+      <button onclick="closeEditAndReshareModal()" style="background: none; border: none; font-size: 1rem; color: #94A3B8; cursor: pointer; font-weight: 900;">✕</button>
+    </div>
+    
+    <div style="font-size: 0.72rem; color: #92400E; background: rgba(254, 186, 39, 0.1); border: 1px solid var(--uthe-gold); border-radius: 6px; padding: 0.5rem 0.65rem; line-height: 1.4;">
+      <strong>Live Sync Notice:</strong> Once a post is live on external platforms like X (Twitter) or LinkedIn, those platforms do not allow any outside website to alter text on their external servers after it is published.<br>
+      Modifying the content below and clicking <strong>"RE-SHARE LIVE TO FEED"</strong> will launch your updated 1-click social post to your connected stream.
+    </div>
+
+    <input type="hidden" id="edit-reshare-camp-id" value="">
+
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <div class="form-group">
+        <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-main);">Target Position / Campaign Audience</label>
+        <input type="text" id="edit-reshare-title" style="height: 38px; width: 100%; border: 1.5px solid var(--border-color); border-radius: 6px; padding: 0 0.5rem; font-size: 0.8rem; background: #FFFFFF; color: #0F172A;" />
+      </div>
+
+      <div class="form-group">
+        <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-main);">Target Social Channel</label>
+        <select id="edit-reshare-channel" style="height: 38px; width: 100%; border: 1.5px solid var(--border-color); border-radius: 6px; padding: 0 0.5rem; font-size: 0.8rem; background: #FFFFFF; color: #0F172A;">
+          <option value="LinkedIn">LinkedIn InMail & Company Feed</option>
+          <option value="X">X (Twitter) Talent Stream</option>
+          <option value="Facebook">Facebook / Meta Careers</option>
+          <option value="TikTok">TikTok Hiring Feed</option>
+          <option value="Instagram">Instagram Bio / Careers</option>
+          <option value="All" selected>All Connected Channels</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label style="font-size: 0.72rem; font-weight: 800; color: var(--text-main);">Updated Post / Message Content</label>
+        <textarea id="edit-reshare-message" rows="4" style="width: 100%; border: 1.5px solid var(--border-color); border-radius: 6px; padding: 0.5rem; font-size: 0.8rem; background: #FFFFFF; color: #0F172A;"></textarea>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 0.5rem;">
+      <button class="btn-surface-sm" onclick="closeEditAndReshareModal()" style="height: 36px; padding: 0 1rem; font-size: 0.75rem;">CANCEL</button>
+      <button class="btn-gold-action" onclick="executeEditAndReshare()" style="height: 36px; padding: 0 1.25rem; font-size: 0.75rem; font-weight: 800;">RE-SHARE LIVE TO FEED</button>
     </div>
   </div>
 </div>
@@ -7420,164 +7497,281 @@ window.renderActiveJobsTable = renderActiveJobsTable;
 
 
 
-window.broadcastToConnectedChannels = function() {
+window.trigger1ClickSocialPost = function(channelName, postText, targetUrl) {
+  const shareUrl = targetUrl || 'https://jobs.utheversity.com';
+  const encodedText = encodeURIComponent(postText || 'We are hiring! Join our team at Quantum Retail.');
+  const encodedUrl = encodeURIComponent(shareUrl);
+  const ch = (channelName || '').toLowerCase();
 
-const email = document.getElementById('inp-recruiter-email').value;
+  const linkedinInput = document.getElementById('social-linkedin')?.value || 'https://linkedin.com/company/quantumretail';
+  const xInput = document.getElementById('social-x')?.value || '@QuantumRetailJobs';
+  const fbInput = document.getElementById('social-facebook')?.value || 'https://facebook.com/quantumretail';
+  const tiktokInput = document.getElementById('social-tiktok')?.value || '@QuantumRetailHiring';
+  const igInput = document.getElementById('social-instagram')?.value || '@QuantumRetailCareers';
 
-showCustomModalAlert('Share Dispatched', `Immediate multi-platform talent share sent to LinkedIn, X, TikTok, Meta networks and ${email}.`);
+  let intentUrl = '';
 
+  if (ch.includes('linkedin')) {
+    intentUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}&summary=${encodedText}`;
+  } else if (ch.includes('x') || ch.includes('twitter')) {
+    intentUrl = `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`;
+  } else if (ch.includes('facebook') || ch.includes('meta')) {
+    intentUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`;
+  } else if (ch.includes('tiktok')) {
+    try { navigator.clipboard.writeText(`${postText}\n\nApply: ${shareUrl}`); } catch (e) {}
+    const cleanHandle = tiktokInput.replace('@', '');
+    intentUrl = tiktokInput.startsWith('http') ? tiktokInput : `https://www.tiktok.com/@${cleanHandle}`;
+  } else if (ch.includes('instagram')) {
+    try { navigator.clipboard.writeText(`${postText}\n\nApply: ${shareUrl}`); } catch (e) {}
+    const cleanHandle = igInput.replace('@', '');
+    intentUrl = igInput.startsWith('http') ? igInput : `https://www.instagram.com/${cleanHandle}`;
+  } else {
+    // All connected channels: open X and LinkedIn
+    window.open(`https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`, '_blank');
+    intentUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+  }
+
+  if (intentUrl) {
+    window.open(intentUrl, '_blank', 'noopener,noreferrer,width=650,height=550');
+  }
 };
 
+window.broadcastToConnectedChannels = function() {
+  const jobTitle = document.getElementById('inp-job-title')?.value || 'Career Opportunity';
+  const company = document.getElementById('prof-company-name')?.value || 'Quantum Retail Corp';
+  const minComp = document.getElementById('inp-min-comp')?.value || '65000';
+  const maxComp = document.getElementById('inp-max-comp')?.value || '95000';
+  const location = document.getElementById('inp-job-location')?.value || 'Austin, TX (Hybrid)';
+  const shareUrl = 'https://jobs.utheversity.com';
 
+  const postText = `🚨 WE'RE HIRING! ${company} is seeking an exceptional ${jobTitle} (${location})! Compensation: $${Number(minComp).toLocaleString()} - $${Number(maxComp).toLocaleString()}/yr + full benefits. Apply directly on UTHEVERSITY:`;
+
+  trigger1ClickSocialPost('all', postText, shareUrl);
+
+  const now = new Date();
+  const timestampStr = now.toISOString().replace('T', ' ').substring(0, 19);
+  const campId = `CMP-${Math.floor(900 + Math.random() * 99)}`;
+
+  const tbody = document.getElementById('crm-campaign-tracker-tbody');
+  if (tbody) {
+    const tr = document.createElement('tr');
+    tr.id = `row-camp-${campId}`;
+    tr.innerHTML = `
+      <td><code>${campId}</code></td>
+      <td><strong>${timestampStr}</strong></td>
+      <td>${jobTitle} (${location})</td>
+      <td>Connected Socials (LinkedIn, X, Meta)</td>
+      <td>Multi-Network</td>
+      <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">LIVE BROADCAST</span></td>
+      <td>
+        <div style="display: flex; gap: 4px; align-items: center;">
+          <button class="btn-surface-sm" onclick="openEditAndReshareModal('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: #0284C7; border-color: #0284C7;" data-tooltip="Edit post details and re-share to feed">✏️ EDIT & RE-SHARE</button>
+          <button class="btn-surface-sm" onclick="openLiveSocialThread('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread">↗ THREAD</button>
+        </div>
+      </td>
+    `;
+    tbody.prepend(tr);
+  }
+
+  showCustomModalAlert(
+    '1-Click Live Social Share Launched',
+    `Multi-platform 1-click share window launched for your linked LinkedIn, X (Twitter), and Meta channels!\n\n📌 Remember: To update a live post later, use the "EDIT & RE-SHARE" button in Tab 2.`
+  );
+};
 
 // 1. CAMPAIGN RECIPIENT CAP (25 MAX)
-
 window.clampCrmRecipients = function(input) {
-
-let val = parseInt(input.value, 10);
-
-if (isNaN(val) || val < 1) input.value = 1;
-
-else if (val > 25) {
-
-input.value = 25;
-
-showCustomModalAlert('Recipient Cap (25 Max)', 'Campaign recipient count is strictly capped at 25 recipients per batch.');
-
-}
-
+  let val = parseInt(input.value, 10);
+  if (isNaN(val) || val < 1) input.value = 1;
+  else if (val > 25) {
+    input.value = 25;
+    showCustomModalAlert('Recipient Cap (25 Max)', 'Campaign recipient count is strictly capped at 25 recipients per batch.');
+  }
 };
-
-
 
 // CRM Templates Alignment
-
 const CRM_TEMPLATES = {
-
-email_blast: {
-
-channel: 'Email Share (hiring@quantumretail.com)',
-
-message: 'Hi {candidate_name},\n\nI saw your exceptional background in sales and customer service. We are expanding our team at {company_name} and would love to invite you for an interview for our {job_title} role.\n\nBest regards,\nQuantum Talent Team'
-
-},
-
-linkedin_dm: {
-
-channel: 'LinkedIn InMail & Direct Message',
-
-message: 'Hello {candidate_name}, impressed by your leadership and customer focus. We have an open {job_title} at {company_name} that matches your background. Let’s connect for a quick 15-minute introductory call.'
-
-},
-
-x_dm: {
-
-channel: 'X (Twitter) Talent Stream Message',
-
-message: 'Hey {candidate_name}! Loved your recent posts. We are hiring a {job_title} at {company_name} with competitive pay and growth opportunities. Check out our position or send a DM!'
-
-},
-
-meta_dm: {
-
-channel: 'Facebook & Instagram Direct Talent Message',
-
-message: 'Hi {candidate_name}! Your work and leadership caught our eye. We are growing {company_name} and currently hiring a {job_title}. We would love to connect!'
-
-}
-
+  email_blast: {
+    channel: 'Email Share (hiring@quantumretail.com)',
+    message: 'Hi {candidate_name},\n\nI saw your exceptional background in sales and customer service. We are expanding our team at {company_name} and would love to invite you for an interview for our {job_title} role.\n\nBest regards,\nQuantum Talent Team'
+  },
+  linkedin_dm: {
+    channel: 'LinkedIn InMail & Direct Message',
+    message: 'Hello {candidate_name}, impressed by your leadership and customer focus. We have an open {job_title} at {company_name} that matches your background. Let’s connect for a quick 15-minute introductory call.'
+  },
+  x_dm: {
+    channel: 'X (Twitter) Talent Stream Message',
+    message: 'Hey {candidate_name}! Loved your recent posts. We are hiring a {job_title} at {company_name} with competitive pay and growth opportunities. Check out our position or send a DM!'
+  },
+  meta_dm: {
+    channel: 'Facebook & Instagram Direct Talent Message',
+    message: 'Hi {candidate_name}! Your work and leadership caught our eye. We are growing {company_name} and currently hiring a {job_title}. We would love to connect!'
+  }
 };
-
-
 
 window.handleTemplateChange = function(templateKey) {
-
-const tmpl = CRM_TEMPLATES[templateKey] || CRM_TEMPLATES.email_blast;
-
-document.getElementById('crm-channel-display').value = tmpl.channel;
-
-document.getElementById('crm-message-body').value = tmpl.message;
-
+  const tmpl = CRM_TEMPLATES[templateKey] || CRM_TEMPLATES.email_blast;
+  document.getElementById('crm-channel-display').value = tmpl.channel;
+  document.getElementById('crm-message-body').value = tmpl.message;
 };
-
-
 
 window.dispatchCrmCampaign = function() {
+  const audience = document.getElementById('crm-target-audience').value;
+  const channelDisplay = document.getElementById('crm-channel-display').value;
+  const templateKey = document.getElementById('crm-template-select').value;
+  let count = parseInt(document.getElementById('crm-recipient-count').value, 10);
+  if (isNaN(count) || count < 1) count = 1;
+  if (count > 25) count = 25;
 
-const audience = document.getElementById('crm-target-audience').value;
+  const rawMessage = document.getElementById('crm-message-body').value;
+  const company = document.getElementById('prof-company-name')?.value || 'Quantum Retail Corp';
+  const renderedMessage = rawMessage
+    .replace(/{candidate_name}/g, 'Candidate')
+    .replace(/{job_title}/g, 'Career Opportunity')
+    .replace(/{company_name}/g, company);
 
-const channel = document.getElementById('crm-channel-display').value;
+  trigger1ClickSocialPost(templateKey, renderedMessage, 'https://jobs.utheversity.com');
 
-let count = parseInt(document.getElementById('crm-recipient-count').value, 10);
+  const now = new Date();
+  const timestampStr = now.toISOString().replace('T', ' ').substring(0, 19);
+  const campId = `CMP-${Math.floor(900 + Math.random() * 99)}`;
 
-if (isNaN(count) || count < 1) count = 1;
+  const tbody = document.getElementById('crm-campaign-tracker-tbody');
+  if (tbody) {
+    const tr = document.createElement('tr');
+    tr.id = `row-camp-${campId}`;
+    tr.innerHTML = `
+      <td><code>${campId}</code></td>
+      <td><strong>${timestampStr}</strong></td>
+      <td>${audience}</td>
+      <td>${channelDisplay}</td>
+      <td>${count}</td>
+      <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">DISPATCHED</span></td>
+      <td>
+        <div style="display: flex; gap: 4px; align-items: center;">
+          <button class="btn-surface-sm" onclick="openEditAndReshareModal('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: #0284C7; border-color: #0284C7;" data-tooltip="Edit post details and re-share to feed">✏️ EDIT & RE-SHARE</button>
+          <button class="btn-surface-sm" onclick="openLiveSocialThread('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread">↗ THREAD</button>
+        </div>
+      </td>
+    `;
+    tbody.prepend(tr);
+  }
 
-if (count > 25) count = 25;
-
-
-
-const now = new Date();
-
-const timestampStr = now.getFullYear() + '-' +
-
-String(now.getMonth() + 1).padStart(2, '0') + '-' +
-
-String(now.getDate()).padStart(2, '0') + ' ' +
-
-String(now.getHours()).padStart(2, '0') + ':' +
-
-String(now.getMinutes()).padStart(2, '0') + ':' +
-
-String(now.getSeconds()).padStart(2, '0');
-
-
-
-const campId = `CMP-${Math.floor(900 + Math.random() * 99)}`;
-
-const tbody = document.getElementById('crm-campaign-tracker-tbody');
-
-const tr = document.createElement('tr');
-
-tr.innerHTML = `
-
-<td><code>${campId}</code></td>
-
-<td><strong>${timestampStr}</strong></td>
-
-<td>${audience}</td>
-
-<td>${channel}</td>
-
-<td>${count}</td>
-
-<td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">DISPATCHED</span></td>
-
-<td>Follow-up in 48h</td>
-
-`;
-
-tbody.prepend(tr);
-
-showCustomModalAlert('Campaign Dispatched & Logged', `Outreach campaign ${campId} logged with timestamp ${timestampStr} for ${count} candidates (25 Max Batch).`);
-
+  showCustomModalAlert(
+    'Outreach Dispatched & Logged',
+    `1-Click Live Social outreach launched for ${channelDisplay}.\n\nLogged campaign ${campId} for ${count} candidates (25 Max Batch).\n\n📌 Live Sync Notice: Use "EDIT & RE-SHARE" in your tracker to push post corrections to your feed.`
+  );
 };
 
+window.testSocialIntentShare = function() {
+  const channelDisplay = document.getElementById('crm-channel-display').value;
+  const rawMessage = document.getElementById('crm-message-body').value;
+  const company = document.getElementById('prof-company-name')?.value || 'Quantum Retail Corp';
+  const renderedMessage = rawMessage
+    .replace(/{candidate_name}/g, 'Talent Lead')
+    .replace(/{job_title}/g, 'Career Opportunity')
+    .replace(/{company_name}/g, company);
 
+  trigger1ClickSocialPost(channelDisplay, renderedMessage, 'https://jobs.utheversity.com');
+};
+
+window.openEditAndReshareModal = function(campId) {
+  const row = document.getElementById(`row-camp-${campId}`);
+  let currentAudience = 'Retail & Sales Professionals';
+  let currentChannel = 'All';
+  let currentMessage = document.getElementById('crm-message-body')?.value || '';
+
+  if (row) {
+    const cells = row.querySelectorAll('td');
+    if (cells[2]) currentAudience = cells[2].textContent.trim();
+    if (cells[3]) currentChannel = cells[3].textContent.trim();
+  }
+
+  document.getElementById('edit-reshare-camp-id').value = campId;
+  document.getElementById('edit-reshare-title').value = currentAudience;
+  document.getElementById('edit-reshare-message').value = currentMessage || `Join ${document.getElementById('prof-company-name')?.value || 'Quantum Retail'}! We are hiring for ${currentAudience}. Apply live on UTHEVERSITY.`;
+
+  const sel = document.getElementById('edit-reshare-channel');
+  if (sel) {
+    if (currentChannel.toLowerCase().includes('linkedin')) sel.value = 'LinkedIn';
+    else if (currentChannel.toLowerCase().includes('x') || currentChannel.toLowerCase().includes('twitter')) sel.value = 'X';
+    else if (currentChannel.toLowerCase().includes('facebook') || currentChannel.toLowerCase().includes('meta')) sel.value = 'Facebook';
+    else if (currentChannel.toLowerCase().includes('tiktok')) sel.value = 'TikTok';
+    else if (currentChannel.toLowerCase().includes('instagram')) sel.value = 'Instagram';
+    else sel.value = 'All';
+  }
+
+  const modal = document.getElementById('edit-reshare-modal');
+  if (modal) modal.style.display = 'flex';
+};
+
+window.closeEditAndReshareModal = function() {
+  const modal = document.getElementById('edit-reshare-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.executeEditAndReshare = function() {
+  const campId = document.getElementById('edit-reshare-camp-id').value;
+  const updatedTitle = document.getElementById('edit-reshare-title').value;
+  const updatedChannel = document.getElementById('edit-reshare-channel').value;
+  const updatedMessage = document.getElementById('edit-reshare-message').value;
+
+  trigger1ClickSocialPost(updatedChannel, updatedMessage, 'https://jobs.utheversity.com');
+
+  const row = document.getElementById(`row-camp-${campId}`);
+  if (row) {
+    const cells = row.querySelectorAll('td');
+    if (cells[2]) cells[2].textContent = updatedTitle;
+    if (cells[3]) cells[3].textContent = `${updatedChannel} (Updated)`;
+    if (cells[5]) cells[5].innerHTML = `<span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">RE-SHARED LIVE</span>`;
+  }
+
+  closeEditAndReshareModal();
+  showCustomModalAlert(
+    'Post Updated & Re-Shared Live',
+    `Updated content for ${campId} has been launched via 1-click share to ${updatedChannel}.\n\nYour Campaign Date Tracker has been refreshed with the updated record.`
+  );
+};
+
+window.openLiveSocialThread = function(campId) {
+  const row = document.getElementById(`row-camp-${campId}`);
+  let channelText = '';
+  if (row) {
+    const cells = row.querySelectorAll('td');
+    if (cells[3]) channelText = cells[3].textContent.toLowerCase();
+  }
+
+  let targetUrl = '';
+  if (channelText.includes('linkedin')) {
+    targetUrl = document.getElementById('social-linkedin')?.value || 'https://linkedin.com/company/quantumretail';
+  } else if (channelText.includes('x') || channelText.includes('twitter')) {
+    const handle = (document.getElementById('social-x')?.value || '@QuantumRetailJobs').replace('@', '');
+    targetUrl = `https://twitter.com/${handle}`;
+  } else if (channelText.includes('facebook')) {
+    targetUrl = document.getElementById('social-facebook')?.value || 'https://facebook.com/quantumretail';
+  } else if (channelText.includes('tiktok')) {
+    const handle = (document.getElementById('social-tiktok')?.value || '@QuantumRetailHiring').replace('@', '');
+    targetUrl = `https://tiktok.com/@${handle}`;
+  } else if (channelText.includes('instagram')) {
+    const handle = (document.getElementById('social-instagram')?.value || '@QuantumRetailCareers').replace('@', '');
+    targetUrl = `https://instagram.com/${handle}`;
+  } else {
+    targetUrl = document.getElementById('social-linkedin')?.value || 'https://linkedin.com/company/quantumretail';
+  }
+
+  if (targetUrl) {
+    if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
+    window.open(targetUrl, '_blank', 'noopener,noreferrer');
+  }
+};
 
 window.testPersonalizationPreview = function() {
-
-const tmpl = document.getElementById('crm-message-body').value;
-
-const rendered = tmpl
-
-.replace(/{candidate_name}/g, 'Marcus Vance')
-
-.replace(/{job_title}/g, 'Sales Manager')
-
-.replace(/{company_name}/g, 'Quantum Retail Corp');
-
-showCustomModalAlert('Personalization Preview (Marcus Vance)', rendered);
-
+  const tmpl = document.getElementById('crm-message-body').value;
+  const rendered = tmpl
+    .replace(/{candidate_name}/g, 'Marcus Vance')
+    .replace(/{job_title}/g, 'Sales Manager')
+    .replace(/{company_name}/g, 'Quantum Retail Corp');
+  showCustomModalAlert('Personalization Preview (Marcus Vance)', rendered);
 };
 
 

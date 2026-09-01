@@ -3294,6 +3294,32 @@ async function runTests() {
     assert(false, `Group 88 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 89: 1-CLICK LIVE SOCIAL POSTING, LIVE SYNC NOTICE & EDIT/RE-SHARE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 89: 1-CLICK LIVE SOCIAL POSTING, LIVE SYNC NOTICE & EDIT/RE-SHARE ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Verify Recruiter Live Social Sync Notice
+    assert(recruiterHtml.includes('LIVE SOCIAL MEDIA SYNC NOTICE') && recruiterHtml.includes('Once a post is live on external platforms like X (Twitter) or LinkedIn'), 'recruiter.html includes official live social sync notice');
+    assert(recruiterHtml.includes('EDIT & RE-SHARE') && recruiterHtml.includes('button in Tab 2 to push the corrected version to their feed'), 'recruiter.html explains Edit & Re-Share workflow for live post updates');
+
+    // 2. Verify 1-Click Social Dispatch integration
+    assert(recruiterHtml.includes('trigger1ClickSocialPost') && recruiterHtml.includes('linkedin.com/sharing/share-offsite'), 'recruiter.html implements trigger1ClickSocialPost for LinkedIn');
+    assert(recruiterHtml.includes('twitter.com/intent/tweet'), 'recruiter.html implements 1-click Twitter/X intent sharing');
+    assert(recruiterHtml.includes('facebook.com/sharer/sharer.php'), 'recruiter.html implements 1-click Facebook intent sharing');
+
+    // 3. Verify Edit & Re-Share Modal and Live Actions in Tracker
+    assert(recruiterHtml.includes('id="edit-reshare-modal"'), 'recruiter.html includes #edit-reshare-modal signature modal');
+    assert(recruiterHtml.includes('openEditAndReshareModal') && recruiterHtml.includes('executeEditAndReshare'), 'recruiter.html implements openEditAndReshareModal and executeEditAndReshare');
+    assert(recruiterHtml.includes('openLiveSocialThread'), 'recruiter.html implements openLiveSocialThread');
+
+  } catch (err) {
+    assert(false, `Group 89 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
