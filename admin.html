@@ -259,51 +259,53 @@
       font-size: 0.75rem;
     }
 
-    /* 2. COMPACT 6 NAVIGATION TABS (36PX HEIGHT) */
+    /* 2. COMPACT & SLEEK 6 NAVIGATION TABS */
     .admin-tabs-nav-bar {
       background: #FFFFFF;
-      border-bottom: 1.5px solid var(--border-color);
-      padding: 0 1rem;
+      border-bottom: 1px solid var(--border-color);
+      padding: 0 0.75rem;
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.2rem;
       position: sticky;
       top: 48px;
       z-index: 850;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      min-height: 32px;
     }
 
     .admin-nav-tab-btn {
       background: transparent;
-      border: none;
-      border-bottom: 2.5px solid transparent;
+      border: 1px solid transparent;
+      border-bottom: 2px solid transparent;
       color: var(--text-muted);
-      font-size: 0.68rem;
-      font-weight: 800;
+      font-size: 0.60rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 0 0.75rem;
+      letter-spacing: 0.03em;
+      padding: 0 0.5rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
-      height: 36px;
+      gap: 0.25rem;
+      height: 26px;
+      border-radius: 4px;
       white-space: nowrap;
       transition: all 0.15s ease;
     }
 
     .admin-nav-tab-btn:hover {
       color: var(--uthe-charcoal);
-      background: var(--card-subtle);
+      background: #F8FAFC;
     }
 
     .admin-nav-tab-btn.active {
-      color: var(--uthe-charcoal);
-      border-bottom-color: var(--uthe-gold);
-      font-weight: 900;
-      background: var(--uthe-gold-light);
+      color: #0F172A !important;
+      border-bottom-color: var(--uthe-gold) !important;
+      font-weight: 800 !important;
+      background: var(--uthe-gold-light) !important;
     }
 
     /* MAIN WORKSPACE */
@@ -407,17 +409,18 @@
       vertical-align: middle;
     }
 
-    /* COMPACT ACTION BUTTONS (28-32PX HEIGHT) */
+    /* COMPACT ACTION BUTTONS & PREMIUM REFINED CONTROLS */
     /* 1. DEFAULT STATE: White Fill, Gold Outline, Gold Text */
     button, .btn-primary, .btn-gold, .btn-quick-send-main, .send-reply-btn, .btn-auth-header, .btn-submit-request, .btn-surface-sm, .btn-primary-executive {
       background-color: #FFFFFF !important;
       color: #FEBA27 !important;
       border: 1.5px solid #FEBA27 !important;
-      font-weight: 800 !important;
-      letter-spacing: 0.06em !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.03em !important;
       text-transform: uppercase !important;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      border-radius: 4px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
     /* 2. HOVER STATE: Signature Gold Fill, Limousine Black Text */
@@ -426,7 +429,7 @@
       color: #0F172A !important;
       border-color: #FEBA27 !important;
       box-shadow: 0 4px 14px rgba(254, 186, 39, 0.35) !important;
-      transform: translateY(-1px) !important;
+      transform: translateY(-0.5px) !important;
     }
 
     /* 3. SELECTED / ACTIVE STATE: u-theLOGO Accent Blue Fill, White Text */
@@ -437,21 +440,46 @@
       box-shadow: 0 4px 14px rgba(0, 117, 255, 0.35) !important;
     }
 
+    /* ULTRA-SLEEK COMPACT TABLE ACTION BUTTONS (20-22PX HEIGHT) */
+    .btn-surface-sm {
+      height: 22px !important;
+      font-size: 0.58rem !important;
+      padding: 0 0.40rem !important;
+      border-radius: 4px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.02em !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      white-space: nowrap !important;
+    }
+
     .btn-danger-sm {
-      background: var(--danger-bg);
-      color: var(--danger-red);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      font-weight: 700;
-      font-size: 0.62rem;
-      text-transform: uppercase;
-      padding: 0 0.5rem;
-      border-radius: 3px;
-      cursor: pointer;
-      height: 26px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      white-space: nowrap;
+      background: #FEF2F2 !important;
+      color: #EF4444 !important;
+      border: 1px solid #FECACA !important;
+      font-weight: 700 !important;
+      font-size: 0.58rem !important;
+      letter-spacing: 0.02em !important;
+      text-transform: uppercase !important;
+      padding: 0 0.40rem !important;
+      border-radius: 4px !important;
+      cursor: pointer !important;
+      height: 22px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      white-space: nowrap !important;
+      box-shadow: 0 1px 2px rgba(239, 68, 68, 0.04) !important;
+      transition: all 0.15s ease !important;
+    }
+
+    .btn-danger-sm:hover {
+      background: #EF4444 !important;
+      color: #FFFFFF !important;
+      border-color: #EF4444 !important;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25) !important;
+      transform: translateY(-0.5px) !important;
     }
 
     /* 4. BADGES & TAGS */
@@ -459,6 +487,7 @@
       background-color: #FFFFFF !important;
       color: #FEBA27 !important;
       border: 1px solid #FEBA27 !important;
+      border-radius: 4px !important;
     }
 
     .badge-tag.active, .status-badge.active, .badge-tag.selected {
@@ -467,19 +496,19 @@
       border-color: #0075FF !important;
     }
     .status-badge.active {
-      background: var(--status-mint-bg);
-      color: #065F46;
-      border: 1px solid rgba(0, 200, 83, 0.3);
+      background: var(--status-mint-bg) !important;
+      color: #065F46 !important;
+      border: 1px solid rgba(0, 200, 83, 0.3) !important;
     }
     .status-badge.suspended {
-      background: var(--danger-bg);
-      color: var(--danger-red);
-      border: 1px solid rgba(239, 68, 68, 0.3);
+      background: var(--danger-bg) !important;
+      color: var(--danger-red) !important;
+      border: 1px solid rgba(239, 68, 68, 0.3) !important;
     }
 
     .action-cells {
       display: flex;
-      gap: 0.25rem;
+      gap: 0.2rem;
       align-items: center;
       flex-wrap: nowrap;
     }
@@ -488,31 +517,33 @@
       color: var(--uthe-charcoal);
       border: 1px solid var(--border-color);
       font-weight: 700;
-      font-size: 0.62rem;
-      letter-spacing: 0.4px;
+      font-size: 0.58rem;
+      letter-spacing: 0.02em;
       text-transform: uppercase;
-      border-radius: 3px;
+      border-radius: 4px;
       cursor: pointer;
-      padding: 0 0.5rem;
-      height: 26px;
+      padding: 0 0.38rem;
+      height: 22px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.1s ease;
+      transition: all 0.12s ease;
       white-space: nowrap;
     }
     .action-cells button:hover {
       border-color: var(--uthe-gold);
       background: var(--uthe-gold-light);
+      color: #0F172A;
     }
     .action-cells button.danger {
-      background: var(--danger-bg);
+      background: #FEF2F2;
       color: var(--danger-red);
-      border: 1px solid rgba(239, 68, 68, 0.3);
+      border: 1px solid #FECACA;
     }
     .action-cells button.danger:hover {
-      background: rgba(239, 68, 68, 0.15);
-      border-color: var(--danger-red);
+      background: #EF4444;
+      color: #FFFFFF;
+      border-color: #EF4444;
     }
 
     .form-group {
@@ -1353,13 +1384,13 @@
     <section id="view-listings" class="view-section">
       <!-- Section A: Job Listings -->
       <div class="table-container">
-        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-          <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 0.70rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
+          <div style="display: flex; align-items: center; gap: 6px;">
             <span>MASTER JOB LISTINGS INVENTORY</span>
-            <button id="btn-admin-batch-delete-jobs" class="btn-danger-sm" onclick="confirmBatchDeleteAdminJobs()" style="display:none; height: 26px; font-size: 0.68rem; padding: 0 0.65rem; font-weight: 800;">🗑️ Delete Selected (<span id="admin-selected-jobs-count">0</span>)</button>
+            <button id="btn-admin-batch-delete-jobs" class="btn-danger-sm" onclick="confirmBatchDeleteAdminJobs()" style="display:none; height: 22px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 700; border-radius: 4px;">🗑️ Delete Selected (<span id="admin-selected-jobs-count">0</span>)</button>
           </div>
-          <div style="display: flex; gap: 0.4rem; align-items: center;">
-            <button class="btn-gold" onclick="openJobAggregatorModal()" style="height: 28px; font-size: 0.68rem; padding: 0 0.75rem; font-weight: 800;" data-tooltip="Sync live public job feeds from ATS platforms (Greenhouse, Lever, RSS)">
+          <div style="display: flex; gap: 0.35rem; align-items: center;">
+            <button class="btn-gold" onclick="openJobAggregatorModal()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px;" data-tooltip="Sync live public job feeds from ATS platforms (Greenhouse, Lever, RSS)">
               ⚡ Sync Live Job Feeds
             </button>
           </div>
@@ -1383,15 +1414,15 @@
 
       <!-- Section B: Candidate Applications -->
       <div class="table-container">
-        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
-          <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div style="padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 0.70rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; gap: 0.4rem;">
+          <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
             <span>CANDIDATE APPLICATIONS & ATS STAGE OVERRIDES</span>
-            <button id="btn-admin-batch-delete-apps" class="btn-danger-sm" onclick="confirmBatchDeleteAdminApps()" style="display:none; height: 26px; font-size: 0.68rem; padding: 0 0.65rem; font-weight: 800;">🗑️ Delete Selected (<span id="admin-selected-apps-count">0</span>)</button>
-            <a href="/api/admin/resumes/download-all" target="_blank" style="background:#D4AF37; color:#000; padding:6px 12px; border-radius:4px; font-weight:bold; text-decoration:none; display:inline-block; font-size:0.68rem;">
+            <button id="btn-admin-batch-delete-apps" class="btn-danger-sm" onclick="confirmBatchDeleteAdminApps()" style="display:none; height: 22px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 700; border-radius: 4px;">🗑️ Delete Selected (<span id="admin-selected-apps-count">0</span>)</button>
+            <a href="/api/admin/resumes/download-all" target="_blank" style="background:#FFFFFF; color:#FEBA27; border: 1.2px solid #FEBA27; padding:0 0.55rem; height: 24px; border-radius:4px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; font-size:0.60rem; letter-spacing: 0.03em;">
               📦 DOWNLOAD ALL RESUMES (.ZIP)
             </a>
           </div>
-          <span style="font-size:0.65rem; color:var(--text-muted);">Direct pipeline stage controls</span>
+          <span style="font-size:0.62rem; color:var(--text-muted);">Direct pipeline stage controls</span>
         </div>
         <table>
           <thead>
@@ -1411,24 +1442,24 @@
       </div>
 
       <!-- Section C: Master Candidate Resume Directory & Talent Sourcing Board -->
-      <div class="table-container" style="margin-top: 1rem;">
-        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-          <div style="display: flex; align-items: center; gap: 8px;">
+      <div class="table-container" style="margin-top: 0.85rem;">
+        <div style="padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 0.70rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
+          <div style="display: flex; align-items: center; gap: 6px;">
             <span>MASTER CANDIDATE RESUME DIRECTORY & SOURCING</span>
-            <span class="badge-tag tag-gold" id="admin-resume-count-badge">8 Resumes</span>
-            <button id="btn-admin-batch-delete-resumes" class="btn-danger-sm" onclick="confirmBatchDeleteAdminResumes()" style="display:none; height: 26px; font-size: 0.68rem; padding: 0 0.65rem; font-weight: 800;">🗑️ Delete Selected (<span id="admin-selected-resumes-count">0</span>)</button>
+            <span class="badge-tag tag-gold" id="admin-resume-count-badge" style="font-size: 0.58rem; padding: 1px 6px;">8 Resumes</span>
+            <button id="btn-admin-batch-delete-resumes" class="btn-danger-sm" onclick="confirmBatchDeleteAdminResumes()" style="display:none; height: 22px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 700; border-radius: 4px;">🗑️ Delete Selected (<span id="admin-selected-resumes-count">0</span>)</button>
           </div>
-          <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
-            <button class="btn-gold" onclick="openBatchResumeParserModal()" style="height: 30px; font-size: 0.7rem; padding: 0 0.75rem; font-weight: 800;" data-tooltip="Automated multi-resume text parser and batch candidate ingester">
+          <div style="display: flex; gap: 0.35rem; align-items: center; flex-wrap: wrap;">
+            <button class="btn-gold" onclick="openBatchResumeParserModal()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px;" data-tooltip="Automated multi-resume text parser and batch candidate ingester">
               🧠 Batch Resume Ingestion
             </button>
-            <button class="btn-surface-sm" onclick="openUploadResumeModal()" style="height: 30px; font-size: 0.7rem; padding: 0 0.75rem; font-weight: 800;" data-tooltip="Upload new verified candidate resume profile">
+            <button class="btn-surface-sm" onclick="openUploadResumeModal()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px;" data-tooltip="Upload new verified candidate resume profile">
               📄 Upload Resume
             </button>
-            <button class="btn-surface-sm" onclick="openImportExcelModal()" style="height: 30px; font-size: 0.7rem; padding: 0 0.75rem; font-weight: 800;" data-tooltip="Bulk import candidate resumes from Microsoft Excel (.xlsx / .csv)">
+            <button class="btn-surface-sm" onclick="openImportExcelModal()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px;" data-tooltip="Bulk import candidate resumes from Microsoft Excel (.xlsx / .csv)">
               📊 Import Microsoft Excel
             </button>
-            <button class="btn-surface-sm" onclick="openImportGoogleSheetsModal()" style="height: 30px; font-size: 0.7rem; padding: 0 0.75rem; font-weight: 800;" data-tooltip="Import candidate resumes from Google Sheets (CSV URL or Data)">
+            <button class="btn-surface-sm" onclick="openImportGoogleSheetsModal()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px;" data-tooltip="Import candidate resumes from Google Sheets (CSV URL or Data)">
               🌐 Import Google Sheets
             </button>
           </div>
@@ -2669,7 +2700,7 @@
           <td>${app.email}</td>
           <td>${app.phone || 'N/A'}</td>
           <td>
-            <select onchange="updateApplicantStage('${app.id}', this.value)" style="height:26px; font-size:0.68rem; padding:0 0.4rem;" data-tooltip="Override candidate ATS hiring stage">
+            <select onchange="updateApplicantStage('${app.id}', this.value)" style="height:22px; font-size:0.58rem; padding:0 0.35rem; border-radius:4px; border:1px solid var(--border-color); background:#F8FAFC; color:var(--text-main); font-weight:600;" data-tooltip="Override candidate ATS hiring stage">
               <option value="Applied" ${app.status === 'Applied' ? 'selected' : ''}>Applied</option>
               <option value="Screened" ${app.status === 'Screened' ? 'selected' : ''}>Screened</option>
               <option value="Interviewing" ${app.status === 'Interviewing' ? 'selected' : ''}>Interviewing</option>
@@ -2677,7 +2708,7 @@
               <option value="Hired" ${app.status === 'Hired' ? 'selected' : ''}>Hired</option>
             </select>
           </td>
-          <td style="display:flex; gap:0.25rem; align-items:center;">
+          <td style="display:flex; gap:0.2rem; align-items:center;">
             <button class="btn-surface-sm" onclick="showCustomModalAlert('Candidate Profile: ${app.name}', 'Role: ${app.jobTitle}\\nEmail: ${app.email}\\nPhone: ${app.phone}\\nResume: ${app.resumeFile || 'resume.pdf'}')" data-tooltip="Review candidate submission details">
               REVIEW
             </button>
@@ -3173,7 +3204,7 @@
           <td><span class="badge-tag tag-mint">${r.score || 94}% MATCH</span></td>
           <td><span style="font-size:0.65rem; color:var(--text-muted);">${(r.skills || []).slice(0, 2).join(', ')}</span></td>
           <td>
-            <button class="btn-surface-sm" onclick="openAdminResumeViewer('${r.id}', '${(r.name || '').replace(/'/g, "\\'")}', '${(r.role || '').replace(/'/g, "\\'")}', '${r.resumeFile || ''}')" style="height:24px; font-size:0.68rem; padding:0 0.55rem; color:var(--blue-accent); border-color:var(--blue-accent); font-weight:800;" data-tooltip="Open candidate resume in preview window">
+            <button class="btn-surface-sm" onclick="openAdminResumeViewer('${r.id}', '${(r.name || '').replace(/'/g, "\\'")}', '${(r.role || '').replace(/'/g, "\\'")}', '${r.resumeFile || ''}')" style="height:22px; font-size:0.58rem; padding:0 0.40rem; color:var(--blue-accent); border-color:var(--blue-accent); font-weight:700;" data-tooltip="Open candidate resume in preview window">
               📄 View
             </button>
           </td>
