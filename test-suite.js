@@ -3367,6 +3367,24 @@ async function runTests() {
     assert(false, `Group 91 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 92: AUTHENTIC SOCIAL MEDIA BRAND LOGOS & CLEAN ICONS
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 92: AUTHENTIC SOCIAL MEDIA BRAND LOGOS & CLEAN ICONS ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Verify authentic brand SVGs in openLiveSocialThread channels array
+    assert(recruiterHtml.includes('viewBox="0 0 24 24" fill="#0A66C2"') && recruiterHtml.includes('viewBox="0 0 24 24" fill="#1877F2"'), 'recruiter.html includes authentic vector brand icons for LinkedIn and Facebook');
+    assert(recruiterHtml.includes('M18.244 2.25h3.308l-7.227 8.26'), 'recruiter.html includes official X geometry SVG logo');
+    assert(recruiterHtml.includes('M12.525.02c1.31-.02'), 'recruiter.html includes official TikTok mark SVG logo');
+    assert(recruiterHtml.includes('ig-grad-thread') && recruiterHtml.includes('ig-grad-belt'), 'recruiter.html includes official Instagram multi-stop radial gradient SVG logo');
+
+  } catch (err) {
+    assert(false, `Group 92 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
