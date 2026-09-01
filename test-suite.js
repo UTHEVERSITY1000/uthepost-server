@@ -3205,6 +3205,67 @@ async function runTests() {
     assert(false, `Group 86 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 87: U-THEADMIN PLANS & ADD-ONS CONTROL BOARD (TAB 4)
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 87: U-THEADMIN PLANS & ADD-ONS CONTROL BOARD (TAB 4) ---');
+
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+
+    // 1. Verify exact add-on titles and descriptions in Tab 4
+    assert(adminHtml.includes('Top-of-Page Spotlight Placement') && adminHtml.includes('Pin your job posting at the top of candidate search results.'), 'admin.html Tab 4 includes Top-of-Page Spotlight Placement with description');
+    assert(adminHtml.includes('Urgent Hiring Badges') && adminHtml.includes('Highlight urgent open positions with bright badge accents.'), 'admin.html Tab 4 includes Urgent Hiring Badges with description');
+    assert(adminHtml.includes('Direct Hiring Messages (Candidate InMail)') && adminHtml.includes('Send direct interview invitations to candidate inboxes.'), 'admin.html Tab 4 includes Direct Hiring Messages (Candidate InMail) with description');
+    assert(adminHtml.includes('Verified Employer Shield') && adminHtml.includes('Display official gold UTHEVERSITY emblem on company profile and job cards.'), 'admin.html Tab 4 includes Verified Employer Shield with description');
+
+    // 2. Verify pricing inputs present
+    assert(adminHtml.includes('id="cms-price-spotlight"'), 'admin.html includes #cms-price-spotlight ($49/mo)');
+    assert(adminHtml.includes('id="cms-price-urgent"'), 'admin.html includes #cms-price-urgent ($29/mo)');
+    assert(adminHtml.includes('id="cms-price-direct-msgs"'), 'admin.html includes #cms-price-direct-msgs ($19/mo)');
+    assert(adminHtml.includes('id="cms-price-verified-shield"'), 'admin.html includes #cms-price-verified-shield ($3)');
+
+    // 3. Verify POST /api/cms/config updates and persists pricing schema
+    const adminLoginRes = await fetch(`${BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'contact@utheversity.com', password: 'ZionAdmin2026!' })
+    });
+    const adminLoginData = await adminLoginRes.json();
+    const admToken = adminLoginData.token;
+
+    const cmsUpdateRes = await fetch(`${BASE_URL}/api/cms/config`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${admToken}`,
+        'X-Admin-Portal': 'true'
+      },
+      body: JSON.stringify({
+        pricing: {
+          spotlightPrice: 49,
+          urgentBadge: 29,
+          directMessages: 19,
+          verifiedEmployer: 3
+        },
+        addOns: {
+          topSpotlight: 49,
+          urgentBadge: 29,
+          directMessages: 19,
+          verifiedEmployer: 3
+        }
+      })
+    });
+    assert(cmsUpdateRes.status === 200, 'POST /api/cms/config successfully saves Tab 4 add-on pricing');
+    const cmsUpdateData = await cmsUpdateRes.json();
+    assert(cmsUpdateData.config.pricing.urgentBadge === 29, 'Pricing config contains urgentBadge: 29');
+    assert(cmsUpdateData.config.pricing.directMessages === 19, 'Pricing config contains directMessages: 19');
+    assert(cmsUpdateData.config.pricing.verifiedEmployer === 3, 'Pricing config contains verifiedEmployer: 3');
+
+  } catch (err) {
+    assert(false, `Group 87 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
