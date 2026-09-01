@@ -3505,16 +3505,16 @@ async function runTests() {
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
     const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
 
-    // 1. Recruiter top deck Blue ? Help Button to the right of logo
-    assert(recruiterHtml.includes('id="btn-brand-help"'), 'recruiter.html defines #btn-brand-help directly to the right of company logo badge');
-    assert(recruiterHtml.includes('id="btn-help-guide"'), 'recruiter.html defines #btn-help-guide in top deck header');
-    assert(recruiterHtml.includes('class="btn-help-brand"'), 'recruiter.html styles .btn-help-brand');
+    // 1. Recruiter top deck Blue ? Help Button snugged directly next to notification bell
+    assert(recruiterHtml.includes('id="btn-help-guide"'), 'recruiter.html defines #btn-help-guide in top deck header actions');
+    assert(recruiterHtml.includes('.btn-help-header'), 'recruiter.html styles .btn-help-header');
     assert(recruiterHtml.includes('#0075FF'), 'recruiter.html enforces blue #0075FF accent for help icon');
+    assert(!recruiterHtml.includes('id="btn-brand-help"'), 'recruiter.html cleanly deleted ? next to upload logo');
+    assert(!recruiterHtml.includes('id="tab-nav-help"'), 'recruiter.html cleanly deleted Tab 7 from menu');
 
-    // 2. Candidate top deck Blue ? Help Button to the right of logo badge
-    assert(candidateHtml.includes('id="btn-candidate-brand-help"'), 'candidate.html defines #btn-candidate-brand-help in brand group');
+    // 2. Candidate top deck Blue ? Help Button snugged directly next to notification bell
     assert(candidateHtml.includes('id="btn-candidate-help"'), 'candidate.html defines #btn-candidate-help in top deck header');
-    assert(candidateHtml.includes('class="btn-help-brand"'), 'candidate.html styles .btn-help-brand');
+    assert(!candidateHtml.includes('id="btn-candidate-brand-help"'), 'candidate.html cleanly deleted ? next to brand badge');
 
     // 3. Signature How-To Guide Modal in recruiter.html
     assert(recruiterHtml.includes('id="how-to-guide-modal"'), 'recruiter.html defines #how-to-guide-modal signature modal');
@@ -3525,14 +3525,7 @@ async function runTests() {
     assert(candidateHtml.includes('id="how-to-guide-modal"'), 'candidate.html defines #how-to-guide-modal signature modal');
     assert(candidateHtml.includes('openHowToGuideModal') && candidateHtml.includes('switchGuideTab'), 'candidate.html implements openHowToGuideModal and switchGuideTab functions');
 
-    // 5. Tab 7: ? (BLUE) Menu Item and #view-help Section
-    assert(recruiterHtml.includes('id="tab-nav-help"') && recruiterHtml.includes('7.'), 'recruiter.html defines Tab 7: 7. ? in top deck navigation');
-    assert(recruiterHtml.includes('switchRecruiterTab(\'help\')'), 'recruiter.html binds Tab 7 to switchRecruiterTab(\'help\')');
-    assert(recruiterHtml.includes('id="view-help"'), 'recruiter.html defines #view-help full-page how-to board');
-    assert(recruiterHtml.includes('guide-cards-container'), 'recruiter.html defines guide-cards-container with interactive cards');
-    assert(recruiterHtml.includes('filterGuideCategory') && recruiterHtml.includes('filterHowToGuideCards'), 'recruiter.html implements filterGuideCategory and filterHowToGuideCards');
-
-    // 6. Plain English and Child-like Simplicity Content Checks
+    // 5. Plain English and Child-like Simplicity Content Checks
     assert(recruiterHtml.includes('lemonade stand') || recruiterHtml.includes('colorful flyer') || recruiterHtml.includes('Job Studio & Fast Publishing'), 'recruiter.html contains clear step-by-step guides for job studio');
     assert(recruiterHtml.includes('1. Applied ➔ 2. Screened ➔ 3. Interviewing ➔ 4. Offer / Hired'), 'recruiter.html explains 4-stage ATS pipeline in simple terms');
     assert(recruiterHtml.includes('How to Apply in 30 Seconds') || recruiterHtml.includes('30-Second PDF Auto-Fill'), 'recruiter.html explains candidate quick-apply process step-by-step');
