@@ -3052,15 +3052,29 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (pathname === '/api/resumes' && req.method === 'DELETE') {
+    const idsParam = parsedUrl.searchParams.get('ids');
     const resId = parsedUrl.searchParams.get('id');
+
+    if (idsParam) {
+      const idsToDelete = idsParam.split(',').map(s => s.trim()).filter(Boolean);
+      for (const tid of idsToDelete) {
+        const idx = resumesStore.findIndex(r => r.id === tid);
+        if (idx !== -1) resumesStore.splice(idx, 1);
+      }
+      saveResumesToDisk();
+      broadcastWebSocketEvent('RESUMES_BATCH_DELETED', { ids: idsToDelete, total: resumesStore.length });
+      return sendJson(200, { ok: true, status: 'batch_deleted', count: idsToDelete.length, ids: idsToDelete });
+    }
+
     if (resId) {
       const idx = resumesStore.findIndex(r => r.id === resId);
       if (idx !== -1) resumesStore.splice(idx, 1);
       saveResumesToDisk();
-      broadcastWebSocketEvent('RESUME_DELETED', { id: resId });
+      broadcastWebSocketEvent('RESUME_DELETED', { id: resId, total: resumesStore.length });
       return sendJson(200, { ok: true, status: 'deleted', id: resId });
     }
-    return sendJson(400, { error: 'Missing resume ID parameter.' });
+
+    return sendJson(400, { error: 'Missing resume ID or IDs parameter.' });
   }
 
   // ----------------------------------------------------

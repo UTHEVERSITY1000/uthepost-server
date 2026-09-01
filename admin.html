@@ -3178,7 +3178,7 @@
             </button>
           </td>
           <td class="action-cells">
-            <button class="danger" onclick="deleteAdminResume('${r.id}')" title="Delete candidate resume">Delete</button>
+            <button class="btn-danger-sm" onclick="deleteAdminResume('${r.id}')" data-tooltip="Delete candidate resume from directory">DELETE</button>
           </td>
         </tr>
       `).join('');
@@ -3186,25 +3186,25 @@
     window.renderAdminResumes = renderAdminResumes;
 
     async function deleteAdminResume(id) {
-      if (typeof showCustomModalConfirm === 'function') {
-        showCustomModalConfirm('Delete Resume Record', `Are you sure you want to permanently delete candidate resume #${id}?`, async () => {
+      showCustomModalConfirm(
+        'PERMANENTLY DELETE RESUME',
+        `Are you sure you want to permanently delete candidate resume #${id}?`,
+        async () => {
           try {
             const res = await fetch(`/api/resumes?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
             if (res.ok) {
+              adminResumes = adminResumes.filter(r => r.id !== id);
+              renderAdminResumes();
               showCustomModalAlert('Resume Deleted', `Candidate resume #${id} was deleted.`);
-              loadAdminResumes();
+            } else {
+              const err = await res.json().catch(() => ({}));
+              showCustomModalAlert('Delete Failed', err.error || 'Could not delete resume record.');
             }
-          } catch (e) {}
-        });
-      } else {
-        try {
-          const res = await fetch(`/api/resumes?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
-          if (res.ok) {
-            showCustomModalAlert('Resume Deleted', `Candidate resume #${id} was deleted.`);
-            loadAdminResumes();
+          } catch (e) {
+            showCustomModalAlert('Delete Error', e.message);
           }
-        } catch (e) {}
-      }
+        }
+      );
     }
     window.deleteAdminResume = deleteAdminResume;
 
