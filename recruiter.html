@@ -7478,6 +7478,132 @@ SIGN IN TO WORKSPACE
 
 
 
+<!-- RECRUITER PLATFORM HOW-TO GUIDE & MANUAL MODAL (EMPLOYER EXCLUSIVE) -->
+<div class="modal-overlay" id="how-to-guide-modal" style="display: none;">
+  <div class="modal-card" style="max-width: 820px; max-height: 90vh; display: flex; flex-direction: column; padding: 1.5rem; background: #FFFFFF; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); border: 1.5px solid #0075FF;">
+    
+    <!-- MODAL HEADER -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0075FF; padding-bottom: 0.75rem; margin-bottom: 1rem;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="background: #0075FF; color: #FFFFFF; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; box-shadow: 0 2px 6px rgba(0, 117, 255, 0.4);">?</span>
+        <div>
+          <h2 style="font-size: 1.15rem; font-weight: 900; color: #0F172A; margin: 0; letter-spacing: 0.5px;">U-THEPOST RECRUITER MANUAL & HOW-TO GUIDE</h2>
+          <div style="font-size: 0.72rem; color: #64748B; font-weight: 600;">Plain-English walkthrough of every feature, button, and tool in your employer portal.</div>
+        </div>
+      </div>
+      <button onclick="closeHowToGuideModal()" style="background: #F1F5F9; border: none; border-radius: 6px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: 900; color: #64748B;" data-tooltip="Close guide">✕</button>
+    </div>
+
+    <!-- SCROLLABLE BODY -->
+    <div style="overflow-y: auto; padding-right: 0.5rem; display: flex; flex-direction: column; gap: 1rem; flex: 1;">
+      
+      <!-- HERO INTRO -->
+      <div style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); color: #FFFFFF; border-radius: 8px; padding: 1rem; border: 1px solid #334155;">
+        <div style="font-size: 0.7rem; font-weight: 800; color: #FEBA27; text-transform: uppercase; letter-spacing: 0.05em;">Welcome to U-THEPOST</div>
+        <div style="font-size: 0.9rem; font-weight: 900; margin-top: 2px;">Your All-in-One Executive Talent Acquisition & Multi-Channel Hiring Suite</div>
+        <div style="font-size: 0.75rem; color: #94A3B8; margin-top: 4px; line-height: 1.4;">
+          U-THEPOST gives your hiring team complete control: design job postings, broadcast to 5 social platforms in 1 click, track applicants through an interactive ATS pipeline, and scout verified candidate resumes nationwide.
+        </div>
+      </div>
+
+      <!-- TAB 1: JOB STUDIO -->
+      <div style="background: #FFFFFF; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+          <span style="background: #FEBA27; color: #000; font-weight: 900; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">TAB 1</span>
+          <h3 style="font-size: 0.9rem; font-weight: 900; color: #0F172A; margin: 0;">Job Studio & Fast Publishing</h3>
+        </div>
+        <div style="font-size: 0.75rem; color: #475569; line-height: 1.45; display: flex; flex-direction: column; gap: 0.4rem;">
+          <div>• <strong>Job Description Details:</strong> Fill in the Job Title, Compensation Range (Hourly / Annual), Location (City, State / Remote / Hybrid), and Employment Commitment.</div>
+          <div>• <strong>1-Click Perks & Benefits:</strong> Tap any perk chip (e.g. <em>18 Days PTO</em>, <em>Comprehensive Health</em>, <em>401(k) Match</em>, <em>Flexible Schedule</em>) to automatically attach them to your post.</div>
+          <div>• <strong>⭐ Top-of-Page Spotlight Placement ($49/mo):</strong> Pins your job at position #1 at the very top of candidate search results with a glowing gold badge.</div>
+          <div>• <strong>🔥 Urgent Hiring Badge ($29/mo):</strong> Attaches an eye-catching red rush badge to encourage immediate candidate applications.</div>
+          <div>• <strong>Card 2 (Live Preview):</strong> See real-time updates of how candidates will see your listing, then click <strong>[ 🚀 PUBLISH LIVE & BROADCAST ]</strong> to launch it instantly.</div>
+        </div>
+      </div>
+
+      <!-- TAB 2: OMNICHANNEL CRM -->
+      <div style="background: #FFFFFF; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+          <span style="background: #0075FF; color: #fff; font-weight: 900; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">TAB 2</span>
+          <h3 style="font-size: 0.9rem; font-weight: 900; color: #0F172A; margin: 0;">Omnichannel CRM & Social Media Broadcasting</h3>
+        </div>
+        <div style="font-size: 0.75rem; color: #475569; line-height: 1.45; display: flex; flex-direction: column; gap: 0.4rem;">
+          <div>• <strong>Connected Social Handles:</strong> Save your official company handles for <strong>LinkedIn</strong>, <strong>X (Twitter)</strong>, <strong>TikTok</strong>, <strong>Facebook</strong>, and <strong>Instagram</strong>. They persist automatically in your workspace.</div>
+          <div>• <strong>Granular Channel Selection:</strong> Check only the platforms you want to post to, or check <em>Select All</em> to broadcast everywhere in 1 click.</div>
+          <div>• <strong>↗ THREAD Button:</strong> Opens a signature picker with authentic brand logos to jump straight to live social conversation streams.</div>
+          <div>• <strong>✏️ Edit & Re-Share:</strong> If you need to make changes to a live job, use Edit & Re-Share to broadcast an updated posting to your active social feeds.</div>
+        </div>
+      </div>
+
+      <!-- TAB 3: APPLICANT TRACKER -->
+      <div style="background: #FFFFFF; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+          <span style="background: #10B981; color: #fff; font-weight: 900; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">TAB 3</span>
+          <h3 style="font-size: 0.9rem; font-weight: 900; color: #0F172A; margin: 0;">Applicant Tracker (ATS) & Hiring Stages</h3>
+        </div>
+        <div style="font-size: 0.75rem; color: #475569; line-height: 1.45; display: flex; flex-direction: column; gap: 0.4rem;">
+          <div>• <strong>4-Stage Kanban Pipeline:</strong> Easily move candidate cards through <em>1. Applied ➔ 2. Screened ➔ 3. Interviewing ➔ 4. Offer / Hired</em>.</div>
+          <div>• <strong>Candidate Dossier & Verified Resumes:</strong> Click any applicant to view their AI match score, contact info, and open their verified PDF resume.</div>
+          <div>• <strong>Direct Messaging & 1-Click Templates:</strong> Send executive messages directly to the candidate's inbox using pre-formatted templates (<em>Intro</em>, <em>Invite</em>, <em>Interest</em>).</div>
+          <div>• <strong>📅 Propose Date & Time:</strong> Pick a calendar date and time to automatically generate and send interview meeting invites.</div>
+          <div>• <strong>Upper-Left Checkboxes & Bulk Delete:</strong> Select candidate cards with checkboxes to bulk-delete or organize applicants.</div>
+        </div>
+      </div>
+
+      <!-- TAB 4: PERFORMANCE & PLANS -->
+      <div style="background: #FFFFFF; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+          <span style="background: #D97706; color: #fff; font-weight: 900; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">TAB 4</span>
+          <h3 style="font-size: 0.9rem; font-weight: 900; color: #0F172A; margin: 0;">Performance Plans & High-Impact Add-Ons</h3>
+        </div>
+        <div style="font-size: 0.75rem; color: #475569; line-height: 1.45; display: flex; flex-direction: column; gap: 0.4rem;">
+          <div>• <strong>Membership Tiers:</strong> Choose from <em>u-thePAL ($0 Free)</em>, <em>Starter ($99/mo)</em>, <em>Growth ($299/mo)</em>, or <em>Pro ($699/mo)</em>.</div>
+          <div>• <strong>Superpower Add-Ons:</strong> Boost performance with <em>Spotlight Placement ($49/mo)</em>, <em>Urgent Hiring ($29/mo)</em>, <em>Direct InMail ($19/mo)</em>, <em>Verified Employer Shield ($39/mo)</em>, and <em>Social Bundles ($19.99/mo)</em>.</div>
+        </div>
+      </div>
+
+      <!-- TAB 5: MY PROFILE -->
+      <div style="background: #FFFFFF; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+          <span style="background: #6366F1; color: #fff; font-weight: 900; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">TAB 5</span>
+          <h3 style="font-size: 0.9rem; font-weight: 900; color: #0F172A; margin: 0;">My Profile & Company Brand Assets</h3>
+        </div>
+        <div style="font-size: 0.75rem; color: #475569; line-height: 1.45;">
+          Upload and update your official company logo badge. Your logo automatically renders across all candidate job postings, executive candidate messages, and board cards.
+        </div>
+      </div>
+
+      <!-- TAB 6: RESUME SEARCH -->
+      <div style="background: #FFFFFF; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+          <span style="background: #8B5CF6; color: #fff; font-weight: 900; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">TAB 6</span>
+          <h3 style="font-size: 0.9rem; font-weight: 900; color: #0F172A; margin: 0;">Resume Search & National Talent Scouting</h3>
+        </div>
+        <div style="font-size: 0.75rem; color: #475569; line-height: 1.45;">
+          Scout verified talent across the country using keyword and location search filters, quick category pills (Executive, Engineering, Sales, Healthcare, Operations), and 1-tap candidate shortlisting.
+        </div>
+      </div>
+
+      <!-- CORPORATE DOMAIN REQUIREMENT -->
+      <div style="background: #EFF6FF; border: 1px solid #93C5FD; border-radius: 8px; padding: 0.85rem;">
+        <div style="font-weight: 900; font-size: 0.82rem; color: #1E40AF; margin-bottom: 4px;">🛡️ Verified Corporate Email Requirement</div>
+        <div style="font-size: 0.75rem; color: #1E3A8A; line-height: 1.4;">
+          To guarantee the highest level of network trust and candidate safety, employer accounts require legitimate corporate domains (e.g. <code>@company.com</code>). Personal webmail addresses (@gmail, @yahoo, @outlook) are restricted on U-THEPOST.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MODAL FOOTER -->
+    <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 1rem;">
+      <button class="btn-gold" onclick="closeHowToGuideModal()" style="height: 36px; padding: 0 1.5rem; font-size: 0.78rem; font-weight: 800;">
+        GOT IT, CLOSE GUIDE
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <!-- SIGNATURE CUSTOM MODAL ALERT (NO DEFAULT BROWSER ALERT) -->
 
 <div class="custom-modal-alert" id="custom-modal-alert">
@@ -9846,11 +9972,10 @@ window.closeCustomAlert = function() {
 };
 
 // HOW-TO GUIDE MODAL HANDLERS
-window.openHowToGuideModal = function(initialTab = 'recruiter') {
+window.openHowToGuideModal = function() {
   const modal = document.getElementById('how-to-guide-modal');
   if (modal) {
     modal.style.display = 'flex';
-    switchGuideTab(initialTab);
   }
 };
 

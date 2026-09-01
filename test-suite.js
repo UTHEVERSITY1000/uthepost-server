@@ -3516,19 +3516,24 @@ async function runTests() {
     assert(candidateHtml.includes('id="btn-candidate-help"'), 'candidate.html defines #btn-candidate-help in top deck header');
     assert(!candidateHtml.includes('id="btn-candidate-brand-help"'), 'candidate.html cleanly deleted ? next to brand badge');
 
-    // 3. Signature How-To Guide Modal in recruiter.html
+    // 3. Signature How-To Guide Modal in recruiter.html (Employer Exclusive)
     assert(recruiterHtml.includes('id="how-to-guide-modal"'), 'recruiter.html defines #how-to-guide-modal signature modal');
-    assert(recruiterHtml.includes('guide-tab-btn-recruiter') && recruiterHtml.includes('guide-tab-btn-candidate'), 'recruiter.html includes tabbed chapters for employers and candidates');
-    assert(recruiterHtml.includes('openHowToGuideModal') && recruiterHtml.includes('switchGuideTab'), 'recruiter.html implements openHowToGuideModal and switchGuideTab functions');
+    assert(recruiterHtml.includes('U-THEPOST RECRUITER MANUAL'), 'recruiter.html includes recruiter manual title');
+    assert(recruiterHtml.includes('openHowToGuideModal') && recruiterHtml.includes('closeHowToGuideModal'), 'recruiter.html implements openHowToGuideModal and closeHowToGuideModal');
+    assert(recruiterHtml.includes('Job Studio & Fast Publishing') && recruiterHtml.includes('Omnichannel CRM & Social Media Broadcasting'), 'recruiter.html contains employer-specific workflows');
 
-    // 4. Signature How-To Guide Modal in candidate.html
+    // 4. Signature How-To Guide Modal in candidate.html (Candidate Exclusive)
     assert(candidateHtml.includes('id="how-to-guide-modal"'), 'candidate.html defines #how-to-guide-modal signature modal');
-    assert(candidateHtml.includes('openHowToGuideModal') && candidateHtml.includes('switchGuideTab'), 'candidate.html implements openHowToGuideModal and switchGuideTab functions');
+    assert(candidateHtml.includes('U-THEJOBS CANDIDATE GUIDE'), 'candidate.html includes candidate guide title');
+    assert(candidateHtml.includes('openHowToGuideModal') && candidateHtml.includes('closeHowToGuideModal'), 'candidate.html implements openHowToGuideModal and closeHowToGuideModal');
+    assert(candidateHtml.includes('How to Apply in 30 Seconds') && candidateHtml.includes('How to Search & Discover Jobs'), 'candidate.html contains candidate-specific workflows');
 
-    // 5. Plain English and Child-like Simplicity Content Checks
-    assert(recruiterHtml.includes('lemonade stand') || recruiterHtml.includes('colorful flyer') || recruiterHtml.includes('Job Studio & Fast Publishing'), 'recruiter.html contains clear step-by-step guides for job studio');
-    assert(recruiterHtml.includes('1. Applied ➔ 2. Screened ➔ 3. Interviewing ➔ 4. Offer / Hired'), 'recruiter.html explains 4-stage ATS pipeline in simple terms');
-    assert(recruiterHtml.includes('How to Apply in 30 Seconds') || recruiterHtml.includes('30-Second PDF Auto-Fill'), 'recruiter.html explains candidate quick-apply process step-by-step');
+    // 5. Strict Portal Separation: Candidate guide modal MUST NOT contain recruiter pricing or employer tabs
+    const candModalIdx = candidateHtml.indexOf('id="how-to-guide-modal"');
+    const candModalEndIdx = candidateHtml.indexOf('<!-- CANDIDATE PROFILE MODAL -->', candModalIdx);
+    const candModalHtml = candidateHtml.substring(candModalIdx, candModalEndIdx);
+    assert(!candModalHtml.includes('$49/mo') && !candModalHtml.includes('$299/mo') && !candModalHtml.includes('$699/mo'), 'candidate.html guide modal is strictly stripped of recruiter pricing tiers and add-on costs');
+    assert(!candModalHtml.includes('guide-tab-btn-recruiter'), 'candidate.html guide modal does not contain recruiter tab switchers');
 
   } catch (err) {
     assert(false, `Group 95 failed: ${err.message}`);
