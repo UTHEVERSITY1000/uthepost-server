@@ -3572,22 +3572,29 @@ async function runTests() {
   }
 
   // =========================================================================
-  // GROUP 97: U-THEPOST DESKTOP PROPORTIONAL SIZING & TOP DECK CONTAINMENT
+  // GROUP 97: U-THEPOST COMPACT TOP DECK SPECIFICATIONS (11PX / 16PX / 44PX)
   // =========================================================================
   try {
-    console.log('\n--- GROUP 97: U-THEPOST DESKTOP PROPORTIONAL SIZING ---');
+    console.log('\n--- GROUP 97: U-THEPOST COMPACT TOP DECK SPECIFICATIONS ---');
 
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
-    // 1. UI Menu Navigation Tabs Calibrated to Fit Cleanly Without Truncation
-    assert(recruiterHtml.includes('.nav-tab-btn, .portal-navigation button, nav.header-center-tabs button'), 'recruiter.html sets desktop UI menu navigation tabs');
-    assert(recruiterHtml.includes('overflow: visible !important;') && recruiterHtml.includes('text-overflow: ellipsis !important;'), 'recruiter.html prevents tab title truncation on desktop');
+    // 1. Header Container Constraint (max-height: 44px)
+    assert(recruiterHtml.includes('max-height: 44px !important;'), 'recruiter.html sets max-height: 44px header constraint');
 
-    // 2. Top Deck Action Buttons & SVG Icons 12px Sizing
-    assert(recruiterHtml.includes('.btn-home-header svg') && recruiterHtml.includes('width: 12px !important;'), 'recruiter.html sets 12px width for home button SVG icon on desktop');
-    assert(recruiterHtml.includes('.btn-help-header svg') && recruiterHtml.includes('width: 12px !important;'), 'recruiter.html sets 12px width for blue ? help icon on desktop');
-    assert(recruiterHtml.includes('.btn-notif-header .notif-bell-svg') && recruiterHtml.includes('width: 12px !important;'), 'recruiter.html sets 12px width for notification bell icon on desktop');
-    assert(recruiterHtml.includes('.btn-auth-header'), 'recruiter.html styles auth button on desktop');
+    // 2. Main Menu Tabs (11px, font-weight: 600, letter-spacing: 0.03em, padding: 4px 8px, nowrap)
+    assert(recruiterHtml.includes('font-size: 11px !important;') && recruiterHtml.includes('.nav-tab-btn, .portal-navigation button, nav.header-center-tabs button'), 'recruiter.html sets 11px font size for menu tabs');
+    assert(recruiterHtml.includes('font-weight: 600 !important;'), 'recruiter.html sets font-weight: 600 for menu tabs');
+    assert(recruiterHtml.includes('padding: 4px 8px !important;'), 'recruiter.html sets padding: 4px 8px for menu tabs');
+
+    // 3. Home & Utility Buttons (11px, height: 30px, padding: 3px 8px, radius: 4px)
+    assert(recruiterHtml.includes('.btn-home-header') && recruiterHtml.includes('padding: 3px 8px !important;'), 'recruiter.html sets 3px 8px padding for home button');
+    assert(recruiterHtml.includes('.btn-auth-header') && recruiterHtml.includes('padding: 3px 8px !important;'), 'recruiter.html sets 3px 8px padding for auth button');
+
+    // 4. Notification Bell & Action Icons (16px SVG, 30px wrapper)
+    assert(recruiterHtml.includes('.btn-notif-header .notif-bell-svg') && recruiterHtml.includes('width: 16px !important;'), 'recruiter.html sets 16px width for notification bell icon');
+    assert(recruiterHtml.includes('.btn-help-header svg') && recruiterHtml.includes('width: 16px !important;'), 'recruiter.html sets 16px width for blue ? help icon');
+    assert(recruiterHtml.includes('.btn-notif-header') && recruiterHtml.includes('width: 30px !important;') && recruiterHtml.includes('height: 30px !important;'), 'recruiter.html sets 30px x 30px icon button wrapper');
 
   } catch (err) {
     assert(false, `Group 97 failed: ${err.message}`);
