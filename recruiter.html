@@ -5544,9 +5544,23 @@ RESET
 
 <section id="view-ats" class="tab-view">
 
+<!-- BATCH ACTION BELT -->
+<div class="ats-bulk-actions-belt" style="display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.5rem 0.85rem; margin-bottom: 0.75rem; box-shadow: var(--shadow-sm);">
+  <div style="display: flex; align-items: center; gap: 0.75rem;">
+    <label style="display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 800; color: var(--uthe-charcoal); cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; margin: 0;">
+      <input type="checkbox" id="chk-kanban-select-all" onchange="toggleSelectAllKanbanCards(this.checked)" style="width: 13px; height: 13px; min-height: 13px; accent-color: var(--uthe-gold); cursor: pointer; margin: 0;">
+      Select All
+    </label>
+    <span id="kanban-selected-count-badge" style="display: none; font-size: 0.7rem; font-weight: 800; background: var(--uthe-gold-light); color: #92400E; padding: 2px 8px; border-radius: 4px;">0 Selected</span>
+  </div>
+  <div style="display: flex; align-items: center; gap: 0.5rem;">
+    <button id="btn-kanban-delete-selected" class="btn-surface-action" onclick="confirmDeleteSelectedKanbanCards()" style="display: none; background: #FEE2E2; color: #DC2626; border-color: #FCA5A5; font-size: 0.72rem; font-weight: 900; padding: 0.35rem 0.75rem; height: 32px;" data-tooltip="Delete selected applicant cards">
+      🗑️ DELETE SELECTED (<span id="kanban-delete-count">0</span>)
+    </button>
+  </div>
+</div>
+
 <div class="kanban-board" id="kanban-board">
-
-
 
 <!-- COLUMN 1: APPLIED (DISTINCT SLATE DECK) -->
 
@@ -5564,7 +5578,10 @@ RESET
 
           <div class="candidate-card" id="card-701" draggable="true" data-id="APP-701" onclick="openCandidateReviewModal('APP-701')">
             <div class="cand-grab-handle" style="display: flex; justify-content: space-between; align-items: center;">
-              <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">Aug 31, 2026 • 9:30 AM</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="checkbox" class="kanban-card-checkbox" data-id="APP-701" onclick="event.stopPropagation(); handleKanbanCardCheckboxChange();" style="width: 12px; height: 12px; min-height: 12px; accent-color: var(--uthe-gold); cursor: pointer; margin: 0; padding: 0;">
+                <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">Aug 31, 2026 • 9:30 AM</span>
+              </div>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <button class="btn-card-trash" onclick="confirmDeleteCandidate('APP-701', event)" data-tooltip="Delete Candidate" style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 0.85rem; padding: 0 4px; line-height: 1;">🗑️</button>
                 <span style="color: var(--text-muted);">:::</span>
@@ -5589,7 +5606,10 @@ RESET
         <div class="kanban-cards-area" id="cards-screened">
           <div class="candidate-card" id="card-702" draggable="true" data-id="APP-702" onclick="openCandidateReviewModal('APP-702')">
             <div class="cand-grab-handle" style="display: flex; justify-content: space-between; align-items: center;">
-              <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">Aug 30, 2026 • 2:15 PM</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="checkbox" class="kanban-card-checkbox" data-id="APP-702" onclick="event.stopPropagation(); handleKanbanCardCheckboxChange();" style="width: 12px; height: 12px; min-height: 12px; accent-color: var(--uthe-gold); cursor: pointer; margin: 0; padding: 0;">
+                <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">Aug 30, 2026 • 2:15 PM</span>
+              </div>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <button class="btn-card-trash" onclick="confirmDeleteCandidate('APP-702', event)" data-tooltip="Delete Candidate" style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 0.85rem; padding: 0 4px; line-height: 1;">🗑️</button>
                 <span style="color: var(--text-muted);">:::</span>
@@ -5614,7 +5634,10 @@ RESET
         <div class="kanban-cards-area" id="cards-interviewing">
           <div class="candidate-card" id="card-703" draggable="true" data-id="APP-703" onclick="openCandidateReviewModal('APP-703')">
             <div class="cand-grab-handle" style="display: flex; justify-content: space-between; align-items: center;">
-              <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">Aug 29, 2026 • 11:45 AM</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="checkbox" class="kanban-card-checkbox" data-id="APP-703" onclick="event.stopPropagation(); handleKanbanCardCheckboxChange();" style="width: 12px; height: 12px; min-height: 12px; accent-color: var(--uthe-gold); cursor: pointer; margin: 0; padding: 0;">
+                <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">Aug 29, 2026 • 11:45 AM</span>
+              </div>
               <div style="display: flex; align-items: center; gap: 6px;">
                 <button class="btn-card-trash" onclick="confirmDeleteCandidate('APP-703', event)" data-tooltip="Delete Candidate" style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 0.85rem; padding: 0 4px; line-height: 1;">🗑️</button>
                 <span style="color: var(--text-muted);">:::</span>
@@ -7925,9 +7948,119 @@ window.deleteCandidateCard = function(candidateId) {
   if (typeof CANDIDATES_DATA !== 'undefined' && CANDIDATES_DATA[candidateId]) {
     delete CANDIDATES_DATA[candidateId];
   }
+  const deletedList = (function() {
+    try {
+      const saved = localStorage.getItem('uthe_recruiter_deleted_applicants');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) { return []; }
+  })();
+  if (!deletedList.includes(candidateId)) {
+    deletedList.push(candidateId);
+    try { localStorage.setItem('uthe_recruiter_deleted_applicants', JSON.stringify(deletedList)); } catch (e) {}
+  }
+  try { localStorage.setItem('uthe_recruiter_applicants', JSON.stringify(CANDIDATES_DATA)); } catch (e) {}
+  fetch(`/api/applicants?id=${encodeURIComponent(candidateId)}`, { method: 'DELETE' }).catch(() => {});
+
+  handleKanbanCardCheckboxChange();
   renderRecruiterCandidateList();
   updateKanbanCounters();
   showCustomModalAlert('Candidate Removed', 'The candidate record has been removed from your tracker.');
+};
+
+window.handleKanbanCardCheckboxChange = function() {
+  const allCheckboxes = document.querySelectorAll('.kanban-card-checkbox');
+  const checkedBoxes = document.querySelectorAll('.kanban-card-checkbox:checked');
+  const count = checkedBoxes.length;
+
+  const selectAllChk = document.getElementById('chk-kanban-select-all');
+  if (selectAllChk) {
+    selectAllChk.checked = (allCheckboxes.length > 0 && count === allCheckboxes.length);
+    selectAllChk.indeterminate = (count > 0 && count < allCheckboxes.length);
+  }
+
+  const badge = document.getElementById('kanban-selected-count-badge');
+  if (badge) {
+    if (count > 0) {
+      badge.textContent = `${count} Selected`;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  const delBtn = document.getElementById('btn-kanban-delete-selected');
+  const delCount = document.getElementById('kanban-delete-count');
+  if (delBtn) {
+    if (count > 0) {
+      delBtn.style.display = 'inline-flex';
+      if (delCount) delCount.textContent = count;
+    } else {
+      delBtn.style.display = 'none';
+    }
+  }
+};
+
+window.toggleSelectAllKanbanCards = function(isChecked) {
+  const allCheckboxes = document.querySelectorAll('.kanban-card-checkbox');
+  allCheckboxes.forEach(cb => {
+    cb.checked = isChecked;
+  });
+  handleKanbanCardCheckboxChange();
+};
+
+window.confirmDeleteSelectedKanbanCards = function() {
+  const checkedBoxes = document.querySelectorAll('.kanban-card-checkbox:checked');
+  const ids = Array.from(checkedBoxes).map(cb => cb.getAttribute('data-id')).filter(Boolean);
+  if (ids.length === 0) return;
+
+  showCustomModalConfirm(
+    'Delete Selected Applicants',
+    `Are you sure you want to remove ${ids.length} selected applicant card${ids.length > 1 ? 's' : ''} from your tracker?`,
+    () => {
+      deleteSelectedKanbanCards(ids);
+    }
+  );
+};
+
+window.deleteSelectedKanbanCards = function(ids) {
+  if (!Array.isArray(ids) || ids.length === 0) return;
+
+  const deletedList = (function() {
+    try {
+      const saved = localStorage.getItem('uthe_recruiter_deleted_applicants');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) { return []; }
+  })();
+
+  ids.forEach(id => {
+    const card = document.getElementById(`card-${id}`) || document.querySelector(`[data-id="${id}"]`) || document.getElementById(`card-${id.replace('APP-', '')}`);
+    if (card) card.remove();
+
+    if (typeof CANDIDATES_DATA !== 'undefined' && CANDIDATES_DATA[id]) {
+      delete CANDIDATES_DATA[id];
+    }
+
+    if (!deletedList.includes(id)) {
+      deletedList.push(id);
+    }
+
+    fetch(`/api/applicants?id=${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => {});
+  });
+
+  try {
+    localStorage.setItem('uthe_recruiter_deleted_applicants', JSON.stringify(deletedList));
+    localStorage.setItem('uthe_recruiter_applicants', JSON.stringify(CANDIDATES_DATA));
+  } catch (e) {}
+
+  const selectAllChk = document.getElementById('chk-kanban-select-all');
+  if (selectAllChk) {
+    selectAllChk.checked = false;
+    selectAllChk.indeterminate = false;
+  }
+  handleKanbanCardCheckboxChange();
+  renderRecruiterCandidateList();
+  updateKanbanCounters();
+  showCustomModalAlert('Applicants Removed', `${ids.length} candidate card${ids.length > 1 ? 's were' : ' was'} removed from your tracker.`);
 };
 
 window.openRecruiterMessagesDrawer = function(applicantId) {
@@ -8891,7 +9024,10 @@ function ingestCandidateApplicant(applicant, showNotification = true) {
 
   card.innerHTML = `
     <div class="cand-grab-handle" style="display: flex; justify-content: space-between; align-items: center;">
-      <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">${dateStr}</span>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <input type="checkbox" class="kanban-card-checkbox" data-id="${appId}" onclick="event.stopPropagation(); handleKanbanCardCheckboxChange();" style="width: 12px; height: 12px; min-height: 12px; accent-color: var(--uthe-gold); cursor: pointer; margin: 0; padding: 0;">
+        <span class="cand-applied-date" style="font-size: 0.65rem; color: #0284C7; font-weight: 800;">${dateStr}</span>
+      </div>
       <div style="display: flex; align-items: center; gap: 6px;">
         <button class="btn-card-trash" onclick="confirmDeleteCandidate('${appId}', event)" data-tooltip="Delete Candidate" style="background: none; border: none; cursor: pointer; color: #EF4444; font-size: 0.85rem; padding: 0 4px; line-height: 1;">🗑️</button>
         <span style="color: var(--text-muted);">:::</span>

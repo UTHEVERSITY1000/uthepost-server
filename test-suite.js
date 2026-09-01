@@ -3272,6 +3272,28 @@ async function runTests() {
     assert(false, `Group 87 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 88: APPLICANT TRACKER (TAB 3) UPPER-LEFT CARD CHECKBOXES & BULK DELETE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 88: APPLICANT TRACKER (TAB 3) UPPER-LEFT CARD CHECKBOXES & BULK DELETE ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Verify upper-left checkboxes on candidate cards in Tab 3
+    assert(recruiterHtml.includes('class="kanban-card-checkbox"') && recruiterHtml.includes('data-id="APP-701"'), 'recruiter.html candidate cards include upper-left .kanban-card-checkbox');
+    assert(recruiterHtml.includes('handleKanbanCardCheckboxChange()'), 'recruiter.html defines handleKanbanCardCheckboxChange handler');
+
+    // 2. Verify batch action belt and select all controls
+    assert(recruiterHtml.includes('id="chk-kanban-select-all"'), 'recruiter.html defines #chk-kanban-select-all control');
+    assert(recruiterHtml.includes('id="btn-kanban-delete-selected"'), 'recruiter.html defines #btn-kanban-delete-selected button');
+    assert(recruiterHtml.includes('toggleSelectAllKanbanCards') && recruiterHtml.includes('confirmDeleteSelectedKanbanCards'), 'recruiter.html implements toggleSelectAllKanbanCards and confirmDeleteSelectedKanbanCards');
+    assert(recruiterHtml.includes('deleteSelectedKanbanCards'), 'recruiter.html implements deleteSelectedKanbanCards batch deletion logic');
+
+  } catch (err) {
+    assert(false, `Group 88 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
