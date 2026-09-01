@@ -5302,7 +5302,7 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <label data-tooltip="Choose an outreach message template aligned with connected accounts.">Outreach Template (Channel Aligned)</label>
 
-<select id="crm-template-select" onchange="handleTemplateChange(this.value)" data-tooltip="Select template tailored for email, LinkedIn, X, or Meta DMs.">
+<select id="crm-template-select" onchange="handleTemplateChange(this.value)" data-tooltip="Select template tailored for email, LinkedIn, X, TikTok, or Meta DMs.">
 
 <option value="email_blast">1. Direct Email Share (Via Recruiter Email)</option>
 
@@ -5310,7 +5310,9 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <option value="x_dm">3. X (Twitter) Talent Stream Message</option>
 
-<option value="meta_dm">4. Facebook & Instagram Direct Talent Message</option>
+<option value="tiktok_dm">4. TikTok Hiring & Talent Message</option>
+
+<option value="meta_dm">5. Facebook & Instagram Direct Talent Message</option>
 
 </select>
 
@@ -7602,6 +7604,10 @@ const CRM_TEMPLATES = {
   x_dm: {
     channel: 'X (Twitter) Talent Stream Message',
     message: 'Hey {candidate_name}! Loved your recent posts. We are hiring a {job_title} at {company_name} with competitive pay and growth opportunities. Check out our position or send a DM!'
+  },
+  tiktok_dm: {
+    channel: 'TikTok Hiring & Talent Stream (@QuantumRetailHiring)',
+    message: 'Hey {candidate_name}! Loved your recent video content and dynamic energy. We are growing {company_name} and hiring a {job_title}. Check out our open roles or send a DM on TikTok to connect!'
   },
   meta_dm: {
     channel: 'Facebook & Instagram Direct Talent Message',

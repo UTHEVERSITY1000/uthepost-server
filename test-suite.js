@@ -3320,6 +3320,24 @@ async function runTests() {
     assert(false, `Group 89 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 90: TIKTOK INTEGRATION IN OUTREACH TEMPLATES
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 90: TIKTOK INTEGRATION IN OUTREACH TEMPLATES ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Verify TikTok option in #crm-template-select
+    assert(recruiterHtml.includes('<option value="tiktok_dm">') && recruiterHtml.includes('TikTok Hiring & Talent Message'), 'recruiter.html includes TikTok option in Outreach Template select dropdown');
+
+    // 2. Verify TikTok template in CRM_TEMPLATES
+    assert(recruiterHtml.includes('tiktok_dm:') && recruiterHtml.includes('TikTok Hiring & Talent Stream'), 'recruiter.html defines tiktok_dm in CRM_TEMPLATES');
+
+  } catch (err) {
+    assert(false, `Group 90 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
