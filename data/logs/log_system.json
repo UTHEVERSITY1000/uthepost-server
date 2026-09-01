@@ -1,5 +1,1007 @@
 [
   {
+    "timestamp": "2026-09-01T20:11:03.743Z",
+    "eventType": "RESUME_BATCH_INGESTED",
+    "details": {
+      "count": 2,
+      "total": 18
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:03.597Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "recruiter_1788293463086@techglobaltalent.com",
+      "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
+      "type": "WELCOME_USER",
+      "emailId": "EML-837522",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:03.115Z",
+    "eventType": "USER_SIGNUP",
+    "details": {
+      "userId": "USR-835",
+      "role": "recruiter",
+      "email": "recruiter_1788293463086@techglobaltalent.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:02.783Z",
+    "eventType": "JOB_PUBLISHED",
+    "details": {
+      "jobId": "JOB-SPOT-1788293462654",
+      "title": "Executive Director of Operations",
+      "company": "Premier Global Logistics"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:02.563Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:11:02.561Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:02.451Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:02.356Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "You have a new message from Quantum Retail Corp",
+      "type": "NEW_DIRECT_MESSAGE_ALERT",
+      "emailId": "EML-531031",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:02.130Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-3910",
+      "applicantId": "APP-701",
+      "senderRole": "candidate",
+      "userId": "cand-anon"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:01.765Z",
+    "eventType": "JOB_DELETED",
+    "details": {
+      "jobId": "JOB-TEST-1788293460894"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:01.491Z",
+    "eventType": "JOB_PUBLISHED",
+    "details": {
+      "jobId": "JOB-TEST-1788293460894",
+      "title": "Cloud Solutions Architect",
+      "company": "Quantum Systems Inc"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:00.833Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:00.650Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:00.500Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:11:00.499Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:00.377Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:00.258Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:11:00.257Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:11:00.017Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:11:00.015Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:59.772Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "candidate@domain.com",
+      "subject": "You have a new message from UTHEVERSITY Global Inc.",
+      "type": "NEW_DIRECT_MESSAGE_ALERT",
+      "emailId": "EML-885005",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:59.180Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-7540",
+      "applicantId": "APP-766",
+      "senderRole": "recruiter",
+      "userId": "USR-001"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:59.023Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "u-theADMIN — Live Transactional Email System Test",
+      "type": "DIAGNOSTIC_TEST_EMAIL",
+      "emailId": "EML-711254",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:58.718Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "u-theADMIN — Live Transactional Email System Test",
+      "type": "DIAGNOSTIC_TEST_EMAIL",
+      "emailId": "EML-122510",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:58.478Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "u-theADMIN — Live Transactional Email System Test",
+      "type": "DIAGNOSTIC_TEST_EMAIL",
+      "emailId": "EML-279489",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:58.185Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "candidate.applicant.1788293457485@utheversity.com",
+      "subject": "You have a new message from Quantum Technologies Corp",
+      "type": "NEW_DIRECT_MESSAGE_ALERT",
+      "emailId": "EML-350239",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:57.994Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-6660",
+      "applicantId": "APP-790",
+      "senderRole": "recruiter",
+      "userId": "USR-001"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:57.912Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
+      "type": "NEW_APPLICANT_ALERT_RECRUITER",
+      "emailId": "EML-543436",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:57.704Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "candidate.applicant.1788293457485@utheversity.com",
+      "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
+      "type": "APPLICATION_RECEIPT_CANDIDATE",
+      "emailId": "EML-614472",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:57.514Z",
+    "eventType": "CANDIDATE_APPLIED",
+    "details": {
+      "applicantId": "APP-790",
+      "jobId": "JOB-101",
+      "name": "Morgan Sterling"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:57.416Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "test.welcome.1788293456354@utheversity.com",
+      "subject": "Your UTHEVERSITY Password Has Been Updated",
+      "type": "PASSWORD_RESET_CONFIRMATION",
+      "emailId": "EML-651284",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:57.147Z",
+    "eventType": "PASSWORD_RESET",
+    "details": {
+      "userId": "USR-433",
+      "email": "test.welcome.1788293456354@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:57.035Z",
+    "eventType": "FORGOT_PASSWORD_REQUESTED",
+    "details": {
+      "email": "test.welcome.1788293456354@utheversity.com",
+      "userId": "USR-433"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:56.962Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "test.welcome.1788293456354@utheversity.com",
+      "subject": "Reset Your UTHEVERSITY Account Password",
+      "type": "PASSWORD_RESET_REQUEST",
+      "emailId": "EML-429731",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:56.575Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "test.welcome.1788293456354@utheversity.com",
+      "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+      "type": "WELCOME_USER",
+      "emailId": "EML-958956",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:56.388Z",
+    "eventType": "USER_SIGNUP",
+    "details": {
+      "userId": "USR-433",
+      "role": "candidate",
+      "email": "test.welcome.1788293456354@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:56.264Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:55.992Z",
+    "eventType": "ADMIN_USER_UPDATED",
+    "details": {
+      "userId": "USR-003",
+      "role": "Candidate",
+      "approved": true,
+      "status": "Active"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:55.914Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "jordan.rivera@email.com",
+      "subject": "Reset Your UTHEVERSITY Account Password",
+      "type": "PASSWORD_RESET_REQUEST",
+      "emailId": "EML-256619",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:55.719Z",
+    "eventType": "ADMIN_RESET_PASSWORD",
+    "details": {
+      "userId": "USR-003",
+      "email": "jordan.rivera@email.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:54.645Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:54.550Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:10:54.549Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:54.443Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:54.179Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:53.623Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "You have a new message from Persistent Systems Corp",
+      "type": "NEW_DIRECT_MESSAGE_ALERT",
+      "emailId": "EML-542837",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:53.430Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-7219",
+      "applicantId": "APP-856",
+      "senderRole": "candidate",
+      "userId": "USR-873"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:53.322Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1788293452562",
+      "type": "NEW_APPLICANT_ALERT_RECRUITER",
+      "emailId": "EML-441819",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:53.100Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "jane.doe@example.com",
+      "subject": "Application Received: Senior Lead Architect 1788293452562 at Persistent Systems Corp",
+      "type": "APPLICATION_RECEIPT_CANDIDATE",
+      "emailId": "EML-181991",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:52.909Z",
+    "eventType": "CANDIDATE_APPLIED",
+    "details": {
+      "applicantId": "APP-856",
+      "jobId": "JOB-1788293452572",
+      "name": "Jane Doe"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:52.821Z",
+    "eventType": "RESUME_UPLOADED",
+    "details": {
+      "filename": "John_Doe_Resume_2026.pdf",
+      "path": "C:\\Users\\nutrasye\\Desktop\\U-THEPOST HTML FILES ENCLOSED\\data\\resumes\\John_Doe_Resume_2026.pdf",
+      "uploadedBy": "USR-873"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:52.727Z",
+    "eventType": "JOB_PUBLISHED",
+    "details": {
+      "jobId": "JOB-1788293452572",
+      "title": "Senior Lead Architect 1788293452562",
+      "company": "Persistent Systems Corp"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:52.480Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "test.candidate.1788293452228@domain.com",
+      "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+      "type": "WELCOME_USER",
+      "emailId": "EML-145077",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:52.267Z",
+    "eventType": "USER_SIGNUP",
+    "details": {
+      "userId": "USR-873",
+      "role": "candidate",
+      "email": "test.candidate.1788293452228@domain.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:52.150Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:52.056Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:10:52.054Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:51.951Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:10:51.950Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:51.764Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:10:51.763Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:10:51.654Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:52.714Z",
+    "eventType": "RESUME_BATCH_INGESTED",
+    "details": {
+      "count": 2,
+      "total": 15
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:52.578Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "recruiter_1788293392357@techglobaltalent.com",
+      "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
+      "type": "WELCOME_USER",
+      "emailId": "EML-451928",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:52.380Z",
+    "eventType": "USER_SIGNUP",
+    "details": {
+      "userId": "USR-181",
+      "role": "recruiter",
+      "email": "recruiter_1788293392357@techglobaltalent.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:52.274Z",
+    "eventType": "JOB_PUBLISHED",
+    "details": {
+      "jobId": "JOB-SPOT-1788293392160",
+      "title": "Executive Director of Operations",
+      "company": "Premier Global Logistics"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:52.048Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:09:52.046Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:51.940Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:51.836Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "You have a new message from Quantum Retail Corp",
+      "type": "NEW_DIRECT_MESSAGE_ALERT",
+      "emailId": "EML-625584",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:51.631Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-6050",
+      "applicantId": "APP-701",
+      "senderRole": "candidate",
+      "userId": "cand-anon"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:50.529Z",
+    "eventType": "JOB_DELETED",
+    "details": {
+      "jobId": "JOB-TEST-1788293390036"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:50.138Z",
+    "eventType": "JOB_PUBLISHED",
+    "details": {
+      "jobId": "JOB-TEST-1788293390036",
+      "title": "Cloud Solutions Architect",
+      "company": "Quantum Systems Inc"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:49.946Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:49.810Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:49.669Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:09:49.667Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:49.538Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:49.433Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:09:49.431Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:49.249Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:09:49.248Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:48.741Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "candidate@domain.com",
+      "subject": "You have a new message from UTHEVERSITY Global Inc.",
+      "type": "NEW_DIRECT_MESSAGE_ALERT",
+      "emailId": "EML-761124",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:48.546Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-2539",
+      "applicantId": "APP-766",
+      "senderRole": "recruiter",
+      "userId": "USR-001"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:48.333Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "u-theADMIN — Live Transactional Email System Test",
+      "type": "DIAGNOSTIC_TEST_EMAIL",
+      "emailId": "EML-593446",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:48.099Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "u-theADMIN — Live Transactional Email System Test",
+      "type": "DIAGNOSTIC_TEST_EMAIL",
+      "emailId": "EML-781711",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:46.947Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "u-theADMIN — Live Transactional Email System Test",
+      "type": "DIAGNOSTIC_TEST_EMAIL",
+      "emailId": "EML-433484",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:46.714Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "candidate.applicant.1788293385939@utheversity.com",
+      "subject": "You have a new message from Quantum Technologies Corp",
+      "type": "NEW_DIRECT_MESSAGE_ALERT",
+      "emailId": "EML-767629",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:46.512Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-7981",
+      "applicantId": "APP-871",
+      "senderRole": "recruiter",
+      "userId": "USR-001"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:46.412Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
+      "type": "NEW_APPLICANT_ALERT_RECRUITER",
+      "emailId": "EML-884770",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:46.217Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "candidate.applicant.1788293385939@utheversity.com",
+      "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
+      "type": "APPLICATION_RECEIPT_CANDIDATE",
+      "emailId": "EML-404559",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:45.948Z",
+    "eventType": "CANDIDATE_APPLIED",
+    "details": {
+      "applicantId": "APP-871",
+      "jobId": "JOB-101",
+      "name": "Morgan Sterling"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:45.863Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "test.welcome.1788293384872@utheversity.com",
+      "subject": "Your UTHEVERSITY Password Has Been Updated",
+      "type": "PASSWORD_RESET_CONFIRMATION",
+      "emailId": "EML-767444",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:45.659Z",
+    "eventType": "PASSWORD_RESET",
+    "details": {
+      "userId": "USR-762",
+      "email": "test.welcome.1788293384872@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:45.567Z",
+    "eventType": "FORGOT_PASSWORD_REQUESTED",
+    "details": {
+      "email": "test.welcome.1788293384872@utheversity.com",
+      "userId": "USR-762"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:45.487Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "test.welcome.1788293384872@utheversity.com",
+      "subject": "Reset Your UTHEVERSITY Account Password",
+      "type": "PASSWORD_RESET_REQUEST",
+      "emailId": "EML-708823",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:45.089Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "test.welcome.1788293384872@utheversity.com",
+      "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+      "type": "WELCOME_USER",
+      "emailId": "EML-849082",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:44.884Z",
+    "eventType": "USER_SIGNUP",
+    "details": {
+      "userId": "USR-762",
+      "role": "candidate",
+      "email": "test.welcome.1788293384872@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:44.794Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:44.491Z",
+    "eventType": "ADMIN_USER_UPDATED",
+    "details": {
+      "userId": "USR-003",
+      "role": "Candidate",
+      "approved": true,
+      "status": "Active"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:44.414Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "jordan.rivera@email.com",
+      "subject": "Reset Your UTHEVERSITY Account Password",
+      "type": "PASSWORD_RESET_REQUEST",
+      "emailId": "EML-443182",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:44.217Z",
+    "eventType": "ADMIN_RESET_PASSWORD",
+    "details": {
+      "userId": "USR-003",
+      "email": "jordan.rivera@email.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:43.976Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:43.889Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:09:43.888Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:43.754Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:43.532Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:42.713Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "You have a new message from Persistent Systems Corp",
+      "type": "NEW_DIRECT_MESSAGE_ALERT",
+      "emailId": "EML-133300",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:42.489Z",
+    "eventType": "MESSAGE_SENT",
+    "details": {
+      "messageId": "MSG-5501",
+      "applicantId": "APP-708",
+      "senderRole": "candidate",
+      "userId": "USR-926"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:42.397Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "contact@utheversity.com",
+      "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1788293381593",
+      "type": "NEW_APPLICANT_ALERT_RECRUITER",
+      "emailId": "EML-135739",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:42.140Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "jane.doe@example.com",
+      "subject": "Application Received: Senior Lead Architect 1788293381593 at Persistent Systems Corp",
+      "type": "APPLICATION_RECEIPT_CANDIDATE",
+      "emailId": "EML-569394",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:41.939Z",
+    "eventType": "CANDIDATE_APPLIED",
+    "details": {
+      "applicantId": "APP-708",
+      "jobId": "JOB-1788293381594",
+      "name": "Jane Doe"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:41.838Z",
+    "eventType": "RESUME_UPLOADED",
+    "details": {
+      "filename": "John_Doe_Resume_2026.pdf",
+      "path": "C:\\Users\\nutrasye\\Desktop\\U-THEPOST HTML FILES ENCLOSED\\data\\resumes\\John_Doe_Resume_2026.pdf",
+      "uploadedBy": "USR-926"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:41.729Z",
+    "eventType": "JOB_PUBLISHED",
+    "details": {
+      "jobId": "JOB-1788293381594",
+      "title": "Senior Lead Architect 1788293381593",
+      "company": "Persistent Systems Corp"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:41.490Z",
+    "eventType": "EMAIL_DISPATCHED",
+    "details": {
+      "to": "test.candidate.1788293381081@domain.com",
+      "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+      "type": "WELCOME_USER",
+      "emailId": "EML-713116",
+      "status": "logged_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:41.114Z",
+    "eventType": "USER_SIGNUP",
+    "details": {
+      "userId": "USR-926",
+      "role": "candidate",
+      "email": "test.candidate.1788293381081@domain.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:41.011Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:40.912Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:09:40.911Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:40.712Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:09:40.710Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:40.603Z",
+    "eventType": "CMS_CONFIG_UPDATED",
+    "details": {
+      "updatedBy": "USR-001",
+      "timestamp": "2026-09-01T20:09:40.602Z"
+    }
+  },
+  {
+    "timestamp": "2026-09-01T20:09:40.472Z",
+    "eventType": "USER_LOGIN",
+    "details": {
+      "userId": "USR-001",
+      "email": "contact@utheversity.com"
+    }
+  },
+  {
     "timestamp": "2026-09-01T19:56:08.640Z",
     "eventType": "RESUME_BATCH_INGESTED",
     "details": {
@@ -3629,1008 +4631,6 @@
       "jobId": "JOB-TEST-1788287499920",
       "title": "Cloud Solutions Architect",
       "company": "Quantum Systems Inc"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:39.680Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:39.471Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:39.295Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:31:39.293Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:39.177Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:39.075Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:31:39.074Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:38.822Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:31:38.819Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:38.312Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "candidate@domain.com",
-      "subject": "You have a new message from UTHEVERSITY Global Inc.",
-      "type": "NEW_DIRECT_MESSAGE_ALERT",
-      "emailId": "EML-926859",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:38.102Z",
-    "eventType": "MESSAGE_SENT",
-    "details": {
-      "messageId": "MSG-2093",
-      "applicantId": "APP-766",
-      "senderRole": "recruiter",
-      "userId": "USR-001"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:37.992Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "u-theADMIN — Live Transactional Email System Test",
-      "type": "DIAGNOSTIC_TEST_EMAIL",
-      "emailId": "EML-781924",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:37.730Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "u-theADMIN — Live Transactional Email System Test",
-      "type": "DIAGNOSTIC_TEST_EMAIL",
-      "emailId": "EML-297756",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:37.426Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "u-theADMIN — Live Transactional Email System Test",
-      "type": "DIAGNOSTIC_TEST_EMAIL",
-      "emailId": "EML-444374",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:37.061Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "candidate.applicant.1788287496178@utheversity.com",
-      "subject": "You have a new message from Quantum Technologies Corp",
-      "type": "NEW_DIRECT_MESSAGE_ALERT",
-      "emailId": "EML-537022",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:36.793Z",
-    "eventType": "MESSAGE_SENT",
-    "details": {
-      "messageId": "MSG-7651",
-      "applicantId": "APP-704",
-      "senderRole": "recruiter",
-      "userId": "USR-001"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:36.655Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
-      "type": "NEW_APPLICANT_ALERT_RECRUITER",
-      "emailId": "EML-813412",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:36.450Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "candidate.applicant.1788287496178@utheversity.com",
-      "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
-      "type": "APPLICATION_RECEIPT_CANDIDATE",
-      "emailId": "EML-345394",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:36.184Z",
-    "eventType": "CANDIDATE_APPLIED",
-    "details": {
-      "applicantId": "APP-704",
-      "jobId": "JOB-101",
-      "name": "Morgan Sterling"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:35.998Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "test.welcome.1788287495026@utheversity.com",
-      "subject": "Your UTHEVERSITY Password Has Been Updated",
-      "type": "PASSWORD_RESET_CONFIRMATION",
-      "emailId": "EML-366328",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:35.789Z",
-    "eventType": "PASSWORD_RESET",
-    "details": {
-      "userId": "USR-992",
-      "email": "test.welcome.1788287495026@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:35.691Z",
-    "eventType": "FORGOT_PASSWORD_REQUESTED",
-    "details": {
-      "email": "test.welcome.1788287495026@utheversity.com",
-      "userId": "USR-992"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:35.611Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "test.welcome.1788287495026@utheversity.com",
-      "subject": "Reset Your UTHEVERSITY Account Password",
-      "type": "PASSWORD_RESET_REQUEST",
-      "emailId": "EML-190762",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:35.307Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "test.welcome.1788287495026@utheversity.com",
-      "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
-      "type": "WELCOME_USER",
-      "emailId": "EML-898901",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:35.039Z",
-    "eventType": "USER_SIGNUP",
-    "details": {
-      "userId": "USR-992",
-      "role": "candidate",
-      "email": "test.welcome.1788287495026@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:34.946Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:34.673Z",
-    "eventType": "ADMIN_USER_UPDATED",
-    "details": {
-      "userId": "USR-003",
-      "role": "Candidate",
-      "approved": true,
-      "status": "Active"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:34.589Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "jordan.rivera@email.com",
-      "subject": "Reset Your UTHEVERSITY Account Password",
-      "type": "PASSWORD_RESET_REQUEST",
-      "emailId": "EML-816534",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:34.374Z",
-    "eventType": "ADMIN_RESET_PASSWORD",
-    "details": {
-      "userId": "USR-003",
-      "email": "jordan.rivera@email.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:34.115Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:34.007Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:31:34.006Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:33.905Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:33.713Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:33.410Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "You have a new message from Persistent Systems Corp",
-      "type": "NEW_DIRECT_MESSAGE_ALERT",
-      "emailId": "EML-977751",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:33.098Z",
-    "eventType": "MESSAGE_SENT",
-    "details": {
-      "messageId": "MSG-1687",
-      "applicantId": "APP-737",
-      "senderRole": "candidate",
-      "userId": "USR-780"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:33.009Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1788287492107",
-      "type": "NEW_APPLICANT_ALERT_RECRUITER",
-      "emailId": "EML-126141",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:32.804Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "jane.doe@example.com",
-      "subject": "Application Received: Senior Lead Architect 1788287492107 at Persistent Systems Corp",
-      "type": "APPLICATION_RECEIPT_CANDIDATE",
-      "emailId": "EML-699391",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:32.592Z",
-    "eventType": "CANDIDATE_APPLIED",
-    "details": {
-      "applicantId": "APP-737",
-      "jobId": "JOB-1788287492108",
-      "name": "Jane Doe"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:32.480Z",
-    "eventType": "RESUME_UPLOADED",
-    "details": {
-      "filename": "John_Doe_Resume_2026.pdf",
-      "path": "C:\\Users\\nutrasye\\Desktop\\U-THEPOST HTML FILES ENCLOSED\\data\\resumes\\John_Doe_Resume_2026.pdf",
-      "uploadedBy": "USR-780"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:32.306Z",
-    "eventType": "JOB_PUBLISHED",
-    "details": {
-      "jobId": "JOB-1788287492108",
-      "title": "Senior Lead Architect 1788287492107",
-      "company": "Persistent Systems Corp"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:32.025Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "test.candidate.1788287491774@domain.com",
-      "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
-      "type": "WELCOME_USER",
-      "emailId": "EML-762557",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:31.824Z",
-    "eventType": "USER_SIGNUP",
-    "details": {
-      "userId": "USR-780",
-      "role": "candidate",
-      "email": "test.candidate.1788287491774@domain.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:31.613Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:31.499Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:31:31.497Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:31.384Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:31:31.382Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:31.256Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:31:31.253Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:31:31.132Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:25.257Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "recruiter_1788287065032@techglobaltalent.com",
-      "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
-      "type": "WELCOME_USER",
-      "emailId": "EML-166840",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:25.055Z",
-    "eventType": "USER_SIGNUP",
-    "details": {
-      "userId": "USR-737",
-      "role": "recruiter",
-      "email": "recruiter_1788287065032@techglobaltalent.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:24.957Z",
-    "eventType": "JOB_PUBLISHED",
-    "details": {
-      "jobId": "JOB-SPOT-1788287064803",
-      "title": "Executive Director of Operations",
-      "company": "Premier Global Logistics"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:24.676Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:24:24.666Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:24.511Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:24.390Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "You have a new message from Quantum Retail Corp",
-      "type": "NEW_DIRECT_MESSAGE_ALERT",
-      "emailId": "EML-374336",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:24.108Z",
-    "eventType": "MESSAGE_SENT",
-    "details": {
-      "messageId": "MSG-4092",
-      "applicantId": "APP-701",
-      "senderRole": "candidate",
-      "userId": "cand-anon"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:23.190Z",
-    "eventType": "JOB_DELETED",
-    "details": {
-      "jobId": "JOB-TEST-1788287062813"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:23.006Z",
-    "eventType": "JOB_PUBLISHED",
-    "details": {
-      "jobId": "JOB-TEST-1788287062813",
-      "title": "Cloud Solutions Architect",
-      "company": "Quantum Systems Inc"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:22.722Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:22.504Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:22.335Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:24:22.333Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:22.158Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:22.044Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:24:22.042Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:21.682Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:24:21.680Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:21.457Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "candidate@domain.com",
-      "subject": "You have a new message from UTHEVERSITY Global Inc.",
-      "type": "NEW_DIRECT_MESSAGE_ALERT",
-      "emailId": "EML-289992",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:21.256Z",
-    "eventType": "MESSAGE_SENT",
-    "details": {
-      "messageId": "MSG-4957",
-      "applicantId": "APP-766",
-      "senderRole": "recruiter",
-      "userId": "USR-001"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:21.145Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "u-theADMIN — Live Transactional Email System Test",
-      "type": "DIAGNOSTIC_TEST_EMAIL",
-      "emailId": "EML-593900",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:20.865Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "u-theADMIN — Live Transactional Email System Test",
-      "type": "DIAGNOSTIC_TEST_EMAIL",
-      "emailId": "EML-301328",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:20.488Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "u-theADMIN — Live Transactional Email System Test",
-      "type": "DIAGNOSTIC_TEST_EMAIL",
-      "emailId": "EML-362638",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:20.229Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "candidate.applicant.1788287059450@utheversity.com",
-      "subject": "You have a new message from Quantum Technologies Corp",
-      "type": "NEW_DIRECT_MESSAGE_ALERT",
-      "emailId": "EML-462110",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:20.018Z",
-    "eventType": "MESSAGE_SENT",
-    "details": {
-      "messageId": "MSG-9850",
-      "applicantId": "APP-731",
-      "senderRole": "recruiter",
-      "userId": "USR-001"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:19.902Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
-      "type": "NEW_APPLICANT_ALERT_RECRUITER",
-      "emailId": "EML-118359",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:19.693Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "candidate.applicant.1788287059450@utheversity.com",
-      "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
-      "type": "APPLICATION_RECEIPT_CANDIDATE",
-      "emailId": "EML-381848",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:19.467Z",
-    "eventType": "CANDIDATE_APPLIED",
-    "details": {
-      "applicantId": "APP-731",
-      "jobId": "JOB-101",
-      "name": "Morgan Sterling"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:19.369Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "test.welcome.1788287058122@utheversity.com",
-      "subject": "Your UTHEVERSITY Password Has Been Updated",
-      "type": "PASSWORD_RESET_CONFIRMATION",
-      "emailId": "EML-691751",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:18.928Z",
-    "eventType": "PASSWORD_RESET",
-    "details": {
-      "userId": "USR-636",
-      "email": "test.welcome.1788287058122@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:18.757Z",
-    "eventType": "FORGOT_PASSWORD_REQUESTED",
-    "details": {
-      "email": "test.welcome.1788287058122@utheversity.com",
-      "userId": "USR-636"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:18.610Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "test.welcome.1788287058122@utheversity.com",
-      "subject": "Reset Your UTHEVERSITY Account Password",
-      "type": "PASSWORD_RESET_REQUEST",
-      "emailId": "EML-482601",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:18.337Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "test.welcome.1788287058122@utheversity.com",
-      "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
-      "type": "WELCOME_USER",
-      "emailId": "EML-839134",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:18.141Z",
-    "eventType": "USER_SIGNUP",
-    "details": {
-      "userId": "USR-636",
-      "role": "candidate",
-      "email": "test.welcome.1788287058122@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:18.041Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:17.795Z",
-    "eventType": "ADMIN_USER_UPDATED",
-    "details": {
-      "userId": "USR-003",
-      "role": "Candidate",
-      "approved": true,
-      "status": "Active"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:17.696Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "jordan.rivera@email.com",
-      "subject": "Reset Your UTHEVERSITY Account Password",
-      "type": "PASSWORD_RESET_REQUEST",
-      "emailId": "EML-289205",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:17.253Z",
-    "eventType": "ADMIN_RESET_PASSWORD",
-    "details": {
-      "userId": "USR-003",
-      "email": "jordan.rivera@email.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:16.629Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:16.498Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:24:16.495Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:16.310Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:15.660Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:14.795Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "You have a new message from Persistent Systems Corp",
-      "type": "NEW_DIRECT_MESSAGE_ALERT",
-      "emailId": "EML-266656",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:14.588Z",
-    "eventType": "MESSAGE_SENT",
-    "details": {
-      "messageId": "MSG-2044",
-      "applicantId": "APP-819",
-      "senderRole": "candidate",
-      "userId": "USR-911"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:14.356Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1788287053399",
-      "type": "NEW_APPLICANT_ALERT_RECRUITER",
-      "emailId": "EML-178553",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:14.085Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "jane.doe@example.com",
-      "subject": "Application Received: Senior Lead Architect 1788287053399 at Persistent Systems Corp",
-      "type": "APPLICATION_RECEIPT_CANDIDATE",
-      "emailId": "EML-526250",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:13.718Z",
-    "eventType": "CANDIDATE_APPLIED",
-    "details": {
-      "applicantId": "APP-819",
-      "jobId": "JOB-1788287053406",
-      "name": "Jane Doe"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:13.620Z",
-    "eventType": "RESUME_UPLOADED",
-    "details": {
-      "filename": "John_Doe_Resume_2026.pdf",
-      "path": "C:\\Users\\nutrasye\\Desktop\\U-THEPOST HTML FILES ENCLOSED\\data\\resumes\\John_Doe_Resume_2026.pdf",
-      "uploadedBy": "USR-911"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:13.539Z",
-    "eventType": "JOB_PUBLISHED",
-    "details": {
-      "jobId": "JOB-1788287053406",
-      "title": "Senior Lead Architect 1788287053399",
-      "company": "Persistent Systems Corp"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:13.324Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "test.candidate.1788287052985@domain.com",
-      "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
-      "type": "WELCOME_USER",
-      "emailId": "EML-698897",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:13.003Z",
-    "eventType": "USER_SIGNUP",
-    "details": {
-      "userId": "USR-911",
-      "role": "candidate",
-      "email": "test.candidate.1788287052985@domain.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:12.910Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:12.748Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:24:12.746Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:12.631Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:24:12.630Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:12.499Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:24:12.498Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:24:12.367Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:03.321Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "recruiter_1788285962516@techglobaltalent.com",
-      "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
-      "type": "WELCOME_USER",
-      "emailId": "EML-183118",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:02.541Z",
-    "eventType": "USER_SIGNUP",
-    "details": {
-      "userId": "USR-355",
-      "role": "recruiter",
-      "email": "recruiter_1788285962516@techglobaltalent.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:02.120Z",
-    "eventType": "JOB_PUBLISHED",
-    "details": {
-      "jobId": "JOB-SPOT-1788285962015",
-      "title": "Executive Director of Operations",
-      "company": "Premier Global Logistics"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:01.892Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-01T18:06:01.891Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:01.742Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:01.630Z",
-    "eventType": "EMAIL_DISPATCHED",
-    "details": {
-      "to": "contact@utheversity.com",
-      "subject": "You have a new message from Quantum Retail Corp",
-      "type": "NEW_DIRECT_MESSAGE_ALERT",
-      "emailId": "EML-390934",
-      "status": "logged_fallback"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:01.326Z",
-    "eventType": "MESSAGE_SENT",
-    "details": {
-      "messageId": "MSG-6363",
-      "applicantId": "APP-701",
-      "senderRole": "candidate",
-      "userId": "cand-anon"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:00.842Z",
-    "eventType": "JOB_DELETED",
-    "details": {
-      "jobId": "JOB-TEST-1788285960483"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:00.623Z",
-    "eventType": "JOB_PUBLISHED",
-    "details": {
-      "jobId": "JOB-TEST-1788285960483",
-      "title": "Cloud Solutions Architect",
-      "company": "Quantum Systems Inc"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:00.388Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-01T18:06:00.265Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
     }
   }
 ]

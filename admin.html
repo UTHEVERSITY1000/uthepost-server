@@ -1830,6 +1830,36 @@
     </div>
   </div>
 
+  <!-- MASTER CANDIDATE RESUME VIEWER MODAL (IN-WINDOW WITH X TO CLOSE) -->
+  <div class="modal-overlay" id="admin-resume-viewer-modal">
+    <div class="modal-card" style="max-width: 820px; width: 95%; max-height: 92vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <span class="modal-main-title" id="admin-resume-viewer-title">📄 CANDIDATE RESUME VIEWER</span>
+        <button class="btn-close-modal" onclick="closeModal('admin-resume-viewer-modal')" data-tooltip="Close resume preview">X</button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem 0.75rem; margin-bottom: 0.5rem;">
+        <div>
+          <strong id="admin-viewer-cand-name" style="font-size: 0.82rem; color: #0F172A;">Candidate Name</strong>
+          <span id="admin-viewer-cand-role" style="font-size: 0.72rem; color: #64748B; margin-left: 6px;">Target Role</span>
+        </div>
+        <a id="admin-viewer-download-link" href="#" target="_blank" style="background: var(--uthe-gold); color: #000; font-weight: 800; font-size: 0.68rem; padding: 4px 10px; border-radius: 4px; text-decoration: none;" data-tooltip="Download or open PDF file in new window">
+          ⬇️ Download PDF
+        </a>
+      </div>
+
+      <div id="admin-resume-viewer-body" style="flex: 1; min-height: 60vh; background: #E2E8F0; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column;">
+        <iframe id="admin-resume-viewer-frame" src="" style="width: 100%; height: 60vh; border: none;" title="Resume PDF Preview"></iframe>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 0.6rem;">
+        <button class="btn-gold" onclick="closeModal('admin-resume-viewer-modal')" style="height: 32px; font-weight: 800; font-size: 0.75rem; padding: 0 1.25rem;">
+          CLOSE (X)
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- SIGNATURE CUSTOM MODAL ALERT (NO BROWSER ALERT) -->
   <div class="custom-modal-alert" id="custom-modal-alert">
     <div class="custom-alert-card">
@@ -3048,53 +3078,24 @@
     }
     window.loadAdminResumes = loadAdminResumes;
 
-    function getSelectedAdminResumeIds() {
-      const chks = document.querySelectorAll('#admin-resumes-tbody .admin-resume-chk:checked');
-      return Array.from(chks).map(c => c.getAttribute('data-id')).filter(Boolean);
-    }
+    window.openAdminResumeViewer = function(id, name, role, filename) {
+      const titleEl = document.getElementById('admin-resume-viewer-title');
+      const nameEl = document.getElementById('admin-viewer-cand-name');
+      const roleEl = document.getElementById('admin-viewer-cand-role');
+      const linkEl = document.getElementById('admin-viewer-download-link');
+      const frameEl = document.getElementById('admin-resume-viewer-frame');
 
-    window.handleAdminResumeChkChange = function() {
-      const selected = getSelectedAdminResumeIds();
-      const btn = document.getElementById('btn-admin-batch-delete-resumes');
-      const countSpan = document.getElementById('admin-selected-resumes-count');
-      const selectAll = document.getElementById('chk-admin-resumes-select-all');
+      const cleanFilename = (filename || `${(name || 'Candidate').replace(/\s+/g, '_')}_Resume.pdf`).split('/').pop().split('\\').pop();
+      const token = localStorage.getItem('uthe_token') || localStorage.getItem('master_admin_token') || localStorage.getItem('admin_token') || '';
+      const pdfUrl = `/data/resumes/${encodeURIComponent(cleanFilename)}?token=${encodeURIComponent(token)}&t=${Date.now()}`;
 
-      if (countSpan) countSpan.textContent = selected.length;
-      if (btn) btn.style.display = selected.length > 0 ? 'inline-block' : 'none';
+      if (titleEl) titleEl.textContent = `📄 RESUME VIEWER: ${name || id}`;
+      if (nameEl) nameEl.textContent = name || id;
+      if (roleEl) roleEl.textContent = role ? `• ${role}` : '';
+      if (linkEl) linkEl.href = pdfUrl;
+      if (frameEl) frameEl.src = pdfUrl;
 
-      const allChks = document.querySelectorAll('#admin-resumes-tbody .admin-resume-chk');
-      if (selectAll) selectAll.checked = allChks.length > 0 && selected.length === allChks.length;
-    };
-
-    window.toggleSelectAllAdminResumes = function(checked) {
-      const allChks = document.querySelectorAll('#admin-resumes-tbody .admin-resume-chk');
-      allChks.forEach(c => { c.checked = checked; });
-      handleAdminResumeChkChange();
-    };
-
-    window.confirmBatchDeleteAdminResumes = function() {
-      const ids = getSelectedAdminResumeIds();
-      if (ids.length === 0) return;
-      showCustomModalConfirm(
-        'BATCH DELETE RESUMES',
-        `Are you sure you want to permanently delete ${ids.length} selected candidate resume${ids.length === 1 ? '' : 's'} from the database?`,
-        async () => {
-          try {
-            const res = await fetch(`/api/resumes?ids=${encodeURIComponent(ids.join(','))}`, { method: 'DELETE' });
-            if (res.ok) {
-              adminResumes = adminResumes.filter(r => !ids.includes(r.id));
-              const selectAll = document.getElementById('chk-admin-resumes-select-all');
-              if (selectAll) selectAll.checked = false;
-              const btn = document.getElementById('btn-admin-batch-delete-resumes');
-              if (btn) btn.style.display = 'none';
-              renderAdminResumes();
-              showCustomModalAlert('Resumes Deleted', `Successfully deleted ${ids.length} candidate resume${ids.length === 1 ? '' : 's'}.`);
-            }
-          } catch (e) {
-            showCustomModalAlert('Delete Error', e.message);
-          }
-        }
-      );
+      openModal('admin-resume-viewer-modal');
     };
 
     function renderAdminResumes(resumes = null) {
@@ -3122,7 +3123,11 @@
           <td>${r.experience || '3+ Yrs'}</td>
           <td><span class="badge-tag tag-mint">${r.score || 94}% MATCH</span></td>
           <td><span style="font-size:0.65rem; color:var(--text-muted);">${(r.skills || []).slice(0, 2).join(', ')}</span></td>
-          <td><a href="/resumes/${r.resumeFile || 'sample_resume.pdf'}" target="_blank" style="color:var(--blue-accent); font-weight:700; text-decoration:none; font-size:0.68rem;">📄 ${r.resumeFile ? 'View' : 'PDF'}</a></td>
+          <td>
+            <button class="btn-surface-sm" onclick="openAdminResumeViewer('${r.id}', '${(r.name || '').replace(/'/g, "\\'")}', '${(r.role || '').replace(/'/g, "\\'")}', '${r.resumeFile || ''}')" style="height:24px; font-size:0.68rem; padding:0 0.55rem; color:var(--blue-accent); border-color:var(--blue-accent); font-weight:800;" data-tooltip="Open candidate resume in preview window">
+              📄 View
+            </button>
+          </td>
           <td class="action-cells">
             <button class="danger" onclick="deleteAdminResume('${r.id}')" title="Delete candidate resume">Delete</button>
           </td>

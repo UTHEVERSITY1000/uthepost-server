@@ -3708,6 +3708,28 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 99 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 100: ADMIN IN-WINDOW RESUME VIEWER MODAL SUITE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 100: ADMIN IN-WINDOW RESUME VIEWER MODAL SUITE ---');
+
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+
+    // 1. Admin Resume Viewer Modal Markup
+    assert(adminHtml.includes('id="admin-resume-viewer-modal"'), 'admin.html defines #admin-resume-viewer-modal overlay');
+    assert(adminHtml.includes('id="admin-resume-viewer-frame"'), 'admin.html includes iframe preview container');
+    assert(adminHtml.includes('id="admin-viewer-download-link"'), 'admin.html includes download/open PDF action link');
+    assert(adminHtml.includes('closeModal(\'admin-resume-viewer-modal\')'), 'admin.html provides X close handler on resume preview window');
+
+    // 2. Open Resume In-Window Handler
+    assert(adminHtml.includes('openAdminResumeViewer'), 'admin.html defines openAdminResumeViewer function');
+    assert(adminHtml.includes('openAdminResumeViewer(\'${r.id}\''), 'renderAdminResumes triggers in-window viewer on View click without page navigation');
+
+  } catch (err) {
+    assert(false, `Group 100 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
