@@ -3666,6 +3666,48 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 98 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 99: DUAL-PORTAL BATCH DELETION CONTROLS SUITE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 99: DUAL-PORTAL BATCH DELETION CONTROLS SUITE ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+
+    // 1. U-THEPOST Tab 6 Resume Search Batch Deletion
+    assert(recruiterHtml.includes('class="resume-card-checkbox"'), 'recruiter.html includes .resume-card-checkbox directly to the left of match badge');
+    assert(recruiterHtml.includes('id="chk-resumes-select-all"'), 'recruiter.html defines #chk-resumes-select-all toggle in command bar');
+    assert(recruiterHtml.includes('id="btn-batch-delete-resumes"'), 'recruiter.html defines #btn-batch-delete-resumes button');
+    assert(recruiterHtml.includes('handleResumeCardCheckboxChange') && recruiterHtml.includes('confirmBatchDeleteResumes') && recruiterHtml.includes('executeBatchDeleteResumes'), 'recruiter.html implements batch delete resume functions');
+
+    // 2. U-THEADMIN Tab 5 Master Job Listings Batch Deletion
+    assert(adminHtml.includes('id="chk-admin-jobs-select-all"'), 'admin.html defines #chk-admin-jobs-select-all in jobs table header');
+    assert(adminHtml.includes('id="btn-admin-batch-delete-jobs"'), 'admin.html defines #btn-admin-batch-delete-jobs button in jobs section');
+    assert(adminHtml.includes('admin-job-chk'), 'admin.html includes .admin-job-chk in job rows');
+    assert(adminHtml.includes('handleAdminJobChkChange') && adminHtml.includes('confirmBatchDeleteAdminJobs'), 'admin.html implements batch delete job functions');
+
+    // 3. U-THEADMIN Tab 5 Candidate Applications Batch Deletion
+    assert(adminHtml.includes('id="chk-admin-apps-select-all"'), 'admin.html defines #chk-admin-apps-select-all in applications table header');
+    assert(adminHtml.includes('id="btn-admin-batch-delete-apps"'), 'admin.html defines #btn-admin-batch-delete-apps button in applications section');
+    assert(adminHtml.includes('admin-app-chk'), 'admin.html includes .admin-app-chk in application rows');
+    assert(adminHtml.includes('handleAdminAppChkChange') && adminHtml.includes('confirmBatchDeleteAdminApps'), 'admin.html implements batch delete application functions');
+
+    // 4. U-THEADMIN Tab 5 Master Candidate Resume Directory Batch Deletion
+    assert(adminHtml.includes('id="chk-admin-resumes-select-all"'), 'admin.html defines #chk-admin-resumes-select-all in resumes table header');
+    assert(adminHtml.includes('id="btn-admin-batch-delete-resumes"'), 'admin.html defines #btn-admin-batch-delete-resumes button in resumes section');
+    assert(adminHtml.includes('admin-resume-chk'), 'admin.html includes .admin-resume-chk in resume rows');
+    assert(adminHtml.includes('handleAdminResumeChkChange') && adminHtml.includes('confirmBatchDeleteAdminResumes'), 'admin.html implements batch delete resume functions');
+
+    // 5. Server Batch Resume Deletion API Test
+    const batchDelRes = await httpDelete('/api/resumes?ids=RES-TEST-999,RES-TEST-888');
+    assert(batchDelRes.status === 200, 'DELETE /api/resumes?ids=... returns HTTP 200');
+    assert(batchDelRes.data && batchDelRes.data.ok === true && batchDelRes.data.status === 'batch_deleted', 'Batch delete endpoint confirms successful batch processing');
+
+  } catch (err) {
+    assert(false, `Group 99 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

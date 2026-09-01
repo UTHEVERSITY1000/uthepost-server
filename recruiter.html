@@ -6642,6 +6642,12 @@ VERIFIED EMPLOYER
 
           <button class="btn-surface-sm" onclick="resetResumeFilters()" style="height: 40px; padding: 0 0.85rem; font-size: 0.72rem; font-weight: 800; white-space: nowrap;">RESET</button>
           <button class="btn-surface-sm" onclick="openBatchResumeParserModal()" style="height: 40px; padding: 0 0.85rem; font-size: 0.72rem; font-weight: 800; white-space: nowrap; color: #0075FF; border-color: #0075FF;" data-tooltip="Batch ingest and auto-parse candidate resumes">🧠 BATCH INGESTION</button>
+          <label style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; font-weight: 800; cursor: pointer; color: var(--text-muted); margin-left: 4px;" data-tooltip="Select all candidate resume cards">
+            <input type="checkbox" id="chk-resumes-select-all" onchange="toggleSelectAllResumeCards(this.checked)" style="width: 14px; height: 14px; accent-color: #FEBA27; cursor: pointer;"> Select All
+          </label>
+          <button id="btn-batch-delete-resumes" class="btn-surface-sm" onclick="confirmBatchDeleteResumes()" style="display: none; height: 40px; padding: 0 0.85rem; font-size: 0.72rem; font-weight: 800; white-space: nowrap; color: #EF4444; border-color: #EF4444;" data-tooltip="Batch delete selected candidate resumes">
+            🗑️ DELETE SELECTED (<span id="selected-resumes-count">0</span>)
+          </button>
         </div>
       </div>
 
@@ -10759,9 +10765,12 @@ function renderFilteredResumes(resumes) {
                 <div style="font-size: 0.72rem; color: #64748B; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${r.role}</div>
               </div>
             </div>
-            <span style="font-size: 0.65rem; font-weight: 900; background: var(--status-mint-bg); color: #065F46; border-radius: 4px; padding: 2px 6px; white-space: nowrap;">
-              ${r.score || 94}% MATCH
-            </span>
+            <div style="display: flex; align-items: center; gap: 5px; flex-shrink: 0;">
+              <input type="checkbox" class="resume-card-checkbox" data-id="${r.id}" onchange="handleResumeCardCheckboxChange()" style="width: 13px; height: 13px; accent-color: #FEBA27; cursor: pointer; margin: 0; padding: 0; flex-shrink: 0;" data-tooltip="Select candidate for batch deletion">
+              <span style="font-size: 0.65rem; font-weight: 900; background: var(--status-mint-bg); color: #065F46; border-radius: 4px; padding: 2px 6px; white-space: nowrap;">
+                ${r.score || 94}% MATCH
+              </span>
+            </div>
           </div>
 
           <div style="font-size: 0.7rem; color: #64748B; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0.5rem;">
@@ -10828,6 +10837,68 @@ function inviteCandidateFromSearch(resId, name, role) {
   renderRecruiterCandidateList();
   openRecruiterMessagesDrawer(appId);
 }
+function getSelectedResumeCardIds() {
+  const chks = document.querySelectorAll('#resume-grid-container .resume-card-checkbox:checked');
+  return Array.from(chks).map(c => c.getAttribute('data-id')).filter(Boolean);
+}
+
+window.handleResumeCardCheckboxChange = function() {
+  const selected = getSelectedResumeCardIds();
+  const btn = document.getElementById('btn-batch-delete-resumes');
+  const countSpan = document.getElementById('selected-resumes-count');
+  const selectAllChk = document.getElementById('chk-resumes-select-all');
+
+  if (countSpan) countSpan.textContent = selected.length;
+  if (btn) btn.style.display = selected.length > 0 ? 'inline-block' : 'none';
+
+  const allChks = document.querySelectorAll('#resume-grid-container .resume-card-checkbox');
+  if (selectAllChk) {
+    selectAllChk.checked = allChks.length > 0 && selected.length === allChks.length;
+  }
+};
+
+window.toggleSelectAllResumeCards = function(checked) {
+  const allChks = document.querySelectorAll('#resume-grid-container .resume-card-checkbox');
+  allChks.forEach(chk => { chk.checked = checked; });
+  handleResumeCardCheckboxChange();
+};
+
+window.confirmBatchDeleteResumes = function() {
+  const selectedIds = getSelectedResumeCardIds();
+  if (selectedIds.length === 0) {
+    showCustomModalAlert('No Resumes Selected', 'Please select at least one candidate resume card to delete.');
+    return;
+  }
+
+  showCustomModalConfirm(
+    'Batch Delete Resumes',
+    `Are you sure you want to permanently delete ${selectedIds.length} selected candidate resume${selectedIds.length === 1 ? '' : 's'} from the talent database?`,
+    () => { executeBatchDeleteResumes(selectedIds); }
+  );
+};
+
+window.executeBatchDeleteResumes = async function(selectedIds) {
+  try {
+    const res = await fetch(`/api/resumes?ids=${encodeURIComponent(selectedIds.join(','))}`, {
+      method: 'DELETE'
+    });
+    const data = await res.json();
+    if (data.ok || data.status === 'batch_deleted') {
+      showCustomModalAlert('Resumes Deleted', `Successfully deleted ${selectedIds.length} candidate resume${selectedIds.length === 1 ? '' : 's'}.`);
+      globalResumesList = globalResumesList.filter(r => !selectedIds.includes(r.id));
+      const selectAllChk = document.getElementById('chk-resumes-select-all');
+      if (selectAllChk) selectAllChk.checked = false;
+      const btn = document.getElementById('btn-batch-delete-resumes');
+      if (btn) btn.style.display = 'none';
+      renderResumeBoard();
+    } else {
+      showCustomModalAlert('Delete Failed', data.error || 'Could not delete resumes.');
+    }
+  } catch (e) {
+    showCustomModalAlert('Network Error', e.message);
+  }
+};
+
 window.inviteCandidateFromSearch = inviteCandidateFromSearch;
 
 function handleSyncEvent(data) {

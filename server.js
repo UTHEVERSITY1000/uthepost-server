@@ -3053,6 +3053,21 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname === '/api/resumes' && req.method === 'DELETE') {
     const resId = parsedUrl.searchParams.get('id');
+    const resIdsParam = parsedUrl.searchParams.get('ids');
+    if (resIdsParam) {
+      const idsToDelete = resIdsParam.split(',').map(s => s.trim()).filter(Boolean);
+      let deletedCount = 0;
+      idsToDelete.forEach(id => {
+        const idx = resumesStore.findIndex(r => r.id === id);
+        if (idx !== -1) {
+          resumesStore.splice(idx, 1);
+          deletedCount++;
+        }
+      });
+      saveResumesToDisk();
+      broadcastWebSocketEvent('RESUMES_BATCH_DELETED', { ids: idsToDelete });
+      return sendJson(200, { ok: true, status: 'batch_deleted', count: deletedCount, ids: idsToDelete });
+    }
     if (resId) {
       const idx = resumesStore.findIndex(r => r.id === resId);
       if (idx !== -1) resumesStore.splice(idx, 1);

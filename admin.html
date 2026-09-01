@@ -1356,6 +1356,7 @@
         <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <span>MASTER JOB LISTINGS INVENTORY</span>
+            <button id="btn-admin-batch-delete-jobs" class="btn-danger-sm" onclick="confirmBatchDeleteAdminJobs()" style="display:none; height: 26px; font-size: 0.68rem; padding: 0 0.65rem; font-weight: 800;">🗑️ Delete Selected (<span id="admin-selected-jobs-count">0</span>)</button>
           </div>
           <div style="display: flex; gap: 0.4rem; align-items: center;">
             <button class="btn-gold" onclick="openJobAggregatorModal()" style="height: 28px; font-size: 0.68rem; padding: 0 0.75rem; font-weight: 800;" data-tooltip="Sync live public job feeds from ATS platforms (Greenhouse, Lever, RSS)">
@@ -1366,6 +1367,7 @@
         <table>
           <thead>
             <tr>
+              <th style="width: 28px;"><input type="checkbox" id="chk-admin-jobs-select-all" onchange="toggleSelectAllAdminJobs(this.checked)" style="width: 13px; height: 13px; cursor: pointer; accent-color: var(--uthe-gold);"></th>
               <th>Job ID</th>
               <th>Position Title</th>
               <th>Company</th>
@@ -1382,9 +1384,10 @@
       <!-- Section B: Candidate Applications -->
       <div class="table-container">
         <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
-          <div style="display: flex; align-items: center; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
             <span>CANDIDATE APPLICATIONS & ATS STAGE OVERRIDES</span>
-            <a href="/api/admin/resumes/download-all" target="_blank" style="background:#D4AF37; color:#000; padding:8px 16px; border-radius:4px; font-weight:bold; text-decoration:none; display:inline-block; margin-left:12px;">
+            <button id="btn-admin-batch-delete-apps" class="btn-danger-sm" onclick="confirmBatchDeleteAdminApps()" style="display:none; height: 26px; font-size: 0.68rem; padding: 0 0.65rem; font-weight: 800;">🗑️ Delete Selected (<span id="admin-selected-apps-count">0</span>)</button>
+            <a href="/api/admin/resumes/download-all" target="_blank" style="background:#D4AF37; color:#000; padding:6px 12px; border-radius:4px; font-weight:bold; text-decoration:none; display:inline-block; font-size:0.68rem;">
               📦 DOWNLOAD ALL RESUMES (.ZIP)
             </a>
           </div>
@@ -1393,6 +1396,7 @@
         <table>
           <thead>
             <tr>
+              <th style="width: 28px;"><input type="checkbox" id="chk-admin-apps-select-all" onchange="toggleSelectAllAdminApps(this.checked)" style="width: 13px; height: 13px; cursor: pointer; accent-color: var(--uthe-gold);"></th>
               <th>Applicant ID</th>
               <th>Candidate Name</th>
               <th>Applied Position</th>
@@ -1412,6 +1416,7 @@
           <div style="display: flex; align-items: center; gap: 8px;">
             <span>MASTER CANDIDATE RESUME DIRECTORY & SOURCING</span>
             <span class="badge-tag tag-gold" id="admin-resume-count-badge">8 Resumes</span>
+            <button id="btn-admin-batch-delete-resumes" class="btn-danger-sm" onclick="confirmBatchDeleteAdminResumes()" style="display:none; height: 26px; font-size: 0.68rem; padding: 0 0.65rem; font-weight: 800;">🗑️ Delete Selected (<span id="admin-selected-resumes-count">0</span>)</button>
           </div>
           <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
             <button class="btn-gold" onclick="openBatchResumeParserModal()" style="height: 30px; font-size: 0.7rem; padding: 0 0.75rem; font-weight: 800;" data-tooltip="Automated multi-resume text parser and batch candidate ingester">
@@ -1431,6 +1436,7 @@
         <table>
           <thead>
             <tr>
+              <th style="width: 28px;"><input type="checkbox" id="chk-admin-resumes-select-all" onchange="toggleSelectAllAdminResumes(this.checked)" style="width: 13px; height: 13px; cursor: pointer; accent-color: var(--uthe-gold);"></th>
               <th>ID</th>
               <th>Candidate Name</th>
               <th>Target Role</th>
@@ -2441,6 +2447,51 @@
     };
 
     // 5. MASTER LISTINGS & APPLICATIONS CRUD
+    function getSelectedAdminJobIds() {
+      const chks = document.querySelectorAll('#admin-jobs-tbody .admin-job-chk:checked');
+      return Array.from(chks).map(c => c.getAttribute('data-id')).filter(Boolean);
+    }
+
+    window.handleAdminJobChkChange = function() {
+      const selected = getSelectedAdminJobIds();
+      const btn = document.getElementById('btn-admin-batch-delete-jobs');
+      const countSpan = document.getElementById('admin-selected-jobs-count');
+      const selectAll = document.getElementById('chk-admin-jobs-select-all');
+
+      if (countSpan) countSpan.textContent = selected.length;
+      if (btn) btn.style.display = selected.length > 0 ? 'inline-block' : 'none';
+
+      const allChks = document.querySelectorAll('#admin-jobs-tbody .admin-job-chk');
+      if (selectAll) selectAll.checked = allChks.length > 0 && selected.length === allChks.length;
+    };
+
+    window.toggleSelectAllAdminJobs = function(checked) {
+      const allChks = document.querySelectorAll('#admin-jobs-tbody .admin-job-chk');
+      allChks.forEach(c => { c.checked = checked; });
+      handleAdminJobChkChange();
+    };
+
+    window.confirmBatchDeleteAdminJobs = function() {
+      const ids = getSelectedAdminJobIds();
+      if (ids.length === 0) return;
+      showCustomModalConfirm(
+        'BATCH DELETE JOB LISTINGS',
+        `Are you sure you want to permanently delete ${ids.length} selected job listing${ids.length === 1 ? '' : 's'} from the master catalog?`,
+        async () => {
+          for (const id of ids) {
+            try { await fetch(`/api/jobs/${id}`, { method: 'DELETE', headers: getAdminAuthHeaders() }); } catch (e) {}
+          }
+          adminJobs = adminJobs.filter(j => !ids.includes(j.id));
+          const selectAll = document.getElementById('chk-admin-jobs-select-all');
+          if (selectAll) selectAll.checked = false;
+          const btn = document.getElementById('btn-admin-batch-delete-jobs');
+          if (btn) btn.style.display = 'none';
+          renderAdminJobs();
+          showCustomModalAlert('Batch Jobs Deleted', `Successfully deleted ${ids.length} job listing${ids.length === 1 ? '' : 's'}.`);
+        }
+      );
+    };
+
     function renderAdminJobs(list = null) {
       const tbody = document.getElementById('admin-jobs-tbody');
       tbody.innerHTML = '';
@@ -2449,6 +2500,7 @@
         const isActive = job.status !== 'Paused';
         const isFeatured = Boolean(job.featured);
         tr.innerHTML = `
+          <td><input type="checkbox" class="admin-job-chk" data-id="${job.id}" onchange="handleAdminJobChkChange()" style="width:13px; height:13px; cursor:pointer; accent-color:var(--uthe-gold);"></td>
           <td><code>${job.id}</code></td>
           <td><strong>${job.jobTitle || job.title}</strong> ${isFeatured ? '<span class="badge-tag tag-purple">FEATURED</span>' : ''}</td>
           <td>${job.company}</td>
@@ -2529,12 +2581,58 @@
       );
     }
 
+    function getSelectedAdminAppIds() {
+      const chks = document.querySelectorAll('#admin-applicants-tbody .admin-app-chk:checked');
+      return Array.from(chks).map(c => c.getAttribute('data-id')).filter(Boolean);
+    }
+
+    window.handleAdminAppChkChange = function() {
+      const selected = getSelectedAdminAppIds();
+      const btn = document.getElementById('btn-admin-batch-delete-apps');
+      const countSpan = document.getElementById('admin-selected-apps-count');
+      const selectAll = document.getElementById('chk-admin-apps-select-all');
+
+      if (countSpan) countSpan.textContent = selected.length;
+      if (btn) btn.style.display = selected.length > 0 ? 'inline-block' : 'none';
+
+      const allChks = document.querySelectorAll('#admin-applicants-tbody .admin-app-chk');
+      if (selectAll) selectAll.checked = allChks.length > 0 && selected.length === allChks.length;
+    };
+
+    window.toggleSelectAllAdminApps = function(checked) {
+      const allChks = document.querySelectorAll('#admin-applicants-tbody .admin-app-chk');
+      allChks.forEach(c => { c.checked = checked; });
+      handleAdminAppChkChange();
+    };
+
+    window.confirmBatchDeleteAdminApps = function() {
+      const ids = getSelectedAdminAppIds();
+      if (ids.length === 0) return;
+      showCustomModalConfirm(
+        'BATCH DELETE APPLICATIONS',
+        `Are you sure you want to permanently delete ${ids.length} selected candidate application${ids.length === 1 ? '' : 's'}?`,
+        async () => {
+          for (const id of ids) {
+            try { await fetch(`/api/applicants/${id}`, { method: 'DELETE' }); } catch (e) {}
+          }
+          adminApplicants = adminApplicants.filter(a => !ids.includes(a.id));
+          const selectAll = document.getElementById('chk-admin-apps-select-all');
+          if (selectAll) selectAll.checked = false;
+          const btn = document.getElementById('btn-admin-batch-delete-apps');
+          if (btn) btn.style.display = 'none';
+          renderAdminApplicants();
+          showCustomModalAlert('Applications Deleted', `Successfully deleted ${ids.length} candidate application${ids.length === 1 ? '' : 's'}.`);
+        }
+      );
+    };
+
     function renderAdminApplicants(list = null) {
       const tbody = document.getElementById('admin-applicants-tbody');
       tbody.innerHTML = '';
       (list || adminApplicants).forEach(app => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
+          <td><input type="checkbox" class="admin-app-chk" data-id="${app.id}" onchange="handleAdminAppChkChange()" style="width:13px; height:13px; cursor:pointer; accent-color:var(--uthe-gold);"></td>
           <td><code>${app.id}</code></td>
           <td><strong>${app.name}</strong></td>
           <td>${app.jobTitle}</td>
@@ -2950,6 +3048,55 @@
     }
     window.loadAdminResumes = loadAdminResumes;
 
+    function getSelectedAdminResumeIds() {
+      const chks = document.querySelectorAll('#admin-resumes-tbody .admin-resume-chk:checked');
+      return Array.from(chks).map(c => c.getAttribute('data-id')).filter(Boolean);
+    }
+
+    window.handleAdminResumeChkChange = function() {
+      const selected = getSelectedAdminResumeIds();
+      const btn = document.getElementById('btn-admin-batch-delete-resumes');
+      const countSpan = document.getElementById('admin-selected-resumes-count');
+      const selectAll = document.getElementById('chk-admin-resumes-select-all');
+
+      if (countSpan) countSpan.textContent = selected.length;
+      if (btn) btn.style.display = selected.length > 0 ? 'inline-block' : 'none';
+
+      const allChks = document.querySelectorAll('#admin-resumes-tbody .admin-resume-chk');
+      if (selectAll) selectAll.checked = allChks.length > 0 && selected.length === allChks.length;
+    };
+
+    window.toggleSelectAllAdminResumes = function(checked) {
+      const allChks = document.querySelectorAll('#admin-resumes-tbody .admin-resume-chk');
+      allChks.forEach(c => { c.checked = checked; });
+      handleAdminResumeChkChange();
+    };
+
+    window.confirmBatchDeleteAdminResumes = function() {
+      const ids = getSelectedAdminResumeIds();
+      if (ids.length === 0) return;
+      showCustomModalConfirm(
+        'BATCH DELETE RESUMES',
+        `Are you sure you want to permanently delete ${ids.length} selected candidate resume${ids.length === 1 ? '' : 's'} from the database?`,
+        async () => {
+          try {
+            const res = await fetch(`/api/resumes?ids=${encodeURIComponent(ids.join(','))}`, { method: 'DELETE' });
+            if (res.ok) {
+              adminResumes = adminResumes.filter(r => !ids.includes(r.id));
+              const selectAll = document.getElementById('chk-admin-resumes-select-all');
+              if (selectAll) selectAll.checked = false;
+              const btn = document.getElementById('btn-admin-batch-delete-resumes');
+              if (btn) btn.style.display = 'none';
+              renderAdminResumes();
+              showCustomModalAlert('Resumes Deleted', `Successfully deleted ${ids.length} candidate resume${ids.length === 1 ? '' : 's'}.`);
+            }
+          } catch (e) {
+            showCustomModalAlert('Delete Error', e.message);
+          }
+        }
+      );
+    };
+
     function renderAdminResumes(resumes = null) {
       const list = resumes || adminResumes;
       const tbody = document.getElementById('admin-resumes-tbody');
@@ -2958,12 +3105,13 @@
       if (!tbody) return;
 
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:1.5rem; color:var(--text-muted);">No candidate resumes in directory. Click "Upload Resume" or "Import Microsoft Excel" to add candidates.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:1.5rem; color:var(--text-muted);">No candidate resumes in directory. Click "Upload Resume" or "Import Microsoft Excel" to add candidates.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = list.map(r => `
         <tr>
+          <td><input type="checkbox" class="admin-resume-chk" data-id="${r.id}" onchange="handleAdminResumeChkChange()" style="width:13px; height:13px; cursor:pointer; accent-color:var(--uthe-gold);"></td>
           <td><strong>${r.id}</strong></td>
           <td>
             <div style="font-weight:700; color:var(--uthe-charcoal);">${r.name}</div>
