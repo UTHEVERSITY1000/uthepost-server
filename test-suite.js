@@ -3539,6 +3539,38 @@ async function runTests() {
     assert(false, `Group 95 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 96: UTHEVERSITY HOME SCREEN RETURN NAVIGATION
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 96: UTHEVERSITY HOME SCREEN RETURN NAVIGATION ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Recruiter Top Deck Header UTHEVERSITY Home Button
+    assert(recruiterHtml.includes('id="btn-utheversity-home"'), 'recruiter.html defines #btn-utheversity-home button in top deck header actions');
+    assert(recruiterHtml.includes('href="https://utheversity.com"'), 'recruiter.html links directly to https://utheversity.com');
+    assert(recruiterHtml.includes('.btn-home-header'), 'recruiter.html defines .btn-home-header styling');
+    assert(recruiterHtml.includes('UTHEVERSITY HOME'), 'recruiter.html displays UTHEVERSITY HOME button label');
+
+    // 2. Recruiter Mobile Slide-Out Drawer & Footer Home Links
+    assert(recruiterHtml.includes('RETURN TO UTHEVERSITY HOME'), 'recruiter.html mobile drawer includes return to home link');
+    assert(recruiterHtml.includes('Return to UTHEVERSITY Home Screen'), 'recruiter.html footer includes return to home screen link');
+
+    // 3. Candidate Top Deck Header UTHEVERSITY Home Button
+    assert(candidateHtml.includes('id="btn-candidate-utheversity-home"'), 'candidate.html defines #btn-candidate-utheversity-home button in top deck header');
+    assert(candidateHtml.includes('href="https://utheversity.com"'), 'candidate.html links directly to https://utheversity.com');
+    assert(candidateHtml.includes('.btn-home-header'), 'candidate.html defines .btn-home-header styling');
+    assert(candidateHtml.includes('UTHEVERSITY HOME'), 'candidate.html displays UTHEVERSITY HOME button label');
+
+    // 4. Candidate Footer Home Link
+    assert(candidateHtml.includes('Return to UTHEVERSITY Home Screen'), 'candidate.html footer includes return to home screen link');
+
+  } catch (err) {
+    assert(false, `Group 96 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
