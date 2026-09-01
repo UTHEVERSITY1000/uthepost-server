@@ -3618,6 +3618,7 @@ async function runTests() {
     // 1. Admin UI Controls & Modals
     assert(adminHtml.includes('id="modal-sync-job-feeds"'), 'admin.html defines #modal-sync-job-feeds modal');
     assert(adminHtml.includes('id="modal-batch-resume-parser"'), 'admin.html defines #modal-batch-resume-parser modal');
+    assert(adminHtml.includes('window.openModal = openModal') && adminHtml.includes('window.closeModal = closeModal'), 'admin.html defines global openModal and closeModal');
     assert(adminHtml.includes('openJobAggregatorModal') && adminHtml.includes('triggerLiveJobFeedSync'), 'admin.html implements job aggregator sync functions');
     assert(adminHtml.includes('openBatchResumeParserModal') && adminHtml.includes('triggerBatchResumeIngestion'), 'admin.html implements batch resume ingestion functions');
 

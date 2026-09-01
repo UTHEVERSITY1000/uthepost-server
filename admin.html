@@ -1927,12 +1927,20 @@
       document.getElementById('cms-panel-jobs').style.display = targetKey === 'jobs' ? 'flex' : 'none';
     };
 
-    function openAdminAuthModal() {
-      document.getElementById('admin-auth-modal').style.display = 'flex';
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'flex';
     }
+    window.openModal = openModal;
 
     function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    }
+    window.closeModal = closeModal;
+
+    function openAdminAuthModal() {
+      openModal('admin-auth-modal');
     }
 
     function togglePassVisibility(id) {
