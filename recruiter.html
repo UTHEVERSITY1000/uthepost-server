@@ -4807,8 +4807,6 @@ main, .main-content, .workspace-container, #job-studio-container {
   visibility: visible !important;
   opacity: 1 !important;
   z-index: 100000 !important;
-  height: 24px !important;
-  max-height: 24px !important;
   min-height: 24px !important;
   padding: 2px 5px !important;
   gap: 3px !important;
@@ -4822,8 +4820,11 @@ main, .main-content, .workspace-container, #job-studio-container {
 }
 
 .employer-logo-preview-img {
-  width: 16px !important;
-  height: 16px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 1.5px solid var(--uthe-gold) !important;
 }
 
 .portal-navigation, nav.header-center-tabs {

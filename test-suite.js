@@ -3592,10 +3592,11 @@ async function runTests() {
     assert(recruiterHtml.includes('padding: 2px 5px !important;'), 'recruiter.html sets padding: 2px 5px for menu tabs');
     assert(recruiterHtml.includes('z-index: 100000 !important;'), 'recruiter.html elevates menu items to z-index: 100000');
 
-    // 3. Action & Utility Deck (8px, height: 24px, padding: 2px 5px)
+    // 3. Action & Utility Deck (8px, height: 24px, padding: 2px 5px, 32px logo)
     assert(recruiterHtml.includes('.btn-home-header') && recruiterHtml.includes('height: 24px !important;'), 'recruiter.html sets height: 24px for home button');
     assert(recruiterHtml.includes('.btn-auth-header') && recruiterHtml.includes('height: 24px !important;'), 'recruiter.html sets height: 24px for auth button');
-    assert(recruiterHtml.includes('.employer-logo-badge') && recruiterHtml.includes('height: 24px !important;'), 'recruiter.html sets height: 24px for logo badge');
+    assert(recruiterHtml.includes('.employer-logo-badge') && recruiterHtml.includes('min-height: 24px !important;'), 'recruiter.html sets min-height: 24px for logo badge');
+    assert(recruiterHtml.includes('.employer-logo-preview-img') && recruiterHtml.includes('width: 32px !important;'), 'recruiter.html sets 32px profile picture size for employer logo');
 
     // 4. Notification Bell & Action Icons (12px SVG, 24px wrapper)
     assert(recruiterHtml.includes('.btn-notif-header .notif-bell-svg') && recruiterHtml.includes('width: 12px !important;'), 'recruiter.html sets 12px width for notification bell icon');
