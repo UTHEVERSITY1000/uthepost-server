@@ -4761,20 +4761,29 @@ main, .main-content, .workspace-container, #job-studio-container {
 
 @media (min-width: 769px) {
 
-/* 1. Top Header Flex Container (8px micro-layout, max-height: 34px) */
+/* 1. Elevate Header Layer & Remove Vertical Height Clipping (z-index: 99999, min-height: 42px) */
 
 header, .recruiter-header {
+  position: relative !important;
+  z-index: 99999 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
   display: flex !important;
   flex-wrap: nowrap !important;
   align-items: center !important;
   justify-content: space-between !important;
   gap: 4px !important;
-  height: 34px !important;
-  max-height: 34px !important;
+  min-height: 42px !important;
+  height: auto !important;
   padding: 2px 6px !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
+  overflow: visible !important;
   box-sizing: border-box !important;
+}
+
+/* 2. Lower Stacking Level on Main Content to Prevent Overlap */
+main, .main-content, .workspace-container, #job-studio-container {
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 .brand-group {
@@ -4792,6 +4801,12 @@ header, .recruiter-header {
 }
 
 .employer-logo-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 100000 !important;
   height: 24px !important;
   max-height: 24px !important;
   min-height: 24px !important;
@@ -4827,9 +4842,15 @@ header, .recruiter-header {
   display: none !important;
 }
 
-/* 2. Navigation Tabs (8px, weight: 700, spacing: 0.02em, padding: 2px 5px, max-height: 24px, nowrap, overflow hidden, text-overflow ellipsis) */
+/* 3. Navigation Tabs (8px, weight: 700, padding: 2px 5px, z-index: 100000, visible) */
 
 .nav-tab-btn, .portal-navigation button, nav.header-center-tabs button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 100000 !important;
   flex: 1 1 0px !important;
   min-width: 0 !important;
   height: 24px !important;
@@ -4854,7 +4875,7 @@ header, .recruiter-header {
   overflow: visible !important;
 }
 
-/* 3. Action & Utility Deck (EDIT LOGO, RETURN TO HOME, LOGOUT, Notification Bell: 8px, height: 24px, padding: 2px 5px) */
+/* 4. Action & Utility Deck (z-index: 100000, visible, 8px, height: 24px) */
 .header-actions {
   display: flex !important;
   align-items: center !important;
@@ -4863,6 +4884,12 @@ header, .recruiter-header {
 }
 
 .btn-home-header {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 100000 !important;
   height: 24px !important;
   max-height: 24px !important;
   padding: 2px 5px !important;
@@ -4879,6 +4906,12 @@ header, .recruiter-header {
 }
 
 .btn-help-header {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 100000 !important;
   width: 24px !important;
   height: 24px !important;
   max-height: 24px !important;
@@ -4892,6 +4925,12 @@ header, .recruiter-header {
 }
 
 .btn-notif-header {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 100000 !important;
   width: 24px !important;
   height: 24px !important;
   max-height: 24px !important;
@@ -4912,6 +4951,12 @@ header, .recruiter-header {
 }
 
 .btn-auth-header {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 100000 !important;
   height: 24px !important;
   max-height: 24px !important;
   padding: 2px 5px !important;

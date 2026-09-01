@@ -3572,23 +3572,23 @@ async function runTests() {
   }
 
   // =========================================================================
-  // GROUP 97: U-THEPOST ULTRA-COMPACT 8PX MICRO-LAYOUT SPECIFICATIONS
+  // GROUP 97: U-THEPOST DESKTOP HEADER LAYER ELEVATION (Z-INDEX 99999)
   // =========================================================================
   try {
-    console.log('\n--- GROUP 97: U-THEPOST 8PX MICRO-LAYOUT SPECIFICATIONS ---');
+    console.log('\n--- GROUP 97: U-THEPOST DESKTOP HEADER LAYER ELEVATION ---');
 
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
-    // 1. Top Header Flex Container (max-height: 34px, padding: 2px 6px, overflow-x: auto)
-    assert(recruiterHtml.includes('max-height: 34px !important;'), 'recruiter.html sets max-height: 34px header constraint');
-    assert(recruiterHtml.includes('padding: 2px 6px !important;'), 'recruiter.html sets padding: 2px 6px for header');
-    assert(recruiterHtml.includes('overflow-x: auto !important;'), 'recruiter.html sets overflow-x: auto for header');
+    // 1. Elevate Header Layer & Remove Vertical Height Clipping (z-index: 99999, min-height: 42px)
+    assert(recruiterHtml.includes('position: relative !important;') && recruiterHtml.includes('z-index: 99999 !important;'), 'recruiter.html sets position: relative and z-index: 99999 on desktop header');
+    assert(recruiterHtml.includes('min-height: 42px !important;'), 'recruiter.html sets min-height: 42px header constraint');
+    assert(recruiterHtml.includes('overflow: visible !important;'), 'recruiter.html sets overflow: visible for header');
 
-    // 2. Navigation Tabs (8px, font-weight: 700, letter-spacing: 0.02em, padding: 2px 5px, max-height: 24px)
+    // 2. Navigation Tabs (8px, font-weight: 700, padding: 2px 5px, z-index: 100000)
     assert(recruiterHtml.includes('font-size: 8px !important;') && recruiterHtml.includes('.nav-tab-btn, .portal-navigation button, nav.header-center-tabs button'), 'recruiter.html sets 8px font size for menu tabs');
     assert(recruiterHtml.includes('font-weight: 700 !important;'), 'recruiter.html sets font-weight: 700 for menu tabs');
     assert(recruiterHtml.includes('padding: 2px 5px !important;'), 'recruiter.html sets padding: 2px 5px for menu tabs');
-    assert(recruiterHtml.includes('overflow: hidden !important;') && recruiterHtml.includes('text-overflow: ellipsis !important;'), 'recruiter.html enforces text boundary containment with overflow: hidden and ellipsis');
+    assert(recruiterHtml.includes('z-index: 100000 !important;'), 'recruiter.html elevates menu items to z-index: 100000');
 
     // 3. Action & Utility Deck (8px, height: 24px, padding: 2px 5px)
     assert(recruiterHtml.includes('.btn-home-header') && recruiterHtml.includes('height: 24px !important;'), 'recruiter.html sets height: 24px for home button');
