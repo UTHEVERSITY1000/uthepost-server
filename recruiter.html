@@ -5988,115 +5988,60 @@ ADD-ONS
 
 
 <!-- FEATURE ADD-ONS WITH ON/OFF TOGGLES -->
-
 <div class="addon-item-row">
-
 <div>
-
 <strong>Top-of-Page Spotlight Placement</strong>
-
 <div style="font-size: 0.75rem; color: var(--text-muted);">Pin your job posting at the top of candidate search results.</div>
-
 </div>
-
 <div style="display: flex; align-items: center; gap: 1rem;">
-
-<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);">$49/mo</span>
-
+<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-spotlight" data-cms-key="price-addon-spotlight">$49/mo</span>
 <label class="toggle-switch" data-tooltip="Toggle Top-of-Page Spotlight ($49/mo)">
-
 <input type="checkbox" id="toggle-addon-spotlight" onchange="recalculateMembershipTotal()">
-
 <span class="toggle-slider"></span>
-
 </label>
-
 </div>
-
 </div>
-
-
 
 <div class="addon-item-row">
-
 <div>
-
 <strong>Urgent Hiring Badges</strong>
-
 <div style="font-size: 0.75rem; color: var(--text-muted);">Highlight urgent open positions with bright badge accents.</div>
-
 </div>
-
 <div style="display: flex; align-items: center; gap: 1rem;">
-
-<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);">$29/mo</span>
-
+<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-urgent" data-cms-key="price-addon-urgent">$29/mo</span>
 <label class="toggle-switch" data-tooltip="Toggle Urgent Hiring Badges ($29/mo)">
-
 <input type="checkbox" id="toggle-addon-urgent" onchange="recalculateMembershipTotal()">
-
 <span class="toggle-slider"></span>
-
 </label>
-
 </div>
-
 </div>
-
-
 
 <div class="addon-item-row">
-
 <div>
-
 <strong>Direct Hiring Messages (Candidate InMail)</strong>
-
 <div style="font-size: 0.75rem; color: var(--text-muted);">Send direct interview invitations to candidate inboxes.</div>
-
 </div>
-
 <div style="display: flex; align-items: center; gap: 1rem;">
-
-<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);">$19/mo</span>
-
+<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-inmail" data-cms-key="price-addon-inmail">$19/mo</span>
 <label class="toggle-switch" data-tooltip="Toggle Direct Hiring InMail Messages ($19/mo)">
-
 <input type="checkbox" id="toggle-addon-inmail" onchange="recalculateMembershipTotal()">
-
 <span class="toggle-slider"></span>
-
 </label>
-
 </div>
-
 </div>
-
-
 
 <div class="addon-item-row">
-
 <div>
-
 <strong>Verified Employer Shield</strong>
-
 <div style="font-size: 0.75rem; color: var(--text-muted);">Display official gold UTHEVERSITY emblem on company profile and job cards.</div>
-
 </div>
-
 <div style="display: flex; align-items: center; gap: 1rem;">
-
-<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);">$39/mo</span>
-
-<label class="toggle-switch" data-tooltip="Toggle Verified Employer Shield ($39/mo)">
-
+<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-verified" data-cms-key="price-addon-verified">$3/mo</span>
+<label class="toggle-switch" data-tooltip="Toggle Verified Employer Shield ($3/mo)">
 <input type="checkbox" id="toggle-addon-verified" onchange="recalculateMembershipTotal()">
-
 <span class="toggle-slider"></span>
-
 </label>
-
 </div>
-
 </div>
 
 
@@ -8253,59 +8198,35 @@ addonDetails.push(`${individualSocials.length} Social Channels (\$${socialCost.t
 
 
 const spotEl = document.getElementById('toggle-addon-spotlight');
-
 if (spotEl && spotEl.checked) {
-
-const rate = liveCmsPricing.topSpotlight !== undefined ? liveCmsPricing.topSpotlight : 49;
-
-total += rate;
-
-addonCount++;
-
-addonDetails.push(`Spotlight ($${rate})`);
-
+  const rate = liveCmsPricing.spotlightPrice !== undefined ? liveCmsPricing.spotlightPrice : (liveCmsPricing.topSpotlight !== undefined ? liveCmsPricing.topSpotlight : 49);
+  total += rate;
+  addonCount++;
+  addonDetails.push(`Spotlight ($${rate})`);
 }
 
 const urgEl = document.getElementById('toggle-addon-urgent');
-
 if (urgEl && urgEl.checked) {
-
-const rate = liveCmsPricing.urgentBadge !== undefined ? liveCmsPricing.urgentBadge : 29;
-
-total += rate;
-
-addonCount++;
-
-addonDetails.push(`Urgent Badges ($${rate})`);
-
+  const rate = liveCmsPricing.urgentBadge !== undefined ? liveCmsPricing.urgentBadge : 29;
+  total += rate;
+  addonCount++;
+  addonDetails.push(`Urgent Badges ($${rate})`);
 }
 
 const msgEl = document.getElementById('toggle-addon-inmail');
-
 if (msgEl && msgEl.checked) {
-
-const rate = liveCmsPricing.directMessages !== undefined ? liveCmsPricing.directMessages : 19;
-
-total += rate;
-
-addonCount++;
-
-addonDetails.push(`InMail Messages ($${rate})`);
-
+  const rate = liveCmsPricing.directMessages !== undefined ? liveCmsPricing.directMessages : 19;
+  total += rate;
+  addonCount++;
+  addonDetails.push(`InMail Messages ($${rate})`);
 }
 
 const verEl = document.getElementById('toggle-addon-verified');
-
 if (verEl && verEl.checked) {
-
-const rate = liveCmsPricing.verifiedEmployer !== undefined ? liveCmsPricing.verifiedEmployer : 39;
-
-total += rate;
-
-addonCount++;
-
-addonDetails.push(`Verified Shield ($${rate})`);
-
+  const rate = liveCmsPricing.verifiedEmployer !== undefined ? liveCmsPricing.verifiedEmployer : 3;
+  total += rate;
+  addonCount++;
+  addonDetails.push(`Verified Shield ($${rate})`);
 }
 
 
@@ -9400,174 +9321,118 @@ if (!config) return;
 
 
 
-if (config.pricing) {
+if (config.pricing || config.addOns) {
+  const pr = config.pricing || {};
+  const ad = config.addOns || {};
+  liveCmsPricing = { ...liveCmsPricing, ...pr, ...ad };
 
-liveCmsPricing = { ...liveCmsPricing, ...config.pricing };
+  // Update Plan Card Price Texts
+  const palEl = document.getElementById('price-pal');
+  if (palEl) palEl.innerHTML = `$${pr.palMonthly !== undefined ? pr.palMonthly : 0}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
+  const startEl = document.getElementById('price-starter');
+  if (startEl) startEl.innerHTML = `$${pr.starterMonthly !== undefined ? pr.starterMonthly : 99}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
+  const growEl = document.getElementById('price-growth');
+  if (growEl) growEl.innerHTML = `$${pr.growthMonthly !== undefined ? pr.growthMonthly : 299}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
+  const proEl = document.getElementById('price-pro');
+  if (proEl) proEl.innerHTML = `$${pr.proMonthly !== undefined ? pr.proMonthly : 699}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
 
-if (config.addOns) liveCmsPricing = { ...liveCmsPricing, ...config.addOns };
+  // Update Social Add-On Price Texts
+  const bundleRate = pr.socialBundleAddon !== undefined ? pr.socialBundleAddon : (ad.socialBundle5 !== undefined ? ad.socialBundle5 : 19.99);
+  const singleRate = pr.individualSocialAddon !== undefined ? pr.individualSocialAddon : (ad.individualSocial !== undefined ? ad.individualSocial : 5.99);
 
+  const bundleLabel = document.getElementById('label-social-bundle-price');
+  if (bundleLabel) bundleLabel.textContent = `5-CHANNEL BUNDLE ($${bundleRate}/mo)`;
+  const singleLabels = document.querySelectorAll('.label-social-single-price');
+  singleLabels.forEach(el => el.textContent = `$${singleRate}/mo`);
+  const subPricing = document.getElementById('label-social-pricing-sub');
+  if (subPricing) subPricing.textContent = `$${singleRate} each OR 5-Channel Bundle for $${bundleRate}/mo`;
 
+  // Update Feature Add-On Price Tags in Tab 4
+  const spotRate = pr.spotlightPrice !== undefined ? pr.spotlightPrice : (pr.topSpotlight !== undefined ? pr.topSpotlight : (ad.topSpotlight !== undefined ? ad.topSpotlight : 49));
+  const urgRate = pr.urgentBadge !== undefined ? pr.urgentBadge : (ad.urgentBadge !== undefined ? ad.urgentBadge : 29);
+  const inmailRate = pr.directMessages !== undefined ? pr.directMessages : (ad.directMessages !== undefined ? ad.directMessages : 19);
+  const verRate = pr.verifiedEmployer !== undefined ? pr.verifiedEmployer : (ad.verifiedEmployer !== undefined ? ad.verifiedEmployer : 3);
 
-// Update Plan Card Price Texts
+  const spotLabel = document.getElementById('price-addon-spotlight');
+  if (spotLabel) spotLabel.textContent = `$${spotRate}/mo`;
+  const urgLabel = document.getElementById('price-addon-urgent');
+  if (urgLabel) urgLabel.textContent = `$${urgRate}/mo`;
+  const inmailLabel = document.getElementById('price-addon-inmail');
+  if (inmailLabel) inmailLabel.textContent = `$${inmailRate}/mo`;
+  const verLabel = document.getElementById('price-addon-verified');
+  if (verLabel) verLabel.textContent = `$${verRate}/mo`;
 
-const palEl = document.getElementById('price-pal');
-
-if (palEl) palEl.innerHTML = `$${config.pricing.palMonthly !== undefined ? config.pricing.palMonthly : 0}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
-
-const startEl = document.getElementById('price-starter');
-
-if (startEl) startEl.innerHTML = `$${config.pricing.starterMonthly || 99}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
-
-const growEl = document.getElementById('price-growth');
-
-if (growEl) growEl.innerHTML = `$${config.pricing.growthMonthly || 299}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
-
-const proEl = document.getElementById('price-pro');
-
-if (proEl) proEl.innerHTML = `$${config.pricing.proMonthly || 699}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>`;
-
-
-
-// Update Social Add-On Price Texts
-
-const bundleLabel = document.getElementById('label-social-bundle-price');
-
-if (bundleLabel) bundleLabel.textContent = `5-CHANNEL BUNDLE ($${(config.pricing.socialBundleAddon || 19.99)}/mo)`;
-
-const singleLabels = document.querySelectorAll('.label-social-single-price');
-
-singleLabels.forEach(el => el.textContent = `$${(config.pricing.individualSocialAddon || 5.99)}/mo`);
-
-const subPricing = document.getElementById('label-social-pricing-sub');
-
-if (subPricing) subPricing.textContent = `$${(config.pricing.individualSocialAddon || 5.99)} each OR 5-Channel Bundle for $${(config.pricing.socialBundleAddon || 19.99)}/mo`;
-
-
-
-// Recalculate Dynamic Total
-
-recalculateMembershipTotal();
-
+  // Recalculate Dynamic Total
+  recalculateMembershipTotal();
 }
-
-
 
 if (config.postStudio) {
-
-const p = config.postStudio;
-
-if (p.card2Title) {
-
-const el = document.getElementById('card2-title-text');
-
-if (el) el.textContent = p.card2Title;
-
+  const p = config.postStudio;
+  if (p.card2Title) {
+    const el = document.getElementById('card2-title-text');
+    if (el) el.textContent = p.card2Title;
+  }
+  if (p.card3Title) {
+    const el = document.getElementById('card3-title-text');
+    if (el) el.textContent = p.card3Title;
+  }
+  if (p.publishHeader) {
+    const el = document.getElementById('publish-header-text');
+    if (el) el.textContent = p.publishHeader;
+  }
+  if (p.publishBtnText) {
+    const el = document.getElementById('btn-publish-post');
+    if (el) el.textContent = p.publishBtnText;
+  }
 }
-
-if (p.card3Title) {
-
-const el = document.getElementById('card3-title-text');
-
-if (el) el.textContent = p.card3Title;
-
-}
-
-if (p.publishHeader) {
-
-const el = document.getElementById('publish-header-text');
-
-if (el) el.textContent = p.publishHeader;
-
-}
-
-if (p.publishBtnText) {
-
-const el = document.getElementById('btn-publish-post');
-
-if (el) el.textContent = p.publishBtnText;
-
-}
-
-}
-
-
 
 if (config.labels) {
-
-if (config.labels.postTitle) {
-
-const el = document.getElementById('cms-brand-title');
-
-if (el) el.textContent = config.labels.postTitle;
-
+  if (config.labels.postTitle) {
+    const el = document.getElementById('cms-brand-title');
+    if (el) el.textContent = config.labels.postTitle;
+  }
 }
-
-}
-
-
 
 // Explicit data-cms-key dynamic DOM binding
+const spotVal = config.pricing?.spotlightPrice !== undefined ? config.pricing.spotlightPrice : (config.pricing?.topSpotlight !== undefined ? config.pricing.topSpotlight : config.addOns?.topSpotlight);
+const urgVal = config.pricing?.urgentBadge !== undefined ? config.pricing.urgentBadge : config.addOns?.urgentBadge;
+const inmailVal = config.pricing?.directMessages !== undefined ? config.pricing.directMessages : config.addOns?.directMessages;
+const verVal = config.pricing?.verifiedEmployer !== undefined ? config.pricing.verifiedEmployer : config.addOns?.verifiedEmployer;
 
 const cmsKeyMap = {
-
-'brand-title': config.labels?.postTitle || 'U-THEPOST',
-
-'post-card2-title': config.postStudio?.card2Title,
-
-'post-card3-title': config.postStudio?.card3Title,
-
-'post-publish-header': config.postStudio?.publishHeader,
-
-'post-publish-btn': config.postStudio?.publishBtnText,
-
-'post-job-title-label': config.postStudio?.jobTitleLabel,
-
-'post-company-label': config.postStudio?.companyNameLabel,
-
-'post-loc-label': config.postStudio?.locationLabel,
-
-'post-emp-options': config.postStudio?.employmentOptions,
-
-'post-salary-label': config.postStudio?.salaryLabel,
-
-'post-email-label': config.postStudio?.emailFieldLabel,
-
-'post-phone-label': config.postStudio?.phoneFieldLabel,
-
-'post-social-header': config.postStudio?.socialHeader,
-
-'post-linkedin-ph': config.postStudio?.linkedinPlaceholder,
-
-'post-x-ph': config.postStudio?.xPlaceholder,
-
-'post-tiktok-ph': config.postStudio?.tiktokPlaceholder,
-
-'post-preview-badge': config.postStudio?.previewBadge,
-
-'post-benefit-label': config.postStudio?.benefitSummaryLabel,
-
-'post-primary-btn': config.postStudio?.primaryActionBtn,
-
-'post-col-id': config.postStudio?.colJobId,
-
-'post-col-title': config.postStudio?.colTitle,
-
-'post-perks-label': config.postStudio?.perksLabel,
-
-'price-pal': config.pricing?.palMonthly !== undefined ? `$${config.pricing.palMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
-
-'price-starter': config.pricing?.starterMonthly !== undefined ? `$${config.pricing.starterMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
-
-'price-growth': config.pricing?.growthMonthly !== undefined ? `$${config.pricing.growthMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
-
-'price-pro': config.pricing?.proMonthly !== undefined ? `$${config.pricing.proMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
-
-'social-bundle-label': config.pricing?.socialBundleAddon !== undefined ? `5-CHANNEL BUNDLE ($${config.pricing.socialBundleAddon}/mo)` : null,
-
-'social-single-price': config.pricing?.individualSocialAddon !== undefined ? `$${config.pricing.individualSocialAddon}/mo` : null,
-
-'social-pricing-sub': (config.pricing?.individualSocialAddon !== undefined && config.pricing?.socialBundleAddon !== undefined) ? `$${config.pricing.individualSocialAddon} each OR 5-Channel Bundle for $${config.pricing.socialBundleAddon}/mo` : null
-
+  'brand-title': config.labels?.postTitle || 'U-THEPOST',
+  'post-card2-title': config.postStudio?.card2Title,
+  'post-card3-title': config.postStudio?.card3Title,
+  'post-publish-header': config.postStudio?.publishHeader,
+  'post-publish-btn': config.postStudio?.publishBtnText,
+  'post-job-title-label': config.postStudio?.jobTitleLabel,
+  'post-company-label': config.postStudio?.companyNameLabel,
+  'post-loc-label': config.postStudio?.locationLabel,
+  'post-emp-options': config.postStudio?.employmentOptions,
+  'post-salary-label': config.postStudio?.salaryLabel,
+  'post-email-label': config.postStudio?.emailFieldLabel,
+  'post-phone-label': config.postStudio?.phoneFieldLabel,
+  'post-social-header': config.postStudio?.socialHeader,
+  'post-linkedin-ph': config.postStudio?.linkedinPlaceholder,
+  'post-x-ph': config.postStudio?.xPlaceholder,
+  'post-tiktok-ph': config.postStudio?.tiktokPlaceholder,
+  'post-preview-badge': config.postStudio?.previewBadge,
+  'post-benefit-label': config.postStudio?.benefitSummaryLabel,
+  'post-primary-btn': config.postStudio?.primaryActionBtn,
+  'post-col-id': config.postStudio?.colJobId,
+  'post-col-title': config.postStudio?.colTitle,
+  'post-perks-label': config.postStudio?.perksLabel,
+  'price-pal': config.pricing?.palMonthly !== undefined ? `$${config.pricing.palMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
+  'price-starter': config.pricing?.starterMonthly !== undefined ? `$${config.pricing.starterMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
+  'price-growth': config.pricing?.growthMonthly !== undefined ? `$${config.pricing.growthMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
+  'price-pro': config.pricing?.proMonthly !== undefined ? `$${config.pricing.proMonthly}<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span>` : null,
+  'social-bundle-label': (config.pricing?.socialBundleAddon !== undefined || config.addOns?.socialBundle5 !== undefined) ? `5-CHANNEL BUNDLE ($${config.pricing?.socialBundleAddon || config.addOns?.socialBundle5}/mo)` : null,
+  'social-single-price': (config.pricing?.individualSocialAddon !== undefined || config.addOns?.individualSocial !== undefined) ? `$${config.pricing?.individualSocialAddon || config.addOns?.individualSocial}/mo` : null,
+  'social-pricing-sub': (config.pricing?.individualSocialAddon !== undefined && config.pricing?.socialBundleAddon !== undefined) ? `$${config.pricing.individualSocialAddon} each OR 5-Channel Bundle for $${config.pricing.socialBundleAddon}/mo` : null,
+  'price-addon-spotlight': spotVal !== undefined ? `$${spotVal}/mo` : null,
+  'price-addon-urgent': urgVal !== undefined ? `$${urgVal}/mo` : null,
+  'price-addon-inmail': inmailVal !== undefined ? `$${inmailVal}/mo` : null,
+  'price-addon-verified': verVal !== undefined ? `$${verVal}/mo` : null
 };
 
 

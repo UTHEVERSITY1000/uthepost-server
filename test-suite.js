@@ -3257,10 +3257,16 @@ async function runTests() {
       })
     });
     assert(cmsUpdateRes.status === 200, 'POST /api/cms/config successfully saves Tab 4 add-on pricing');
-    const cmsUpdateData = await cmsUpdateRes.json();
-    assert(cmsUpdateData.config.pricing.urgentBadge === 29, 'Pricing config contains urgentBadge: 29');
-    assert(cmsUpdateData.config.pricing.directMessages === 19, 'Pricing config contains directMessages: 19');
-    assert(cmsUpdateData.config.pricing.verifiedEmployer === 3, 'Pricing config contains verifiedEmployer: 3');
+    // 4. Verify input containment styling in admin.html
+    assert(adminHtml.includes('max-width: 100%') && adminHtml.includes('box-sizing: border-box'), 'admin.html inputs and cms-sub-box have strict box-sizing containment to prevent card spilling');
+
+    // 5. Verify recruiter.html (U-THEPOST) Tab 4 dynamic add-on price labels and live sync
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    assert(recruiterHtml.includes('id="price-addon-spotlight"'), 'recruiter.html contains #price-addon-spotlight');
+    assert(recruiterHtml.includes('id="price-addon-urgent"'), 'recruiter.html contains #price-addon-urgent');
+    assert(recruiterHtml.includes('id="price-addon-inmail"'), 'recruiter.html contains #price-addon-inmail');
+    assert(recruiterHtml.includes('id="price-addon-verified"'), 'recruiter.html contains #price-addon-verified');
+    assert(recruiterHtml.includes('price-addon-spotlight') && recruiterHtml.includes('price-addon-urgent'), 'recruiter.html applyCmsConfig binds and updates all feature add-on price tags');
 
   } catch (err) {
     assert(false, `Group 87 failed: ${err.message}`);

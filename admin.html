@@ -519,6 +519,9 @@
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
     }
 
     label {
@@ -527,6 +530,7 @@
       color: var(--text-muted);
       letter-spacing: 0.6px;
       text-transform: uppercase;
+      word-break: break-word;
     }
 
     input, select, textarea {
@@ -540,6 +544,9 @@
       font-weight: 500;
       outline: none;
       height: 32px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
       transition: all 0.15s ease;
     }
 
@@ -558,6 +565,9 @@
       flex-direction: column;
       gap: 0.85rem;
       box-shadow: var(--shadow-sm);
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
     }
 
     .section-header-compact {
@@ -584,6 +594,11 @@
       display: flex;
       flex-direction: column;
       gap: 0.65rem;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow: hidden;
     }
 
     .cms-sub-box-title {
@@ -1834,6 +1849,9 @@
         loadAdminData();
       } else if (tabKey === 'security') {
         checkSmtpStatus();
+      } else if (tabKey === 'cms' || tabKey === 'plans') {
+        if (cmsConfig) populateCmsForm(cmsConfig);
+        else loadAdminData();
       }
     };
 
@@ -1962,6 +1980,7 @@
         }).then(r => r.json());
         if (cms.config) {
           cmsConfig = cms.config;
+          try { localStorage.setItem('uthe_cms_config', JSON.stringify(cms.config)); } catch (e) {}
           populateCmsForm(cms.config);
         }
       } catch (e) {}
@@ -2024,25 +2043,31 @@
         if (j.profileTabName && document.getElementById('cms-jobs-profile-tab')) document.getElementById('cms-jobs-profile-tab').value = j.profileTabName;
       }
 
-      if (config.pricing) {
-        if (config.pricing.palMonthly !== undefined && document.getElementById('cms-price-pal')) document.getElementById('cms-price-pal').value = config.pricing.palMonthly;
-        if (config.pricing.starterMonthly && document.getElementById('cms-price-starter')) document.getElementById('cms-price-starter').value = config.pricing.starterMonthly;
-        if (config.pricing.growthMonthly && document.getElementById('cms-price-growth')) document.getElementById('cms-price-growth').value = config.pricing.growthMonthly;
-        if (config.pricing.proMonthly && document.getElementById('cms-price-pro')) document.getElementById('cms-price-pro').value = config.pricing.proMonthly;
-        if (config.pricing.individualSocialAddon && document.getElementById('cms-price-social-single')) document.getElementById('cms-price-social-single').value = config.pricing.individualSocialAddon;
-        if (config.pricing.socialBundleAddon && document.getElementById('cms-price-social-bundle')) document.getElementById('cms-price-social-bundle').value = config.pricing.socialBundleAddon;
-        if ((config.pricing.spotlightPrice || (config.addOns && config.addOns.topSpotlight)) && document.getElementById('cms-price-spotlight')) {
-          document.getElementById('cms-price-spotlight').value = config.pricing.spotlightPrice || config.addOns.topSpotlight;
-        }
-        if ((config.pricing.urgentBadge || (config.addOns && config.addOns.urgentBadge)) && document.getElementById('cms-price-urgent')) {
-          document.getElementById('cms-price-urgent').value = config.pricing.urgentBadge || config.addOns.urgentBadge || 29;
-        }
-        if ((config.pricing.directMessages || (config.addOns && config.addOns.directMessages)) && document.getElementById('cms-price-direct-msgs')) {
-          document.getElementById('cms-price-direct-msgs').value = config.pricing.directMessages || config.addOns.directMessages || 19;
-        }
-        if ((config.pricing.verifiedEmployer || (config.addOns && config.addOns.verifiedEmployer)) && document.getElementById('cms-price-verified-shield')) {
-          document.getElementById('cms-price-verified-shield').value = config.pricing.verifiedEmployer || config.addOns.verifiedEmployer || 3;
-        }
+      if (config.pricing || config.addOns) {
+        const pr = config.pricing || {};
+        const ad = config.addOns || {};
+        if (pr.palMonthly !== undefined && document.getElementById('cms-price-pal')) document.getElementById('cms-price-pal').value = pr.palMonthly;
+        if (pr.starterMonthly !== undefined && document.getElementById('cms-price-starter')) document.getElementById('cms-price-starter').value = pr.starterMonthly;
+        if (pr.growthMonthly !== undefined && document.getElementById('cms-price-growth')) document.getElementById('cms-price-growth').value = pr.growthMonthly;
+        if (pr.proMonthly !== undefined && document.getElementById('cms-price-pro')) document.getElementById('cms-price-pro').value = pr.proMonthly;
+        
+        const socSingle = pr.individualSocialAddon !== undefined ? pr.individualSocialAddon : ad.individualSocial;
+        if (socSingle !== undefined && document.getElementById('cms-price-social-single')) document.getElementById('cms-price-social-single').value = socSingle;
+
+        const socBundle = pr.socialBundleAddon !== undefined ? pr.socialBundleAddon : ad.socialBundle5;
+        if (socBundle !== undefined && document.getElementById('cms-price-social-bundle')) document.getElementById('cms-price-social-bundle').value = socBundle;
+
+        const spotVal = pr.spotlightPrice !== undefined ? pr.spotlightPrice : (pr.topSpotlight !== undefined ? pr.topSpotlight : ad.topSpotlight);
+        if (spotVal !== undefined && document.getElementById('cms-price-spotlight')) document.getElementById('cms-price-spotlight').value = spotVal;
+
+        const urgVal = pr.urgentBadge !== undefined ? pr.urgentBadge : ad.urgentBadge;
+        if (urgVal !== undefined && document.getElementById('cms-price-urgent')) document.getElementById('cms-price-urgent').value = urgVal;
+
+        const dmVal = pr.directMessages !== undefined ? pr.directMessages : ad.directMessages;
+        if (dmVal !== undefined && document.getElementById('cms-price-direct-msgs')) document.getElementById('cms-price-direct-msgs').value = dmVal;
+
+        const verVal = pr.verifiedEmployer !== undefined ? pr.verifiedEmployer : ad.verifiedEmployer;
+        if (verVal !== undefined && document.getElementById('cms-price-verified-shield')) document.getElementById('cms-price-verified-shield').value = verVal;
       }
     }
 
@@ -2148,7 +2173,11 @@
         }
 
         const data = await res.json();
-        if (data.config) cmsConfig = data.config;
+        if (data.config) {
+          cmsConfig = data.config;
+          try { localStorage.setItem('uthe_cms_config', JSON.stringify(data.config)); } catch (e) {}
+          populateCmsForm(data.config);
+        }
 
         showCustomModalAlert('Zero-Code CMS Broadcast Complete', 'All label, button, and pricing overrides were saved and broadcast live across all subdomains.');
       } catch (e) {
