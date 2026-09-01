@@ -2065,13 +2065,18 @@
 
     // 1. NOTIFICATIONS ALERT & EXECUTIVE RECRUITER MESSAGE DRAWER
     window.openMessageDrawer = function(applicantId) {
-      if (applicantId) currentApplicantId = applicantId;
+      if (applicantId) {
+        currentApplicantId = applicantId;
+        activeThreadId = applicantId;
+      }
       const drawer = document.getElementById('messageDrawer') || document.getElementById('candidate-messages-modal');
       if (drawer) drawer.style.display = 'flex';
       unreadCount = 0;
       const badge = document.getElementById('notif-badge-count');
       if (badge) badge.style.display = 'none';
-      if (typeof fetchMessages === 'function') fetchMessages(currentApplicantId);
+      if (typeof fetchMessages === 'function') {
+        fetchMessages(applicantId || currentApplicantId || activeThreadId);
+      }
     };
     window.openCandidateMessageDrawer = window.openMessageDrawer;
     function openCandidateMessageDrawer(applicantId) {
@@ -2664,14 +2669,33 @@
     };
 
     window.switchActiveThread = function(threadId) {
-      if (!candidateThreads[threadId]) return;
-      activeThreadId = threadId;
-      currentApplicantId = threadId;
+      const keys = Object.keys(candidateThreads);
+      if (keys.length === 0) {
+        activeThreadId = null;
+        currentApplicantId = null;
+        const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
+        if (container) container.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.8rem; padding:40px;">No active recruiter conversations.</div>';
+        const titleEl = document.getElementById('activeRecruiterTitle');
+        if (titleEl) titleEl.textContent = 'NO CONVERSATIONS';
+        renderRecruiterCards();
+        return;
+      }
 
-      const thread = candidateThreads[threadId];
+      const validThreadId = (threadId && candidateThreads[threadId]) 
+        ? threadId 
+        : ((activeThreadId && candidateThreads[activeThreadId]) ? activeThreadId : keys[0]);
+
+      activeThreadId = validThreadId;
+      currentApplicantId = validThreadId;
+
+      const thread = candidateThreads[validThreadId];
+      if (!thread) return;
+
       const titleEl = document.getElementById('activeRecruiterTitle') || document.getElementById('cms-jobs-msg-header');
       if (titleEl) {
-        titleEl.innerHTML = `${thread.company.toUpperCase()} — ${thread.recruiterName.toUpperCase()}`;
+        const compDisplay = (thread.company || 'UTHEVERSITY').toUpperCase();
+        const recDisplay = (thread.recruiterName || 'HIRING TEAM').toUpperCase();
+        titleEl.textContent = `${compDisplay} — ${recDisplay}`;
       }
 
       // Re-render recruiter cards to update active highlight
@@ -2681,27 +2705,34 @@
       const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
       if (container) {
         container.innerHTML = '';
-        const messages = (thread.messages && thread.messages.length > 0) ? thread.messages : [
+        const initialText = thread.initialMessage || `Thank you for your application and resume for "${thread.jobTitle || 'the position'}". Our hiring team has received your submission and will review your qualifications shortly.`;
+        const initialRecruiterName = thread.recruiterName || `${thread.company || 'Hiring Team'} (Recruiter)`;
+
+        let messages = (thread.messages && thread.messages.length > 0) ? thread.messages : [
           {
             applicantId: thread.id,
             senderRole: 'recruiter',
-            senderName: `${thread.recruiterName} (Recruiter)`,
-            text: thread.initialMessage || `Hello! We reviewed your profile and resume for the ${thread.jobTitle} position. Excited to connect!`,
-            timestamp: new Date().toISOString()
+            senderName: initialRecruiterName.includes('(Recruiter)') ? initialRecruiterName : `${initialRecruiterName} (Recruiter)`,
+            text: initialText,
+            timestamp: thread.appliedDate || new Date().toISOString()
           }
         ];
 
+        thread.messages = messages;
+
         messages.forEach(m => {
-          const isRecruiter = m.senderRole === 'recruiter';
+          const isRecruiter = m.senderRole === 'recruiter' || m.senderRole === 'employer' || m.senderRole === 'admin';
           const bubble = document.createElement('div');
           bubble.className = isRecruiter ? 'chat-bubble-recruiter' : 'chat-bubble-candidate';
+          const senderLabel = isRecruiter ? (m.senderName || `${thread.recruiterName || thread.company || 'Recruiter'} (Recruiter)`) : (m.senderName || 'You (Candidate)');
+          const timeStr = m.timestamp ? new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just Now';
           bubble.innerHTML = `
             <div style="font-size:0.75rem; font-weight:800; margin-bottom:0.25rem; color:#D4AF37;">
-              ${isRecruiter ? (m.senderName || `${thread.recruiterName} (Recruiter)`) : (m.senderName || 'You (Candidate)')}
+              ${senderLabel}
             </div>
-            ${m.text}
+            <div style="line-height:1.5;">${m.text}</div>
             <div style="font-size:0.65rem; color:${isRecruiter ? '#64748b' : '#94a3b8'}; margin-top:0.35rem; text-align:right;">
-              ${new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              ${timeStr}
             </div>
           `;
           container.appendChild(bubble);
@@ -2711,7 +2742,7 @@
 
       const input = document.getElementById('recruiterReplyInput') || document.getElementById('cand-reply-input');
       if (input) {
-        input.placeholder = `Type your response to ${thread.company}...`;
+        input.placeholder = `Type your response to ${thread.company || 'Employer'}...`;
       }
     };
 
@@ -2722,7 +2753,7 @@
         return showCustomModalAlert('Empty Message', 'Please enter a reply or choose a quick response tag.');
       }
 
-      const activeAppId = activeThreadId || currentApplicantId || 'APP-701';
+      const activeAppId = activeThreadId || currentApplicantId || Object.keys(candidateThreads)[0] || 'APP-701';
       const activeThread = candidateThreads[activeAppId] || { company: 'Quantum Retail Corp', jobTitle: 'Sales Manager', recruiterName: 'Recruiter' };
 
       const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
@@ -2731,7 +2762,7 @@
         bubble.className = 'chat-bubble-candidate';
         bubble.innerHTML = `
           <div style="font-size:0.75rem; font-weight:800; margin-bottom:0.25rem; color:#D4AF37;">You (Candidate)</div>
-          ${text}
+          <div style="line-height:1.5;">${text}</div>
           <div style="font-size:0.65rem; color:#94a3b8; margin-top:0.35rem; text-align:right;">Just Now</div>
         `;
         container.appendChild(bubble);
@@ -2791,7 +2822,7 @@
 
         candidateThreads = {};
 
-        // Initialize candidateThreads with saved applications from localStorage first
+        // 1. Initialize candidateThreads with saved applications from localStorage first
         try {
           const savedApps = JSON.parse(localStorage.getItem('uthe_candidate_applications') || '[]');
           savedApps.forEach(sa => {
@@ -2804,7 +2835,7 @@
           });
         } catch (e) {}
 
-        // Add default recruiters if not already present and not deleted
+        // 2. Add default recruiters if not already present and not deleted
         Object.keys(DEFAULT_RECRUITERS).forEach(k => {
           if (!candidateThreads[k] && !activeDeletedIds.includes(k)) {
             const def = DEFAULT_RECRUITERS[k];
@@ -2819,8 +2850,17 @@
           }
         });
 
-        // Fetch live server messages
-        const targetId = preferredApplicantId || currentApplicantId || activeThreadId || Object.keys(candidateThreads)[0] || 'APP-701';
+        // 3. Determine targetId strictly from available valid candidate threads
+        const availableKeys = Object.keys(candidateThreads);
+        let targetId = (preferredApplicantId && candidateThreads[preferredApplicantId]) 
+          ? preferredApplicantId 
+          : ((currentApplicantId && candidateThreads[currentApplicantId])
+          ? currentApplicantId
+          : ((activeThreadId && candidateThreads[activeThreadId])
+          ? activeThreadId
+          : (availableKeys.length > 0 ? availableKeys[0] : null)));
+
+        // 4. Fetch live server messages
         let rawList = [];
         try {
           const queryUrl = targetId ? `/api/messages?applicantId=${encodeURIComponent(targetId)}` : '/api/messages';
@@ -2831,10 +2871,10 @@
           }
         } catch (err) {}
 
-        // Group incoming messages by company or applicantId (excluding deleted threads)
+        // 5. Group incoming messages by company or applicantId (excluding deleted threads)
         rawList.forEach(m => {
           const key = m.applicantId || (m.company ? `APP-${m.company.replace(/\s+/g, '')}` : targetId);
-          if (activeDeletedIds.includes(key)) return;
+          if (!key || activeDeletedIds.includes(key)) return;
           if (!candidateThreads[key]) {
             candidateThreads[key] = {
               id: key,
@@ -2849,30 +2889,11 @@
             candidateThreads[key].messages.push(m);
           }
         });
-
-        if (targetId && !candidateThreads[targetId] && !activeDeletedIds.includes(targetId)) {
-          candidateThreads[targetId] = {
-            id: targetId,
-            company: 'Quantum Retail Corp',
-            recruiterName: 'Quantum Talent Acquisition',
-            jobTitle: 'Sales Manager',
-            messages: (localThreadMessages[targetId] && localThreadMessages[targetId].length > 0) ? localThreadMessages[targetId] : [
-              {
-                applicantId: targetId,
-                senderRole: 'recruiter',
-                senderName: 'Quantum Talent Acquisition (Recruiter)',
-                text: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
-                timestamp: new Date().toISOString()
-              }
-            ]
-          };
-        }
-
         renderRecruiterCards();
         switchActiveThread(targetId);
       } catch (e) {
         renderRecruiterCards();
-        switchActiveThread(preferredApplicantId || Object.keys(candidateThreads)[0] || 'APP-701');
+        switchActiveThread(preferredApplicantId || Object.keys(candidateThreads)[0] || null);
       }
     }
 
