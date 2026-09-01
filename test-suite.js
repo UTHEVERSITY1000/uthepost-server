@@ -2900,8 +2900,10 @@ async function runTests() {
     assert(recruiterHtml.includes('id="btn-recruiter-notif"') && recruiterHtml.includes('id="recruiter-notif-badge"'), 'recruiter.html defines #btn-recruiter-notif and #recruiter-notif-badge');
     assert(recruiterHtml.includes('openRecruiterMessagesDrawer'), 'recruiter.html binds notifications bell to openRecruiterMessagesDrawer');
 
-    // 2. Logo reset on logout
+    // 2. Logo reset on logout & removal of EDIT LOGO text
     assert(recruiterHtml.includes('resetCompanyLogo') && recruiterHtml.includes("localStorage.removeItem('uthe_employer_logo'"), 'recruiter.html implements resetCompanyLogo and clears uthe_employer_logo on logout');
+    assert(!recruiterHtml.includes("'EDIT LOGO'") && !recruiterHtml.includes('"EDIT LOGO"'), 'recruiter.html completely removes EDIT LOGO text');
+    assert(recruiterHtml.includes('UPLOAD LOGO'), 'recruiter.html displays UPLOAD LOGO text');
 
     // 3. Candidate card trash bin and date/time
     assert(recruiterHtml.includes('btn-card-trash') && recruiterHtml.includes('cand-applied-date'), 'recruiter.html includes trash bin button and application date on candidate cards');

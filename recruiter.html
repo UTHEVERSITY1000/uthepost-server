@@ -5007,7 +5007,7 @@ white-space: nowrap !important;
 <!-- LIVE LOGO OWNERSHIP COMPONENT -->
 <div class="employer-logo-badge" id="employer-logo-badge" onclick="openLogoUploadModal()" data-tooltip="Upload or change your company logo badge">
 <img id="employer-logo-img" class="employer-logo-preview-img" alt="Employer Logo">
-<span class="employer-logo-text" id="employer-logo-text">+ UPLOAD LOGO</span>
+<span class="employer-logo-text" id="employer-logo-text">UPLOAD LOGO</span>
 </div>
 
 </div>
@@ -7915,22 +7915,18 @@ showCustomModalAlert('Company Logo Updated', 'Your high-resolution company badge
 
 
 function setLogoImage(src) {
-
-const img = document.getElementById('employer-logo-img');
-
-const text = document.getElementById('employer-logo-text');
-
-img.src = src;
-
-img.style.display = 'block';
-
-text.textContent = 'EDIT LOGO';
-
-try { localStorage.setItem('uthe_employer_logo', src); } catch (e) {}
-
+  const img = document.getElementById('employer-logo-img');
+  const text = document.getElementById('employer-logo-text');
+  if (img) {
+    img.src = src;
+    img.style.display = 'block';
+  }
+  if (text) {
+    text.textContent = '';
+    text.style.display = 'none';
+  }
+  try { localStorage.setItem('uthe_employer_logo', src); } catch (e) {}
 }
-
-
 
 function loadSavedLogo() {
   try {
@@ -7950,7 +7946,8 @@ window.resetCompanyLogo = function() {
     img.style.display = 'none';
   }
   if (text) {
-    text.textContent = '+ UPLOAD LOGO';
+    text.textContent = 'UPLOAD LOGO';
+    text.style.display = 'inline';
   }
   const logoInput = document.getElementById('logo-url-input');
   if (logoInput) logoInput.value = '';
