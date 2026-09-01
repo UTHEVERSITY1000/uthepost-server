@@ -3571,6 +3571,27 @@ async function runTests() {
     assert(false, `Group 96 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 97: U-THEPOST DESKTOP 12PX SIZING FOR MENU TABS & ACTION BUTTONS/ICONS
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 97: U-THEPOST DESKTOP 12PX SIZING ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. UI Menu Navigation Tabs 12px Font Size on Desktop
+    assert(recruiterHtml.includes('font-size: 12px !important;') && recruiterHtml.includes('.nav-tab-btn, .portal-navigation button, nav.header-center-tabs button'), 'recruiter.html sets 12px font size for all desktop UI menu navigation tabs');
+
+    // 2. Top Deck Action Buttons & SVG Icons 12px Sizing
+    assert(recruiterHtml.includes('.btn-home-header svg') && recruiterHtml.includes('width: 12px !important;'), 'recruiter.html sets 12px width for home button SVG icon on desktop');
+    assert(recruiterHtml.includes('.btn-help-header svg') && recruiterHtml.includes('width: 12px !important;'), 'recruiter.html sets 12px width for blue ? help icon on desktop');
+    assert(recruiterHtml.includes('.btn-notif-header .notif-bell-svg') && recruiterHtml.includes('width: 12px !important;'), 'recruiter.html sets 12px width for notification bell icon on desktop');
+    assert(recruiterHtml.includes('.btn-auth-header') && recruiterHtml.includes('font-size: 12px !important;'), 'recruiter.html sets 12px font size for auth button on desktop');
+
+  } catch (err) {
+    assert(false, `Group 97 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

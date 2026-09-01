@@ -571,40 +571,6 @@ gap: 0.75rem;
   box-shadow: 0 2px 4px rgba(239, 68, 68, 0.4);
 }
 
-.btn-home-header {
-  background: rgba(254, 186, 39, 0.08) !important;
-  color: #FEBA27 !important;
-  border: 1.5px solid #FEBA27 !important;
-  height: 38px;
-  padding: 0 0.75rem;
-  border-radius: 6px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-decoration: none !important;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 8px rgba(254, 186, 39, 0.2);
-  flex-shrink: 0;
-  box-sizing: border-box;
-}
-
-.btn-home-header:hover,
-.btn-home-header:focus-visible {
-  background: #FEBA27 !important;
-  color: #0F172A !important;
-  box-shadow: 0 4px 14px rgba(254, 186, 39, 0.5) !important;
-  transform: translateY(-1px);
-}
-
-.btn-home-header svg {
-  stroke: currentColor !important;
-  flex-shrink: 0;
-}
-
 .btn-help-header {
   background-color: #0075FF !important;
   color: #FFFFFF !important;
@@ -4832,7 +4798,7 @@ display: none !important;
 
 
 
-/* 2. Stretch Navigation Buttons Proportionally Across Deck */
+/* 2. Stretch Navigation Buttons Proportionally Across Deck (12px Font Size on Desktop) */
 
 .nav-tab-btn, .portal-navigation button, nav.header-center-tabs button {
 
@@ -4842,7 +4808,7 @@ min-width: 0 !important;
 
 height: 32px !important;
 
-font-size: 0.65rem !important;
+font-size: 12px !important;
 
 font-weight: 800 !important;
 
@@ -4865,6 +4831,26 @@ text-overflow: ellipsis !important;
   min-width: 44px !important;
   padding: 0 0.65rem !important;
   overflow: visible !important;
+}
+
+/* Top Deck Action Buttons & Icons Shrunk to 12px (Desktop Only) */
+.btn-home-header {
+  font-size: 12px !important;
+}
+.btn-home-header svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+.btn-help-header svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+.btn-notif-header .notif-bell-svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+.btn-auth-header {
+  font-size: 12px !important;
 }
 
 
@@ -4941,7 +4927,7 @@ white-space: nowrap !important;
     <div class="header-actions">
       <!-- UTHEVERSITY HOME RETURN BUTTON -->
       <a href="https://utheversity.com" class="btn-home-header" id="btn-utheversity-home" data-tooltip="Exit Talent Network & Return to UTHEVERSITY Home Screen">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
         </svg>
@@ -4949,14 +4935,14 @@ white-space: nowrap !important;
       </a>
       <!-- BLUE ? ICON: HOW-TO GUIDE FOR U-THEPOST & U-THEJOBS (SNUGGED DIRECTLY NEXT TO NOTIFICATION BELL) -->
       <button class="btn-help-header" id="btn-help-guide" onclick="openHowToGuideModal()" data-tooltip="Platform Help & How-To Guide">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"></circle>
           <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
           <line x1="12" y1="17" x2="12.01" y2="17"></line>
         </svg>
       </button>
       <button class="btn-notif-header" id="btn-recruiter-notif" onclick="openRecruiterMessagesDrawer()" data-tooltip="Candidate Messages & Applications">
-        <svg class="notif-bell-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FEBA27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="notif-bell-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FEBA27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
         </svg>
@@ -7118,249 +7104,6 @@ VERIFIED EMPLOYER
 
 
 
-<!-- SIGNATURE COMPLETE HOW-TO GUIDE BOARD MODAL -->
-<div class="custom-modal-alert" id="how-to-guide-modal" style="display: none; z-index: 100000;">
-  <div class="custom-alert-card" style="width: 860px; max-width: 95vw; max-height: 88vh; text-align: left; gap: 0.85rem; display: flex; flex-direction: column; overflow: hidden; padding: 1.25rem;">
-    
-    <!-- MODAL HEADER -->
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--uthe-gold); padding-bottom: 0.6rem; flex-shrink: 0;">
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="background: #0075FF; color: #FFFFFF; font-size: 0.75rem; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">?</span>
-        <div style="font-size: 0.95rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 0.5px;">
-          HOW-TO GUIDE — U-THEPOST & U-THEJOBS
-        </div>
-      </div>
-      <button onclick="closeHowToGuideModal()" style="background: none; border: none; font-size: 1.1rem; color: #94A3B8; cursor: pointer; font-weight: 900; line-height: 1;">✕</button>
-    </div>
-
-    <!-- GUIDE NAVIGATION TABS -->
-    <div style="display: flex; gap: 0.4rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; flex-shrink: 0; flex-wrap: wrap;">
-      <button class="drawer-tab-btn active" id="guide-tab-btn-recruiter" onclick="switchGuideTab('recruiter')" style="flex: 1; min-width: 140px; text-align: center; height: 34px; font-size: 0.72rem; font-weight: 800;">
-        1. 🏢 U-THEPOST (EMPLOYERS)
-      </button>
-      <button class="drawer-tab-btn" id="guide-tab-btn-candidate" onclick="switchGuideTab('candidate')" style="flex: 1; min-width: 140px; text-align: center; height: 34px; font-size: 0.72rem; font-weight: 800;">
-        2. 💼 U-THEJOBS (CANDIDATES)
-      </button>
-      <button class="drawer-tab-btn" id="guide-tab-btn-addons" onclick="switchGuideTab('addons')" style="flex: 1; min-width: 140px; text-align: center; height: 34px; font-size: 0.72rem; font-weight: 800;">
-        3. ⭐ ADD-ONS, PLANS & SOCIALS
-      </button>
-    </div>
-
-    <!-- SCROLLABLE GUIDE BODY -->
-    <div id="guide-modal-content-area" style="flex: 1; overflow-y: auto; padding-right: 0.5rem; display: flex; flex-direction: column; gap: 1rem; font-size: 0.8rem; line-height: 1.5; color: #334155;">
-      
-      <!-- TAB 1: U-THEPOST (EMPLOYER PORTAL) -->
-      <div id="guide-view-recruiter" style="display: flex; flex-direction: column; gap: 1rem;">
-        
-        <div style="background: #F8FAFC; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h3 style="font-size: 0.85rem; font-weight: 900; color: #0F172A; margin-bottom: 0.25rem;">👋 Welcome to U-THEPOST!</h3>
-          <p>U-THEPOST is your all-in-one hiring clubhouse. It lets you create job openings, post them instantly to social media, and pick the best people to hire—all from one simple screen.</p>
-        </div>
-
-        <!-- TOP BAR EXPLAINED -->
-        <div style="border-left: 4px solid var(--uthe-gold); padding-left: 0.75rem;">
-          <h4 style="font-size: 0.82rem; font-weight: 900; color: #0F172A;">🔝 The Top Header (Deck)</h4>
-          <ul style="margin: 0.35rem 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: 0.3rem;">
-            <li><strong>+ UPLOAD LOGO:</strong> Click this to put your company picture or logo at the very top so candidates recognize your business.</li>
-            <li><strong>🔔 Bell Icon (Notifications):</strong> Whenever someone applies to your job or answers your message, this bell rings and shows a red badge.</li>
-            <li><strong>LOGIN / SIGN UP:</strong> Sign into your workspace. <em>Important:</em> Only official company emails (like <code>hiring@yourcompany.com</code>) can sign up. Free personal emails like Gmail or Yahoo are not allowed so that every employer stays verified.</li>
-            <li><strong>The 6 Tabs:</strong> Lets you hop between your Job Studio, Social Media CRM, Applicant Tracker, Plans, Profile, and Resume Search.</li>
-          </ul>
-        </div>
-
-        <!-- TAB 1: JOB STUDIO -->
-        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="font-size: 0.82rem; font-weight: 900; color: #D97706; display: flex; align-items: center; gap: 5px;">
-            <span>📝</span> TAB 1: 1. JOB STUDIO (Creating & Launching Jobs)
-          </h4>
-          <p style="margin-top: 0.3rem; font-style: italic; color: #64748B;">
-            <strong>Simple Example:</strong> Think of Job Studio like making a colorful flyer for a lemonade stand. You write what helper you need, how much you will pay them, and what cool perks they get!
-          </p>
-          
-          <div style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
-            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
-              <strong>Step 1: Fill in Card 1 (Job Description)</strong><br>
-              Type your Job Title (e.g. <em>Sales Manager</em>), Company Name, City/Location (or <em>Remote</em>), Pay Range (e.g. <em>$75,000 - $95,000</em>), and Job Type (Full-Time or Part-Time).
-            </div>
-            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
-              <strong>Step 2: Tap Perk Buttons</strong><br>
-              Tap any of the perk buttons (like <em>18 Days PTO</em>, <em>Full Health Insurance</em>, <em>401k Match</em>, <em>Free Lunch</em>) to instantly add them to your post.
-            </div>
-            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
-              <strong>Step 3: Choose Your Priority Badges</strong><br>
-              • <strong>URGENT HIRING BADGE:</strong> Puts a bright red rush badge on your post so candidates know you want to hire quickly.<br>
-              • <strong>⭐ TOP-OF-PAGE SPOTLIGHT:</strong> Pins your job at the very top of search results (like front-row seats) so candidates see you first.
-            </div>
-            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
-              <strong>Step 4: Check Card 2 (Live Preview) & Click PUBLISH LIVE</strong><br>
-              Card 2 shows you a live sneak peek of how candidates will see your job. Click the big gold <strong>"PUBLISH LIVE"</strong> button to launch it!
-            </div>
-            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
-              <strong>Card 3 (Active Listings Table):</strong><br>
-              Shows all your live jobs. Click <strong>PAUSE</strong> if you have enough applicants, or <strong>DELETE</strong> when the job is filled.
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB 2: OMNICHANNEL CRM -->
-        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="font-size: 0.82rem; font-weight: 900; color: #2563EB; display: flex; align-items: center; gap: 5px;">
-            <span>🌐</span> TAB 2: 2. OMNICHANNEL CRM (Social Media Sharing)
-          </h4>
-          <p style="margin-top: 0.3rem;">
-            Connect your company's social media accounts so you can blast job openings across the web in 1 click!
-          </p>
-          <ul style="margin: 0.35rem 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: 0.3rem;">
-            <li><strong>Social Media Links:</strong> Type your real handles or profile links for <em>LinkedIn</em>, <em>X (Twitter)</em>, <em>TikTok</em>, <em>Facebook</em>, and <em>Instagram</em>. Everything saves automatically so you never have to type it again!</li>
-            <li><strong>Channel Checkboxes:</strong> Check only the social networks you want to send your post to (like just LinkedIn and X), or check "Select All" to blast all 5 at once.</li>
-            <li><strong>🚀 1-CLICK SHARE LIVE:</strong> Opens ready-to-post windows directly on your chosen social networks.</li>
-            <li><strong>✏️ EDIT & RE-SHARE Button:</strong> External platforms like X or LinkedIn do not allow outside websites to change published text on their servers. If you need to make a correction, click "EDIT & RE-SHARE" to adjust your message and push the corrected post to your feed.</li>
-            <li><strong>↗ THREAD Button:</strong> Opens our signature card with authentic brand logos so you can visit any connected feed in a new tab.</li>
-          </ul>
-        </div>
-
-        <!-- TAB 3: APPLICANT TRACKER -->
-        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="font-size: 0.82rem; font-weight: 900; color: #059669; display: flex; align-items: center; gap: 5px;">
-            <span>👥</span> TAB 3: 3. APPLICANT TRACKER (Hiring Board & Messages)
-          </h4>
-          <p style="margin-top: 0.3rem; font-style: italic; color: #64748B;">
-            <strong>Simple Example:</strong> Imagine 4 toy boxes lined up: (1) New Letters, (2) Good Fits, (3) Talking on Phone, and (4) Hired! You can slide candidate cards from one box to the next as they pass each step.
-          </p>
-          <ul style="margin: 0.35rem 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: 0.3rem;">
-            <li><strong>The 4 Columns:</strong> <em>1. Applied ➔ 2. Screened ➔ 3. Interviewing ➔ 4. Offer / Hired</em>. Drag or tap candidate cards to move them.</li>
-            <li><strong>Viewing Resumes:</strong> Click on any candidate card to open their file. Click <strong>"📄 View Resume (.pdf)"</strong> to view their full resume in a new tab.</li>
-            <li><strong>Direct Messaging:</strong> Type directly in the chat box to message the candidate in real time.</li>
-            <li><strong>1-Click Templates:</strong> Tap <em>1. INTRO</em>, <em>2. INVITE</em>, or <em>3. INTEREST</em> to instantly fill out a polite message.</li>
-            <li><strong>📅 Propose Date & Time:</strong> Opens a calendar modal where you pick a meeting date and time. It automatically writes out the complete interview invitation for you!</li>
-            <li><strong>Trash / Delete:</strong> Select candidate cards using the checkbox and click the red trash button to remove applicants you don't need.</li>
-          </ul>
-        </div>
-
-        <!-- TAB 6: RESUME SEARCH -->
-        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="font-size: 0.82rem; font-weight: 900; color: #7C3AED; display: flex; align-items: center; gap: 5px;">
-            <span>🔍</span> TAB 6: 6. RESUME SEARCH (Scouting Verified Talent)
-          </h4>
-          <p style="margin-top: 0.3rem;">
-            Search verified candidates across the country. Type any skill, title (like <em>Chef</em> or <em>Sales</em>), or city. Click <strong>"⭐ SHORTLIST"</strong> to save top candidates to your favorites list.
-          </p>
-        </div>
-
-      </div>
-
-      <!-- TAB 2: U-THEJOBS (CANDIDATE CAREER BOARD) -->
-      <div id="guide-view-candidate" style="display: none; flex-direction: column; gap: 1rem;">
-        
-        <div style="background: #F8FAFC; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h3 style="font-size: 0.85rem; font-weight: 900; color: #0F172A; margin-bottom: 0.25rem;">💼 Welcome to U-THEJOBS!</h3>
-          <p>U-THEJOBS is the fast, verified career board for job seekers. You can search verified employers, apply in under 30 seconds with automatic PDF resume fill, and chat directly with hiring managers.</p>
-        </div>
-
-        <!-- HOW TO SEARCH -->
-        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="font-size: 0.82rem; font-weight: 900; color: #D97706;">🔎 How to Search & Find Jobs</h4>
-          <ul style="margin: 0.35rem 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: 0.3rem;">
-            <li><strong>Search Bar:</strong> Type any job title (e.g. <em>Sales Manager</em>), city, or skill to search active listings instantly.</li>
-            <li><strong>Work Commitment Filter:</strong> Choose <em>Full-Time</em>, <em>Part-Time</em>, <em>Contract</em>, or <em>Seasonal</em>.</li>
-            <li><strong>Location Filter:</strong> Choose <em>All Locations</em>, <em>Remote</em>, <em>Hybrid</em>, or <em>On-Site</em>.</li>
-            <li><strong>⭐ TOP SPOTLIGHT Jobs:</strong> Jobs with gold star badges are top-priority postings pinned at the very top of your search results.</li>
-          </ul>
-        </div>
-
-        <!-- HOW TO APPLY STEP BY STEP -->
-        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="font-size: 0.82rem; font-weight: 900; color: #059669;">⚡ How to Apply in 30 Seconds (Step-by-Step)</h4>
-          <div style="margin-top: 0.4rem; display: flex; flex-direction: column; gap: 0.4rem;">
-            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
-              <strong>Step 1: Pick a Job & Inspect Details</strong><br>
-              Click on any job card on the left. The right column shows the full pay, health benefits, PTO vacation days, 401(k) match, and daily responsibilities.
-            </div>
-            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
-              <strong>Step 2: Click QUICK SEND or SEND RESUME/CV</strong><br>
-              Click either button to open the clean application window.
-            </div>
-            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
-              <strong>Step 3: Upload Your PDF Resume (Auto-Fill Magic)</strong><br>
-              Click <strong>"CHOOSE RESUME (.PDF ONLY)"</strong>. Our automatic reader scans your PDF and automatically fills in your Full Name, Email Address, and Phone Number for you!
-            </div>
-            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
-              <strong>Step 4: Choose Best Time to Contact & Submit</strong><br>
-              Pick when you like to be called (Morning, Afternoon, Evening, Anytime), type a quick note, and click <strong>"SUBMIT INTERVIEW REQUEST"</strong>. Your application is sent straight to the hiring manager!
-            </div>
-          </div>
-        </div>
-
-        <!-- CANDIDATE INBOX -->
-        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="font-size: 0.82rem; font-weight: 900; color: #2563EB;">💬 Direct Recruiter Messages & Fast Replies</h4>
-          <p style="margin-top: 0.3rem;">
-            Click the <strong>🔔 Bell Icon</strong> at the top right to open your private conversation drawer. When an employer invites you for an interview, you can talk with them or use <strong>1-Click Quick Replies</strong> (like <em>"I'M INTERESTED — LET'S TALK"</em>) to answer with one tap!
-          </p>
-        </div>
-
-      </div>
-
-      <!-- TAB 3: ADD-ONS, PLANS & SOCIALS -->
-      <div id="guide-view-addons" style="display: none; flex-direction: column; gap: 1rem;">
-        
-        <div style="background: #F8FAFC; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h3 style="font-size: 0.85rem; font-weight: 900; color: #0F172A; margin-bottom: 0.25rem;">⭐ Membership Plans & Superpower Add-Ons</h3>
-          <p>Everything in U-THEPOST starts at $0. You only pay for what you choose to use!</p>
-        </div>
-
-        <!-- PLANS BREAKDOWN -->
-        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="font-size: 0.82rem; font-weight: 900; color: #D97706;">💳 Membership Tiers (Tab 4: Performance & Plans)</h4>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;">
-            <div style="border: 1px solid var(--border-color); padding: 0.6rem; border-radius: 6px;">
-              <strong>u-thePAL ($0 / Free)</strong><br>
-              <span style="font-size: 0.72rem; color: #64748B;">1 active job post via email distribution.</span>
-            </div>
-            <div style="border: 1px solid var(--border-color); padding: 0.6rem; border-radius: 6px;">
-              <strong>Starter ($99/mo)</strong><br>
-              <span style="font-size: 0.72rem; color: #64748B;">3 active jobs with standard board distribution.</span>
-            </div>
-            <div style="border: 1px solid var(--border-color); padding: 0.6rem; border-radius: 6px;">
-              <strong>Growth ($299/mo)</strong><br>
-              <span style="font-size: 0.72rem; color: #64748B;">10 active jobs, multi-channel outreach, and candidate search.</span>
-            </div>
-            <div style="border: 1px solid var(--border-color); padding: 0.6rem; border-radius: 6px;">
-              <strong>Pro ($699/mo)</strong><br>
-              <span style="font-size: 0.72rem; color: #64748B;">Unlimited job listings, priority support, and full talent network.</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ADD-ONS EXPLAINED -->
-        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="font-size: 0.82rem; font-weight: 900; color: #059669;">🚀 Superpower Add-Ons Explained</h4>
-          <ul style="margin: 0.35rem 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: 0.4rem;">
-            <li><strong>⭐ Top-of-Page Spotlight Placement ($49/mo):</strong> Pins your job at position #1 at the very top of candidate search results with a gold badge.</li>
-            <li><strong>🔥 Urgent Hiring Badge ($29/mo):</strong> Adds a bright red badge to rush applications when you need to hire immediately.</li>
-            <li><strong>💬 Direct Hiring Messages ($19/mo):</strong> Lets you message candidates directly in their private portal inbox.</li>
-            <li><strong>🛡️ Verified Employer Shield ($39/mo):</strong> Displays a gold verification shield next to your company name to build maximum candidate trust.</li>
-            <li><strong>🌐 Social Channel Add-Ons ($5.99 each or $19.99 for all 5):</strong> Connects LinkedIn, X, TikTok, Facebook, and Instagram for 1-click sharing.</li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- MODAL FOOTER -->
-    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 0.6rem; flex-shrink: 0;">
-      <div style="font-size: 0.7rem; color: var(--text-muted);">
-        💡 <em>Tip: You can open this guide anytime by clicking the Blue <strong>?</strong> icon at the top of your screen.</em>
-      </div>
-      <button class="btn-gold-action" onclick="closeHowToGuideModal()" style="height: 34px; padding: 0 1.25rem; font-size: 0.75rem; font-weight: 800;">
-        GOT IT, CLOSE GUIDE
-      </button>
-    </div>
-
-  </div>
-</div>
-
 <!-- LOGO UPLOAD MODAL -->
 
 <div class="modal-overlay" id="logo-modal">
@@ -7524,8 +7267,6 @@ SIGN IN TO WORKSPACE
 
 
 <!-- RECRUITER PLATFORM HOW-TO GUIDE & MANUAL MODAL (EMPLOYER EXCLUSIVE) -->
-<div class="modal-overlay" id="how-to-guide-modal" style="display: none;">
-  <div class="modal-card" style="max-width: 820px; max-height: 90vh; display: flex; flex-direction: column; padding: 1.5rem; background: #FFFFFF; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); border: 1.5px solid #0075FF;">
 <div class="modal-overlay" id="how-to-guide-modal" style="display: none; position: fixed; inset: 0; z-index: 100000; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 1rem;">
   <div class="modal-card" style="max-width: 820px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; padding: 1.5rem; background: #FFFFFF; border-radius: 12px; box-shadow: 0 25px 50px rgba(0,0,0,0.35); border: 2px solid #0075FF; position: relative;">
     
@@ -7701,7 +7442,7 @@ OK, GOT IT
 
 <footer class="platform-footer">
 
-<span>&copy; 2026 UTHEVERSITY Inc. — Professional Talent Network &bull; <a href="https://utheversity.com" class="footer-home-link" style="color: var(--uthe-gold); text-decoration: none; font-weight: 700;">Return to UTHEVERSITY Home Screen</a></span>
+<span>&copy; 2026 UTHEVERSITY Inc. — Professional Talent Network</span>
 
 </footer>
 
@@ -10031,7 +9772,6 @@ window.openHowToGuideModal = function() {
 
 window.closeHowToGuideModal = function() {
   const modal = document.getElementById('how-to-guide-modal');
-  if (modal) modal.style.display = 'none';
   if (modal) {
     modal.style.display = 'none';
   }
@@ -10297,12 +10037,6 @@ window.handleAuthSubmit = async function() {
   } else if (authMode === 'reset') {
     showCustomModalAlert('Reset Link Dispatched', `Password reset instructions sent to ${email}.`);
   }
-};
-
-closeModal('auth-modal');
-
-}
-
 };
 
 
