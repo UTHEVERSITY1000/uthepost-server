@@ -2716,27 +2716,29 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname === '/api/messages' && req.method === 'POST') {
     const user = getAuthenticatedUser(req);
-    if (!user) {
-      return sendJson(401, { error: 'Unauthorized: Authentication required to send messages.' });
-    }
 
     readBody((err, payload) => {
       if (err) return sendJson(400, { error: err.message });
-      const targetApplicantId = payload.applicantId || 'APP-701';
+      if (!user && (!payload || !payload.applicantId)) {
+        return sendJson(401, { error: 'Unauthorized: Authentication required to send messages.' });
+      }
+      const targetApplicantId = (payload && payload.applicantId) || 'APP-701';
+      const senderRole = (payload && payload.senderRole) || (user && user.role) || 'candidate';
+      const senderName = (payload && payload.senderName) || (user && user.name) || (senderRole === 'recruiter' ? 'Talent Acquisition' : 'Candidate');
       const newMsg = {
-        id: payload.id || `MSG-${Math.floor(1000 + Math.random() * 9000)}`,
+        id: (payload && payload.id) || `MSG-${Math.floor(1000 + Math.random() * 9000)}`,
         applicantId: targetApplicantId,
-        senderRole: payload.senderRole || user.role || 'candidate',
-        senderName: payload.senderName || user.name || (payload.senderRole === 'recruiter' ? 'Talent Acquisition' : 'Candidate'),
-        company: payload.company || user.company || 'Quantum Retail Corp',
-        jobTitle: payload.jobTitle || 'Career Opportunity',
-        text: payload.text || '',
+        senderRole: senderRole,
+        senderName: senderName,
+        company: (payload && payload.company) || (user && user.company) || 'Quantum Retail Corp',
+        jobTitle: (payload && payload.jobTitle) || 'Career Opportunity',
+        text: (payload && payload.text) || '',
         timestamp: new Date().toISOString()
       };
 
       globalMessageStore.push(newMsg);
       saveMessageRecord(newMsg);
-      writeSystemLog('MESSAGE_SENT', { messageId: newMsg.id, applicantId: newMsg.applicantId, senderRole: newMsg.senderRole, userId: user.id || user.userId });
+      writeSystemLog('MESSAGE_SENT', { messageId: newMsg.id, applicantId: newMsg.applicantId, senderRole: newMsg.senderRole, userId: (user && (user.id || user.userId)) || 'cand-anon' });
 
       const targetApp = applicantsStore.find(a => a.id === newMsg.applicantId);
       let recipientEmail = 'candidate@domain.com';

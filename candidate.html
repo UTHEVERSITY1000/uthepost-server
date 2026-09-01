@@ -2404,21 +2404,48 @@
         company: 'Quantum Retail Corp',
         recruiterName: 'Quantum Talent Acquisition',
         jobTitle: 'Sales Manager',
-        initialMessage: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.'
+        initialMessage: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
+        messages: [
+          {
+            applicantId: 'APP-701',
+            senderRole: 'recruiter',
+            senderName: 'Quantum Talent Acquisition (Recruiter)',
+            text: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
+            timestamp: new Date().toISOString()
+          }
+        ]
       },
       'APP-702': {
         id: 'APP-702',
         company: 'Apex Solutions Group',
         recruiterName: 'Apex Talent Acquisition',
         jobTitle: 'Assembly Line Worker',
-        initialMessage: 'Hi Marcus, your technical qualifications for our manufacturing opening look fantastic. When would be a great time for a brief screening?'
+        initialMessage: 'Hi Marcus, your technical qualifications for our manufacturing opening look fantastic. When would be a great time for a brief screening?',
+        messages: [
+          {
+            applicantId: 'APP-702',
+            senderRole: 'recruiter',
+            senderName: 'Apex Talent Acquisition (Recruiter)',
+            text: 'Hi Marcus, your technical qualifications for our manufacturing opening look fantastic. When would be a great time for a brief screening?',
+            timestamp: new Date().toISOString()
+          }
+        ]
       },
       'APP-703': {
         id: 'APP-703',
         company: 'Nordic Outfitters',
         recruiterName: 'Nordic HR Team',
         jobTitle: 'Retail Sales Associate',
-        initialMessage: 'Greetings Marcus, we received your application for Nordic Outfitters. We are actively interviewing candidates this week!'
+        initialMessage: 'Greetings Marcus, we received your application for Nordic Outfitters. We are actively interviewing candidates this week!',
+        messages: [
+          {
+            applicantId: 'APP-703',
+            senderRole: 'recruiter',
+            senderName: 'Nordic HR Team (Recruiter)',
+            text: 'Greetings Marcus, we received your application for Nordic Outfitters. We are actively interviewing candidates this week!',
+            timestamp: new Date().toISOString()
+          }
+        ]
       }
     };
     const deletedCandidateThreadIds = (function() {
@@ -2654,7 +2681,7 @@
       const container = document.getElementById('chatMessagesContainer') || document.getElementById('candidate-chat-log');
       if (container) {
         container.innerHTML = '';
-        const messages = thread.messages && thread.messages.length > 0 ? thread.messages : [
+        const messages = (thread.messages && thread.messages.length > 0) ? thread.messages : [
           {
             applicantId: thread.id,
             senderRole: 'recruiter',
@@ -2670,7 +2697,7 @@
           bubble.className = isRecruiter ? 'chat-bubble-recruiter' : 'chat-bubble-candidate';
           bubble.innerHTML = `
             <div style="font-size:0.75rem; font-weight:800; margin-bottom:0.25rem; color:#D4AF37;">
-              ${isRecruiter ? (m.senderName || `${thread.recruiterName} (Recruiter)`) : 'You (Candidate)'}
+              ${isRecruiter ? (m.senderName || `${thread.recruiterName} (Recruiter)`) : (m.senderName || 'You (Candidate)')}
             </div>
             ${m.text}
             <div style="font-size:0.65rem; color:${isRecruiter ? '#64748b' : '#94a3b8'}; margin-top:0.35rem; text-align:right;">
@@ -2712,10 +2739,13 @@
       }
       if (input) input.value = '';
 
+      const candidateName = (document.getElementById('prof-cand-name') && document.getElementById('prof-cand-name').value) || (document.getElementById('candidateNameInput') && document.getElementById('candidateNameInput').value) || 'Marcus Vance';
+
       const msgPayload = {
+        id: `MSG-${Math.floor(1000 + Math.random() * 9000)}`,
         applicantId: activeAppId,
         senderRole: 'candidate',
-        senderName: (document.getElementById('prof-cand-name') && document.getElementById('prof-cand-name').value) || (document.getElementById('candidateNameInput') && document.getElementById('candidateNameInput').value) || 'Marcus Vance',
+        senderName: candidateName,
         company: activeThread.company || 'Quantum Retail Corp',
         jobTitle: activeThread.jobTitle || 'Sales Manager',
         text: text,
@@ -2725,6 +2755,11 @@
       if (candidateThreads[activeAppId]) {
         if (!candidateThreads[activeAppId].messages) candidateThreads[activeAppId].messages = [];
         candidateThreads[activeAppId].messages.push(msgPayload);
+        try {
+          let localMsgs = JSON.parse(localStorage.getItem('uthe_candidate_thread_messages') || '{}');
+          localMsgs[activeAppId] = candidateThreads[activeAppId].messages;
+          localStorage.setItem('uthe_candidate_thread_messages', JSON.stringify(localMsgs));
+        } catch (e) {}
       }
 
       try {
@@ -2742,12 +2777,6 @@
 
     async function fetchMessages(preferredApplicantId) {
       try {
-        // Pass the candidate's active application ID or fetch all candidate messages
-        const res = await fetch('/api/messages');
-        const data = await res.json();
-        const rawList = data.messages || [];
-
-        // Filter out deleted candidate threads
         const activeDeletedIds = (function() {
           try {
             const saved = localStorage.getItem('uthe_candidate_deleted_threads');
@@ -2755,14 +2784,22 @@
           } catch (e) { return []; }
         })();
 
-        // Initialize candidateThreads with saved applications from localStorage first
+        let localThreadMessages = {};
+        try {
+          localThreadMessages = JSON.parse(localStorage.getItem('uthe_candidate_thread_messages') || '{}');
+        } catch (e) {}
+
         candidateThreads = {};
 
+        // Initialize candidateThreads with saved applications from localStorage first
         try {
           const savedApps = JSON.parse(localStorage.getItem('uthe_candidate_applications') || '[]');
           savedApps.forEach(sa => {
             if (sa && sa.id && !activeDeletedIds.includes(sa.id)) {
-              candidateThreads[sa.id] = sa;
+              candidateThreads[sa.id] = {
+                ...sa,
+                messages: (sa.messages && sa.messages.length > 0) ? sa.messages : (localThreadMessages[sa.id] || [])
+              };
             }
           });
         } catch (e) {}
@@ -2770,20 +2807,33 @@
         // Add default recruiters if not already present and not deleted
         Object.keys(DEFAULT_RECRUITERS).forEach(k => {
           if (!candidateThreads[k] && !activeDeletedIds.includes(k)) {
+            const def = DEFAULT_RECRUITERS[k];
             candidateThreads[k] = {
-              id: DEFAULT_RECRUITERS[k].id,
-              company: DEFAULT_RECRUITERS[k].company,
-              recruiterName: DEFAULT_RECRUITERS[k].recruiterName,
-              jobTitle: DEFAULT_RECRUITERS[k].jobTitle,
-              initialMessage: DEFAULT_RECRUITERS[k].initialMessage,
-              messages: []
+              id: def.id,
+              company: def.company,
+              recruiterName: def.recruiterName,
+              jobTitle: def.jobTitle,
+              initialMessage: def.initialMessage,
+              messages: (localThreadMessages[k] && localThreadMessages[k].length > 0) ? localThreadMessages[k] : [...(def.messages || [])]
             };
           }
         });
 
+        // Fetch live server messages
+        const targetId = preferredApplicantId || currentApplicantId || activeThreadId || Object.keys(candidateThreads)[0] || 'APP-701';
+        let rawList = [];
+        try {
+          const queryUrl = targetId ? `/api/messages?applicantId=${encodeURIComponent(targetId)}` : '/api/messages';
+          const res = await fetch(queryUrl);
+          if (res.ok) {
+            const data = await res.json();
+            rawList = data.messages || [];
+          }
+        } catch (err) {}
+
         // Group incoming messages by company or applicantId (excluding deleted threads)
         rawList.forEach(m => {
-          const key = m.applicantId || (m.company ? `APP-${m.company.replace(/\s+/g, '')}` : 'APP-701');
+          const key = m.applicantId || (m.company ? `APP-${m.company.replace(/\s+/g, '')}` : targetId);
           if (activeDeletedIds.includes(key)) return;
           if (!candidateThreads[key]) {
             candidateThreads[key] = {
@@ -2794,34 +2844,33 @@
               messages: []
             };
           }
-          candidateThreads[key].messages.push(m);
+          if (!candidateThreads[key].messages) candidateThreads[key].messages = [];
+          if (!candidateThreads[key].messages.some(msg => msg.id && msg.id === m.id)) {
+            candidateThreads[key].messages.push(m);
+          }
         });
 
-        const targetId = preferredApplicantId || currentApplicantId || activeThreadId || Object.keys(candidateThreads)[0] || null;
         if (targetId && !candidateThreads[targetId] && !activeDeletedIds.includes(targetId)) {
           candidateThreads[targetId] = {
             id: targetId,
             company: 'Quantum Retail Corp',
             recruiterName: 'Quantum Talent Acquisition',
             jobTitle: 'Sales Manager',
-            messages: []
+            messages: (localThreadMessages[targetId] && localThreadMessages[targetId].length > 0) ? localThreadMessages[targetId] : [
+              {
+                applicantId: targetId,
+                senderRole: 'recruiter',
+                senderName: 'Quantum Talent Acquisition (Recruiter)',
+                text: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
+                timestamp: new Date().toISOString()
+              }
+            ]
           };
         }
 
         renderRecruiterCards();
         switchActiveThread(targetId);
       } catch (e) {
-        candidateThreads = {};
-        try {
-          const savedApps = JSON.parse(localStorage.getItem('uthe_candidate_applications') || '[]');
-          savedApps.forEach(sa => { if (sa && sa.id) candidateThreads[sa.id] = sa; });
-        } catch (err) {}
-        Object.keys(DEFAULT_RECRUITERS).forEach(k => {
-          if (!candidateThreads[k]) {
-            candidateThreads[k] = JSON.parse(JSON.stringify(DEFAULT_RECRUITERS[k]));
-            candidateThreads[k].messages = [];
-          }
-        });
         renderRecruiterCards();
         switchActiveThread(preferredApplicantId || Object.keys(candidateThreads)[0] || 'APP-701');
       }

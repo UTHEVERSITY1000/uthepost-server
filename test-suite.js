@@ -3165,6 +3165,46 @@ async function runTests() {
     assert(false, `Group 85 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 86: CANDIDATE CONVERSATION THREAD RESTORATION & PERSISTENCE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 86: CANDIDATE CONVERSATION THREAD RESTORATION & PERSISTENCE ---');
+
+    // 1. Verify DEFAULT_RECRUITERS has pre-loaded conversation thread messages
+    assert(candContent.includes('Quantum Talent Acquisition (Recruiter)'), 'candidate.html pre-seeds recruiter initial conversation thread messages');
+    assert(candContent.includes('Apex Talent Acquisition (Recruiter)'), 'candidate.html pre-seeds Apex recruiter initial conversation thread');
+    assert(candContent.includes('Nordic HR Team (Recruiter)'), 'candidate.html pre-seeds Nordic recruiter initial conversation thread');
+
+    // 2. Verify localStorage thread message persistence
+    assert(candContent.includes('uthe_candidate_thread_messages'), 'candidate.html supports permanent thread message storage in localStorage');
+
+    // 3. Verify server.js permits candidate direct message sending
+    const candMsgRes = await fetch(`${BASE_URL}/api/messages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        applicantId: 'APP-701',
+        senderRole: 'candidate',
+        senderName: 'Marcus Vance',
+        company: 'Quantum Retail Corp',
+        jobTitle: 'Sales Manager',
+        text: 'I am excited to speak with your hiring team regarding this position.'
+      })
+    });
+    assert(candMsgRes.status === 201 || candMsgRes.status === 200, 'POST /api/messages permits candidate direct response without session blocking');
+
+    // 4. Verify candidate chat stream querying with applicantId
+    const candGetRes = await fetch(`${BASE_URL}/api/messages?applicantId=APP-701`);
+    assert(candGetRes.status === 200, 'GET /api/messages?applicantId=APP-701 returns HTTP 200 with candidate conversation thread');
+    const candGetData = await candGetRes.json();
+    assert(Array.isArray(candGetData.messages) && candGetData.messages.length > 0, 'Candidate conversation thread contains message stream');
+    assert(candGetData.messages.some(m => m.text.includes('excited to speak with your hiring team')), 'Dispatched candidate message is present in thread');
+
+  } catch (err) {
+    assert(false, `Group 86 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
