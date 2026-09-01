@@ -3338,6 +3338,35 @@ async function runTests() {
     assert(false, `Group 90 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 91: GRANULAR CHANNEL SELECTION, CRM AUTO-SAVE & THREAD PICKER MODAL
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 91: GRANULAR CHANNEL SELECTION, CRM AUTO-SAVE & THREAD PICKER MODAL ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Verify individual channel checkboxes and select all
+    assert(recruiterHtml.includes('id="chk-social-linkedin"') && recruiterHtml.includes('id="chk-social-x"'), 'recruiter.html contains #chk-social-linkedin and #chk-social-x');
+    assert(recruiterHtml.includes('id="chk-social-tiktok"') && recruiterHtml.includes('id="chk-social-facebook"') && recruiterHtml.includes('id="chk-social-instagram"'), 'recruiter.html contains TikTok, Facebook, and Instagram channel checkboxes');
+    assert(recruiterHtml.includes('id="chk-select-all-socials"'), 'recruiter.html defines #chk-select-all-socials toggle');
+
+    // 2. Verify auto-save & restore logic
+    assert(recruiterHtml.includes('saveCrmSettings') && recruiterHtml.includes('restoreCrmSavedState'), 'recruiter.html implements saveCrmSettings and restoreCrmSavedState');
+    assert(recruiterHtml.includes('restoreCrmSavedState()'), 'recruiter.html invokes restoreCrmSavedState on DOMContentLoaded');
+
+    // 3. Verify getSelectedSocialChannels and multi-platform 1-click dispatch
+    assert(recruiterHtml.includes('getSelectedSocialChannels'), 'recruiter.html implements getSelectedSocialChannels');
+    assert(recruiterHtml.includes('selectedChannels.forEach'), 'broadcastToConnectedChannels iterates and dispatches exclusively to selected channels');
+
+    // 4. Verify Live Connected Social Thread Picker Modal
+    assert(recruiterHtml.includes('id="social-thread-picker-modal"'), 'recruiter.html includes #social-thread-picker-modal signature modal');
+    assert(recruiterHtml.includes('openLiveSocialThread') && recruiterHtml.includes('openAllConnectedSocialThreads'), 'recruiter.html implements openLiveSocialThread and openAllConnectedSocialThreads');
+
+  } catch (err) {
+    assert(false, `Group 91 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

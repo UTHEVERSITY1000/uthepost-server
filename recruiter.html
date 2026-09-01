@@ -5210,54 +5210,72 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <div class="section-card standalone-social-belt" id="standalone-social-section" style="margin-bottom: 0.75rem;">
 
-<div class="cms-sub-box-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+<div class="cms-sub-box-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 6px;">
 
-<span data-cms-key="post-social-header">LINK SOCIAL MEDIA ACCOUNTS</span>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span data-cms-key="post-social-header">LINK SOCIAL MEDIA ACCOUNTS</span>
+    <span class="badge-tag tag-mint" style="font-size: 0.55rem;">CONNECTED SYNC</span>
+  </div>
 
-<span class="badge-tag tag-mint" style="font-size: 0.55rem;">CONNECTED SYNC</span>
+  <div style="display: flex; align-items: center; gap: 6px;">
+    <label style="display: flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 800; color: var(--uthe-charcoal); cursor: pointer; margin: 0;">
+      <input type="checkbox" id="chk-select-all-socials" checked onchange="toggleSelectAllSocialChannels(this.checked)" style="width: 13px; height: 13px; min-height: 13px; accent-color: var(--uthe-gold); cursor: pointer; margin: 0;">
+      Select All Channels
+    </label>
+  </div>
 
 </div>
 
 <div style="display: flex; overflow-x: auto; gap: 0.5rem; padding-bottom: 0.25rem; -webkit-overflow-scrolling: touch;">
 
 <div class="form-group" style="min-width: 180px; flex: 1;">
-
-<label>LinkedIn</label>
-
-<input type="text" id="social-linkedin" data-cms-key="post-linkedin-ph" placeholder="https://linkedin.com/company/..." value="https://linkedin.com/company/quantumretail" oninput="updateLivePreview()" data-tooltip="LinkedIn company URL">
-
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+    <label style="margin: 0; display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.72rem; font-weight: 800;">
+      <input type="checkbox" class="social-channel-chk" id="chk-social-linkedin" checked onchange="saveCrmSettings(); updateSocialSelectAllState();" style="width: 12px; height: 12px; accent-color: var(--uthe-gold); cursor: pointer;">
+      LinkedIn
+    </label>
+  </div>
+  <input type="text" id="social-linkedin" data-cms-key="post-linkedin-ph" placeholder="https://linkedin.com/company/..." value="https://linkedin.com/company/quantumretail" oninput="updateLivePreview(); saveCrmSettings();" data-tooltip="LinkedIn company URL">
 </div>
 
 <div class="form-group" style="min-width: 160px; flex: 1;">
-
-<label>X / Twitter</label>
-
-<input type="text" id="social-x" data-cms-key="post-x-ph" placeholder="@Handle..." value="@QuantumRetailJobs" oninput="updateLivePreview()" data-tooltip="X handle or URL">
-
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+    <label style="margin: 0; display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.72rem; font-weight: 800;">
+      <input type="checkbox" class="social-channel-chk" id="chk-social-x" checked onchange="saveCrmSettings(); updateSocialSelectAllState();" style="width: 12px; height: 12px; accent-color: var(--uthe-gold); cursor: pointer;">
+      X / Twitter
+    </label>
+  </div>
+  <input type="text" id="social-x" data-cms-key="post-x-ph" placeholder="@Handle..." value="@QuantumRetailJobs" oninput="updateLivePreview(); saveCrmSettings();" data-tooltip="X handle or URL">
 </div>
 
 <div class="form-group" style="min-width: 160px; flex: 1;">
-
-<label>TikTok</label>
-
-<input type="text" id="social-tiktok" data-cms-key="post-tiktok-ph" placeholder="@Handle..." value="@QuantumRetailHiring" oninput="updateLivePreview()" data-tooltip="TikTok account handle">
-
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+    <label style="margin: 0; display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.72rem; font-weight: 800;">
+      <input type="checkbox" class="social-channel-chk" id="chk-social-tiktok" checked onchange="saveCrmSettings(); updateSocialSelectAllState();" style="width: 12px; height: 12px; accent-color: var(--uthe-gold); cursor: pointer;">
+      TikTok
+    </label>
+  </div>
+  <input type="text" id="social-tiktok" data-cms-key="post-tiktok-ph" placeholder="@Handle..." value="@QuantumRetailHiring" oninput="updateLivePreview(); saveCrmSettings();" data-tooltip="TikTok account handle">
 </div>
 
 <div class="form-group" style="min-width: 180px; flex: 1;">
-
-<label>Facebook</label>
-
-<input type="text" id="social-facebook" placeholder="https://facebook.com/..." value="https://facebook.com/quantumretail" oninput="updateLivePreview()" data-tooltip="Facebook page link">
-
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+    <label style="margin: 0; display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.72rem; font-weight: 800;">
+      <input type="checkbox" class="social-channel-chk" id="chk-social-facebook" checked onchange="saveCrmSettings(); updateSocialSelectAllState();" style="width: 12px; height: 12px; accent-color: var(--uthe-gold); cursor: pointer;">
+      Facebook
+    </label>
+  </div>
+  <input type="text" id="social-facebook" placeholder="https://facebook.com/..." value="https://facebook.com/quantumretail" oninput="updateLivePreview(); saveCrmSettings();" data-tooltip="Facebook page link">
 </div>
 
 <div class="form-group" style="min-width: 160px; flex: 1;">
-
-<label>Instagram</label>
-
-<input type="text" id="social-instagram" placeholder="@Handle..." value="@QuantumRetailCareers" oninput="updateLivePreview()" data-tooltip="Instagram profile handle">
-
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+    <label style="margin: 0; display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.72rem; font-weight: 800;">
+      <input type="checkbox" class="social-channel-chk" id="chk-social-instagram" checked onchange="saveCrmSettings(); updateSocialSelectAllState();" style="width: 12px; height: 12px; accent-color: var(--uthe-gold); cursor: pointer;">
+      Instagram
+    </label>
+  </div>
+  <input type="text" id="social-instagram" placeholder="@Handle..." value="@QuantumRetailCareers" oninput="updateLivePreview(); saveCrmSettings();" data-tooltip="Instagram profile handle">
 </div>
 
 </div>
@@ -5294,7 +5312,7 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <label data-tooltip="Target audience filter or candidate talent pool.">Campaign Target Audience</label>
 
-<input type="text" id="crm-target-audience" value="Retail & Sales Professionals (Austin / Hybrid)" data-tooltip="Specify candidate segment to receive outreach.">
+<input type="text" id="crm-target-audience" value="Retail & Sales Professionals (Austin / Hybrid)" oninput="saveCrmSettings()" data-tooltip="Specify candidate segment to receive outreach.">
 
 </div>
 
@@ -5302,7 +5320,7 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <label data-tooltip="Choose an outreach message template aligned with connected accounts.">Outreach Template (Channel Aligned)</label>
 
-<select id="crm-template-select" onchange="handleTemplateChange(this.value)" data-tooltip="Select template tailored for email, LinkedIn, X, TikTok, or Meta DMs.">
+<select id="crm-template-select" onchange="handleTemplateChange(this.value); saveCrmSettings();" data-tooltip="Select template tailored for email, LinkedIn, X, TikTok, or Meta DMs.">
 
 <option value="email_blast">1. Direct Email Share (Via Recruiter Email)</option>
 
@@ -5338,7 +5356,7 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <label data-tooltip="Maximum outreach campaign recipient count strictly capped at 25 per batch.">Recipient Count (25 MAX PER BATCH)</label>
 
-<input type="number" id="crm-recipient-count" min="1" max="25" value="25" oninput="clampCrmRecipients(this)" data-tooltip="Number of target recipients (Max 25).">
+<input type="number" id="crm-recipient-count" min="1" max="25" value="25" oninput="clampCrmRecipients(this); saveCrmSettings();" data-tooltip="Number of target recipients (Max 25).">
 
 </div>
 
@@ -5350,7 +5368,7 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <label data-tooltip="Outreach message body with personalized replacement tokens.">Personalized Outreach Message Body</label>
 
-<textarea id="crm-message-body" rows="4" data-tooltip="Compose your custom candidate pitch. Supports {candidate_name}, {job_title}, {company_name}.">Hi {candidate_name}, I saw your background in sales and customer service. We are expanding our team at {company_name} and would love to invite you for an interview for our {job_title} role.</textarea>
+<textarea id="crm-message-body" rows="4" oninput="saveCrmSettings()" data-tooltip="Compose your custom candidate pitch. Supports {candidate_name}, {job_title}, {company_name}.">Hi {candidate_name}, I saw your background in sales and customer service. We are expanding our team at {company_name} and would love to invite you for an interview for our {job_title} role.</textarea>
 
 </div>
 
@@ -6436,6 +6454,35 @@ VERIFIED EMPLOYER
   </div>
 </div>
 
+<!-- SIGNATURE LIVE CONNECTED SOCIAL THREAD PICKER MODAL -->
+<div class="custom-modal-alert" id="social-thread-picker-modal" style="display: none;">
+  <div class="custom-alert-card" style="width: 460px; max-width: 95vw; text-align: left; gap: 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+      <div class="alert-card-title" style="color: var(--uthe-gold); font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+        <span>↗</span> OPEN LIVE CONNECTED SOCIAL THREAD
+      </div>
+      <button onclick="closeSocialThreadPickerModal()" style="background: none; border: none; font-size: 1rem; color: #94A3B8; cursor: pointer; font-weight: 900;">✕</button>
+    </div>
+    
+    <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4;">
+      Choose a connected social media platform below to jump directly to your live company profile or talent thread in a new tab:
+    </div>
+
+    <div id="social-thread-options-container" style="display: flex; flex-direction: column; gap: 0.5rem;">
+      <!-- Dynamic Connected Platform Buttons Render Here -->
+    </div>
+
+    <div style="display: flex; gap: 0.5rem; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.25rem;">
+      <button class="btn-surface-sm" onclick="openAllConnectedSocialThreads()" style="height: 34px; padding: 0 0.85rem; font-size: 0.72rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);">
+        🚀 OPEN ALL CONNECTED THREADS
+      </button>
+      <button class="btn-surface-sm" onclick="closeSocialThreadPickerModal()" style="height: 34px; padding: 0 1rem; font-size: 0.75rem;">
+        CLOSE
+      </button>
+    </div>
+  </div>
+</div>
+
 
 
 <!-- LOGO UPLOAD MODAL -->
@@ -7499,6 +7546,91 @@ window.renderActiveJobsTable = renderActiveJobsTable;
 
 
 
+// =========================================================================
+// OMNICHANNEL CRM (TAB 2) AUTO-SAVE & MULTI-CHANNEL SELECTOR LOGIC
+// =========================================================================
+
+window.saveCrmSettings = function() {
+  const crmData = {
+    social_linkedin: document.getElementById('social-linkedin')?.value || '',
+    social_x: document.getElementById('social-x')?.value || '',
+    social_tiktok: document.getElementById('social-tiktok')?.value || '',
+    social_facebook: document.getElementById('social-facebook')?.value || '',
+    social_instagram: document.getElementById('social-instagram')?.value || '',
+    chk_linkedin: document.getElementById('chk-social-linkedin')?.checked ?? true,
+    chk_x: document.getElementById('chk-social-x')?.checked ?? true,
+    chk_tiktok: document.getElementById('chk-social-tiktok')?.checked ?? true,
+    chk_facebook: document.getElementById('chk-social-facebook')?.checked ?? true,
+    chk_instagram: document.getElementById('chk-social-instagram')?.checked ?? true,
+    target_audience: document.getElementById('crm-target-audience')?.value || '',
+    template_select: document.getElementById('crm-template-select')?.value || 'email_blast',
+    recipient_count: document.getElementById('crm-recipient-count')?.value || '25',
+    message_body: document.getElementById('crm-message-body')?.value || ''
+  };
+
+  try {
+    localStorage.setItem('uthe_crm_saved_state', JSON.stringify(crmData));
+  } catch (e) {}
+};
+
+window.restoreCrmSavedState = function() {
+  try {
+    const raw = localStorage.getItem('uthe_crm_saved_state');
+    if (!raw) return;
+    const data = JSON.parse(raw);
+
+    if (data.social_linkedin !== undefined && document.getElementById('social-linkedin')) document.getElementById('social-linkedin').value = data.social_linkedin;
+    if (data.social_x !== undefined && document.getElementById('social-x')) document.getElementById('social-x').value = data.social_x;
+    if (data.social_tiktok !== undefined && document.getElementById('social-tiktok')) document.getElementById('social-tiktok').value = data.social_tiktok;
+    if (data.social_facebook !== undefined && document.getElementById('social-facebook')) document.getElementById('social-facebook').value = data.social_facebook;
+    if (data.social_instagram !== undefined && document.getElementById('social-instagram')) document.getElementById('social-instagram').value = data.social_instagram;
+
+    if (data.chk_linkedin !== undefined && document.getElementById('chk-social-linkedin')) document.getElementById('chk-social-linkedin').checked = data.chk_linkedin;
+    if (data.chk_x !== undefined && document.getElementById('chk-social-x')) document.getElementById('chk-social-x').checked = data.chk_x;
+    if (data.chk_tiktok !== undefined && document.getElementById('chk-social-tiktok')) document.getElementById('chk-social-tiktok').checked = data.chk_tiktok;
+    if (data.chk_facebook !== undefined && document.getElementById('chk-social-facebook')) document.getElementById('chk-social-facebook').checked = data.chk_facebook;
+    if (data.chk_instagram !== undefined && document.getElementById('chk-social-instagram')) document.getElementById('chk-social-instagram').checked = data.chk_instagram;
+
+    if (data.target_audience !== undefined && document.getElementById('crm-target-audience')) document.getElementById('crm-target-audience').value = data.target_audience;
+    if (data.template_select !== undefined && document.getElementById('crm-template-select')) {
+      document.getElementById('crm-template-select').value = data.template_select;
+      handleTemplateChange(data.template_select);
+    }
+    if (data.recipient_count !== undefined && document.getElementById('crm-recipient-count')) document.getElementById('crm-recipient-count').value = data.recipient_count;
+    if (data.message_body !== undefined && document.getElementById('crm-message-body')) document.getElementById('crm-message-body').value = data.message_body;
+
+    updateSocialSelectAllState();
+  } catch (e) {}
+};
+
+window.toggleSelectAllSocialChannels = function(isChecked) {
+  const checkboxes = document.querySelectorAll('.social-channel-chk');
+  checkboxes.forEach(cb => {
+    cb.checked = isChecked;
+  });
+  saveCrmSettings();
+};
+
+window.updateSocialSelectAllState = function() {
+  const allBoxes = document.querySelectorAll('.social-channel-chk');
+  const checkedBoxes = document.querySelectorAll('.social-channel-chk:checked');
+  const selectAll = document.getElementById('chk-select-all-socials');
+  if (selectAll) {
+    selectAll.checked = (allBoxes.length > 0 && checkedBoxes.length === allBoxes.length);
+    selectAll.indeterminate = (checkedBoxes.length > 0 && checkedBoxes.length < allBoxes.length);
+  }
+};
+
+window.getSelectedSocialChannels = function() {
+  const channels = [];
+  if (document.getElementById('chk-social-linkedin')?.checked) channels.push('linkedin');
+  if (document.getElementById('chk-social-x')?.checked) channels.push('x');
+  if (document.getElementById('chk-social-tiktok')?.checked) channels.push('tiktok');
+  if (document.getElementById('chk-social-facebook')?.checked) channels.push('facebook');
+  if (document.getElementById('chk-social-instagram')?.checked) channels.push('instagram');
+  return channels;
+};
+
 window.trigger1ClickSocialPost = function(channelName, postText, targetUrl) {
   const shareUrl = targetUrl || 'https://jobs.utheversity.com';
   const encodedText = encodeURIComponent(postText || 'We are hiring! Join our team at Quantum Retail.');
@@ -7528,8 +7660,6 @@ window.trigger1ClickSocialPost = function(channelName, postText, targetUrl) {
     const cleanHandle = igInput.replace('@', '');
     intentUrl = igInput.startsWith('http') ? igInput : `https://www.instagram.com/${cleanHandle}`;
   } else {
-    // All connected channels: open X and LinkedIn
-    window.open(`https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`, '_blank');
     intentUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
   }
 
@@ -7539,6 +7669,12 @@ window.trigger1ClickSocialPost = function(channelName, postText, targetUrl) {
 };
 
 window.broadcastToConnectedChannels = function() {
+  const selectedChannels = getSelectedSocialChannels();
+  if (selectedChannels.length === 0) {
+    showCustomModalAlert('Select Channels', 'Please select at least one connected social media channel (LinkedIn, X, TikTok, Facebook, or Instagram) to share your listing.');
+    return;
+  }
+
   const jobTitle = document.getElementById('inp-job-title')?.value || 'Career Opportunity';
   const company = document.getElementById('prof-company-name')?.value || 'Quantum Retail Corp';
   const minComp = document.getElementById('inp-min-comp')?.value || '65000';
@@ -7548,11 +7684,14 @@ window.broadcastToConnectedChannels = function() {
 
   const postText = `🚨 WE'RE HIRING! ${company} is seeking an exceptional ${jobTitle} (${location})! Compensation: $${Number(minComp).toLocaleString()} - $${Number(maxComp).toLocaleString()}/yr + full benefits. Apply directly on UTHEVERSITY:`;
 
-  trigger1ClickSocialPost('all', postText, shareUrl);
+  selectedChannels.forEach(ch => {
+    trigger1ClickSocialPost(ch, postText, shareUrl);
+  });
 
   const now = new Date();
   const timestampStr = now.toISOString().replace('T', ' ').substring(0, 19);
   const campId = `CMP-${Math.floor(900 + Math.random() * 99)}`;
+  const channelDisplayNames = selectedChannels.map(c => c.toUpperCase()).join(', ');
 
   const tbody = document.getElementById('crm-campaign-tracker-tbody');
   if (tbody) {
@@ -7562,13 +7701,13 @@ window.broadcastToConnectedChannels = function() {
       <td><code>${campId}</code></td>
       <td><strong>${timestampStr}</strong></td>
       <td>${jobTitle} (${location})</td>
-      <td>Connected Socials (LinkedIn, X, Meta)</td>
+      <td>${channelDisplayNames} (${selectedChannels.length} Platform${selectedChannels.length > 1 ? 's' : ''})</td>
       <td>Multi-Network</td>
       <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">LIVE BROADCAST</span></td>
       <td>
         <div style="display: flex; gap: 4px; align-items: center;">
           <button class="btn-surface-sm" onclick="openEditAndReshareModal('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: #0284C7; border-color: #0284C7;" data-tooltip="Edit post details and re-share to feed">✏️ EDIT & RE-SHARE</button>
-          <button class="btn-surface-sm" onclick="openLiveSocialThread('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread">↗ THREAD</button>
+          <button class="btn-surface-sm" onclick="openLiveSocialThread('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread options">↗ THREAD</button>
         </div>
       </td>
     `;
@@ -7577,7 +7716,7 @@ window.broadcastToConnectedChannels = function() {
 
   showCustomModalAlert(
     '1-Click Live Social Share Launched',
-    `Multi-platform 1-click share window launched for your linked LinkedIn, X (Twitter), and Meta channels!\n\n📌 Remember: To update a live post later, use the "EDIT & RE-SHARE" button in Tab 2.`
+    `1-Click share window launched for your selected platform(s): ${channelDisplayNames}!\n\n📌 Remember: To update a live post later, use the "EDIT & RE-SHARE" button in Tab 2.`
   );
 };
 
@@ -7619,6 +7758,7 @@ window.handleTemplateChange = function(templateKey) {
   const tmpl = CRM_TEMPLATES[templateKey] || CRM_TEMPLATES.email_blast;
   document.getElementById('crm-channel-display').value = tmpl.channel;
   document.getElementById('crm-message-body').value = tmpl.message;
+  saveCrmSettings();
 };
 
 window.dispatchCrmCampaign = function() {
@@ -7656,12 +7796,14 @@ window.dispatchCrmCampaign = function() {
       <td>
         <div style="display: flex; gap: 4px; align-items: center;">
           <button class="btn-surface-sm" onclick="openEditAndReshareModal('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: #0284C7; border-color: #0284C7;" data-tooltip="Edit post details and re-share to feed">✏️ EDIT & RE-SHARE</button>
-          <button class="btn-surface-sm" onclick="openLiveSocialThread('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread">↗ THREAD</button>
+          <button class="btn-surface-sm" onclick="openLiveSocialThread('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread options">↗ THREAD</button>
         </div>
       </td>
     `;
     tbody.prepend(tr);
   }
+
+  saveCrmSettings();
 
   showCustomModalAlert(
     'Outreach Dispatched & Logged',
@@ -7670,7 +7812,8 @@ window.dispatchCrmCampaign = function() {
 };
 
 window.testSocialIntentShare = function() {
-  const channelDisplay = document.getElementById('crm-channel-display').value;
+  const selectedChannels = getSelectedSocialChannels();
+  const channelToTest = selectedChannels.length > 0 ? selectedChannels[0] : (document.getElementById('crm-template-select')?.value || 'linkedin');
   const rawMessage = document.getElementById('crm-message-body').value;
   const company = document.getElementById('prof-company-name')?.value || 'Quantum Retail Corp';
   const renderedMessage = rawMessage
@@ -7678,7 +7821,7 @@ window.testSocialIntentShare = function() {
     .replace(/{job_title}/g, 'Career Opportunity')
     .replace(/{company_name}/g, company);
 
-  trigger1ClickSocialPost(channelDisplay, renderedMessage, 'https://jobs.utheversity.com');
+  trigger1ClickSocialPost(channelToTest, renderedMessage, 'https://jobs.utheversity.com');
 };
 
 window.openEditAndReshareModal = function(campId) {
@@ -7739,36 +7882,63 @@ window.executeEditAndReshare = function() {
   );
 };
 
+// SIGNATURE LIVE SOCIAL THREAD PICKER POPUP
 window.openLiveSocialThread = function(campId) {
-  const row = document.getElementById(`row-camp-${campId}`);
-  let channelText = '';
-  if (row) {
-    const cells = row.querySelectorAll('td');
-    if (cells[3]) channelText = cells[3].textContent.toLowerCase();
-  }
+  const container = document.getElementById('social-thread-options-container');
+  if (!container) return;
 
-  let targetUrl = '';
-  if (channelText.includes('linkedin')) {
-    targetUrl = document.getElementById('social-linkedin')?.value || 'https://linkedin.com/company/quantumretail';
-  } else if (channelText.includes('x') || channelText.includes('twitter')) {
-    const handle = (document.getElementById('social-x')?.value || '@QuantumRetailJobs').replace('@', '');
-    targetUrl = `https://twitter.com/${handle}`;
-  } else if (channelText.includes('facebook')) {
-    targetUrl = document.getElementById('social-facebook')?.value || 'https://facebook.com/quantumretail';
-  } else if (channelText.includes('tiktok')) {
-    const handle = (document.getElementById('social-tiktok')?.value || '@QuantumRetailHiring').replace('@', '');
-    targetUrl = `https://tiktok.com/@${handle}`;
-  } else if (channelText.includes('instagram')) {
-    const handle = (document.getElementById('social-instagram')?.value || '@QuantumRetailCareers').replace('@', '');
-    targetUrl = `https://instagram.com/${handle}`;
-  } else {
-    targetUrl = document.getElementById('social-linkedin')?.value || 'https://linkedin.com/company/quantumretail';
-  }
+  const linkedinVal = document.getElementById('social-linkedin')?.value.trim() || 'https://linkedin.com/company/quantumretail';
+  const xVal = document.getElementById('social-x')?.value.trim() || '@QuantumRetailJobs';
+  const tiktokVal = document.getElementById('social-tiktok')?.value.trim() || '@QuantumRetailHiring';
+  const fbVal = document.getElementById('social-facebook')?.value.trim() || 'https://facebook.com/quantumretail';
+  const igVal = document.getElementById('social-instagram')?.value.trim() || '@QuantumRetailCareers';
 
-  if (targetUrl) {
-    if (!targetUrl.startsWith('http')) targetUrl = 'https://' + targetUrl;
-    window.open(targetUrl, '_blank', 'noopener,noreferrer');
-  }
+  const channels = [
+    { name: 'LinkedIn Company Page & Feed', handle: linkedinVal, url: linkedinVal.startsWith('http') ? linkedinVal : `https://${linkedinVal}`, icon: '💼', color: '#0A66C2' },
+    { name: 'X (Twitter) Talent Stream', handle: xVal, url: xVal.startsWith('http') ? xVal : `https://twitter.com/${xVal.replace('@', '')}`, icon: '🐦', color: '#0F172A' },
+    { name: 'TikTok Hiring Profile', handle: tiktokVal, url: tiktokVal.startsWith('http') ? tiktokVal : `https://tiktok.com/@${tiktokVal.replace('@', '')}`, icon: '🎵', color: '#000000' },
+    { name: 'Facebook Careers Page', handle: fbVal, url: fbVal.startsWith('http') ? fbVal : `https://${fbVal}`, icon: '📘', color: '#1877F2' },
+    { name: 'Instagram Careers Feed', handle: igVal, url: igVal.startsWith('http') ? igVal : `https://instagram.com/${igVal.replace('@', '')}`, icon: '📸', color: '#E1306C' }
+  ];
+
+  container.innerHTML = channels.map(c => `
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; border: 1.5px solid var(--border-color); border-radius: 6px; padding: 0.5rem 0.75rem;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.1rem;">${c.icon}</span>
+        <div>
+          <strong style="font-size: 0.78rem; color: var(--uthe-charcoal); display: block;">${c.name}</strong>
+          <span style="font-size: 0.68rem; color: var(--text-muted); font-weight: 600;">${c.handle}</span>
+        </div>
+      </div>
+      <button class="btn-surface-sm" onclick="window.open('${c.url}', '_blank', 'noopener,noreferrer')" style="height: 28px; padding: 0 0.75rem; font-size: 0.7rem; font-weight: 800; color: ${c.color}; border-color: ${c.color};">
+        VISIT FEED ↗
+      </button>
+    </div>
+  `).join('');
+
+  const modal = document.getElementById('social-thread-picker-modal');
+  if (modal) modal.style.display = 'flex';
+};
+
+window.closeSocialThreadPickerModal = function() {
+  const modal = document.getElementById('social-thread-picker-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.openAllConnectedSocialThreads = function() {
+  const linkedinVal = document.getElementById('social-linkedin')?.value.trim();
+  const xVal = document.getElementById('social-x')?.value.trim();
+  const tiktokVal = document.getElementById('social-tiktok')?.value.trim();
+  const fbVal = document.getElementById('social-facebook')?.value.trim();
+  const igVal = document.getElementById('social-instagram')?.value.trim();
+
+  if (linkedinVal) window.open(linkedinVal.startsWith('http') ? linkedinVal : `https://${linkedinVal}`, '_blank');
+  if (xVal) window.open(xVal.startsWith('http') ? xVal : `https://twitter.com/${xVal.replace('@', '')}`, '_blank');
+  if (tiktokVal) window.open(tiktokVal.startsWith('http') ? tiktokVal : `https://tiktok.com/@${tiktokVal.replace('@', '')}`, '_blank');
+  if (fbVal) window.open(fbVal.startsWith('http') ? fbVal : `https://${fbVal}`, '_blank');
+  if (igVal) window.open(igVal.startsWith('http') ? igVal : `https://instagram.com/${igVal.replace('@', '')}`, '_blank');
+
+  closeSocialThreadPickerModal();
 };
 
 window.testPersonalizationPreview = function() {
@@ -9928,6 +10098,7 @@ closeCustomConfirm();
   loadSavedLogo();
   loadSavedEmployerSession();
   loadSavedEmployerProfile();
+  restoreCrmSavedState();
   loadSavedJobs();
   loadSavedApplicants();
   loadResumeBoard();
