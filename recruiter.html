@@ -5410,12 +5410,17 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <!-- CARD 3: LIVE JOB LISTINGS (SNUG DIRECTLY BENEATH CARD 2) -->
 <div class="panel-card card-3-active-listings" id="card3-live-jobs-container">
-  <div class="panel-header">
+  <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
     <div>
       <span class="panel-title" id="card3-title-text" data-cms-key="post-card3-title">CARD 3: LIVE ACTIVE JOB LISTINGS</span>
       <div class="card3-desktop-note" style="color: #EF4444; font-size: 0.65rem; font-weight: 700; margin-top: 2px;">EDIT ON DESKTOP ONLY</div>
     </div>
-    <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">5 ACTIVE POSITIONS</span>
+    <div style="display: flex; gap: 0.4rem; align-items: center;">
+      <button class="btn-surface-sm" onclick="openJobAggregatorModal()" style="height: 24px; font-size: 0.65rem; padding: 0 0.55rem; font-weight: 800; color: #0075FF; border-color: #0075FF;" data-tooltip="Sync live public job feeds from ATS platforms (Greenhouse, Lever, RSS)">
+        ⚡ SYNC LIVE JOB FEEDS
+      </button>
+      <span style="font-size: 0.65rem; color: #065F46; font-weight: 800; background: var(--status-mint-bg); padding: 0.2rem 0.5rem; border-radius: 4px;">5 ACTIVE POSITIONS</span>
+    </div>
   </div>
 
   <div style="overflow-x: auto; width: 100%;" id="active-jobs-table-container" class="table-container">
@@ -6636,6 +6641,7 @@ VERIFIED EMPLOYER
           </select>
 
           <button class="btn-surface-sm" onclick="resetResumeFilters()" style="height: 40px; padding: 0 0.85rem; font-size: 0.72rem; font-weight: 800; white-space: nowrap;">RESET</button>
+          <button class="btn-surface-sm" onclick="openBatchResumeParserModal()" style="height: 40px; padding: 0 0.85rem; font-size: 0.72rem; font-weight: 800; white-space: nowrap; color: #0075FF; border-color: #0075FF;" data-tooltip="Batch ingest and auto-parse candidate resumes">🧠 BATCH INGESTION</button>
         </div>
       </div>
 
@@ -7505,6 +7511,74 @@ SIGN IN TO WORKSPACE
   </div>
 </div>
 
+<!-- MASTER JOB LISTINGS AGGREGATOR & ATS FEED SYNC MODAL -->
+<div class="custom-modal-alert" id="modal-sync-job-feeds" style="display: none;">
+  <div class="custom-alert-card" style="max-width: 520px; text-align: left;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; margin-bottom: 0.6rem;">
+      <span style="font-weight: 900; font-size: 0.82rem; color: #0F172A;">⚡ LIVE JOB LISTING AGGREGATOR & FEED SYNC</span>
+      <button class="btn-surface-sm" onclick="closeJobAggregatorModal()" style="height: 24px; padding: 0 0.5rem; font-weight: 900;">X</button>
+    </div>
+
+    <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.6rem;">
+      Automatically sync structured, verified job postings from public ATS pipelines (Greenhouse, Lever, Workday, RSS 2.0). Duplicates are automatically filtered out.
+    </div>
+
+    <div class="form-group" style="margin-bottom: 0.5rem;">
+      <label style="font-size: 0.7rem; font-weight: 800;">Select Target Industry / ATS Feed Preset</label>
+      <select id="aggregator-feed-preset" style="width: 100%; height: 36px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Choose high-demand verified industry job feed">
+        <option value="all">⚡ All Active Industry Feeds (Tech, Enterprise Sales, Healthcare)</option>
+        <option value="tech_growth">💻 High-Growth Tech (Software, AI, DevOps, Product)</option>
+        <option value="sales_enterprise">📈 Enterprise Sales & Business Development</option>
+        <option value="healthcare_mgmt">🏥 Healthcare Operations & Clinical Informatics</option>
+      </select>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 0.5rem;">
+      <label style="font-size: 0.7rem; font-weight: 800;">Custom ATS / RSS Feed URL or Raw XML (Optional)</label>
+      <textarea id="aggregator-feed-custom-xml" rows="3" placeholder="Paste custom RSS/Atom XML feed markup or leave blank to use selected high-demand pipeline..." style="width: 100%; font-family: monospace; font-size: 0.7rem; border-radius: 6px; border: 1.5px solid var(--border-color); padding: 6px;" data-tooltip="Optional custom RSS / XML feed payload"></textarea>
+    </div>
+
+    <div id="aggregator-sync-status-box" style="display: none; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 4px; padding: 0.5rem; max-height: 120px; overflow-y: auto; font-size: 0.7rem; font-family: monospace; margin-bottom: 0.5rem;">
+    </div>
+
+    <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+      <button class="btn-surface-sm" onclick="closeJobAggregatorModal()" style="height: 36px; padding: 0 1rem; font-size: 0.75rem; font-weight: 800;">CANCEL</button>
+      <button class="btn-gold-action" id="btn-trigger-feed-sync" style="height: 36px; padding: 0 1.2rem; font-weight: 900; font-size: 0.75rem;" onclick="triggerLiveJobFeedSync()" data-tooltip="Execute live feed synchronization into U-THEPOST">
+        ⚡ SYNC & PUBLISH LIVE LISTINGS
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- AUTOMATED RESUME BATCH INGESTION & DOCUMENT PARSER MODAL -->
+<div class="custom-modal-alert" id="modal-batch-resume-parser" style="display: none;">
+  <div class="custom-alert-card" style="max-width: 540px; text-align: left;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; margin-bottom: 0.6rem;">
+      <span style="font-weight: 900; font-size: 0.82rem; color: #0F172A;">🧠 AUTOMATED RESUME BATCH INGESTION</span>
+      <button class="btn-surface-sm" onclick="closeBatchResumeParserModal()" style="height: 24px; padding: 0 0.5rem; font-weight: 900;">X</button>
+    </div>
+
+    <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.6rem;">
+      Ingest batches of candidate resumes simultaneously. The built-in parser extracts <strong>Candidate Name</strong>, <strong>Email</strong>, <strong>Phone</strong>, <strong>Target Role</strong>, <strong>Skills Taxonomy</strong>, <strong>Experience</strong>, and <strong>Location</strong> into verified candidate cards in <strong>Tab 6: RESUME SEARCH</strong>.
+    </div>
+
+    <div class="form-group" style="margin-bottom: 0.5rem;">
+      <label style="font-size: 0.7rem; font-weight: 800;">Batch Resume Text / Paste Unstructured Candidate Dossiers</label>
+      <textarea id="batch-resume-raw-text" rows="6" placeholder="Paste multiple resumes separated by '---' or newlines:&#10;&#10;Alex Morgan&#10;alex.morgan@techmail.io | (555) 234-5678&#10;Senior Full Stack Engineer • Austin, TX (Remote)&#10;5+ years building scalable microservices with Node.js, React, TypeScript, and AWS.&#10;&#10;---&#10;&#10;Elena Vance&#10;elena.vance@enterprisesales.com | (555) 876-5432&#10;Enterprise Account Executive • New York, NY&#10;7+ years closing $500k+ ARR deals in B2B SaaS." style="width: 100%; font-family: monospace; font-size: 0.72rem; border-radius: 6px; border: 1.5px solid var(--border-color); padding: 6px;" data-tooltip="Paste raw candidate text dossiers for automated parsing"></textarea>
+    </div>
+
+    <div id="batch-resume-preview-box" style="display: none; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 4px; padding: 0.5rem; max-height: 130px; overflow-y: auto; font-size: 0.7rem; font-family: monospace; margin-bottom: 0.5rem;">
+    </div>
+
+    <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+      <button class="btn-surface-sm" onclick="closeBatchResumeParserModal()" style="height: 36px; padding: 0 1rem; font-size: 0.75rem; font-weight: 800;">CANCEL</button>
+      <button class="btn-gold-action" id="btn-trigger-batch-parse" style="height: 36px; padding: 0 1.2rem; font-weight: 900; font-size: 0.75rem;" onclick="triggerBatchResumeIngestion()" data-tooltip="Parse and ingest candidate profiles into live Resume Search">
+        🧠 PARSE & INGEST CANDIDATE POOL
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- SIGNATURE CUSTOM MODAL ALERT (NO DEFAULT BROWSER ALERT) -->
 
 <div class="custom-modal-alert" id="custom-modal-alert">
@@ -7952,6 +8026,116 @@ window.resetCompanyLogo = function() {
   }
   const logoInput = document.getElementById('logo-url-input');
   if (logoInput) logoInput.value = '';
+};
+
+// ----------------------------------------------------
+// JOB LISTING AGGREGATOR & BATCH RESUME INGESTION (RECRUITER STUDIO)
+// ----------------------------------------------------
+window.openJobAggregatorModal = function() {
+  const box = document.getElementById('aggregator-sync-status-box');
+  if (box) box.style.display = 'none';
+  const modal = document.getElementById('modal-sync-job-feeds');
+  if (modal) modal.style.display = 'flex';
+};
+
+window.closeJobAggregatorModal = function() {
+  const modal = document.getElementById('modal-sync-job-feeds');
+  if (modal) modal.style.display = 'none';
+};
+
+window.triggerLiveJobFeedSync = async function() {
+  const btn = document.getElementById('btn-trigger-feed-sync');
+  const preset = document.getElementById('aggregator-feed-preset').value;
+  const customXml = document.getElementById('aggregator-feed-custom-xml').value.trim();
+  const statusBox = document.getElementById('aggregator-sync-status-box');
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '⏳ SYNCHRONIZING ATS JOB FEEDS...';
+  }
+
+  try {
+    const res = await fetch('/api/aggregator/jobs/sync', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ preset, rawXml: customXml })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (statusBox) {
+        statusBox.style.display = 'block';
+        statusBox.innerHTML = `<strong>Feed Sync Complete:</strong> ${data.syncedCount} new jobs ingested. Total database: ${data.totalJobs} listings.`;
+      }
+      showCustomModalAlert('Job Feed Sync Complete', `Successfully synced ${data.syncedCount} new verified job listings from ATS feeds! (Total active: ${data.totalJobs})`);
+      closeJobAggregatorModal();
+      if (typeof loadActiveJobsList === 'function') loadActiveJobsList();
+    } else {
+      showCustomModalAlert('Feed Sync Error', data.error || 'Server rejected job feed payload.');
+    }
+  } catch (err) {
+    showCustomModalAlert('Aggregator Error', err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '⚡ SYNC & PUBLISH LIVE LISTINGS';
+    }
+  }
+};
+
+window.openBatchResumeParserModal = function() {
+  const box = document.getElementById('batch-resume-preview-box');
+  if (box) box.style.display = 'none';
+  const modal = document.getElementById('modal-batch-resume-parser');
+  if (modal) modal.style.display = 'flex';
+};
+
+window.closeBatchResumeParserModal = function() {
+  const modal = document.getElementById('modal-batch-resume-parser');
+  if (modal) modal.style.display = 'none';
+};
+
+window.triggerBatchResumeIngestion = async function() {
+  const rawText = document.getElementById('batch-resume-raw-text').value.trim();
+  const btn = document.getElementById('btn-trigger-batch-parse');
+  const previewBox = document.getElementById('batch-resume-preview-box');
+
+  if (!rawText) {
+    showCustomModalAlert('Input Required', 'Please paste at least one resume or candidate dossier text.');
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '🧠 PARSING & INGESTING DOSSIERS...';
+  }
+
+  try {
+    const res = await fetch('/api/aggregator/resumes/parse-batch', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rawText })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (previewBox) {
+        previewBox.style.display = 'block';
+        previewBox.innerHTML = `<strong>Ingestion Succeeded:</strong> ${data.parsedCount} candidate cards created. Total pool: ${data.totalResumes} resumes.`;
+      }
+      showCustomModalAlert('Batch Ingestion Complete', `Successfully extracted and created ${data.parsedCount} verified candidate cards in Resume Search!`);
+      closeBatchResumeParserModal();
+      document.getElementById('batch-resume-raw-text').value = '';
+      if (typeof loadAllResumes === 'function') loadAllResumes();
+    } else {
+      showCustomModalAlert('Parser Error', data.error || 'Failed to parse resume batch.');
+    }
+  } catch (err) {
+    showCustomModalAlert('Ingestion Network Error', err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '🧠 PARSE & INGEST CANDIDATE POOL';
+    }
+  }
 };
 
 

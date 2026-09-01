@@ -3614,13 +3614,19 @@ async function runTests() {
     console.log('\n--- GROUP 98: JOB LISTING AGGREGATOR & RESUME BATCH INGESTION SUITE ---');
 
     const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
 
-    // 1. Admin UI Controls & Modals
+    // 1. Admin & Recruiter UI Controls & Modals
     assert(adminHtml.includes('id="modal-sync-job-feeds"'), 'admin.html defines #modal-sync-job-feeds modal');
     assert(adminHtml.includes('id="modal-batch-resume-parser"'), 'admin.html defines #modal-batch-resume-parser modal');
     assert(adminHtml.includes('window.openModal = openModal') && adminHtml.includes('window.closeModal = closeModal'), 'admin.html defines global openModal and closeModal');
     assert(adminHtml.includes('openJobAggregatorModal') && adminHtml.includes('triggerLiveJobFeedSync'), 'admin.html implements job aggregator sync functions');
     assert(adminHtml.includes('openBatchResumeParserModal') && adminHtml.includes('triggerBatchResumeIngestion'), 'admin.html implements batch resume ingestion functions');
+
+    assert(recruiterHtml.includes('id="modal-sync-job-feeds"'), 'recruiter.html defines #modal-sync-job-feeds modal');
+    assert(recruiterHtml.includes('id="modal-batch-resume-parser"'), 'recruiter.html defines #modal-batch-resume-parser modal');
+    assert(recruiterHtml.includes('openJobAggregatorModal') && recruiterHtml.includes('triggerLiveJobFeedSync'), 'recruiter.html implements job aggregator sync functions');
+    assert(recruiterHtml.includes('openBatchResumeParserModal') && recruiterHtml.includes('triggerBatchResumeIngestion'), 'recruiter.html implements batch resume ingestion functions');
 
     // 2. Aggregator Stats Endpoint
     const statsRes = await httpGet('/api/aggregator/stats');

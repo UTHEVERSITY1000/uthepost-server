@@ -1756,6 +1756,12 @@
         <textarea id="admin-sheets-csv-raw" rows="4" placeholder="Name, Role, Email, Location, Skills, Score&#10;Jordan Rivera, Systems Architect, jordan@example.com, Austin TX, Node.js React, 96" style="font-family: monospace; font-size: 0.72rem;" data-tooltip="Paste raw comma-separated candidate rows"></textarea>
       </div>
 
+      <button class="btn-gold" style="width: 100%; margin-top: 0.5rem; height: 36px; font-weight: 800;" onclick="processGoogleSheetsImport()" data-tooltip="Import Google Sheets candidate data">
+        IMPORT FROM GOOGLE SHEETS
+      </button>
+    </div>
+  </div>
+
   <!-- MASTER JOB LISTINGS AGGREGATOR & ATS FEED SYNC MODAL -->
   <div class="modal-overlay" id="modal-sync-job-feeds">
     <div class="modal-card" style="max-width: 520px;">
