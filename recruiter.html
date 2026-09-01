@@ -315,7 +315,9 @@ display: flex;
 
 align-items: center;
 
-gap: 0.85rem;
+gap: 0.75rem;
+
+flex-shrink: 0 !important;
 
 }
 
@@ -408,7 +410,33 @@ letter-spacing: 0.8px;
 text-transform: uppercase;
 
 white-space: nowrap;
+}
 
+.btn-help-brand {
+  background-color: #0075FF !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid #0075FF !important;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 117, 255, 0.45);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.btn-help-brand:hover,
+.btn-help-brand:focus-visible {
+  background-color: #0056CC !important;
+  border-color: #0056CC !important;
+  box-shadow: 0 4px 14px rgba(0, 117, 255, 0.7) !important;
+  transform: scale(1.08) translateY(-1px);
 }
 
 
@@ -541,6 +569,205 @@ gap: 0.75rem;
   justify-content: center;
   padding: 0 4px;
   box-shadow: 0 2px 4px rgba(239, 68, 68, 0.4);
+}
+
+.btn-help-header {
+  background-color: #0075FF !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid #0075FF !important;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 117, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.btn-help-header svg {
+  stroke: #FFFFFF !important;
+}
+
+.btn-help-header:hover,
+.btn-help-header:focus-visible {
+  background-color: #0056CC !important;
+  border-color: #0056CC !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(0, 117, 255, 0.6) !important;
+  transform: translateY(-1px);
+}
+
+.nav-help-deck-btn {
+  background-color: #0075FF !important;
+  color: #FFFFFF !important;
+  border: 1.5px solid #0075FF !important;
+  flex: 0 0 32px !important;
+  width: 32px !important;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  font-size: 0.85rem !important;
+  font-weight: 900 !important;
+  box-shadow: 0 2px 6px rgba(0, 117, 255, 0.35) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.nav-help-deck-btn:hover {
+  background-color: #0056CC !important;
+  border-color: #0056CC !important;
+  box-shadow: 0 4px 12px rgba(0, 117, 255, 0.5) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* TAB 7: ? (BLUE) NAVIGATION & HOW-TO BOARD STYLING */
+.nav-tab-btn.nav-tab-help-blue {
+  color: #0075FF !important;
+  border: 1.5px solid #0075FF !important;
+  background: rgba(0, 117, 255, 0.08) !important;
+  font-weight: 900 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  flex: 0 0 auto !important;
+  min-width: 42px !important;
+  padding: 0 0.5rem !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.tab-help-blue-label {
+  color: #0075FF !important;
+  font-weight: 900 !important;
+  font-size: 0.82rem !important;
+}
+
+.nav-tab-btn.nav-tab-help-blue:hover,
+.nav-tab-btn.nav-tab-help-blue.active {
+  background: #0075FF !important;
+  color: #FFFFFF !important;
+  border-color: #0075FF !important;
+  box-shadow: 0 2px 10px rgba(0, 117, 255, 0.35) !important;
+}
+
+.nav-tab-btn.nav-tab-help-blue:hover .tab-help-blue-label,
+.nav-tab-btn.nav-tab-help-blue.active .tab-help-blue-label {
+  color: #FFFFFF !important;
+}
+
+.guide-hero-banner {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  border: 1.5px solid #0075FF;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  color: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(0, 117, 255, 0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.guide-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.guide-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.guide-card:hover {
+  border-color: #0075FF;
+  box-shadow: 0 6px 18px rgba(0, 117, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.guide-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.65rem;
+}
+
+.guide-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(0, 117, 255, 0.1);
+  color: #0075FF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.guide-step-item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  font-size: 0.76rem;
+  color: #334155;
+  line-height: 1.45;
+}
+
+.guide-step-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0075FF;
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.guide-pill {
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  border: 1px solid var(--border-color);
+  background: #FFFFFF;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.guide-pill:hover,
+.guide-pill.active {
+  background: #0075FF;
+  color: #FFFFFF;
+  border-color: #0075FF;
+  box-shadow: 0 2px 6px rgba(0, 117, 255, 0.3);
 }
 
 .btn-auth-header {
@@ -4551,9 +4778,9 @@ justify-content: space-between !important;
 
 align-items: center !important;
 
-gap: 0.4rem !important;
+gap: 0.35rem !important;
 
-margin: 0 0.75rem !important;
+margin: 0 0.5rem !important;
 
 overflow: visible !important; /* Removes scrollbars so tooltips pop out */
 
@@ -4599,6 +4826,13 @@ text-overflow: ellipsis !important;
 
 }
 
+.nav-tab-btn.nav-tab-help-blue, #tab-nav-help {
+  flex: 0 0 auto !important;
+  min-width: 44px !important;
+  padding: 0 0.65rem !important;
+  overflow: visible !important;
+}
+
 
 
 /* 3. Position Tooltips / Dropdowns to Appear Below on Top of Page */
@@ -4636,26 +4870,28 @@ white-space: nowrap !important;
 <header class="recruiter-header">
 
 <div class="brand-group">
-
 <h1 class="brand-title" id="cms-brand-title" data-cms-key="brand-title" data-tooltip="u-thePOST: Recruiter Studio & Multi-Platform Hiring Hub.">U-THEPOST</h1>
 
-
-
 <!-- LIVE LOGO OWNERSHIP COMPONENT -->
-
 <div class="employer-logo-badge" id="employer-logo-badge" onclick="openLogoUploadModal()" data-tooltip="Upload or change your company logo badge">
-
 <img id="employer-logo-img" class="employer-logo-preview-img" alt="Employer Logo">
-
 <span class="employer-logo-text" id="employer-logo-text">+ UPLOAD LOGO</span>
+</div>
+
+<!-- BLUE ? ICON TO THE RIGHT OF THE LOGO -->
+<button class="btn-help-brand" id="btn-brand-help" onclick="openHowToGuideModal()" data-tooltip="Platform Help & How-To Guide" title="How-To Guide">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"></circle>
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+  </svg>
+</button>
 
 </div>
 
-</div>
 
 
-
-    <!-- 6 EXCLUSIVE CUSTOMER TABS -->
+    <!-- 7 EXCLUSIVE CUSTOMER TABS -->
     <nav class="header-center-tabs top-deck-nav portal-navigation nav-container">
       <button class="nav-tab-btn active" onclick="switchRecruiterTab('studio')" data-tooltip="Design, configure connected accounts & launch job postings.">
         1. JOB STUDIO
@@ -4675,9 +4911,19 @@ white-space: nowrap !important;
       <button class="nav-tab-btn" onclick="switchRecruiterTab('resumes')" data-tooltip="Search & scout verified candidate talent resumes across national database.">
         6. RESUME SEARCH
       </button>
+      <button class="nav-tab-btn nav-tab-help-blue" id="tab-nav-help" onclick="switchRecruiterTab('help')" data-tooltip="7. Platform How-To Guide & Interactive Manual">
+        7. <span class="tab-help-blue-label">?</span>
+      </button>
     </nav>
 
     <div class="header-actions">
+      <button class="btn-help-header" id="btn-help-guide" onclick="openHowToGuideModal()" data-tooltip="Platform Help & How-To Guide">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </button>
       <button class="btn-notif-header" id="btn-recruiter-notif" onclick="openRecruiterMessagesDrawer()" data-tooltip="Candidate Messages & Applications">
         <svg class="notif-bell-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FEBA27" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -4708,6 +4954,10 @@ white-space: nowrap !important;
       <button class="drawer-tab-btn" onclick="switchRecruiterTab('plans'); toggleDrawer();">4. PERFORMANCE & PLANS</button>
       <button class="drawer-tab-btn" onclick="switchRecruiterTab('profile'); toggleDrawer();">5. MY PROFILE</button>
       <button class="drawer-tab-btn" onclick="switchRecruiterTab('resumes'); toggleDrawer();">6. RESUME SEARCH</button>
+      <button class="drawer-tab-btn drawer-tab-help-blue" onclick="switchRecruiterTab('help'); toggleDrawer();" style="color:#0075FF; font-weight:900; display:flex; align-items:center; gap:8px;">
+        <span style="background:#0075FF; color:#fff; width:20px; height:20px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:900;">?</span>
+        7. ? (HOW-TO GUIDE)
+      </button>
     </div>
   </div>
 
@@ -4883,15 +5133,23 @@ white-space: nowrap !important;
 
 
 
-<!-- URGENT HIRING TOGGLE & RESTORED PUBLISH BUTTON -->
+<!-- URGENT HIRING & TOP-OF-PAGE SPOTLIGHT TOGGLES -->
 
-<div class="form-group" style="margin-top: 0.5rem;">
+<div class="form-group" style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
 
 <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.62rem;">
 
 <input type="checkbox" id="urgentHiringCheckbox" onchange="toggleUrgentHiringBadge(this.checked)" checked style="accent-color: #FEBA27; width: 14px; height: 14px;">
 
 <span>URGENT HIRING BADGE</span>
+
+</label>
+
+<label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.62rem; color: #92400E;" data-tooltip="Pin your job posting at the top of candidate search results.">
+
+<input type="checkbox" id="chk-job-spotlight" onchange="toggleSpotlightPreviewBadge(this.checked)" checked style="accent-color: #FEBA27; width: 14px; height: 14px;">
+
+<span>⭐ TOP-OF-PAGE SPOTLIGHT</span>
 
 </label>
 
@@ -4926,6 +5184,8 @@ PUBLISH LIVE
 <span class="panel-title" id="card2-title-text" data-cms-key="post-card2-title">2. LIVE POST PREVIEW</span>
 
 <div style="display:flex; gap:0.4rem; align-items:center;">
+
+<span class="spotlight-hiring-badge" id="badge-spotlight-preview" style="background: linear-gradient(135deg, #FEBA27, #F59E0B); color: #111827; font-weight: 900; font-size: 0.62rem; padding: 0.15rem 0.45rem; border-radius: 4px; border: 1px solid #D97706; display: inline-flex; align-items: center; gap: 3px;">⭐ TOP SPOTLIGHT</span>
 
 <span class="urgent-hiring-badge" id="badge-urgent-hiring" data-cms-key="post-preview-badge">URGENT HIRING</span>
 
@@ -6278,6 +6538,344 @@ VERIFIED EMPLOYER
 
   </section>
 
+  <!-- TAB 7: ? (HOW-TO PLATFORM GUIDE & INTERACTIVE WORKSPACE MANUAL) -->
+  <section id="view-help" class="tab-view" style="display: none;">
+
+    <!-- HERO HEADER BANNER -->
+    <div class="guide-hero-banner">
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+          <span style="background: #0075FF; color: #FFFFFF; font-size: 0.68rem; font-weight: 900; padding: 2px 8px; border-radius: 4px; letter-spacing: 0.05em;">TAB 7 • PLATFORM MANUAL</span>
+          <span style="color: #FEBA27; font-weight: 800; font-size: 0.75rem;">U-THEPOST & U-THEJOBS WORKSPACE MANUAL</span>
+        </div>
+        <h2 style="font-size: 1.35rem; font-weight: 900; margin: 0; color: #FFFFFF; letter-spacing: -0.01em;">How-To Guide & Platform Manual</h2>
+        <p style="font-size: 0.8rem; color: #94A3B8; margin: 6px 0 0 0; max-width: 650px; line-height: 1.45;">
+          Clear, step-by-step walkthroughs for job creation, omnichannel social broadcasting, applicant tracking, candidate messaging, and talent discovery.
+        </p>
+      </div>
+
+      <!-- SEARCH / FILTER INPUT -->
+      <div style="min-width: 260px; position: relative;">
+        <input type="text" id="guide-search-input" placeholder="Search guides, tools, or features..." oninput="filterHowToGuideCards(this.value)" style="height: 38px; width: 100%; border: 1.5px solid rgba(0, 117, 255, 0.4); border-radius: 6px; padding: 0 0.85rem 0 2.2rem; font-size: 0.78rem; background: #0F172A; color: #FFFFFF; outline: none;" />
+        <span style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: #94A3B8; pointer-events: none;">🔍</span>
+      </div>
+    </div>
+
+    <!-- QUICK CATEGORY PILLS -->
+    <div style="display: flex; gap: 0.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin-bottom: 1.25rem; padding-bottom: 4px;">
+      <button class="guide-pill active" onclick="filterGuideCategory('all', this)">All Platform Guides</button>
+      <button class="guide-pill" onclick="filterGuideCategory('studio', this)">1. Job Studio</button>
+      <button class="guide-pill" onclick="filterGuideCategory('crm', this)">2. Omnichannel CRM</button>
+      <button class="guide-pill" onclick="filterGuideCategory('ats', this)">3. Applicant Tracker</button>
+      <button class="guide-pill" onclick="filterGuideCategory('plans', this)">4. Plans & Add-Ons</button>
+      <button class="guide-pill" onclick="filterGuideCategory('resumes', this)">6. Resume Search</button>
+      <button class="guide-pill" onclick="filterGuideCategory('candidate', this)">Candidate Portal</button>
+      <button class="guide-pill" onclick="filterGuideCategory('faq', this)">FAQs & Pro Tips</button>
+    </div>
+
+    <!-- MAIN GUIDE CARDS GRID -->
+    <div class="guide-cards-grid" id="guide-cards-container">
+
+      <!-- CARD 1: JOB STUDIO -->
+      <div class="guide-card" data-category="studio">
+        <div class="guide-card-header">
+          <div class="guide-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0075FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="12" y1="18" x2="12" y2="12"></line>
+              <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 0.62rem; font-weight: 800; color: #0075FF; text-transform: uppercase; letter-spacing: 0.05em;">TAB 1 • CREATION & LAUNCH</div>
+            <h3 style="font-size: 0.95rem; font-weight: 900; color: #0F172A; margin: 0;">1. Job Studio & Fast Publishing</h3>
+          </div>
+        </div>
+
+        <p style="font-size: 0.76rem; color: #64748B; margin: 0; line-height: 1.45;">
+          Design professional job postings and launch them live to the candidate talent network in three easy steps.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+          <div class="guide-step-item">
+            <span class="guide-step-num">1</span>
+            <div><strong>Enter Job Details (Card 1):</strong> Type Position Title, select Category, set Pay Structure (Hourly / Salary), and add Location or toggle Remote.</div>
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-num">2</span>
+            <div><strong>Select Perks & Superpowers:</strong> Tap 1-click perk chips (401k, Health, etc.). Choose <em>⭐ Top-of-Page Spotlight</em> or <em>🔥 Urgent Hiring</em> badges.</div>
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-num">3</span>
+            <div><strong>Preview & Publish Live (Cards 2 & 3):</strong> Review the real-time preview in Card 2 and click <em>PUBLISH LIVE</em>. Manage active jobs in Card 3.</div>
+          </div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.7rem; color: #059669; font-weight: 800;">✓ Real-Time Candidate Sync</span>
+          <button class="btn-surface-sm" onclick="switchRecruiterTab('studio')" style="font-size: 0.72rem; font-weight: 800; color: #0075FF; border-color: #0075FF;">
+            Open Job Studio →
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD 2: OMNICHANNEL CRM -->
+      <div class="guide-card" data-category="crm">
+        <div class="guide-card-header">
+          <div class="guide-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0075FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 0.62rem; font-weight: 800; color: #0075FF; text-transform: uppercase; letter-spacing: 0.05em;">TAB 2 • SOCIAL BROADCAST</div>
+            <h3 style="font-size: 0.95rem; font-weight: 900; color: #0F172A; margin: 0;">2. Omnichannel CRM & Socials</h3>
+          </div>
+        </div>
+
+        <p style="font-size: 0.76rem; color: #64748B; margin: 0; line-height: 1.45;">
+          Broadcast your job listings across 5 major social networks simultaneously with granular channel control.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+          <div class="guide-step-item">
+            <span class="guide-step-num">1</span>
+            <div><strong>Connect Account Handles:</strong> Enter your verified usernames for LinkedIn, X (Twitter), TikTok, Facebook, and Instagram. Settings auto-save permanently.</div>
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-num">2</span>
+            <div><strong>Select Target Platforms:</strong> Check individual channel boxes or toggle <em>Select All Channels</em> to broadcast only to your preferred profiles.</div>
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-num">3</span>
+            <div><strong>1-Click Post & Live Threads:</strong> Click <em>1-CLICK SHARE LIVE</em>. Open live feeds via <em>↗ THREAD</em> or use <em>✏️ Edit & Re-Share</em> to post updates.</div>
+          </div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.7rem; color: #0284C7; font-weight: 800;">✓ Auto-Saved Channels</span>
+          <button class="btn-surface-sm" onclick="switchRecruiterTab('crm')" style="font-size: 0.72rem; font-weight: 800; color: #0075FF; border-color: #0075FF;">
+            Launch CRM →
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD 3: APPLICANT TRACKER -->
+      <div class="guide-card" data-category="ats">
+        <div class="guide-card-header">
+          <div class="guide-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0075FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 0.62rem; font-weight: 800; color: #0075FF; text-transform: uppercase; letter-spacing: 0.05em;">TAB 3 • CANDIDATE PIPELINE</div>
+            <h3 style="font-size: 0.95rem; font-weight: 900; color: #0F172A; margin: 0;">3. Applicant Tracker (ATS)</h3>
+          </div>
+        </div>
+
+        <p style="font-size: 0.76rem; color: #64748B; margin: 0; line-height: 1.45;">
+          Track applicants across four hiring stages, inspect verified PDF resumes, and schedule interviews seamlessly.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+          <div class="guide-step-item">
+            <span class="guide-step-num">1</span>
+            <div><strong>4-Stage Visual Pipeline:</strong> Advance applicants across <em>1. Applied ➔ 2. Screened ➔ 3. Interviewing ➔ 4. Offer / Hired</em>.</div>
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-num">2</span>
+            <div><strong>PDF Resumes & Match Scores:</strong> Click any applicant card to inspect their verified PDF resume, qualifications, and match percentage.</div>
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-num">3</span>
+            <div><strong>Direct Messaging & Calendar:</strong> Send 1-click executive templates (Intro, Invite, Interest) or use <em>📅 Propose Date & Time</em> to book meetings.</div>
+          </div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.7rem; color: #8B5CF6; font-weight: 800;">✓ Smart Scheduling</span>
+          <button class="btn-surface-sm" onclick="switchRecruiterTab('ats')" style="font-size: 0.72rem; font-weight: 800; color: #0075FF; border-color: #0075FF;">
+            Open Tracker →
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD 4: PLANS & ADD-ONS -->
+      <div class="guide-card" data-category="plans">
+        <div class="guide-card-header">
+          <div class="guide-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0075FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 0.62rem; font-weight: 800; color: #0075FF; text-transform: uppercase; letter-spacing: 0.05em;">TAB 4 • PRICING & SUPERPOWERS</div>
+            <h3 style="font-size: 0.95rem; font-weight: 900; color: #0F172A; margin: 0;">4. Performance Plans & Add-Ons</h3>
+          </div>
+        </div>
+
+        <p style="font-size: 0.76rem; color: #64748B; margin: 0; line-height: 1.45;">
+          Select the right membership tier for your organization and activate high-visibility add-ons.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.75rem; color: #334155;">
+          <div style="background: var(--card-subtle); border-radius: 6px; padding: 0.45rem 0.6rem;">
+            <strong>Membership Tiers:</strong><br>
+            • <em>u-thePAL ($0)</em>: Free single active posting via email.<br>
+            • <em>Starter ($99)</em>: 3 active jobs with board distribution.<br>
+            • <em>Growth ($299)</em>: 10 active jobs, multi-channel outreach.<br>
+            • <em>Pro ($699)</em>: Unlimited listings and priority network.
+          </div>
+          <div style="background: var(--card-subtle); border-radius: 6px; padding: 0.45rem 0.6rem;">
+            <strong>High-Impact Add-Ons:</strong><br>
+            • <em>⭐ Top Spotlight ($49/mo)</em>: Pinned at #1 in search results.<br>
+            • <em>🔥 Urgent Badge ($29/mo)</em>: Rush candidate applications.<br>
+            • <em>💬 InMail Messages ($19/mo)</em>: Direct candidate outreach.<br>
+            • <em>🛡️ Verified Shield ($39/mo)</em>: Gold trust badge emblem.
+          </div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.7rem; color: #D97706; font-weight: 800;">✓ Transparent Pricing</span>
+          <button class="btn-surface-sm" onclick="switchRecruiterTab('plans')" style="font-size: 0.72rem; font-weight: 800; color: #0075FF; border-color: #0075FF;">
+            View Plans →
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD 5: RESUME SEARCH & TALENT SOURCING -->
+      <div class="guide-card" data-category="resumes">
+        <div class="guide-card-header">
+          <div class="guide-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0075FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 0.62rem; font-weight: 800; color: #0075FF; text-transform: uppercase; letter-spacing: 0.05em;">TAB 6 • TALENT DIRECTORY</div>
+            <h3 style="font-size: 0.95rem; font-weight: 900; color: #0F172A; margin: 0;">6. Resume Search & Scouting</h3>
+          </div>
+        </div>
+
+        <p style="font-size: 0.76rem; color: #64748B; margin: 0; line-height: 1.45;">
+          Directly scout verified talent resumes from across the national candidate directory.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+          <div class="guide-step-item">
+            <span class="guide-step-num">1</span>
+            <div><strong>Dual Search Filters:</strong> Type any job title, skill keyword, or city/location in the top command bar to filter profiles instantly.</div>
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-num">2</span>
+            <div><strong>1-Tap Category Pills:</strong> Filter by industry (Sales, Tech, Management, Marketing) or experience level with a single click.</div>
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-num">3</span>
+            <div><strong>1-Click Shortlisting & Messaging:</strong> Click <em>⭐ Shortlist</em> to bookmark top candidates or <em>💬 Direct Message</em> to initiate contact immediately.</div>
+          </div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.7rem; color: #059669; font-weight: 800;">✓ Verified Talent Pool</span>
+          <button class="btn-surface-sm" onclick="switchRecruiterTab('resumes')" style="font-size: 0.72rem; font-weight: 800; color: #0075FF; border-color: #0075FF;">
+            Search Talent →
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD 6: CANDIDATE PORTAL EXPERIENCE -->
+      <div class="guide-card" data-category="candidate">
+        <div class="guide-card-header">
+          <div class="guide-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0075FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 0.62rem; font-weight: 800; color: #0075FF; text-transform: uppercase; letter-spacing: 0.05em;">CANDIDATE PORTAL • U-THEJOBS</div>
+            <h3 style="font-size: 0.95rem; font-weight: 900; color: #0F172A; margin: 0;">7. Candidate Experience</h3>
+          </div>
+        </div>
+
+        <p style="font-size: 0.76rem; color: #64748B; margin: 0; line-height: 1.45;">
+          Understand how job seekers discover, evaluate, and submit 30-second applications to your postings.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+          <div class="guide-step-item">
+            <span class="guide-step-num">1</span>
+            <div><strong>Candidate Search & Spotlight:</strong> Candidates browse verified listings. Spotlight jobs appear pinned at the very top of their results.</div>
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-num">2</span>
+            <div><strong>30-Second PDF Auto-Fill:</strong> Job seekers click <em>SEND RESUME/CV</em>. Uploading a PDF auto-fills their contact details in seconds.</div>
+          </div>
+          <div class="guide-step-item">
+            <span class="guide-step-num">3</span>
+            <div><strong>Real-Time Notification:</strong> Submitted applications instantly alert your workspace, increment your notification badge, and appear in Tab 3.</div>
+          </div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 0.75rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.7rem; color: #0284C7; font-weight: 800;">✓ Fast Candidate Conversion</span>
+          <button class="btn-surface-sm" onclick="window.open('/candidate.html', '_blank')" style="font-size: 0.72rem; font-weight: 800; color: #0075FF; border-color: #0075FF;">
+            View Candidate Board ↗
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD 7: FAQS & BEST PRACTICES -->
+      <div class="guide-card" data-category="faq" style="grid-column: 1 / -1;">
+        <div class="guide-card-header">
+          <div class="guide-icon-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0075FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size: 0.62rem; font-weight: 800; color: #0075FF; text-transform: uppercase; letter-spacing: 0.05em;">HELP & SUPPORT • BEST PRACTICES</div>
+            <h3 style="font-size: 0.95rem; font-weight: 900; color: #0F172A; margin: 0;">Frequently Asked Questions & Pro Tips</h3>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 0.25rem;">
+          <div style="background: var(--card-subtle); border-radius: 6px; padding: 0.75rem;">
+            <div style="font-weight: 800; font-size: 0.8rem; color: #0F172A; margin-bottom: 4px;">❓ Why do signups require a company email domain?</div>
+            <div style="font-size: 0.74rem; color: #64748B; line-height: 1.4;">To prevent spam and protect job seekers, U-THEPOST requires legitimate corporate/company domains for employer registration. Personal email services (@gmail, @yahoo) are not allowed.</div>
+          </div>
+          <div style="background: var(--card-subtle); border-radius: 6px; padding: 0.75rem;">
+            <div style="font-weight: 800; font-size: 0.8rem; color: #0F172A; margin-bottom: 4px;">❓ How does Top-of-Page Spotlight work?</div>
+            <div style="font-size: 0.74rem; color: #64748B; line-height: 1.4;">When candidates search matching keywords or locations on u-theJOBS, Spotlight listings are dynamically sorted to position #1 with a distinctive gold badge.</div>
+          </div>
+          <div style="background: var(--card-subtle); border-radius: 6px; padding: 0.75rem;">
+            <div style="font-weight: 800; font-size: 0.8rem; color: #0F172A; margin-bottom: 4px;">❓ Can I edit a post after sharing to social media?</div>
+            <div style="font-size: 0.74rem; color: #64748B; line-height: 1.4;">Third-party social networks (X, LinkedIn) do not permit external websites to modify published posts. Use <em>✏️ Edit & Re-Share</em> in Tab 2 to broadcast an updated post live.</div>
+          </div>
+          <div style="background: var(--card-subtle); border-radius: 6px; padding: 0.75rem;">
+            <div style="font-weight: 800; font-size: 0.8rem; color: #0F172A; margin-bottom: 4px;">❓ How do I schedule interviews with applicants?</div>
+            <div style="font-size: 0.74rem; color: #64748B; line-height: 1.4;">Open any candidate card in Tab 3, tap <em>📅 Propose Date & Time</em>, choose your preferred slot, and the meeting proposal is sent directly to the candidate's inbox.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
 </main>
 
 
@@ -6489,6 +7087,249 @@ VERIFIED EMPLOYER
 </div>
 
 
+
+<!-- SIGNATURE COMPLETE HOW-TO GUIDE BOARD MODAL -->
+<div class="custom-modal-alert" id="how-to-guide-modal" style="display: none; z-index: 100000;">
+  <div class="custom-alert-card" style="width: 860px; max-width: 95vw; max-height: 88vh; text-align: left; gap: 0.85rem; display: flex; flex-direction: column; overflow: hidden; padding: 1.25rem;">
+    
+    <!-- MODAL HEADER -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--uthe-gold); padding-bottom: 0.6rem; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="background: #0075FF; color: #FFFFFF; font-size: 0.75rem; font-weight: 900; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">?</span>
+        <div style="font-size: 0.95rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 0.5px;">
+          HOW-TO GUIDE — U-THEPOST & U-THEJOBS
+        </div>
+      </div>
+      <button onclick="closeHowToGuideModal()" style="background: none; border: none; font-size: 1.1rem; color: #94A3B8; cursor: pointer; font-weight: 900; line-height: 1;">✕</button>
+    </div>
+
+    <!-- GUIDE NAVIGATION TABS -->
+    <div style="display: flex; gap: 0.4rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; flex-shrink: 0; flex-wrap: wrap;">
+      <button class="drawer-tab-btn active" id="guide-tab-btn-recruiter" onclick="switchGuideTab('recruiter')" style="flex: 1; min-width: 140px; text-align: center; height: 34px; font-size: 0.72rem; font-weight: 800;">
+        1. 🏢 U-THEPOST (EMPLOYERS)
+      </button>
+      <button class="drawer-tab-btn" id="guide-tab-btn-candidate" onclick="switchGuideTab('candidate')" style="flex: 1; min-width: 140px; text-align: center; height: 34px; font-size: 0.72rem; font-weight: 800;">
+        2. 💼 U-THEJOBS (CANDIDATES)
+      </button>
+      <button class="drawer-tab-btn" id="guide-tab-btn-addons" onclick="switchGuideTab('addons')" style="flex: 1; min-width: 140px; text-align: center; height: 34px; font-size: 0.72rem; font-weight: 800;">
+        3. ⭐ ADD-ONS, PLANS & SOCIALS
+      </button>
+    </div>
+
+    <!-- SCROLLABLE GUIDE BODY -->
+    <div id="guide-modal-content-area" style="flex: 1; overflow-y: auto; padding-right: 0.5rem; display: flex; flex-direction: column; gap: 1rem; font-size: 0.8rem; line-height: 1.5; color: #334155;">
+      
+      <!-- TAB 1: U-THEPOST (EMPLOYER PORTAL) -->
+      <div id="guide-view-recruiter" style="display: flex; flex-direction: column; gap: 1rem;">
+        
+        <div style="background: #F8FAFC; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h3 style="font-size: 0.85rem; font-weight: 900; color: #0F172A; margin-bottom: 0.25rem;">👋 Welcome to U-THEPOST!</h3>
+          <p>U-THEPOST is your all-in-one hiring clubhouse. It lets you create job openings, post them instantly to social media, and pick the best people to hire—all from one simple screen.</p>
+        </div>
+
+        <!-- TOP BAR EXPLAINED -->
+        <div style="border-left: 4px solid var(--uthe-gold); padding-left: 0.75rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 900; color: #0F172A;">🔝 The Top Header (Deck)</h4>
+          <ul style="margin: 0.35rem 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: 0.3rem;">
+            <li><strong>+ UPLOAD LOGO:</strong> Click this to put your company picture or logo at the very top so candidates recognize your business.</li>
+            <li><strong>🔔 Bell Icon (Notifications):</strong> Whenever someone applies to your job or answers your message, this bell rings and shows a red badge.</li>
+            <li><strong>LOGIN / SIGN UP:</strong> Sign into your workspace. <em>Important:</em> Only official company emails (like <code>hiring@yourcompany.com</code>) can sign up. Free personal emails like Gmail or Yahoo are not allowed so that every employer stays verified.</li>
+            <li><strong>The 6 Tabs:</strong> Lets you hop between your Job Studio, Social Media CRM, Applicant Tracker, Plans, Profile, and Resume Search.</li>
+          </ul>
+        </div>
+
+        <!-- TAB 1: JOB STUDIO -->
+        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 900; color: #D97706; display: flex; align-items: center; gap: 5px;">
+            <span>📝</span> TAB 1: 1. JOB STUDIO (Creating & Launching Jobs)
+          </h4>
+          <p style="margin-top: 0.3rem; font-style: italic; color: #64748B;">
+            <strong>Simple Example:</strong> Think of Job Studio like making a colorful flyer for a lemonade stand. You write what helper you need, how much you will pay them, and what cool perks they get!
+          </p>
+          
+          <div style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
+              <strong>Step 1: Fill in Card 1 (Job Description)</strong><br>
+              Type your Job Title (e.g. <em>Sales Manager</em>), Company Name, City/Location (or <em>Remote</em>), Pay Range (e.g. <em>$75,000 - $95,000</em>), and Job Type (Full-Time or Part-Time).
+            </div>
+            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
+              <strong>Step 2: Tap Perk Buttons</strong><br>
+              Tap any of the perk buttons (like <em>18 Days PTO</em>, <em>Full Health Insurance</em>, <em>401k Match</em>, <em>Free Lunch</em>) to instantly add them to your post.
+            </div>
+            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
+              <strong>Step 3: Choose Your Priority Badges</strong><br>
+              • <strong>URGENT HIRING BADGE:</strong> Puts a bright red rush badge on your post so candidates know you want to hire quickly.<br>
+              • <strong>⭐ TOP-OF-PAGE SPOTLIGHT:</strong> Pins your job at the very top of search results (like front-row seats) so candidates see you first.
+            </div>
+            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
+              <strong>Step 4: Check Card 2 (Live Preview) & Click PUBLISH LIVE</strong><br>
+              Card 2 shows you a live sneak peek of how candidates will see your job. Click the big gold <strong>"PUBLISH LIVE"</strong> button to launch it!
+            </div>
+            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
+              <strong>Card 3 (Active Listings Table):</strong><br>
+              Shows all your live jobs. Click <strong>PAUSE</strong> if you have enough applicants, or <strong>DELETE</strong> when the job is filled.
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: OMNICHANNEL CRM -->
+        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 900; color: #2563EB; display: flex; align-items: center; gap: 5px;">
+            <span>🌐</span> TAB 2: 2. OMNICHANNEL CRM (Social Media Sharing)
+          </h4>
+          <p style="margin-top: 0.3rem;">
+            Connect your company's social media accounts so you can blast job openings across the web in 1 click!
+          </p>
+          <ul style="margin: 0.35rem 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: 0.3rem;">
+            <li><strong>Social Media Links:</strong> Type your real handles or profile links for <em>LinkedIn</em>, <em>X (Twitter)</em>, <em>TikTok</em>, <em>Facebook</em>, and <em>Instagram</em>. Everything saves automatically so you never have to type it again!</li>
+            <li><strong>Channel Checkboxes:</strong> Check only the social networks you want to send your post to (like just LinkedIn and X), or check "Select All" to blast all 5 at once.</li>
+            <li><strong>🚀 1-CLICK SHARE LIVE:</strong> Opens ready-to-post windows directly on your chosen social networks.</li>
+            <li><strong>✏️ EDIT & RE-SHARE Button:</strong> External platforms like X or LinkedIn do not allow outside websites to change published text on their servers. If you need to make a correction, click "EDIT & RE-SHARE" to adjust your message and push the corrected post to your feed.</li>
+            <li><strong>↗ THREAD Button:</strong> Opens our signature card with authentic brand logos so you can visit any connected feed in a new tab.</li>
+          </ul>
+        </div>
+
+        <!-- TAB 3: APPLICANT TRACKER -->
+        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 900; color: #059669; display: flex; align-items: center; gap: 5px;">
+            <span>👥</span> TAB 3: 3. APPLICANT TRACKER (Hiring Board & Messages)
+          </h4>
+          <p style="margin-top: 0.3rem; font-style: italic; color: #64748B;">
+            <strong>Simple Example:</strong> Imagine 4 toy boxes lined up: (1) New Letters, (2) Good Fits, (3) Talking on Phone, and (4) Hired! You can slide candidate cards from one box to the next as they pass each step.
+          </p>
+          <ul style="margin: 0.35rem 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: 0.3rem;">
+            <li><strong>The 4 Columns:</strong> <em>1. Applied ➔ 2. Screened ➔ 3. Interviewing ➔ 4. Offer / Hired</em>. Drag or tap candidate cards to move them.</li>
+            <li><strong>Viewing Resumes:</strong> Click on any candidate card to open their file. Click <strong>"📄 View Resume (.pdf)"</strong> to view their full resume in a new tab.</li>
+            <li><strong>Direct Messaging:</strong> Type directly in the chat box to message the candidate in real time.</li>
+            <li><strong>1-Click Templates:</strong> Tap <em>1. INTRO</em>, <em>2. INVITE</em>, or <em>3. INTEREST</em> to instantly fill out a polite message.</li>
+            <li><strong>📅 Propose Date & Time:</strong> Opens a calendar modal where you pick a meeting date and time. It automatically writes out the complete interview invitation for you!</li>
+            <li><strong>Trash / Delete:</strong> Select candidate cards using the checkbox and click the red trash button to remove applicants you don't need.</li>
+          </ul>
+        </div>
+
+        <!-- TAB 6: RESUME SEARCH -->
+        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 900; color: #7C3AED; display: flex; align-items: center; gap: 5px;">
+            <span>🔍</span> TAB 6: 6. RESUME SEARCH (Scouting Verified Talent)
+          </h4>
+          <p style="margin-top: 0.3rem;">
+            Search verified candidates across the country. Type any skill, title (like <em>Chef</em> or <em>Sales</em>), or city. Click <strong>"⭐ SHORTLIST"</strong> to save top candidates to your favorites list.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: U-THEJOBS (CANDIDATE CAREER BOARD) -->
+      <div id="guide-view-candidate" style="display: none; flex-direction: column; gap: 1rem;">
+        
+        <div style="background: #F8FAFC; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h3 style="font-size: 0.85rem; font-weight: 900; color: #0F172A; margin-bottom: 0.25rem;">💼 Welcome to U-THEJOBS!</h3>
+          <p>U-THEJOBS is the fast, verified career board for job seekers. You can search verified employers, apply in under 30 seconds with automatic PDF resume fill, and chat directly with hiring managers.</p>
+        </div>
+
+        <!-- HOW TO SEARCH -->
+        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 900; color: #D97706;">🔎 How to Search & Find Jobs</h4>
+          <ul style="margin: 0.35rem 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: 0.3rem;">
+            <li><strong>Search Bar:</strong> Type any job title (e.g. <em>Sales Manager</em>), city, or skill to search active listings instantly.</li>
+            <li><strong>Work Commitment Filter:</strong> Choose <em>Full-Time</em>, <em>Part-Time</em>, <em>Contract</em>, or <em>Seasonal</em>.</li>
+            <li><strong>Location Filter:</strong> Choose <em>All Locations</em>, <em>Remote</em>, <em>Hybrid</em>, or <em>On-Site</em>.</li>
+            <li><strong>⭐ TOP SPOTLIGHT Jobs:</strong> Jobs with gold star badges are top-priority postings pinned at the very top of your search results.</li>
+          </ul>
+        </div>
+
+        <!-- HOW TO APPLY STEP BY STEP -->
+        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 900; color: #059669;">⚡ How to Apply in 30 Seconds (Step-by-Step)</h4>
+          <div style="margin-top: 0.4rem; display: flex; flex-direction: column; gap: 0.4rem;">
+            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
+              <strong>Step 1: Pick a Job & Inspect Details</strong><br>
+              Click on any job card on the left. The right column shows the full pay, health benefits, PTO vacation days, 401(k) match, and daily responsibilities.
+            </div>
+            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
+              <strong>Step 2: Click QUICK SEND or SEND RESUME/CV</strong><br>
+              Click either button to open the clean application window.
+            </div>
+            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
+              <strong>Step 3: Upload Your PDF Resume (Auto-Fill Magic)</strong><br>
+              Click <strong>"CHOOSE RESUME (.PDF ONLY)"</strong>. Our automatic reader scans your PDF and automatically fills in your Full Name, Email Address, and Phone Number for you!
+            </div>
+            <div style="background: #F8FAFC; padding: 0.5rem; border-radius: 6px;">
+              <strong>Step 4: Choose Best Time to Contact & Submit</strong><br>
+              Pick when you like to be called (Morning, Afternoon, Evening, Anytime), type a quick note, and click <strong>"SUBMIT INTERVIEW REQUEST"</strong>. Your application is sent straight to the hiring manager!
+            </div>
+          </div>
+        </div>
+
+        <!-- CANDIDATE INBOX -->
+        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 900; color: #2563EB;">💬 Direct Recruiter Messages & Fast Replies</h4>
+          <p style="margin-top: 0.3rem;">
+            Click the <strong>🔔 Bell Icon</strong> at the top right to open your private conversation drawer. When an employer invites you for an interview, you can talk with them or use <strong>1-Click Quick Replies</strong> (like <em>"I'M INTERESTED — LET'S TALK"</em>) to answer with one tap!
+          </p>
+        </div>
+
+      </div>
+
+      <!-- TAB 3: ADD-ONS, PLANS & SOCIALS -->
+      <div id="guide-view-addons" style="display: none; flex-direction: column; gap: 1rem;">
+        
+        <div style="background: #F8FAFC; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h3 style="font-size: 0.85rem; font-weight: 900; color: #0F172A; margin-bottom: 0.25rem;">⭐ Membership Plans & Superpower Add-Ons</h3>
+          <p>Everything in U-THEPOST starts at $0. You only pay for what you choose to use!</p>
+        </div>
+
+        <!-- PLANS BREAKDOWN -->
+        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 900; color: #D97706;">💳 Membership Tiers (Tab 4: Performance & Plans)</h4>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;">
+            <div style="border: 1px solid var(--border-color); padding: 0.6rem; border-radius: 6px;">
+              <strong>u-thePAL ($0 / Free)</strong><br>
+              <span style="font-size: 0.72rem; color: #64748B;">1 active job post via email distribution.</span>
+            </div>
+            <div style="border: 1px solid var(--border-color); padding: 0.6rem; border-radius: 6px;">
+              <strong>Starter ($99/mo)</strong><br>
+              <span style="font-size: 0.72rem; color: #64748B;">3 active jobs with standard board distribution.</span>
+            </div>
+            <div style="border: 1px solid var(--border-color); padding: 0.6rem; border-radius: 6px;">
+              <strong>Growth ($299/mo)</strong><br>
+              <span style="font-size: 0.72rem; color: #64748B;">10 active jobs, multi-channel outreach, and candidate search.</span>
+            </div>
+            <div style="border: 1px solid var(--border-color); padding: 0.6rem; border-radius: 6px;">
+              <strong>Pro ($699/mo)</strong><br>
+              <span style="font-size: 0.72rem; color: #64748B;">Unlimited job listings, priority support, and full talent network.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADD-ONS EXPLAINED -->
+        <div style="background: #FFFFFF; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="font-size: 0.82rem; font-weight: 900; color: #059669;">🚀 Superpower Add-Ons Explained</h4>
+          <ul style="margin: 0.35rem 0 0 1rem; padding: 0; display: flex; flex-direction: column; gap: 0.4rem;">
+            <li><strong>⭐ Top-of-Page Spotlight Placement ($49/mo):</strong> Pins your job at position #1 at the very top of candidate search results with a gold badge.</li>
+            <li><strong>🔥 Urgent Hiring Badge ($29/mo):</strong> Adds a bright red badge to rush applications when you need to hire immediately.</li>
+            <li><strong>💬 Direct Hiring Messages ($19/mo):</strong> Lets you message candidates directly in their private portal inbox.</li>
+            <li><strong>🛡️ Verified Employer Shield ($39/mo):</strong> Displays a gold verification shield next to your company name to build maximum candidate trust.</li>
+            <li><strong>🌐 Social Channel Add-Ons ($5.99 each or $19.99 for all 5):</strong> Connects LinkedIn, X, TikTok, Facebook, and Instagram for 1-click sharing.</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- MODAL FOOTER -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 0.6rem; flex-shrink: 0;">
+      <div style="font-size: 0.7rem; color: var(--text-muted);">
+        💡 <em>Tip: You can open this guide anytime by clicking the Blue <strong>?</strong> icon at the top of your screen.</em>
+      </div>
+      <button class="btn-gold-action" onclick="closeHowToGuideModal()" style="height: 34px; padding: 0 1.25rem; font-size: 0.75rem; font-weight: 800;">
+        GOT IT, CLOSE GUIDE
+      </button>
+    </div>
+
+  </div>
+</div>
 
 <!-- LOGO UPLOAD MODAL -->
 
@@ -6949,7 +7790,7 @@ Object.keys(DEFAULT_CANDIDATES_DATA).forEach(k => {
 
 
 
-// 6-Tab Recruiter Navigation Switcher
+// 7-Tab Recruiter Navigation Switcher
 window.switchRecruiterTab = function(tabName) {
   document.querySelectorAll('.nav-tab-btn').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.drawer-tab-btn').forEach(t => t.classList.remove('active'));
@@ -6964,7 +7805,7 @@ window.switchRecruiterTab = function(tabName) {
     target.style.display = 'block';
   }
 
-  const tabs = { 'studio': 0, 'crm': 1, 'ats': 2, 'plans': 3, 'profile': 4, 'resumes': 5 };
+  const tabs = { 'studio': 0, 'crm': 1, 'ats': 2, 'plans': 3, 'profile': 4, 'resumes': 5, 'help': 6, 'guide': 6 };
   const idx = tabs[tabName] !== undefined ? tabs[tabName] : 0;
   if (document.querySelectorAll('.nav-tab-btn')[idx]) document.querySelectorAll('.nav-tab-btn')[idx].classList.add('active');
   if (document.querySelectorAll('.drawer-tab-btn')[idx]) document.querySelectorAll('.drawer-tab-btn')[idx].classList.add('active');
@@ -7344,56 +8185,41 @@ updateLivePreview();
 
 
 
+window.toggleSpotlightPreviewBadge = function(show) {
+  const badge = document.getElementById('badge-spotlight-preview');
+  if (badge) badge.style.display = show ? 'inline-flex' : 'none';
+};
+
 async function publishJobLive() {
+  const isUrgent = document.getElementById('urgentHiringCheckbox') ? document.getElementById('urgentHiringCheckbox').checked : true;
+  const isSpotlight = (document.getElementById('chk-job-spotlight')?.checked || document.getElementById('toggle-addon-spotlight')?.checked) ?? true;
+  const expLevel = document.getElementById('job-exp-level')?.value || document.getElementById('inp-seniority')?.value || 'Mid-Level (2-5 Years)';
+  const perks = getSelectedPerks();
 
-const isUrgent = document.getElementById('urgentHiringCheckbox') ? document.getElementById('urgentHiringCheckbox').checked : true;
-
-const expLevel = document.getElementById('job-exp-level')?.value || document.getElementById('inp-seniority')?.value || 'Mid-Level (2-5 Years)';
-
-const perks = getSelectedPerks();
-
-
-
-const newJob = {
-
-id: `JOB-${Math.floor(100 + Math.random() * 900)}`,
-
-jobTitle: document.getElementById('inp-title').value,
-
-company: document.getElementById('inp-company').value,
-
-location: document.getElementById('inp-location').value,
-
-employmentType: document.getElementById('inp-type').value,
-
-experienceLevel: expLevel,
-
-salary: document.getElementById('inp-salary').value,
-
-urgentHiring: isUrgent,
-
-summary: document.getElementById('inp-desc').value,
-
-additionalPerks: perks.join(' | ') || (document.getElementById('inp-perks')?.value || ''),
-
-perksList: perks,
-
-recruiterEmail: document.getElementById('inp-recruiter-email').value,
-
-socialChannels: {
-
-linkedin: (document.getElementById('social-linkedin') || document.getElementById('inp-soc-linkedin'))?.value || '',
-
-x: (document.getElementById('social-x') || document.getElementById('inp-soc-x'))?.value || '',
-
-tiktok: (document.getElementById('social-tiktok') || document.getElementById('inp-soc-tiktok'))?.value || '',
-
-facebook: (document.getElementById('social-facebook') || document.getElementById('inp-soc-fb'))?.value || '',
-
-instagram: (document.getElementById('social-instagram') || document.getElementById('inp-soc-ig'))?.value || ''
-
-},
-
+  const newJob = {
+    id: `JOB-${Math.floor(100 + Math.random() * 900)}`,
+    jobTitle: document.getElementById('inp-title').value,
+    company: document.getElementById('inp-company').value,
+    location: document.getElementById('inp-location').value,
+    employmentType: document.getElementById('inp-type').value,
+    experienceLevel: expLevel,
+    salary: document.getElementById('inp-salary').value,
+    urgentHiring: isUrgent,
+    spotlight: isSpotlight,
+    topSpotlight: isSpotlight,
+    isSpotlight: isSpotlight,
+    featured: isSpotlight,
+    summary: document.getElementById('inp-desc').value,
+    additionalPerks: perks.join(' | ') || (document.getElementById('inp-perks')?.value || ''),
+    perksList: perks,
+    recruiterEmail: document.getElementById('inp-recruiter-email').value,
+    socialChannels: {
+      linkedin: (document.getElementById('social-linkedin') || document.getElementById('inp-soc-linkedin'))?.value || '',
+      x: (document.getElementById('social-x') || document.getElementById('inp-soc-x'))?.value || '',
+      tiktok: (document.getElementById('social-tiktok') || document.getElementById('inp-soc-tiktok'))?.value || '',
+      facebook: (document.getElementById('social-facebook') || document.getElementById('inp-soc-fb'))?.value || '',
+      instagram: (document.getElementById('social-instagram') || document.getElementById('inp-soc-ig'))?.value || ''
+    },
     createdAt: new Date().toISOString()
   };
 
@@ -7413,7 +8239,11 @@ instagram: (document.getElementById('social-instagram') || document.getElementBy
     jobTitle: newJob.jobTitle,
     status: 'Active',
     postedTime: 'Just Now',
-    channels: 'u-theJOBS, Email, Socials'
+    channels: 'u-theJOBS, Email, Socials',
+    spotlight: isSpotlight,
+    topSpotlight: isSpotlight,
+    isSpotlight: isSpotlight,
+    featured: isSpotlight
   };
 
   activeJobs.unshift(formattedJob);
@@ -7438,8 +8268,11 @@ function renderActiveJobsTable() {
   activeJobs.forEach(job => {
     const tr = document.createElement('tr');
     tr.id = `job-row-${job.id}`;
+    const spotlightBadge = (job.spotlight || job.topSpotlight || job.isSpotlight || job.featured)
+      ? `<span style="background:linear-gradient(135deg,#FEBA27,#F59E0B); color:#111827; font-size:0.58rem; font-weight:900; padding:0.12rem 0.35rem; border-radius:3px; border:1px solid #D97706; margin-left:5px;">⭐ SPOTLIGHT</span>`
+      : '';
     tr.innerHTML = `
-      <td><strong>${job.jobTitle}</strong></td>
+      <td><strong>${job.jobTitle}</strong>${spotlightBadge}</td>
       <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.62rem; font-weight:800; padding:0.12rem 0.35rem; border-radius:3px;">${(job.status || 'ACTIVE').toUpperCase()}</span></td>
       <td style="color:var(--text-muted); font-size:0.72rem;">${job.postedTime || 'Just Now'}</td>
       <td style="font-size:0.7rem;">${job.channels || 'u-theJOBS, Email, Socials'}</td>
@@ -9024,12 +9857,64 @@ document.getElementById('custom-modal-alert').style.display = 'flex';
 
 
 window.closeCustomAlert = function() {
-
-document.getElementById('custom-modal-alert').style.display = 'none';
-
+  document.getElementById('custom-modal-alert').style.display = 'none';
 };
 
+// HOW-TO GUIDE MODAL HANDLERS
+window.openHowToGuideModal = function(initialTab = 'recruiter') {
+  const modal = document.getElementById('how-to-guide-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    switchGuideTab(initialTab);
+  }
+};
 
+window.closeHowToGuideModal = function() {
+  const modal = document.getElementById('how-to-guide-modal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.switchGuideTab = function(tabName) {
+  const tabs = ['recruiter', 'candidate', 'addons'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`guide-tab-btn-${t}`);
+    const view = document.getElementById(`guide-view-${t}`);
+    if (btn) {
+      if (t === tabName) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+    if (view) {
+      view.style.display = (t === tabName) ? 'flex' : 'none';
+    }
+  });
+};
+
+window.filterGuideCategory = function(category, buttonEl) {
+  document.querySelectorAll('.guide-pill').forEach(p => p.classList.remove('active'));
+  if (buttonEl) buttonEl.classList.add('active');
+  const cards = document.querySelectorAll('#guide-cards-container .guide-card');
+  cards.forEach(card => {
+    const cardCat = card.getAttribute('data-category');
+    if (category === 'all' || cardCat === category) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
+
+window.filterHowToGuideCards = function(query) {
+  const q = (query || '').toLowerCase().trim();
+  const cards = document.querySelectorAll('#guide-cards-container .guide-card');
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (!q || text.includes(q)) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
 
 // Auth Handlers
 
@@ -9137,125 +10022,119 @@ meter.style.color = 'var(--text-muted)';
 
 
 
+const DISALLOWED_PERSONAL_DOMAINS = [
+  'gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'icloud.com', 'aol.com',
+  'mail.com', 'zoho.com', 'protonmail.com', 'proton.me', 'live.com', 'gmx.com',
+  'yandex.com', 'fastmail.com', 'inbox.com', 'msn.com', 'att.net', 'verizon.net',
+  'comcast.net', 'sbcglobal.net'
+];
+
+function isPersonalEmailDomain(emailStr) {
+  if (!emailStr || !emailStr.includes('@')) return false;
+  const domain = emailStr.split('@')[1].toLowerCase().trim();
+  return DISALLOWED_PERSONAL_DOMAINS.includes(domain);
+}
+window.isPersonalEmailDomain = isPersonalEmailDomain;
+
 window.handleAuthSubmit = async function() {
+  const emailEl = document.getElementById('auth-email');
+  const passEl = document.getElementById('auth-password');
+  const nameEl = document.getElementById('auth-name');
+  const rememberEl = document.getElementById('auth-remember-device');
 
-const emailEl = document.getElementById('auth-email');
-const passEl = document.getElementById('auth-password');
-const nameEl = document.getElementById('auth-name');
-const rememberEl = document.getElementById('auth-remember-device');
+  const email = emailEl ? emailEl.value.trim() : '';
+  const password = passEl ? passEl.value : '';
+  const name = nameEl ? nameEl.value.trim() : '';
+  const rememberDevice = rememberEl ? rememberEl.checked : true;
 
-const email = emailEl ? emailEl.value.trim() : '';
-const password = passEl ? passEl.value : '';
-const name = nameEl ? nameEl.value.trim() : '';
-const rememberDevice = rememberEl ? rememberEl.checked : true;
+  if (!email) return showCustomModalAlert('Missing Field', 'Please enter your work email.');
 
+  if (authMode === 'signup') {
+    const domain = (email.split('@')[1] || '').toLowerCase().trim();
+    if (isPersonalEmailDomain(email)) {
+      showCustomModalAlert(
+        'COMPANY DOMAIN REQUIRED',
+        `U-THEPOST is strictly reserved for verified employers and organizations. Personal email accounts (such as @${domain}) are not permitted. Please use your official corporate or company work email domain (e.g. name@company.com) to access the recruiter workspace.`
+      );
+      return;
+    }
+  }
 
+  if (authMode === 'login') {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (res.ok && data.user) {
+        currentUser = data.user;
+      } else {
+        currentUser = { name: (name || email.split('@')[0]), email: email, role: 'recruiter' };
+      }
+    } catch (e) {
+      currentUser = { name: (name || email.split('@')[0]), email: email, role: 'recruiter' };
+    }
 
-if (!email) return showCustomModalAlert('Missing Field', 'Please enter your work email.');
+    if (rememberDevice) {
+      try {
+        localStorage.setItem('uthe_remember_device', 'true');
+        localStorage.setItem('uthe_employer_user', JSON.stringify(currentUser));
+      } catch (e) {}
+    } else {
+      try {
+        localStorage.removeItem('uthe_remember_device');
+        localStorage.removeItem('uthe_employer_user');
+      } catch (e) {}
+    }
 
+    closeModal('auth-modal');
+    updateAuthHeaderUi();
+    showCustomModalAlert('Welcome Back', `Logged in as ${currentUser.name}.`);
 
+  } else if (authMode === 'signup') {
+    const signupName = name || email.split('@')[0];
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, name: signupName, role: 'recruiter' })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showCustomModalAlert('SIGN UP ERROR', data.error || 'Failed to register account.');
+        return;
+      }
+      if (data.user) {
+        currentUser = data.user;
+      } else {
+        currentUser = { name: signupName, email: email, role: 'recruiter' };
+      }
+    } catch (e) {
+      currentUser = { name: signupName, email: email, role: 'recruiter' };
+    }
 
-if (authMode === 'login') {
+    if (rememberDevice) {
+      try {
+        localStorage.setItem('uthe_remember_device', 'true');
+        localStorage.setItem('uthe_employer_user', JSON.stringify(currentUser));
+      } catch (e) {}
+    } else {
+      try {
+        localStorage.removeItem('uthe_remember_device');
+        localStorage.removeItem('uthe_employer_user');
+      } catch (e) {}
+    }
 
-try {
+    closeModal('auth-modal');
+    updateAuthHeaderUi();
+    showCustomModalAlert('Account Created', 'Your recruiter studio account is now active.');
 
-const res = await fetch('/api/auth/login', {
-
-method: 'POST',
-
-headers: { 'Content-Type': 'application/json' },
-
-body: JSON.stringify({ email, password })
-
-});
-
-const data = await res.json();
-
-if (res.ok && data.user) {
-
-currentUser = data.user;
-
-} else {
-
-currentUser = { name: (name || email.split('@')[0]), email: email, role: 'recruiter' };
-
-}
-
-} catch (e) {
-currentUser = { name: (name || email.split('@')[0]), email: email, role: 'recruiter' };
-}
-
-if (rememberDevice) {
-  try {
-    localStorage.setItem('uthe_remember_device', 'true');
-    localStorage.setItem('uthe_employer_user', JSON.stringify(currentUser));
-  } catch (e) {}
-} else {
-  try {
-    localStorage.removeItem('uthe_remember_device');
-    localStorage.removeItem('uthe_employer_user');
-  } catch (e) {}
-}
-
-closeModal('auth-modal');
-
-updateAuthHeaderUi();
-
-showCustomModalAlert('Welcome Back', `Logged in as ${currentUser.name}.`);
-
-} else if (authMode === 'signup') {
-
-const signupName = name || email.split('@')[0];
-
-try {
-
-const res = await fetch('/api/auth/signup', {
-
-method: 'POST',
-
-headers: { 'Content-Type': 'application/json' },
-
-body: JSON.stringify({ email, password, name: signupName, role: 'recruiter' })
-
-});
-
-const data = await res.json();
-
-if (res.ok && data.user) {
-
-currentUser = data.user;
-
-} else {
-
-currentUser = { name: signupName, email: email, role: 'recruiter' };
-
-}
-
-} catch (e) {
-currentUser = { name: signupName, email: email, role: 'recruiter' };
-}
-
-if (rememberDevice) {
-  try {
-    localStorage.setItem('uthe_remember_device', 'true');
-    localStorage.setItem('uthe_employer_user', JSON.stringify(currentUser));
-  } catch (e) {}
-} else {
-  try {
-    localStorage.removeItem('uthe_remember_device');
-    localStorage.removeItem('uthe_employer_user');
-  } catch (e) {}
-}
-
-closeModal('auth-modal');
-
-updateAuthHeaderUi();
-
-showCustomModalAlert('Account Created', 'Your recruiter studio account is now active.');
-
-} else if (authMode === 'reset') {
-
-showCustomModalAlert('Reset Link Dispatched', `Password reset instructions sent to ${email}.`);
+  } else if (authMode === 'reset') {
+    showCustomModalAlert('Reset Link Dispatched', `Password reset instructions sent to ${email}.`);
+  }
+};
 
 closeModal('auth-modal');
 

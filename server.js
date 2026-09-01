@@ -1781,6 +1781,22 @@ const server = http.createServer(async (req, res) => {
       if (!email || !password) return sendJson(400, { error: 'Email and password required' });
       if (password.length < 8) return sendJson(400, { error: 'Password must be at least 8 characters long' });
 
+      const DISALLOWED_PERSONAL_DOMAINS = [
+        'gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'icloud.com', 'aol.com',
+        'mail.com', 'zoho.com', 'protonmail.com', 'proton.me', 'live.com', 'gmx.com',
+        'yandex.com', 'fastmail.com', 'inbox.com', 'msn.com', 'att.net', 'verizon.net',
+        'comcast.net', 'sbcglobal.net'
+      ];
+
+      const emailDomain = (email.split('@')[1] || '').toLowerCase().trim();
+      const isRecruiterSignup = (role && (role.toLowerCase().includes('recruiter') || role.toLowerCase().includes('employer'))) || (req.headers.referer && req.headers.referer.includes('recruiter.html'));
+
+      if (isRecruiterSignup && DISALLOWED_PERSONAL_DOMAINS.includes(emailDomain)) {
+        return sendJson(400, {
+          error: `Company Domain Required: Personal email accounts (@${emailDomain}) cannot be used to register on U-THEPOST. Please use your official corporate or company work email domain.`
+        });
+      }
+
       const existing = usersDatabase.find(u => u.email.toLowerCase() === email.toLowerCase().trim());
       if (existing) return sendJson(409, { error: 'Email already registered' });
 
@@ -2374,6 +2390,12 @@ const server = http.createServer(async (req, res) => {
     const payload = handleHunterDomainSearch(parsedUrl.searchParams);
     sendJson(200, payload);
     return;
+  }
+
+  function sanitizeJobForPublic(job) {
+    if (!job) return {};
+    const { recruiterEmail, ...sanitized } = job;
+    return sanitized;
   }
 
   if (pathname === '/api/listings/public' && req.method === 'GET') {
@@ -3243,7 +3265,12 @@ const server = http.createServer(async (req, res) => {
         res.end(`Server Error: ${error.code}`);
       }
     } else {
-      res.writeHead(200, { 'Content-Type': contentType });
+      res.writeHead(200, {
+        'Content-Type': contentType,
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      });
       res.end(content, 'utf-8');
     }
   });

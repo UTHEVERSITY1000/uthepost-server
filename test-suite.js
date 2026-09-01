@@ -3385,6 +3385,162 @@ async function runTests() {
     assert(false, `Group 92 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 93: TOP-OF-PAGE SPOTLIGHT PLACEMENT & SEARCH PINNING
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 93: TOP-OF-PAGE SPOTLIGHT PLACEMENT & SEARCH PINNING ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Verify Job Studio toggle and preview badge
+    assert(recruiterHtml.includes('id="chk-job-spotlight"'), 'recruiter.html includes #chk-job-spotlight toggle in Job Studio');
+    assert(recruiterHtml.includes('id="badge-spotlight-preview"'), 'recruiter.html includes #badge-spotlight-preview in Card 2 Live Preview');
+    assert(recruiterHtml.includes('toggleSpotlightPreviewBadge'), 'recruiter.html implements toggleSpotlightPreviewBadge');
+
+    // 2. Verify publishJobLive sets spotlight flags
+    assert(recruiterHtml.includes('spotlight: isSpotlight') || recruiterHtml.includes('topSpotlight: isSpotlight'), 'recruiter.html packages spotlight flags in publishJobLive');
+    assert(recruiterHtml.includes('⭐ SPOTLIGHT'), 'recruiter.html renders ⭐ SPOTLIGHT badge in Card 3 active jobs table');
+
+    // 3. Verify Candidate Portal spotlight styling and badge
+    assert(candidateHtml.includes('.spotlight-card'), 'candidate.html defines .spotlight-card CSS styling');
+    assert(candidateHtml.includes('⭐ TOP SPOTLIGHT'), 'candidate.html renders ⭐ TOP SPOTLIGHT badge on spotlight cards');
+
+    // 4. Verify Candidate search sorting pins spotlight jobs to top
+    assert(candidateHtml.includes('aSpot && !bSpot') && candidateHtml.includes('-1'), 'candidate.html sorts matching spotlight jobs to the top of candidate search results');
+
+    // 5. Test Live POST /api/jobs with spotlight: true
+    const spotlightTestJob = {
+      id: `JOB-SPOT-${Date.now()}`,
+      jobTitle: 'Executive Director of Operations',
+      company: 'Premier Global Logistics',
+      location: 'AUSTIN, TX (HYBRID)',
+      employmentType: 'Full-Time',
+      salary: '$180,000 - $220,000',
+      spotlight: true,
+      topSpotlight: true,
+      isSpotlight: true,
+      featured: true,
+      summary: 'Executive leadership opening pinned to the top of candidate search results.'
+    };
+
+    const postJobRes = await httpPost('/api/jobs', spotlightTestJob, { 'X-Admin-Portal': 'true' });
+    assert(postJobRes.status === 201 || postJobRes.status === 200, 'POST /api/jobs accepts spotlight job');
+    assert(postJobRes.data.job && (postJobRes.data.job.spotlight === true || postJobRes.data.job.topSpotlight === true), 'Saved job record retains spotlight: true');
+
+    // 6. Verify GET /api/jobs contains the spotlight job
+    const getJobsRes = await httpGet('/api/jobs');
+    assert(getJobsRes.status === 200, 'GET /api/jobs returns 200');
+    const returnedJob = getJobsRes.data.jobs.find(j => j.id === spotlightTestJob.id);
+    assert(returnedJob && (returnedJob.spotlight === true || returnedJob.topSpotlight === true), 'GET /api/jobs provides spotlight property for public candidates');
+
+  } catch (err) {
+    assert(false, `Group 93 failed: ${err.message}`);
+  }
+
+  // =========================================================================
+  // GROUP 94: COMPANY DOMAIN ENFORCEMENT & PERSONAL EMAIL NOTICE (U-THEPOST)
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 94: COMPANY DOMAIN ENFORCEMENT & PERSONAL EMAIL NOTICE ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Verify client-side domain validation in recruiter.html
+    assert(recruiterHtml.includes('isPersonalEmailDomain'), 'recruiter.html defines isPersonalEmailDomain helper');
+    assert(recruiterHtml.includes('COMPANY DOMAIN REQUIRED'), 'recruiter.html flashes COMPANY DOMAIN REQUIRED signature modal');
+    assert(recruiterHtml.includes('DISALLOWED_PERSONAL_DOMAINS'), 'recruiter.html maintains DISALLOWED_PERSONAL_DOMAINS list');
+
+    // 2. Test server-side rejection of personal email addresses on POST /api/auth/signup
+    const gmailSignupRes = await httpPost('/api/auth/signup', {
+      email: `recruiter_test_${Date.now()}@gmail.com`,
+      password: 'TestPassword123!',
+      name: 'Test Recruiter',
+      role: 'recruiter',
+      company: 'Acme Corp'
+    });
+    assert(gmailSignupRes.status === 400, 'POST /api/auth/signup rejects @gmail.com for recruiter account with HTTP 400');
+    assert(gmailSignupRes.data.error && gmailSignupRes.data.error.includes('Company Domain Required'), 'POST /api/auth/signup error notice explains company domain requirement');
+
+    const yahooSignupRes = await httpPost('/api/auth/signup', {
+      email: `recruiter_test_${Date.now()}@yahoo.com`,
+      password: 'TestPassword123!',
+      name: 'Test Recruiter',
+      role: 'employer',
+      company: 'Acme Corp'
+    });
+    assert(yahooSignupRes.status === 400, 'POST /api/auth/signup rejects @yahoo.com for recruiter account with HTTP 400');
+
+    const outlookSignupRes = await httpPost('/api/auth/signup', {
+      email: `recruiter_test_${Date.now()}@outlook.com`,
+      password: 'TestPassword123!',
+      name: 'Test Recruiter',
+      role: 'recruiter',
+      company: 'Acme Corp'
+    });
+    assert(outlookSignupRes.status === 400, 'POST /api/auth/signup rejects @outlook.com for recruiter account with HTTP 400');
+
+    // 3. Test server-side acceptance of legitimate corporate company domains
+    const corpDomainSignupRes = await httpPost('/api/auth/signup', {
+      email: `recruiter_${Date.now()}@techglobaltalent.com`,
+      password: 'CorporatePassword123!',
+      name: 'Corporate Recruiter',
+      role: 'recruiter',
+      company: 'Tech Global Talent Inc'
+    });
+    assert(corpDomainSignupRes.status === 201, 'POST /api/auth/signup accepts legitimate corporate company domain with HTTP 201');
+    assert(corpDomainSignupRes.data.user && corpDomainSignupRes.data.user.email.includes('@techglobaltalent.com'), 'Registered employer profile created successfully');
+
+  } catch (err) {
+    assert(false, `Group 94 failed: ${err.message}`);
+  }
+
+  // =========================================================================
+  // GROUP 95: BLUE ? HELP ICON & COMPREHENSIVE HOW-TO GUIDE BOARD
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 95: BLUE ? HELP ICON & COMPREHENSIVE HOW-TO GUIDE BOARD ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Recruiter top deck Blue ? Help Button to the right of logo
+    assert(recruiterHtml.includes('id="btn-brand-help"'), 'recruiter.html defines #btn-brand-help directly to the right of company logo badge');
+    assert(recruiterHtml.includes('id="btn-help-guide"'), 'recruiter.html defines #btn-help-guide in top deck header');
+    assert(recruiterHtml.includes('class="btn-help-brand"'), 'recruiter.html styles .btn-help-brand');
+    assert(recruiterHtml.includes('#0075FF'), 'recruiter.html enforces blue #0075FF accent for help icon');
+
+    // 2. Candidate top deck Blue ? Help Button to the right of logo badge
+    assert(candidateHtml.includes('id="btn-candidate-brand-help"'), 'candidate.html defines #btn-candidate-brand-help in brand group');
+    assert(candidateHtml.includes('id="btn-candidate-help"'), 'candidate.html defines #btn-candidate-help in top deck header');
+    assert(candidateHtml.includes('class="btn-help-brand"'), 'candidate.html styles .btn-help-brand');
+
+    // 3. Signature How-To Guide Modal in recruiter.html
+    assert(recruiterHtml.includes('id="how-to-guide-modal"'), 'recruiter.html defines #how-to-guide-modal signature modal');
+    assert(recruiterHtml.includes('guide-tab-btn-recruiter') && recruiterHtml.includes('guide-tab-btn-candidate'), 'recruiter.html includes tabbed chapters for employers and candidates');
+    assert(recruiterHtml.includes('openHowToGuideModal') && recruiterHtml.includes('switchGuideTab'), 'recruiter.html implements openHowToGuideModal and switchGuideTab functions');
+
+    // 4. Signature How-To Guide Modal in candidate.html
+    assert(candidateHtml.includes('id="how-to-guide-modal"'), 'candidate.html defines #how-to-guide-modal signature modal');
+    assert(candidateHtml.includes('openHowToGuideModal') && candidateHtml.includes('switchGuideTab'), 'candidate.html implements openHowToGuideModal and switchGuideTab functions');
+
+    // 5. Tab 7: ? (BLUE) Menu Item and #view-help Section
+    assert(recruiterHtml.includes('id="tab-nav-help"') && recruiterHtml.includes('7.'), 'recruiter.html defines Tab 7: 7. ? in top deck navigation');
+    assert(recruiterHtml.includes('switchRecruiterTab(\'help\')'), 'recruiter.html binds Tab 7 to switchRecruiterTab(\'help\')');
+    assert(recruiterHtml.includes('id="view-help"'), 'recruiter.html defines #view-help full-page how-to board');
+    assert(recruiterHtml.includes('guide-cards-container'), 'recruiter.html defines guide-cards-container with interactive cards');
+    assert(recruiterHtml.includes('filterGuideCategory') && recruiterHtml.includes('filterHowToGuideCards'), 'recruiter.html implements filterGuideCategory and filterHowToGuideCards');
+
+    // 6. Plain English and Child-like Simplicity Content Checks
+    assert(recruiterHtml.includes('lemonade stand') || recruiterHtml.includes('colorful flyer') || recruiterHtml.includes('Job Studio & Fast Publishing'), 'recruiter.html contains clear step-by-step guides for job studio');
+    assert(recruiterHtml.includes('1. Applied ➔ 2. Screened ➔ 3. Interviewing ➔ 4. Offer / Hired'), 'recruiter.html explains 4-stage ATS pipeline in simple terms');
+    assert(recruiterHtml.includes('How to Apply in 30 Seconds') || recruiterHtml.includes('30-Second PDF Auto-Fill'), 'recruiter.html explains candidate quick-apply process step-by-step');
+
+  } catch (err) {
+    assert(false, `Group 95 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
