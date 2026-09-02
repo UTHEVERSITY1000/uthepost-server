@@ -3638,18 +3638,18 @@ const server = http.createServer(async (req, res) => {
   }
 
   async function queryPdlPersonSearch(apiKey, targetRole, targetLocation, targetSkills, batchSize) {
-    // TIER 1: Strict match on target title/role with optional location
-    const mustClauses = [];
-    if (targetRole && targetRole.trim()) {
-      mustClauses.push({ match: { job_title: { query: targetRole.trim(), operator: 'and' } } });
-    }
-    if (targetLocation && targetLocation.trim() && targetLocation.toLowerCase() !== 'remote' && targetLocation.toLowerCase() !== 'united states' && targetLocation.toLowerCase() !== 'us') {
-      mustClauses.push({ match: { location_name: targetLocation.trim() } });
+    const roleClean = (targetRole || 'Customer Service Representative').trim();
+    const locClean = (targetLocation || '').trim();
+
+    // TIER 1: Standard match on job_title with optional location and skill boosts
+    const mustClauses = [{ match: { job_title: roleClean } }];
+    if (locClean && !['remote', 'united states', 'us', 'any', 'all'].includes(locClean.toLowerCase())) {
+      mustClauses.push({ match: { location_name: locClean } });
     }
 
     const shouldClauses = [];
     if (Array.isArray(targetSkills) && targetSkills.length > 0) {
-      targetSkills.forEach(skill => {
+      targetSkills.slice(0, 4).forEach(skill => {
         if (skill && skill.trim()) {
           shouldClauses.push({ match: { skills: skill.trim() } });
         }
@@ -3658,8 +3658,8 @@ const server = http.createServer(async (req, res) => {
 
     const tier1Query = {
       bool: {
-        must: mustClauses.length > 0 ? mustClauses : [{ match_all: {} }],
-        should: shouldClauses.length > 0 ? shouldClauses : undefined
+        must: mustClauses,
+        ...(shouldClauses.length > 0 ? { should: shouldClauses } : {})
       }
     };
 
@@ -3669,13 +3669,11 @@ const server = http.createServer(async (req, res) => {
       return tier1Res;
     }
 
-    // TIER 2: Broader match on job title without strict location
+    // TIER 2: Broader match on job_title alone (nationwide candidate pool)
     console.log('[PDL TIER 1 EMPTY -> CASCADING TO TIER 2 BROAD MATCH]');
     const tier2Query = {
       bool: {
-        must: [
-          { match: { job_title: { query: targetRole.trim(), operator: 'or' } } }
-        ]
+        must: [{ match: { job_title: roleClean } }]
       }
     };
     const tier2Res = await executeSinglePdlQuery(apiKey, tier2Query, batchSize);
@@ -3683,15 +3681,19 @@ const server = http.createServer(async (req, res) => {
       return tier2Res;
     }
 
-    // TIER 3: Universal keyword query across title & skills
-    console.log('[PDL TIER 2 EMPTY -> CASCADING TO TIER 3 WILDCARD]');
+    // TIER 3: Query string across job_title
+    console.log('[PDL TIER 2 EMPTY -> CASCADING TO TIER 3 QUERY STRING]');
     const tier3Query = {
       query_string: {
-        query: `"${targetRole.trim()}"`,
-        default_field: 'job_title'
+        query: `job_title:"${roleClean}"`
       }
     };
-    return await executeSinglePdlQuery(apiKey, tier3Query, batchSize);
+    const tier3Res = await executeSinglePdlQuery(apiKey, tier3Query, batchSize);
+    if (tier3Res.success && tier3Res.data && tier3Res.data.length > 0) {
+      return tier3Res;
+    }
+
+    return tier1Res;
   }
 
   if (pathname === '/api/sourcing/pdl-search' && req.method === 'POST') {
