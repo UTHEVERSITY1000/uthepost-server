@@ -1,12 +1,15 @@
 {
   "id": "USR-759",
-  "email": "test.candidate.1787887920554@domain.com",
-  "passwordHash": "a084eb9a26e7a35ee36f5d56e3dd5bcf:591a26b35e8848c41f4aaa5e50077280c347be39bd7fd84bfa715d21bf12d80c7d27d2bac98cae5ed59fe652e17e9b656d5684df23b75d7d038fd0a2243a97af",
+  "userId": "USR-759",
+  "email": "test.candidate.1788323541375@domain.com",
+  "passwordHash": "54136f79bbbb4a43df7d6d3dcf6b1541:b95d96d978cf749406657d6c70701fdd63af94d4e7c64a107494007fbb83c90bcb7448ea45c365e442f15a7552440aec662f740f2e132f515ccd43643fb0129d",
   "name": "Test Persistent Candidate",
+  "fullName": "Test Persistent Candidate",
   "role": "candidate",
   "company": "Test Co",
   "phone": "",
   "bio": "",
   "approved": true,
-  "createdAt": "2026-08-28T03:32:00.570Z"
+  "status": "Active",
+  "createdAt": "2026-09-02T04:32:21.375Z"
 }

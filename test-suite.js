@@ -3730,6 +3730,53 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 100 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 101: GOOGLE FOR JOBS SCHEMA & PEOPLE DATA LABS (PDL) SOURCING SUITE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 101: GOOGLE FOR JOBS SCHEMA & PEOPLE DATA LABS (PDL) SOURCING SUITE ---');
+
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+
+    // 1. Google for Jobs Schema.org Markup
+    assert(candidateHtml.includes('renderGoogleJobPostingSchema'), 'candidate.html implements renderGoogleJobPostingSchema generator');
+    assert(candidateHtml.includes('application/ld+json'), 'candidate.html injects application/ld+json structured schema');
+    assert(candidateHtml.includes('"@type": "JobPosting"'), 'candidate.html formats valid Schema.org JobPosting type');
+    assert(candidateHtml.includes('"directApply": true'), 'candidate.html sets directApply flag for Google for Jobs');
+
+    // 2. Server Google for Jobs Schema Endpoint
+    const googleRes = await httpGet('/api/jobs/google-schema');
+    assert(googleRes.status === 200, 'GET /api/jobs/google-schema returns HTTP 200');
+    assert(Array.isArray(googleRes.data), 'Google for Jobs schema returns array of JobPosting items');
+    if (googleRes.data.length > 0) {
+      assert(googleRes.data[0]['@type'] === 'JobPosting', 'Google schema item has @type JobPosting');
+      assert(googleRes.data[0].hiringOrganization && googleRes.data[0].hiringOrganization['@type'] === 'Organization', 'Google schema item includes structured hiringOrganization');
+    }
+
+    // 3. People Data Labs (PDL) Candidate Sourcing API
+    const pdlSearchRes = await httpPost('/api/sourcing/pdl-search', {
+      role: 'Staff Systems Engineer',
+      location: 'Austin, TX',
+      skills: 'Go, Kubernetes, Distributed Systems',
+      size: 5
+    });
+    assert(pdlSearchRes.status === 200, 'POST /api/sourcing/pdl-search returns HTTP 200');
+    assert(pdlSearchRes.data && pdlSearchRes.data.ok === true, 'PDL sourcing confirms ok: true');
+    assert(pdlSearchRes.data.source === 'People Data Labs (PDL)', 'PDL response confirms verified sourcing channel');
+    assert(pdlSearchRes.data.count === 5, 'PDL response confirms 5 requested candidates ingested');
+    assert(Array.isArray(pdlSearchRes.data.candidates) && pdlSearchRes.data.candidates.length === 5, 'PDL response returns candidate dossier array');
+
+    // 4. Admin PDL Sourcing Controls & Modal
+    assert(adminHtml.includes('id="modal-pdl-sourcing"'), 'admin.html defines #modal-pdl-sourcing modal');
+    assert(adminHtml.includes('openPdlSourcingModal'), 'admin.html implements openPdlSourcingModal trigger');
+    assert(adminHtml.includes('triggerPdlCandidateSourcing'), 'admin.html implements triggerPdlCandidateSourcing handler');
+    assert(adminHtml.includes('id="pdl-api-key"'), 'admin.html provides PDL API key configuration input');
+
+  } catch (err) {
+    assert(false, `Group 101 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

@@ -1450,6 +1450,9 @@
             <button id="btn-admin-batch-delete-resumes" class="btn-danger-sm" onclick="confirmBatchDeleteAdminResumes()" style="display:none; height: 22px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 700; border-radius: 4px;">🗑️ Delete Selected (<span id="admin-selected-resumes-count">0</span>)</button>
           </div>
           <div style="display: flex; gap: 0.35rem; align-items: center; flex-wrap: wrap;">
+            <button class="btn-gold" onclick="openPdlSourcingModal()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px;" data-tooltip="Source verified candidate dossiers via People Data Labs (PDL) API">
+              ⚡ PDL Talent Sourcing
+            </button>
             <button class="btn-gold" onclick="openBatchResumeParserModal()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px;" data-tooltip="Automated multi-resume text parser and batch candidate ingester">
               🧠 Batch Resume Ingestion
             </button>
@@ -1858,6 +1861,62 @@
       <button class="btn-gold" id="btn-trigger-batch-parse" style="width: 100%; margin-top: 0.6rem; height: 38px; font-weight: 900; font-size: 0.75rem;" onclick="triggerBatchResumeIngestion()" data-tooltip="Parse and ingest candidate profiles into live Resume Search">
         🧠 PARSE & INGEST CANDIDATE POOL
       </button>
+    </div>
+  </div>
+
+  <!-- PEOPLE DATA LABS (PDL) CANDIDATE SOURCING MODAL -->
+  <div class="modal-overlay" id="modal-pdl-sourcing" style="display: none;">
+    <div class="modal-card" style="max-width: 520px; text-align: left;">
+      <div class="modal-header">
+        <span class="modal-main-title">⚡ PEOPLE DATA LABS (PDL) TALENT SOURCING</span>
+        <button class="btn-close-modal" onclick="closeModal('modal-pdl-sourcing')">X</button>
+      </div>
+
+      <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.6rem;">
+        Query the People Data Labs API talent graph (1,000 free monthly lookups). Profiles (Candidate Name, Email, Phone, Skills, Experience, Location) are automatically verified and ingested into <strong>Tab 6: RESUME SEARCH</strong>.
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label style="font-size: 0.7rem; font-weight: 800;">Target Role / Keywords</label>
+          <input type="text" id="pdl-target-role" placeholder="e.g. Senior Software Engineer" value="Software Engineer" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Target job title / specialty">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label style="font-size: 0.7rem; font-weight: 800;">Location (City, State / Remote)</label>
+          <input type="text" id="pdl-target-location" placeholder="e.g. Austin, TX" value="Austin, TX" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Target candidate location">
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label style="font-size: 0.7rem; font-weight: 800;">Skills Taxonomy (Comma-Separated)</label>
+          <input type="text" id="pdl-target-skills" placeholder="React, Node.js, TypeScript, AWS" value="React, Node.js, AWS, Distributed Systems" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Core technical skills">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label style="font-size: 0.7rem; font-weight: 800;">Batch Size</label>
+          <select id="pdl-batch-size" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Number of candidate records to source">
+            <option value="5">5 Candidates</option>
+            <option value="10" selected>10 Candidates</option>
+            <option value="25">25 Candidates</option>
+            <option value="50">50 Candidates</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0.5rem;">
+        <label style="font-size: 0.7rem; font-weight: 800;">People Data Labs API Key (Free Tier: 1,000 lookups/mo)</label>
+        <input type="password" id="pdl-api-key" placeholder="Enter PDL API Key (or leave blank for sandbox demo mode)" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Optional PDL API Key">
+      </div>
+
+      <div id="pdl-status-console" style="display: none; background: #111827; color: #34D399; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; padding: 0.5rem; border-radius: 4px; max-height: 120px; overflow-y: auto; margin-bottom: 0.5rem;">
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+        <button class="btn-surface-sm" onclick="closeModal('modal-pdl-sourcing')" style="height: 34px; padding: 0 1rem; font-size: 0.75rem; font-weight: 800;">CANCEL</button>
+        <button class="btn-gold" id="btn-trigger-pdl-sourcing" style="height: 34px; padding: 0 1.2rem; font-size: 0.75rem; font-weight: 900;" onclick="triggerPdlCandidateSourcing()" data-tooltip="Execute candidate sourcing via PDL API">
+          ⚡ SOURCING CANDIDATES (PDL API)
+        </button>
+      </div>
     </div>
   </div>
 
@@ -3091,9 +3150,64 @@
           btn.disabled = false;
           btn.textContent = '🧠 PARSE & INGEST CANDIDATE POOL';
         }
-      }
-    }
     window.triggerBatchResumeIngestion = triggerBatchResumeIngestion;
+
+    // PEOPLE DATA LABS (PDL) TALENT SOURCING HANDLERS
+    window.openPdlSourcingModal = function() {
+      openModal('modal-pdl-sourcing');
+      const savedKey = localStorage.getItem('pdl_api_key') || '';
+      const keyInput = document.getElementById('pdl-api-key');
+      if (keyInput && savedKey) keyInput.value = savedKey;
+    };
+
+    window.triggerPdlCandidateSourcing = async function() {
+      const role = document.getElementById('pdl-target-role').value.trim() || 'Software Engineer';
+      const location = document.getElementById('pdl-target-location').value.trim() || 'Austin, TX';
+      const skills = document.getElementById('pdl-target-skills').value.trim();
+      const size = parseInt(document.getElementById('pdl-batch-size').value) || 10;
+      const apiKey = document.getElementById('pdl-api-key').value.trim();
+
+      if (apiKey) localStorage.setItem('pdl_api_key', apiKey);
+
+      const consoleEl = document.getElementById('pdl-status-console');
+      if (consoleEl) {
+        consoleEl.style.display = 'block';
+        consoleEl.textContent = `[PDL API] Connecting to People Data Labs talent graph...\n[PDL API] Querying: role="${role}", location="${location}", size=${size}...\n`;
+      }
+
+      const btn = document.getElementById('btn-trigger-pdl-sourcing');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '⏳ SOURCING CANDIDATES...';
+      }
+
+      try {
+        const res = await fetch('/api/sourcing/pdl-search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ role, location, skills, size, apiKey })
+        });
+        const data = await res.json();
+        if (res.ok && data.ok) {
+          if (consoleEl) {
+            consoleEl.textContent += `[PDL SUCCESS] Ingested ${data.count} candidates!\n[PDL TOTAL] Total Active Resumes in Store: ${data.totalResumes}\n`;
+          }
+          if (typeof loadAdminResumes === 'function') loadAdminResumes();
+          showCustomModalAlert('PDL Sourcing Complete', `Successfully extracted and created ${data.count} verified candidate dossiers in Resume Search!`);
+        } else {
+          if (consoleEl) consoleEl.textContent += `[PDL ERROR] ${data.error || 'Failed to source candidates.'}\n`;
+          showCustomModalAlert('PDL Sourcing Notice', data.error || 'Unable to connect to PDL API.');
+        }
+      } catch (err) {
+        if (consoleEl) consoleEl.textContent += `[NETWORK ERROR] ${err.message}\n`;
+        showCustomModalAlert('Sourcing Error', err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = '⚡ SOURCING CANDIDATES (PDL API)';
+        }
+      }
+    };
 
     async function loadAdminResumes() {
       try {

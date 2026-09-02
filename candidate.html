@@ -2387,6 +2387,75 @@
         `;
         container.appendChild(card);
       });
+
+      renderGoogleJobPostingSchema(list);
+    }
+
+    // GOOGLE FOR JOBS (SCHEMA.ORG LD+JSON) AUTOMATED INGESTION & INDEXING
+    function renderGoogleJobPostingSchema(jobs) {
+      try {
+        const list = jobs || allJobs || jobsDatabase || [];
+        if (!Array.isArray(list) || list.length === 0) return;
+        let scriptEl = document.getElementById('google-jobposting-schema');
+        if (!scriptEl) {
+          scriptEl = document.createElement('script');
+          scriptEl.type = 'application/ld+json';
+          scriptEl.id = 'google-jobposting-schema';
+          document.head.appendChild(scriptEl);
+        }
+        const schemaArray = list.map(job => {
+          const minSal = Number(job.minCompensation || 0) || (job.salary && parseInt(job.salary.replace(/[^0-9]/g, '')) ) || 50000;
+          const maxSal = Number(job.maxCompensation || 0) || minSal * 1.25;
+          const cleanLoc = (job.location || 'United States').replace(/\(.*\)/g, '').trim();
+          const isRemote = (job.location || '').toLowerCase().includes('remote') || (job.employmentType || '').toLowerCase().includes('remote');
+          
+          return {
+            "@context": "https://schema.org/",
+            "@type": "JobPosting",
+            "title": job.jobTitle || 'Executive Position',
+            "description": job.summary || `${job.jobTitle} at ${job.company}. Perks: ${job.additionalPerks || 'Comprehensive Benefits'}.`,
+            "identifier": {
+              "@type": "PropertyValue",
+              "name": job.company || "U-THEPOST Employer",
+              "value": job.id || "JOB-001"
+            },
+            "datePosted": job.createdAt ? new Date(job.createdAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+            "validThrough": new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            "employmentType": (job.employmentType && job.employmentType.toLowerCase().includes('part')) ? "PART_TIME" : "FULL_TIME",
+            "hiringOrganization": {
+              "@type": "Organization",
+              "name": job.company || "U-THEPOST Partner",
+              "sameAs": "https://utheversity.com",
+              "logo": job.logo || "https://utheversity.com/assets/logo.png"
+            },
+            "jobLocation": {
+              "@type": "Place",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": cleanLoc,
+                "addressLocality": cleanLoc.split(',')[0] ? cleanLoc.split(',')[0].trim() : cleanLoc,
+                "addressRegion": cleanLoc.split(',')[1] ? cleanLoc.split(',')[1].trim() : "TX",
+                "addressCountry": "US"
+              }
+            },
+            ...(isRemote ? { "jobLocationType": "TELECOMMUTE" } : {}),
+            "baseSalary": {
+              "@type": "MonetaryAmount",
+              "currency": "USD",
+              "value": {
+                "@type": "QuantitativeValue",
+                "minValue": minSal,
+                "maxValue": maxSal,
+                "unitText": "YEAR"
+              }
+            },
+            "directApply": true
+          };
+        });
+        scriptEl.textContent = JSON.stringify(schemaArray);
+      } catch (err) {
+        console.warn('[Schema.org] Notice rendering Google for Jobs LD+JSON:', err);
+      }
     }
 
     function selectJob(jobId) {
