@@ -1,5 +1,61 @@
 [
   {
+    "id": "RES-568",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-02T20:30:57.177Z"
+  },
+  {
+    "id": "RES-848",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-02T20:30:57.177Z"
+  },
+  {
+    "id": "RES-956",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-02T20:30:57.143Z"
+  },
+  {
     "id": "RES-346",
     "name": "Bulk Cand Two",
     "role": "Tech Lead",
@@ -260,15 +316,15 @@
     "updatedAt": "2026-09-02T17:19:40.759Z"
   },
   {
-    "id": "RES-5043",
+    "id": "RES-7214",
     "name": "Jacqueline Wright",
     "role": "Staff Systems Engineer",
     "email": "jacqueline.wright@talentlead.io",
-    "phone": "(555) 852-3986",
+    "phone": "(555) 392-4740",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "5+ Years",
-    "score": 93,
+    "score": 96,
     "verified": true,
     "skills": [
       "Go",
@@ -286,7 +342,7 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Jacqueline_Wright_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-02T17:35:23.166Z"
+    "updatedAt": "2026-09-02T20:30:58.679Z"
   },
   {
     "id": "RES-469",
@@ -598,15 +654,15 @@
     "updatedAt": "2026-09-02T06:02:00.321Z"
   },
   {
-    "id": "RES-9652",
+    "id": "RES-2217",
     "name": "Katarina Castellano",
     "role": "Staff Systems Engineer",
     "email": "katarina.castellano@talentlead.io",
-    "phone": "(555) 223-6464",
+    "phone": "(555) 379-6373",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "9+ Years",
-    "score": 97,
+    "score": 93,
     "verified": true,
     "skills": [
       "Go",
@@ -624,18 +680,18 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Katarina_Castellano_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-02T17:35:23.166Z"
+    "updatedAt": "2026-09-02T20:30:58.679Z"
   },
   {
-    "id": "RES-6626",
+    "id": "RES-6666",
     "name": "Derrick Mercer",
     "role": "Staff Systems Engineer",
     "email": "derrick.mercer@talentlead.io",
-    "phone": "(555) 825-6903",
+    "phone": "(555) 610-2263",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "8+ Years",
-    "score": 95,
+    "score": 94,
     "verified": true,
     "skills": [
       "Go",
@@ -653,18 +709,18 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Derrick_Mercer_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-02T17:35:23.166Z"
+    "updatedAt": "2026-09-02T20:30:58.679Z"
   },
   {
-    "id": "RES-7941",
+    "id": "RES-9538",
     "name": "Natalia Kensington",
     "role": "Staff Systems Engineer",
     "email": "natalia.kensington@talentlead.io",
-    "phone": "(555) 508-1221",
+    "phone": "(555) 358-9195",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "7+ Years",
-    "score": 98,
+    "score": 94,
     "verified": true,
     "skills": [
       "Go",
@@ -682,18 +738,18 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Natalia_Kensington_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-02T17:35:23.166Z"
+    "updatedAt": "2026-09-02T20:30:58.679Z"
   },
   {
-    "id": "RES-7134",
+    "id": "RES-9423",
     "name": "Harrison Vanguard",
     "role": "Staff Systems Engineer",
     "email": "harrison.vanguard@talentlead.io",
-    "phone": "(555) 209-9337",
+    "phone": "(555) 351-5577",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "6+ Years",
-    "score": 97,
+    "score": 95,
     "verified": true,
     "skills": [
       "Go",
@@ -711,10 +767,10 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Harrison_Vanguard_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-02T17:35:23.166Z"
+    "updatedAt": "2026-09-02T20:30:58.679Z"
   },
   {
-    "id": "RES-394",
+    "id": "RES-259",
     "name": "Rachel Green",
     "role": "Director of Brand Marketing • New York, NY",
     "email": "rachel.green@fashionretail.com",
@@ -722,17 +778,17 @@
     "location": "New York, NY",
     "workType": "Full-Time • Hybrid",
     "experience": "6+ Years",
-    "score": 94,
+    "score": 95,
     "verified": true,
     "skills": [
       "SEO"
     ],
     "bio": "6+ years leading viral multi-channel campaigns, influencer partnerships, and SEO growth marketing.",
     "resumeFile": "Rachel_Green_Resume.pdf",
-    "updatedAt": "2026-09-02T17:35:23.014Z"
+    "updatedAt": "2026-09-02T20:30:58.507Z"
   },
   {
-    "id": "RES-390",
+    "id": "RES-250",
     "name": "Marcus Vance",
     "role": "Machine Learning Engineer",
     "email": "marcus.vance@talentscale.io",
@@ -749,7 +805,7 @@
     ],
     "bio": "Staff Machine Learning Engineer • San Francisco, CA",
     "resumeFile": "Marcus_Vance_Resume.pdf",
-    "updatedAt": "2026-09-02T17:35:23.012Z"
+    "updatedAt": "2026-09-02T20:30:58.504Z"
   },
   {
     "id": "RES-182",

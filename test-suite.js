@@ -3818,6 +3818,56 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 102 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 103: LIVE EMPLOYER JOB FEED INGESTION & AUTOMATED SOURCING PIPELINE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 103: LIVE EMPLOYER JOB FEED INGESTION & AUTOMATED SOURCING PIPELINE ---');
+
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Feed Status Endpoint
+    const feedStatusRes = await httpGet('/api/jobs/feed-status');
+    assert(feedStatusRes.status === 200, 'GET /api/jobs/feed-status returns HTTP 200');
+    assert(feedStatusRes.data && feedStatusRes.data.status === 'operational', 'Feed status confirms operational health');
+    assert(Array.isArray(feedStatusRes.data.supportedProviders) && feedStatusRes.data.supportedProviders.includes('adzuna'), 'Supported providers list includes Adzuna API');
+    assert(feedStatusRes.data.supportedProviders.includes('jsearch'), 'Supported providers list includes JSearch RapidAPI');
+
+    // 2. Multi-Sector Live Feed Ingestion (Customer Support / Tier II CSRs)
+    const csrSyncRes = await httpPost('/api/jobs/sync-live-feed', {
+      category: 'customer_support',
+      count: 10
+    });
+    assert(csrSyncRes.status === 200, 'POST /api/jobs/sync-live-feed returns HTTP 200 for customer support batch');
+    assert(csrSyncRes.data && csrSyncRes.data.ok === true, 'Live job feed confirms ok: true');
+    assert(typeof csrSyncRes.data.totalJobs === 'number', 'Response returns updated total active jobs count');
+
+    // 3. Admin Live Feed Sourcing Controls
+    assert(adminHtml.includes('triggerLiveJobFeedSync'), 'admin.html implements triggerLiveJobFeedSync');
+    assert(adminHtml.includes('id="modal-sync-job-feeds"'), 'admin.html defines #modal-sync-job-feeds modal');
+    assert(adminHtml.includes('id="aggregator-feed-preset"'), 'admin.html includes feed preset selector');
+
+    // 4. Candidate Public Job Ingestion & Google for Jobs Verification
+    const publicJobsRes = await httpGet('/api/listings/public');
+    assert(publicJobsRes.status === 200, 'GET /api/listings/public returns HTTP 200');
+    assert(Array.isArray(publicJobsRes.data.jobs) && publicJobsRes.data.jobs.length > 0, 'Public job listings contain verified employer vacancies');
+    
+    // Check for Customer Service or Tech employer vacancy
+    const hasActivePost = publicJobsRes.data.jobs.some(j => j.company && j.jobTitle && j.salary);
+    assert(hasActivePost, 'Ingested employer jobs contain complete Company, Title, and Salary data');
+
+    // 5. Google for Jobs Schema Endpoint Indexing Readiness
+    const schemaRes = await httpGet('/api/jobs/google-schema');
+    assert(schemaRes.status === 200, 'GET /api/jobs/google-schema returns HTTP 200');
+    assert(Array.isArray(schemaRes.data) && schemaRes.data.length > 0, 'Google for Jobs schema array populated with structured JobPostings');
+    assert(schemaRes.data[0]['@type'] === 'JobPosting', 'Top schema item has @type JobPosting');
+    assert(schemaRes.data[0].directApply === true, 'Top schema item sets directApply: true for direct candidate routing');
+
+  } catch (err) {
+    assert(false, `Group 103 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

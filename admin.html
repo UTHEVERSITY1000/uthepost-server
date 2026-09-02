@@ -3552,10 +3552,237 @@
         }
         showCustomModalAlert('Network Notice', `Could not reach /api/admin/test-email: ${err.message}`);
       }
-    }
-
     // Alias for direct test email handler
     window.sendTestEmail = sendAdminTestEmail;
+
+    // ----------------------------------------------------
+    // MODAL OPEN / CLOSE UNIVERSAL DISPATCHERS
+    // ----------------------------------------------------
+    function openModal(modalId) {
+      const el = document.getElementById(modalId);
+      if (el) el.style.display = 'flex';
+    }
+    function closeModal(modalId) {
+      const el = document.getElementById(modalId);
+      if (el) el.style.display = 'none';
+    }
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+
+    function openJobAggregatorModal() { openModal('modal-sync-job-feeds'); }
+    function openBatchResumeParserModal() { openModal('modal-batch-resume-parser'); }
+    function openPdlSourcingModal() { openModal('modal-pdl-sourcing'); }
+    function openUploadResumeModal() { openModal('modal-upload-resume'); }
+    function openImportExcelModal() { openModal('modal-import-excel'); }
+    function openImportGoogleSheetsModal() { openModal('modal-import-sheets'); }
+
+    window.openJobAggregatorModal = openJobAggregatorModal;
+    window.openBatchResumeParserModal = openBatchResumeParserModal;
+    window.openPdlSourcingModal = openPdlSourcingModal;
+    window.openUploadResumeModal = openUploadResumeModal;
+    window.openImportExcelModal = openImportExcelModal;
+    window.openImportGoogleSheetsModal = openImportGoogleSheetsModal;
+
+    // ----------------------------------------------------
+    // LIVE ACTIVE EMPLOYER JOB FEED SYNC ROUTINE
+    // ----------------------------------------------------
+    async function triggerLiveJobFeedSync() {
+      const btn = document.getElementById('btn-trigger-feed-sync');
+      const origText = btn ? btn.textContent : '⚡ SYNC & PUBLISH LIVE LISTINGS';
+      const preset = document.getElementById('aggregator-feed-preset') ? document.getElementById('aggregator-feed-preset').value : 'all';
+      const rawXml = document.getElementById('aggregator-feed-custom-xml') ? document.getElementById('aggregator-feed-custom-xml').value.trim() : '';
+      const statusBox = document.getElementById('aggregator-sync-status-box');
+
+      if (btn) {
+        btn.textContent = 'SYNCING ACTIVE EMPLOYERS...';
+        btn.disabled = true;
+      }
+      if (statusBox) {
+        statusBox.style.display = 'block';
+        statusBox.innerHTML = '<span style="color:var(--uthe-gold);">Connecting to live employer job feeds...</span>';
+      }
+
+      try {
+        const res = await fetch('/api/jobs/sync-live-feed', {
+          method: 'POST',
+          headers: getAdminAuthHeaders(),
+          body: JSON.stringify({ preset, rawXml, count: 25 })
+        });
+        const data = await res.json();
+        if (btn) {
+          btn.textContent = origText;
+          btn.disabled = false;
+        }
+
+        if (res.ok) {
+          if (statusBox) {
+            statusBox.innerHTML = `
+              <div style="color:var(--status-mint); font-weight:700;">✓ Synced ${data.syncedCount || 0} New Active Employer Postings</div>
+              <div style="color:var(--text-muted); margin-top:2px;">Total Active Jobs: ${data.totalJobs || 0} (Google Schema Ready)</div>
+            `;
+          }
+          loadAdminJobs();
+          showCustomModalAlert(
+            'Live Job Feed Sync Completed',
+            `Successfully ingested and verified ${data.syncedCount || 0} active hiring employer postings.\n\nTotal Active Jobs: ${data.totalJobs || 0}\nGoogle for Jobs Schema: Auto-Generated`
+          );
+        } else {
+          if (statusBox) statusBox.innerHTML = `<span style="color:var(--danger-red);">Error: ${data.error || 'Sync failed'}</span>`;
+          showCustomModalAlert('Feed Sync Notice', data.error || 'Could not complete job feed sync.');
+        }
+      } catch (err) {
+        if (btn) {
+          btn.textContent = origText;
+          btn.disabled = false;
+        }
+        if (statusBox) statusBox.innerHTML = `<span style="color:var(--danger-red);">Network Error: ${err.message}</span>`;
+        showCustomModalAlert('Network Notice', err.message);
+      }
+    }
+    window.triggerLiveJobFeedSync = triggerLiveJobFeedSync;
+
+    // ----------------------------------------------------
+    // PEOPLE DATA LABS (PDL) TALENT SOURCING ROUTINE
+    // ----------------------------------------------------
+    async function triggerPdlCandidateSourcing() {
+      const btn = document.getElementById('btn-trigger-pdl-sourcing');
+      const origText = btn ? btn.textContent : '⚡ SOURCING CANDIDATES (PDL API)';
+      const role = document.getElementById('pdl-target-role') ? document.getElementById('pdl-target-role').value.trim() : 'Software Engineer';
+      const location = document.getElementById('pdl-target-location') ? document.getElementById('pdl-target-location').value.trim() : 'Austin, TX';
+      const skills = document.getElementById('pdl-target-skills') ? document.getElementById('pdl-target-skills').value.trim() : '';
+      const size = document.getElementById('pdl-batch-size') ? parseInt(document.getElementById('pdl-batch-size').value, 10) : 10;
+      const apiKey = document.getElementById('pdl-api-key') ? document.getElementById('pdl-api-key').value.trim() : '';
+      const consoleBox = document.getElementById('pdl-status-console');
+
+      if (btn) {
+        btn.textContent = 'SOURCING TALENT GRAPH...';
+        btn.disabled = true;
+      }
+      if (consoleBox) {
+        consoleBox.style.display = 'block';
+        consoleBox.innerHTML = `[${new Date().toLocaleTimeString()}] Sourcing candidate dossiers: "${role}" in "${location}" (Batch: ${size})...`;
+      }
+
+      try {
+        const res = await fetch('/api/sourcing/pdl-search', {
+          method: 'POST',
+          headers: getAdminAuthHeaders(),
+          body: JSON.stringify({ role, location, skills, size, apiKey })
+        });
+        const data = await res.json();
+        if (btn) {
+          btn.textContent = origText;
+          btn.disabled = false;
+        }
+
+        if (res.ok) {
+          if (consoleBox) {
+            consoleBox.innerHTML += `<br>[${new Date().toLocaleTimeString()}] Sourcing successful: ${data.count || 0} candidate dossiers verified & ingested.`;
+          }
+          loadAdminResumes();
+          showCustomModalAlert(
+            'Candidate Sourcing Completed',
+            `Successfully ingested ${data.count || 0} verified candidate dossiers for "${role}".\n\nChannel: ${data.source || 'Verified Talent Network'}\nProfiles are now live in Tab 6: RESUME SEARCH.`
+          );
+        } else {
+          if (consoleBox) {
+            consoleBox.innerHTML += `<br>[ERROR] Sourcing Notice: ${data.error || 'Failed to source profiles'}`;
+          }
+          showCustomModalAlert('PDL Sourcing Notice', data.error || 'Sourcing query encountered an issue.');
+        }
+      } catch (err) {
+        if (btn) {
+          btn.textContent = origText;
+          btn.disabled = false;
+        }
+        if (consoleBox) {
+          consoleBox.innerHTML += `<br>[ERROR] Network Error: ${err.message}`;
+        }
+        showCustomModalAlert('Network Notice', err.message);
+      }
+    }
+    window.triggerPdlCandidateSourcing = triggerPdlCandidateSourcing;
+
+    // ----------------------------------------------------
+    // BATCH RESUME TEXT PARSER & INGESTION ROUTINE
+    // ----------------------------------------------------
+    async function triggerBatchResumeIngestion() {
+      const btn = document.getElementById('btn-trigger-batch-parse');
+      const origText = btn ? btn.textContent : '🧠 PARSE & INGEST CANDIDATE POOL';
+      const rawText = document.getElementById('batch-resume-raw-text') ? document.getElementById('batch-resume-raw-text').value.trim() : '';
+      const previewBox = document.getElementById('batch-resume-preview-box');
+
+      if (!rawText) {
+        showCustomModalAlert('Missing Resume Content', 'Please paste candidate text or resumes to parse.');
+        return;
+      }
+
+      if (btn) {
+        btn.textContent = 'PARSING RESUMES...';
+        btn.disabled = true;
+      }
+      if (previewBox) {
+        previewBox.style.display = 'block';
+        previewBox.innerHTML = '<span style="color:var(--uthe-gold);">Extracting contact data, roles, and skills...</span>';
+      }
+
+      try {
+        const res = await fetch('/api/aggregator/resumes/parse-batch', {
+          method: 'POST',
+          headers: getAdminAuthHeaders(),
+          body: JSON.stringify({ rawText })
+        });
+        const data = await res.json();
+        if (btn) {
+          btn.textContent = origText;
+          btn.disabled = false;
+        }
+
+        if (res.ok) {
+          if (previewBox) {
+            previewBox.innerHTML = `<span style="color:var(--status-mint); font-weight:700;">✓ Ingested ${data.count || 0} candidate profiles.</span>`;
+          }
+          loadAdminResumes();
+          showCustomModalAlert(
+            'Batch Resume Ingestion Completed',
+            `Successfully parsed and published ${data.count || 0} candidate resumes to the directory.`
+          );
+        } else {
+          if (previewBox) previewBox.innerHTML = `<span style="color:var(--danger-red);">Error: ${data.error || 'Parsing failed'}</span>`;
+          showCustomModalAlert('Parser Notice', data.error || 'Could not parse resumes.');
+        }
+      } catch (err) {
+        if (btn) {
+          btn.textContent = origText;
+          btn.disabled = false;
+        }
+        if (previewBox) previewBox.innerHTML = `<span style="color:var(--danger-red);">Network Error: ${err.message}</span>`;
+        showCustomModalAlert('Network Notice', err.message);
+      }
+    }
+    window.triggerBatchResumeIngestion = triggerBatchResumeIngestion;
+
+    // In-Window Admin Resume Viewer Modal
+    function openAdminResumeViewer(id, name, role, resumeFile) {
+      const modal = document.getElementById('admin-resume-viewer-modal');
+      const nameEl = document.getElementById('admin-viewer-cand-name');
+      const roleEl = document.getElementById('admin-viewer-cand-role');
+      const frame = document.getElementById('admin-resume-viewer-frame');
+      const downloadLink = document.getElementById('admin-viewer-download-link');
+
+      if (nameEl) nameEl.textContent = name || 'Candidate Profile';
+      if (roleEl) roleEl.textContent = role || 'Verified Talent';
+
+      const fileUrl = resumeFile ? `/data/resumes/${encodeURIComponent(resumeFile)}?unlocked=1` : `/api/resumes?id=${encodeURIComponent(id)}`;
+      if (frame) frame.src = fileUrl;
+      if (downloadLink) {
+        downloadLink.href = fileUrl;
+        downloadLink.download = `${(name || 'Resume').replace(/\s+/g, '_')}_Resume.pdf`;
+      }
+
+      openModal('admin-resume-viewer-modal');
+    }
+    window.openAdminResumeViewer = openAdminResumeViewer;
 
     // Smart Tooltip Boundary Detection (< 60px from top viewport edge)
     function initSmartTooltipPositioning() {
