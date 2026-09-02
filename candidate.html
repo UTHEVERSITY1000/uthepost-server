@@ -1444,6 +1444,99 @@
       .candidate-board-layout, .recruiter-studio-layout {
         flex-direction: column !important;
       }
+
+      /* EXECUTIVE CANDIDATE NOTIFICATIONS / MESSAGING MODAL ON MOBILE */
+      #messageDrawer, .message-drawer-overlay {
+        padding: 0.5rem !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      #messageDrawer .message-drawer-card,
+      .message-drawer-card {
+        flex-direction: column !important;
+        width: 96vw !important;
+        max-width: 96vw !important;
+        height: auto !important;
+        max-height: 92vh !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        border-radius: 8px !important;
+      }
+
+      #messageDrawer .conversation-sidebar,
+      .conversation-sidebar {
+        width: 100% !important;
+        max-height: 160px !important;
+        border-right: none !important;
+        border-bottom: 1.5px solid #D4AF37 !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+      }
+
+      #messageDrawer .chat-panel,
+      .message-drawer-card .chat-panel {
+        width: 100% !important;
+        padding: 0 !important;
+        overflow-y: visible !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      #messageDrawer .message-drawer-body,
+      .message-drawer-body {
+        padding: 12px 14px !important;
+        min-height: 140px !important;
+        max-height: 280px !important;
+      }
+
+      #messageDrawer .quick-responses-wrapper,
+      .quick-responses-wrapper {
+        padding: 8px 12px !important;
+      }
+
+      #messageDrawer .quick-chip,
+      .quick-chip {
+        font-size: 0.62rem !important;
+        padding: 4px 8px !important;
+      }
+
+      #messageDrawer .message-drawer-footer,
+      .message-drawer-footer {
+        padding: 8px 10px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        align-items: center !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+
+      #messageDrawer .message-input-field,
+      .message-input-field,
+      #recruiterReplyInput {
+        flex: 1 1 auto !important;
+        width: auto !important;
+        min-width: 0 !important;
+        height: 38px !important;
+        font-size: 0.78rem !important;
+        padding: 0 0.6rem !important;
+        box-sizing: border-box !important;
+      }
+
+      #messageDrawer .send-reply-btn,
+      .send-reply-btn {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-width: auto !important;
+        height: 38px !important;
+        font-size: 0.68rem !important;
+        font-weight: 800 !important;
+        padding: 0 0.75rem !important;
+        white-space: nowrap !important;
+        box-sizing: border-box !important;
+      }
     }
 
     @media (max-width: 480px) {

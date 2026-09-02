@@ -1,5 +1,61 @@
 [
   {
+    "id": "RES-166",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-02T01:13:16.182Z"
+  },
+  {
+    "id": "RES-937",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-02T01:13:16.182Z"
+  },
+  {
+    "id": "RES-305",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-02T01:13:16.143Z"
+  },
+  {
     "id": "RES-780",
     "name": "Bulk Cand Two",
     "role": "Tech Lead",
@@ -224,7 +280,7 @@
     "updatedAt": "2026-09-01T21:50:00.294Z"
   },
   {
-    "id": "RES-931",
+    "id": "RES-285",
     "name": "Rachel Green",
     "role": "Director of Brand Marketing • New York, NY",
     "email": "rachel.green@fashionretail.com",
@@ -232,14 +288,14 @@
     "location": "New York, NY",
     "workType": "Full-Time • Hybrid",
     "experience": "6+ Years",
-    "score": 94,
+    "score": 92,
     "verified": true,
     "skills": [
       "SEO"
     ],
     "bio": "6+ years leading viral multi-channel campaigns, influencer partnerships, and SEO growth marketing.",
     "resumeFile": "Rachel_Green_Resume.pdf",
-    "updatedAt": "2026-09-02T00:35:23.313Z"
+    "updatedAt": "2026-09-02T01:13:18.043Z"
   },
   {
     "id": "RES-565",
@@ -280,7 +336,7 @@
     "updatedAt": "2026-09-01T20:26:58.912Z"
   },
   {
-    "id": "RES-778",
+    "id": "RES-320",
     "name": "Marcus Vance",
     "role": "Machine Learning Engineer",
     "email": "marcus.vance@talentscale.io",
@@ -288,7 +344,7 @@
     "location": "San Francisco, CA",
     "workType": "Full-Time • Hybrid",
     "experience": "8+ Years",
-    "score": 98,
+    "score": 93,
     "verified": true,
     "skills": [
       "Python",
@@ -297,7 +353,7 @@
     ],
     "bio": "Staff Machine Learning Engineer • San Francisco, CA",
     "resumeFile": "Marcus_Vance_Resume.pdf",
-    "updatedAt": "2026-09-02T00:35:23.313Z"
+    "updatedAt": "2026-09-02T01:13:18.043Z"
   },
   {
     "id": "RES-102",
