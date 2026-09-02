@@ -3615,18 +3615,20 @@ async function runTests() {
 
     const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
 
-    // 1. Admin & Recruiter UI Controls & Modals
+    // 1. Admin UI Controls & Exclusive Feed Sync Sovereignty
     assert(adminHtml.includes('id="modal-sync-job-feeds"'), 'admin.html defines #modal-sync-job-feeds modal');
     assert(adminHtml.includes('id="modal-batch-resume-parser"'), 'admin.html defines #modal-batch-resume-parser modal');
     assert(adminHtml.includes('window.openModal = openModal') && adminHtml.includes('window.closeModal = closeModal'), 'admin.html defines global openModal and closeModal');
     assert(adminHtml.includes('openJobAggregatorModal') && adminHtml.includes('triggerLiveJobFeedSync'), 'admin.html implements job aggregator sync functions');
     assert(adminHtml.includes('openBatchResumeParserModal') && adminHtml.includes('triggerBatchResumeIngestion'), 'admin.html implements batch resume ingestion functions');
 
-    assert(recruiterHtml.includes('id="modal-sync-job-feeds"'), 'recruiter.html defines #modal-sync-job-feeds modal');
-    assert(recruiterHtml.includes('id="modal-batch-resume-parser"'), 'recruiter.html defines #modal-batch-resume-parser modal');
-    assert(recruiterHtml.includes('openJobAggregatorModal') && recruiterHtml.includes('triggerLiveJobFeedSync'), 'recruiter.html implements job aggregator sync functions');
-    assert(recruiterHtml.includes('openBatchResumeParserModal') && recruiterHtml.includes('triggerBatchResumeIngestion'), 'recruiter.html implements batch resume ingestion functions');
+    // 2. Strict Privacy Verification: Recruiters & Candidates NEVER see "SYNC LIVE JOB FEEDS"
+    assert(!recruiterHtml.includes('⚡ SYNC LIVE JOB FEEDS'), 'recruiter.html strictly omits ⚡ SYNC LIVE JOB FEEDS from Card 3 and all tabs');
+    assert(!recruiterHtml.includes('id="modal-sync-job-feeds"'), 'recruiter.html strictly omits #modal-sync-job-feeds modal');
+    assert(!candidateHtml.includes('SYNC LIVE JOB FEEDS'), 'candidate.html strictly omits SYNC LIVE JOB FEEDS');
+    assert(!candidateHtml.includes('id="modal-sync-job-feeds"'), 'candidate.html strictly omits #modal-sync-job-feeds modal');
 
     // 2. Aggregator Stats Endpoint
     const statsRes = await httpGet('/api/aggregator/stats');
