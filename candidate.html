@@ -2341,7 +2341,14 @@
       const container = document.getElementById('opportunities-list');
       if (!container) return;
       container.innerHTML = '';
-      const list = jobs || allJobs || jobsDatabase;
+      const rawList = jobs || allJobs || jobsDatabase || [];
+      const list = [...rawList].sort((a, b) => {
+        const aSpot = Boolean(a.spotlight || a.topSpotlight || a.isSpotlight);
+        const bSpot = Boolean(b.spotlight || b.topSpotlight || b.isSpotlight);
+        if (aSpot && !bSpot) return -1;
+        if (!aSpot && bSpot) return 1;
+        return 0;
+      });
 
       list.forEach(job => {
         const isSelected = job.id === selectedJobId;
