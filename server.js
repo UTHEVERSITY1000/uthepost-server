@@ -544,136 +544,7 @@ const globalMessageStore = [
 ];
 
 // Candidate Resume Directory Database Store
-const defaultResumesDirectory = [
-  {
-    id: 'RES-101',
-    name: 'Marcus Vance',
-    role: 'Sales Manager',
-    email: 'marcus.vance@example.com',
-    phone: '+1 (512) 555-0199',
-    location: 'Austin, TX (Remote)',
-    workType: 'Full-Time • Remote',
-    experience: '7+ Years',
-    score: 95,
-    verified: true,
-    skills: ['B2B Sales', 'Team Leadership', 'Salesforce CRM', 'Revenue Growth', 'Enterprise Accounts'],
-    bio: 'Dynamic Sales Manager with 7+ years accelerating retail and SaaS revenue pipelines by 140%+ across North America.',
-    resumeFile: 'Marcus_Vance_Resume_2026.pdf',
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'RES-102',
-    name: 'Elena Rostova',
-    role: 'Retail Sales Associate',
-    email: 'elena.rostova@example.com',
-    phone: '+1 (415) 555-0211',
-    location: 'San Francisco, CA (Hybrid)',
-    workType: 'Full-Time • Hybrid',
-    experience: '4+ Years',
-    score: 91,
-    verified: true,
-    skills: ['Customer Engagement', 'Inventory Control', 'POS Systems', 'Merchandising', 'Bilingual'],
-    bio: 'Customer-focused Retail Specialist experienced in fast-paced flagship storefronts and omnichannel order fulfillment.',
-    resumeFile: 'Elena_Rostova_Resume.pdf',
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'RES-103',
-    name: 'David K. Mercer',
-    role: 'Store Director / VP Retail',
-    email: 'david.mercer@example.com',
-    phone: '+1 (206) 555-0331',
-    location: 'Seattle, WA (On-Site)',
-    workType: 'Full-Time • On-Site',
-    experience: '12+ Years',
-    score: 98,
-    verified: true,
-    skills: ['P&L Management', 'Store Operations', 'Executive Leadership', 'Staff Training', 'Supply Chain'],
-    bio: 'Accomplished Retail Executive leading multi-unit store networks with $45M+ annual budgets and 200+ direct reports.',
-    resumeFile: 'David_Mercer_Resume.pdf',
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'RES-104',
-    name: 'Sarah Jenkins',
-    role: 'Operations & Logistics Manager',
-    email: 'sarah.jenkins@example.com',
-    phone: '+1 (312) 555-0842',
-    location: 'Chicago, IL (Remote)',
-    workType: 'Full-Time • Remote',
-    experience: '6+ Years',
-    score: 94,
-    verified: true,
-    skills: ['Logistics Ops', 'Warehouse Management', 'ERP Software', 'Vendor Relations', 'Lean Six Sigma'],
-    bio: 'Operational strategist specialized in streamlining multi-channel warehouse fulfillment and vendor negotiations.',
-    resumeFile: 'Sarah_Jenkins_Resume.pdf',
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'RES-105',
-    name: 'Alexander Hayes',
-    role: 'Lead Full-Stack Engineer',
-    email: 'alex.hayes@example.com',
-    phone: '+1 (404) 555-0915',
-    location: 'Atlanta, GA (Remote)',
-    workType: 'Full-Time • Remote',
-    experience: '8+ Years',
-    score: 97,
-    verified: true,
-    skills: ['TypeScript', 'Node.js', 'React', 'Cloud Architecture', 'GraphQL', 'PostgreSQL'],
-    bio: 'High-throughput system architect passionate about reactive user interfaces and resilient cloud-native backends.',
-    resumeFile: 'Alexander_Hayes_Resume.pdf',
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'RES-106',
-    name: 'Maya Lin',
-    role: 'Digital Marketing & Growth Lead',
-    email: 'maya.lin@example.com',
-    phone: '+1 (212) 555-0177',
-    location: 'New York, NY (Hybrid)',
-    workType: 'Full-Time • Hybrid',
-    experience: '5+ Years',
-    score: 93,
-    verified: true,
-    skills: ['Omnichannel Growth', 'Paid Media', 'SEO / SEM', 'Google Analytics', 'Content Strategy'],
-    bio: 'Data-driven Growth Marketer driving acquisition campaigns and viral social outreach across global consumer brands.',
-    resumeFile: 'Maya_Lin_Resume.pdf',
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'RES-107',
-    name: 'Jordan Cole',
-    role: 'Customer Success & Support Lead',
-    email: 'jordan.cole@example.com',
-    phone: '+1 (303) 555-0164',
-    location: 'Denver, CO (Remote)',
-    workType: 'Full-Time • Remote',
-    experience: '5+ Years',
-    score: 89,
-    verified: true,
-    skills: ['Client Retention', 'Zendesk / Intercom', 'SaaS Onboarding', 'Customer Success', 'Escalation Mgmt'],
-    bio: 'Customer advocate dedicated to 99%+ CSAT scores and frictionless enterprise onboarding workflows.',
-    resumeFile: 'Jordan_Cole_Resume.pdf',
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: 'RES-108',
-    name: 'Priya Patel',
-    role: 'HR & Talent Acquisition Specialist',
-    email: 'priya.patel@example.com',
-    phone: '+1 (617) 555-0138',
-    location: 'Boston, MA (Hybrid)',
-    workType: 'Full-Time • Hybrid',
-    experience: '6+ Years',
-    score: 96,
-    verified: true,
-    skills: ['Technical Sourcing', 'ATS Optimization', 'Employer Branding', 'Diversity Hiring', 'Interviewing'],
-    bio: 'Strategic talent partner specializing in recruiting executive, engineering, and high-impact corporate teams.',
-    resumeFile: 'Priya_Patel_Resume.pdf',
-    updatedAt: new Date().toISOString()
-  }
-];
+const defaultResumesDirectory = [];
 
 // ----------------------------------------------------
 // STRICT DATA STORAGE & AUTOMATIC INDEXING SYSTEM
@@ -713,20 +584,23 @@ function initDataDirectories() {
 }
 
 const resumesFilePath = path.join(DATA_DIR, 'resumes_directory.json');
-const resumesStore = [...defaultResumesDirectory];
+const resumesStore = [];
 
 function loadResumesFromDisk() {
   try {
     if (fs.existsSync(resumesFilePath)) {
       const data = JSON.parse(fs.readFileSync(resumesFilePath, 'utf8'));
-      if (Array.isArray(data) && data.length > 0) {
+      if (Array.isArray(data)) {
         resumesStore.length = 0;
         resumesStore.push(...data);
       }
     } else {
+      resumesStore.length = 0;
       saveResumesToDisk();
     }
-  } catch (e) {}
+  } catch (e) {
+    resumesStore.length = 0;
+  }
 }
 
 function saveResumesToDisk() {
@@ -3057,7 +2931,15 @@ const server = http.createServer(async (req, res) => {
       const idsToDelete = idsParam.split(',').map(s => s.trim()).filter(Boolean);
       for (const tid of idsToDelete) {
         const idx = resumesStore.findIndex(r => r.id === tid);
-        if (idx !== -1) resumesStore.splice(idx, 1);
+        if (idx !== -1) {
+          const removed = resumesStore.splice(idx, 1)[0];
+          if (removed && removed.resumeFile) {
+            try {
+              const fPath = path.join(DIRS.resumes, removed.resumeFile);
+              if (fs.existsSync(fPath)) fs.unlinkSync(fPath);
+            } catch (e) {}
+          }
+        }
       }
       saveResumesToDisk();
       broadcastWebSocketEvent('RESUMES_BATCH_DELETED', { ids: idsToDelete, total: resumesStore.length });
@@ -3066,7 +2948,15 @@ const server = http.createServer(async (req, res) => {
 
     if (resId) {
       const idx = resumesStore.findIndex(r => r.id === resId);
-      if (idx !== -1) resumesStore.splice(idx, 1);
+      if (idx !== -1) {
+        const removed = resumesStore.splice(idx, 1)[0];
+        if (removed && removed.resumeFile) {
+          try {
+            const fPath = path.join(DIRS.resumes, removed.resumeFile);
+            if (fs.existsSync(fPath)) fs.unlinkSync(fPath);
+          } catch (e) {}
+        }
+      }
       saveResumesToDisk();
       broadcastWebSocketEvent('RESUME_DELETED', { id: resId, total: resumesStore.length });
       return sendJson(200, { ok: true, status: 'deleted', id: resId });
@@ -4140,5 +4030,7 @@ server.listen(PORT, () => {
   console.log(`  admin.utheversity.com -> admin.html (u-theADMIN Master Suite - Zion Daye)`);
   console.log(`================================================================`);
   loadApplicantsFromDisk();
+  loadResumesFromDisk();
+  loadJobsFromDisk();
   initWebSocket();
 });
