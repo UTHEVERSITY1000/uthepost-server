@@ -3763,7 +3763,7 @@ Director of Brand Marketing • New York, NY
     });
     assert(pdlSearchRes.status === 200, 'POST /api/sourcing/pdl-search returns HTTP 200');
     assert(pdlSearchRes.data && pdlSearchRes.data.ok === true, 'PDL sourcing confirms ok: true');
-    assert(pdlSearchRes.data.source === 'People Data Labs (PDL)', 'PDL response confirms verified sourcing channel');
+    assert(pdlSearchRes.data.source === 'Verified Talent Network', 'PDL response confirms verified sourcing channel');
     assert(pdlSearchRes.data.count === 5, 'PDL response confirms 5 requested candidates ingested');
     assert(Array.isArray(pdlSearchRes.data.candidates) && pdlSearchRes.data.candidates.length === 5, 'PDL response returns candidate dossier array');
 

@@ -1,5 +1,61 @@
 [
   {
+    "id": "RES-917",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-02T06:01:58.554Z"
+  },
+  {
+    "id": "RES-839",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-02T06:01:58.553Z"
+  },
+  {
+    "id": "RES-991",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-02T06:01:58.514Z"
+  },
+  {
     "id": "RES-417",
     "name": "Bulk Cand Two",
     "role": "Tech Lead",
@@ -168,22 +224,22 @@
     "updatedAt": "2026-09-02T05:33:16.475Z"
   },
   {
-    "id": "PDL-5569",
+    "id": "RES-4725",
     "name": "Vance Fairchild",
     "role": "Staff Systems Engineer",
     "email": "vance.fairchild@staffsystemsengineerpro.io",
-    "phone": "(555) 618-8934",
+    "phone": "(555) 562-1016",
     "location": "Austin, TX",
     "workType": "Full-Time • Verified",
     "experience": "8+ Years",
-    "score": 90,
+    "score": 91,
     "verified": true,
     "skills": [
       "Go",
       "Kubernetes",
       "Distributed Systems"
     ],
-    "bio": "Vance Fairchild is an experienced Staff Systems Engineer based in Austin, TX with a verified track record of high customer satisfaction, reliability, and team excellence.",
+    "bio": "Vance Fairchild is an experienced Staff Systems Engineer based in Austin, TX with a verified track record of high customer satisfaction, reliability, and team excellence. Verified portfolio on U-THEPOST.",
     "workHistory": [
       {
         "title": "Senior Staff Systems Engineer",
@@ -192,19 +248,77 @@
       }
     ],
     "education": "Associate / Bachelor Degree - Verified Portfolio",
-    "resumeFile": "Vance_Fairchild_PDL_Resume.pdf",
-    "source": "PEOPLE_DATA_LABS",
-    "updatedAt": "2026-09-02T05:57:36.297Z"
+    "resumeFile": "Vance_Fairchild_Resume.pdf",
+    "source": "VERIFIED_TALENT_NETWORK",
+    "updatedAt": "2026-09-02T06:02:00.321Z"
   },
   {
-    "id": "PDL-6429",
+    "id": "RES-7854",
     "name": "Katarina Castellano",
     "role": "Staff Systems Engineer",
     "email": "katarina.castellano@staffsystemsengineerpro.io",
-    "phone": "(555) 844-5098",
+    "phone": "(555) 849-5239",
     "location": "Austin, TX",
     "workType": "Full-Time • Verified",
     "experience": "7+ Years",
+    "score": 90,
+    "verified": true,
+    "skills": [
+      "Go",
+      "Kubernetes",
+      "Distributed Systems"
+    ],
+    "bio": "Katarina Castellano is an experienced Staff Systems Engineer based in Austin, TX with a verified track record of high customer satisfaction, reliability, and team excellence. Verified portfolio on U-THEPOST.",
+    "workHistory": [
+      {
+        "title": "Senior Staff Systems Engineer",
+        "company": "Apex Global Enterprises",
+        "dateRange": "2022 - Present"
+      }
+    ],
+    "education": "Associate / Bachelor Degree - Verified Portfolio",
+    "resumeFile": "Katarina_Castellano_Resume.pdf",
+    "source": "VERIFIED_TALENT_NETWORK",
+    "updatedAt": "2026-09-02T06:02:00.321Z"
+  },
+  {
+    "id": "RES-4157",
+    "name": "Derrick Mercer",
+    "role": "Staff Systems Engineer",
+    "email": "derrick.mercer@staffsystemsengineerpro.io",
+    "phone": "(555) 200-4599",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Verified",
+    "experience": "6+ Years",
+    "score": 91,
+    "verified": true,
+    "skills": [
+      "Go",
+      "Kubernetes",
+      "Distributed Systems"
+    ],
+    "bio": "Derrick Mercer is an experienced Staff Systems Engineer based in Austin, TX with a verified track record of high customer satisfaction, reliability, and team excellence. Verified portfolio on U-THEPOST.",
+    "workHistory": [
+      {
+        "title": "Senior Staff Systems Engineer",
+        "company": "Apex Global Enterprises",
+        "dateRange": "2022 - Present"
+      }
+    ],
+    "education": "Associate / Bachelor Degree - Verified Portfolio",
+    "resumeFile": "Derrick_Mercer_Resume.pdf",
+    "source": "VERIFIED_TALENT_NETWORK",
+    "updatedAt": "2026-09-02T06:02:00.321Z"
+  },
+  {
+    "id": "RES-3823",
+    "name": "Natalia Kensington",
+    "role": "Staff Systems Engineer",
+    "email": "natalia.kensington@staffsystemsengineerpro.io",
+    "phone": "(555) 367-2566",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Verified",
+    "experience": "5+ Years",
     "score": 94,
     "verified": true,
     "skills": [
@@ -212,7 +326,7 @@
       "Kubernetes",
       "Distributed Systems"
     ],
-    "bio": "Katarina Castellano is an experienced Staff Systems Engineer based in Austin, TX with a verified track record of high customer satisfaction, reliability, and team excellence.",
+    "bio": "Natalia Kensington is an experienced Staff Systems Engineer based in Austin, TX with a verified track record of high customer satisfaction, reliability, and team excellence. Verified portfolio on U-THEPOST.",
     "workHistory": [
       {
         "title": "Senior Staff Systems Engineer",
@@ -221,48 +335,19 @@
       }
     ],
     "education": "Associate / Bachelor Degree - Verified Portfolio",
-    "resumeFile": "Katarina_Castellano_PDL_Resume.pdf",
-    "source": "PEOPLE_DATA_LABS",
-    "updatedAt": "2026-09-02T05:57:36.297Z"
+    "resumeFile": "Natalia_Kensington_Resume.pdf",
+    "source": "VERIFIED_TALENT_NETWORK",
+    "updatedAt": "2026-09-02T06:02:00.321Z"
   },
   {
-    "id": "PDL-8179",
-    "name": "Derrick Mercer",
+    "id": "RES-7104",
+    "name": "Harrison Vanguard",
     "role": "Staff Systems Engineer",
-    "email": "derrick.mercer@staffsystemsengineerpro.io",
-    "phone": "(555) 644-3973",
+    "email": "harrison.vanguard@staffsystemsengineerpro.io",
+    "phone": "(555) 334-8292",
     "location": "Austin, TX",
     "workType": "Full-Time • Verified",
-    "experience": "6+ Years",
-    "score": 98,
-    "verified": true,
-    "skills": [
-      "Go",
-      "Kubernetes",
-      "Distributed Systems"
-    ],
-    "bio": "Derrick Mercer is an experienced Staff Systems Engineer based in Austin, TX with a verified track record of high customer satisfaction, reliability, and team excellence.",
-    "workHistory": [
-      {
-        "title": "Senior Staff Systems Engineer",
-        "company": "Apex Global Enterprises",
-        "dateRange": "2022 - Present"
-      }
-    ],
-    "education": "Associate / Bachelor Degree - Verified Portfolio",
-    "resumeFile": "Derrick_Mercer_PDL_Resume.pdf",
-    "source": "PEOPLE_DATA_LABS",
-    "updatedAt": "2026-09-02T05:57:36.297Z"
-  },
-  {
-    "id": "PDL-7706",
-    "name": "Natalia Kensington",
-    "role": "Staff Systems Engineer",
-    "email": "natalia.kensington@staffsystemsengineerpro.io",
-    "phone": "(555) 758-6170",
-    "location": "Austin, TX",
-    "workType": "Full-Time • Verified",
-    "experience": "5+ Years",
+    "experience": "4+ Years",
     "score": 90,
     "verified": true,
     "skills": [
@@ -270,7 +355,7 @@
       "Kubernetes",
       "Distributed Systems"
     ],
-    "bio": "Natalia Kensington is an experienced Staff Systems Engineer based in Austin, TX with a verified track record of high customer satisfaction, reliability, and team excellence.",
+    "bio": "Harrison Vanguard is an experienced Staff Systems Engineer based in Austin, TX with a verified track record of high customer satisfaction, reliability, and team excellence. Verified portfolio on U-THEPOST.",
     "workHistory": [
       {
         "title": "Senior Staff Systems Engineer",
@@ -279,41 +364,12 @@
       }
     ],
     "education": "Associate / Bachelor Degree - Verified Portfolio",
-    "resumeFile": "Natalia_Kensington_PDL_Resume.pdf",
-    "source": "PEOPLE_DATA_LABS",
-    "updatedAt": "2026-09-02T05:57:36.297Z"
+    "resumeFile": "Harrison_Vanguard_Resume.pdf",
+    "source": "VERIFIED_TALENT_NETWORK",
+    "updatedAt": "2026-09-02T06:02:00.321Z"
   },
   {
-    "id": "PDL-9920",
-    "name": "Harrison Vanguard",
-    "role": "Staff Systems Engineer",
-    "email": "harrison.vanguard@staffsystemsengineerpro.io",
-    "phone": "(555) 513-1656",
-    "location": "Austin, TX",
-    "workType": "Full-Time • Verified",
-    "experience": "4+ Years",
-    "score": 97,
-    "verified": true,
-    "skills": [
-      "Go",
-      "Kubernetes",
-      "Distributed Systems"
-    ],
-    "bio": "Harrison Vanguard is an experienced Staff Systems Engineer based in Austin, TX with a verified track record of high customer satisfaction, reliability, and team excellence.",
-    "workHistory": [
-      {
-        "title": "Senior Staff Systems Engineer",
-        "company": "Apex Global Enterprises",
-        "dateRange": "2022 - Present"
-      }
-    ],
-    "education": "Associate / Bachelor Degree - Verified Portfolio",
-    "resumeFile": "Harrison_Vanguard_PDL_Resume.pdf",
-    "source": "PEOPLE_DATA_LABS",
-    "updatedAt": "2026-09-02T05:57:36.297Z"
-  },
-  {
-    "id": "RES-207",
+    "id": "RES-311",
     "name": "Rachel Green",
     "role": "Director of Brand Marketing • New York, NY",
     "email": "rachel.green@fashionretail.com",
@@ -321,17 +377,17 @@
     "location": "New York, NY",
     "workType": "Full-Time • Hybrid",
     "experience": "6+ Years",
-    "score": 95,
+    "score": 96,
     "verified": true,
     "skills": [
       "SEO"
     ],
     "bio": "6+ years leading viral multi-channel campaigns, influencer partnerships, and SEO growth marketing.",
     "resumeFile": "Rachel_Green_Resume.pdf",
-    "updatedAt": "2026-09-02T05:57:36.138Z"
+    "updatedAt": "2026-09-02T06:01:59.981Z"
   },
   {
-    "id": "RES-259",
+    "id": "RES-859",
     "name": "Marcus Vance",
     "role": "Machine Learning Engineer",
     "email": "marcus.vance@talentscale.io",
@@ -339,7 +395,7 @@
     "location": "San Francisco, CA",
     "workType": "Full-Time • Hybrid",
     "experience": "8+ Years",
-    "score": 97,
+    "score": 92,
     "verified": true,
     "skills": [
       "Python",
@@ -348,7 +404,7 @@
     ],
     "bio": "Staff Machine Learning Engineer • San Francisco, CA",
     "resumeFile": "Marcus_Vance_Resume.pdf",
-    "updatedAt": "2026-09-02T05:57:36.136Z"
+    "updatedAt": "2026-09-02T06:01:59.978Z"
   },
   {
     "id": "RES-182",

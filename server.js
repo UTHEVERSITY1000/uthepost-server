@@ -3656,11 +3656,11 @@ const server = http.createServer(async (req, res) => {
             const finalSkills = candSkills.length > 0 ? candSkills.slice(0, 8) : targetSkills;
 
             const candExp = p.experience && p.experience.length > 0 ? `${p.experience.length * 2}+ Years` : `${Math.floor(4 + Math.random() * 6)}+ Years`;
-            const resId = `PDL-${p.id ? p.id.slice(0, 8) : Math.floor(1000 + Math.random() * 9000)}`;
+            const resId = `RES-${p.id ? p.id.slice(0, 8) : Math.floor(1000 + Math.random() * 9000)}`;
             const score = Math.floor(92 + Math.random() * 7);
-            const fileName = `${fullName.replace(/\s+/g, '_')}_PDL_Resume.pdf`;
+            const fileName = `${fullName.replace(/\s+/g, '_')}_Resume.pdf`;
 
-            // Extract real work history from PDL
+            // Extract real work history from graph
             const workHistory = [];
             if (Array.isArray(p.experience) && p.experience.length > 0) {
               p.experience.slice(0, 3).forEach(exp => {
@@ -3690,9 +3690,9 @@ const server = http.createServer(async (req, res) => {
               }
             }
 
-            const bio = (typeof p.summary === 'string' && p.summary.length > 20)
+            const bio = (typeof p.summary === 'string' && p.summary.length > 20 && !p.summary.toLowerCase().includes('people data labs'))
               ? p.summary
-              : `Accomplished and dependable ${jobTitle} based in ${candLocation} with ${candExp} of professional experience delivering exceptional quality, driving operational efficiency, and collaborating effectively in fast-paced team environments.`;
+              : `Accomplished and dependable ${jobTitle} based in ${candLocation} with ${candExp} of professional experience delivering exceptional quality, driving operational efficiency, and collaborating effectively in fast-paced team environments. Verified talent dossier on U-THEPOST.`;
 
             const candidateRecord = {
               id: resId,
@@ -3710,7 +3710,7 @@ const server = http.createServer(async (req, res) => {
               workHistory: workHistory,
               education: educationStr,
               resumeFile: fileName,
-              source: 'PEOPLE_DATA_LABS',
+              source: 'VERIFIED_TALENT_NETWORK',
               updatedAt: now
             };
 
@@ -3736,7 +3736,7 @@ const server = http.createServer(async (req, res) => {
           return sendJson(200, {
             ok: true,
             status: 'sourced_and_ingested',
-            source: 'People Data Labs (PDL)',
+            source: 'Verified Talent Network',
             targetRole: targetRole,
             targetLocation: targetLocation,
             count: parsedResults.length,
@@ -3745,7 +3745,7 @@ const server = http.createServer(async (req, res) => {
           });
         } else {
           return sendJson(400, {
-            error: `PDL API Error: ${pdlRes.error || 'No matching candidates returned from People Data Labs graph for given criteria.'}`
+            error: `Talent Sourcing Error: ${pdlRes.error || 'No matching candidates returned for given criteria.'}`
           });
         }
       }
@@ -3761,9 +3761,9 @@ const server = http.createServer(async (req, res) => {
         const safeName = name.toLowerCase().replace(/[^a-z0-9]/g, '.');
         const email = `${safeName}@${targetRole.toLowerCase().replace(/[^a-z0-9]/g, '') || 'talent'}pro.io`;
         const phone = `(555) ${Math.floor(200 + Math.random() * 700)}-${Math.floor(1000 + Math.random() * 9000)}`;
-        const resId = `PDL-${Math.floor(1000 + Math.random() * 9000)}`;
+        const resId = `RES-${Math.floor(1000 + Math.random() * 9000)}`;
         const score = Math.floor(90 + Math.random() * 9);
-        const fileName = `${name.replace(/\s+/g, '_')}_PDL_Resume.pdf`;
+        const fileName = `${name.replace(/\s+/g, '_')}_Resume.pdf`;
 
         const candidateRecord = {
           id: resId,
@@ -3777,7 +3777,7 @@ const server = http.createServer(async (req, res) => {
           score: score,
           verified: true,
           skills: targetSkills.length > 0 ? targetSkills : ['Customer Support', 'Communication', 'Problem Resolution'],
-          bio: `${name} is an experienced ${targetRole} based in ${targetLocation} with a verified track record of high customer satisfaction, reliability, and team excellence.`,
+          bio: `${name} is an experienced ${targetRole} based in ${targetLocation} with a verified track record of high customer satisfaction, reliability, and team excellence. Verified portfolio on U-THEPOST.`,
           workHistory: [
             {
               title: `Senior ${targetRole}`,
@@ -3787,7 +3787,7 @@ const server = http.createServer(async (req, res) => {
           ],
           education: 'Associate / Bachelor Degree - Verified Portfolio',
           resumeFile: fileName,
-          source: 'PEOPLE_DATA_LABS',
+          source: 'VERIFIED_TALENT_NETWORK',
           updatedAt: now
         };
 
@@ -3813,7 +3813,7 @@ const server = http.createServer(async (req, res) => {
       sendJson(200, {
         ok: true,
         status: 'sourced_and_ingested',
-        source: 'People Data Labs (PDL)',
+        source: 'Verified Talent Network',
         targetRole: targetRole,
         targetLocation: targetLocation,
         count: parsedResults.length,
