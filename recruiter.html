@@ -235,9 +235,9 @@ nav [data-tooltip]::before,
 
 
 
-/* 48PX MINIMUM TOUCH TARGETS */
+/* 48PX MINIMUM TOUCH TARGETS FOR STANDARD INPUTS & BUTTONS */
 
-button, input, select, textarea, .touch-target {
+button, input:not([type="checkbox"]):not([type="radio"]), select, textarea, .touch-target {
 
 min-height: 48px;
 
@@ -245,6 +245,22 @@ touch-action: manipulation;
 
 font-family: inherit;
 
+}
+
+/* STANDARD COMPACT CHECKBOX NORMALIZATION */
+input[type="checkbox"], input[type="radio"], .kanban-card-checkbox, .resume-card-checkbox, #urgentHiringCheckbox, #chk-job-spotlight {
+  min-height: 13px !important;
+  max-height: 14px !important;
+  height: 13px !important;
+  min-width: 13px !important;
+  max-width: 14px !important;
+  width: 13px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  accent-color: var(--uthe-gold) !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  vertical-align: middle !important;
 }
 
 
@@ -2099,7 +2115,7 @@ cursor: pointer;
 
 user-select: none;
 
-touch-action: none;
+touch-action: pan-y pan-x;
 
 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
 
@@ -2136,6 +2152,8 @@ transform: scale(1.03);
 box-shadow: var(--shadow-lg);
 
 border-color: var(--uthe-gold);
+
+touch-action: none;
 
 z-index: 1000;
 
@@ -4470,6 +4488,103 @@ box-sizing: border-box !important;
 
 }
 
+/* MOBILE CHECKBOX INDUSTRY STANDARD SIZING (NEVER BLOWN UP OR PUSHING ELEMENTS) */
+input[type="checkbox"],
+input[type="radio"],
+.kanban-card-checkbox,
+.resume-card-checkbox,
+#urgentHiringCheckbox,
+#chk-job-spotlight {
+  width: 13px !important;
+  min-width: 13px !important;
+  max-width: 14px !important;
+  height: 13px !important;
+  min-height: 13px !important;
+  max-height: 14px !important;
+  flex: 0 0 13px !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  accent-color: #FEBA27 !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* CARD 1 TOGGLES SNUG STACKING ON MOBILE */
+.card1-toggles-container {
+  margin-top: 0.35rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.25rem !important;
+  width: 100% !important;
+}
+
+/* TAB 3: ATS KANBAN BOARD & COLUMN TOUCH-FRIENDLY WIDE SCROLLBARS */
+.kanban-board {
+  scrollbar-width: thin !important;
+  scrollbar-color: #FEBA27 #E2E8F0 !important;
+  padding-bottom: 1.25rem !important;
+}
+
+.kanban-board::-webkit-scrollbar {
+  display: block !important;
+  height: 12px !important;
+  background-color: #E2E8F0 !important;
+  border-radius: 6px !important;
+}
+
+.kanban-board::-webkit-scrollbar-track {
+  background-color: #E2E8F0 !important;
+  border-radius: 6px !important;
+}
+
+.kanban-board::-webkit-scrollbar-thumb {
+  background-color: #FEBA27 !important;
+  border-radius: 6px !important;
+  border: 2px solid #D97706 !important;
+}
+
+.kanban-board::-webkit-scrollbar-thumb:hover {
+  background-color: #F59E0B !important;
+}
+
+.kanban-cards-area {
+  scrollbar-width: auto !important;
+  scrollbar-color: #FEBA27 #E2E8F0 !important;
+  padding-right: 0.4rem !important;
+}
+
+.kanban-cards-area::-webkit-scrollbar {
+  display: block !important;
+  width: 10px !important;
+  background-color: #E2E8F0 !important;
+  border-radius: 5px !important;
+}
+
+.kanban-cards-area::-webkit-scrollbar-track {
+  background-color: #E2E8F0 !important;
+  border-radius: 5px !important;
+}
+
+.kanban-cards-area::-webkit-scrollbar-thumb {
+  background-color: #FEBA27 !important;
+  border-radius: 5px !important;
+  border: 1.5px solid #D97706 !important;
+}
+
+.kanban-cards-area::-webkit-scrollbar-thumb:hover {
+  background-color: #F59E0B !important;
+}
+
+.candidate-card {
+  touch-action: pan-y pan-x !important;
+}
+
+.candidate-card.touch-dragging {
+  touch-action: none !important;
+}
+
 
 
       /* Make Campaign Date Tracker Table horizontally scrollable on mobile */
@@ -5264,21 +5379,21 @@ white-space: nowrap !important;
 
 <!-- URGENT HIRING & TOP-OF-PAGE SPOTLIGHT TOGGLES -->
 
-<div class="form-group" style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
+<div class="form-group card1-toggles-container" style="margin-top: 0.35rem; display: flex; flex-direction: column; gap: 0.3rem; width: 100%;">
 
-<label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.62rem;">
+<label style="display: flex; align-items: center; justify-content: flex-start; gap: 0.45rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.62rem; width: 100%; margin: 0; padding: 0.05rem 0;">
 
-<input type="checkbox" id="urgentHiringCheckbox" onchange="toggleUrgentHiringBadge(this.checked)" checked style="accent-color: #FEBA27; width: 14px; height: 14px;">
+<input type="checkbox" id="urgentHiringCheckbox" onchange="toggleUrgentHiringBadge(this.checked)" checked style="accent-color: #FEBA27; width: 14px; height: 14px; min-width: 14px; min-height: 14px; margin: 0; flex-shrink: 0;">
 
-<span>URGENT HIRING BADGE</span>
+<span style="letter-spacing: 0.3px; white-space: nowrap;">URGENT HIRING BADGE</span>
 
 </label>
 
-<label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.62rem; color: #92400E;" data-tooltip="Pin your job posting at the top of candidate search results.">
+<label style="display: flex; align-items: center; justify-content: flex-start; gap: 0.45rem; cursor: pointer; text-transform: uppercase; font-weight: 800; font-size: 0.62rem; color: #92400E; width: 100%; margin: 0; padding: 0.05rem 0;" data-tooltip="Pin your job posting at the top of candidate search results.">
 
-<input type="checkbox" id="chk-job-spotlight" onchange="toggleSpotlightPreviewBadge(this.checked)" checked style="accent-color: #FEBA27; width: 14px; height: 14px;">
+<input type="checkbox" id="chk-job-spotlight" onchange="toggleSpotlightPreviewBadge(this.checked)" checked style="accent-color: #FEBA27; width: 14px; height: 14px; min-width: 14px; min-height: 14px; margin: 0; flex-shrink: 0;">
 
-<span>⭐ TOP-OF-PAGE SPOTLIGHT</span>
+<span style="letter-spacing: 0.3px; white-space: nowrap;">⭐ TOP-OF-PAGE SPOTLIGHT</span>
 
 </label>
 
@@ -5286,7 +5401,7 @@ white-space: nowrap !important;
 
 
 
-<button class="btn-primary btn-publish-card1" onclick="publishJob()" style="width: 100%; margin-top: 0.6rem; height: 34px; font-size: 0.7rem;">
+<button class="btn-primary btn-publish-card1" onclick="publishJob()" style="width: 100%; margin-top: 0.5rem; height: 34px; font-size: 0.7rem;">
 
 PUBLISH LIVE
 
@@ -9902,127 +10017,105 @@ window.loadSavedEmployerProfile = function() {
 
 
 // Mobile Touch ATS Setup
-
 function setupMobileTouchAts() {
-
-const cards = document.querySelectorAll('.candidate-card');
-
-const columns = document.querySelectorAll('.kanban-col');
-
-
-
-cards.forEach(card => {
-
-card.addEventListener('dragstart', (e) => {
-
-e.dataTransfer.setData('text/plain', card.id);
-
-});
-
-
-
-let activeCol = null;
-
-card.addEventListener('touchstart', () => {
-
-card.classList.add('touch-dragging');
-
-}, { passive: true });
-
-
-
-card.addEventListener('touchmove', (e) => {
-
-const touch = e.touches[0];
-
-const targetElem = document.elementFromPoint(touch.clientX, touch.clientY);
-
-const col = targetElem ? targetElem.closest('.kanban-col') : null;
-
-
-
-columns.forEach(c => c.classList.remove('drop-target-hover'));
-
-if (col) {
-
-col.classList.add('drop-target-hover');
-
-activeCol = col;
-
-}
-
-}, { passive: false });
-
-
-
-card.addEventListener('touchend', () => {
-
-card.classList.remove('touch-dragging');
-
-columns.forEach(c => c.classList.remove('drop-target-hover'));
-
-if (activeCol) {
-
-const cardsArea = activeCol.querySelector('.kanban-cards-area') || activeCol;
-
-cardsArea.appendChild(card);
-
-updateKanbanCounters();
-
-showCustomModalAlert('Applicant Status Updated', `Candidate moved to ${activeCol.getAttribute('data-col')}.`);
-
-}
-
-activeCol = null;
-
-});
-
-});
-
-
-
-columns.forEach(col => {
-
-col.addEventListener('dragover', (e) => {
-
-e.preventDefault();
-
-col.classList.add('drop-target-hover');
-
-});
-
-col.addEventListener('dragleave', () => {
-
-col.classList.remove('drop-target-hover');
-
-});
-
-col.addEventListener('drop', (e) => {
-
-e.preventDefault();
-
-col.classList.remove('drop-target-hover');
-
-const cardId = e.dataTransfer.getData('text/plain');
-
-const card = document.getElementById(cardId);
-
-if (card) {
-
-const cardsArea = col.querySelector('.kanban-cards-area') || col;
-
-cardsArea.appendChild(card);
-
-updateKanbanCounters();
-
-showCustomModalAlert('Applicant Status Updated', `Candidate moved to ${col.getAttribute('data-col')}.`);
-
-}
-
-});
-
-});
-
+  const cards = document.querySelectorAll('.candidate-card');
+  const columns = document.querySelectorAll('.kanban-col');
+
+  cards.forEach(card => {
+    if (card._touchSetupDone) return;
+    card._touchSetupDone = true;
+
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', card.id);
+    });
+
+    let activeCol = null;
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+    let sourceCol = null;
+
+    card.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      isDragging = false;
+      activeCol = null;
+      sourceCol = card.closest('.kanban-col');
+    }, { passive: true });
+
+    card.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      const deltaX = Math.abs(touch.clientX - startX);
+      const deltaY = Math.abs(touch.clientY - startY);
+
+      // Only engage drag if user moved past intentional threshold (distinguishes from normal scroll/tap)
+      if (!isDragging && (deltaX > 22 || deltaY > 22)) {
+        isDragging = true;
+        card.classList.add('touch-dragging');
+      }
+
+      if (isDragging) {
+        const targetElem = document.elementFromPoint(touch.clientX, touch.clientY);
+        const col = targetElem ? targetElem.closest('.kanban-col') : null;
+
+        columns.forEach(c => c.classList.remove('drop-target-hover'));
+        if (col) {
+          col.classList.add('drop-target-hover');
+          activeCol = col;
+        } else {
+          activeCol = null;
+        }
+      }
+    }, { passive: true });
+
+    card.addEventListener('touchend', () => {
+      card.classList.remove('touch-dragging');
+      columns.forEach(c => c.classList.remove('drop-target-hover'));
+
+      // Only move candidate and fire alert if intentionally dragged to a DIFFERENT column
+      if (isDragging && activeCol && sourceCol && activeCol !== sourceCol) {
+        const cardsArea = activeCol.querySelector('.kanban-cards-area') || activeCol;
+        cardsArea.appendChild(card);
+        updateKanbanCounters();
+        showCustomModalAlert('Applicant Status Updated', `Candidate moved to ${activeCol.getAttribute('data-col')}.`);
+      }
+
+      activeCol = null;
+      isDragging = false;
+      sourceCol = null;
+    });
+  });
+
+  columns.forEach(col => {
+    if (col._dragSetupDone) return;
+    col._dragSetupDone = true;
+
+    col.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      col.classList.add('drop-target-hover');
+    });
+
+    col.addEventListener('dragleave', () => {
+      col.classList.remove('drop-target-hover');
+    });
+
+    col.addEventListener('drop', (e) => {
+      e.preventDefault();
+      col.classList.remove('drop-target-hover');
+      const cardId = e.dataTransfer.getData('text/plain');
+      const card = document.getElementById(cardId);
+      if (card) {
+        const sourceCol = card.closest('.kanban-col');
+        if (sourceCol !== col) {
+          const cardsArea = col.querySelector('.kanban-cards-area') || col;
+          cardsArea.appendChild(card);
+          updateKanbanCounters();
+          showCustomModalAlert('Applicant Status Updated', `Candidate moved to ${col.getAttribute('data-col')}.`);
+        }
+      }
+    });
+  });
 }
 
 
@@ -10754,7 +10847,8 @@ function renderFilteredResumes(resumes) {
         <div>
           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.4rem;">
             <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
-              <div style="width: 36px; height: 36px; border-radius: 50%; background: #0F172A; color: #FEBA27; font-weight: 900; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1.5px solid #FEBA27;">
+              <input type="checkbox" class="resume-card-checkbox" data-id="${r.id}" onchange="handleResumeCardCheckboxChange()" style="width: 13px; height: 13px; min-width: 13px; min-height: 13px; max-width: 14px; max-height: 14px; accent-color: #FEBA27; cursor: pointer; margin: 0; padding: 0; flex-shrink: 0;" data-tooltip="Select candidate for batch deletion">
+              <div style="width: 34px; height: 34px; border-radius: 50%; background: #0F172A; color: #FEBA27; font-weight: 900; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1.5px solid #FEBA27;">
                 ${r.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
               </div>
               <div style="min-width: 0;">
@@ -10765,9 +10859,8 @@ function renderFilteredResumes(resumes) {
                 <div style="font-size: 0.72rem; color: #64748B; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${r.role}</div>
               </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 5px; flex-shrink: 0;">
-              <input type="checkbox" class="resume-card-checkbox" data-id="${r.id}" onchange="handleResumeCardCheckboxChange()" style="width: 13px; height: 13px; accent-color: #FEBA27; cursor: pointer; margin: 0; padding: 0; flex-shrink: 0;" data-tooltip="Select candidate for batch deletion">
-              <span style="font-size: 0.65rem; font-weight: 900; background: var(--status-mint-bg); color: #065F46; border-radius: 4px; padding: 2px 6px; white-space: nowrap;">
+            <div style="display: flex; align-items: center; justify-content: flex-end; flex-shrink: 0;">
+              <span class="cand-score-badge" style="font-size: 0.65rem; font-weight: 900; background: var(--status-mint-bg); color: #065F46; border-radius: 4px; padding: 2px 6px; white-space: nowrap;">
                 ${r.score || 94}% MATCH
               </span>
             </div>
