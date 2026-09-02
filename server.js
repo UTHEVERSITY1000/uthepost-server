@@ -3439,32 +3439,13 @@ const server = http.createServer(async (req, res) => {
   // ----------------------------------------------------
   // PEOPLE DATA LABS (PDL) CANDIDATE SOURCING API
   // ----------------------------------------------------
-  async function queryPdlPersonSearch(apiKey, targetRole, targetLocation, targetSkills, batchSize) {
+  async function executeSinglePdlQuery(apiKey, queryObj, batchSize) {
     const https = require('https');
     return new Promise((resolve) => {
-      const mustClauses = [];
-      if (targetRole) {
-        mustClauses.push({ match: { job_title: targetRole } });
-      }
-      if (targetLocation && targetLocation.toLowerCase() !== 'remote' && targetLocation.toLowerCase() !== 'any') {
-        mustClauses.push({ match: { location_name: targetLocation } });
-      }
-      if (targetSkills && targetSkills.length > 0) {
-        targetSkills.slice(0, 3).forEach(skill => {
-          mustClauses.push({ match: { skills: skill } });
-        });
-      }
-
-      const payloadObj = {
-        query: {
-          bool: {
-            must: mustClauses.length > 0 ? mustClauses : [{ exists: { field: 'job_title' } }]
-          }
-        },
+      const payloadData = JSON.stringify({
+        query: queryObj,
         size: batchSize
-      };
-
-      const payloadData = JSON.stringify(payloadObj);
+      });
       const req = https.request({
         hostname: 'api.peopledatalabs.com',
         port: 443,
@@ -3483,11 +3464,14 @@ const server = http.createServer(async (req, res) => {
         res.on('end', () => {
           try {
             const parsed = JSON.parse(data);
-            if (res.statusCode >= 200 && res.statusCode < 300 && Array.isArray(parsed.data)) {
+            if (res.statusCode >= 200 && res.statusCode < 300 && Array.isArray(parsed.data) && parsed.data.length > 0) {
               resolve({ success: true, count: parsed.total || parsed.data.length, data: parsed.data });
+            } else if (res.statusCode === 404 || (parsed && Array.isArray(parsed.data) && parsed.data.length === 0)) {
+              resolve({ success: false, notFound: true, error: 'No records were found matching your search' });
             } else {
               const errMsg = (parsed && (parsed.error ? (parsed.error.message || parsed.error) : parsed.message)) || `PDL HTTP ${res.statusCode}`;
-              resolve({ success: false, statusCode: res.statusCode, error: errMsg });
+              const isNotFound = res.statusCode === 404 || (typeof errMsg === 'string' && errMsg.toLowerCase().includes('no records'));
+              resolve({ success: false, notFound: isNotFound, statusCode: res.statusCode, error: errMsg });
             }
           } catch (e) {
             resolve({ success: false, statusCode: res.statusCode, error: `Failed to parse PDL API response: ${e.message}` });
@@ -3500,6 +3484,58 @@ const server = http.createServer(async (req, res) => {
       req.write(payloadData);
       req.end();
     });
+  }
+
+  async function queryPdlPersonSearch(apiKey, targetRole, targetLocation, targetSkills, batchSize) {
+    // Strategy 1: Targeted query with job_title + location, with skills as optional boosts (should)
+    const mustClauses = [];
+    if (targetRole) {
+      mustClauses.push({ match: { job_title: targetRole } });
+    }
+    if (targetLocation && targetLocation.toLowerCase() !== 'remote' && targetLocation.toLowerCase() !== 'any' && targetLocation.toLowerCase() !== 'all') {
+      mustClauses.push({ match: { location_name: targetLocation } });
+    }
+
+    const shouldClauses = [];
+    if (targetSkills && targetSkills.length > 0) {
+      targetSkills.slice(0, 4).forEach(skill => {
+        shouldClauses.push({ match: { skills: skill } });
+      });
+    }
+
+    const q1 = {
+      bool: {
+        must: mustClauses.length > 0 ? mustClauses : [{ exists: { field: 'job_title' } }],
+        ...(shouldClauses.length > 0 ? { should: shouldClauses } : {})
+      }
+    };
+
+    let res = await executeSinglePdlQuery(apiKey, q1, batchSize);
+    if (res.success) return res;
+
+    // Strategy 2: If too narrow, loosen to just job_title match (broad nationwide candidate pool)
+    if (res.notFound && targetRole) {
+      const q2 = {
+        bool: {
+          must: [{ match: { job_title: targetRole } }]
+        }
+      };
+      res = await executeSinglePdlQuery(apiKey, q2, batchSize);
+      if (res.success) return res;
+    }
+
+    // Strategy 3: Loosen to query_string wildcard for role keywords
+    if (res.notFound && targetRole) {
+      const q3 = {
+        query_string: {
+          query: `"${targetRole}"`
+        }
+      };
+      res = await executeSinglePdlQuery(apiKey, q3, batchSize);
+      if (res.success) return res;
+    }
+
+    return res;
   }
 
   if (pathname === '/api/sourcing/pdl-search' && req.method === 'POST') {
