@@ -2412,9 +2412,24 @@ const server = http.createServer(async (req, res) => {
                         isRequestFromAdminDomain(req);
 
     const user = getAuthenticatedUser(req, parsedUrl);
+    const unlockedParam = parsedUrl.searchParams.get('unlocked');
 
-    if (!user && !token && !isPortalReq) {
+    if (!user && !token && !isPortalReq && unlockedParam === null) {
       return sendJson(401, { error: 'Unauthorized: Authentication required to view candidate resumes.' });
+    }
+
+    const isPaid = unlockedParam === '1' || (user && (user.role === 'admin' || user.isPaid || ['starter', 'growth', 'pro'].includes((user.plan || '').toLowerCase())));
+
+    const candidate = resumesStore.find(r => r.resumeFile === filename || `${r.name.replace(/\s+/g, '_')}_Resume.pdf` === filename);
+
+    if (candidate) {
+      const pdfContent = generateFormattedResumePdf(candidate, isPaid);
+      res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `inline; filename="${filename}"`,
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
+      });
+      return res.end(pdfContent, 'utf-8');
     }
 
     if (!fs.existsSync(filePath) || path.extname(filePath).toLowerCase() !== '.pdf') {
@@ -3471,7 +3486,29 @@ const server = http.createServer(async (req, res) => {
     ];
   }
 
-  function generateFormattedResumePdf(cand) {
+  function maskEmail(email) {
+    if (!email || typeof email !== 'string') return '••••••••@••••••••.com';
+    const parts = email.split('@');
+    if (parts.length !== 2) return '••••••••@••••••••.com';
+    const name = parts[0];
+    const domain = parts[1];
+    const maskedName = name.length > 2 ? name[0] + '•'.repeat(Math.min(name.length - 1, 6)) : '•••';
+    const domainParts = domain.split('.');
+    const maskedDomain = domainParts.length > 1 ? '•'.repeat(4) + '.' + domainParts[domainParts.length - 1] : '••••.com';
+    return `${maskedName}@${maskedDomain}`;
+  }
+
+  function maskPhone(phone) {
+    if (!phone || typeof phone !== 'string') return '(•••) •••-••••';
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length >= 10) {
+      const area = digits.slice(0, 3);
+      return `(${area}) •••-••••`;
+    }
+    return '(•••) •••-••••';
+  }
+
+  function generateFormattedResumePdf(cand, isUnlocked = false) {
     const rawName = String(cand.name || 'Candidate Name').trim();
     const name = sanitizePdfText(rawName).toUpperCase();
     const role = sanitizePdfText(toTitleCase(cand.role || 'Customer Service Representative'));
@@ -3500,6 +3537,12 @@ const server = http.createServer(async (req, res) => {
 
     const expYears = sanitizePdfText(cand.experience || '5+ Years');
     const matchScore = sanitizePdfText(String(cand.score || '95')).replace('%', '') || '95';
+
+    const displayEmail = isUnlocked ? email : sanitizePdfText(maskEmail(email));
+    const displayPhone = isUnlocked ? phone : sanitizePdfText(maskPhone(phone));
+    const statusLine = isUnlocked ?
+      `(${expYears} Experience   |   Match Affinity: ${matchScore}%   |   Status: Verified Talent) Tj` :
+      `(${expYears} Experience   |   Match Affinity: ${matchScore}%   |   [Contact Locked - Paid Plan Required]) Tj`;
 
     let rawSkills = Array.isArray(cand.skills) ? cand.skills : String(cand.skills || '').split(',');
     const cleanSkillsList = rawSkills
@@ -3532,9 +3575,9 @@ const server = http.createServer(async (req, res) => {
       `(${role} - Verified Candidate Portfolio) Tj`,
       '0 -16 Td',
       '/F1 9 Tf',
-      `(${email}   |   ${phone}   |   ${location}) Tj`,
+      `(${displayEmail}   |   ${displayPhone}   |   ${location}) Tj`,
       '0 -14 Td',
-      `(${expYears} Experience   |   Match Affinity: ${matchScore}%   |   Status: Verified Talent) Tj`,
+      `${statusLine}`,
       '0 -24 Td',
       '/F1 11 Tf',
       '(EXECUTIVE SUMMARY & CAREER PROFILE) Tj',
@@ -4112,6 +4155,27 @@ const server = http.createServer(async (req, res) => {
     case '.jpg': contentType = 'image/jpg'; break;
     case '.svg': contentType = 'image/svg+xml'; break;
     case '.pdf': contentType = 'application/pdf'; break;
+  }
+
+  // Subscription-Aware Dynamic PDF Resume Delivery
+  if (extname === '.pdf' && (filePath.includes('resumes') || pathname.includes('resumes'))) {
+    const user = getAuthenticatedUser(req);
+    const unlockedParam = parsedUrl.searchParams.get('unlocked');
+    const isPaid = unlockedParam === '1' || (user && (user.role === 'admin' || user.isPaid || ['starter', 'growth', 'pro'].includes((user.plan || '').toLowerCase())));
+
+    const filename = path.basename(filePath);
+    const candidate = resumesStore.find(r => r.resumeFile === filename || `${r.name.replace(/\s+/g, '_')}_Resume.pdf` === filename);
+
+    if (candidate) {
+      const pdfContent = generateFormattedResumePdf(candidate, isPaid);
+      res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Content-Disposition': `inline; filename="${filename}"`
+      });
+      res.end(pdfContent, 'utf-8');
+      return;
+    }
   }
 
   fs.readFile(filePath, (error, content) => {

@@ -4544,6 +4544,41 @@ input[type="radio"],
   vertical-align: middle !important;
 }
 
+/* BLURRED DIRECT CONTACT DETAILS FOR FREE / UNSUBSCRIBED RECRUITERS */
+.blurred-contact-text {
+  filter: blur(4.5px);
+  -webkit-filter: blur(4.5px);
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  display: inline-block;
+  color: #64748B;
+  transition: filter 0.2s ease;
+  letter-spacing: 0.5px;
+}
+.btn-unlock-contact-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #FEBA27 0%, #D97706 100%);
+  color: #0F172A;
+  font-weight: 800;
+  font-size: 0.65rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #D97706;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+.btn-unlock-contact-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(254, 186, 39, 0.4);
+  background: linear-gradient(135deg, #FCD34D 0%, #FEBA27 100%);
+}
+
 /* CARD 1 TOGGLES SNUG STACKING ON MOBILE */
 .card1-toggles-container {
   margin-top: 0.35rem !important;
@@ -7730,12 +7765,44 @@ SIGN IN TO WORKSPACE
       </button>
     </div>
   </div>
+
+<!-- UNLOCK CANDIDATE DIRECT CONTACT MODAL (PAID PLAN REQUIRED) -->
+<div class="custom-modal-alert" id="modal-unlock-contact" style="display: none;">
+  <div class="custom-alert-card" style="max-width: 480px; text-align: left; padding: 0; overflow: hidden; border: 2px solid #FEBA27;">
+    <div style="background: #0F172A; color: #FFFFFF; padding: 0.9rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #FEBA27;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.15rem;">🔒</span>
+        <strong style="font-size: 0.88rem; letter-spacing: 0.5px; color: #FEBA27;">UNLOCK DIRECT CANDIDATE CONTACT</strong>
+      </div>
+      <button class="btn-surface-sm" onclick="closeUnlockContactModal()" style="height: 24px; padding: 0 0.5rem; font-weight: 900; background: rgba(255,255,255,0.1); color: #FFFFFF; border: none;">X</button>
+    </div>
+    <div style="padding: 1.25rem;">
+      <p style="font-size: 0.8rem; color: #334155; line-height: 1.5; margin: 0 0 0.85rem 0;">
+        Direct candidate phone numbers, verified email addresses, and unmasked PDF resume downloads are reserved exclusively for <strong>Subscribed Recruiters & Employers</strong>.
+      </p>
+      <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1.15rem;">
+        <div style="font-size: 0.72rem; font-weight: 900; color: #92400E; margin-bottom: 4px; letter-spacing: 0.5px;">⚡ WHAT GETS UNLOCKED WITH A PAID PLAN:</div>
+        <ul style="font-size: 0.72rem; color: #78350F; margin: 0; padding-left: 1.1rem; line-height: 1.6;">
+          <li>Full verified candidate email addresses</li>
+          <li>Direct candidate telephone numbers</li>
+          <li>Unmasked PDF resume downloads & exports</li>
+          <li>Direct two-way InMail chat invitations</li>
+        </ul>
+      </div>
+      <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+        <button class="btn-surface-sm" onclick="closeUnlockContactModal()" style="height: 36px; padding: 0 1rem; font-size: 0.75rem; font-weight: 800;">
+          CANCEL
+        </button>
+        <button onclick="closeUnlockContactModal(); switchRecruiterTab('plans');" class="btn-gold-action" style="height: 36px; padding: 0 1.25rem; font-weight: 900; font-size: 0.75rem;">
+          ⚡ VIEW PLANS & UPGRADE (TAB 4)
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- SIGNATURE CUSTOM MODAL ALERT (NO DEFAULT BROWSER ALERT) -->
-
 <div class="custom-modal-alert" id="custom-modal-alert">
-
 <div class="custom-alert-card">
 
 <div class="alert-card-title" id="custom-alert-title">SYSTEM NOTIFICATION</div>
@@ -9168,46 +9235,76 @@ window.testPersonalizationPreview = function() {
 
 
 
+// =========================================================================
+// DIRECT CANDIDATE CONTACT PRIVACY & PAID SUBSCRIPTION ENGINE
+// =========================================================================
+function maskEmail(email) {
+  if (!email || typeof email !== 'string') return '••••••••@••••••••.com';
+  const parts = email.split('@');
+  if (parts.length !== 2) return '••••••••@••••••••.com';
+  const name = parts[0];
+  const domain = parts[1];
+  const maskedName = name.length > 2 ? name[0] + '•'.repeat(Math.min(name.length - 1, 6)) : '•••';
+  const domainParts = domain.split('.');
+  const maskedDomain = domainParts.length > 1 ? '•'.repeat(4) + '.' + domainParts[domainParts.length - 1] : '••••.com';
+  return `${maskedName}@${maskedDomain}`;
+}
+window.maskEmail = maskEmail;
+
+function maskPhone(phone) {
+  if (!phone || typeof phone !== 'string') return '(•••) •••-••••';
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length >= 10) {
+    const area = digits.slice(0, 3);
+    return `(${area}) •••-••••`;
+  }
+  return '(•••) •••-••••';
+}
+window.maskPhone = maskPhone;
+
+function isPaidRecruiter() {
+  if (currentUser && (currentUser.role === 'admin' || currentUser.isPaid || ['starter', 'growth', 'pro'].includes((currentUser.plan || '').toLowerCase()))) {
+    return true;
+  }
+  const savedPlan = (localStorage.getItem('uthe_subscribed_plan') || '').toLowerCase();
+  const isPaid = localStorage.getItem('uthe_is_paid_plan') === 'true';
+  return isPaid || ['starter', 'growth', 'pro'].includes(savedPlan);
+}
+window.isPaidRecruiter = isPaidRecruiter;
+
+function openUnlockContactModal(candidateName) {
+  const modal = document.getElementById('modal-unlock-contact');
+  if (modal) modal.style.display = 'flex';
+}
+window.openUnlockContactModal = openUnlockContactModal;
+
+function closeUnlockContactModal() {
+  const modal = document.getElementById('modal-unlock-contact');
+  if (modal) modal.style.display = 'none';
+}
+window.closeUnlockContactModal = closeUnlockContactModal;
+
 // Dynamic Applicant Resume Viewer & PDF Opener
-
 function openApplicantResume(applicantId, applicantName, filename) {
+  if (!filename) {
+    showCustomModalAlert('Resume Missing', `No resume file on record for ${applicantName}.`);
+    return;
+  }
 
-if (!filename) {
+  const cleanFilename = filename.split('/').pop().split('\\').pop();
+  const token = localStorage.getItem('uthe_token') ||
+    localStorage.getItem('master_admin_token') ||
+    localStorage.getItem('admin_token') || '';
 
-showCustomModalAlert('Resume Missing', `No resume file on record for ${applicantName}.`);
+  const isPaid = isPaidRecruiter();
+  // Append token and unlock status query parameters for seamless authentication
+  const pdfUrl = `/data/resumes/${encodeURIComponent(cleanFilename)}?token=${encodeURIComponent(token)}&unlocked=${isPaid ? '1' : '0'}&t=${Date.now()}`;
 
-return;
-
+  const newTab = window.open(pdfUrl, '_blank');
+  if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
+    showCustomModalAlert('Pop-Up Blocked', `Please allow pop-ups for this site to view ${applicantName}'s resume.`);
+  }
 }
-
-
-
-const cleanFilename = filename.split('/').pop().split('\\').pop();
-
-const token = localStorage.getItem('uthe_token') ||
-
-localStorage.getItem('master_admin_token') ||
-
-localStorage.getItem('admin_token') || '';
-
-
-
-// Append token query parameter for seamless new-tab authentication
-
-const pdfUrl = `/data/resumes/${encodeURIComponent(cleanFilename)}?token=${encodeURIComponent(token)}&t=${Date.now()}`;
-
-
-
-const newTab = window.open(pdfUrl, '_blank');
-
-if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
-
-showCustomModalAlert('Pop-Up Blocked', `Please allow pop-ups for this site to view ${applicantName}'s resume.`);
-
-}
-
-}
-
 window.openApplicantResume = openApplicantResume;
 
 
@@ -9975,11 +10072,26 @@ if (breakdownEl) breakdownEl.textContent = `Base Plan: ${planNames[selectedBaseP
 
 
 window.checkoutMembershipPlan = function() {
+  const total = document.getElementById('calc-total-amount').textContent;
+  const numTotal = parseFloat(total.replace(/[^0-9.]/g, '')) || 0;
+  const isPaid = selectedBasePlan !== 'pal' || numTotal > 0;
 
-const total = document.getElementById('calc-total-amount').textContent;
+  if (isPaid) {
+    try {
+      localStorage.setItem('uthe_subscribed_plan', selectedBasePlan);
+      localStorage.setItem('uthe_is_paid_plan', 'true');
+    } catch (e) {}
+    if (currentUser) {
+      currentUser.isPaid = true;
+      currentUser.plan = selectedBasePlan;
+    }
+  }
 
-showCustomModalAlert('Membership Activated', `Your plan selection of ${total} is active with real-time add-on features enabled.`);
+  showCustomModalAlert('Membership Activated', `Your plan selection of ${total} is active with real-time add-on features and full candidate direct contact access enabled.`);
 
+  if (typeof renderResumeBoard === 'function') {
+    renderResumeBoard();
+  }
 };
 
 
@@ -10874,6 +10986,34 @@ function renderFilteredResumes(resumes) {
     const isSaved = savedIds.includes(r.id);
     const skillsHtml = (r.skills || []).slice(0, 4).map(s => `<span class="cand-skill-pill">${s}</span>`).join('');
     
+    const isSubscribed = isPaidRecruiter();
+    const candEmail = r.email || `${r.name.toLowerCase().replace(/[^a-z0-9]/g, '.')}@talentlead.io`;
+    const candPhone = r.phone || `(512) 555-01${Math.floor(10 + Math.random() * 89)}`;
+    const displayEmail = isSubscribed ? candEmail : maskEmail(candEmail);
+    const displayPhone = isSubscribed ? candPhone : maskPhone(candPhone);
+
+    const contactBarHtml = isSubscribed ? `
+      <div style="font-size: 0.68rem; color: #047857; background: #ECFDF5; padding: 4px 8px; border-radius: 4px; border: 1px solid #A7F3D0; margin-bottom: 0.5rem; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+        <span>📧 <strong>${displayEmail}</strong></span>
+        <span>📞 <strong>${displayPhone}</strong></span>
+        <span style="margin-left: auto; font-size: 0.62rem; font-weight: 800; color: #065F46;">✓ UNLOCKED</span>
+      </div>
+    ` : `
+      <div style="font-size: 0.68rem; color: #64748B; background: #F8FAFC; padding: 5px 8px; border-radius: 4px; border: 1px dashed #CBD5E1; margin-bottom: 0.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
+          <span style="font-weight: 800; color: #475569; font-size: 0.64rem;">🔒 DIRECT CONTACT:</span>
+          <span style="font-size: 0.58rem; color: #B45309; font-weight: 800; background: #FEF3C7; padding: 1px 5px; border-radius: 3px;">PAID PLAN REQUIRED</span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+          <span>📧 <span class="blurred-contact-text">${displayEmail}</span></span>
+          <span>📞 <span class="blurred-contact-text">${displayPhone}</span></span>
+        </div>
+        <button onclick="event.stopPropagation(); openUnlockContactModal('${r.name.replace(/'/g, "\\'")}')" class="btn-unlock-contact-pill" style="margin-top: 4px; width: 100%; justify-content: center;">
+          🔒 UNLOCK EMAIL & PHONE (UPGRADE PLAN)
+        </button>
+      </div>
+    `;
+
     return `
       <div class="resume-dossier-card" id="resume-card-${r.id}">
         <div>
@@ -10897,6 +11037,8 @@ function renderFilteredResumes(resumes) {
               </span>
             </div>
           </div>
+
+          ${contactBarHtml}
 
           <div style="font-size: 0.7rem; color: #64748B; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0.5rem;">
             <span>📍 ${r.location || 'Remote'}</span>

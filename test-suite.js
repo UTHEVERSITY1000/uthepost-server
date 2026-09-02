@@ -3777,6 +3777,47 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 101 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 102: CANDIDATE DIRECT CONTACT PRIVACY & PAID SUBSCRIPTION UNLOCK
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 102: CANDIDATE DIRECT CONTACT PRIVACY & PAID SUBSCRIPTION UNLOCK ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Recruiter CSS Contact Masking & Unlock Badges
+    assert(recruiterHtml.includes('.blurred-contact-text'), 'recruiter.html defines .blurred-contact-text styling');
+    assert(recruiterHtml.includes('.btn-unlock-contact-pill'), 'recruiter.html defines .btn-unlock-contact-pill CTA styling');
+
+    // 2. Unlock Candidate Contact Modal
+    assert(recruiterHtml.includes('id="modal-unlock-contact"'), 'recruiter.html defines #modal-unlock-contact signature modal');
+    assert(recruiterHtml.includes('UNLOCK DIRECT CANDIDATE CONTACT'), 'recruiter.html includes unlock modal header');
+    assert(recruiterHtml.includes('openUnlockContactModal'), 'recruiter.html implements openUnlockContactModal');
+    assert(recruiterHtml.includes('closeUnlockContactModal'), 'recruiter.html implements closeUnlockContactModal');
+
+    // 3. Privacy Masking Helpers & Subscription Verification
+    assert(recruiterHtml.includes('function maskEmail'), 'recruiter.html implements maskEmail helper');
+    assert(recruiterHtml.includes('function maskPhone'), 'recruiter.html implements maskPhone helper');
+    assert(recruiterHtml.includes('function isPaidRecruiter'), 'recruiter.html implements isPaidRecruiter subscription checker');
+    assert(recruiterHtml.includes('uthe_is_paid_plan'), 'recruiter.html verifies uthe_is_paid_plan persistence in localStorage');
+
+    // 4. Candidate Resume Card Contact Bar
+    assert(recruiterHtml.includes('PAID PLAN REQUIRED'), 'recruiter.html marks locked contact details with PAID PLAN REQUIRED');
+    assert(recruiterHtml.includes('UNLOCK EMAIL & PHONE (UPGRADE PLAN)'), 'recruiter.html includes UNLOCK EMAIL & PHONE trigger on resume cards');
+
+    // 5. Server-Side Locked/Masked vs Unlocked PDF Resume Generation
+    const lockedPdfRes = await httpGet('/data/resumes/Marcus_Vance_Resume_2026.pdf?unlocked=0');
+    assert(lockedPdfRes.status === 200, 'GET /data/resumes/... returns HTTP 200 for resume PDF');
+    assert(lockedPdfRes.headers['content-type'] === 'application/pdf', 'Server responds with application/pdf Content-Type');
+
+    const unlockedPdfRes = await httpGet('/data/resumes/Marcus_Vance_Resume_2026.pdf?unlocked=1');
+    assert(unlockedPdfRes.status === 200, 'GET /data/resumes/... returns HTTP 200 for unlocked resume PDF');
+    assert(unlockedPdfRes.headers['content-type'] === 'application/pdf', 'Server responds with application/pdf Content-Type for unlocked request');
+
+  } catch (err) {
+    assert(false, `Group 102 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
