@@ -423,7 +423,7 @@
     .search-filter-belt {
       background: #FFFFFF;
       border-bottom: 1px solid var(--border-color);
-      padding: 0.85rem 1.25rem;
+      padding: 0.65rem 1.25rem 0.45rem 1.25rem;
       display: flex;
       gap: 0.75rem;
       align-items: center;
@@ -431,6 +431,74 @@
       top: 64px;
       z-index: 900;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    /* QUICK CATEGORY FILTER BAR & DEDICATED FELONY FRIENDLY BUTTON */
+    .category-filter-bar {
+      display: flex;
+      gap: 0.35rem;
+      align-items: center;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0.4rem 1.25rem;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+      scrollbar-width: none;
+      position: sticky;
+      top: 118px;
+      z-index: 890;
+    }
+    .category-filter-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .cand-cat-filter-btn {
+      background: #F1F5F9;
+      color: #334155;
+      border: 1px solid #CBD5E1;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .cand-cat-filter-btn:hover {
+      background: #E2E8F0;
+      color: #0F172A;
+      border-color: #94A3B8;
+      transform: translateY(-0.5px);
+    }
+    .cand-cat-filter-btn.active {
+      background: #0F172A !important;
+      color: #FEBA27 !important;
+      border-color: #0F172A !important;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25) !important;
+    }
+    /* Dedicated Felony-Friendly Button Styling */
+    .cand-cat-filter-btn.btn-felony-friendly {
+      background: #FFFBEB !important;
+      color: #B45309 !important;
+      border: 1.5px solid #FEBA27 !important;
+      font-weight: 900 !important;
+      box-shadow: 0 0 10px rgba(254, 186, 39, 0.3) !important;
+    }
+    .cand-cat-filter-btn.btn-felony-friendly:hover {
+      background: #FEBA27 !important;
+      color: #0F172A !important;
+      box-shadow: 0 2px 14px rgba(254, 186, 39, 0.5) !important;
+      transform: translateY(-0.5px);
+    }
+    .cand-cat-filter-btn.btn-felony-friendly.active {
+      background: #D97706 !important;
+      color: #FFFFFF !important;
+      border-color: #D97706 !important;
+      box-shadow: 0 0 16px rgba(217, 119, 6, 0.6) !important;
     }
 
     .search-input-wrap {
@@ -1714,6 +1782,34 @@
     </select>
   </section>
 
+  <!-- QUICK CATEGORY FILTER BAR & DEDICATED FELONY FRIENDLY BUTTON -->
+  <nav class="category-filter-bar" id="category-filter-bar">
+    <button type="button" class="cand-cat-filter-btn active" id="cat-btn-all" onclick="filterByCategory('ALL')" data-tooltip="Show all verified career opportunities">
+      ⚡ ALL OPPORTUNITIES
+    </button>
+    <button type="button" class="cand-cat-filter-btn btn-felony-friendly" id="cat-btn-felony" onclick="filterByCategory('felony_friendly')" data-tooltip="1-Click Filter: View and apply for 100% Felony-Friendly and Fair Chance verified job listings ($16-$24/hr)">
+      🤝 FELONY FRIENDLY
+    </button>
+    <button type="button" class="cand-cat-filter-btn" id="cat-btn-retail" onclick="filterByCategory('retail_grocery')" data-tooltip="Filter Retail Store Clerks, Cashiers & Grocery Associates ($15-$20/hr)">
+      🛒 RETAIL & GROCERY
+    </button>
+    <button type="button" class="cand-cat-filter-btn" id="cat-btn-culinary" onclick="filterByCategory('culinary_hospitality')" data-tooltip="Filter Chefs, Line Cooks, Restaurant Hosts & Kitchen Staff ($16-$22/hr)">
+      🍳 COOKS, CHEFS & HOSTS
+    </button>
+    <button type="button" class="cand-cat-filter-btn" id="cat-btn-industrial" onclick="filterByCategory('industrial_factory')" data-tooltip="Filter Assembly Line, Factory & Industrial Manufacturing jobs ($18-$25/hr)">
+      🏭 INDUSTRIAL & FACTORY
+    </button>
+    <button type="button" class="cand-cat-filter-btn" id="cat-btn-sales" onclick="filterByCategory('sales_representative')" data-tooltip="Filter Sales Representatives, Client Advisors & Account Execs ($18-$28/hr + Commission)">
+      💼 SALES REPRESENTATIVES
+    </button>
+    <button type="button" class="cand-cat-filter-btn" id="cat-btn-tech" onclick="filterByCategory('tech_growth')" data-tooltip="Filter Tech, Software, Cloud & AI Engineering positions">
+      💻 TECH & CLOUD
+    </button>
+    <button type="button" class="cand-cat-filter-btn" id="cat-btn-support" onclick="filterByCategory('customer_support')" data-tooltip="Filter Customer Service & Client Care roles">
+      🎧 CUSTOMER SUPPORT
+    </button>
+  </nav>
+
   <!-- 2-COLUMN MAIN BOARD -->
   <main class="board-container">
 
@@ -2362,6 +2458,19 @@
           ? `<span style="background: linear-gradient(135deg, #FEBA27, #F59E0B); color: #111827; font-weight: 900; font-size: 0.60rem; padding: 0.12rem 0.4rem; border-radius: 4px; border: 1px solid #D97706; display: inline-flex; align-items: center; gap: 3px; vertical-align: middle;">⭐ TOP SPOTLIGHT</span>`
           : '';
 
+        const isFelony = Boolean(
+          job.felonyFriendly === true ||
+          job.fairChance === true ||
+          (job.category && job.category.includes('felony')) ||
+          (job.additionalPerks && (job.additionalPerks.toLowerCase().includes('fair chance') || job.additionalPerks.toLowerCase().includes('felony'))) ||
+          (job.paidVacation && (job.paidVacation.toLowerCase().includes('fair chance') || job.paidVacation.toLowerCase().includes('felony'))) ||
+          (job.summary && (job.summary.toLowerCase().includes('fair chance') || job.summary.toLowerCase().includes('felony')))
+        );
+
+        const felonyBadge = isFelony
+          ? `<span class="badge-tag tag-gold" style="background: #FFFBEB !important; color: #B45309 !important; border: 1.5px solid #FEBA27 !important; font-weight: 900; font-size: 0.58rem; padding: 1px 6px; border-radius: 4px; box-shadow: 0 0 8px rgba(254, 186, 39, 0.25); display: inline-flex; align-items: center; gap: 3px;">🤝 FELONY FRIENDLY</span>`
+          : '';
+
         const perksList = Array.isArray(job.perksList) && job.perksList.length > 0
           ? job.perksList
           : (job.additionalPerks ? job.additionalPerks.split(/[|,+]/).map(s => s.trim()).filter(Boolean) : []);
@@ -2377,6 +2486,7 @@
               <div class="card-job-title" style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
                 <span>${job.jobTitle}</span>
                 ${spotlightBadge}
+                ${felonyBadge}
               </div>
               <div class="card-company-name">${job.company}</div>
             </div>
@@ -2411,41 +2521,34 @@
           document.head.appendChild(scriptEl);
         }
         const schemaArray = list.map(job => {
-          const minSal = Number(job.minCompensation || 0) || (job.salary && parseInt(job.salary.replace(/[^0-9]/g, '')) ) || 50000;
-          const maxSal = Number(job.maxCompensation || 0) || minSal * 1.25;
-          const cleanLoc = (job.location || 'United States').replace(/\(.*\)/g, '').trim();
-          const isRemote = (job.location || '').toLowerCase().includes('remote') || (job.employmentType || '').toLowerCase().includes('remote');
-          
+          const minSal = parseInt(job.minCompensation || '36400', 10);
+          const maxSal = parseInt(job.maxCompensation || '52000', 10);
           return {
             "@context": "https://schema.org/",
             "@type": "JobPosting",
-            "title": job.jobTitle || 'Executive Position',
-            "description": job.summary || `${job.jobTitle} at ${job.company}. Perks: ${job.additionalPerks || 'Comprehensive Benefits'}.`,
+            "title": job.jobTitle,
+            "description": job.summary || `Verified job vacancy for ${job.jobTitle} at ${job.company}.`,
             "identifier": {
               "@type": "PropertyValue",
-              "name": job.company || "U-THEPOST Employer",
-              "value": job.id || "JOB-001"
+              "name": job.company,
+              "value": job.id || `JOB-${Date.now()}`
             },
-            "datePosted": job.createdAt ? new Date(job.createdAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-            "validThrough": new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            "employmentType": (job.employmentType && job.employmentType.toLowerCase().includes('part')) ? "PART_TIME" : "FULL_TIME",
+            "datePosted": job.createdAt ? new Date(job.createdAt).toISOString() : new Date().toISOString(),
+            "validThrough": new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
+            "employmentType": job.employmentType === 'Full-Time' ? 'FULL_TIME' : 'PART_TIME',
             "hiringOrganization": {
               "@type": "Organization",
-              "name": job.company || "U-THEPOST Partner",
-              "sameAs": "https://utheversity.com",
-              "logo": job.logo || "https://utheversity.com/assets/logo.png"
+              "name": job.company,
+              "sameAs": "https://jobs.utheversity.com"
             },
             "jobLocation": {
               "@type": "Place",
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": cleanLoc,
-                "addressLocality": cleanLoc.split(',')[0] ? cleanLoc.split(',')[0].trim() : cleanLoc,
-                "addressRegion": cleanLoc.split(',')[1] ? cleanLoc.split(',')[1].trim() : "TX",
+                "addressLocality": job.location || "United States",
                 "addressCountry": "US"
               }
             },
-            ...(isRemote ? { "jobLocationType": "TELECOMMUTE" } : {}),
             "baseSalary": {
               "@type": "MonetaryAmount",
               "currency": "USD",
@@ -2494,11 +2597,18 @@
         : (job.additionalPerks ? job.additionalPerks.split(/[|,+]/).map(s => s.trim()).filter(Boolean) : []);
       const perksDisplayEl = document.getElementById('dt-perks');
       if (perksDisplayEl) {
-        if (perksList.length > 0) {
-          perksDisplayEl.innerHTML = perksList.map(p => `<span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px; display:inline-block;">${p}</span>`).join(' ');
-        } else {
-          perksDisplayEl.textContent = job.additionalPerks || 'Benefits included.';
+        const isFelony = Boolean(
+          job.felonyFriendly === true ||
+          job.fairChance === true ||
+          (job.category && job.category.includes('felony')) ||
+          (job.additionalPerks && (job.additionalPerks.toLowerCase().includes('fair chance') || job.additionalPerks.toLowerCase().includes('felony'))) ||
+          (job.summary && (job.summary.toLowerCase().includes('fair chance') || job.summary.toLowerCase().includes('felony')))
+        );
+        let itemsHtml = perksList.map(p => `<span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px; display:inline-block;">${p}</span>`).join(' ');
+        if (isFelony) {
+          itemsHtml = `<span class="badge-tag tag-gold" style="background:#FFFBEB !important; color:#B45309 !important; border:1.5px solid #FEBA27 !important; font-weight:900; font-size:0.62rem; padding:2px 8px; margin:2px; display:inline-block;">🤝 FELONY FRIENDLY / FAIR CHANCE</span> ` + itemsHtml;
         }
+        perksDisplayEl.innerHTML = itemsHtml || (job.additionalPerks || 'Benefits included.');
       }
 
       setVal('modal-apply-role', job.jobTitle);
@@ -2506,6 +2616,16 @@
       setVal('thread-job-title', job.jobTitle);
       setVal('thread-company-name', job.company);
     }
+
+    let currentCategoryFilter = 'ALL';
+
+    window.filterByCategory = function(catKey) {
+      currentCategoryFilter = catKey || 'ALL';
+      document.querySelectorAll('.cand-cat-filter-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.querySelector(`.cand-cat-filter-btn[onclick*="'${catKey}'"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+      handleFilterChange();
+    };
 
     function handleFilterChange() {
       const searchEl = document.getElementById('search-input') || document.getElementById('jobSearchInput');
@@ -2524,7 +2644,50 @@
           (j.zipCode && j.zipCode.toString().toLowerCase().includes(q));
         const matchesType = type === 'ALL' || j.employmentType.toLowerCase().includes(type.toLowerCase());
         const matchesLoc = loc === 'ALL' || j.location.toLowerCase().includes(loc.toLowerCase());
-        return matchesQ && matchesType && matchesLoc;
+
+        let matchesCat = true;
+        if (currentCategoryFilter === 'felony_friendly') {
+          matchesCat = Boolean(
+            j.felonyFriendly === true ||
+            j.fairChance === true ||
+            (j.category && j.category.includes('felony')) ||
+            (j.additionalPerks && (j.additionalPerks.toLowerCase().includes('fair chance') || j.additionalPerks.toLowerCase().includes('felony'))) ||
+            (j.paidVacation && (j.paidVacation.toLowerCase().includes('fair chance') || j.paidVacation.toLowerCase().includes('felony'))) ||
+            (j.summary && (j.summary.toLowerCase().includes('fair chance') || j.summary.toLowerCase().includes('felony')))
+          );
+        } else if (currentCategoryFilter === 'retail_grocery') {
+          matchesCat = Boolean(
+            j.category === 'retail_grocery' ||
+            (j.jobTitle && /grocery|cashier|retail|produce|supermarket|stocking/i.test(j.jobTitle))
+          );
+        } else if (currentCategoryFilter === 'culinary_hospitality') {
+          matchesCat = Boolean(
+            j.category === 'culinary_hospitality' ||
+            (j.jobTitle && /cook|chef|host|kitchen|prep|bistro|dining/i.test(j.jobTitle))
+          );
+        } else if (currentCategoryFilter === 'industrial_factory') {
+          matchesCat = Boolean(
+            j.category === 'industrial_factory' ||
+            (j.jobTitle && /assembly|factory|machine|industrial|manufacturing|production|labor/i.test(j.jobTitle))
+          );
+        } else if (currentCategoryFilter === 'sales_representative') {
+          matchesCat = Boolean(
+            j.category === 'sales_representative' ||
+            (j.jobTitle && /sales|account rep|client advisor|account executive/i.test(j.jobTitle))
+          );
+        } else if (currentCategoryFilter === 'tech_growth') {
+          matchesCat = Boolean(
+            j.category === 'tech_growth' ||
+            (j.jobTitle && /engineer|software|developer|architect|cloud|devops|data/i.test(j.jobTitle))
+          );
+        } else if (currentCategoryFilter === 'customer_support') {
+          matchesCat = Boolean(
+            j.category === 'customer_support' ||
+            (j.jobTitle && /support|service|client care|help desk/i.test(j.jobTitle))
+          );
+        }
+
+        return matchesQ && matchesType && matchesLoc && matchesCat;
       });
 
       // PIN MATCHING TOP-OF-PAGE SPOTLIGHT JOBS TO THE VERY TOP OF CANDIDATE SEARCH RESULTS

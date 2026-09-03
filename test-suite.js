@@ -3870,6 +3870,52 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 103 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 104: BLUE-COLLAR, $18-$22/HR & DEDICATED FELONY FRIENDLY SUITE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 104: BLUE-COLLAR & FELONY FRIENDLY PIPELINE SUITE ---');
+
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Admin 1-Click PDL Sourcing Templates
+    assert(adminHtml.includes('selectPdlTemplate'), 'admin.html defines selectPdlTemplate() function');
+    assert(adminHtml.includes('selectPdlTemplate(\'felony_friendly\')'), 'admin.html includes Felony-Friendly 1-Click PDL template tab');
+    assert(adminHtml.includes('selectPdlTemplate(\'sales_rep\')'), 'admin.html includes Sales Reps 1-Click PDL template tab');
+    assert(adminHtml.includes('selectPdlTemplate(\'chefs_cooks_hosts\')'), 'admin.html includes Chefs/Cooks/Host 1-Click PDL template tab');
+    assert(adminHtml.includes('selectPdlTemplate(\'industrial_assembly\')'), 'admin.html includes Industrial & Assembly 1-Click PDL template tab');
+    assert(adminHtml.includes('selectPdlTemplate(\'grocery_stores\')'), 'admin.html includes Grocery Stores 1-Click PDL template tab');
+    assert(adminHtml.includes('selectPdlTemplate(\'retail_clerks\')'), 'admin.html includes Retail Clerks & Cashiers 1-Click PDL template tab');
+
+    // 2. Admin Live Job Feed Blue-Collar & Felony-Friendly Presets
+    assert(adminHtml.includes('value="felony_friendly"'), 'admin.html job feed preset includes felony_friendly option');
+    assert(adminHtml.includes('value="retail_grocery"'), 'admin.html job feed preset includes retail_grocery option');
+    assert(adminHtml.includes('value="culinary_hospitality"'), 'admin.html job feed preset includes culinary_hospitality option');
+    assert(adminHtml.includes('value="industrial_factory"'), 'admin.html job feed preset includes industrial_factory option');
+    assert(adminHtml.includes('value="sales_representative"'), 'admin.html job feed preset includes sales_representative option');
+
+    // 3. Candidate Dedicated Felony Friendly Button & Category Belt
+    assert(candidateHtml.includes('id="category-filter-bar"'), 'candidate.html defines #category-filter-bar container');
+    assert(candidateHtml.includes('filterByCategory(\'felony_friendly\')'), 'candidate.html defines dedicated 🤝 FELONY FRIENDLY button');
+    assert(candidateHtml.includes('filterByCategory(\'retail_grocery\')'), 'candidate.html defines 🛒 RETAIL & GROCERY button');
+    assert(candidateHtml.includes('filterByCategory(\'culinary_hospitality\')'), 'candidate.html defines 🍳 COOKS, CHEFS & HOSTS button');
+    assert(candidateHtml.includes('filterByCategory(\'industrial_factory\')'), 'candidate.html defines 🏭 INDUSTRIAL & FACTORY button');
+    assert(candidateHtml.includes('filterByCategory(\'sales_representative\')'), 'candidate.html defines 💼 SALES REPRESENTATIVES button');
+    assert(candidateHtml.includes('🤝 FELONY FRIENDLY'), 'candidate.html renders 🤝 FELONY FRIENDLY badges on job listings');
+
+    // 4. Server Felony Friendly Sync Verification
+    const felonySyncRes = await httpPost('/api/jobs/sync-live-feed', {
+      preset: 'felony_friendly',
+      source: 'preset'
+    });
+    assert(felonySyncRes.status === 200, 'POST /api/jobs/sync-live-feed succeeds for felony_friendly preset');
+    assert(felonySyncRes.data.ok === true, 'Felony-Friendly feed sync returns ok: true');
+
+  } catch (err) {
+    assert(false, `Group 104 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

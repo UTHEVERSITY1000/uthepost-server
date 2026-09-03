@@ -1984,7 +1984,12 @@
       <div class="form-group">
         <label>Select Target Industry / ATS Feed Preset</label>
         <select id="aggregator-feed-preset" style="font-size: 0.75rem; padding: 6px;" data-tooltip="Choose high-demand verified industry job feed">
-          <option value="all">⚡ All Active Industry Feeds (Tech, Enterprise Sales, Healthcare)</option>
+          <option value="all">⚡ All Active Industry Feeds (Tech, Sales, Healthcare, Blue-Collar)</option>
+          <option value="felony_friendly" selected>🤝 Felony-Friendly & Fair Chance Opportunities ($16 - $24/hr)</option>
+          <option value="retail_grocery">🛒 Retail Clerks, Cashiers & Grocery Associates ($15 - $20/hr)</option>
+          <option value="culinary_hospitality">🍳 Chefs, Line Cooks, Hosts & Food Service ($16 - $22/hr)</option>
+          <option value="industrial_factory">🏭 Industrial Assembly Line & Factory ($18 - $25/hr)</option>
+          <option value="sales_representative">💼 Sales Representatives & Client Advisors ($18 - $28/hr + Commission)</option>
           <option value="tech_growth">💻 High-Growth Tech (Software, AI, DevOps, Product)</option>
           <option value="sales_enterprise">📈 Enterprise Sales & Business Development</option>
           <option value="healthcare_mgmt">🏥 Healthcare Operations & Clinical Informatics</option>
@@ -2039,25 +2044,62 @@
         <button class="btn-close-modal" onclick="closeModal('modal-pdl-sourcing')">X</button>
       </div>
 
-      <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.6rem;">
+      <div style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.5rem;">
         Query the People Data Labs API talent graph (1,000 free monthly lookups). Profiles (Candidate Name, Email, Phone, Skills, Experience, Location) are automatically verified and ingested into <strong>Tab 6: RESUME SEARCH</strong>.
+      </div>
+
+      <!-- 1-CLICK JOB OPPORTUNITY TEMPLATE TABS -->
+      <div style="margin-bottom: 0.65rem; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem;">
+        <div style="font-size: 0.62rem; font-weight: 800; color: var(--uthe-charcoal); text-transform: uppercase; margin-bottom: 0.35rem; display: flex; justify-content: space-between; align-items: center;">
+          <span>⚡ 1-CLICK OPPORTUNITY PRESET TEMPLATES:</span>
+          <span style="font-size: 0.56rem; color: #D97706; font-weight: 800;">AUTO-FILLS ALL FIELDS</span>
+        </div>
+        <div class="pdl-template-pills-belt" style="display: flex; gap: 0.25rem; flex-wrap: wrap;">
+          <button type="button" class="btn-surface-sm pdl-template-tab active" onclick="selectPdlTemplate('felony_friendly')" style="height: 23px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 800; border-radius: 4px;" data-tooltip="Auto-fill Felony-Friendly / Fair Chance labor, warehouse & production roles">
+            🤝 Felony-Friendly / Fair Chance
+          </button>
+          <button type="button" class="btn-surface-sm pdl-template-tab" onclick="selectPdlTemplate('sales_rep')" style="height: 23px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 800; border-radius: 4px;" data-tooltip="Auto-fill Sales Representatives ($18-$28/hr + Commission)">
+            💼 Sales Representatives
+          </button>
+          <button type="button" class="btn-surface-sm pdl-template-tab" onclick="selectPdlTemplate('chefs_cooks_hosts')" style="height: 23px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 800; border-radius: 4px;" data-tooltip="Auto-fill Chefs, Line Cooks, Hosts & Food Service ($16-$22/hr)">
+            🍳 Chefs / Cooks / Hosts
+          </button>
+          <button type="button" class="btn-surface-sm pdl-template-tab" onclick="selectPdlTemplate('industrial_assembly')" style="height: 23px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 800; border-radius: 4px;" data-tooltip="Auto-fill Industrial Assembly Line & Factory jobs ($18-$25/hr)">
+            🏭 Industrial & Factory
+          </button>
+          <button type="button" class="btn-surface-sm pdl-template-tab" onclick="selectPdlTemplate('grocery_stores')" style="height: 23px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 800; border-radius: 4px;" data-tooltip="Auto-fill Grocery Store Clerks, Produce & Stocking ($15-$20/hr)">
+            🥦 Grocery Stores
+          </button>
+          <button type="button" class="btn-surface-sm pdl-template-tab" onclick="selectPdlTemplate('retail_clerks')" style="height: 23px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 800; border-radius: 4px;" data-tooltip="Auto-fill Retail Clerks, Cashiers & Store Staff ($15-$19/hr)">
+            🛒 Retail Clerks / Cashiers
+          </button>
+          <button type="button" class="btn-surface-sm pdl-template-tab" onclick="selectPdlTemplate('software_tech')" style="height: 23px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 800; border-radius: 4px;" data-tooltip="Auto-fill Software Engineers & Cloud Tech">
+            💻 Tech & Software
+          </button>
+          <button type="button" class="btn-surface-sm pdl-template-tab" onclick="selectPdlTemplate('customer_support')" style="height: 23px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 800; border-radius: 4px;" data-tooltip="Auto-fill Customer Support & Service Specialists">
+            🎧 Customer Support
+          </button>
+          <button type="button" class="btn-surface-sm pdl-template-tab" onclick="selectPdlTemplate('healthcare_ops')" style="height: 23px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 800; border-radius: 4px;" data-tooltip="Auto-fill Healthcare Operations & Clinical staff">
+            🏥 Healthcare Operations
+          </button>
+        </div>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
         <div class="form-group" style="margin-bottom:0;">
           <label style="font-size: 0.7rem; font-weight: 800;">Target Role / Keywords</label>
-          <input type="text" id="pdl-target-role" placeholder="e.g. Senior Software Engineer" value="Software Engineer" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Target job title / specialty">
+          <input type="text" id="pdl-target-role" placeholder="e.g. Warehouse Material Handler" value="Warehouse Material Handler / General Laborer" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Target job title / specialty">
         </div>
         <div class="form-group" style="margin-bottom:0;">
           <label style="font-size: 0.7rem; font-weight: 800;">Location (City, State / Remote)</label>
-          <input type="text" id="pdl-target-location" placeholder="e.g. Austin, TX" value="Austin, TX" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Target candidate location">
+          <input type="text" id="pdl-target-location" placeholder="e.g. Dallas, TX" value="Dallas, TX (or Nationwide)" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Target candidate location">
         </div>
       </div>
 
       <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
         <div class="form-group" style="margin-bottom:0;">
           <label style="font-size: 0.7rem; font-weight: 800;">Skills Taxonomy (Comma-Separated)</label>
-          <input type="text" id="pdl-target-skills" placeholder="React, Node.js, TypeScript, AWS" value="React, Node.js, AWS, Distributed Systems" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Core technical skills">
+          <input type="text" id="pdl-target-skills" placeholder="Material Handling, OSHA Safety" value="Material Handling, Warehouse Operations, Assembly, OSHA Safety, Punctual, Reliable" style="height: 34px; font-size: 0.75rem; padding: 0 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #FFFFFF;" data-tooltip="Core skills taxonomy">
         </div>
         <div class="form-group" style="margin-bottom:0;">
           <label style="font-size: 0.7rem; font-weight: 800;">Batch Size</label>
@@ -3323,7 +3365,83 @@
     }
     window.triggerBatchResumeIngestion = triggerBatchResumeIngestion;
 
-    // PEOPLE DATA LABS (PDL) TALENT SOURCING HANDLERS
+    // PEOPLE DATA LABS (PDL) TALENT SOURCING HANDLERS & 1-CLICK PRESETS
+    const PDL_TEMPLATES = {
+      felony_friendly: {
+        role: 'Warehouse Material Handler / General Laborer',
+        location: 'Dallas, TX (or Nationwide)',
+        skills: 'Material Handling, Warehouse Operations, Assembly, OSHA Safety, Punctual, Reliable, Heavy Lifting',
+        batchSize: '10'
+      },
+      sales_rep: {
+        role: 'Sales Representative / Client Advisor',
+        location: 'Atlanta, GA (or Remote)',
+        skills: 'Direct Sales, B2B Prospecting, Customer Relations, CRM, Pipeline Management, Closing Deals, Negotiation',
+        batchSize: '10'
+      },
+      chefs_cooks_hosts: {
+        role: 'Line Cook / Restaurant Host / Prep Chef',
+        location: 'Chicago, IL',
+        skills: 'Food Preparation, Line Cooking, ServSafe Certified, Sanitation, Grill Station, Kitchen Operations, Hospitality',
+        batchSize: '10'
+      },
+      industrial_assembly: {
+        role: 'Assembly Line Worker / Machine Operator',
+        location: 'Detroit, MI',
+        skills: 'Assembly Line, Manufacturing, Machine Operation, Blueprint Reading, Quality Inspection, Industrial Safety, Tooling',
+        batchSize: '10'
+      },
+      grocery_stores: {
+        role: 'Grocery Store Clerk / Stocking Associate',
+        location: 'Denver, CO',
+        skills: 'Shelf Stocking, Inventory Management, Produce Handling, Customer Service, Merchandising, FIFO Rotation, POS',
+        batchSize: '10'
+      },
+      retail_clerks: {
+        role: 'Retail Cashier / Store Sales Associate',
+        location: 'Phoenix, AZ',
+        skills: 'Cash Register, POS Checkout, Cash Handling, Customer Service, Retail Sales, Store Maintenance, Returns Processing',
+        batchSize: '10'
+      },
+      software_tech: {
+        role: 'Senior Software Engineer',
+        location: 'Austin, TX (Remote)',
+        skills: 'React, Node.js, TypeScript, AWS, Distributed Systems, Docker, PostgreSQL',
+        batchSize: '10'
+      },
+      customer_support: {
+        role: 'Customer Support Representative',
+        location: 'Remote (United States)',
+        skills: 'Customer Service, Zendesk, Salesforce CRM, Ticket Resolution, Email Support, Live Chat, Conflict Resolution',
+        batchSize: '10'
+      },
+      healthcare_ops: {
+        role: 'Healthcare Operations & Patient Coordinator',
+        location: 'Houston, TX',
+        skills: 'HIPAA Compliance, Epic Systems, Patient Scheduling, Medical Records, Clinical Workflow, Insurance Verification',
+        batchSize: '10'
+      }
+    };
+
+    window.selectPdlTemplate = function(key) {
+      const tmpl = PDL_TEMPLATES[key];
+      if (!tmpl) return;
+      const roleEl = document.getElementById('pdl-target-role');
+      const locEl = document.getElementById('pdl-target-location');
+      const skillsEl = document.getElementById('pdl-target-skills');
+      const sizeEl = document.getElementById('pdl-batch-size');
+      if (roleEl) roleEl.value = tmpl.role;
+      if (locEl) locEl.value = tmpl.location;
+      if (skillsEl) skillsEl.value = tmpl.skills;
+      if (sizeEl) sizeEl.value = tmpl.batchSize || '10';
+
+      document.querySelectorAll('.pdl-template-tab').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeBtn = document.querySelector(`.pdl-template-tab[onclick*="'${key}'"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+    };
+
     window.openPdlSourcingModal = function() {
       openModal('modal-pdl-sourcing');
       const savedKey = localStorage.getItem('pdl_api_key') || '';

@@ -3104,30 +3104,45 @@ const server = http.createServer(async (req, res) => {
   // Pre-configured High-Demand Job Listing Feed Presets
   // Pre-configured High-Demand Job Listing Feed Presets across Major Hiring Verticals
   const AGGREGATOR_JOB_PRESETS = {
+    'felony_friendly': [
+      { jobTitle: 'Warehouse Material Handler (Fair Chance)', company: 'FairChance Logistics Partners', location: 'Dallas, TX • On-Site', employmentType: 'Full-Time', minCompensation: '38480', maxCompensation: '45760', salary: '$18.50 - $22.00 / hr ($38.5k - $45.8k/yr)', summary: 'Immediate hiring for warehouse material handlers and pallet movers. 100% fair chance hiring policy — prior records welcomed. Direct deposit weekly.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'careers@fairchancelogistics.org', paidVacation: 'Paid Weekly & Overtime Available', healthCoverage: 'Full Medical & Dental (Day 90)', retirement: '401(k) Match', additionalPerks: 'Fair Chance Background Accepted • On-the-job Forklift Cert', felonyFriendly: true, category: 'felony_friendly', spotlight: true },
+      { jobTitle: 'General Production & Assembly Laborer', company: 'Pioneer Industrial Services', location: 'Detroit, MI • On-Site', employmentType: 'Full-Time', minCompensation: '39520', maxCompensation: '47840', salary: '$19.00 - $23.00 / hr ($39.5k - $47.8k/yr)', summary: 'Operate manufacturing assembly stations and assist with product packaging. Felony friendly background policy with comprehensive on-the-job training.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'jobs@pioneerindustrialservices.com', paidVacation: '2 Weeks PTO', healthCoverage: 'Health & Vision Plan', retirement: '401(k)', additionalPerks: 'Fair Chance Hiring Partner • Safety Equipment Provided', felonyFriendly: true, category: 'felony_friendly', spotlight: true },
+      { jobTitle: 'Commercial Facilities & Sanitation Associate', company: 'Alliance Facilities Group', location: 'Chicago, IL • On-Site', employmentType: 'Full-Time', minCompensation: '36400', maxCompensation: '43680', salary: '$17.50 - $21.00 / hr ($36.4k - $43.7k/yr)', summary: 'Maintain facility sanitation, waste handling, and general building readiness. Felony friendly employer offering steady shifts and overtime bonuses.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'hiring@alliancefacilities.com', paidVacation: 'Paid Holidays & Sick Leave', healthCoverage: 'Comprehensive Healthcare', retirement: 'Retirement Savings Plan', additionalPerks: 'Felony Friendly Verified • Weekly Pay Schedule', felonyFriendly: true, category: 'felony_friendly' },
+      { jobTitle: 'Distribution Center Package Sorter', company: 'Horizon Supply Works', location: 'Atlanta, GA • On-Site', employmentType: 'Full-Time', minCompensation: '37440', maxCompensation: '46800', salary: '$18.00 - $22.50 / hr ($37.4k - $46.8k/yr)', summary: 'Unload delivery trucks, scan parcels, and prepare freight for regional distribution. Fair chance hiring committed to second-chance career opportunities.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'careers@horizonsupplyworks.com', paidVacation: 'Paid Time Off', healthCoverage: 'Medical Coverage Included', retirement: '401(k)', additionalPerks: 'Fair Chance Opportunity • Career Advancement Tracks', felonyFriendly: true, category: 'felony_friendly' }
+    ],
+    'retail_grocery': [
+      { jobTitle: 'Grocery Department Clerk & Stocker', company: 'FreshCorner Supermarkets', location: 'Denver, CO • On-Site', employmentType: 'Full-Time', minCompensation: '33280', maxCompensation: '40560', salary: '$16.00 - $19.50 / hr ($33.3k - $40.5k/yr)', summary: 'Restock supermarket aisles, maintain produce displays, assist shoppers with item lookups, and ensure store presentation excellence.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'careers@freshcornersupermarkets.com', paidVacation: 'Paid Vacation', healthCoverage: 'Health / Dental Coverage', retirement: 'Employee Discount & 401(k)', additionalPerks: '20% Employee Store Discount • Flexible Schedules', category: 'retail_grocery', spotlight: true },
+      { jobTitle: 'Front End Cashier & Customer Service', company: 'Metro Retail Express', location: 'Phoenix, AZ • On-Site', employmentType: 'Full-Time', minCompensation: '32240', maxCompensation: '38480', salary: '$15.50 - $18.50 / hr ($32.2k - $38.5k/yr)', summary: 'Scan merchandise, process payment transactions, issue receipts, and provide friendly, attentive customer assistance at checkout registers.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'hiring@metroretailexpress.com', paidVacation: 'Paid Time Off', healthCoverage: 'Medical Plan Available', retirement: 'Company 401(k)', additionalPerks: 'Paid Training Provided • Weekend Differential Pay', category: 'retail_grocery' },
+      { jobTitle: 'Produce & Perishables Team Member', company: 'Apex Supermarket Group', location: 'Austin, TX • On-Site', employmentType: 'Full-Time', minCompensation: '34320', maxCompensation: '41600', salary: '$16.50 - $20.00 / hr ($34.3k - $41.6k/yr)', summary: 'Manage fresh produce displays, inspect fruit & vegetable quality, rotate stock according to FIFO standards, and maintain clean work areas.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'jobs@apexsupermarkets.com', paidVacation: '2 Weeks Paid Vacation', healthCoverage: 'Comprehensive Health Plan', retirement: '401(k) Match', additionalPerks: 'Employee Store Discount • Weekly Pay', category: 'retail_grocery' }
+    ],
+    'culinary_hospitality': [
+      { jobTitle: 'Line Cook & Grill Specialist', company: 'Heritage Grill & Kitchens', location: 'Chicago, IL • On-Site', employmentType: 'Full-Time', minCompensation: '36400', maxCompensation: '45760', salary: '$17.50 - $22.00 / hr ($36.4k - $45.8k/yr)', summary: 'Prepare signature entrees, manage high-volume grill stations during rush hours, adhere strictly to food safety guidelines, and execute prep lists.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'kitchen@heritagegrill.com', paidVacation: 'Paid Sick Days & PTO', healthCoverage: 'Medical & Dental Plan', retirement: '401(k)', additionalPerks: 'Free Shift Meals • ServSafe Certification Provided • Weekly Pay', category: 'culinary_hospitality', spotlight: true },
+      { jobTitle: 'Prep Cook & Food Prep Associate', company: 'Metro Bistro Hospitality', location: 'Atlanta, GA • On-Site', employmentType: 'Full-Time', minCompensation: '33280', maxCompensation: '40560', salary: '$16.00 - $19.50 / hr ($33.3k - $40.5k/yr)', summary: 'Chop vegetables, prepare sauces, portion meats according to recipe specifications, and maintain kitchen sanitation and inventory readiness.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'jobs@metrobistro.com', paidVacation: 'Paid Time Off', healthCoverage: 'Healthcare Package', retirement: 'Retirement Savings', additionalPerks: 'Free Shift Meals • Culinary Career Growth Program', category: 'culinary_hospitality' },
+      { jobTitle: 'Front of House Host / Hostess', company: 'Summit Restaurant Group', location: 'New York, NY • On-Site', employmentType: 'Full-Time', minCompensation: '31200', maxCompensation: '38480', salary: '$15.00 - $18.50 / hr ($31.2k - $38.5k/yr)', summary: 'Greet guests warmly, manage table seating charts on OpenTable, coordinate with waitstaff, and handle reservation inquiries with hospitality.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'hospitality@summitrestaurants.com', paidVacation: 'Paid Vacation', healthCoverage: 'Health & Dental', retirement: '401(k)', additionalPerks: 'Dining Discounts • Friendly Team Culture • Flexible Hours', category: 'culinary_hospitality' }
+    ],
+    'industrial_factory': [
+      { jobTitle: 'Assembly Line Production Worker', company: 'Keystone Manufacturing Works', location: 'Detroit, MI • On-Site', employmentType: 'Full-Time', minCompensation: '39520', maxCompensation: '49920', salary: '$19.00 - $24.00 / hr ($39.5k - $49.9k/yr)', summary: 'Assemble mechanical and electrical components on high-throughput manufacturing lines. Inspect finished parts for precision and report defects.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'careers@keystonemanufacturing.com', paidVacation: '3 Weeks PTO', healthCoverage: 'Full Medical / Dental / Vision', retirement: '401(k) 5% Match', additionalPerks: 'Climate Controlled Plant • Safety Boots Provided • Overtime 1.5x', category: 'industrial_factory', spotlight: true },
+      { jobTitle: 'Industrial Machine Operator', company: 'Precision Assembly Corp', location: 'Cleveland, OH • On-Site', employmentType: 'Full-Time', minCompensation: '41600', maxCompensation: '53040', salary: '$20.00 - $25.50 / hr ($41.6k - $53.0k/yr)', summary: 'Set up, calibrate, and monitor automated stamping, cutting, and packaging machinery. Conduct routine equipment maintenance and log throughput.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'hiring@precisionassemblycorp.com', paidVacation: 'Paid Holidays & Vacation', healthCoverage: 'Top Tier Medical Plan', retirement: '401(k) Matching', additionalPerks: 'Shift Differential Pay ($2/hr night bonus) • Tool Allowance', category: 'industrial_factory' },
+      { jobTitle: 'Quality Inspection & Packaging Associate', company: 'Apex Fabrication Works', location: 'Indianapolis, IN • On-Site', employmentType: 'Full-Time', minCompensation: '40560', maxCompensation: '50960', salary: '$19.50 - $24.50 / hr ($40.6k - $51.0k/yr)', summary: 'Verify assembled components meet manufacturing tolerances using calipers and gauges. Package finished goods for safe transit to distribution centers.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'jobs@apexfabrication.com', paidVacation: 'Paid Time Off', healthCoverage: 'Comprehensive Healthcare', retirement: '401(k)', additionalPerks: 'Paid Overtime Available • Career Progression to Team Lead', category: 'industrial_factory' }
+    ],
+    'sales_representative': [
+      { jobTitle: 'Inside Sales Representative', company: 'Vanguard Commercial Sales', location: 'Atlanta, GA • Hybrid / Remote', employmentType: 'Full-Time', minCompensation: '37440', maxCompensation: '54080', salary: '$18.00 - $26.00 / hr ($37.4k - $54k Base + Uncapped Comm)', summary: 'Connect with inbound enterprise leads, present product overviews, qualify prospects, and close initial contract renewals with dedicated sales support.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'sales@vanguardcommercial.com', paidVacation: 'Unlimited PTO', healthCoverage: 'Full Medical & Dental', retirement: '401(k) Match', additionalPerks: 'Uncapped Monthly Commission • Top Performer Bonuses • Paid Training', category: 'sales_representative', spotlight: true },
+      { jobTitle: 'Account Development Representative', company: 'Apex Client Relations Group', location: 'Dallas, TX • Hybrid', employmentType: 'Full-Time', minCompensation: '41600', maxCompensation: '58240', salary: '$20.00 - $28.00 / hr ($41.6k - $58.2k Base + Commission)', summary: 'Conduct outreach to regional commercial accounts, schedule executive demos for senior account managers, and manage sales CRM pipeline data.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'talent@apexclientrelations.com', paidVacation: '3 Weeks PTO', healthCoverage: 'Comprehensive Healthcare', retirement: '401(k)', additionalPerks: 'Sales Acceleration Training • Quarterly Club Trips', category: 'sales_representative' },
+      { jobTitle: 'Field Sales & Client Advisor', company: 'Summit Solutions Group', location: 'Chicago, IL • On-Site', employmentType: 'Full-Time', minCompensation: '45760', maxCompensation: '62400', salary: '$22.00 - $30.00 / hr ($45.8k - $62.4k Base + Commission)', summary: 'Travel locally to business clients, conduct on-site product demonstrations, provide custom price quotes, and foster long-term commercial relationships.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'careers@summitsolutionsgroup.com', paidVacation: 'Paid Vacation & Sick Time', healthCoverage: 'Full Medical Coverage', retirement: '401(k) Matching', additionalPerks: 'Company Car & Mileage Reimbursement • Tech Setup Provided', category: 'sales_representative' }
+    ],
     'customer_support': [
-      { jobTitle: 'Customer Service Representative (Tier II)', company: 'Nordic Global Logistics', location: 'Austin, TX • Remote Option', employmentType: 'Full-Time', minCompensation: '52000', maxCompensation: '68000', salary: '$52,000 - $68,000', summary: 'Deliver high-touch client support, resolve escalated freight inquiries, and optimize customer satisfaction metrics.', applyLinkUrl: 'https://careers.nordicglobal.com/csr-tier2', recruiterEmail: 'careers@nordicglobal.com', paidVacation: '3 Weeks PTO', healthCoverage: 'Comprehensive Medical & Dental', retirement: '401(k) 4% Match', additionalPerks: 'Annual Performance Bonus', spotlight: true },
-      { jobTitle: 'Client Experience Specialist', company: 'Apex Retail Solutions', location: 'Dallas, TX • Hybrid', employmentType: 'Full-Time', minCompensation: '55000', maxCompensation: '72000', salary: '$55,000 - $72,000', summary: 'Manage enterprise retail customer accounts, ensure rapid response SLAs across chat/email/phone, and drive brand loyalty.', applyLinkUrl: 'https://apexretailsolutions.com/apply', recruiterEmail: 'talent@apexretailsolutions.com', paidVacation: 'Flexible Time Off', healthCoverage: '100% Employee Coverage', retirement: '401(k) Matching', additionalPerks: 'Modern Hardware & Work Stipend' },
-      { jobTitle: 'Technical Support Lead (SaaS)', company: 'CloudBridge Software', location: 'Remote • US', employmentType: 'Full-Time', minCompensation: '65000', maxCompensation: '85000', salary: '$65,000 - $85,000', summary: 'Troubleshoot complex web application integrations, guide tier-1 support agents, and collaborate directly with engineering on product fixes.', applyLinkUrl: 'https://cloudbridge.io/careers/tech-support', recruiterEmail: 'support-jobs@cloudbridge.io', paidVacation: 'Unlimited PTO', healthCoverage: 'Top Tier Health / Vision', retirement: '401(k) 5% Match', additionalPerks: '$2,000 Annual Learning Budget' },
-      { jobTitle: 'Inbound Operations & Care Manager', company: 'OmniCare Services Corp', location: 'Chicago, IL • Hybrid', employmentType: 'Full-Time', minCompensation: '70000', maxCompensation: '95000', salary: '$70,000 - $95,000', summary: 'Direct a 25-person omnichannel customer care team, design QA evaluation workflows, and track CSAT and resolution times.', applyLinkUrl: 'https://omnicareservices.com/careers/ops-mgr', recruiterEmail: 'hiring@omnicareservices.com', paidVacation: '4 Weeks Paid Vacation', healthCoverage: 'Premium Family Medical', retirement: '401(k)', additionalPerks: 'Quarterly Team Bonuses' }
+      { jobTitle: 'Customer Service Representative (Tier II)', company: 'Nordic Global Logistics', location: 'Austin, TX • Remote Option', employmentType: 'Full-Time', minCompensation: '52000', maxCompensation: '68000', salary: '$52,000 - $68,000', summary: 'Deliver high-touch client support, resolve escalated freight inquiries, and optimize customer satisfaction metrics.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'careers@nordicglobal.com', paidVacation: '3 Weeks PTO', healthCoverage: 'Comprehensive Medical & Dental', retirement: '401(k) 4% Match', additionalPerks: 'Annual Performance Bonus', category: 'customer_support', spotlight: true },
+      { jobTitle: 'Client Experience Specialist', company: 'Apex Retail Solutions', location: 'Dallas, TX • Hybrid', employmentType: 'Full-Time', minCompensation: '55000', maxCompensation: '72000', salary: '$55,000 - $72,000', summary: 'Manage enterprise retail customer accounts, ensure rapid response SLAs across chat/email/phone, and drive brand loyalty.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'talent@apexretailsolutions.com', paidVacation: 'Flexible Time Off', healthCoverage: '100% Employee Coverage', retirement: '401(k) Matching', additionalPerks: 'Modern Hardware & Work Stipend', category: 'customer_support' }
     ],
     'tech_growth': [
-      { jobTitle: 'Senior Full Stack Engineer (React / Node)', company: 'Apex Cloud Systems', location: 'Remote • US/Canada', employmentType: 'Full-Time', minCompensation: '145000', maxCompensation: '185000', salary: '$145,000 - $185,000', summary: 'Architect scalable real-time microservices, GraphQL APIs, and modern responsive frontends for enterprise talent analytics.', applyLinkUrl: 'https://careers.apexcloud.io/jobs/senior-fullstack', recruiterEmail: 'hiring@apexcloud.io', paidVacation: 'Unlimited PTO', healthCoverage: '100% Comprehensive Health', retirement: '401(k) 6% Match', additionalPerks: '$3,000 Annual Tech Stipend', spotlight: true },
-      { jobTitle: 'Staff Machine Learning / AI Engineer', company: 'NeuralForge AI Labs', location: 'San Francisco, CA • Hybrid', employmentType: 'Full-Time', minCompensation: '175000', maxCompensation: '235000', salary: '$175,000 - $235,000', summary: 'Lead LLM fine-tuning, retrieval-augmented generation pipelines, and high-throughput inference deployment on distributed GPU clusters.', applyLinkUrl: 'https://neuralforge.ai/careers/staff-ai', recruiterEmail: 'talent@neuralforge.ai', paidVacation: '25 Days PTO', healthCoverage: 'Premium Medical & Dental', retirement: '401(k) Matching', additionalPerks: 'Equity Package (0.5% - 1.0%)', spotlight: true },
-      { jobTitle: 'Principal Cloud DevOps Architect', company: 'Vanguard Infrastructure', location: 'Remote', employmentType: 'Full-Time', minCompensation: '160000', maxCompensation: '210000', salary: '$160,000 - $210,000', summary: 'Design zero-trust multi-region Kubernetes clusters, automated Terraform pipelines, and high-resilience CI/CD deployments.', applyLinkUrl: 'https://vanguardinfra.com/apply', recruiterEmail: 'careers@vanguardinfra.com', paidVacation: 'Unlimited Flexible PTO', healthCoverage: 'Family Health Included', retirement: '401(k) with 5% Match', additionalPerks: 'Home Office Upgrade Budget' },
-      { jobTitle: 'Lead Product Designer (UI / UX)', company: 'PixelCraft Studio', location: 'New York, NY • Hybrid', employmentType: 'Full-Time', minCompensation: '135000', maxCompensation: '170000', salary: '$135,000 - $170,000', summary: 'Direct enterprise SaaS design systems, conduct user discovery sprints, and craft clean, highly-converting user experiences.', applyLinkUrl: 'https://pixelcraft.design/jobs/lead-uiux', recruiterEmail: 'design@pixelcraft.design', paidVacation: '4 Weeks Paid Vacation', healthCoverage: 'Full Medical & Vision', retirement: '401(k)', additionalPerks: 'Wellness & Gym Reimbursement' }
+      { jobTitle: 'Senior Full Stack Engineer (React / Node)', company: 'Apex Cloud Systems', location: 'Remote • US/Canada', employmentType: 'Full-Time', minCompensation: '145000', maxCompensation: '185000', salary: '$145,000 - $185,000', summary: 'Architect scalable real-time microservices, GraphQL APIs, and modern responsive frontends for enterprise talent analytics.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'hiring@apexcloud.io', paidVacation: 'Unlimited PTO', healthCoverage: '100% Comprehensive Health', retirement: '401(k) 6% Match', additionalPerks: '$3,000 Annual Tech Stipend', category: 'tech_growth', spotlight: true },
+      { jobTitle: 'Staff Machine Learning / AI Engineer', company: 'NeuralForge AI Labs', location: 'San Francisco, CA • Hybrid', employmentType: 'Full-Time', minCompensation: '175000', maxCompensation: '235000', salary: '$175,000 - $235,000', summary: 'Lead LLM fine-tuning, retrieval-augmented generation pipelines, and high-throughput inference deployment on distributed GPU clusters.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'talent@neuralforge.ai', paidVacation: '25 Days PTO', healthCoverage: 'Premium Medical & Dental', retirement: '401(k) Matching', additionalPerks: 'Equity Package (0.5% - 1.0%)', category: 'tech_growth', spotlight: true }
     ],
     'sales_enterprise': [
-      { jobTitle: 'Enterprise Account Executive (SaaS)', company: 'OmniStream Data Solutions', location: 'Austin, TX • Remote', employmentType: 'Full-Time', minCompensation: '120000', maxCompensation: '240000', salary: '$120,000 Base ($240,000 OTE)', summary: 'Drive outbound enterprise sales cycles, negotiate six-figure ARR contracts, and partner with Fortune 500 executive buyers.', applyLinkUrl: 'https://omnistream.io/careers/enterprise-ae', recruiterEmail: 'sales-talent@omnistream.io', paidVacation: 'Unlimited PTO', healthCoverage: 'Comprehensive Health & Life', retirement: '401(k) Match', additionalPerks: 'Quarterly President Club Bonuses', spotlight: true },
-      { jobTitle: 'Director of Business Development', company: 'GlobalScale Networks', location: 'Chicago, IL • Hybrid', employmentType: 'Full-Time', minCompensation: '150000', maxCompensation: '260000', salary: '$150,000 - $260,000 OTE', summary: 'Lead strategic enterprise partnerships, oversee a high-velocity SDR team, and scale revenue pipeline across North America.', applyLinkUrl: 'https://globalscale.net/careers/bd-director', recruiterEmail: 'recruiting@globalscale.net', paidVacation: 'Flexible Time Off', healthCoverage: 'Top Tier Medical', retirement: '401(k)', additionalPerks: 'Executive Travel Budget' },
-      { jobTitle: 'Senior Customer Success Director', company: 'Hyperion Client Operations', location: 'Remote', employmentType: 'Full-Time', minCompensation: '130000', maxCompensation: '175000', salary: '$130,000 - $175,000', summary: 'Manage tier-1 enterprise accounts, lead onboarding retention strategies, and drive 125%+ net revenue retention.', applyLinkUrl: 'https://hyperionops.com/careers/cs-director', recruiterEmail: 'people@hyperionops.com', paidVacation: 'Standard 4 Weeks PTO', healthCoverage: '100% Medical Coverage', retirement: '401(k) Match', additionalPerks: 'Annual Learning Stipend' }
+      { jobTitle: 'Enterprise Account Executive (SaaS)', company: 'OmniStream Data Solutions', location: 'Austin, TX • Remote', employmentType: 'Full-Time', minCompensation: '120000', maxCompensation: '240000', salary: '$120,000 Base ($240,000 OTE)', summary: 'Drive outbound enterprise sales cycles, negotiate six-figure ARR contracts, and partner with Fortune 500 executive buyers.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'sales-talent@omnistream.io', paidVacation: 'Unlimited PTO', healthCoverage: 'Comprehensive Health & Life', retirement: '401(k) Match', additionalPerks: 'Quarterly President Club Bonuses', category: 'sales_enterprise', spotlight: true }
     ],
     'healthcare_mgmt': [
-      { jobTitle: 'Clinical Director of Patient Operations', company: 'Alliance Healthcare Network', location: 'Denver, CO • On-Site', employmentType: 'Full-Time', minCompensation: '140000', maxCompensation: '185000', salary: '$140,000 - $185,000', summary: 'Oversee multi-specialty clinical operations, lead healthcare compliance protocols, and optimize patient care delivery pathways.', applyLinkUrl: 'https://alliancehealth.org/careers/clinical-director', recruiterEmail: 'careers@alliancehealth.org', paidVacation: '5 Weeks PTO', healthCoverage: 'Platinum Healthcare Plan', retirement: '403(b) / 401(k) Match', additionalPerks: 'Relocation Assistance Package', spotlight: true },
-      { jobTitle: 'Health Informatics & Data Manager', company: 'MedPulse Systems', location: 'Remote • US', employmentType: 'Full-Time', minCompensation: '115000', maxCompensation: '155000', salary: '$115,000 - $155,000', summary: 'Analyze clinical trial electronic medical records (EMR), integrate FHIR healthcare data pipelines, and ensure HIPAA compliance.', applyLinkUrl: 'https://medpulse.io/careers/informatics', recruiterEmail: 'talent@medpulse.io', paidVacation: '20 Days Paid Vacation', healthCoverage: 'Full Health & Dental', retirement: '401(k)', additionalPerks: 'Continuing Education Budget' }
-    ],
-    'remote_operations': [
-      { jobTitle: 'Director of Remote Operations', company: 'SyncWave Global', location: 'Remote • US', employmentType: 'Full-Time', minCompensation: '125000', maxCompensation: '165000', salary: '$125,000 - $165,000', summary: 'Standardize distributed operational workflows, manage vendor relationships, and lead asynchronous communication best practices.', applyLinkUrl: 'https://syncwave.io/careers/remote-ops', recruiterEmail: 'operations@syncwave.io', paidVacation: 'Unlimited PTO', healthCoverage: 'Comprehensive Health & Vision', retirement: '401(k) 5% Match', additionalPerks: 'Home Ergonomic Setup Budget', spotlight: true },
-      { jobTitle: 'People Operations & HR Business Partner', company: 'Elevation Partners Group', location: 'Remote • US', employmentType: 'Full-Time', minCompensation: '95000', maxCompensation: '135000', salary: '$95,000 - $135,000', summary: 'Lead full-cycle talent onboarding, execute employee retention initiatives, and maintain nationwide HR compliance.', applyLinkUrl: 'https://elevationpartners.com/careers/hrbp', recruiterEmail: 'people@elevationpartners.com', paidVacation: '4 Weeks PTO', healthCoverage: '100% Medical Coverage', retirement: '401(k) Matching', additionalPerks: 'Annual Wellness Stipend' }
+      { jobTitle: 'Clinical Director of Patient Operations', company: 'Alliance Healthcare Network', location: 'Denver, CO • On-Site', employmentType: 'Full-Time', minCompensation: '140000', maxCompensation: '185000', salary: '$140,000 - $185,000', summary: 'Oversee multi-specialty clinical operations, lead healthcare compliance protocols, and optimize patient care delivery pathways.', applyLinkUrl: 'https://jobs.utheversity.com', recruiterEmail: 'careers@alliancehealth.org', paidVacation: '5 Weeks PTO', healthCoverage: 'Platinum Healthcare Plan', retirement: '403(b) / 401(k) Match', additionalPerks: 'Relocation Assistance Package', category: 'healthcare_mgmt', spotlight: true }
     ]
   };
 
@@ -3170,7 +3185,7 @@ const server = http.createServer(async (req, res) => {
                 maxCompensation: String(maxC),
                 salary: `$${minC.toLocaleString()} - $${maxC.toLocaleString()}`,
                 summary: item.description ? item.description.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 400) : 'Exciting active career opportunity.',
-                applyLinkUrl: item.redirect_url || 'https://utheversity.com',
+                applyLinkUrl: item.redirect_url || 'https://jobs.utheversity.com',
                 recruiterEmail: 'careers@verifiedtalentnetwork.io',
                 source: 'ADZUNA_LIVE_API'
               });
@@ -3223,7 +3238,7 @@ const server = http.createServer(async (req, res) => {
                 maxCompensation: String(maxC),
                 salary: `$${Number(minC).toLocaleString()} - $${Number(maxC).toLocaleString()}`,
                 summary: item.job_description ? item.job_description.slice(0, 400) : 'Active employer vacancy with competitive benefits.',
-                applyLinkUrl: item.job_apply_link || 'https://utheversity.com',
+                applyLinkUrl: item.job_apply_link || 'https://jobs.utheversity.com',
                 recruiterEmail: 'careers@verifiedtalentnetwork.io',
                 logo: item.employer_logo || '',
                 source: 'JSEARCH_REALTIME_API'
@@ -3254,9 +3269,18 @@ const server = http.createServer(async (req, res) => {
       );
 
       if (!isDuplicate) {
-        const minComp = String(jobData.minCompensation || '65000');
-        const maxComp = String(jobData.maxCompensation || '95000');
+        const minComp = String(jobData.minCompensation || '36400');
+        const maxComp = String(jobData.maxCompensation || '52000');
         const formattedSalary = jobData.salary || `$${Number(minComp).toLocaleString()} - $${Number(maxComp).toLocaleString()}`;
+
+        const isFelonyFriendly = Boolean(
+          jobData.felonyFriendly === true ||
+          jobData.fairChance === true ||
+          (jobData.category && jobData.category.includes('felony')) ||
+          (jobData.paidVacation && (jobData.paidVacation.toLowerCase().includes('fair chance') || jobData.paidVacation.toLowerCase().includes('felony'))) ||
+          (jobData.additionalPerks && (jobData.additionalPerks.toLowerCase().includes('fair chance') || jobData.additionalPerks.toLowerCase().includes('felony'))) ||
+          (jobData.summary && (jobData.summary.toLowerCase().includes('fair chance') || jobData.summary.toLowerCase().includes('felony')))
+        );
 
         const newRecord = {
           id: jobData.id || `JOB-LIVE-${Date.now()}-${Math.floor(100 + Math.random() * 900)}`,
@@ -3265,20 +3289,22 @@ const server = http.createServer(async (req, res) => {
           company: compClean,
           location: jobData.location || 'Remote • US',
           employmentType: jobData.employmentType || 'Full-Time',
-          payStructure: jobData.payStructure || 'Salary Range',
+          payStructure: jobData.payStructure || 'Hourly / Salary',
           minCompensation: minComp,
           maxCompensation: maxComp,
           salary: formattedSalary,
-          paidVacation: jobData.paidVacation || 'Unlimited PTO',
+          paidVacation: jobData.paidVacation || 'Paid Time Off',
           healthCoverage: jobData.healthCoverage || 'Comprehensive Medical / Dental',
           retirement: jobData.retirement || '401(k) Match',
-          additionalPerks: jobData.additionalPerks || 'Remote Work Stipend & Tech Setup',
+          additionalPerks: jobData.additionalPerks || 'Direct Deposit & On-The-Job Training',
           applyLinkUrl: jobData.applyLinkUrl || 'https://jobs.utheversity.com',
           recruiterEmail: jobData.recruiterEmail || 'talent-sync@utheversity.com',
           socialChannels: jobData.socialChannels || { linkedin: true, x: true },
-          summary: jobData.summary || `Immediate hiring for ${titleClean} at ${compClean}. Competitive salary and comprehensive benefits.`,
+          summary: jobData.summary || `Immediate hiring for ${titleClean} at ${compClean}. Competitive pay and comprehensive benefits.`,
           logo: jobData.logo || '',
           spotlight: jobData.spotlight === true,
+          felonyFriendly: isFelonyFriendly,
+          category: jobData.category || (isFelonyFriendly ? 'felony_friendly' : 'general'),
           source: jobData.source || sourceTag,
           createdAt: jobData.createdAt || new Date().toISOString()
         };
@@ -3330,7 +3356,7 @@ const server = http.createServer(async (req, res) => {
       let candidateJobs = [];
       const source = (payload.source || 'preset').toLowerCase();
       const presetKey = payload.preset || payload.category || 'all';
-      const keywords = payload.keywords || payload.role || 'Customer Service';
+      const keywords = payload.keywords || payload.role || 'Warehouse';
       const location = payload.location || 'United States';
       const count = parseInt(payload.count || payload.size || 20, 10);
 
@@ -3367,16 +3393,45 @@ const server = http.createServer(async (req, res) => {
       const unadded = candidateJobs.filter(j => !existingTitles.has(`${(j.jobTitle || '').toLowerCase().trim()}@${(j.company || '').toLowerCase().trim()}`));
 
       if (unadded.length === 0 && !payload.rawXml) {
-        const dynamicPresets = [
-          { role: 'Customer Success Operations Lead', comp: 'CloudPoint Global', loc: 'Dallas, TX • Hybrid', sal: '$72,000 - $92,000', min: '72000', max: '92000', perks: 'Unlimited PTO & Health' },
-          { role: 'Technical Account Representative (Tier II)', comp: 'Vertex Data Networks', loc: 'Austin, TX • Remote', sal: '$68,000 - $88,000', min: '68000', max: '88000', perks: '401(k) Match & Equipment Stipend' },
-          { role: 'Senior Client Support Strategist', comp: 'Horizon Health Tech', loc: 'Chicago, IL • Remote', sal: '$78,000 - $98,000', min: '78000', max: '98000', perks: 'Comprehensive Health & Vision' },
-          { role: 'Lead Solutions Architect (AWS / Cloud)', comp: 'Prism Cloud AI', loc: 'San Francisco, CA • Hybrid', sal: '$165,000 - $215,000', min: '165000', max: '215000', perks: 'Equity & Full Benefits' },
-          { role: 'Enterprise Business Development Director', comp: 'Starlight Media Solutions', loc: 'New York, NY • Hybrid', sal: '$135,000 - $190,000', min: '135000', max: '190000', perks: 'Quarterly Bonuses & Travel Budget' },
-          { role: 'People & Talent Operations Partner', comp: 'NextWave Ventures', loc: 'Remote • US', sal: '$90,000 - $125,000', min: '90000', max: '125000', perks: '4 Weeks PTO & Learning Budget' }
-        ];
-
         const batchSalt = Date.now().toString().slice(-4);
+        let dynamicPresets = [];
+
+        if (presetKey === 'felony_friendly') {
+          dynamicPresets = [
+            { role: 'Warehouse Fulfillment Specialist (Fair Chance)', comp: 'Apex Logistics Corp', loc: 'Dallas, TX • On-Site', sal: '$18.50 - $22.00 / hr', min: '38480', max: '45760', perks: 'Fair Chance Verified • Weekly Pay', felony: true, cat: 'felony_friendly' },
+            { role: 'Packaging & Light Assembly Technician', comp: 'Summit Industrial Works', loc: 'Detroit, MI • On-Site', sal: '$19.00 - $23.50 / hr', min: '39520', max: '48880', perks: 'Fair Chance Hiring Partner • Overtime Available', felony: true, cat: 'felony_friendly' },
+            { role: 'Facilities Operations Assistant', comp: 'Keystone Facility Services', loc: 'Chicago, IL • On-Site', sal: '$17.50 - $21.50 / hr', min: '36400', max: '44720', perks: 'Felony Friendly Policy • Paid Safety Boots', felony: true, cat: 'felony_friendly' }
+          ];
+        } else if (presetKey === 'retail_grocery') {
+          dynamicPresets = [
+            { role: 'Grocery Stocker & Cashier Specialist', comp: 'FreshChoice Supermarkets', loc: 'Denver, CO • On-Site', sal: '$16.00 - $19.50 / hr', min: '33280', max: '40560', perks: 'Store Discount & Flexible Shifts', cat: 'retail_grocery' },
+            { role: 'Customer Service Register Lead', comp: 'Metro Express Retail', loc: 'Phoenix, AZ • On-Site', sal: '$16.50 - $20.00 / hr', min: '34320', max: '41600', perks: 'Paid Training & Health Plan', cat: 'retail_grocery' }
+          ];
+        } else if (presetKey === 'culinary_hospitality') {
+          dynamicPresets = [
+            { role: 'Lead Line Cook / Kitchen Supervisor', comp: 'Heritage Bistro & Grill', loc: 'Chicago, IL • On-Site', sal: '$18.00 - $23.00 / hr', min: '37440', max: '47840', perks: 'Free Shift Meals & Weekly Pay', cat: 'culinary_hospitality' },
+            { role: 'Restaurant Host / Dining Coordinator', comp: 'Crown Hospitality Group', loc: 'Atlanta, GA • On-Site', sal: '$15.50 - $19.00 / hr', min: '32240', max: '39520', perks: 'Dining Discounts & Flexible Hours', cat: 'culinary_hospitality' }
+          ];
+        } else if (presetKey === 'industrial_factory') {
+          dynamicPresets = [
+            { role: 'Factory Assembly Line Operator', comp: 'Apex Manufacturing Solutions', loc: 'Cleveland, OH • On-Site', sal: '$19.50 - $24.50 / hr', min: '40560', max: '50960', perks: 'Climate Controlled & 401(k) Match', cat: 'industrial_factory' },
+            { role: 'CNC Machine Setup Specialist', comp: 'Precision Tooling Works', loc: 'Indianapolis, IN • On-Site', sal: '$21.00 - $26.00 / hr', min: '43680', max: '54080', perks: 'Shift Differential & Full Health', cat: 'industrial_factory' }
+          ];
+        } else if (presetKey === 'sales_representative') {
+          dynamicPresets = [
+            { role: 'Inside Client Sales Representative', comp: 'Vanguard Growth Partners', loc: 'Atlanta, GA • Hybrid', sal: '$19.00 - $27.00 / hr Base + Comm', min: '39520', max: '56160', perks: 'Uncapped Commission & 401(k)', cat: 'sales_representative' },
+            { role: 'Commercial Sales Development Specialist', comp: 'Apex Business Solutions', loc: 'Dallas, TX • Remote', sal: '$21.00 - $29.00 / hr Base + Comm', min: '43680', max: '60320', perks: 'Full Benefits & Quarterly Bonus', cat: 'sales_representative' }
+          ];
+        } else {
+          dynamicPresets = [
+            { role: 'Warehouse Material Handler (Fair Chance)', comp: 'Apex Logistics Corp', loc: 'Dallas, TX • On-Site', sal: '$18.50 - $22.00 / hr', min: '38480', max: '45760', perks: 'Fair Chance Verified • Weekly Pay', felony: true, cat: 'felony_friendly' },
+            { role: 'Grocery Department Clerk', comp: 'FreshCorner Markets', loc: 'Denver, CO • On-Site', sal: '$16.00 - $19.50 / hr', min: '33280', max: '40560', perks: 'Store Discount & Weekly Pay', cat: 'retail_grocery' },
+            { role: 'Line Cook & Food Prep', comp: 'Heritage Grill', loc: 'Chicago, IL • On-Site', sal: '$17.50 - $22.00 / hr', min: '36400', max: '45760', perks: 'Free Meals & Paid Time Off', cat: 'culinary_hospitality' },
+            { role: 'Industrial Assembly Line Worker', comp: 'Keystone Manufacturing', loc: 'Detroit, MI • On-Site', sal: '$19.00 - $24.00 / hr', min: '39520', max: '49920', perks: 'Full Health & Overtime 1.5x', cat: 'industrial_factory' },
+            { role: 'Inside Sales Representative', comp: 'Vanguard Sales Corp', loc: 'Atlanta, GA • Remote', sal: '$18.00 - $26.00 / hr Base + Comm', min: '37440', max: '54080', perks: 'Uncapped Commission Plan', cat: 'sales_representative' }
+          ];
+        }
+
         dynamicPresets.forEach(item => {
           candidateJobs.push({
             jobTitle: item.role,
@@ -3386,10 +3441,12 @@ const server = http.createServer(async (req, res) => {
             minCompensation: item.min,
             maxCompensation: item.max,
             salary: item.sal,
-            summary: `Immediate hiring for ${item.role} at ${item.comp}. Competitive salary, full medical coverage, and modern 401(k) matching.`,
+            summary: `Immediate hiring for ${item.role} at ${item.comp}. Competitive compensation, reliable weekly pay, and complete on-the-job training.`,
             applyLinkUrl: 'https://jobs.utheversity.com',
             recruiterEmail: 'careers@verifiedtalentnetwork.io',
             paidVacation: item.perks,
+            felonyFriendly: item.felony === true,
+            category: item.cat || 'general',
             spotlight: true
           });
         });
