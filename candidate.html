@@ -433,16 +433,16 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
     }
 
-    /* QUICK CATEGORY FILTER BAR & DEDICATED FELONY FRIENDLY BUTTON */
+    /* SLIM, SLEEK & PREMIUM CATEGORY FILTER BAR */
     .category-filter-bar {
       display: flex;
       gap: 0.35rem;
       align-items: center;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 0.4rem 1.25rem;
+      padding: 0.35rem 1.25rem;
       background: #FFFFFF;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid #E2E8F0;
       white-space: nowrap;
       scrollbar-width: none;
       position: sticky;
@@ -453,13 +453,13 @@
       display: none;
     }
     .cand-cat-filter-btn {
-      background: #F1F5F9;
-      color: #334155;
-      border: 1px solid #CBD5E1;
-      font-size: 0.65rem;
-      font-weight: 800;
-      padding: 0.3rem 0.7rem;
-      border-radius: 20px;
+      background: #F8FAFC;
+      color: #475569;
+      border: 1px solid #E2E8F0;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -467,38 +467,37 @@
       transition: all 0.15s ease;
       text-transform: uppercase;
       letter-spacing: 0.03em;
+      height: 28px;
+      box-sizing: border-box;
     }
     .cand-cat-filter-btn:hover {
-      background: #E2E8F0;
+      background: #F1F5F9;
       color: #0F172A;
-      border-color: #94A3B8;
-      transform: translateY(-0.5px);
+      border-color: #CBD5E1;
     }
     .cand-cat-filter-btn.active {
       background: #0F172A !important;
       color: #FEBA27 !important;
       border-color: #0F172A !important;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25) !important;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.18) !important;
     }
     /* Dedicated Felony-Friendly Button Styling */
     .cand-cat-filter-btn.btn-felony-friendly {
       background: #FFFBEB !important;
       color: #B45309 !important;
-      border: 1.5px solid #FEBA27 !important;
-      font-weight: 900 !important;
-      box-shadow: 0 0 10px rgba(254, 186, 39, 0.3) !important;
+      border: 1px solid #FCD34D !important;
+      font-weight: 800 !important;
     }
     .cand-cat-filter-btn.btn-felony-friendly:hover {
-      background: #FEBA27 !important;
-      color: #0F172A !important;
-      box-shadow: 0 2px 14px rgba(254, 186, 39, 0.5) !important;
-      transform: translateY(-0.5px);
+      background: #FEF3C7 !important;
+      border-color: #FEBA27 !important;
+      color: #92400E !important;
     }
     .cand-cat-filter-btn.btn-felony-friendly.active {
-      background: #D97706 !important;
+      background: #B45309 !important;
       color: #FFFFFF !important;
-      border-color: #D97706 !important;
-      box-shadow: 0 0 16px rgba(217, 119, 6, 0.6) !important;
+      border-color: #B45309 !important;
+      box-shadow: 0 1px 4px rgba(180, 83, 9, 0.25) !important;
     }
 
     .search-input-wrap {
@@ -1921,31 +1920,31 @@
     </select>
   </section>
 
-  <!-- QUICK CATEGORY FILTER BAR & DEDICATED FELONY FRIENDLY BUTTON -->
+  <!-- SLIM, SLEEK & PREMIUM CATEGORY FILTER BAR -->
   <nav class="category-filter-bar" id="category-filter-bar">
     <button type="button" class="cand-cat-filter-btn active" id="cat-btn-all" onclick="filterByCategory('ALL')" data-tooltip="Show all verified career opportunities">
-      ⚡ ALL OPPORTUNITIES
+      ALL OPPORTUNITIES
     </button>
-    <button type="button" class="cand-cat-filter-btn btn-felony-friendly" id="cat-btn-felony" onclick="filterByCategory('felony_friendly')" data-tooltip="1-Click Filter: View and apply for 100% Felony-Friendly and Fair Chance verified job listings ($16-$24/hr)">
-      🤝 FELONY FRIENDLY
+    <button type="button" class="cand-cat-filter-btn btn-felony-friendly" id="cat-btn-felony" onclick="filterByCategory('felony_friendly')" data-tooltip="1-Click Filter: View and apply for 100% Felony-Friendly and Fair Chance verified job listings">
+      ❤️ FELONY FRIENDLY
     </button>
-    <button type="button" class="cand-cat-filter-btn" id="cat-btn-retail" onclick="filterByCategory('retail_grocery')" data-tooltip="Filter Retail Store Clerks, Cashiers & Grocery Associates ($15-$20/hr)">
-      🛒 RETAIL & GROCERY
+    <button type="button" class="cand-cat-filter-btn" id="cat-btn-retail" onclick="filterByCategory('retail_grocery')" data-tooltip="Filter Retail Store Clerks, Cashiers & Grocery Associates">
+      RETAIL & GROCERY
     </button>
-    <button type="button" class="cand-cat-filter-btn" id="cat-btn-culinary" onclick="filterByCategory('culinary_hospitality')" data-tooltip="Filter Chefs, Line Cooks, Restaurant Hosts & Kitchen Staff ($16-$22/hr)">
-      🍳 COOKS, CHEFS & HOSTS
+    <button type="button" class="cand-cat-filter-btn" id="cat-btn-culinary" onclick="filterByCategory('culinary_hospitality')" data-tooltip="Filter Chefs, Line Cooks, Restaurant Hosts & Kitchen Staff">
+      COOKS, CHEFS & HOSTS
     </button>
-    <button type="button" class="cand-cat-filter-btn" id="cat-btn-industrial" onclick="filterByCategory('industrial_factory')" data-tooltip="Filter Assembly Line, Factory & Industrial Manufacturing jobs ($18-$25/hr)">
-      🏭 INDUSTRIAL & FACTORY
+    <button type="button" class="cand-cat-filter-btn" id="cat-btn-industrial" onclick="filterByCategory('industrial_factory')" data-tooltip="Filter Assembly Line, Factory & Industrial Manufacturing jobs">
+      INDUSTRIAL & FACTORY
     </button>
-    <button type="button" class="cand-cat-filter-btn" id="cat-btn-sales" onclick="filterByCategory('sales_representative')" data-tooltip="Filter Sales Representatives, Client Advisors & Account Execs ($18-$28/hr + Commission)">
-      💼 SALES REPRESENTATIVES
+    <button type="button" class="cand-cat-filter-btn" id="cat-btn-sales" onclick="filterByCategory('sales_representative')" data-tooltip="Filter Sales Representatives, Client Advisors & Account Execs">
+      SALES REPRESENTATIVES
     </button>
     <button type="button" class="cand-cat-filter-btn" id="cat-btn-tech" onclick="filterByCategory('tech_growth')" data-tooltip="Filter Tech, Software, Cloud & AI Engineering positions">
-      💻 TECH & CLOUD
+      TECH & CLOUD
     </button>
     <button type="button" class="cand-cat-filter-btn" id="cat-btn-support" onclick="filterByCategory('customer_support')" data-tooltip="Filter Customer Service & Client Care roles">
-      🎧 CUSTOMER SUPPORT
+      CUSTOMER SUPPORT
     </button>
   </nav>
 
@@ -1958,7 +1957,7 @@
         <div class="lock-icon-badge">🔒</div>
         <h2 class="lock-title">CREATE AN ACCOUNT TO VIEW ACTIVE JOB OPPORTUNITIES</h2>
         <p class="lock-subtitle">
-          Full access to verified employer postings, competitive wages ($18 - $28/hr), felony-friendly positions, direct recruiter messaging, and 1-click resume applications requires a free candidate account.
+          Full access to verified employer postings, competitive wages, felony-friendly positions, direct recruiter messaging, and 1-click resume applications requires a free candidate account.
         </p>
         <div class="lock-action-row">
           <button type="button" class="btn-lock-signup" onclick="openAuthModal('signup')" data-tooltip="Create a free job seeker account in 30 seconds">
@@ -2635,7 +2634,7 @@
         );
 
         const felonyBadge = isFelony
-          ? `<span class="badge-tag tag-gold" style="background: #FFFBEB !important; color: #B45309 !important; border: 1.5px solid #FEBA27 !important; font-weight: 900; font-size: 0.58rem; padding: 1px 6px; border-radius: 4px; box-shadow: 0 0 8px rgba(254, 186, 39, 0.25); display: inline-flex; align-items: center; gap: 3px;">🤝 FELONY FRIENDLY</span>`
+          ? `<span class="badge-tag tag-gold" style="background: #FFFBEB !important; color: #B45309 !important; border: 1.5px solid #FEBA27 !important; font-weight: 900; font-size: 0.58rem; padding: 1px 6px; border-radius: 4px; box-shadow: 0 0 8px rgba(254, 186, 39, 0.25); display: inline-flex; align-items: center; gap: 3px;">❤️ FELONY FRIENDLY</span>`
           : '';
 
         const perksList = Array.isArray(job.perksList) && job.perksList.length > 0
@@ -2773,7 +2772,7 @@
         );
         let itemsHtml = perksList.map(p => `<span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px; display:inline-block;">${p}</span>`).join(' ');
         if (isFelony) {
-          itemsHtml = `<span class="badge-tag tag-gold" style="background:#FFFBEB !important; color:#B45309 !important; border:1.5px solid #FEBA27 !important; font-weight:900; font-size:0.62rem; padding:2px 8px; margin:2px; display:inline-block;">🤝 FELONY FRIENDLY / FAIR CHANCE</span> ` + itemsHtml;
+          itemsHtml = `<span class="badge-tag tag-gold" style="background:#FFFBEB !important; color:#B45309 !important; border:1.5px solid #FEBA27 !important; font-weight:900; font-size:0.62rem; padding:2px 8px; margin:2px; display:inline-block;">❤️ FELONY FRIENDLY / FAIR CHANCE</span> ` + itemsHtml;
         }
         perksDisplayEl.innerHTML = itemsHtml || (job.additionalPerks || 'Benefits included.');
       }

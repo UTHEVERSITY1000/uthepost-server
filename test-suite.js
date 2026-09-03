@@ -3897,12 +3897,12 @@ Director of Brand Marketing • New York, NY
 
     // 3. Candidate Dedicated Felony Friendly Button & Category Belt
     assert(candidateHtml.includes('id="category-filter-bar"'), 'candidate.html defines #category-filter-bar container');
-    assert(candidateHtml.includes('filterByCategory(\'felony_friendly\')'), 'candidate.html defines dedicated 🤝 FELONY FRIENDLY button');
-    assert(candidateHtml.includes('filterByCategory(\'retail_grocery\')'), 'candidate.html defines 🛒 RETAIL & GROCERY button');
-    assert(candidateHtml.includes('filterByCategory(\'culinary_hospitality\')'), 'candidate.html defines 🍳 COOKS, CHEFS & HOSTS button');
-    assert(candidateHtml.includes('filterByCategory(\'industrial_factory\')'), 'candidate.html defines 🏭 INDUSTRIAL & FACTORY button');
-    assert(candidateHtml.includes('filterByCategory(\'sales_representative\')'), 'candidate.html defines 💼 SALES REPRESENTATIVES button');
-    assert(candidateHtml.includes('🤝 FELONY FRIENDLY'), 'candidate.html renders 🤝 FELONY FRIENDLY badges on job listings');
+    assert(candidateHtml.includes('filterByCategory(\'felony_friendly\')'), 'candidate.html defines dedicated ❤️ FELONY FRIENDLY button');
+    assert(candidateHtml.includes('filterByCategory(\'retail_grocery\')'), 'candidate.html defines RETAIL & GROCERY button');
+    assert(candidateHtml.includes('filterByCategory(\'culinary_hospitality\')'), 'candidate.html defines COOKS, CHEFS & HOSTS button');
+    assert(candidateHtml.includes('filterByCategory(\'industrial_factory\')'), 'candidate.html defines INDUSTRIAL & FACTORY button');
+    assert(candidateHtml.includes('filterByCategory(\'sales_representative\')'), 'candidate.html defines SALES REPRESENTATIVES button');
+    assert(candidateHtml.includes('❤️ FELONY FRIENDLY'), 'candidate.html renders ❤️ FELONY FRIENDLY badges on job listings');
 
     // 4. Server Felony Friendly Sync Verification
     const felonySyncRes = await httpPost('/api/jobs/sync-live-feed', {
@@ -3927,6 +3927,8 @@ Director of Brand Marketing • New York, NY
     // 1. Visitor Auth Barrier Markup
     assert(candidateHtml.includes('id="visitor-auth-barrier"'), 'candidate.html defines #visitor-auth-barrier overlay');
     assert(candidateHtml.includes('CREATE AN ACCOUNT TO VIEW ACTIVE JOB OPPORTUNITIES'), 'candidate.html displays clear signup barrier title');
+    assert(candidateHtml.includes('competitive wages'), 'candidate.html mentions competitive wages');
+    assert(!candidateHtml.includes('competitive wages ($18 - $28/hr)'), 'candidate.html removes ($18 - $28/hr) wage range from lock subtitle');
     assert(candidateHtml.includes('.visitor-lock-card'), 'candidate.html defines .visitor-lock-card styling');
     assert(candidateHtml.includes('.btn-lock-signup'), 'candidate.html includes .btn-lock-signup button');
     assert(candidateHtml.includes('.btn-lock-login'), 'candidate.html includes .btn-lock-login button');
