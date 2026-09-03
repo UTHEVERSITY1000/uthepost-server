@@ -1,5 +1,28 @@
 [
   {
+    "timestamp": "2026-09-03T03:03:25.609Z",
+    "eventType": "JOB_FEED_SYNC_COMPLETED",
+    "details": {
+      "count": 6,
+      "total": 307,
+      "source": "FEED_PRESET"
+    }
+  },
+  {
+    "timestamp": "2026-09-03T03:02:57.956Z",
+    "eventType": "SYSTEM_BOOT",
+    "details": {
+      "message": "UTHEVERSITY Storage & Indexing Engine Initialized"
+    }
+  },
+  {
+    "timestamp": "2026-09-03T03:02:47.665Z",
+    "eventType": "SYSTEM_BOOT",
+    "details": {
+      "message": "UTHEVERSITY Storage & Indexing Engine Initialized"
+    }
+  },
+  {
     "timestamp": "2026-09-03T03:01:02.684Z",
     "eventType": "PDL_CANDIDATES_SOURCED",
     "details": {
@@ -4603,31 +4626,6 @@
     "details": {
       "updatedBy": "USR-001",
       "timestamp": "2026-09-02T17:34:12.580Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-02T17:34:12.460Z",
-    "eventType": "CMS_CONFIG_UPDATED",
-    "details": {
-      "updatedBy": "USR-001",
-      "timestamp": "2026-09-02T17:34:12.458Z"
-    }
-  },
-  {
-    "timestamp": "2026-09-02T17:34:12.336Z",
-    "eventType": "USER_LOGIN",
-    "details": {
-      "userId": "USR-001",
-      "email": "contact@utheversity.com"
-    }
-  },
-  {
-    "timestamp": "2026-09-02T17:33:53.893Z",
-    "eventType": "PDL_CANDIDATES_SOURCED",
-    "details": {
-      "count": 5,
-      "role": "Staff Systems Engineer",
-      "location": "Austin, Tx"
     }
   }
 ]
