@@ -1490,10 +1490,10 @@ async function runTests() {
     assert(adminHtml.includes('.btn-gold') && adminHtml.includes('background-color: #FEBA27 !important'), 'admin.html has gold hover for .btn-gold');
     assert(adminSuiteHtml.includes('background-color: #FEBA27 !important'), 'admin.html includes gold hover');
 
-    // 4. Badges & Tags Standard: White fill, Gold outline, Gold text
+    // 4. Badges & Tags Standard:
     assert(candidateHtml.includes('background-color: #FFFFFF !important') && candidateHtml.includes('border: 1px solid #FEBA27 !important'), 'candidate.html standardizes badges to white fill and gold outline');
     assert(recruiterHtml.includes('background-color: #FFFFFF !important') && recruiterHtml.includes('border: 1px solid #FEBA27 !important'), 'recruiter.html standardizes badges to white fill and gold outline');
-    assert(adminHtml.includes('background-color: #FFFFFF !important') && adminHtml.includes('border: 1px solid #FEBA27 !important'), 'admin.html standardizes badges to white fill and gold outline');
+    assert(adminHtml.includes('background-color: #E2E8F0 !important') && adminHtml.includes('box-shadow: 0 0 10px rgba(254, 186, 39'), 'admin.html standardizes badges to medium airy grey fill and ambient gold glow');
 
   } catch (err) {
     assert(false, `Group 29 failed: ${err.message}`);
@@ -1525,19 +1525,12 @@ async function runTests() {
   // ================================================================
   console.log('\n--- GROUP 31: UTHEVERSITY TRIPLE-STATE BUTTON & BADGE RE-STYLING ---');
   try {
-    const allFiles = [
+    const portalFiles = [
       'recruiter.html',
-      'candidate.html',
-      'admin.html',
-      'recruiter.html',
-      'recruiter.html',
-      'recruiter.html',
-      'candidate.html',
-      'candidate.html',
-      'admin.html'
+      'candidate.html'
     ];
 
-    for (const f of allFiles) {
+    for (const f of portalFiles) {
       const content = fs.readFileSync(path.join(__dirname, f), 'utf8');
 
       // 1. Default State: White Fill, Gold Outline, Gold Text (#FEBA27)
@@ -1556,6 +1549,13 @@ async function runTests() {
       assert(content.includes('.badge-tag, .role-badge, .status-badge'), `${f} defines universal badge-tag, role-badge, status-badge rules`);
       assert(content.includes('.badge-tag.active, .status-badge.active, .badge-tag.selected'), `${f} defines active/selected badge rules with #0075FF`);
     }
+
+    // u-theADMIN Specific Styling Theme:
+    const adminContent = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    assert(adminContent.includes('background-color: #FEBA27 !important') && adminContent.includes('color: #0F172A !important'), 'admin.html enforces gold fill and black text for action buttons');
+    assert(adminContent.includes('background-color: #E2E8F0 !important') && adminContent.includes('color: #D97706 !important'), 'admin.html enforces medium airy grey fill and gold text for badges');
+    assert(adminContent.includes('background: #0F172A !important') && adminContent.includes('color: #FEBA27 !important'), 'admin.html enforces dark navy fill and gold text for tabs');
+    assert(adminContent.includes('.admin-nav-tab-btn:hover') && adminContent.includes('background: #FEBA27 !important') && adminContent.includes('color: #0F172A !important'), 'admin.html enforces signature gold fill and black text on tab hover');
 
   } catch (err) {
     assert(false, `Group 31 failed: ${err.message}`);

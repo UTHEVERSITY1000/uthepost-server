@@ -259,33 +259,32 @@
       font-size: 0.75rem;
     }
 
-    /* 2. COMPACT & SLEEK 6 NAVIGATION TABS */
+    /* 2. COMPACT & SLEEK 6 NAVIGATION TABS (DARK NAVY WITH GOLD TEXT, GOLD ON HOVER) */
     .admin-tabs-nav-bar {
       background: #FFFFFF;
       border-bottom: 1px solid var(--border-color);
-      padding: 0 0.75rem;
+      padding: 0.3rem 0.75rem;
       display: flex;
       align-items: center;
-      gap: 0.2rem;
+      gap: 0.35rem;
       position: sticky;
       top: 48px;
       z-index: 850;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      min-height: 32px;
+      min-height: 34px;
     }
 
     .admin-nav-tab-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      border-bottom: 2px solid transparent;
-      color: var(--text-muted);
+      background: #0F172A !important;
+      border: 1px solid #0F172A !important;
+      color: #FEBA27 !important;
       font-size: 0.60rem;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
-      padding: 0 0.5rem;
+      letter-spacing: 0.04em;
+      padding: 0 0.65rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -293,19 +292,24 @@
       height: 26px;
       border-radius: 4px;
       white-space: nowrap;
-      transition: all 0.15s ease;
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.2);
     }
 
     .admin-nav-tab-btn:hover {
-      color: var(--uthe-charcoal);
-      background: #F8FAFC;
+      background: #FEBA27 !important;
+      color: #0F172A !important;
+      border-color: #FEBA27 !important;
+      box-shadow: 0 3px 12px rgba(254, 186, 39, 0.45) !important;
+      transform: translateY(-0.5px);
     }
 
     .admin-nav-tab-btn.active {
+      background: #FEBA27 !important;
       color: #0F172A !important;
-      border-bottom-color: var(--uthe-gold) !important;
-      font-weight: 800 !important;
-      background: var(--uthe-gold-light) !important;
+      border-color: #FEBA27 !important;
+      font-weight: 900 !important;
+      box-shadow: 0 3px 12px rgba(254, 186, 39, 0.5) !important;
     }
 
     /* MAIN WORKSPACE */
@@ -508,31 +512,31 @@
       vertical-align: middle;
     }
 
-    /* COMPACT ACTION BUTTONS & PREMIUM REFINED CONTROLS */
-    /* 1. DEFAULT STATE: White Fill, Gold Outline, Gold Text */
-    button, .btn-primary, .btn-gold, .btn-quick-send-main, .send-reply-btn, .btn-auth-header, .btn-submit-request, .btn-surface-sm, .btn-primary-executive {
-      background-color: #FFFFFF !important;
-      color: #FEBA27 !important;
+    /* COMPACT ACTION BUTTONS: SIGNATURE GOLD COLOR FILL & BLACK TEXT */
+    button, .btn-primary, .btn-gold, .btn-gold-action, .btn-quick-send-main, .send-reply-btn, .btn-auth-header, .btn-submit-request, .btn-surface-sm, .btn-primary-executive, .action-cells button {
+      background-color: #FEBA27 !important;
+      color: #0F172A !important;
       border: 1.5px solid #FEBA27 !important;
-      font-weight: 700 !important;
+      font-weight: 800 !important;
       letter-spacing: 0.03em !important;
       text-transform: uppercase !important;
       border-radius: 4px !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
       transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      cursor: pointer !important;
     }
 
-    /* 2. HOVER STATE: Signature Gold Fill, Limousine Black Text */
-    button:hover, .btn-primary:hover, .btn-gold:hover, .btn-quick-send-main:hover, .send-reply-btn:hover, .btn-auth-header:hover, .btn-submit-request:hover, .btn-surface-sm:hover, .btn-primary-executive:hover {
-      background-color: #FEBA27 !important;
-      color: #0F172A !important;
-      border-color: #FEBA27 !important;
-      box-shadow: 0 4px 14px rgba(254, 186, 39, 0.35) !important;
+    /* HOVER STATE: Rich Accent Gold Fill, Black Text & Ambient Elevation */
+    button:hover, .btn-primary:hover, .btn-gold:hover, .btn-gold-action:hover, .btn-quick-send-main:hover, .send-reply-btn:hover, .btn-auth-header:hover, .btn-submit-request:hover, .btn-surface-sm:hover, .btn-primary-executive:hover, .action-cells button:hover {
+      background-color: #E5A51F !important;
+      color: #000000 !important;
+      border-color: #E5A51F !important;
+      box-shadow: 0 4px 14px rgba(254, 186, 39, 0.45) !important;
       transform: translateY(-0.5px) !important;
     }
 
-    /* 3. SELECTED / ACTIVE STATE: u-theLOGO Accent Blue Fill, White Text */
-    button:active, button.active, .btn-primary.active, .btn-surface-sm.active, .admin-nav-tab-btn.active {
+    /* SELECTED / ACTIVE STATE: u-theLOGO Accent Blue Fill, White Text */
+    button:active, button.active, .btn-primary.active, .btn-surface-sm.active {
       background-color: #0075FF !important;
       color: #FFFFFF !important;
       border-color: #0075FF !important;
@@ -540,12 +544,12 @@
     }
 
     /* ULTRA-SLEEK COMPACT TABLE ACTION BUTTONS (20-22PX HEIGHT) */
-    .btn-surface-sm {
+    .btn-surface-sm, .action-cells button {
       height: 22px !important;
       font-size: 0.58rem !important;
-      padding: 0 0.40rem !important;
+      padding: 0 0.42rem !important;
       border-radius: 4px !important;
-      font-weight: 700 !important;
+      font-weight: 800 !important;
       letter-spacing: 0.02em !important;
       display: inline-flex !important;
       align-items: center !important;
@@ -553,15 +557,15 @@
       white-space: nowrap !important;
     }
 
-    .btn-danger-sm {
+    .btn-danger-sm, button.danger, .action-cells button.danger {
       background: #FEF2F2 !important;
       color: #EF4444 !important;
       border: 1px solid #FECACA !important;
-      font-weight: 700 !important;
+      font-weight: 800 !important;
       font-size: 0.58rem !important;
       letter-spacing: 0.02em !important;
       text-transform: uppercase !important;
-      padding: 0 0.40rem !important;
+      padding: 0 0.42rem !important;
       border-radius: 4px !important;
       cursor: pointer !important;
       height: 22px !important;
@@ -573,7 +577,7 @@
       transition: all 0.15s ease !important;
     }
 
-    .btn-danger-sm:hover {
+    .btn-danger-sm:hover, button.danger:hover, .action-cells button.danger:hover {
       background: #EF4444 !important;
       color: #FFFFFF !important;
       border-color: #EF4444 !important;
@@ -581,28 +585,63 @@
       transform: translateY(-0.5px) !important;
     }
 
-    /* 4. BADGES & TAGS */
+    /* BADGES: MEDIUM AIRY GREY FILL, GOLD TEXT & AMBIENT SUBTLE GLOW */
     .badge-tag, .role-badge, .status-badge {
-      background-color: #FFFFFF !important;
-      color: #FEBA27 !important;
-      border: 1px solid #FEBA27 !important;
+      background-color: #E2E8F0 !important;
+      color: #D97706 !important;
+      border: 1px solid rgba(254, 186, 39, 0.45) !important;
       border-radius: 4px !important;
+      box-shadow: 0 0 10px rgba(254, 186, 39, 0.35), 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+      font-weight: 800 !important;
+      letter-spacing: 0.03em !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 2px 7px !important;
+      font-size: 0.58rem !important;
+      text-transform: uppercase !important;
     }
 
-    .badge-tag.active, .status-badge.active, .badge-tag.selected {
+    .badge-tag.tag-gold, .role-badge.admin {
+      background-color: #E2E8F0 !important;
+      color: #B45309 !important;
+      border-color: #FEBA27 !important;
+      box-shadow: 0 0 12px rgba(254, 186, 39, 0.45), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .badge-tag.tag-mint, .status-badge.active {
+      background-color: #E2E8F0 !important;
+      color: #059669 !important;
+      border-color: rgba(5, 150, 105, 0.5) !important;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3), 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .badge-tag.tag-cyan, .role-badge.employer {
+      background-color: #E2E8F0 !important;
+      color: #0284C7 !important;
+      border-color: rgba(2, 132, 199, 0.5) !important;
+      box-shadow: 0 0 10px rgba(14, 165, 233, 0.3), 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .badge-tag.tag-purple, .role-badge.candidate {
+      background-color: #E2E8F0 !important;
+      color: #7C3AED !important;
+      border-color: rgba(124, 58, 237, 0.5) !important;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.3), 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .status-badge.suspended {
+      background-color: #FEE2E2 !important;
+      color: #DC2626 !important;
+      border-color: rgba(239, 68, 68, 0.5) !important;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3), 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .badge-tag.active, .status-badge.active.selected, .badge-tag.selected {
       background-color: #0075FF !important;
       color: #FFFFFF !important;
       border-color: #0075FF !important;
-    }
-    .status-badge.active {
-      background: var(--status-mint-bg) !important;
-      color: #065F46 !important;
-      border: 1px solid rgba(0, 200, 83, 0.3) !important;
-    }
-    .status-badge.suspended {
-      background: var(--danger-bg) !important;
-      color: var(--danger-red) !important;
-      border: 1px solid rgba(239, 68, 68, 0.3) !important;
+      box-shadow: 0 0 12px rgba(0, 117, 255, 0.45) !important;
     }
 
     .action-cells {
@@ -891,11 +930,13 @@
       gap: 0.75rem !important;
     }
 
-    /* Touch Targets */
-    button, input, select, textarea, .admin-nav-tab-btn {
-      min-height: 38px !important;
-      touch-action: manipulation !important;
-      font-size: 0.8rem !important;
+    /* Touch Targets for Mobile Devices */
+    @media (max-width: 768px) {
+      input, select, textarea {
+        min-height: 38px !important;
+        touch-action: manipulation !important;
+        font-size: 0.8rem !important;
+      }
     }
 
     /* Modal Overlay & Responsive Card Containment */
