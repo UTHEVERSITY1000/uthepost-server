@@ -854,7 +854,10 @@
       <span class="brand-badge" data-tooltip="Master Zero-Code CMS Active">MASTER CMS</span>
     </div>
 
-    <div class="header-actions">
+    <div class="header-actions" style="display: flex; gap: 0.5rem; align-items: center;">
+      <button class="btn-gold" onclick="openJobAggregatorModal()" style="height: 28px; font-size: 0.62rem; padding: 0 0.65rem; font-weight: 800; border-radius: 4px; box-shadow: var(--shadow-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Sync live public job feeds from ATS platforms (Customer Support, Tech, Healthcare, Sales, Remote)">
+        ⚡ SYNC LIVE JOB FEEDS
+      </button>
       <div class="owner-badge" onclick="openAdminAuthModal()" data-tooltip="Master Administrator Profile: Zion Daye (815-980-4272)">
         <span>👑</span><span id="header-admin-identity">ZION DAYE (815-980-4272)</span>
       </div>
@@ -914,6 +917,22 @@
         <div class="kpi-card" data-tooltip="Cluster node health and connectivity">
           <span class="kpi-label">HEALTH STATUS</span>
           <span class="kpi-value" style="color: #065F46;" id="kpi-health">ONLINE</span>
+        </div>
+      </div>
+
+      <!-- QUICK SOURCING COMMAND BAR -->
+      <div style="background: #FFFFFF; border: 1.5px solid var(--uthe-gold); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; box-shadow: var(--shadow-sm);">
+        <div>
+          <div style="font-size: 0.78rem; font-weight: 900; color: var(--uthe-charcoal); letter-spacing: 0.5px;">⚡ AUTOMATED LIVE EMPLOYER SOURCING PIPELINE</div>
+          <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">Populate u-theJOBS (jobs.utheversity.com) with active hiring employer vacancies & auto-generate Google for Jobs Schema</div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <button class="btn-gold" onclick="openJobAggregatorModal()" style="height: 32px; font-size: 0.68rem; padding: 0 0.85rem; font-weight: 800; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Open Live Feed Aggregator Modal">
+            ⚡ SYNC LIVE JOB FEEDS
+          </button>
+          <button class="btn-surface-sm" onclick="openPdlSourcingModal()" style="height: 32px; font-size: 0.68rem; padding: 0 0.75rem; font-weight: 800; border-radius: 6px; color: var(--blue-accent); border-color: var(--blue-accent); cursor: pointer;" data-tooltip="Open Candidate Resume Sourcing Engine">
+            🧠 SOURCE TALENT DOSSIERS
+          </button>
         </div>
       </div>
 
