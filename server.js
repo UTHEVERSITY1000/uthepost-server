@@ -3790,7 +3790,7 @@ const server = http.createServer(async (req, res) => {
     const skillsLine1 = sanitizePdfText(cleanSkillsList.slice(0, 5).join('   |   ')) || 'Customer Support   |   Communication   |   Problem Resolution';
     const skillsLine2 = cleanSkillsList.length > 5 ? sanitizePdfText(cleanSkillsList.slice(5, 10).join('   |   ')) : '';
 
-    const rawBio = cand.bio || `Accomplished and dependable ${role} based in ${location} with ${expYears} of professional experience delivering exceptional quality, driving operational efficiency, and collaborating effectively in fast-paced team environments. Verified talent dossier on U-THEPOST.`;
+    const rawBio = cand.bio || `Accomplished and dependable ${role} based in ${location} with ${expYears} of professional experience delivering exceptional quality, driving operational efficiency, and collaborating effectively in fast-paced team environments. Verified candidate profile on U-THEPOST.`;
     const cleanBio = sanitizePdfText(rawBio.replace(/\btrue\b/gi, location));
     const bioLines = wrapTextToLines(cleanBio, 90, 3);
 
@@ -3810,7 +3810,7 @@ const server = http.createServer(async (req, res) => {
       `(${name}) Tj`,
       '0 -20 Td',
       '/F1 12 Tf',
-      `(${role} - Verified Candidate Portfolio) Tj`,
+      `(${role} - Verified Resume) Tj`,
       '0 -16 Td',
       '/F1 9 Tf',
       `(${displayEmail}   |   ${displayPhone}   |   ${location}) Tj`,
@@ -4071,7 +4071,7 @@ const server = http.createServer(async (req, res) => {
 
             const bio = (typeof p.summary === 'string' && p.summary.length > 20 && !p.summary.toLowerCase().includes('people data labs'))
               ? p.summary.replace(/\btrue\b/gi, candLocation)
-              : `Accomplished and dependable ${jobTitle} based in ${candLocation} with ${candExp} of professional experience delivering exceptional quality, driving operational efficiency, and collaborating effectively in fast-paced team environments. Verified talent dossier on U-THEPOST.`;
+              : `Accomplished and dependable ${jobTitle} based in ${candLocation} with ${candExp} of professional experience delivering exceptional quality, driving operational efficiency, and collaborating effectively in fast-paced team environments. Verified candidate profile on U-THEPOST.`;
 
             const candidateRecord = {
               id: resId,
@@ -4156,7 +4156,7 @@ const server = http.createServer(async (req, res) => {
           score: score,
           verified: true,
           skills: targetSkills.length > 0 ? targetSkills : ['Customer Support', 'Communication', 'Problem Resolution'],
-          bio: `Accomplished and dependable ${targetRole} based in ${targetLocation} with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified talent dossier on U-THEPOST.`,
+          bio: `Accomplished and dependable ${targetRole} based in ${targetLocation} with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified candidate profile on U-THEPOST.`,
           workHistory: [
             {
               title: `Senior ${targetRole}`,

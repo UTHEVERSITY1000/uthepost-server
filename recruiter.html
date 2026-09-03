@@ -2825,6 +2825,7 @@ white-space: nowrap;
   display: inline-block;
   line-height: 1.3;
 }
+.resume-card,
 .resume-dossier-card {
   background: #FFFFFF;
   border: 1.5px solid var(--border-color);
@@ -2837,6 +2838,7 @@ white-space: nowrap;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
+.resume-card:hover,
 .resume-dossier-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
@@ -7221,7 +7223,7 @@ VERIFIED EMPLOYER
       </div>
     </div>
 
-    <!-- RIGHT PANEL: ACTIVE CANDIDATE DOSSIER & DIRECT MESSAGING -->
+    <!-- RIGHT PANEL: ACTIVE CANDIDATE PROFILE & DIRECT MESSAGING -->
     <div class="chat-panel">
       
       <div class="message-drawer-header">
@@ -7635,7 +7637,7 @@ SIGN IN TO WORKSPACE
         </div>
         <div style="font-size: 0.75rem; color: #475569; line-height: 1.45; display: flex; flex-direction: column; gap: 0.4rem;">
           <div>• <strong>4-Stage Kanban Pipeline:</strong> Easily move candidate cards through <em>1. Applied ➔ 2. Screened ➔ 3. Interviewing ➔ 4. Offer / Hired</em>.</div>
-          <div>• <strong>Candidate Dossier & Verified Resumes:</strong> Click any applicant to view their AI match score, contact info, and open their verified PDF resume.</div>
+          <div>• <strong>Candidate Profile & Verified Resumes:</strong> Click any applicant to view their AI match score, contact info, and open their verified PDF resume.</div>
           <div>• <strong>Direct Messaging & 1-Click Templates:</strong> Send executive messages directly to the candidate's inbox using pre-formatted templates (<em>Intro</em>, <em>Invite</em>, <em>Interest</em>).</div>
           <div>• <strong>📅 Propose Date & Time:</strong> Pick a calendar date and time to automatically generate and send interview meeting invites.</div>
           <div>• <strong>Upper-Left Checkboxes & Bulk Delete:</strong> Select candidate cards with checkboxes to bulk-delete or organize applicants.</div>
@@ -7709,8 +7711,8 @@ SIGN IN TO WORKSPACE
     </div>
 
     <div class="form-group" style="margin-bottom: 0.5rem;">
-      <label style="font-size: 0.7rem; font-weight: 800;">Batch Resume Text / Paste Unstructured Candidate Dossiers</label>
-      <textarea id="batch-resume-raw-text" rows="6" placeholder="Paste multiple resumes separated by '---' or newlines:&#10;&#10;Alex Morgan&#10;alex.morgan@techmail.io | (555) 234-5678&#10;Senior Full Stack Engineer • Austin, TX (Remote)&#10;5+ years building scalable microservices with Node.js, React, TypeScript, and AWS.&#10;&#10;---&#10;&#10;Elena Vance&#10;elena.vance@enterprisesales.com | (555) 876-5432&#10;Enterprise Account Executive • New York, NY&#10;7+ years closing $500k+ ARR deals in B2B SaaS." style="width: 100%; font-family: monospace; font-size: 0.72rem; border-radius: 6px; border: 1.5px solid var(--border-color); padding: 6px;" data-tooltip="Paste raw candidate text dossiers for automated parsing"></textarea>
+      <label style="font-size: 0.7rem; font-weight: 800;">Batch Resume Text / Paste Resumes & Candidate Profiles</label>
+      <textarea id="batch-resume-raw-text" rows="6" placeholder="Paste multiple resumes separated by '---' or newlines:&#10;&#10;Alex Morgan&#10;alex.morgan@techmail.io | (555) 234-5678&#10;Senior Full Stack Engineer • Austin, TX (Remote)&#10;5+ years building scalable microservices with Node.js, React, TypeScript, and AWS.&#10;&#10;---&#10;&#10;Elena Vance&#10;elena.vance@enterprisesales.com | (555) 876-5432&#10;Enterprise Account Executive • New York, NY&#10;7+ years closing $500k+ ARR deals in B2B SaaS." style="width: 100%; font-family: monospace; font-size: 0.72rem; border-radius: 6px; border: 1.5px solid var(--border-color); padding: 6px;" data-tooltip="Paste candidate resume text for automated parsing"></textarea>
     </div>
 
     <div id="batch-resume-preview-box" style="display: none; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 4px; padding: 0.5rem; max-height: 130px; overflow-y: auto; font-size: 0.7rem; font-family: monospace; margin-bottom: 0.5rem;">
@@ -8227,13 +8229,13 @@ window.triggerBatchResumeIngestion = async function() {
   const previewBox = document.getElementById('batch-resume-preview-box');
 
   if (!rawText) {
-    showCustomModalAlert('Input Required', 'Please paste at least one resume or candidate dossier text.');
+    showCustomModalAlert('Input Required', 'Please paste at least one resume or candidate profile text.');
     return;
   }
 
   if (btn) {
     btn.disabled = true;
-    btn.textContent = '🧠 PARSING & INGESTING DOSSIERS...';
+    btn.textContent = '🧠 PARSING & INGESTING RESUMES...';
   }
 
   try {
@@ -10922,7 +10924,7 @@ function renderFilteredResumes(resumes) {
     `;
 
     return `
-      <div class="resume-dossier-card" id="resume-card-${r.id}">
+      <div class="resume-card resume-dossier-card" id="resume-card-${r.id}">
         <div>
           <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.4rem;">
             <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">

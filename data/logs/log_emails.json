@@ -1,5 +1,459 @@
 [
   {
+    "id": "EML-440036",
+    "to": "recruiter_1788406883408@techglobaltalent.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-373",
+      "role": "recruiter"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:23.500Z"
+  },
+  {
+    "id": "EML-848126",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Quantum Retail Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-8699",
+      "applicantId": "APP-701",
+      "senderRole": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:22.513Z"
+  },
+  {
+    "id": "EML-832225",
+    "to": "candidate@domain.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from UTHEVERSITY Global Inc.",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-9919",
+      "applicantId": "APP-766",
+      "senderRole": "recruiter"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:19.751Z"
+  },
+  {
+    "id": "EML-295388",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "u-theADMIN — Live Transactional Email System Test",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": false,
+      "verifyError": null
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:19.310Z"
+  },
+  {
+    "id": "EML-114871",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "u-theADMIN — Live Transactional Email System Test",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": false,
+      "verifyError": null
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:18.999Z"
+  },
+  {
+    "id": "EML-716288",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "u-theADMIN — Live Transactional Email System Test",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": false,
+      "verifyError": null
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:18.599Z"
+  },
+  {
+    "id": "EML-259102",
+    "to": "candidate.applicant.1788406877407@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Quantum Technologies Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-5170",
+      "applicantId": "APP-701",
+      "senderRole": "recruiter"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:18.324Z"
+  },
+  {
+    "id": "EML-538440",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
+    "type": "NEW_APPLICANT_ALERT_RECRUITER",
+    "metadata": {
+      "applicantId": "APP-701",
+      "jobId": "JOB-101",
+      "candidateEmail": "candidate.applicant.1788406877407@utheversity.com"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:17.805Z"
+  },
+  {
+    "id": "EML-228895",
+    "to": "candidate.applicant.1788406877407@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
+    "type": "APPLICATION_RECEIPT_CANDIDATE",
+    "metadata": {
+      "applicantId": "APP-701",
+      "jobId": "JOB-101"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:17.489Z"
+  },
+  {
+    "id": "EML-503344",
+    "to": "test.welcome.1788406876371@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Your UTHEVERSITY Password Has Been Updated",
+    "type": "PASSWORD_RESET_CONFIRMATION",
+    "metadata": {},
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:17.223Z"
+  },
+  {
+    "id": "EML-190011",
+    "to": "test.welcome.1788406876371@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Reset Your UTHEVERSITY Account Password",
+    "type": "PASSWORD_RESET_REQUEST",
+    "metadata": {
+      "userId": "USR-211",
+      "token": "e30ee7acb1a4988ad2b06fbde762e81994f3b6df4480e3f4"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:16.839Z"
+  },
+  {
+    "id": "EML-271824",
+    "to": "test.welcome.1788406876371@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-211",
+      "role": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:16.479Z"
+  },
+  {
+    "id": "EML-521490",
+    "to": "jordan.rivera@email.com",
+    "from": "contact@utheversity.com",
+    "subject": "Reset Your UTHEVERSITY Account Password",
+    "type": "PASSWORD_RESET_REQUEST",
+    "metadata": {
+      "userId": "USR-003",
+      "token": "5c9a5d04a88236f078869dc4b5f22a3dbdde07ef0849f9a4"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:15.570Z"
+  },
+  {
+    "id": "EML-744658",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Persistent Systems Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-1892",
+      "applicantId": "APP-801",
+      "senderRole": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:14.239Z"
+  },
+  {
+    "id": "EML-860607",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1788406873051",
+    "type": "NEW_APPLICANT_ALERT_RECRUITER",
+    "metadata": {
+      "applicantId": "APP-801",
+      "jobId": "JOB-1788406873055",
+      "candidateEmail": "jane.doe@example.com"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:13.836Z"
+  },
+  {
+    "id": "EML-178788",
+    "to": "jane.doe@example.com",
+    "from": "contact@utheversity.com",
+    "subject": "Application Received: Senior Lead Architect 1788406873051 at Persistent Systems Corp",
+    "type": "APPLICATION_RECEIPT_CANDIDATE",
+    "metadata": {
+      "applicantId": "APP-801",
+      "jobId": "JOB-1788406873055"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:13.485Z"
+  },
+  {
+    "id": "EML-183540",
+    "to": "test.candidate.1788406872615@domain.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-485",
+      "role": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:41:12.701Z"
+  },
+  {
+    "id": "EML-275875",
+    "to": "recruiter_1788405255533@techglobaltalent.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-111",
+      "role": "recruiter"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:15.674Z"
+  },
+  {
+    "id": "EML-303091",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Quantum Retail Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-6598",
+      "applicantId": "APP-701",
+      "senderRole": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:14.579Z"
+  },
+  {
+    "id": "EML-953513",
+    "to": "candidate@domain.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from UTHEVERSITY Global Inc.",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-1423",
+      "applicantId": "APP-766",
+      "senderRole": "recruiter"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:11.609Z"
+  },
+  {
+    "id": "EML-530911",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "u-theADMIN — Live Transactional Email System Test",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": false,
+      "verifyError": null
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:11.092Z"
+  },
+  {
+    "id": "EML-513636",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "u-theADMIN — Live Transactional Email System Test",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": false,
+      "verifyError": null
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:10.801Z"
+  },
+  {
+    "id": "EML-958534",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "u-theADMIN — Live Transactional Email System Test",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": false,
+      "verifyError": null
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:10.486Z"
+  },
+  {
+    "id": "EML-825262",
+    "to": "candidate.applicant.1788405249565@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Quantum Technologies Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-5457",
+      "applicantId": "APP-802",
+      "senderRole": "recruiter"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:10.258Z"
+  },
+  {
+    "id": "EML-517126",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
+    "type": "NEW_APPLICANT_ALERT_RECRUITER",
+    "metadata": {
+      "applicantId": "APP-802",
+      "jobId": "JOB-101",
+      "candidateEmail": "candidate.applicant.1788405249565@utheversity.com"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:09.976Z"
+  },
+  {
+    "id": "EML-295236",
+    "to": "candidate.applicant.1788405249565@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
+    "type": "APPLICATION_RECEIPT_CANDIDATE",
+    "metadata": {
+      "applicantId": "APP-802",
+      "jobId": "JOB-101"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:09.717Z"
+  },
+  {
+    "id": "EML-470504",
+    "to": "test.welcome.1788405248226@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Your UTHEVERSITY Password Has Been Updated",
+    "type": "PASSWORD_RESET_CONFIRMATION",
+    "metadata": {},
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:09.331Z"
+  },
+  {
+    "id": "EML-437910",
+    "to": "test.welcome.1788405248226@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Reset Your UTHEVERSITY Account Password",
+    "type": "PASSWORD_RESET_REQUEST",
+    "metadata": {
+      "userId": "USR-804",
+      "token": "189568db2e99c5786c59000dafd889d5a4bcdc5d1b4bfabe"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:08.763Z"
+  },
+  {
+    "id": "EML-865979",
+    "to": "test.welcome.1788405248226@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-804",
+      "role": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:08.323Z"
+  },
+  {
+    "id": "EML-134870",
+    "to": "jordan.rivera@email.com",
+    "from": "contact@utheversity.com",
+    "subject": "Reset Your UTHEVERSITY Account Password",
+    "type": "PASSWORD_RESET_REQUEST",
+    "metadata": {
+      "userId": "USR-003",
+      "token": "a8e453a60b94c2d03d556d5b9146a6860210ff67afd4b3c5"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:07.412Z"
+  },
+  {
+    "id": "EML-330768",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Persistent Systems Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-2756",
+      "applicantId": "APP-768",
+      "senderRole": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:06.142Z"
+  },
+  {
+    "id": "EML-811945",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1788405245106",
+    "type": "NEW_APPLICANT_ALERT_RECRUITER",
+    "metadata": {
+      "applicantId": "APP-768",
+      "jobId": "JOB-1788405245108",
+      "candidateEmail": "jane.doe@example.com"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:05.860Z"
+  },
+  {
+    "id": "EML-277869",
+    "to": "jane.doe@example.com",
+    "from": "contact@utheversity.com",
+    "subject": "Application Received: Senior Lead Architect 1788405245106 at Persistent Systems Corp",
+    "type": "APPLICATION_RECEIPT_CANDIDATE",
+    "metadata": {
+      "applicantId": "APP-768",
+      "jobId": "JOB-1788405245108"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:05.664Z"
+  },
+  {
+    "id": "EML-534784",
+    "to": "test.candidate.1788405244801@domain.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-420",
+      "role": "candidate"
+    },
+    "status": "pending",
+    "timestamp": "2026-09-03T03:14:04.893Z"
+  },
+  {
     "id": "EML-544533",
     "to": "recruiter_1788404461907@techglobaltalent.com",
     "from": "contact@utheversity.com",
@@ -6224,459 +6678,5 @@
     },
     "status": "pending",
     "timestamp": "2026-09-02T00:34:16.254Z"
-  },
-  {
-    "id": "EML-295608",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
-    "type": "NEW_APPLICANT_ALERT_RECRUITER",
-    "metadata": {
-      "applicantId": "APP-704",
-      "jobId": "JOB-101",
-      "candidateEmail": "candidate.applicant.1788309255459@utheversity.com"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-02T00:34:15.772Z"
-  },
-  {
-    "id": "EML-635029",
-    "to": "candidate.applicant.1788309255459@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
-    "type": "APPLICATION_RECEIPT_CANDIDATE",
-    "metadata": {
-      "applicantId": "APP-704",
-      "jobId": "JOB-101"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-02T00:34:15.566Z"
-  },
-  {
-    "id": "EML-996299",
-    "to": "test.welcome.1788309254360@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Your UTHEVERSITY Password Has Been Updated",
-    "type": "PASSWORD_RESET_CONFIRMATION",
-    "metadata": {},
-    "status": "pending",
-    "timestamp": "2026-09-02T00:34:15.257Z"
-  },
-  {
-    "id": "EML-730435",
-    "to": "test.welcome.1788309254360@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Reset Your UTHEVERSITY Account Password",
-    "type": "PASSWORD_RESET_REQUEST",
-    "metadata": {
-      "userId": "USR-942",
-      "token": "99313e1293623f12417d3bb2bb12692e242d395202b6b697"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-02T00:34:14.889Z"
-  },
-  {
-    "id": "EML-471840",
-    "to": "test.welcome.1788309254360@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
-    "type": "WELCOME_USER",
-    "metadata": {
-      "userId": "USR-942",
-      "role": "candidate"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-02T00:34:14.518Z"
-  },
-  {
-    "id": "EML-649529",
-    "to": "jordan.rivera@email.com",
-    "from": "contact@utheversity.com",
-    "subject": "Reset Your UTHEVERSITY Account Password",
-    "type": "PASSWORD_RESET_REQUEST",
-    "metadata": {
-      "userId": "USR-003",
-      "token": "f0f0db0113a09f14d9ed4bb5136f044152388a5b03f9e829"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-02T00:34:12.596Z"
-  },
-  {
-    "id": "EML-306201",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from Persistent Systems Corp",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-4218",
-      "applicantId": "APP-782",
-      "senderRole": "candidate"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-02T00:34:06.527Z"
-  },
-  {
-    "id": "EML-927508",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1788309245067",
-    "type": "NEW_APPLICANT_ALERT_RECRUITER",
-    "metadata": {
-      "applicantId": "APP-782",
-      "jobId": "JOB-1788309245087",
-      "candidateEmail": "jane.doe@example.com"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-02T00:34:06.067Z"
-  },
-  {
-    "id": "EML-800879",
-    "to": "jane.doe@example.com",
-    "from": "contact@utheversity.com",
-    "subject": "Application Received: Senior Lead Architect 1788309245067 at Persistent Systems Corp",
-    "type": "APPLICATION_RECEIPT_CANDIDATE",
-    "metadata": {
-      "applicantId": "APP-782",
-      "jobId": "JOB-1788309245087"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-02T00:34:05.861Z"
-  },
-  {
-    "id": "EML-158447",
-    "to": "test.candidate.1788309243824@domain.com",
-    "from": "contact@utheversity.com",
-    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
-    "type": "WELCOME_USER",
-    "metadata": {
-      "userId": "USR-352",
-      "role": "candidate"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-02T00:34:04.186Z"
-  },
-  {
-    "id": "EML-468585",
-    "to": "recruiter_1788299436332@techglobaltalent.com",
-    "from": "contact@utheversity.com",
-    "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
-    "type": "WELCOME_USER",
-    "metadata": {
-      "userId": "USR-812",
-      "role": "recruiter"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:36.452Z"
-  },
-  {
-    "id": "EML-338560",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from Quantum Retail Corp",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-6381",
-      "applicantId": "APP-701",
-      "senderRole": "candidate"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:35.599Z"
-  },
-  {
-    "id": "EML-967258",
-    "to": "candidate@domain.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from UTHEVERSITY Global Inc.",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-6375",
-      "applicantId": "APP-766",
-      "senderRole": "recruiter"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:33.091Z"
-  },
-  {
-    "id": "EML-692771",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "u-theADMIN — Live Transactional Email System Test",
-    "type": "DIAGNOSTIC_TEST_EMAIL",
-    "metadata": {
-      "targetEmail": "contact@utheversity.com",
-      "isVerified": false,
-      "verifyError": null
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:32.716Z"
-  },
-  {
-    "id": "EML-521268",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "u-theADMIN — Live Transactional Email System Test",
-    "type": "DIAGNOSTIC_TEST_EMAIL",
-    "metadata": {
-      "targetEmail": "contact@utheversity.com",
-      "isVerified": false,
-      "verifyError": null
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:32.349Z"
-  },
-  {
-    "id": "EML-896616",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "u-theADMIN — Live Transactional Email System Test",
-    "type": "DIAGNOSTIC_TEST_EMAIL",
-    "metadata": {
-      "targetEmail": "contact@utheversity.com",
-      "isVerified": false,
-      "verifyError": null
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:32.065Z"
-  },
-  {
-    "id": "EML-401254",
-    "to": "candidate.applicant.1788299431096@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from Quantum Technologies Corp",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-3652",
-      "applicantId": "APP-816",
-      "senderRole": "recruiter"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:31.722Z"
-  },
-  {
-    "id": "EML-670900",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
-    "type": "NEW_APPLICANT_ALERT_RECRUITER",
-    "metadata": {
-      "applicantId": "APP-816",
-      "jobId": "JOB-101",
-      "candidateEmail": "candidate.applicant.1788299431096@utheversity.com"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:31.429Z"
-  },
-  {
-    "id": "EML-727052",
-    "to": "candidate.applicant.1788299431096@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
-    "type": "APPLICATION_RECEIPT_CANDIDATE",
-    "metadata": {
-      "applicantId": "APP-816",
-      "jobId": "JOB-101"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:31.220Z"
-  },
-  {
-    "id": "EML-164342",
-    "to": "test.welcome.1788299429978@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Your UTHEVERSITY Password Has Been Updated",
-    "type": "PASSWORD_RESET_CONFIRMATION",
-    "metadata": {},
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:30.881Z"
-  },
-  {
-    "id": "EML-385070",
-    "to": "test.welcome.1788299429978@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Reset Your UTHEVERSITY Account Password",
-    "type": "PASSWORD_RESET_REQUEST",
-    "metadata": {
-      "userId": "USR-569",
-      "token": "e30846ff09cf1e9e3358cc8cc27e8b9399ac7c207c52daf6"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:30.387Z"
-  },
-  {
-    "id": "EML-888475",
-    "to": "test.welcome.1788299429978@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
-    "type": "WELCOME_USER",
-    "metadata": {
-      "userId": "USR-569",
-      "role": "candidate"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:30.053Z"
-  },
-  {
-    "id": "EML-145818",
-    "to": "jordan.rivera@email.com",
-    "from": "contact@utheversity.com",
-    "subject": "Reset Your UTHEVERSITY Account Password",
-    "type": "PASSWORD_RESET_REQUEST",
-    "metadata": {
-      "userId": "USR-003",
-      "token": "3f5f321b9a1dfbabd0b3ac424d4301896768b6fe5412193b"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:29.411Z"
-  },
-  {
-    "id": "EML-919071",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from Persistent Systems Corp",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-9174",
-      "applicantId": "APP-776",
-      "senderRole": "candidate"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:28.270Z"
-  },
-  {
-    "id": "EML-227394",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1788299427066",
-    "type": "NEW_APPLICANT_ALERT_RECRUITER",
-    "metadata": {
-      "applicantId": "APP-776",
-      "jobId": "JOB-1788299427056",
-      "candidateEmail": "jane.doe@example.com"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:27.820Z"
-  },
-  {
-    "id": "EML-304966",
-    "to": "jane.doe@example.com",
-    "from": "contact@utheversity.com",
-    "subject": "Application Received: Senior Lead Architect 1788299427066 at Persistent Systems Corp",
-    "type": "APPLICATION_RECEIPT_CANDIDATE",
-    "metadata": {
-      "applicantId": "APP-776",
-      "jobId": "JOB-1788299427056"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:27.602Z"
-  },
-  {
-    "id": "EML-280061",
-    "to": "test.candidate.1788299426743@domain.com",
-    "from": "contact@utheversity.com",
-    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
-    "type": "WELCOME_USER",
-    "metadata": {
-      "userId": "USR-521",
-      "role": "candidate"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:26.830Z"
-  },
-  {
-    "id": "EML-488861",
-    "to": "recruiter_1788299401721@techglobaltalent.com",
-    "from": "contact@utheversity.com",
-    "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
-    "type": "WELCOME_USER",
-    "metadata": {
-      "userId": "USR-885",
-      "role": "recruiter"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:01.888Z"
-  },
-  {
-    "id": "EML-300651",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from Quantum Retail Corp",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-8265",
-      "applicantId": "APP-701",
-      "senderRole": "candidate"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:50:00.635Z"
-  },
-  {
-    "id": "EML-380980",
-    "to": "candidate@domain.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from UTHEVERSITY Global Inc.",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-3051",
-      "applicantId": "APP-766",
-      "senderRole": "recruiter"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:49:53.587Z"
-  },
-  {
-    "id": "EML-841920",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "u-theADMIN — Live Transactional Email System Test",
-    "type": "DIAGNOSTIC_TEST_EMAIL",
-    "metadata": {
-      "targetEmail": "contact@utheversity.com",
-      "isVerified": false,
-      "verifyError": null
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:49:53.176Z"
-  },
-  {
-    "id": "EML-932417",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "u-theADMIN — Live Transactional Email System Test",
-    "type": "DIAGNOSTIC_TEST_EMAIL",
-    "metadata": {
-      "targetEmail": "contact@utheversity.com",
-      "isVerified": false,
-      "verifyError": null
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:49:52.881Z"
-  },
-  {
-    "id": "EML-692249",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "u-theADMIN — Live Transactional Email System Test",
-    "type": "DIAGNOSTIC_TEST_EMAIL",
-    "metadata": {
-      "targetEmail": "contact@utheversity.com",
-      "isVerified": false,
-      "verifyError": null
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:49:52.366Z"
-  },
-  {
-    "id": "EML-302559",
-    "to": "candidate.applicant.1788299391152@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from Quantum Technologies Corp",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-4458",
-      "applicantId": "APP-884",
-      "senderRole": "recruiter"
-    },
-    "status": "pending",
-    "timestamp": "2026-09-01T21:49:52.052Z"
   }
 ]

@@ -1030,7 +1030,7 @@
             ⚡ SYNC LIVE JOB FEEDS
           </button>
           <button class="btn-surface-sm" onclick="openPdlSourcingModal()" style="height: 32px; font-size: 0.68rem; padding: 0 0.75rem; font-weight: 800; border-radius: 6px; color: var(--blue-accent); border-color: var(--blue-accent); cursor: pointer;" data-tooltip="Open Candidate Resume Sourcing Engine">
-            🧠 SOURCE TALENT DOSSIERS
+            🧠 SOURCE CANDIDATE RESUMES
           </button>
         </div>
       </div>
@@ -1574,7 +1574,7 @@
             <button id="btn-admin-batch-delete-resumes" class="btn-danger-sm" onclick="confirmBatchDeleteAdminResumes()" style="display:none; height: 22px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 700; border-radius: 4px;">🗑️ Delete Selected (<span id="admin-selected-resumes-count">0</span>)</button>
           </div>
           <div style="display: flex; gap: 0.35rem; align-items: center; flex-wrap: wrap;">
-            <button class="btn-gold" onclick="openPdlSourcingModal()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px;" data-tooltip="Source verified candidate dossiers via People Data Labs (PDL) API">
+            <button class="btn-gold" onclick="openPdlSourcingModal()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px;" data-tooltip="Source verified candidate profiles via People Data Labs (PDL) API">
               ⚡ PDL Talent Sourcing
             </button>
             <button class="btn-gold" onclick="openBatchResumeParserModal()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px;" data-tooltip="Automated multi-resume text parser and batch candidate ingester">
@@ -1977,8 +1977,8 @@
       </div>
 
       <div class="form-group">
-        <label>Batch Resume Text / Paste Unstructured Candidate Dossiers</label>
-        <textarea id="batch-resume-raw-text" rows="6" placeholder="Paste multiple resumes separated by '---' or newlines:&#10;&#10;Alex Morgan&#10;alex.morgan@techmail.io | (555) 234-5678&#10;Senior Full Stack Engineer • Austin, TX (Remote)&#10;5+ years building scalable microservices with Node.js, React, TypeScript, and AWS.&#10;&#10;---&#10;&#10;Elena Vance&#10;elena.vance@enterprisesales.com | (555) 876-5432&#10;Enterprise Account Executive • New York, NY&#10;7+ years closing $500k+ ARR deals in B2B SaaS." style="font-family: monospace; font-size: 0.72rem;" data-tooltip="Paste raw candidate text dossiers for automated parsing"></textarea>
+        <label>Batch Resume Text / Paste Resumes & Candidate Profiles</label>
+        <textarea id="batch-resume-raw-text" rows="6" placeholder="Paste multiple resumes separated by '---' or newlines:&#10;&#10;Alex Morgan&#10;alex.morgan@techmail.io | (555) 234-5678&#10;Senior Full Stack Engineer • Austin, TX (Remote)&#10;5+ years building scalable microservices with Node.js, React, TypeScript, and AWS.&#10;&#10;---&#10;&#10;Elena Vance&#10;elena.vance@enterprisesales.com | (555) 876-5432&#10;Enterprise Account Executive • New York, NY&#10;7+ years closing $500k+ ARR deals in B2B SaaS." style="font-family: monospace; font-size: 0.72rem;" data-tooltip="Paste candidate resume text for automated parsing"></textarea>
       </div>
 
       <div id="batch-resume-preview-box" style="display: none; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 4px; padding: 0.5rem; max-height: 130px; overflow-y: auto; font-size: 0.7rem; font-family: monospace; margin-top: 0.4rem;">
@@ -3243,13 +3243,13 @@
       const previewBox = document.getElementById('batch-resume-preview-box');
 
       if (!rawText) {
-        showCustomModalAlert('Input Required', 'Please paste at least one resume or candidate dossier text.');
+        showCustomModalAlert('Input Required', 'Please paste at least one resume or candidate profile text.');
         return;
       }
 
       if (btn) {
         btn.disabled = true;
-        btn.textContent = '🧠 PARSING & INGESTING DOSSIERS...';
+        btn.textContent = '🧠 PARSING & INGESTING RESUMES...';
       }
 
       try {
@@ -3323,7 +3323,7 @@
             consoleEl.textContent += `[PDL SUCCESS] Ingested ${data.count} candidates!\n[PDL TOTAL] Total Active Resumes in Store: ${data.totalResumes}\n`;
           }
           if (typeof loadAdminResumes === 'function') loadAdminResumes();
-          showCustomModalAlert('PDL Sourcing Complete', `Successfully extracted and created ${data.count} verified candidate dossiers in Resume Search!`);
+          showCustomModalAlert('PDL Sourcing Complete', `Successfully extracted and created ${data.count} verified candidate profiles in Resume Search!`);
         } else {
           if (consoleEl) consoleEl.textContent += `[PDL ERROR] ${data.error || 'Failed to source candidates.'}\n`;
           showCustomModalAlert('PDL Sourcing Notice', data.error || 'Unable to connect to PDL API.');
@@ -3790,7 +3790,7 @@
       }
       if (consoleBox) {
         consoleBox.style.display = 'block';
-        consoleBox.innerHTML = `[${new Date().toLocaleTimeString()}] Sourcing candidate dossiers: "${role}" in "${location}" (Batch: ${size})...`;
+        consoleBox.innerHTML = `[${new Date().toLocaleTimeString()}] Sourcing candidate profiles: "${role}" in "${location}" (Batch: ${size})...`;
       }
 
       try {
@@ -3807,12 +3807,12 @@
 
         if (res.ok) {
           if (consoleBox) {
-            consoleBox.innerHTML += `<br>[${new Date().toLocaleTimeString()}] Sourcing successful: ${data.count || 0} candidate dossiers verified & ingested.`;
+            consoleBox.innerHTML += `<br>[${new Date().toLocaleTimeString()}] Sourcing successful: ${data.count || 0} candidate profiles verified & ingested.`;
           }
           loadAdminResumes();
           showCustomModalAlert(
             'Candidate Sourcing Completed',
-            `Successfully ingested ${data.count || 0} verified candidate dossiers for "${role}".\n\nChannel: ${data.source || 'Verified Talent Network'}\nProfiles are now live in Tab 6: RESUME SEARCH.`
+            `Successfully ingested ${data.count || 0} verified candidate profiles for "${role}".\n\nChannel: ${data.source || 'Verified Talent Network'}\nProfiles are now live in Tab 6: RESUME SEARCH.`
           );
         } else {
           if (consoleBox) {
