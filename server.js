@@ -3517,6 +3517,123 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // 4. POST /api/ai/content-helper (AI Content Helper & SEO Search Optimizer)
+  if (pathname === '/api/ai/content-helper' && req.method === 'POST') {
+    readBody((err, payload) => {
+      if (err) return sendJson(400, { error: err.message });
+      payload = payload || {};
+
+      const title = (payload.title || 'Sales Representative').trim();
+      const company = (payload.company || 'Enterprise Solutions').trim();
+      const location = (payload.location || 'Austin, TX • Hybrid').trim();
+      const salary = (payload.salary || '$18.00 - $26.00 / hr').trim();
+      const desc = (payload.description || '').trim();
+      const intent = (payload.intent || 'enhance').toLowerCase();
+      const category = (payload.category || 'general').toLowerCase();
+
+      // Category-aware topical keywords and competitor gap benchmarks
+      const topicalKeywordMap = {
+        retail_grocery: ['Weekly Pay', 'Employee Store Discount', 'Customer Service', 'Cash Handling', 'Inventory Stocking', 'Flexible Morning & Evening Shifts'],
+        culinary_hospitality: ['Free Shift Meals', 'Culinary Knife Skills', 'Food Safety ServSafe', 'Line Prep', 'Kitchen Cleanliness', 'Paid Time Off'],
+        industrial_factory: ['Weekly Direct Deposit', 'Safety Gear PPE Provided', 'Overtime 1.5x Pay', 'Assembly Line Operations', 'Climate-Controlled Plant', 'No Experience Required'],
+        sales_representative: ['Uncapped Monthly Commission', 'Warm Leads Provided', 'Inbound & Outbound Calling', 'Client Account Growth', '401(k) Match', 'Comprehensive Health Plan'],
+        felony_friendly: ['Fair Chance Background Policy', 'Immediate Start', 'Weekly Direct Deposit', 'Safety Gear Provided', 'On-the-Job Paid Training', 'Stable Full-Time Hours'],
+        tech_growth: ['Modern Tech Stack', 'Remote Flexibility', 'Continuous Learning Stipend', 'Comprehensive Health & Dental', 'Stock Options / Equity', 'Agile Teamwork'],
+        customer_support: ['Help Desk & Ticket Management', 'Empathetic Client Communication', 'Paid Product Training', 'Health Benefits', 'Work-Life Balance', 'Growth Path'],
+        general: ['Competitive Pay', 'Weekly Direct Deposit', 'Health & Dental Benefits', 'Paid Time Off', 'Growth Opportunities', 'Equal Opportunity Employer']
+      };
+
+      // Determine category or infer from title
+      let activeCat = category;
+      if (!topicalKeywordMap[activeCat]) {
+        if (/grocery|cashier|retail|produce|store/i.test(title)) activeCat = 'retail_grocery';
+        else if (/cook|chef|kitchen|prep|dining|host/i.test(title)) activeCat = 'culinary_hospitality';
+        else if (/assembly|factory|industrial|manufacturing|warehouse|operator/i.test(title)) activeCat = 'industrial_factory';
+        else if (/sales|account executive|advisor|business development/i.test(title)) activeCat = 'sales_representative';
+        else if (/fair chance|felony/i.test(title) || payload.felonyFriendly) activeCat = 'felony_friendly';
+        else if (/engineer|developer|software|cloud|tech|devops/i.test(title)) activeCat = 'tech_growth';
+        else if (/support|service|client care|help desk/i.test(title)) activeCat = 'customer_support';
+        else activeCat = 'general';
+      }
+
+      const categoryKeywords = topicalKeywordMap[activeCat] || topicalKeywordMap.general;
+
+      // Identify topical gaps (keywords from category missing in current description)
+      const descLower = (desc + ' ' + title).toLowerCase();
+      const topicalGaps = categoryKeywords.filter(kw => !descLower.includes(kw.toLowerCase()));
+      const presentKeywords = categoryKeywords.filter(kw => descLower.includes(kw.toLowerCase()));
+
+      // Calculate Content Quality & Search Score (0 - 100)
+      let score = 70;
+      if (title.length >= 5) score += 6;
+      if (company.length >= 2) score += 4;
+      if (salary.length >= 4 && (salary.includes('$') || /hr|year|k/i.test(salary))) score += 8;
+      if (desc.length >= 80) score += 6;
+      if (presentKeywords.length >= 2) score += 6;
+      score = Math.min(score, 98);
+
+      // Generate enhanced high-converting title
+      let enhancedTitle = title;
+      if (activeCat === 'felony_friendly' && !enhancedTitle.toLowerCase().includes('fair chance')) {
+        enhancedTitle = `${title} (Fair Chance Certified)`;
+      } else if (activeCat === 'sales_representative' && !enhancedTitle.toLowerCase().includes('commission') && !enhancedTitle.toLowerCase().includes('base')) {
+        enhancedTitle = `${title} – Base Pay + Commission`;
+      } else if (activeCat === 'industrial_factory' && !enhancedTitle.toLowerCase().includes('weekly')) {
+        enhancedTitle = `${title} (Weekly Pay & Full Benefits)`;
+      } else if (activeCat === 'retail_grocery' && !enhancedTitle.toLowerCase().includes('discount')) {
+        enhancedTitle = `${title} – Flexible Shifts`;
+      } else if (activeCat === 'culinary_hospitality' && !enhancedTitle.toLowerCase().includes('meals')) {
+        enhancedTitle = `${title} (Free Meals & Training)`;
+      }
+
+      // Generate structured, candidate-friendly enhanced description
+      const enhancedDescription = `We are actively hiring a motivated ${title} to join the dedicated team at ${company} in ${location}.
+
+Key Responsibilities:
+• Deliver consistent, high-quality results in daily operations and team workflows.
+• Communicate clearly with coworkers, supervisors, and clients with a positive attitude.
+• Maintain a clean, organized, and safe working environment adhering to all company standards.
+• Take ownership of assigned shift targets and actively participate in continuous improvement.
+
+Compensation & Benefits:
+• Compensation: ${salary} with reliable pay schedules.
+• Full benefits package including comprehensive health, dental, and retirement options.
+• Generous Paid Time Off (PTO) and paid holiday schedule.
+• On-the-job training, mentorship, and clear advancement opportunities within ${company}.
+
+Qualifications:
+• Strong communication skills and a dependable work ethic.
+• Ability to collaborate effectively in a fast-paced team environment.
+• Eagerness to learn new procedures and grow professionally.`;
+
+      const seoMetaTitle = `${enhancedTitle} | ${company} Hiring Now | U-THEJOBS`;
+      const seoMetaDescription = `Apply for ${title} at ${company} in ${location}. Competitive compensation (${salary}), excellent benefits, and immediate interview scheduling.`;
+
+      return sendJson(200, {
+        ok: true,
+        score: score,
+        rating: score >= 90 ? 'EXCELLENT / HIGH VISIBILITY' : (score >= 80 ? 'GOOD' : 'NEEDS OPTIMIZATION'),
+        enhancedTitle: enhancedTitle,
+        enhancedDescription: enhancedDescription,
+        suggestedPerks: categoryKeywords.slice(0, 4),
+        topicalGaps: topicalGaps,
+        presentKeywords: presentKeywords,
+        seoMetaTitle: seoMetaTitle,
+        seoMetaDescription: seoMetaDescription,
+        googleSchemaPreview: {
+          "@context": "https://schema.org/",
+          "@type": "JobPosting",
+          "title": enhancedTitle,
+          "hiringOrganization": { "@type": "Organization", "name": company },
+          "jobLocation": { "@type": "Place", "address": location },
+          "baseSalary": salary,
+          "directApply": true
+        }
+      });
+    });
+    return;
+  }
+
   // Endpoint: Automated Resume Batch Ingestion & Document Parser
   if (pathname === '/api/aggregator/resumes/parse-batch' && req.method === 'POST') {
     readBody((err, payload) => {

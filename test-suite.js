@@ -3943,6 +3943,55 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 105 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 106: AI CONTENT HELPER & SEO SEARCH OPTIMIZER SUITE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 106: AI CONTENT HELPER & SEO SEARCH OPTIMIZER SUITE ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Card 1 AI Helper Trigger & Live Score Badge
+    assert(recruiterHtml.includes('id="btn-open-ai-helper"'), 'recruiter.html defines #btn-open-ai-helper in Card 1');
+    assert(recruiterHtml.includes('AI CONTENT HELPER'), 'recruiter.html includes AI CONTENT HELPER label');
+    assert(recruiterHtml.includes('id="card1-ai-grade"'), 'recruiter.html displays real-time AI grade badge in Card 1');
+
+    // 2. AI Content Helper Modal & Tabs
+    assert(recruiterHtml.includes('id="modal-ai-content-helper"'), 'recruiter.html defines #modal-ai-content-helper modal');
+    assert(recruiterHtml.includes('id="tab-btn-ai-enhance"'), 'recruiter.html includes 1-Click Generate & Enhance tab');
+    assert(recruiterHtml.includes('id="tab-btn-ai-gaps"'), 'recruiter.html includes Competitor & Keyword Gaps tab');
+    assert(recruiterHtml.includes('id="tab-btn-ai-seo"'), 'recruiter.html includes Google & AI Search Preview tab');
+
+    // 3. AI Client Functions
+    assert(recruiterHtml.includes('openAiContentHelperModal'), 'recruiter.html implements openAiContentHelperModal()');
+    assert(recruiterHtml.includes('closeAiContentHelperModal'), 'recruiter.html implements closeAiContentHelperModal()');
+    assert(recruiterHtml.includes('switchAiHelperTab'), 'recruiter.html implements switchAiHelperTab()');
+    assert(recruiterHtml.includes('triggerAiJobEnhance'), 'recruiter.html implements triggerAiJobEnhance()');
+    assert(recruiterHtml.includes('applyAiOptimizedJob'), 'recruiter.html implements applyAiOptimizedJob()');
+    assert(recruiterHtml.includes('addTopicalGapPerk'), 'recruiter.html implements addTopicalGapPerk()');
+
+    // 4. Server API POST /api/ai/content-helper Verification
+    const aiRes = await httpPost('/api/ai/content-helper', {
+      title: 'Warehouse Material Handler',
+      company: 'Apex Logistics Corp',
+      location: 'Dallas, TX • On-Site',
+      salary: '$19.00 - $24.00 / hr',
+      description: 'Material handling and sorting.',
+      category: 'industrial_factory',
+      intent: 'enhance'
+    });
+
+    assert(aiRes.status === 200, 'POST /api/ai/content-helper returns HTTP 200');
+    assert(aiRes.data.ok === true, 'AI helper response confirms ok: true');
+    assert(typeof aiRes.data.score === 'number' && aiRes.data.score > 0, 'AI helper computes valid quality score');
+    assert(aiRes.data.enhancedDescription && aiRes.data.enhancedDescription.length > 50, 'AI helper generates high-ranking structured description');
+    assert(Array.isArray(aiRes.data.topicalGaps), 'AI helper returns competitor topical gaps array');
+    assert(aiRes.data.googleSchemaPreview && aiRes.data.googleSchemaPreview['@type'] === 'JobPosting', 'AI helper generates Google Schema preview');
+
+  } catch (err) {
+    assert(false, `Group 106 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

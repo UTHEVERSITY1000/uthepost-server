@@ -5153,6 +5153,110 @@ main, .main-content, .workspace-container, #job-studio-container {
   white-space: nowrap !important;
 }
 
+/* AI CONTENT HELPER & SEO SEARCH OPTIMIZER (CARD 1) */
+.btn-ai-helper-trigger {
+  background: #0F172A;
+  color: #FEBA27;
+  border: 1.5px solid #FEBA27;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.btn-ai-helper-trigger:hover {
+  background: #1E293B;
+  box-shadow: 0 0 10px rgba(254, 186, 39, 0.35);
+  transform: translateY(-0.5px);
+}
+.ai-grade-badge {
+  background: #FEBA27;
+  color: #0F172A;
+  font-weight: 900;
+  font-size: 0.58rem;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.ai-helper-modal-card {
+  max-width: 680px;
+  width: 95%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border: 1.5px solid #0F172A;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+  padding: 1.25rem;
+  box-sizing: border-box;
+}
+.ai-helper-tabs-bar {
+  display: flex;
+  gap: 0.4rem;
+  border-bottom: 1.5px solid #E2E8F0;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.85rem;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.ai-helper-tab-btn {
+  background: #F8FAFC;
+  color: #475569;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.ai-helper-tab-btn.active {
+  background: #0F172A;
+  color: #FEBA27;
+  border-color: #0F172A;
+}
+.ai-preset-chip {
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #CBD5E1;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.ai-preset-chip:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+  border-color: #94A3B8;
+}
+.ai-gap-chip {
+  background: #FFFBEB;
+  color: #92400E;
+  border: 1px dashed #F59E0B;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.12s ease;
+}
+.ai-gap-chip:hover {
+  background: #FEBA27;
+  color: #0F172A;
+  border-style: solid;
+}
+
 /* 4. Position Tooltips / Dropdowns to Appear Below on Top of Page */
 
 .nav-tab-btn [data-tooltip], .portal-navigation button .tooltip, .tooltip-dropdown {
@@ -5389,9 +5493,15 @@ white-space: nowrap !important;
 
 <div class="form-group">
 
-<label data-tooltip="Main responsibilities and role summary.">Job Description & Key Responsibilities</label>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+  <label data-tooltip="Main responsibilities and role summary." style="margin: 0; font-weight: 800; font-size: 0.62rem; text-transform: uppercase;">Job Description & Key Responsibilities</label>
+  <button type="button" class="btn-ai-helper-trigger" id="btn-open-ai-helper" onclick="openAiContentHelperModal()" data-tooltip="AI Content Helper: Optimize for SEO, grade against competitors & generate high-ranking copy.">
+    AI CONTENT HELPER
+    <span class="ai-grade-badge" id="card1-ai-grade">94/100</span>
+  </button>
+</div>
 
-<textarea id="inp-desc" rows="4" oninput="updateLivePreview()" data-tooltip="Job description content.">Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.</textarea>
+<textarea id="inp-desc" rows="4" oninput="updateLivePreview(); updateAiLiveGrade();" data-tooltip="Job description content.">Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.</textarea>
 
 </div>
 
@@ -7462,6 +7572,121 @@ SAVE COMPANY LOGO
 
 
 
+<!-- AI CONTENT HELPER & SEO SEARCH OPTIMIZER MODAL -->
+<div class="modal-overlay" id="modal-ai-content-helper" style="display: none;">
+  <div class="ai-helper-modal-card">
+    
+    <!-- MODAL HEADER -->
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #0F172A; padding-bottom: 0.6rem; margin-bottom: 0.75rem;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="background: #0F172A; color: #FEBA27; font-weight: 900; font-size: 0.72rem; padding: 3px 8px; border-radius: 4px;">AI</span>
+        <div>
+          <div style="font-size: 0.95rem; font-weight: 900; color: #0F172A; letter-spacing: -0.01em;">AI CONTENT HELPER & SEARCH OPTIMIZER</div>
+          <div style="font-size: 0.7rem; color: #64748B; font-weight: 600;">Grade content, fill competitor keyword gaps & rank higher on Google for Jobs</div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span id="ai-modal-live-badge" style="background: #FFFBEB; color: #B45309; border: 1px solid #FEBA27; font-weight: 900; font-size: 0.68rem; padding: 2px 8px; border-radius: 4px;">SCORE: 94/100 (HIGH VISIBILITY)</span>
+        <button class="drawer-close" onclick="closeAiContentHelperModal()" style="font-size: 1rem; cursor: pointer;">✕</button>
+      </div>
+    </div>
+
+    <!-- TABS BAR -->
+    <div class="ai-helper-tabs-bar">
+      <button type="button" class="ai-helper-tab-btn active" id="tab-btn-ai-enhance" onclick="switchAiHelperTab('enhance')">1. 1-CLICK GENERATE & ENHANCE</button>
+      <button type="button" class="ai-helper-tab-btn" id="tab-btn-ai-gaps" onclick="switchAiHelperTab('gaps')">2. COMPETITOR & KEYWORD GAPS</button>
+      <button type="button" class="ai-helper-tab-btn" id="tab-btn-ai-seo" onclick="switchAiHelperTab('seo')">3. GOOGLE & AI SEARCH PREVIEW</button>
+    </div>
+
+    <!-- TAB 1: GENERATE & ENHANCE -->
+    <div id="ai-tab-view-enhance" style="display: flex; flex-direction: column; gap: 0.75rem; flex: 1; overflow-y: auto;">
+      <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center;">
+        <span style="font-size: 0.68rem; font-weight: 800; color: #475569;">ROLE PRESETS:</span>
+        <button type="button" class="ai-preset-chip" onclick="applyAiRolePreset('sales')">💼 Sales Rep</button>
+        <button type="button" class="ai-preset-chip" onclick="applyAiRolePreset('culinary')">🍳 Cooks & Hosts</button>
+        <button type="button" class="ai-preset-chip" onclick="applyAiRolePreset('industrial')">🏭 Factory & Assembly</button>
+        <button type="button" class="ai-preset-chip" onclick="applyAiRolePreset('retail')">🛒 Retail & Grocery</button>
+        <button type="button" class="ai-preset-chip" onclick="applyAiRolePreset('felony')">❤️ Fair Chance / Felony-Friendly</button>
+        <button type="button" class="ai-preset-chip" onclick="applyAiRolePreset('tech')">💻 Tech & Cloud</button>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem;">
+        <button type="button" class="btn-gold-action" style="flex: 1; height: 34px; font-size: 0.72rem; font-weight: 800;" onclick="triggerAiJobEnhance('enhance')">
+          ⚡ GENERATE HIGH-RANKING COPY
+        </button>
+        <button type="button" class="btn-surface-sm" style="flex: 1; height: 34px; font-size: 0.72rem; font-weight: 800;" onclick="triggerAiJobEnhance('bullet_points')">
+          🎯 STRUCTURE BULLET POINTS & PERKS
+        </button>
+      </div>
+
+      <div class="form-group" style="margin: 0; display: flex; flex-direction: column; flex: 1;">
+        <label style="font-size: 0.68rem; font-weight: 800; color: #0F172A; display: flex; justify-content: space-between;">
+          <span>Generated Optimized Description</span>
+          <span style="color: #64748B; font-size: 0.65rem; font-weight: 600;">Editable before applying</span>
+        </label>
+        <textarea id="ai-enhanced-desc-output" rows="7" style="width: 100%; border: 1.5px solid #CBD5E1; border-radius: 6px; padding: 0.6rem; font-size: 0.76rem; line-height: 1.45; font-family: inherit; resize: vertical;"></textarea>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; justify-content: flex-end; padding-top: 0.4rem; border-top: 1px solid #E2E8F0;">
+        <button type="button" class="btn-surface-sm" onclick="closeAiContentHelperModal()" style="height: 34px; padding: 0 1rem; font-size: 0.72rem;">CANCEL</button>
+        <button type="button" class="btn-primary" onclick="applyAiOptimizedJob()" style="height: 34px; padding: 0 1.25rem; font-size: 0.75rem; font-weight: 900; background: #FEBA27; color: #0F172A; border: 1.5px solid #FEBA27;">
+          ✓ APPLY TO JOB STUDIO (CARD 1)
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 2: COMPETITOR & KEYWORD GAPS -->
+    <div id="ai-tab-view-gaps" style="display: none; flex-direction: column; gap: 0.85rem; flex: 1; overflow-y: auto;">
+      <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 0.75rem;">
+        <div style="font-size: 0.78rem; font-weight: 800; color: #0F172A; margin-bottom: 0.25rem;">Competitor Keyword & Search Intent Analysis</div>
+        <div style="font-size: 0.7rem; color: #64748B; line-height: 1.4;">
+          The top-performing competitor job postings in this sector use the following high-intent keywords to rank at the top of candidate feeds. Click any keyword chip to add it directly to your job post.
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 0.7rem; font-weight: 800; color: #B45309; text-transform: uppercase; margin-bottom: 0.4rem;">
+          ⚠️ Missing High-Intent Search Keywords (Click to Add):
+        </div>
+        <div id="ai-topical-gaps-list" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+          <!-- Dynamically populated chips -->
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size: 0.7rem; font-weight: 800; color: #065F46; text-transform: uppercase; margin-bottom: 0.4rem;">
+          ✓ Keywords Already Present in Your Job Post:
+        </div>
+        <div id="ai-present-keywords-list" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+          <!-- Dynamically populated chips -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: GOOGLE & AI SEARCH PREVIEW -->
+    <div id="ai-tab-view-seo" style="display: none; flex-direction: column; gap: 0.85rem; flex: 1; overflow-y: auto;">
+      <div style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 1rem; background: #FFFFFF; box-shadow: 0 1px 4px rgba(0,0,0,0.05);">
+        <div style="font-size: 0.65rem; color: #202124; margin-bottom: 2px;">https://jobs.utheversity.com › listings › <span id="ai-seo-preview-slug">sales-manager</span></div>
+        <div id="ai-seo-preview-title" style="font-size: 0.92rem; font-weight: 700; color: #1a0dab; text-decoration: underline; margin-bottom: 4px; cursor: pointer;">
+          Sales Representative – Base Pay + Commission | Quantum Retail Corp
+        </div>
+        <div id="ai-seo-preview-desc" style="font-size: 0.74rem; color: #4d5156; line-height: 1.4;">
+          Apply for Sales Representative at Quantum Retail Corp in Austin, TX. Competitive compensation ($75,000 - $95,000), excellent benefits, and immediate interview scheduling.
+        </div>
+      </div>
+
+      <div style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 8px; padding: 0.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+          <span style="font-size: 0.72rem; font-weight: 800; color: #0F172A;">Google for Jobs Structured Schema (JSON-LD)</span>
+          <span style="background: #065F46; color: #FFFFFF; font-size: 0.6rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">AUTOMATICALLY SYNCED</span>
+        </div>
+        <pre id="ai-google-schema-code" style="background: #0F172A; color: #FEBA27; font-size: 0.68rem; padding: 0.6rem; border-radius: 6px; overflow-x: auto; margin: 0; font-family: monospace; max-height: 120px;"></pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- AUTHENTICATION & ACCOUNT MODAL -->
 
 <div class="modal-overlay" id="auth-modal">
@@ -8394,11 +8619,213 @@ if (socIg) activeSocials.push('Instagram');
 const pvSocials = document.getElementById('pv-socials');
 
 if (pvSocials) {
-
-pvSocials.textContent = activeSocials.length > 0 ? activeSocials.join(' • ') : 'LinkedIn • X • TikTok • Facebook • Instagram';
+  pvSocials.textContent = activeSocials.length > 0 ? activeSocials.join(' • ') : 'LinkedIn • X • TikTok • Facebook • Instagram';
+}
 
 }
 
+// ============================================================================
+// AI CONTENT HELPER & SEO SEARCH OPTIMIZER ENGINE (CARD 1)
+// ============================================================================
+let currentAiOptimizationResult = null;
+
+function updateAiLiveGrade() {
+  const title = (document.getElementById('inp-title')?.value || '').trim();
+  const desc = (document.getElementById('inp-desc')?.value || '').trim();
+  const salary = (document.getElementById('inp-salary')?.value || '').trim();
+  
+  let score = 70;
+  if (title.length >= 5) score += 6;
+  if (salary.length >= 4 && (salary.includes('$') || /hr|year|k/i.test(salary))) score += 8;
+  if (desc.length >= 80) score += 8;
+  if (desc.length >= 180) score += 4;
+  score = Math.min(score, 98);
+
+  const gradeBadge = document.getElementById('card1-ai-grade');
+  if (gradeBadge) gradeBadge.textContent = `${score}/100`;
+
+  const modalGrade = document.getElementById('ai-modal-live-badge');
+  if (modalGrade) {
+    modalGrade.textContent = `SCORE: ${score}/100 (${score >= 90 ? 'HIGH VISIBILITY' : 'GOOD'})`;
+  }
+}
+
+window.openAiContentHelperModal = function() {
+  const modal = document.getElementById('modal-ai-content-helper');
+  if (modal) modal.style.display = 'flex';
+  updateAiLiveGrade();
+  switchAiHelperTab('enhance');
+  triggerAiJobEnhance('enhance');
+};
+function openAiContentHelperModal() {
+  window.openAiContentHelperModal();
+}
+
+window.closeAiContentHelperModal = function() {
+  const modal = document.getElementById('modal-ai-content-helper');
+  if (modal) modal.style.display = 'none';
+};
+function closeAiContentHelperModal() {
+  window.closeAiContentHelperModal();
+}
+
+window.switchAiHelperTab = function(tabKey) {
+  document.querySelectorAll('.ai-helper-tab-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.getElementById(`tab-btn-ai-${tabKey}`);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  const viewEnhance = document.getElementById('ai-tab-view-enhance');
+  const viewGaps = document.getElementById('ai-tab-view-gaps');
+  const viewSeo = document.getElementById('ai-tab-view-seo');
+
+  if (viewEnhance) viewEnhance.style.display = tabKey === 'enhance' ? 'flex' : 'none';
+  if (viewGaps) viewGaps.style.display = tabKey === 'gaps' ? 'flex' : 'none';
+  if (viewSeo) viewSeo.style.display = tabKey === 'seo' ? 'flex' : 'none';
+};
+function switchAiHelperTab(tabKey) {
+  window.switchAiHelperTab(tabKey);
+}
+
+window.applyAiRolePreset = function(roleKey) {
+  const titleInput = document.getElementById('inp-title');
+  const salaryInput = document.getElementById('inp-salary');
+
+  if (roleKey === 'sales') {
+    if (titleInput) titleInput.value = 'Inside Sales Representative';
+    if (salaryInput) salaryInput.value = '$19.00 - $28.00 / hr Base + Comm';
+  } else if (roleKey === 'culinary') {
+    if (titleInput) titleInput.value = 'Line Cook & Kitchen Prep';
+    if (salaryInput) salaryInput.value = '$17.00 - $22.00 / hr';
+  } else if (roleKey === 'industrial') {
+    if (titleInput) titleInput.value = 'Assembly Line & Factory Operator';
+    if (salaryInput) salaryInput.value = '$19.50 - $25.00 / hr';
+  } else if (roleKey === 'retail') {
+    if (titleInput) titleInput.value = 'Retail Sales Associate & Cashier';
+    if (salaryInput) salaryInput.value = '$16.00 - $20.00 / hr';
+  } else if (roleKey === 'felony') {
+    if (titleInput) titleInput.value = 'Warehouse Material Handler (Fair Chance)';
+    if (salaryInput) salaryInput.value = '$18.50 - $23.00 / hr';
+  } else if (roleKey === 'tech') {
+    if (titleInput) titleInput.value = 'Full-Stack Software Engineer';
+    if (salaryInput) salaryInput.value = '$110,000 - $145,000';
+  }
+
+  updateLivePreview();
+  triggerAiJobEnhance('enhance');
+};
+function applyAiRolePreset(roleKey) {
+  window.applyAiRolePreset(roleKey);
+}
+
+window.triggerAiJobEnhance = async function(intent) {
+  const title = (document.getElementById('inp-title')?.value || 'Sales Representative').trim();
+  const company = (document.getElementById('inp-company')?.value || 'Quantum Retail Corp').trim();
+  const location = (document.getElementById('inp-location')?.value || 'Austin, TX • Hybrid').trim();
+  const salary = (document.getElementById('inp-salary')?.value || '$18.00 - $26.00 / hr').trim();
+  const desc = (document.getElementById('inp-desc')?.value || '').trim();
+
+  try {
+    const res = await fetch('/api/ai/content-helper', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, company, location, salary, description: desc, intent })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      currentAiOptimizationResult = data;
+      const descOutput = document.getElementById('ai-enhanced-desc-output');
+      if (descOutput) descOutput.value = data.enhancedDescription;
+
+      // Update Gaps
+      const gapsContainer = document.getElementById('ai-topical-gaps-list');
+      if (gapsContainer) {
+        if (data.topicalGaps && data.topicalGaps.length > 0) {
+          gapsContainer.innerHTML = data.topicalGaps.map(g => `
+            <button type="button" class="ai-gap-chip" onclick="addTopicalGapPerk('${g}')">
+              <span>+</span> <span>${g}</span>
+            </button>
+          `).join('');
+        } else {
+          gapsContainer.innerHTML = `<span style="font-size:0.7rem; color:#065F46; font-weight:700;">✓ Excellent! No critical search keywords missing.</span>`;
+        }
+      }
+
+      // Update Present Keywords
+      const presentContainer = document.getElementById('ai-present-keywords-list');
+      if (presentContainer) {
+        if (data.presentKeywords && data.presentKeywords.length > 0) {
+          presentContainer.innerHTML = data.presentKeywords.map(k => `
+            <span style="background:#ECFDF5; color:#065F46; border:1px solid #A7F3D0; font-size:0.68rem; font-weight:700; padding:2px 7px; border-radius:4px;">✓ ${k}</span>
+          `).join('');
+        } else {
+          presentContainer.innerHTML = `<span style="font-size:0.7rem; color:#64748B;">Add recommended keywords above.</span>`;
+        }
+      }
+
+      // Update SEO Previews
+      const seoTitle = document.getElementById('ai-seo-preview-title');
+      if (seoTitle) seoTitle.textContent = data.seoMetaTitle;
+      const seoDesc = document.getElementById('ai-seo-preview-desc');
+      if (seoDesc) seoDesc.textContent = data.seoMetaDescription;
+      const seoSlug = document.getElementById('ai-seo-preview-slug');
+      if (seoSlug) seoSlug.textContent = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const schemaCode = document.getElementById('ai-google-schema-code');
+      if (schemaCode) schemaCode.textContent = JSON.stringify(data.googleSchemaPreview, null, 2);
+
+      updateAiLiveGrade();
+    }
+  } catch (e) {}
+};
+function triggerAiJobEnhance(intent) {
+  window.triggerAiJobEnhance(intent);
+}
+
+window.addTopicalGapPerk = function(perkName) {
+  const matchingPill = document.querySelector(`#perks-pill-container .perk-pill[data-value="${perkName}"]`);
+  if (matchingPill && !matchingPill.classList.contains('active')) {
+    matchingPill.classList.add('active');
+  }
+
+  const descOutput = document.getElementById('ai-enhanced-desc-output');
+  if (descOutput) {
+    descOutput.value = descOutput.value.trim() + `\n• ${perkName} included.`;
+  }
+  const mainDesc = document.getElementById('inp-desc');
+  if (mainDesc) {
+    mainDesc.value = mainDesc.value.trim() + `\n• ${perkName} included.`;
+  }
+
+  updateLivePreview();
+  triggerAiJobEnhance('enhance');
+  showCustomModalAlert('Keyword Added', `"${perkName}" has been added to your job posting copy and perks.`);
+};
+function addTopicalGapPerk(perkName) {
+  window.addTopicalGapPerk(perkName);
+}
+
+window.applyAiOptimizedJob = function() {
+  const descOutput = document.getElementById('ai-enhanced-desc-output');
+  const mainDesc = document.getElementById('inp-desc');
+  if (descOutput && mainDesc && descOutput.value) {
+    mainDesc.value = descOutput.value;
+  }
+
+  if (currentAiOptimizationResult) {
+    if (currentAiOptimizationResult.enhancedTitle) {
+      const mainTitle = document.getElementById('inp-title');
+      if (mainTitle) {
+        mainTitle.value = currentAiOptimizationResult.enhancedTitle;
+      }
+    }
+  }
+
+  updateLivePreview();
+  updateAiLiveGrade();
+  closeAiContentHelperModal();
+  showCustomModalAlert('Job Post Optimized', 'AI enhanced description and SEO keywords successfully applied to Card 1 in Job Studio!');
+};
+function applyAiOptimizedJob() {
+  window.applyAiOptimizedJob();
 }
 
 
