@@ -378,9 +378,108 @@
       background: var(--card-surface);
       border: 1px solid var(--border-color);
       border-radius: 6px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* INFINITE VERTICAL BELTS (DESKTOP & TOUCH-FRIENDLY MOBILE SCROLLBARS) */
+    .infinite-vertical-belt {
+      position: relative;
+      max-height: 480px;
+      overflow-y: auto;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      box-shadow: var(--shadow-sm);
+      scroll-behavior: smooth;
+      background: #FFFFFF;
+      scrollbar-width: thin;
+      scrollbar-color: #CBD5E1 #F8FAFC;
+    }
+
+    .infinite-vertical-belt table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 720px;
+      text-align: left;
+      font-size: 0.72rem;
+    }
+
+    /* Sticky table headers with subtle elevation & solid background */
+    .infinite-vertical-belt thead th {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 12 !important;
+      background: #F8FAFC !important;
+      color: var(--text-muted);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.58rem;
+      letter-spacing: 0.6px;
+      padding: 0.55rem 0.75rem;
+      border-bottom: 2px solid var(--border-strong) !important;
+      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.05) !important;
+    }
+
+    .infinite-vertical-belt td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      vertical-align: middle;
+      background: #FFFFFF;
+    }
+
+    .infinite-vertical-belt tr:hover td {
+      background-color: #F8FAFC;
+    }
+
+    /* Desktop Custom Scrollbar */
+    .infinite-vertical-belt::-webkit-scrollbar {
+      width: 9px;
+      height: 9px;
+    }
+    .infinite-vertical-belt::-webkit-scrollbar-track {
+      background: #F8FAFC;
+    }
+    .infinite-vertical-belt::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 4px;
+      border: 2px solid #F8FAFC;
+    }
+    .infinite-vertical-belt::-webkit-scrollbar-thumb:hover {
+      background: var(--uthe-gold);
+    }
+
+    /* Mobile & Tablet Wide Touch-Friendly Scrollbar (14px width, tactile grip) */
+    @media (max-width: 768px) {
+      .infinite-vertical-belt {
+        max-height: 400px;
+        scrollbar-width: auto !important;
+        scrollbar-color: var(--uthe-gold) #F1F5F9 !important;
+        touch-action: pan-y pan-x;
+      }
+      .infinite-vertical-belt::-webkit-scrollbar {
+        width: 14px !important;
+        height: 14px !important;
+      }
+      .infinite-vertical-belt::-webkit-scrollbar-track {
+        background: #F1F5F9 !important;
+        border-radius: 8px !important;
+        box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.05) !important;
+      }
+      .infinite-vertical-belt::-webkit-scrollbar-thumb {
+        background: #94A3B8 !important;
+        border-radius: 8px !important;
+        border: 3px solid #F1F5F9 !important;
+        min-height: 52px !important;
+        min-width: 52px !important;
+      }
+      .infinite-vertical-belt::-webkit-scrollbar-thumb:active,
+      .infinite-vertical-belt::-webkit-scrollbar-thumb:hover {
+        background: var(--uthe-gold) !important;
+        border-color: #FFF8E6 !important;
+      }
     }
 
     table {
@@ -983,67 +1082,69 @@
          ================================================================ -->
     <section id="view-users" class="view-section">
       <div class="table-container">
-        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center;">
+        <div style="padding: 0.65rem 0.85rem; border-bottom: 1px solid var(--border-color); font-weight: 900; font-size: 0.75rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; background: #FFFFFF;">
           <span>REGISTERED USER ACCOUNTS & ACCESS PERMISSIONS</span>
           <span style="font-size:0.65rem; color:var(--text-muted);">Direct action controls for master administrator</span>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>User ID</th>
-              <th>Full Name</th>
-              <th>Email Address</th>
-              <th>Phone</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="user-table-body">
-            <tr>
-              <td><code>USR-001</code></td>
-              <td><strong>Zion Daye</strong></td>
-              <td>contact@utheversity.com</td>
-              <td>815-980-4272</td>
-              <td><span class="role-badge admin">Master Admin</span></td>
-              <td><span class="status-badge active">Active</span></td>
-              <td class="action-cells">
-                <button onclick="editUser('USR-001')" data-tooltip="Edit user account details">EDIT</button>
-                <button onclick="resetPassword('USR-001')" data-tooltip="Generate temporary secure password">RESET PW</button>
-                <button onclick="toggleSuspend('USR-001', false)" data-tooltip="Suspend or activate user account access">SUSPEND</button>
-                <button onclick="deleteUser('USR-001')" class="danger" data-tooltip="Permanently delete user account">DELETE</button>
-              </td>
-            </tr>
-            <tr>
-              <td><code>USR-002</code></td>
-              <td><strong>Apex Recruiting Co.</strong></td>
-              <td>hr@apexrecruiting.com</td>
-              <td>800-555-0199</td>
-              <td><span class="role-badge employer">Employer</span></td>
-              <td><span class="status-badge active">Active</span></td>
-              <td class="action-cells">
-                <button onclick="editUser('USR-002')" data-tooltip="Edit user account details">EDIT</button>
-                <button onclick="resetPassword('USR-002')" data-tooltip="Generate temporary secure password">RESET PW</button>
-                <button onclick="toggleSuspend('USR-002', false)" data-tooltip="Suspend or activate user account access">SUSPEND</button>
-                <button onclick="deleteUser('USR-002')" class="danger" data-tooltip="Permanently delete user account">DELETE</button>
-              </td>
-            </tr>
-            <tr>
-              <td><code>USR-003</code></td>
-              <td><strong>Jordan Rivera</strong></td>
-              <td>jordan.rivera@email.com</td>
-              <td>312-555-0144</td>
-              <td><span class="role-badge candidate">Candidate</span></td>
-              <td><span class="status-badge active">Active</span></td>
-              <td class="action-cells">
-                <button onclick="editUser('USR-003')" data-tooltip="Edit user account details">EDIT</button>
-                <button onclick="resetPassword('USR-003')" data-tooltip="Generate temporary secure password">RESET PW</button>
-                <button onclick="toggleSuspend('USR-003', false)" data-tooltip="Suspend or activate user account access">SUSPEND</button>
-                <button onclick="deleteUser('USR-003')" class="danger" data-tooltip="Permanently delete user account">DELETE</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="infinite-vertical-belt">
+          <table>
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Full Name</th>
+                <th>Email Address</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="user-table-body">
+              <tr>
+                <td><code>USR-001</code></td>
+                <td><strong>Zion Daye</strong></td>
+                <td>contact@utheversity.com</td>
+                <td>815-980-4272</td>
+                <td><span class="role-badge admin">Master Admin</span></td>
+                <td><span class="status-badge active">Active</span></td>
+                <td class="action-cells">
+                  <button onclick="editUser('USR-001')" data-tooltip="Edit user account details">EDIT</button>
+                  <button onclick="resetPassword('USR-001')" data-tooltip="Generate temporary secure password">RESET PW</button>
+                  <button onclick="toggleSuspend('USR-001', false)" data-tooltip="Suspend or activate user account access">SUSPEND</button>
+                  <button onclick="deleteUser('USR-001')" class="danger" data-tooltip="Permanently delete user account">DELETE</button>
+                </td>
+              </tr>
+              <tr>
+                <td><code>USR-002</code></td>
+                <td><strong>Apex Recruiting Co.</strong></td>
+                <td>hr@apexrecruiting.com</td>
+                <td>800-555-0199</td>
+                <td><span class="role-badge employer">Employer</span></td>
+                <td><span class="status-badge active">Active</span></td>
+                <td class="action-cells">
+                  <button onclick="editUser('USR-002')" data-tooltip="Edit user account details">EDIT</button>
+                  <button onclick="resetPassword('USR-002')" data-tooltip="Generate temporary secure password">RESET PW</button>
+                  <button onclick="toggleSuspend('USR-002', false)" data-tooltip="Suspend or activate user account access">SUSPEND</button>
+                  <button onclick="deleteUser('USR-002')" class="danger" data-tooltip="Permanently delete user account">DELETE</button>
+                </td>
+              </tr>
+              <tr>
+                <td><code>USR-003</code></td>
+                <td><strong>Jordan Rivera</strong></td>
+                <td>jordan.rivera@email.com</td>
+                <td>312-555-0144</td>
+                <td><span class="role-badge candidate">Candidate</span></td>
+                <td><span class="status-badge active">Active</span></td>
+                <td class="action-cells">
+                  <button onclick="editUser('USR-003')" data-tooltip="Edit user account details">EDIT</button>
+                  <button onclick="resetPassword('USR-003')" data-tooltip="Generate temporary secure password">RESET PW</button>
+                  <button onclick="toggleSuspend('USR-003', false)" data-tooltip="Suspend or activate user account access">SUSPEND</button>
+                  <button onclick="deleteUser('USR-003')" class="danger" data-tooltip="Permanently delete user account">DELETE</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -1403,7 +1504,7 @@
     <section id="view-listings" class="view-section">
       <!-- Section A: Job Listings -->
       <div class="table-container">
-        <div style="padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 0.70rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
+        <div style="padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 0.70rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem; background: #FFFFFF;">
           <div style="display: flex; align-items: center; gap: 6px;">
             <span>MASTER JOB LISTINGS INVENTORY</span>
             <button id="btn-admin-batch-delete-jobs" class="btn-danger-sm" onclick="confirmBatchDeleteAdminJobs()" style="display:none; height: 22px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 700; border-radius: 4px;">🗑️ Delete Selected (<span id="admin-selected-jobs-count">0</span>)</button>
@@ -1414,26 +1515,28 @@
             </button>
           </div>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 28px;"><input type="checkbox" id="chk-admin-jobs-select-all" onchange="toggleSelectAllAdminJobs(this.checked)" style="width: 13px; height: 13px; cursor: pointer; accent-color: var(--uthe-gold);"></th>
-              <th>Job ID</th>
-              <th>Position Title</th>
-              <th>Company</th>
-              <th>Location</th>
-              <th>Salary</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="admin-jobs-tbody"></tbody>
-        </table>
+        <div class="infinite-vertical-belt">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 28px;"><input type="checkbox" id="chk-admin-jobs-select-all" onchange="toggleSelectAllAdminJobs(this.checked)" style="width: 13px; height: 13px; cursor: pointer; accent-color: var(--uthe-gold);"></th>
+                <th>Job ID</th>
+                <th>Position Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Salary</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-jobs-tbody"></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Section B: Candidate Applications -->
-      <div class="table-container">
-        <div style="padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 0.70rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; gap: 0.4rem;">
+      <div class="table-container" style="margin-top: 0.85rem;">
+        <div style="padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 0.70rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; gap: 0.4rem; background: #FFFFFF;">
           <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
             <span>CANDIDATE APPLICATIONS & ATS STAGE OVERRIDES</span>
             <button id="btn-admin-batch-delete-apps" class="btn-danger-sm" onclick="confirmBatchDeleteAdminApps()" style="display:none; height: 22px; font-size: 0.58rem; padding: 0 0.45rem; font-weight: 700; border-radius: 4px;">🗑️ Delete Selected (<span id="admin-selected-apps-count">0</span>)</button>
@@ -1443,26 +1546,28 @@
           </div>
           <span style="font-size:0.62rem; color:var(--text-muted);">Direct pipeline stage controls</span>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 28px;"><input type="checkbox" id="chk-admin-apps-select-all" onchange="toggleSelectAllAdminApps(this.checked)" style="width: 13px; height: 13px; cursor: pointer; accent-color: var(--uthe-gold);"></th>
-              <th>Applicant ID</th>
-              <th>Candidate Name</th>
-              <th>Applied Position</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Stage</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="admin-applicants-tbody"></tbody>
-        </table>
+        <div class="infinite-vertical-belt">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 28px;"><input type="checkbox" id="chk-admin-apps-select-all" onchange="toggleSelectAllAdminApps(this.checked)" style="width: 13px; height: 13px; cursor: pointer; accent-color: var(--uthe-gold);"></th>
+                <th>Applicant ID</th>
+                <th>Candidate Name</th>
+                <th>Applied Position</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Stage</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-applicants-tbody"></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Section C: Master Candidate Resume Directory & Talent Sourcing Board -->
       <div class="table-container" style="margin-top: 0.85rem;">
-        <div style="padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 0.70rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem;">
+        <div style="padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 0.70rem; color: var(--uthe-charcoal); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.4rem; background: #FFFFFF;">
           <div style="display: flex; align-items: center; gap: 6px;">
             <span>MASTER CANDIDATE RESUME DIRECTORY & SOURCING</span>
             <span class="badge-tag tag-gold" id="admin-resume-count-badge" style="font-size: 0.58rem; padding: 1px 6px;">8 Resumes</span>
@@ -1486,25 +1591,27 @@
             </button>
           </div>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th style="width: 28px;"><input type="checkbox" id="chk-admin-resumes-select-all" onchange="toggleSelectAllAdminResumes(this.checked)" style="width: 13px; height: 13px; cursor: pointer; accent-color: var(--uthe-gold);"></th>
-              <th>ID</th>
-              <th>Candidate Name</th>
-              <th>Target Role</th>
-              <th>Location</th>
-              <th>Experience</th>
-              <th>Match Score</th>
-              <th>Skills</th>
-              <th>Resume (.pdf)</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="admin-resumes-tbody">
-            <!-- Dynamic Admin Resume Directory Rows -->
-          </tbody>
-        </table>
+        <div class="infinite-vertical-belt">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 28px;"><input type="checkbox" id="chk-admin-resumes-select-all" onchange="toggleSelectAllAdminResumes(this.checked)" style="width: 13px; height: 13px; cursor: pointer; accent-color: var(--uthe-gold);"></th>
+                <th>ID</th>
+                <th>Candidate Name</th>
+                <th>Target Role</th>
+                <th>Location</th>
+                <th>Experience</th>
+                <th>Match Score</th>
+                <th>Skills</th>
+                <th>Resume (.pdf)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-resumes-tbody">
+              <!-- Dynamic Admin Resume Directory Rows -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
