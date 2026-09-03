@@ -2658,6 +2658,8 @@
         tbody.appendChild(tr);
       });
     }
+    window.renderAdminJobs = renderAdminJobs;
+    window.loadAdminJobs = loadAdminData;
 
     async function toggleJobFeatured(jobId) {
       await fetch(`/api/jobs/${jobId}/feature`, { method: 'PUT' });
@@ -3642,7 +3644,7 @@
               <div style="color:var(--text-muted); margin-top:2px;">Total Active Jobs: ${data.totalJobs || 0} (Google Schema Ready)</div>
             `;
           }
-          loadAdminJobs();
+          if (typeof loadAdminData === 'function') await loadAdminData();
           showCustomModalAlert(
             'Live Job Feed Sync Completed',
             `Successfully ingested and verified ${data.syncedCount || 0} active hiring employer postings.\n\nTotal Active Jobs: ${data.totalJobs || 0}\nGoogle for Jobs Schema: Auto-Generated`
