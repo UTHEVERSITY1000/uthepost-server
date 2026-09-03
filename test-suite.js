@@ -3916,6 +3916,31 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 104 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 105: U-THEJOBS CANDIDATE VISITOR SIGNUP ACCESS GATEKEEPER
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 105: U-THEJOBS CANDIDATE VISITOR SIGNUP ACCESS GATEKEEPER ---');
+
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Visitor Auth Barrier Markup
+    assert(candidateHtml.includes('id="visitor-auth-barrier"'), 'candidate.html defines #visitor-auth-barrier overlay');
+    assert(candidateHtml.includes('CREATE AN ACCOUNT TO VIEW ACTIVE JOB OPPORTUNITIES'), 'candidate.html displays clear signup barrier title');
+    assert(candidateHtml.includes('.visitor-lock-card'), 'candidate.html defines .visitor-lock-card styling');
+    assert(candidateHtml.includes('.btn-lock-signup'), 'candidate.html includes .btn-lock-signup button');
+    assert(candidateHtml.includes('.btn-lock-login'), 'candidate.html includes .btn-lock-login button');
+
+    // 2. Auth Access Logic & Gatekeeper Functions
+    assert(candidateHtml.includes('checkCandidateAuthAccess'), 'candidate.html implements checkCandidateAuthAccess()');
+    assert(candidateHtml.includes('logoutCandidate'), 'candidate.html implements logoutCandidate()');
+    assert(candidateHtml.includes('handleAuthHeaderClick'), 'candidate.html implements handleAuthHeaderClick()');
+    assert(candidateHtml.includes('openAuthModal(\'signup\')'), 'candidate.html defaults visitor auth prompt to signup tab');
+
+  } catch (err) {
+    assert(false, `Group 105 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

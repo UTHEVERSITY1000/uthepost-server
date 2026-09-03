@@ -536,7 +536,145 @@
       max-width: 180px;
     }
 
-    /* 2-COLUMN BOARD LAYOUT */
+    /* 2-COLUMN BOARD LAYOUT & VISITOR AUTHENTICATION GATE */
+    .board-wrapper-relative {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 160px);
+    }
+
+    .visitor-auth-barrier {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 850;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .visitor-lock-card {
+      background: #FFFFFF;
+      border: 2px solid #FEBA27;
+      border-radius: 14px;
+      padding: 2.25rem 2rem;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 24px rgba(254, 186, 39, 0.4);
+      animation: fadeInScale 0.22s ease-out;
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .lock-icon-badge {
+      width: 52px;
+      height: 52px;
+      background: #FFFBEB;
+      border: 2px solid #FEBA27;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.85rem;
+      box-shadow: 0 0 14px rgba(254, 186, 39, 0.35);
+    }
+
+    .lock-title {
+      font-size: 1.12rem;
+      font-weight: 900;
+      color: #0F172A;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      line-height: 1.35;
+    }
+
+    .lock-subtitle {
+      font-size: 0.85rem;
+      color: #475569;
+      line-height: 1.5;
+      margin: 0 0 1.35rem 0;
+    }
+
+    .lock-action-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .btn-lock-signup {
+      background: #FEBA27;
+      color: #0F172A;
+      border: 1.5px solid #FEBA27;
+      border-radius: 8px;
+      padding: 0.85rem 1.25rem;
+      font-size: 0.88rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 12px rgba(254, 186, 39, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-lock-signup:hover {
+      background: #F59E0B;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(254, 186, 39, 0.5);
+    }
+
+    .btn-lock-login {
+      background: #0F172A;
+      color: #FEBA27;
+      border: 1.5px solid #0F172A;
+      border-radius: 8px;
+      padding: 0.75rem 1.25rem;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.15s ease;
+      text-transform: uppercase;
+    }
+
+    .btn-lock-login:hover {
+      background: #1E293B;
+      border-color: #FEBA27;
+    }
+
+    .lock-perks-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 1rem;
+      border-top: 1px solid #E2E8F0;
+      padding-top: 0.85rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #64748B;
+    }
+
     main.board-container {
       flex: 1;
       display: grid;
@@ -546,6 +684,7 @@
       margin: 0 auto;
       width: 100%;
       padding: 1.25rem;
+      transition: filter 0.25s ease;
     }
 
     /* LEFT COLUMN: OPPORTUNITIES LIST */
@@ -1810,71 +1949,99 @@
     </button>
   </nav>
 
-  <!-- 2-COLUMN MAIN BOARD -->
-  <main class="board-container">
-
-    <!-- LEFT COLUMN: JOB LISTINGS -->
-    <div class="opportunities-col" id="opportunities-list">
-      <!-- Ingested via JS -->
+  <!-- 2-COLUMN MAIN BOARD & VISITOR AUTHENTICATION GATE -->
+  <div class="board-wrapper-relative">
+    
+    <!-- VISITOR SIGNUP REQUIRED AUTHENTICATION BARRIER OVERLAY -->
+    <div id="visitor-auth-barrier" class="visitor-auth-barrier" style="display: none;">
+      <div class="visitor-lock-card">
+        <div class="lock-icon-badge">🔒</div>
+        <h2 class="lock-title">CREATE AN ACCOUNT TO VIEW ACTIVE JOB OPPORTUNITIES</h2>
+        <p class="lock-subtitle">
+          Full access to verified employer postings, competitive wages ($18 - $28/hr), felony-friendly positions, direct recruiter messaging, and 1-click resume applications requires a free candidate account.
+        </p>
+        <div class="lock-action-row">
+          <button type="button" class="btn-lock-signup" onclick="openAuthModal('signup')" data-tooltip="Create a free job seeker account in 30 seconds">
+            CREATE FREE CANDIDATE ACCOUNT
+          </button>
+          <button type="button" class="btn-lock-login" onclick="openAuthModal('login')" data-tooltip="Sign in to your existing candidate account">
+            SIGN IN TO EXISTING ACCOUNT
+          </button>
+        </div>
+        <div class="lock-perks-list">
+          <span>✓ 100% Free for Job Seekers</span>
+          <span>✓ Instant 1-Click Applications</span>
+          <span>✓ Direct Recruiter Chat</span>
+          <span>✓ Felony-Friendly Filter</span>
+        </div>
+      </div>
     </div>
 
-    <!-- RIGHT COLUMN: DETAILED SPECIFICATION INSPECTOR -->
-    <div class="detail-inspector" id="detail-inspector">
-      <div class="detail-header-group">
-        <div>
-          <div class="detail-title" id="dt-title">Sales Manager</div>
-          <div class="detail-company" id="dt-company">Quantum Retail Corp</div>
-          <div class="card-meta-row" style="margin-top: 0.4rem;">
-            <span id="dt-location">AUSTIN, TX (HYBRID)</span>
-            <span>•</span>
-            <span id="dt-type">FULL-TIME</span>
+    <main class="board-container" id="candidate-board-container">
+
+      <!-- LEFT COLUMN: JOB LISTINGS -->
+      <div class="opportunities-col" id="opportunities-list">
+        <!-- Ingested via JS -->
+      </div>
+
+      <!-- RIGHT COLUMN: DETAILED SPECIFICATION INSPECTOR -->
+      <div class="detail-inspector" id="detail-inspector">
+        <div class="detail-header-group">
+          <div>
+            <div class="detail-title" id="dt-title">Sales Manager</div>
+            <div class="detail-company" id="dt-company">Quantum Retail Corp</div>
+            <div class="card-meta-row" style="margin-top: 0.4rem;">
+              <span id="dt-location">AUSTIN, TX (HYBRID)</span>
+              <span>•</span>
+              <span id="dt-type">FULL-TIME</span>
+            </div>
+            <div class="card-salary-pill" id="dt-salary" style="margin-top: 0.5rem; font-size: 0.85rem;">$75,000 - $95,000</div>
           </div>
-          <div class="card-salary-pill" id="dt-salary" style="margin-top: 0.5rem; font-size: 0.85rem;">$75,000 - $95,000</div>
+
+          <button class="btn-quick-send-main" id="btn-quick-send-top" data-cms-key="jobs-quick-send-btn" onclick="openApplicationModal()" data-tooltip="Send direct interview request to the hiring manager.">
+            QUICK SEND
+          </button>
         </div>
 
-        <button class="btn-quick-send-main" id="btn-quick-send-top" data-cms-key="jobs-quick-send-btn" onclick="openApplicationModal()" data-tooltip="Send direct interview request to the hiring manager.">
-          QUICK SEND
-        </button>
+        <div class="detail-perks-grid">
+          <div class="perk-box">
+            <span class="perk-label">Paid Vacation</span>
+            <span class="perk-val" id="dt-pto">18 Days PTO</span>
+          </div>
+          <div class="perk-box">
+            <span class="perk-label">Health & Medical</span>
+            <span class="perk-val" id="dt-health">Comprehensive Health</span>
+          </div>
+          <div class="perk-box">
+            <span class="perk-label">Retirement</span>
+            <span class="perk-val" id="dt-retirement">401(k) 4% Match</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Job Description & Responsibilities</label>
+          <div class="detail-body-text" id="dt-desc">
+            Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Perks & Benefits Summary</label>
+          <div class="detail-body-text" id="dt-perks">
+            18 Days PTO | Comprehensive Health | 401(k) 4% Match
+          </div>
+        </div>
+
+        <!-- BOTTOM DETAIL BUTTON BENEATH JOB DESCRIPTION: SEND RESUME/CV -->
+        <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.5rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color);">
+          <button class="btn-quick-send-main" id="btn-send-resume-bottom" data-cms-key="jobs-send-resume-btn" style="width: 100%;" onclick="openApplicationModal()" data-tooltip="Submit your resume directly to the employer.">
+            SEND RESUME/CV
+          </button>
+        </div>
       </div>
 
-      <div class="detail-perks-grid">
-        <div class="perk-box">
-          <span class="perk-label">Paid Vacation</span>
-          <span class="perk-val" id="dt-pto">18 Days PTO</span>
-        </div>
-        <div class="perk-box">
-          <span class="perk-label">Health & Medical</span>
-          <span class="perk-val" id="dt-health">Comprehensive Health</span>
-        </div>
-        <div class="perk-box">
-          <span class="perk-label">Retirement</span>
-          <span class="perk-val" id="dt-retirement">401(k) 4% Match</span>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Job Description & Responsibilities</label>
-        <div class="detail-body-text" id="dt-desc">
-          Lead our regional sales team, manage client relationships, drive store targets, and coordinate staff scheduling. Positive leadership and customer service focus.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Perks & Benefits Summary</label>
-        <div class="detail-body-text" id="dt-perks">
-          18 Days PTO | Comprehensive Health | 401(k) 4% Match
-        </div>
-      </div>
-
-      <!-- BOTTOM DETAIL BUTTON BENEATH JOB DESCRIPTION: SEND RESUME/CV -->
-      <div style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.5rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color);">
-        <button class="btn-quick-send-main" id="btn-send-resume-bottom" data-cms-key="jobs-send-resume-btn" style="width: 100%;" onclick="openApplicationModal()" data-tooltip="Submit your resume directly to the employer.">
-          SEND RESUME/CV
-        </button>
-      </div>
-    </div>
-
-  </main>
+    </main>
+  </div>
 
   <!-- STREAMLINED APPLICATION FORM MODAL -->
   <div class="modal-overlay" id="app-modal">
@@ -2620,6 +2787,10 @@
     let currentCategoryFilter = 'ALL';
 
     window.filterByCategory = function(catKey) {
+      if (!currentUser) {
+        openAuthModal('signup');
+        return;
+      }
       currentCategoryFilter = catKey || 'ALL';
       document.querySelectorAll('.cand-cat-filter-btn').forEach(b => b.classList.remove('active'));
       const activeBtn = document.querySelector(`.cand-cat-filter-btn[onclick*="'${catKey}'"]`);
@@ -2748,18 +2919,38 @@
       window.closeMessageDrawer();
     }
 
-    window.openAuthModal = function() {
+    window.openAuthModal = function(initialTab = 'signup') {
       if (currentUser) {
-        showCustomModalAlert('Account Session', `Logged in as ${currentUser.name} (${currentUser.email}).`);
+        showCustomModalConfirm(
+          'SIGN OUT OF CANDIDATE ACCOUNT',
+          `You are currently signed in as ${currentUser.name} (${currentUser.email}). Do you want to sign out?`,
+          logoutCandidate
+        );
         return;
       }
       const modal = document.getElementById('auth-modal');
       if (modal) modal.style.display = 'flex';
-      if (typeof switchAuthTab === 'function') switchAuthTab('login');
+      if (typeof switchAuthTab === 'function') switchAuthTab(initialTab || 'signup');
     };
-    function openAuthModal() {
-      window.openAuthModal();
+    function openAuthModal(initialTab = 'signup') {
+      window.openAuthModal(initialTab);
     }
+
+    window.handleAuthHeaderClick = function() {
+      openAuthModal();
+    };
+
+    window.logoutCandidate = function() {
+      currentUser = null;
+      try {
+        localStorage.removeItem('uthe_candidate_user');
+        localStorage.removeItem('uthe_remember_device');
+      } catch (e) {}
+      const authBtn = document.getElementById('btn-auth-status');
+      if (authBtn) authBtn.textContent = 'LOGIN / SIGN UP';
+      if (typeof checkCandidateAuthAccess === 'function') checkCandidateAuthAccess();
+      showCustomModalAlert('Logged Out', 'You have been signed out. Please sign up or sign in to view and apply for active job opportunities.');
+    };
 
     window.closeModal = function(id) {
       const el = document.getElementById(id);
@@ -3684,7 +3875,31 @@
             authBtn.textContent = `${currentUser.name.toUpperCase()} (LOGOUT)`;
           }
         }
+        checkCandidateAuthAccess();
       } catch (e) {}
+    }
+
+    // VISITOR AUTHENTICATION & ACCESS GATEKEEPER
+    function checkCandidateAuthAccess() {
+      const barrier = document.getElementById('visitor-auth-barrier');
+      const board = document.getElementById('candidate-board-container') || document.querySelector('main.board-container');
+      const isAuth = Boolean(currentUser && (currentUser.email || currentUser.id || currentUser.name));
+
+      if (!isAuth) {
+        if (barrier) barrier.style.display = 'flex';
+        if (board) {
+          board.style.filter = 'blur(6px)';
+          board.style.pointerEvents = 'none';
+          board.style.userSelect = 'none';
+        }
+      } else {
+        if (barrier) barrier.style.display = 'none';
+        if (board) {
+          board.style.filter = 'none';
+          board.style.pointerEvents = 'auto';
+          board.style.userSelect = 'auto';
+        }
+      }
     }
 
     // Custom Modal Alert
@@ -3792,7 +4007,8 @@
         closeModal('auth-modal');
         const authBtn = document.getElementById('btn-auth-status');
         if (authBtn) authBtn.textContent = `${currentUser.name.toUpperCase()} (LOGOUT)`;
-        showCustomModalAlert('Welcome Back', `Logged in as ${currentUser.name}.`);
+        checkCandidateAuthAccess();
+        showCustomModalAlert('Welcome Back', `Logged in as ${currentUser.name}. Full job listings unlocked.`);
 
       } else if (authMode === 'signup') {
         const signupName = name || (email.split('@')[0]);
@@ -3828,7 +4044,8 @@
         closeModal('auth-modal');
         const authBtn = document.getElementById('btn-auth-status');
         if (authBtn) authBtn.textContent = `${currentUser.name.toUpperCase()} (LOGOUT)`;
-        showCustomModalAlert('Account Created', 'Candidate profile activated.');
+        checkCandidateAuthAccess();
+        showCustomModalAlert('Account Created', 'Candidate profile activated. Full job listings and 1-click applications unlocked!');
 
       } else if (authMode === 'reset') {
         showCustomModalAlert('Password Reset Dispatched', `Reset instructions sent to ${email}.`);
@@ -4166,6 +4383,7 @@
       currentSearchFilter = '';
       currentSearchQuery = '';
       loadSavedCandidateProfile();
+      checkCandidateAuthAccess();
       renderJobListings();
       selectJob('JOB-101');
       initDualSync();
