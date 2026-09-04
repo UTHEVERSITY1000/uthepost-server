@@ -4108,6 +4108,62 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 109 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 110: CANDIDATE RESUME ROUTING & ZERO-404 SUITE
+  // ================================================================
+  console.log('\n--- GROUP 110: CANDIDATE RESUME ROUTING & ZERO-404 SUITE ---');
+  try {
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+
+    // 1. Email Templates Include Direct Clickable PDF Links
+    assert(serverJs.includes('VIEW CANDIDATE RESUME (PDF)'), 'server.js alert email includes VIEW CANDIDATE RESUME (PDF) button');
+    assert(serverJs.includes('VIEW SUBMITTED RESUME (PDF)'), 'server.js confirmation email includes VIEW SUBMITTED RESUME (PDF) button');
+    assert(serverJs.includes('data/resumes/'), 'server.js emails route to /data/resumes/');
+
+    // 2. Direct Resume Route Variants
+    const resDataResume = await httpGet('/data/resumes/Marcus_Vance_Resume_2026.pdf?unlocked=1');
+    assert(resDataResume.status === 200, 'GET /data/resumes/... returns HTTP 200');
+    assert(resDataResume.headers['content-type'] && resDataResume.headers['content-type'].includes('application/pdf'), 'GET /data/resumes/... returns application/pdf Content-Type');
+
+    const resDirectResume = await httpGet('/resumes/Marcus_Vance_Resume_2026.pdf?unlocked=1');
+    assert(resDirectResume.status === 200, 'GET /resumes/... returns HTTP 200');
+    assert(resDirectResume.headers['content-type'] && resDirectResume.headers['content-type'].includes('application/pdf'), 'GET /resumes/... returns application/pdf Content-Type');
+
+    const resApiResume = await httpGet('/api/resumes/Marcus_Vance_Resume_2026.pdf?unlocked=1');
+    assert(resApiResume.status === 200, 'GET /api/resumes/... returns HTTP 200');
+    assert(resApiResume.headers['content-type'] && resApiResume.headers['content-type'].includes('application/pdf'), 'GET /api/resumes/... returns application/pdf Content-Type');
+
+    // 3. Email Direct Click Param
+    const resEmailSource = await httpGet('/data/resumes/Elena_Rostova_Resume.pdf?source=email');
+    assert(resEmailSource.status === 200, 'GET /data/resumes/... with ?source=email returns HTTP 200');
+    assert(resEmailSource.headers['content-type'] && resEmailSource.headers['content-type'].includes('application/pdf'), 'Email resume link serves PDF Content-Type');
+
+    // 4. Candidate Application Ingestion with Instant PDF Generator
+    const testCandidateName = `Candidate_${Date.now()}`;
+    const testResumeFile = `${testCandidateName}_Resume.pdf`;
+    const applyRes = await httpPost('/api/applicants', {
+      name: testCandidateName,
+      email: `${testCandidateName.toLowerCase()}@testcandidate.com`,
+      phone: '+1 (555) 987-6543',
+      jobId: 'JOB-101',
+      jobTitle: 'Senior Full-Stack Engineer',
+      resumeFile: testResumeFile,
+      resumeSummary: 'Experienced software architect.'
+    });
+    assert(applyRes.status === 201, 'POST /api/applicants creates application with HTTP 201');
+
+    const createdResumeRes = await httpGet(`/data/resumes/${encodeURIComponent(testResumeFile)}?unlocked=1`);
+    assert(createdResumeRes.status === 200, 'Newly applied candidate resume is instantly accessible via /data/resumes/... with HTTP 200');
+    assert(createdResumeRes.headers['content-type'] && createdResumeRes.headers['content-type'].includes('application/pdf'), 'Newly applied candidate resume serves valid PDF');
+
+    const fallbackResumeRes = await httpGet(`/data/resumes/Unknown_Candidate_Resume.pdf?unlocked=1`);
+    assert(fallbackResumeRes.status === 200, 'Non-existent resume query returns generated fallback PDF with HTTP 200 (Zero 404s)');
+    assert(fallbackResumeRes.headers['content-type'] && fallbackResumeRes.headers['content-type'].includes('application/pdf'), 'Fallback resume returns application/pdf');
+
+  } catch (err) {
+    assert(false, `Group 110 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
