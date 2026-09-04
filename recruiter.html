@@ -5282,6 +5282,57 @@ main, .main-content, .workspace-container, #job-studio-container {
   z-index: 100000 !important;
 }
 
+/* HIGH-PRIORITY RECRUITER AUTH MODAL & OVERLAY STYLING */
+#auth-modal.modal-overlay {
+  display: none;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  backdrop-filter: blur(6px) !important;
+  z-index: 99999999 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 1rem !important;
+  pointer-events: auto !important;
+}
+
+#auth-modal .modal-card {
+  background: #FFFFFF !important;
+  width: 100% !important;
+  max-width: 440px !important;
+  height: auto !important;
+  max-height: 92vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border-radius: 12px !important;
+  border: 1.5px solid #FEBA27 !important;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 30px rgba(254, 186, 39, 0.25) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 1.5rem !important;
+  box-sizing: border-box !important;
+  pointer-events: auto !important;
+  z-index: 100000000 !important;
+}
+
+#auth-modal .drawer-tab-btn {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+#auth-modal button,
+#auth-modal input {
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+#auth-modal input[type="text"],
+#auth-modal input[type="email"],
+#auth-modal input[type="password"] {
+  cursor: text !important;
+}
+
 </style>
 
 </head>
@@ -7701,19 +7752,27 @@ SAVE COMPANY LOGO
 
 <span class="modal-title" id="auth-modal-title">RECRUITER AUTHENTICATION</span>
 
-<button class="drawer-close" onclick="closeModal('auth-modal')">X</button>
+<button type="button" class="drawer-close" onclick="closeModal('auth-modal')" style="cursor: pointer; pointer-events: auto;">X</button>
 
 </div>
 
+<!-- ACTIVE RECRUITER SESSION BANNER -->
+<div id="auth-active-session-banner" style="display: none; background: #FFFDF5; border: 1px solid var(--uthe-gold); border-radius: 8px; padding: 0.85rem; margin-bottom: 0.85rem; text-align: center;">
+  <div style="font-size: 0.65rem; font-weight: 800; color: #854D0E; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px;">ACTIVE RECRUITER SESSION</div>
+  <div style="font-size: 0.82rem; font-weight: 700; color: var(--uthe-charcoal); margin-bottom: 2px;" id="auth-session-user-name">Recruiter Lead</div>
+  <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.75rem;" id="auth-session-user-email">hiring@company.com</div>
+  <button type="button" class="btn-gold-action" style="width: 100%; height: 34px; font-size: 0.72rem; cursor: pointer !important; pointer-events: auto !important;" onclick="logoutRecruiter()">
+    LOG OUT OF WORKSPACE
+  </button>
+</div>
 
+<div style="display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;" id="auth-tabs-row">
 
-<div style="display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 0.5rem;">
+<button type="button" class="drawer-tab-btn active" id="tab-auth-login" style="flex:1; text-align:center; height:38px; cursor: pointer; pointer-events: auto;" onclick="switchAuthTab('login')">LOGIN</button>
 
-<button class="drawer-tab-btn active" id="tab-auth-login" style="flex:1; text-align:center; height:38px;" onclick="switchAuthTab('login')">LOGIN</button>
+<button type="button" class="drawer-tab-btn" id="tab-auth-signup" style="flex:1; text-align:center; height:38px; cursor: pointer; pointer-events: auto;" onclick="switchAuthTab('signup')">SIGN UP</button>
 
-<button class="drawer-tab-btn" id="tab-auth-signup" style="flex:1; text-align:center; height:38px;" onclick="switchAuthTab('signup')">SIGN UP</button>
-
-<button class="drawer-tab-btn" id="tab-auth-reset" style="flex:1; text-align:center; height:38px;" onclick="switchAuthTab('reset')">RESET</button>
+<button type="button" class="drawer-tab-btn" id="tab-auth-reset" style="flex:1; text-align:center; height:38px; cursor: pointer; pointer-events: auto;" onclick="switchAuthTab('reset')">RESET</button>
 
 </div>
 
@@ -7749,7 +7808,7 @@ SAVE COMPANY LOGO
 
 <input type="password" id="auth-password" placeholder="••••••••••••" oninput="checkPassLength(this.value)">
 
-<span class="password-toggle-icon" onclick="togglePassVisibility('auth-password')">👁️</span>
+<span class="password-toggle-icon" onclick="togglePassVisibility('auth-password')" style="cursor: pointer;">👁️</span>
 
 </div>
 
@@ -7761,7 +7820,7 @@ SAVE COMPANY LOGO
 
 <!-- REMEMBER MY DEVICE (STAY SIGNED IN) -->
 
-<div style="background: var(--card-subtle); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; cursor: pointer;">
+<div id="auth-group-remember" style="background: var(--card-subtle); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; cursor: pointer;">
 
 <input type="checkbox" id="auth-remember-device" checked style="min-height: 20px; width: 20px; accent-color: var(--uthe-gold); cursor: pointer;">
 
@@ -7787,7 +7846,7 @@ Remember My Device (Stay Signed In on jobs.utheversity.com)
 
 
 
-<button class="btn-gold-action" style="width:100%; margin-top:0.75rem;" id="auth-submit-btn" onclick="handleAuthSubmit()">
+<button type="button" class="btn-gold-action" style="width:100%; margin-top:0.75rem; cursor: pointer !important; pointer-events: auto !important;" id="auth-submit-btn" onclick="handleAuthSubmit()">
 
 SIGN IN TO WORKSPACE
 
@@ -10753,72 +10812,68 @@ window.filterHowToGuideCards = function(query) {
 
 // Auth Handlers
 
-window.openAuthModal = function() {
+window.openAuthModal = function(initialMode) {
+  const modal = document.getElementById('auth-modal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  
+  const banner = document.getElementById('auth-active-session-banner');
+  const nameDisplay = document.getElementById('auth-session-user-name');
+  const emailDisplay = document.getElementById('auth-session-user-email');
+  
   if (currentUser) {
-    showCustomModalConfirm('Recruiter Session', `Logged in as ${currentUser.name} (${currentUser.email}). Would you like to log out?`, () => {
-      currentUser = null;
-      try {
-        localStorage.removeItem('uthe_employer_user');
-        localStorage.removeItem('uthe_remember_device');
-        localStorage.removeItem('uthe_employer_logo');
-      } catch (e) {}
-      resetCompanyLogo();
-      updateAuthHeaderUi();
-      showCustomModalAlert('Logged Out', 'You have been logged out of your recruiter workspace.');
-    });
-    return;
+    if (banner) banner.style.display = 'block';
+    if (nameDisplay) nameDisplay.textContent = currentUser.name || 'Recruiter Lead';
+    if (emailDisplay) emailDisplay.textContent = currentUser.email || '';
+  } else {
+    if (banner) banner.style.display = 'none';
   }
-  document.getElementById('auth-modal').style.display = 'flex';
-  switchAuthTab('login');
+  
+  window.switchAuthTab(initialMode || 'login');
 };
 
-
+window.logoutRecruiter = function() {
+  currentUser = null;
+  try {
+    localStorage.removeItem('uthe_employer_user');
+    localStorage.removeItem('uthe_remember_device');
+    localStorage.removeItem('uthe_employer_logo');
+  } catch (e) {}
+  resetCompanyLogo();
+  updateAuthHeaderUi();
+  const banner = document.getElementById('auth-active-session-banner');
+  if (banner) banner.style.display = 'none';
+  closeModal('auth-modal');
+  showCustomModalAlert('Logged Out', 'You have been successfully logged out of the recruiter workspace.');
+};
 
 window.switchAuthTab = function(mode) {
+  authMode = mode;
+  document.querySelectorAll('#auth-modal .drawer-tab-btn').forEach(b => b.classList.remove('active'));
+  const activeTab = document.getElementById(`tab-auth-${mode}`);
+  if (activeTab) activeTab.classList.add('active');
 
-authMode = mode;
+  const nameGroup = document.getElementById('auth-group-name');
+  const passGroup = document.getElementById('auth-group-pass');
+  const rememberGroup = document.getElementById('auth-group-remember');
+  const submitBtn = document.getElementById('auth-submit-btn');
 
-document.querySelectorAll('#auth-modal .drawer-tab-btn').forEach(b => b.classList.remove('active'));
-
-const activeTab = document.getElementById(`tab-auth-${mode}`);
-if (activeTab) activeTab.classList.add('active');
-
-
-
-const nameGroup = document.getElementById('auth-group-name');
-
-const passGroup = document.getElementById('auth-group-pass');
-
-const submitBtn = document.getElementById('auth-submit-btn');
-
-
-
-if (mode === 'signup') {
-
-if (nameGroup) nameGroup.style.display = 'flex';
-
-if (passGroup) passGroup.style.display = 'flex';
-
-if (submitBtn) submitBtn.textContent = 'CREATE RECRUITER ACCOUNT';
-
-} else if (mode === 'login') {
-
-if (nameGroup) nameGroup.style.display = 'none';
-
-if (passGroup) passGroup.style.display = 'flex';
-
-if (submitBtn) submitBtn.textContent = 'SIGN IN TO WORKSPACE';
-
-} else if (mode === 'reset') {
-
-if (nameGroup) nameGroup.style.display = 'none';
-
-if (passGroup) passGroup.style.display = 'none';
-
-if (submitBtn) submitBtn.textContent = 'SEND RESET LINK';
-
-}
-
+  if (mode === 'signup') {
+    if (nameGroup) nameGroup.style.display = 'flex';
+    if (passGroup) passGroup.style.display = 'flex';
+    if (rememberGroup) rememberGroup.style.display = 'flex';
+    if (submitBtn) submitBtn.textContent = 'CREATE RECRUITER ACCOUNT';
+  } else if (mode === 'login') {
+    if (nameGroup) nameGroup.style.display = 'none';
+    if (passGroup) passGroup.style.display = 'flex';
+    if (rememberGroup) rememberGroup.style.display = 'flex';
+    if (submitBtn) submitBtn.textContent = 'SIGN IN TO WORKSPACE';
+  } else if (mode === 'reset') {
+    if (nameGroup) nameGroup.style.display = 'none';
+    if (passGroup) passGroup.style.display = 'none';
+    if (rememberGroup) rememberGroup.style.display = 'none';
+    if (submitBtn) submitBtn.textContent = 'SEND RESET LINK';
+  }
 };
 
 

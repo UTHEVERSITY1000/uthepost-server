@@ -1,5 +1,267 @@
 [
   {
+    "id": "RES-513",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-04T17:08:36.156Z"
+  },
+  {
+    "id": "RES-781",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-04T17:08:36.156Z"
+  },
+  {
+    "id": "RES-890",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-04T17:08:36.107Z"
+  },
+  {
+    "id": "RES-672",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-04T17:06:56.696Z"
+  },
+  {
+    "id": "RES-429",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-04T17:06:56.696Z"
+  },
+  {
+    "id": "RES-446",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-04T17:06:56.631Z"
+  },
+  {
+    "id": "RES-981",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-04T16:52:26.647Z"
+  },
+  {
+    "id": "RES-225",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-04T16:52:26.647Z"
+  },
+  {
+    "id": "RES-415",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-04T16:52:26.421Z"
+  },
+  {
+    "id": "RES-688",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-03T06:54:30.522Z"
+  },
+  {
+    "id": "RES-762",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-03T06:54:30.244Z"
+  },
+  {
+    "id": "RES-746",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-03T05:00:30.915Z"
+  },
+  {
+    "id": "RES-400",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-03T05:00:30.915Z"
+  },
+  {
+    "id": "RES-968",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-03T05:00:30.856Z"
+  },
+  {
     "id": "RES-515",
     "name": "Bulk Cand Two",
     "role": "Tech Lead",
@@ -635,21 +897,21 @@
   },
   {
     "id": "RES-145",
-    "name": "Bulk Cand One",
-    "role": "Sales Lead",
-    "email": "bulk1@test.com",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
     "phone": "",
-    "location": "Chicago, IL",
+    "location": "Austin, TX",
     "workType": "Full-Time • Remote",
     "experience": "3+ Years",
-    "score": 94,
+    "score": 95,
     "verified": true,
     "skills": [
       "Professional"
     ],
     "bio": "",
-    "resumeFile": "Bulk_Cand_One_Resume.pdf",
-    "updatedAt": "2026-09-03T02:14:28.207Z"
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-03T06:54:30.523Z"
   },
   {
     "id": "RES-617",
@@ -1136,22 +1398,22 @@
     "updatedAt": "2026-09-02T17:19:40.759Z"
   },
   {
-    "id": "RES-2644",
+    "id": "RES-4131",
     "name": "Jacqueline Wright",
     "role": "Staff Systems Engineer",
     "email": "jacqueline.wright@talentlead.io",
-    "phone": "(555) 827-3182",
+    "phone": "(555) 414-6659",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "5+ Years",
-    "score": 98,
+    "score": 95,
     "verified": true,
     "skills": [
       "Go",
       "Kubernetes",
       "Distributed Systems"
     ],
-    "bio": "Accomplished and dependable Staff Systems Engineer based in Austin, Tx with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified talent dossier on U-THEPOST.",
+    "bio": "Accomplished and dependable Staff Systems Engineer based in Austin, Tx with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified candidate profile on U-THEPOST.",
     "workHistory": [
       {
         "title": "Senior Staff Systems Engineer",
@@ -1162,7 +1424,7 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Jacqueline_Wright_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-03T04:39:27.524Z"
+    "updatedAt": "2026-09-04T17:08:38.504Z"
   },
   {
     "id": "RES-469",
@@ -1474,22 +1736,22 @@
     "updatedAt": "2026-09-02T06:02:00.321Z"
   },
   {
-    "id": "RES-2701",
+    "id": "RES-2289",
     "name": "Katarina Castellano",
     "role": "Staff Systems Engineer",
     "email": "katarina.castellano@talentlead.io",
-    "phone": "(555) 255-1960",
+    "phone": "(555) 453-8710",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "9+ Years",
-    "score": 94,
+    "score": 93,
     "verified": true,
     "skills": [
       "Go",
       "Kubernetes",
       "Distributed Systems"
     ],
-    "bio": "Accomplished and dependable Staff Systems Engineer based in Austin, Tx with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified talent dossier on U-THEPOST.",
+    "bio": "Accomplished and dependable Staff Systems Engineer based in Austin, Tx with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified candidate profile on U-THEPOST.",
     "workHistory": [
       {
         "title": "Senior Staff Systems Engineer",
@@ -1500,25 +1762,25 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Katarina_Castellano_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-03T04:39:27.524Z"
+    "updatedAt": "2026-09-04T17:08:38.504Z"
   },
   {
-    "id": "RES-3266",
+    "id": "RES-5443",
     "name": "Derrick Mercer",
     "role": "Staff Systems Engineer",
     "email": "derrick.mercer@talentlead.io",
-    "phone": "(555) 594-6160",
+    "phone": "(555) 384-2182",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "8+ Years",
-    "score": 94,
+    "score": 93,
     "verified": true,
     "skills": [
       "Go",
       "Kubernetes",
       "Distributed Systems"
     ],
-    "bio": "Accomplished and dependable Staff Systems Engineer based in Austin, Tx with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified talent dossier on U-THEPOST.",
+    "bio": "Accomplished and dependable Staff Systems Engineer based in Austin, Tx with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified candidate profile on U-THEPOST.",
     "workHistory": [
       {
         "title": "Senior Staff Systems Engineer",
@@ -1529,14 +1791,14 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Derrick_Mercer_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-03T04:39:27.524Z"
+    "updatedAt": "2026-09-04T17:08:38.504Z"
   },
   {
-    "id": "RES-1077",
+    "id": "RES-8329",
     "name": "Natalia Kensington",
     "role": "Staff Systems Engineer",
     "email": "natalia.kensington@talentlead.io",
-    "phone": "(555) 876-3560",
+    "phone": "(555) 515-2013",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "7+ Years",
@@ -1547,7 +1809,7 @@
       "Kubernetes",
       "Distributed Systems"
     ],
-    "bio": "Accomplished and dependable Staff Systems Engineer based in Austin, Tx with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified talent dossier on U-THEPOST.",
+    "bio": "Accomplished and dependable Staff Systems Engineer based in Austin, Tx with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified candidate profile on U-THEPOST.",
     "workHistory": [
       {
         "title": "Senior Staff Systems Engineer",
@@ -1558,25 +1820,25 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Natalia_Kensington_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-03T04:39:27.524Z"
+    "updatedAt": "2026-09-04T17:08:38.504Z"
   },
   {
-    "id": "RES-8442",
+    "id": "RES-2344",
     "name": "Harrison Vanguard",
     "role": "Staff Systems Engineer",
     "email": "harrison.vanguard@talentlead.io",
-    "phone": "(555) 655-4379",
+    "phone": "(555) 783-4471",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "6+ Years",
-    "score": 96,
+    "score": 92,
     "verified": true,
     "skills": [
       "Go",
       "Kubernetes",
       "Distributed Systems"
     ],
-    "bio": "Accomplished and dependable Staff Systems Engineer based in Austin, Tx with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified talent dossier on U-THEPOST.",
+    "bio": "Accomplished and dependable Staff Systems Engineer based in Austin, Tx with verified experience delivering exceptional service quality, driving operational efficiency, and collaborating effectively in fast-paced environments. Verified candidate profile on U-THEPOST.",
     "workHistory": [
       {
         "title": "Senior Staff Systems Engineer",
@@ -1587,10 +1849,10 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Harrison_Vanguard_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-03T04:39:27.524Z"
+    "updatedAt": "2026-09-04T17:08:38.504Z"
   },
   {
-    "id": "RES-759",
+    "id": "RES-719",
     "name": "Rachel Green",
     "role": "Director of Brand Marketing • New York, NY",
     "email": "rachel.green@fashionretail.com",
@@ -1598,17 +1860,17 @@
     "location": "New York, NY",
     "workType": "Full-Time • Hybrid",
     "experience": "6+ Years",
-    "score": 96,
+    "score": 92,
     "verified": true,
     "skills": [
       "SEO"
     ],
     "bio": "6+ years leading viral multi-channel campaigns, influencer partnerships, and SEO growth marketing.",
     "resumeFile": "Rachel_Green_Resume.pdf",
-    "updatedAt": "2026-09-03T04:39:27.208Z"
+    "updatedAt": "2026-09-04T17:08:38.288Z"
   },
   {
-    "id": "RES-533",
+    "id": "RES-345",
     "name": "Marcus Vance",
     "role": "Machine Learning Engineer",
     "email": "marcus.vance@talentscale.io",
@@ -1616,7 +1878,7 @@
     "location": "San Francisco, CA",
     "workType": "Full-Time • Hybrid",
     "experience": "8+ Years",
-    "score": 93,
+    "score": 94,
     "verified": true,
     "skills": [
       "Python",
@@ -1625,7 +1887,7 @@
     ],
     "bio": "Staff Machine Learning Engineer • San Francisco, CA",
     "resumeFile": "Marcus_Vance_Resume.pdf",
-    "updatedAt": "2026-09-03T04:39:27.208Z"
+    "updatedAt": "2026-09-04T17:08:38.288Z"
   },
   {
     "id": "RES-182",

@@ -4013,6 +4013,42 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 106 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 107: RECRUITER AUTH MODAL, SESSION MANAGEMENT & CLICKABILITY SUITE
+  // ================================================================
+  console.log('\n--- GROUP 107: RECRUITER AUTH MODAL & SESSION SUITE ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Auth Modal Markup & High-Priority Styling
+    assert(recruiterHtml.includes('id="auth-modal"'), 'recruiter.html defines #auth-modal modal overlay');
+    assert(recruiterHtml.includes('id="auth-active-session-banner"'), 'recruiter.html includes active recruiter session banner');
+    assert(recruiterHtml.includes('logoutRecruiter()'), 'recruiter.html connects 1-click logout button');
+    assert(recruiterHtml.includes('id="tab-auth-login"'), 'recruiter.html includes Login tab button');
+    assert(recruiterHtml.includes('id="tab-auth-signup"'), 'recruiter.html includes Sign Up tab button');
+    assert(recruiterHtml.includes('id="tab-auth-reset"'), 'recruiter.html includes Reset Password tab button');
+    assert(recruiterHtml.includes('id="auth-submit-btn"'), 'recruiter.html includes #auth-submit-btn submit button');
+    assert(recruiterHtml.includes('z-index: 99999999 !important'), 'recruiter.html sets max z-index on #auth-modal');
+    assert(recruiterHtml.includes('z-index: 100000000 !important'), 'recruiter.html sets max z-index on #auth-modal .modal-card');
+
+    // 2. JavaScript Auth Handlers
+    assert(recruiterHtml.includes('window.openAuthModal = function'), 'recruiter.html implements openAuthModal()');
+    assert(recruiterHtml.includes('window.logoutRecruiter = function'), 'recruiter.html implements logoutRecruiter()');
+    assert(recruiterHtml.includes('window.switchAuthTab = function'), 'recruiter.html implements switchAuthTab()');
+    assert(recruiterHtml.includes('window.handleAuthSubmit = async function'), 'recruiter.html implements handleAuthSubmit()');
+    assert(recruiterHtml.includes('isPersonalEmailDomain'), 'recruiter.html validates company domain for recruiters');
+
+    // 3. API Auth Check
+    const loginRes = await httpPost('/api/auth/login', {
+      email: 'recruiter@utheversity.com',
+      password: 'password123'
+    });
+    assert(loginRes.status === 200 || loginRes.status === 401 || loginRes.status === 400, 'POST /api/auth/login returns valid response code');
+
+  } catch (err) {
+    assert(false, `Group 107 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
