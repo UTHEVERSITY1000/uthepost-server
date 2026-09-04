@@ -1574,53 +1574,31 @@ font-size: 0.7rem;
 
 
 .perk-pill {
-
-height: 26px !important;
-
-padding: 0 0.6rem !important;
-
-font-size: 0.62rem !important;
-
-font-weight: 700 !important;
-
-border-radius: 20px !important;
-
-background-color: #F1F5F9 !important;
-
-color: #64748B !important;
-
-border: 1px solid #CBD5E1 !important;
-
-cursor: pointer !important;
-
-box-shadow: none !important;
-
-text-transform: none !important;
-
-display: inline-flex !important;
-
-align-items: center !important;
-
-justify-content: center !important;
-
-line-height: 1 !important;
-
-transition: all 0.15s ease !important;
-
+  height: 22px !important;
+  padding: 2px 7px !important;
+  font-size: 0.58rem !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+  background-color: #F8FAFC !important;
+  color: #475569 !important;
+  border: 1px solid #CBD5E1 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.03em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  transition: all 0.15s ease-in-out !important;
 }
 
-
-
 .perk-pill.active {
-
-background-color: #FEBA27 !important;
-
-color: #0F172A !important;
-
-border-color: #FEBA27 !important;
-
-box-shadow: 0 2px 6px rgba(254, 186, 39, 0.3) !important;
-
+  background-color: #FFF2C6 !important; /* Soft Gold Fill */
+  color: #0F172A !important;
+  border: 1.5px solid #FEBA27 !important;
+  box-shadow: 0 1px 3px rgba(254, 186, 39, 0.25) !important;
 }
 
 
@@ -4201,26 +4179,28 @@ display: none !important;
 
 
 
-/* Card 2 Live Preview Perks Badges */
-
+/* Card 2 Live Preview Perks Badges (Clean, sleek, micro-pills standard desktop/mobile size) */
 .preview-perks-container .badge-tag, #preview-perks-list .badge-tag {
-
-background-color: #F1F5F9 !important; /* Light Grey */
-
-border: 0.5px solid #475569 !important; /* Dark Grey Outline */
-
-color: #334155 !important; /* Medium Dark Grey Text */
-
-transition: all 0.2s ease-in-out !important;
-
+  background-color: #F1F5F9 !important; /* Light Grey */
+  border: 0.5px solid #475569 !important; /* Dark Grey Outline */
+  color: #334155 !important; /* Medium Dark Grey Text */
+  font-size: 0.58rem !important;
+  font-weight: 700 !important;
+  padding: 2px 7px !important;
+  height: 22px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.02em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  transition: all 0.2s ease-in-out !important;
 }
 
 .preview-perks-container .badge-tag:hover, #preview-perks-list .badge-tag:hover {
-
-box-shadow: 0 0 10px rgba(254, 186, 39, 0.6) !important; /* Ambient Signature Gold Glow */
-
-border-color: #FEBA27 !important;
-
+  box-shadow: 0 0 10px rgba(254, 186, 39, 0.6) !important; /* Ambient Signature Gold Glow */
+  border-color: #FEBA27 !important;
 }
 
 
@@ -5360,21 +5340,36 @@ main, .main-content, .workspace-container, #job-studio-container {
   cursor: pointer !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 4px !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  height: 22px !important;
+  padding: 2px 7px !important;
+  font-size: 0.58rem !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  background-color: #FFFBEB !important;
+  border: 1px solid #FEBA27 !important;
+  color: #0F172A !important;
   transition: all 0.15s ease !important;
   user-select: none !important;
+  box-shadow: 0 1px 2px rgba(254, 186, 39, 0.12) !important;
 }
 .preview-perk-badge:hover {
   background: #FEE2E2 !important;
   color: #DC2626 !important;
   border-color: #EF4444 !important;
   transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(239, 68, 68, 0.25) !important;
 }
 .preview-perk-badge .badge-remove-x {
-  font-size: 0.65rem;
-  font-weight: 800;
-  opacity: 0.6;
+  font-size: 0.60rem;
+  font-weight: 900;
+  opacity: 0.65;
   margin-left: 2px;
+  line-height: 1;
 }
 .preview-perk-badge:hover .badge-remove-x {
   opacity: 1;
@@ -5767,16 +5762,11 @@ PUBLISH LIVE
 
 
 
-<!-- PERKS & BENEFITS PREVIEW PILLS -->
-
+<!-- PERKS & BENEFITS PREVIEW PILLS (Clean, Sleek Micro-Pills) -->
 <div id="preview-perks-list" class="preview-perks-container" style="display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.35rem 0;">
-
-<span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px;">PTO</span>
-
-<span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px;">Health Benefits</span>
-
-<span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px;">401k Match</span>
-
+<span class="badge-tag tag-gold preview-perk-badge" style="font-size:0.58rem; padding:2px 7px; height:22px;">PTO</span>
+<span class="badge-tag tag-gold preview-perk-badge" style="font-size:0.58rem; padding:2px 7px; height:22px;">Health Benefits</span>
+<span class="badge-tag tag-gold preview-perk-badge" style="font-size:0.58rem; padding:2px 7px; height:22px;">401k Match</span>
 </div>
 
 <div id="pv-perks" style="display: none;"></div>
