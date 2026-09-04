@@ -4049,6 +4049,44 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 107 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 108: KEYWORD GAP DESELECTION & RECRUITER PROFILE PERSISTENCE SUITE
+  // ================================================================
+  console.log('\n--- GROUP 108: KEYWORD DESELECTION & PROFILE PERSISTENCE SUITE ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+
+    // 1. Keyword Deselect & Removal Handlers
+    assert(recruiterHtml.includes('window.removeKeywordPerk = function') || recruiterHtml.includes('removeKeywordPerk('), 'recruiter.html implements removeKeywordPerk()');
+    assert(recruiterHtml.includes('window.deselectKeywordPerk = window.removeKeywordPerk'), 'recruiter.html aliases deselectKeywordPerk');
+    assert(recruiterHtml.includes('preview-perk-badge'), 'recruiter.html defines preview-perk-badge styling');
+    assert(recruiterHtml.includes('badge-remove-x'), 'recruiter.html includes badge-remove-x close glyph');
+    assert(recruiterHtml.includes('.ai-gap-chip.selected'), 'recruiter.html defines .ai-gap-chip.selected styling');
+
+    // 2. Profile Persistence & Auto-Save
+    assert(recruiterHtml.includes('id="prof-company"'), 'recruiter.html contains #prof-company');
+    assert(recruiterHtml.includes('id="prof-name"'), 'recruiter.html contains #prof-name');
+    assert(recruiterHtml.includes('id="prof-email"'), 'recruiter.html contains #prof-email');
+    assert(recruiterHtml.includes('id="prof-phone"'), 'recruiter.html contains #prof-phone');
+    assert(recruiterHtml.includes('id="prof-bio"'), 'recruiter.html contains #prof-bio');
+    assert(recruiterHtml.includes('window.saveEmployerProfile = async function'), 'recruiter.html implements saveEmployerProfile()');
+    assert(recruiterHtml.includes('window.loadSavedEmployerProfile = function'), 'recruiter.html implements loadSavedEmployerProfile()');
+    assert(recruiterHtml.includes("if (tabName === 'profile')"), 'recruiter.html reloads saved profile on profile tab navigation');
+
+    // 3. Backend Profile API Check
+    const profileRes = await httpPut('/api/auth/profile', {
+      company: 'Quantum Retail Corp',
+      name: 'Quantum Talent Team',
+      email: 'hiring@quantumretail.com',
+      phone: '+1 (555) 019-2831',
+      bio: 'High-growth retail organization.'
+    });
+    assert(profileRes.status === 200, 'PUT /api/auth/profile returns HTTP 200');
+
+  } catch (err) {
+    assert(false, `Group 108 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

@@ -5333,6 +5333,42 @@ main, .main-content, .workspace-container, #job-studio-container {
   cursor: text !important;
 }
 
+/* INTERACTIVE AI GAP CHIPS & LIVE PREVIEW PERK DESELECTION */
+.ai-gap-chip.selected {
+  background: #0F172A !important;
+  color: #FEBA27 !important;
+  border: 1px solid #FEBA27 !important;
+}
+.ai-gap-chip.selected:hover {
+  background: #EF4444 !important;
+  color: #FFFFFF !important;
+  border-color: #EF4444 !important;
+}
+
+.preview-perk-badge {
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  transition: all 0.15s ease !important;
+  user-select: none !important;
+}
+.preview-perk-badge:hover {
+  background: #FEE2E2 !important;
+  color: #DC2626 !important;
+  border-color: #EF4444 !important;
+  transform: translateY(-1px);
+}
+.preview-perk-badge .badge-remove-x {
+  font-size: 0.65rem;
+  font-weight: 800;
+  opacity: 0.6;
+  margin-left: 2px;
+}
+.preview-perk-badge:hover .badge-remove-x {
+  opacity: 1;
+}
+
 </style>
 
 </head>
@@ -8367,6 +8403,9 @@ window.switchRecruiterTab = function(tabName) {
   if (tabName === 'resumes') {
     loadResumeBoard();
   }
+  if (tabName === 'profile') {
+    loadSavedEmployerProfile();
+  }
 };
 
 
@@ -8637,11 +8676,13 @@ if (perksContainer) {
 
 if (selectedPerks.length > 0) {
 
-perksContainer.innerHTML = selectedPerks.map(perk =>
-
-`<span class="badge-tag tag-gold" style="font-size:0.58rem; padding:2px 6px; margin:2px;">${perk}</span>`
-
-).join('');
+perksContainer.innerHTML = selectedPerks.map(perk => {
+  const safePerk = perk.replace(/'/g, "\\'");
+  return `<span class="badge-tag tag-gold preview-perk-badge" onclick="removeKeywordPerk('${safePerk}')" data-tooltip="Click to deselect / remove keyword">
+    <span>${perk}</span>
+    <span class="badge-remove-x">×</span>
+  </span>`;
+}).join('');
 
 } else {
 
@@ -8852,11 +8893,17 @@ Qualifications:
       const gapsContainer = document.getElementById('ai-topical-gaps-list');
       if (gapsContainer) {
         if (data.topicalGaps && data.topicalGaps.length > 0) {
-          gapsContainer.innerHTML = data.topicalGaps.map(g => `
-            <button type="button" class="ai-gap-chip" onclick="addTopicalGapPerk('${g}')">
-              <span>ADD</span> <span>${g}</span>
-            </button>
-          `).join('');
+          const selectedPerks = getSelectedPerks();
+          const currentDesc = (document.getElementById('inp-desc')?.value || '') + ' ' + (document.getElementById('ai-enhanced-desc-output')?.value || '');
+          gapsContainer.innerHTML = data.topicalGaps.map(g => {
+            const isSelected = selectedPerks.includes(g) || currentDesc.includes(g);
+            const safeG = g.replace(/'/g, "\\'");
+            return `
+              <button type="button" class="ai-gap-chip ${isSelected ? 'selected' : ''}" data-perk="${g}" onclick="addTopicalGapPerk('${safeG}')" data-tooltip="${isSelected ? 'Click to deselect keyword' : 'Click to add keyword'}">
+                <span>${isSelected ? 'ADDED' : 'ADD'}</span> <span>${g}</span>
+              </button>
+            `;
+          }).join('');
         } else {
           gapsContainer.innerHTML = `<span style="font-size:0.7rem; color:#065F46; font-weight:700;">Excellent! No critical search keywords missing.</span>`;
         }
@@ -8898,24 +8945,96 @@ function triggerAiJobEnhance(intent) {
   window.triggerAiJobEnhance(intent);
 }
 
+window.removeKeywordPerk = function(perkName) {
+  if (!perkName) return;
+  const cleanName = perkName.trim();
+  
+  // 1. Deactivate standard perk pills or remove dynamic pills in #perks-pill-container
+  const matchingPills = document.querySelectorAll(`#perks-pill-container .perk-pill[data-value="${cleanName}"]`);
+  matchingPills.forEach(pill => {
+    if (pill.classList.contains('dynamic-perk')) {
+      pill.remove();
+    } else {
+      pill.classList.remove('active');
+    }
+  });
+
+  // 2. Remove from main description and AI description
+  const cleanRegex = new RegExp(`(^|\\n)[•\\-\\s]*${cleanName.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')}(\\s+included\\.?)?`, 'gi');
+  
+  const mainDesc = document.getElementById('inp-desc');
+  if (mainDesc && mainDesc.value) {
+    mainDesc.value = mainDesc.value.replace(cleanRegex, '').replace(/\\n\\n+/g, '\n').trim();
+  }
+  const descOutput = document.getElementById('ai-enhanced-desc-output');
+  if (descOutput && descOutput.value) {
+    descOutput.value = descOutput.value.replace(cleanRegex, '').replace(/\\n\\n+/g, '\n').trim();
+  }
+
+  // 3. Update the AI content helper gap chip state if visible
+  const gapBtns = document.querySelectorAll(`.ai-gap-chip[data-perk="${cleanName}"]`);
+  gapBtns.forEach(btn => {
+    btn.classList.remove('selected');
+    btn.innerHTML = `<span>ADD</span> <span>${cleanName}</span>`;
+    btn.setAttribute('data-tooltip', 'Click to add keyword');
+  });
+
+  updateLivePreview();
+  if (typeof updateAiLiveGrade === 'function') updateAiLiveGrade();
+  showCustomModalAlert('Keyword Deselected', `"${cleanName}" was deselected and removed from your live job card preview.`);
+};
+window.deselectKeywordPerk = window.removeKeywordPerk;
+function removeKeywordPerk(perkName) {
+  window.removeKeywordPerk(perkName);
+}
+
 window.addTopicalGapPerk = function(perkName) {
-  const matchingPill = document.querySelector(`#perks-pill-container .perk-pill[data-value="${perkName}"]`);
-  if (matchingPill && !matchingPill.classList.contains('active')) {
+  if (!perkName) return;
+  const cleanName = perkName.trim();
+  let matchingPill = document.querySelector(`#perks-pill-container .perk-pill[data-value="${cleanName}"]`);
+  
+  // If already active, toggle it OFF (deselect)
+  if (matchingPill && matchingPill.classList.contains('active')) {
+    window.removeKeywordPerk(cleanName);
+    return;
+  }
+  
+  // If not found in default pills, create a dynamic pill in #perks-pill-container
+  if (!matchingPill) {
+    const pillContainer = document.getElementById('perks-pill-container');
+    if (pillContainer) {
+      matchingPill = document.createElement('button');
+      matchingPill.type = 'button';
+      matchingPill.className = 'perk-pill dynamic-perk active';
+      matchingPill.setAttribute('data-value', cleanName);
+      matchingPill.onclick = function() { togglePerkPill(this); };
+      matchingPill.innerHTML = `${cleanName} <span style="font-size:0.65rem; margin-left:3px; opacity:0.75;" onclick="event.stopPropagation(); removeKeywordPerk('${cleanName.replace(/'/g, "\\'")}')">×</span>`;
+      pillContainer.appendChild(matchingPill);
+    }
+  } else {
     matchingPill.classList.add('active');
   }
 
   const descOutput = document.getElementById('ai-enhanced-desc-output');
-  if (descOutput) {
-    descOutput.value = descOutput.value.trim() + `\n• ${perkName} included.`;
+  if (descOutput && !descOutput.value.includes(cleanName)) {
+    descOutput.value = descOutput.value.trim() + `\n• ${cleanName} included.`;
   }
   const mainDesc = document.getElementById('inp-desc');
-  if (mainDesc) {
-    mainDesc.value = mainDesc.value.trim() + `\n• ${perkName} included.`;
+  if (mainDesc && !mainDesc.value.includes(cleanName)) {
+    mainDesc.value = mainDesc.value.trim() + `\n• ${cleanName} included.`;
   }
 
+  // Update gap chip state in modal
+  const gapBtns = document.querySelectorAll(`.ai-gap-chip[data-perk="${cleanName}"]`);
+  gapBtns.forEach(btn => {
+    btn.classList.add('selected');
+    btn.innerHTML = `<span>ADDED</span> <span>${cleanName}</span>`;
+    btn.setAttribute('data-tooltip', 'Click to deselect keyword');
+  });
+
   updateLivePreview();
-  triggerAiJobEnhance('enhance');
-  showCustomModalAlert('Keyword Added', `"${perkName}" has been added to your job posting copy and perks.`);
+  if (typeof updateAiLiveGrade === 'function') updateAiLiveGrade();
+  showCustomModalAlert('Keyword Added', `"${cleanName}" has been added to your live job card preview and benefits.`);
 };
 function addTopicalGapPerk(perkName) {
   window.addTopicalGapPerk(perkName);
@@ -10604,11 +10723,20 @@ window.loadSavedEmployerProfile = function() {
   }
 
   if (saved) {
-    if (document.getElementById('prof-company') && saved.company !== undefined) document.getElementById('prof-company').value = saved.company;
-    if (document.getElementById('prof-name') && saved.name !== undefined) document.getElementById('prof-name').value = saved.name;
-    if (document.getElementById('prof-email') && saved.email !== undefined) document.getElementById('prof-email').value = saved.email;
-    if (document.getElementById('prof-phone') && saved.phone !== undefined) document.getElementById('prof-phone').value = saved.phone;
-    if (document.getElementById('prof-bio') && saved.bio !== undefined) document.getElementById('prof-bio').value = saved.bio;
+    const compEl = document.getElementById('prof-company');
+    if (compEl && saved.company !== undefined && saved.company !== '') compEl.value = saved.company;
+    
+    const nameEl = document.getElementById('prof-name');
+    if (nameEl && saved.name !== undefined && saved.name !== '') nameEl.value = saved.name;
+    
+    const emailEl = document.getElementById('prof-email');
+    if (emailEl && saved.email !== undefined && saved.email !== '') emailEl.value = saved.email;
+    
+    const phoneEl = document.getElementById('prof-phone');
+    if (phoneEl && saved.phone !== undefined && saved.phone !== '') phoneEl.value = saved.phone;
+    
+    const bioEl = document.getElementById('prof-bio');
+    if (bioEl && saved.bio !== undefined && saved.bio !== '') bioEl.value = saved.bio;
   }
 };
 
