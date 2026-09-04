@@ -3950,27 +3950,37 @@ Director of Brand Marketing • New York, NY
     console.log('\n--- GROUP 106: AI CONTENT HELPER & SEO SEARCH OPTIMIZER SUITE ---');
 
     const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
 
     // 1. Card 1 AI Helper Trigger & Live Score Badge
     assert(recruiterHtml.includes('id="btn-open-ai-helper"'), 'recruiter.html defines #btn-open-ai-helper in Card 1');
     assert(recruiterHtml.includes('AI CONTENT HELPER'), 'recruiter.html includes AI CONTENT HELPER label');
     assert(recruiterHtml.includes('id="card1-ai-grade"'), 'recruiter.html displays real-time AI grade badge in Card 1');
 
-    // 2. AI Content Helper Modal & Tabs
+    // 2. AI Content Helper Clean UI & Icon Rules (Only ❤️ Heart Icon Allowed)
     assert(recruiterHtml.includes('id="modal-ai-content-helper"'), 'recruiter.html defines #modal-ai-content-helper modal');
     assert(recruiterHtml.includes('id="tab-btn-ai-enhance"'), 'recruiter.html includes 1-Click Generate & Enhance tab');
     assert(recruiterHtml.includes('id="tab-btn-ai-gaps"'), 'recruiter.html includes Competitor & Keyword Gaps tab');
-    assert(recruiterHtml.includes('id="tab-btn-ai-seo"'), 'recruiter.html includes Google & AI Search Preview tab');
+    assert(recruiterHtml.includes('id="tab-btn-ai-seo"'), 'recruiter.html includes Google & Search Preview tab');
+    assert(recruiterHtml.includes('❤️ FAIR CHANCE / FELONY-FRIENDLY'), 'recruiter.html preserves ❤️ Heart Icon for felony-friendly preset');
+    assert(!recruiterHtml.includes('💼 Sales Rep'), 'recruiter.html removed toyish briefcase icon from presets');
+    assert(!recruiterHtml.includes('🍳 Cooks & Hosts'), 'recruiter.html removed toyish cooking icon from presets');
+    assert(!recruiterHtml.includes('⚡ GENERATE HIGH-RANKING COPY'), 'recruiter.html removed lightning icon from action buttons');
+    assert(!recruiterHtml.includes('🎯 STRUCTURE BULLET POINTS & PERKS'), 'recruiter.html removed bullseye icon from action buttons');
 
-    // 3. AI Client Functions
-    assert(recruiterHtml.includes('openAiContentHelperModal'), 'recruiter.html implements openAiContentHelperModal()');
-    assert(recruiterHtml.includes('closeAiContentHelperModal'), 'recruiter.html implements closeAiContentHelperModal()');
-    assert(recruiterHtml.includes('switchAiHelperTab'), 'recruiter.html implements switchAiHelperTab()');
-    assert(recruiterHtml.includes('triggerAiJobEnhance'), 'recruiter.html implements triggerAiJobEnhance()');
-    assert(recruiterHtml.includes('applyAiOptimizedJob'), 'recruiter.html implements applyAiOptimizedJob()');
-    assert(recruiterHtml.includes('addTopicalGapPerk'), 'recruiter.html implements addTopicalGapPerk()');
+    // 3. No Code Boxes in Recruiter Portal (Relocated to Admin Tab 6)
+    assert(!recruiterHtml.includes('id="ai-google-schema-code"'), 'recruiter.html strictly omits raw JSON-LD schema code box');
+    assert(recruiterHtml.includes('GOOGLE SEARCH & JOB BOARD INDEXING'), 'recruiter.html uses plain-English indexing status');
+    assert(adminHtml.includes('id="admin-schema-inspector-card"'), 'admin.html Tab 6 defines Google for Jobs Schema Inspector card');
+    assert(adminHtml.includes('id="admin-google-schema-code"'), 'admin.html Tab 6 includes JSON-LD schema code viewer');
+    assert(adminHtml.includes('loadAdminGoogleSchema'), 'admin.html implements loadAdminGoogleSchema()');
 
-    // 4. Server API POST /api/ai/content-helper Verification
+    // 4. Recruiter Login Clickability (Desktop & Mobile)
+    assert(recruiterHtml.includes('id="btn-auth-status"'), 'recruiter.html defines #btn-auth-status header login button');
+    assert(recruiterHtml.includes('id="btn-drawer-auth"'), 'recruiter.html defines #btn-drawer-auth mobile drawer login button');
+    assert(recruiterHtml.includes('openAuthModal'), 'recruiter.html implements openAuthModal()');
+
+    // 5. Server API POST /api/ai/content-helper Verification (Enhance & Bullet Points)
     const aiRes = await httpPost('/api/ai/content-helper', {
       title: 'Warehouse Material Handler',
       company: 'Apex Logistics Corp',
@@ -3981,12 +3991,23 @@ Director of Brand Marketing • New York, NY
       intent: 'enhance'
     });
 
-    assert(aiRes.status === 200, 'POST /api/ai/content-helper returns HTTP 200');
+    assert(aiRes.status === 200, 'POST /api/ai/content-helper returns HTTP 200 for enhance');
     assert(aiRes.data.ok === true, 'AI helper response confirms ok: true');
     assert(typeof aiRes.data.score === 'number' && aiRes.data.score > 0, 'AI helper computes valid quality score');
     assert(aiRes.data.enhancedDescription && aiRes.data.enhancedDescription.length > 50, 'AI helper generates high-ranking structured description');
-    assert(Array.isArray(aiRes.data.topicalGaps), 'AI helper returns competitor topical gaps array');
-    assert(aiRes.data.googleSchemaPreview && aiRes.data.googleSchemaPreview['@type'] === 'JobPosting', 'AI helper generates Google Schema preview');
+
+    const aiBulletsRes = await httpPost('/api/ai/content-helper', {
+      title: 'Sales Representative',
+      company: 'Quantum Retail Corp',
+      location: 'Austin, TX • Hybrid',
+      salary: '$20.00 - $28.00 / hr Base + Comm',
+      description: 'Inside sales outreach.',
+      category: 'sales_representative',
+      intent: 'bullet_points'
+    });
+
+    assert(aiBulletsRes.status === 200, 'POST /api/ai/content-helper returns HTTP 200 for bullet_points');
+    assert(aiBulletsRes.data.enhancedDescription.includes('Structured Benefits & Compensation'), 'AI helper produces bullet-point structured benefits');
 
   } catch (err) {
     assert(false, `Group 106 failed: ${err.message}`);

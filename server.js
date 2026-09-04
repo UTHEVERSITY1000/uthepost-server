@@ -3586,8 +3586,30 @@ const server = http.createServer(async (req, res) => {
         enhancedTitle = `${title} (Free Meals & Training)`;
       }
 
-      // Generate structured, candidate-friendly enhanced description
-      const enhancedDescription = `We are actively hiring a motivated ${title} to join the dedicated team at ${company} in ${location}.
+      // Generate structured, candidate-friendly enhanced description based on intent
+      let enhancedDescription = '';
+      if (intent === 'bullet_points') {
+        enhancedDescription = `Position Summary: Immediate hiring for ${title} at ${company} in ${location}.
+
+Key Day-to-Day Responsibilities:
+• Execute shift tasks with accuracy, teamwork, and high attention to detail.
+• Maintain open communication with team leads and assist fellow team members.
+• Follow all workplace safety standards, cleanliness protocols, and operating procedures.
+• Ensure daily assignments and customer expectations are consistently met.
+
+Structured Benefits & Compensation:
+• Target Compensation: ${salary}
+• ${categoryKeywords[0] || 'Weekly Pay'} & Direct Deposit
+• ${categoryKeywords[1] || 'Health Benefits'} & Dental Coverage
+• ${categoryKeywords[2] || 'Paid Time Off'} (PTO) & Holiday Pay
+• ${categoryKeywords[3] || 'On-the-Job Training'} with Career Advancement
+
+Role Requirements:
+• Dependable attendance and positive team attitude.
+• Ability to work standard shift schedule in ${location}.
+• No complex prior experience required – full paid training provided.`;
+      } else {
+        enhancedDescription = `We are actively hiring a motivated ${title} to join the dedicated team at ${company} in ${location}.
 
 Key Responsibilities:
 • Deliver consistent, high-quality results in daily operations and team workflows.
@@ -3605,6 +3627,7 @@ Qualifications:
 • Strong communication skills and a dependable work ethic.
 • Ability to collaborate effectively in a fast-paced team environment.
 • Eagerness to learn new procedures and grow professionally.`;
+      }
 
       const seoMetaTitle = `${enhancedTitle} | ${company} Hiring Now | U-THEJOBS`;
       const seoMetaDescription = `Apply for ${title} at ${company} in ${location}. Competitive compensation (${salary}), excellent benefits, and immediate interview scheduling.`;

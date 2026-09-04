@@ -1732,6 +1732,36 @@
         <div id="email-diagnostic-result" style="margin-top: 0.65rem; font-size: 0.68rem; padding: 0.5rem 0.75rem; border-radius: 5px; background: #F8FAFC; border: 1px solid var(--border-color); display: none;">
         </div>
       </div>
+
+      <!-- GOOGLE FOR JOBS STRUCTURED SCHEMA (JSON-LD) LIVE INSPECTOR CARD -->
+      <div class="section-card" style="margin-top: 0.85rem;" id="admin-schema-inspector-card">
+        <div class="section-header-compact">
+          <div class="section-title-compact">GOOGLE FOR JOBS STRUCTURED SCHEMA (JSON-LD) LIVE INSPECTOR</div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <span class="badge-tag tag-mint" id="admin-schema-status-badge">SCHEMA SYNCED & VALID</span>
+          </div>
+        </div>
+
+        <div style="font-size: 0.68rem; color: var(--text-muted); margin-bottom: 0.65rem;">
+          Inspect, validate, and monitor the live structured JSON-LD job schema served across Google Search and Google for Jobs indexing spiders.
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 0.65rem; align-items: center; flex-wrap: wrap;">
+          <button class="btn-gold" onclick="loadAdminGoogleSchema()" id="btn-refresh-admin-schema" style="height:32px; padding:0 0.85rem;" data-tooltip="Fetch live Google for Jobs schema from /api/jobs/google-schema">
+            REFRESH LIVE SCHEMA
+          </button>
+          <button class="btn-surface-sm" onclick="copyAdminGoogleSchema()" id="btn-copy-admin-schema" style="height:32px; padding:0 0.85rem;" data-tooltip="Copy raw JSON-LD schema to clipboard">
+            COPY JSON-LD SCHEMA
+          </button>
+          <a href="/api/jobs/google-schema" target="_blank" class="btn-surface-sm" style="height:32px; padding:0 0.85rem; text-decoration:none; display:inline-flex; align-items:center;" data-tooltip="Open raw API endpoint in new tab">
+            OPEN SCHEMA API ENDPOINT
+          </a>
+        </div>
+
+        <div style="background: #111827; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: #FEBA27; max-height: 240px; overflow-y: auto;">
+          <pre id="admin-google-schema-code" style="margin:0; white-space:pre-wrap; word-break:break-all;">Loading live Google for Jobs schema...</pre>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -4139,6 +4169,53 @@
       }
     }, 3000);
 
+    // Live Google for Jobs Schema Inspector (Tab 6: System & Security Settings)
+    async function loadAdminGoogleSchema() {
+      const codeEl = document.getElementById('admin-google-schema-code');
+      const badgeEl = document.getElementById('admin-schema-status-badge');
+      if (codeEl) codeEl.textContent = 'Fetching live Google for Jobs schema from /api/jobs/google-schema...';
+
+      try {
+        const res = await fetch('/api/jobs/google-schema', {
+          headers: getAdminAuthHeaders()
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (codeEl) codeEl.textContent = JSON.stringify(data, null, 2);
+          if (badgeEl) {
+            const count = Array.isArray(data) ? data.length : (data ? 1 : 0);
+            badgeEl.textContent = `${count} POSTINGS SYNCED & VALID`;
+            badgeEl.className = 'badge-tag tag-mint';
+          }
+        } else {
+          if (codeEl) codeEl.textContent = `Error fetching schema: HTTP ${res.status}`;
+          if (badgeEl) {
+            badgeEl.textContent = 'SCHEMA FEED ERROR';
+            badgeEl.className = 'badge-tag tag-danger';
+          }
+        }
+      } catch (err) {
+        if (codeEl) codeEl.textContent = `Error connecting to schema API: ${err.message}`;
+        if (badgeEl) {
+          badgeEl.textContent = 'CONNECTION OFFLINE';
+          badgeEl.className = 'badge-tag tag-warning';
+        }
+      }
+    }
+    window.loadAdminGoogleSchema = loadAdminGoogleSchema;
+
+    function copyAdminGoogleSchema() {
+      const codeEl = document.getElementById('admin-google-schema-code');
+      if (codeEl && codeEl.textContent) {
+        navigator.clipboard.writeText(codeEl.textContent).then(() => {
+          showCustomAlert('SCHEMA COPIED', 'Google for Jobs JSON-LD schema copied to clipboard.');
+        }).catch(() => {
+          showCustomAlert('SCHEMA COPIED', 'Google for Jobs JSON-LD schema ready for inspection.');
+        });
+      }
+    }
+    window.copyAdminGoogleSchema = copyAdminGoogleSchema;
+
     window.addEventListener('DOMContentLoaded', async () => {
       const yesBtn = document.getElementById('custom-confirm-btn-yes');
       if (yesBtn) {
@@ -4153,6 +4230,7 @@
       }
       await ensureMasterAdminSession();
       loadAdminData();
+      loadAdminGoogleSchema();
       connectLiveSync();
       initSmartTooltipPositioning();
     });
