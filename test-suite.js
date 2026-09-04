@@ -4087,6 +4087,27 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 108 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 109: STRUCTURED TOP-DOWN JOB DESCRIPTION FORMATTING SUITE
+  // ================================================================
+  console.log('\n--- GROUP 109: STRUCTURED TOP-DOWN JOB DESCRIPTION FORMATTING SUITE ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+
+    // 1. Recruiter Card 2 Live Preview Structured Formatting
+    assert(recruiterHtml.includes('id="pv-desc"'), 'recruiter.html defines #pv-desc preview element');
+    assert(recruiterHtml.includes('#pv-desc') && recruiterHtml.includes('white-space: pre-wrap'), 'recruiter.html CSS enforces white-space: pre-wrap on #pv-desc');
+    assert(recruiterHtml.includes('word-break: break-word'), 'recruiter.html CSS enforces word-break: break-word on #pv-desc');
+
+    // 2. Candidate Live Public Detail Inspector Structured Formatting
+    assert(candidateHtml.includes('id="dt-desc"'), 'candidate.html defines #dt-desc detail element');
+    assert(candidateHtml.includes('.detail-body-text') && candidateHtml.includes('white-space: pre-wrap'), 'candidate.html CSS enforces white-space: pre-wrap on .detail-body-text');
+
+  } catch (err) {
+    assert(false, `Group 109 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
