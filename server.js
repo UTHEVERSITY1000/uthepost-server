@@ -3971,10 +3971,262 @@ const server = http.createServer(async (req, res) => {
         enhancedTitle = `${title} (Free Meals & Training)`;
       }
 
+      // Match specific role template for highly accurate job-specific generation
+      const tLower = (title || '').toLowerCase();
+      let matchedRoleKey = null;
+      if (tLower.includes('chef') || tLower.includes('cook') && tLower.includes('head')) matchedRoleKey = 'chef';
+      else if (tLower.includes('cook') || tLower.includes('culinary') || tLower.includes('kitchen') || activeCat === 'culinary_hospitality') matchedRoleKey = 'cook';
+      else if (tLower.includes('host') || tLower.includes('greeter') || tLower.includes('server')) matchedRoleKey = 'host';
+      else if (tLower.includes('sales') || tLower.includes('account executive') || activeCat === 'sales_representative') matchedRoleKey = 'sales';
+      else if (tLower.includes('retail') || tLower.includes('cashier') || tLower.includes('store associate')) matchedRoleKey = 'retail';
+      else if (tLower.includes('grocery') || tLower.includes('stocker') || tLower.includes('supermarket') || activeCat === 'retail_grocery') matchedRoleKey = 'grocery';
+      else if (tLower.includes('assembly') || tLower.includes('factory') || tLower.includes('production') || tLower.includes('manufacturing')) matchedRoleKey = 'assembly';
+      else if (tLower.includes('fair chance') || tLower.includes('felony') || activeCat === 'felony_friendly') matchedRoleKey = 'felony';
+      else if (tLower.includes('warehouse') || tLower.includes('material handler') || activeCat === 'industrial_factory') matchedRoleKey = 'warehouse';
+      else if (tLower.includes('software') || tLower.includes('engineer') || tLower.includes('developer') || tLower.includes('tech') || activeCat === 'software_tech') matchedRoleKey = 'tech';
+      else if (tLower.includes('support') || tLower.includes('customer service') || activeCat === 'customer_support') matchedRoleKey = 'customer_service';
+
+      const ROLE_TEMPLATES = {
+        sales: {
+          responsibilities: [
+            'Conduct outbound calls, prospect qualified sales leads, and follow up with inbound customer inquiries.',
+            'Deliver engaging product presentations and consultatively guide prospective clients to optimal solutions.',
+            'Manage active sales pipeline in CRM (Salesforce/HubSpot) and consistently exceed monthly quota targets.',
+            'Build enduring client relationships, negotiate agreement terms, and generate customer referrals.'
+          ],
+          benefits: [
+            `Target Earnings: ${salary} with Uncapped Monthly Commissions`,
+            'Comprehensive Medical, Dental & Vision Insurance with low copays',
+            '401(k) Retirement Plan with 4% Employer Match',
+            '3 Weeks Paid Time Off (PTO) + Paid Holidays & Sick Days',
+            'Structured Sales Leadership Training & Fast-Track Executive Promotion'
+          ],
+          qualifications: [
+            '1-2+ years in inside sales, account management, retail sales, or customer relationship outreach.',
+            'Persuasive verbal and written communication skills with strong objection-handling ability.',
+            'Goal-driven mentality, self-motivated discipline, and comfortable with digital CRM tools.'
+          ]
+        },
+        chef: {
+          responsibilities: [
+            'Direct kitchen operations, maintain high culinary standards, and ensure flawless station ticket timing.',
+            'Manage food inventory, order fresh produce/meats, monitor food costs, and enforce waste-reduction goals.',
+            'Lead, train, and schedule line cooks, prep cooks, and dishwashing staff across all lunch and dinner shifts.',
+            'Uphold strict health department safety, sanitation, food temperature logs, and kitchen cleanliness standards.'
+          ],
+          benefits: [
+            `Competitive Compensation: ${salary} + Quarterly Kitchen Bonuses`,
+            'Full Health, Dental, Vision & Life Insurance Coverage',
+            'Paid Vacation (PTO) & Flexible Shift Scheduling',
+            'Free Daily Chef Tasting Meals & Professional Uniform Allowance',
+            'Executive Culinary Growth & Multi-Unit Kitchen Management Pathways'
+          ],
+          qualifications: [
+            '3+ years experience as a Head Chef, Sous Chef, Kitchen Manager, or Lead Cook in high-volume dining.',
+            'In-depth knowledge of culinary techniques, recipes, inventory management, and ServSafe certification.',
+            'Inspiring leadership presence, calm composure during rush hours, and keen attention to detail.'
+          ]
+        },
+        cook: {
+          responsibilities: [
+            'Prepare, season, and cook menu items on grill, sauté, fry, and salad stations to exact recipe specs.',
+            'Execute prep lists, chop vegetables, portion proteins, and restock line stations before rush hours.',
+            'Maintain strict food safety, cross-contamination prevention, and kitchen sanitation protocols.',
+            'Work in close harmony with head chef, fellow line cooks, and food runners to guarantee fast ticket times.'
+          ],
+          benefits: [
+            `Hourly Pay: ${salary} with Weekly Pay & Direct Deposit`,
+            'Free Shift Meals & 50% Off Dining Discounts for family',
+            'Medical, Dental & Vision Benefits for full-time culinary staff',
+            'Paid Time Off (PTO) & Holiday Overtime Rates',
+            'Hands-on culinary mentorship and rapid promotion to Lead Cook / Sous Chef'
+          ],
+          qualifications: [
+            '1+ years experience in a restaurant kitchen, line cooking station, or culinary prep environment.',
+            'Solid knife skills, speed on the line, and familiar with safe food holding temperatures.',
+            'Ability to stand for full shifts and collaborate well in a fast-paced team environment.'
+          ]
+        },
+        host: {
+          responsibilities: [
+            'Warmly welcome dining guests upon arrival, coordinate front-door waitlists, and manage reservations via OpenTable.',
+            'Escort guests to tables, present food and beverage menus, and inform guests of daily culinary specials.',
+            'Balance server station rotations to maintain smooth dining room workflow and avoid server overload.',
+            'Answer guest phone calls, take to-go takeout orders, and maintain a spotless, welcoming host stand.'
+          ],
+          benefits: [
+            `Hourly Wage: ${salary} plus pooled host tips`,
+            '50% Off Employee Dining Discount across all restaurant locations',
+            'Healthcare, Dental & Vision insurance plans for full-time staff',
+            'Paid Sick Leave & Paid Time Off (PTO)',
+            'Career advancement opportunities to Lead Host, Head Server, or Floor Supervisor'
+          ],
+          qualifications: [
+            'Enthusiastic, courteous personality with natural hospitality and customer care focus.',
+            'Strong verbal communication skills and comfortable multitasking during peak rush hours.',
+            'Punctual, professional presentation, and availability for evening and weekend dining shifts.'
+          ]
+        },
+        retail: {
+          responsibilities: [
+            'Engage store shoppers proactively, answer product inquiries, and deliver an outstanding shopping experience.',
+            'Operate digital POS cash registers, scan merchandise, process payments, and issue receipts accurately.',
+            'Restock display shelves, fold apparel, maintain visual floor merchandising, and organize product aisles.',
+            'Assist with incoming inventory freight, apply security tags, and maintain clean fitting rooms.'
+          ],
+          benefits: [
+            `Hourly Pay: ${salary} with flexible weekly work schedules`,
+            '30% Generous Store Merchandise Employee Discount',
+            'Full Medical, Dental & Vision insurance packages',
+            'Paid Time Off (PTO), Paid Holidays & Paid Sick Time',
+            'Clear promotion roadmap to Shift Supervisor and Assistant Store Manager'
+          ],
+          qualifications: [
+            'High school diploma or GED equivalent; retail, customer service, or cashier experience preferred.',
+            'Friendly, positive energy with passion for assisting customers.',
+            'Basic arithmetic skills, comfort with POS touchscreens, and ability to stay active on the sales floor.'
+          ]
+        },
+        grocery: {
+          responsibilities: [
+            'Stock grocery aisles, dairy cases, and produce bins following FIFO (First In, First Out) freshness rules.',
+            'Unload daily distributor trucks, breakdown shipping pallets, and organize backroom storage racks.',
+            'Assist shoppers with locating items, check inventory availability, and provide courteous customer service.',
+            'Operate checkout lanes, scan groceries quickly, bag items with care, and keep checkout areas sanitized.'
+          ],
+          benefits: [
+            `Guaranteed Starting Wage: ${salary} with predictable shifts`,
+            'Employee Grocery Discount & Store Shopping Perks',
+            'Comprehensive Medical, Prescription & Dental Health Plans',
+            '401(k) Retirement Savings Plan with Company Contribution',
+            'Department Lead & Store Operations Career Advancement Programs'
+          ],
+          qualifications: [
+            'Dependable attendance record, positive attitude, and eagerness to work with a community team.',
+            'Ability to lift up to 40 lbs and comfortably walk, bend, and stock throughout shifts.',
+            'Flexible scheduling availability including mornings, afternoons, or weekends.'
+          ]
+        },
+        assembly: {
+          responsibilities: [
+            'Assemble manufactured components along automated conveyor lines following technical work diagrams.',
+            'Perform continuous visual inspections and caliper measurements to ensure zero-defect quality standards.',
+            'Operate pneumatic assembly tools, fastening equipment, and automated packaging machinery safely.',
+            'Log hourly production metrics, report material shortages, and maintain a 5S clean, safe manufacturing cell.'
+          ],
+          benefits: [
+            `Hourly Wage: ${salary} + $1.50/hr Night Shift Differential Pay`,
+            'Comprehensive Health, Dental, Vision & Life Insurance Benefits',
+            'Annual Safety Boot & Equipment Allowance ($150/yr)',
+            'Paid Holidays, Paid Sick Days, and Accrued Vacation Time',
+            'Technical Skill-Building Certifications and Promotion to Quality Inspector or Line Lead'
+          ],
+          qualifications: [
+            'High school diploma or equivalent; factory, production, or assembly experience is a plus.',
+            'Good mechanical dexterity, hand-eye coordination, and dedication to workplace safety protocols.',
+            'Reliable daily transportation and ability to stand comfortably for production shift durations.'
+          ]
+        },
+        warehouse: {
+          responsibilities: [
+            'Pick, pack, label, and scan outgoing customer shipments using RF handheld barcode scanners.',
+            'Operate pallet jacks, hand trucks, and material carts to stage freight in shipping bays.',
+            'Unload inbound container trailers, verify packing manifests against received goods, and shelve SKUs.',
+            'Maintain an organized, clutter-free warehouse floor following OSHA safety standards.'
+          ],
+          benefits: [
+            `Competitive Pay: ${salary} with Weekly Pay & Direct Deposit`,
+            'Full Healthcare Coverage (Medical, Dental & Vision) after 30 days',
+            'Paid Forklift Certification & Equipment Safety Training',
+            'Paid Time Off (PTO), Paid Holidays & Overtime Opportunities',
+            'Logistics Career Path into Inventory Specialist, Shipping Lead, or Warehouse Manager'
+          ],
+          qualifications: [
+            'Previous warehouse, shipping/receiving, or distribution center experience preferred (not required).',
+            'Ability to lift up to 50 lbs and work actively in a fast-paced logistics warehouse.',
+            'Punctual, team-oriented, and safety-minded work ethic.'
+          ]
+        },
+        felony: {
+          responsibilities: [
+            'Pick, pack, label, and stage outgoing customer orders in a modern, climate-controlled logistics facility.',
+            'Operate handheld RF inventory scanners, manual pallet jacks, and material staging carts safely.',
+            'Receive inbound distributor pallets, sort inventory by SKU, and replenish warehouse bin locations.',
+            'Participate in daily team safety huddles and maintain an organized, supportive warehouse workspace.'
+          ],
+          benefits: [
+            'Fair Chance Certified Employer: Second-chance hiring welcoming applicants with past justice involvement',
+            `Starting Pay: ${salary} with Reliable Weekly Pay & Direct Deposit`,
+            'Comprehensive Medical, Dental & Vision Insurance for all full-time workers',
+            'Paid Forklift Training, Safety Certifications & Career Mentorship',
+            'Equal Opportunity Upward Mobility to Shift Lead and Warehouse Supervisor'
+          ],
+          qualifications: [
+            'Second Chance / Fair Chance candidate: Background-friendly with no automatic disqualifications.',
+            'Strong commitment to dependable attendance, teamwork, and continuous personal growth.',
+            'Ability to lift up to 50 lbs and work regular warehouse shifts in a supportive environment.'
+          ]
+        },
+        tech: {
+          responsibilities: [
+            'Architect, develop, and deploy scalable web applications, REST APIs, and microservices (React, Node.js, TypeScript).',
+            'Collaborate with product designers and engineering teams to translate product requirements into robust features.',
+            'Write clean, maintainable code, comprehensive automated tests, and optimize cloud infrastructure (AWS/GCP).',
+            'Participate in agile sprint ceremonies, lead code reviews, and drive continuous integration & delivery (CI/CD).'
+          ],
+          benefits: [
+            `Annual Salary: ${salary} + Company Equity Options`,
+            '100% Employer-Covered Health, Dental, Vision & Mental Health Benefits',
+            'Flexible Remote / Hybrid Work Model with Home Office Setup Stipend',
+            'Unlimited Paid Time Off (PTO) + 12 Paid Company Holidays',
+            '$2,500 Annual Professional Development & Tech Conference Budget'
+          ],
+          qualifications: [
+            '3+ years of professional full-stack software development experience with modern JavaScript/TypeScript and cloud stacks.',
+            'Strong grasp of relational/NoSQL databases, microservices architecture, and automated test frameworks.',
+            'Passionate problem-solver with excellent technical communication and teamwork skills.'
+          ]
+        },
+        customer_service: {
+          responsibilities: [
+            'Provide prompt, friendly, and helpful support to customers via inbound phone, live chat, and email tickets.',
+            'Diagnose customer account questions, resolve order issues, process billing requests, and explain features.',
+            'Document all customer interactions and troubleshooting steps thoroughly in CRM ticketing systems (Zendesk/Salesforce).',
+            'Partner with technical support and product teams to escalate unresolved issues and champion user feedback.'
+          ],
+          benefits: [
+            `Hourly Rate: ${salary} + Monthly Customer Satisfaction Performance Bonuses`,
+            'Comprehensive Healthcare Plan: Medical, Dental & Vision with low out-of-pocket costs',
+            'Paid Time Off (PTO), Paid Holidays, and Paid Volunteer Days',
+            'Full Paid Training Program & Dual-Monitor Work Equipment Provided',
+            'Direct Promotion Pathways into Support Team Lead, QA Specialist, or Account Manager'
+          ],
+          qualifications: [
+            '1+ years in customer service, call center operations, retail support, or hospitality service.',
+            'Exceptional empathy, active listening, and clear verbal/written communication skills.',
+            'Proficient typing speed (40+ WPM) and comfortable navigating multi-tab computer software.'
+          ]
+        }
+      };
+
+      const matchedRole = matchedRoleKey ? ROLE_TEMPLATES[matchedRoleKey] : null;
+
       // Generate structured, candidate-friendly enhanced description based on intent
       let enhancedDescription = '';
       if (intent === 'bullet_points') {
-        enhancedDescription = `Position Summary: Immediate hiring for ${title} at ${company} in ${location}.
+        if (matchedRole) {
+          enhancedDescription = `Position Summary: Immediate hiring for ${title} at ${company} in ${location}.
+
+Key Day-to-Day Responsibilities:
+${matchedRole.responsibilities.map(r => `• ${r}`).join('\n')}
+
+Structured Benefits & Compensation:
+${matchedRole.benefits.map(b => `• ${b}`).join('\n')}
+
+Role Requirements:
+${matchedRole.qualifications.map(q => `• ${q}`).join('\n')}`;
+        } else {
+          enhancedDescription = `Position Summary: Immediate hiring for ${title} at ${company} in ${location}.
 
 Key Day-to-Day Responsibilities:
 • Execute shift tasks with accuracy, teamwork, and high attention to detail.
@@ -3993,8 +4245,21 @@ Role Requirements:
 • Dependable attendance and positive team attitude.
 • Ability to work standard shift schedule in ${location}.
 • No complex prior experience required – full paid training provided.`;
+        }
       } else {
-        enhancedDescription = `We are actively hiring a motivated ${title} to join the dedicated team at ${company} in ${location}.
+        if (matchedRole) {
+          enhancedDescription = `We are actively hiring a motivated ${title} to join the dedicated team at ${company} in ${location}.
+
+Key Responsibilities:
+${matchedRole.responsibilities.map(r => `• ${r}`).join('\n')}
+
+Compensation & Benefits:
+${matchedRole.benefits.map(b => `• ${b}`).join('\n')}
+
+Qualifications:
+${matchedRole.qualifications.map(q => `• ${q}`).join('\n')}`;
+        } else {
+          enhancedDescription = `We are actively hiring a motivated ${title} to join the dedicated team at ${company} in ${location}.
 
 Key Responsibilities:
 • Deliver consistent, high-quality results in daily operations and team workflows.
@@ -4012,6 +4277,7 @@ Qualifications:
 • Strong communication skills and a dependable work ethic.
 • Ability to collaborate effectively in a fast-paced team environment.
 • Eagerness to learn new procedures and grow professionally.`;
+        }
       }
 
       const seoMetaTitle = `${enhancedTitle} | ${company} Hiring Now | U-THEJOBS`;
