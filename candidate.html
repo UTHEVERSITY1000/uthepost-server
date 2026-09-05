@@ -4088,22 +4088,25 @@
 
       } else if (authMode === 'signup') {
         const signupName = name || (email.split('@')[0]);
+        let res, data;
         try {
-          const res = await fetch('/api/auth/signup', {
+          res = await fetch('/api/auth/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password, name: signupName, role: 'candidate' })
           });
-          const data = await res.json();
-          if (res.ok && data.user) {
-            currentUser = data.user;
-          } else {
-            // Local fallback session
-            currentUser = { name: signupName, email: email, role: 'candidate' };
-          }
+          data = await res.json();
         } catch (e) {
-          currentUser = { name: signupName, email: email, role: 'candidate' };
+          showCustomModalAlert('CONNECTION ERROR', 'Unable to reach authentication server. Please check your network connection.');
+          return;
         }
+
+        if (!res.ok || !data.user) {
+          showCustomModalAlert('SIGN UP ERROR', data.error || 'Failed to create candidate account.');
+          return;
+        }
+
+        currentUser = data.user;
 
         if (rememberDevice) {
           try {
@@ -4124,8 +4127,28 @@
         showCustomModalAlert('Account Created', 'Candidate profile activated. Full job listings and 1-click applications unlocked!');
 
       } else if (authMode === 'reset') {
-        showCustomModalAlert('Password Reset Dispatched', `Reset instructions sent to ${email}.`);
-        closeModal('auth-modal');
+        let res, data;
+        try {
+          res = await fetch('/api/auth/forgot-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          data = await res.json();
+        } catch (e) {
+          showCustomModalAlert('CONNECTION ERROR', 'Unable to reach server. Please check your network connection.');
+          return;
+        }
+
+        if (res.ok) {
+          showCustomModalAlert(
+            'PASSWORD RESET LINK DISPATCHED',
+            data.message || `A secure 30-minute password reset link has been dispatched to ${email}. Please check your inbox.`
+          );
+          closeModal('auth-modal');
+        } else {
+          showCustomModalAlert('RESET ERROR', data.error || 'Failed to dispatch password reset link.');
+        }
       }
     }
 

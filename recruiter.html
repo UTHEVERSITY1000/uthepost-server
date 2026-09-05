@@ -11628,25 +11628,25 @@ window.handleAuthSubmit = async function() {
 
   } else if (authMode === 'signup') {
     const signupName = name || email.split('@')[0];
+    let res, data;
     try {
-      const res = await fetch('/api/auth/signup', {
+      res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name: signupName, role: 'recruiter' })
       });
-      const data = await res.json();
-      if (!res.ok) {
-        showCustomModalAlert('SIGN UP ERROR', data.error || 'Failed to register account.');
-        return;
-      }
-      if (data.user) {
-        currentUser = data.user;
-      } else {
-        currentUser = { name: signupName, email: email, role: 'recruiter' };
-      }
+      data = await res.json();
     } catch (e) {
-      currentUser = { name: signupName, email: email, role: 'recruiter' };
+      showCustomModalAlert('CONNECTION ERROR', 'Unable to reach authentication server. Please check your network connection.');
+      return;
     }
+
+    if (!res.ok || !data.user) {
+      showCustomModalAlert('SIGN UP ERROR', data.error || 'Failed to register account.');
+      return;
+    }
+
+    currentUser = data.user;
 
     if (rememberDevice) {
       try {
@@ -11666,7 +11666,28 @@ window.handleAuthSubmit = async function() {
     showCustomModalAlert('Account Created', 'Your recruiter studio account is now active.');
 
   } else if (authMode === 'reset') {
-    showCustomModalAlert('Reset Link Dispatched', `Password reset instructions sent to ${email}.`);
+    let res, data;
+    try {
+      res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      data = await res.json();
+    } catch (e) {
+      showCustomModalAlert('CONNECTION ERROR', 'Unable to reach server. Please check your network connection.');
+      return;
+    }
+
+    if (res.ok) {
+      showCustomModalAlert(
+        'PASSWORD RESET LINK DISPATCHED',
+        data.message || `A secure 30-minute password reset link has been dispatched to ${email}. Please check your inbox.`
+      );
+      closeModal('auth-modal');
+    } else {
+      showCustomModalAlert('RESET ERROR', data.error || 'Failed to dispatch password reset link.');
+    }
   }
 };
 
