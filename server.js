@@ -68,12 +68,12 @@ loadEnvAndSmtpConfig();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'utheversity-professional-jwt-secret-key-2026-secure';
 
-// Helper function: Strictly enforce IPv4 socket connections and EHLO domain for Google SMTP Relay & standard SMTP
+// Helper function: Strictly enforce IPv4 socket connections and EHLO domain for Google Workspace & standard SMTP
 function getTransporter() {
   if (!nodemailer) return null;
   loadEnvAndSmtpConfig();
   const smtpUser = process.env.SMTP_USER ? process.env.SMTP_USER.trim() : null;
-  const smtpPass = process.env.SMTP_PASS ? process.env.SMTP_PASS.trim() : null;
+  const smtpPass = process.env.SMTP_PASS ? process.env.SMTP_PASS.trim().replace(/\s+/g, '') : null;
   
   if (!smtpUser || !smtpPass) return null;
 
@@ -1842,8 +1842,6 @@ function generateFormattedResumePdf(cand, isUnlocked = false) {
 
 function resolveTargetFileForHost(req, parsedUrl) {
   const pathname = parsedUrl.pathname;
-  const cleanPath = pathname.toLowerCase().replace(/\/+$/, '');
-
   if (cleanPath === '/recruiter' || cleanPath === '/recruiter.html' || cleanPath === '/post' || cleanPath === '/u-thepost' || cleanPath === '/u-thepost.html' || cleanPath === '/u-thepost-enterprise-edition.html' || cleanPath === '/u-thepost-dual link to u-thejobs.html' || cleanPath === '/u-thepost-dual link & mobile.html' || cleanPath === '/reset-password-recruiter') {
     return 'recruiter.html';
   }
