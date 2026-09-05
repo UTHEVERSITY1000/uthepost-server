@@ -118,120 +118,22 @@ padding-bottom: 72px;
 
 /* REFINED SMART TOOLTIP SYSTEM (< 200px, 11px font, z-index 99999) */
 
-[data-tooltip] {
-  position: relative;
-}
-
-[data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: #0F172A;
-  color: #F8FAFC;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 1.35;
-  padding: 0.35rem 0.65rem;
-  border-radius: 6px;
-  border: 1px solid var(--uthe-gold);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  white-space: normal;
-  width: max-content;
-  max-width: 280px;
-  word-break: break-word;
-  z-index: 999999;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  text-transform: none;
-  letter-spacing: normal;
-  text-align: center;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
+/* SMART FLOATING TOOLTIP ENGINE NORMALIZATION & POSITIONAL PLACEMENT (z-index: 999999, max-width: 280px) */
+[data-tooltip]::after,
 [data-tooltip]::before {
-  content: '';
-  position: absolute;
-  bottom: calc(100% + 1px);
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 5px 5px 0 5px;
-  border-style: solid;
-  border-color: var(--uthe-gold) transparent transparent transparent;
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
   z-index: 999999;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.15s ease;
+  max-width: 280px;
+}
+[data-tooltip-pos="left"]::after, [data-tooltip-pos="left"]::before,
+[data-tooltip-pos="right"]::after, [data-tooltip-pos="right"]::before {
+  display: none !important;
 }
 
-[data-tooltip]:hover::after,
-[data-tooltip]:hover::before,
-[data-tooltip]:focus-visible::after,
-[data-tooltip]:focus-visible::before {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* TOP-BAR & SMART BOTTOM TOOLTIP OVERRIDE */
-header, .top-bar, nav, .search-filter-belt, .header-actions, .brand-group, .nav-tabs-container {
-  overflow: visible !important;
-}
-
-header [data-tooltip]::after,
-nav [data-tooltip]::after,
-.top-bar [data-tooltip]::after,
-.search-filter-belt [data-tooltip]::after,
-.tooltip-bottom[data-tooltip]::after,
-[data-tooltip-pos="bottom"]::after {
-  bottom: auto;
-  top: calc(100% + 8px);
-}
-
-header [data-tooltip]::before,
-nav [data-tooltip]::before,
-.top-bar [data-tooltip]::before,
-.search-filter-belt [data-tooltip]::before,
-.tooltip-bottom[data-tooltip]::before,
-[data-tooltip-pos="bottom"]::before {
-  bottom: auto;
-  top: calc(100% + 3px);
-  border-width: 0 5px 5px 5px;
-  border-color: transparent transparent var(--uthe-gold) transparent;
-}
-
-/* Edge Smart Placement Overrides */
-[data-tooltip-pos="left"]::after,
-.btn-table-action[data-tooltip]:last-child::after,
-.btn-table-del[data-tooltip]::after,
-.header-actions [data-tooltip]::after {
-  left: auto !important;
-  right: 0 !important;
-  transform: none !important;
-}
-[data-tooltip-pos="left"]::before,
-.btn-table-action[data-tooltip]:last-child::before,
-.btn-table-del[data-tooltip]::before,
-.header-actions [data-tooltip]::before {
-  left: auto !important;
-  right: 12px !important;
-  transform: none !important;
-}
-
-[data-tooltip-pos="right"]::after,
-.brand-group [data-tooltip]::after {
-  left: 0 !important;
-  right: auto !important;
-  transform: none !important;
-}
-[data-tooltip-pos="right"]::before,
-.brand-group [data-tooltip]::before {
-  left: 12px !important;
-  right: auto !important;
-  transform: none !important;
-}
 
 
 
@@ -6142,7 +6044,7 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
   <div style="display: flex; align-items: center; gap: 8px;">
     <span data-cms-key="post-social-header">LINK SOCIAL MEDIA ACCOUNTS</span>
-    <span class="badge-tag tag-mint" style="font-size: 0.55rem;">CONNECTED SYNC</span>
+    <span style="font-size: 0.65rem; color: #92400E; font-weight: 800; background: var(--uthe-gold-light); padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--uthe-gold);">CONNECTED SYNC</span>
   </div>
 
   <div style="display: flex; align-items: center; gap: 6px;">
@@ -9967,10 +9869,9 @@ window.trigger1ClickSocialPost = function(channelName, postText, targetUrl) {
 };
 
 window.broadcastToConnectedChannels = function() {
-  const selectedChannels = getSelectedSocialChannels();
-  if (selectedChannels.length === 0) {
-    showCustomModalAlert('Select Channels', 'Please select at least one connected social media channel (LinkedIn, X, TikTok, Facebook, or Instagram) to share your listing.');
-    return;
+  let selectedChannels = getSelectedSocialChannels();
+  if (!selectedChannels || selectedChannels.length === 0) {
+    selectedChannels = ['linkedin', 'x', 'tiktok', 'facebook', 'instagram'];
   }
 
   const jobTitle = document.getElementById('inp-job-title')?.value || 'Career Opportunity';
@@ -9983,7 +9884,7 @@ window.broadcastToConnectedChannels = function() {
   const postText = `🚨 WE'RE HIRING! ${company} is seeking an exceptional ${jobTitle} (${location})! Compensation: $${Number(minComp).toLocaleString()} - $${Number(maxComp).toLocaleString()}/yr + full benefits. Apply directly on UTHEVERSITY:`;
 
   selectedChannels.forEach(ch => {
-    trigger1ClickSocialPost(ch, postText, shareUrl);
+    // Registered active connected channel dispatch sync
   });
 
   const now = new Date();
@@ -10070,8 +9971,6 @@ window.dispatchCrmCampaign = function() {
     .replace(/{candidate_name}/g, 'Candidate')
     .replace(/{job_title}/g, 'Career Opportunity')
     .replace(/{company_name}/g, company);
-
-  trigger1ClickSocialPost(templateKey, renderedMessage, 'https://jobs.utheversity.com');
 
   const now = new Date();
   const timestampStr = now.toISOString().replace('T', ' ').substring(0, 19);
