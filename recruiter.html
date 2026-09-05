@@ -1659,6 +1659,40 @@ color: var(--uthe-charcoal);
 
 }
 
+/* TAB 2 CRM OUTREACH, PUBLISHING, DISTRIBUTION & CAMPAIGN TRACKER ACTION BUTTONS */
+#view-crm .crm-outreach-actions-row button,
+#view-crm .publishing-action-row button,
+#view-crm #btn-publish-post,
+#view-crm .campaign-tracker-table button,
+#view-crm .campaign-tracker-table .btn-surface-sm,
+#social-thread-picker-modal .btn-surface-sm,
+#edit-reshare-modal .btn-gold-action,
+#edit-reshare-modal .btn-surface-sm {
+  background-color: #0F172A !important;
+  color: #FEBA27 !important;
+  border: 1.5px solid #FEBA27 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25) !important;
+  transition: all 0.15s ease !important;
+}
+
+#view-crm .crm-outreach-actions-row button:hover,
+#view-crm .publishing-action-row button:hover,
+#view-crm #btn-publish-post:hover,
+#view-crm .campaign-tracker-table button:hover,
+#view-crm .campaign-tracker-table .btn-surface-sm:hover,
+#social-thread-picker-modal .btn-surface-sm:hover,
+#edit-reshare-modal .btn-gold-action:hover,
+#edit-reshare-modal .btn-surface-sm:hover {
+  background-color: #1E293B !important;
+  color: #FEBA27 !important;
+  border-color: #FEBA27 !important;
+  box-shadow: 0 0 12px rgba(254, 186, 39, 0.4) !important;
+  transform: translateY(-1px) !important;
+}
+
+
 
 
 /* PREVIEW CARD */
@@ -6164,10 +6198,10 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <div class="crm-outreach-actions-row" style="display: flex; gap: 0.75rem; align-items: center; margin-top: 0.75rem;">
   <button class="btn-gold-action" onclick="dispatchCrmCampaign()" style="flex: 1.5; height: 38px; font-weight: 800; font-size: 0.75rem;" data-tooltip="Launch 1-click live social outreach to connected accounts">
-    🚀 DISPATCH OUTREACH CAMPAIGN (1-CLICK SHARE)
+    DISPATCH OUTREACH CAMPAIGN (1-CLICK SHARE)
   </button>
   <button class="btn-surface-action" onclick="testSocialIntentShare()" style="flex: 1; height: 38px; font-size: 0.72rem;" data-tooltip="Preview and test 1-click live post share">
-    🔗 TEST 1-CLICK SHARE
+    TEST 1-CLICK SHARE
   </button>
 </div>
 
@@ -6231,7 +6265,7 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <strong style="font-size: 0.78rem; display: block;">Connected Socials</strong>
 
-<small style="font-size: 0.68rem; color: var(--text-muted);">LinkedIn, X, TikTok, Meta</small>
+<small style="font-size: 0.68rem; color: var(--text-muted);">LinkedIn, X (Twitter), TikTok, Facebook, Instagram</small>
 
 </div>
 
@@ -6247,7 +6281,7 @@ QUICK SEND / SUBMIT INTERVIEW REQUEST
 
 <button class="btn-gold-action" id="btn-publish-post" data-cms-key="post-publish-btn" style="flex: 1.5;" onclick="publishJob()" data-tooltip="Publish position live and share across all selected channels.">
 
-PUBLISH LIVE
+PUBLISH LIVE & BROADCAST
 
 </button>
 
@@ -6333,8 +6367,8 @@ RESET
 
 <td>
   <div style="display: flex; gap: 4px; align-items: center;">
-    <button class="btn-surface-sm" onclick="openEditAndReshareModal('CMP-901')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: #0284C7; border-color: #0284C7;" data-tooltip="Edit post details and re-share to feed">✏️ EDIT & RE-SHARE</button>
-    <button class="btn-surface-sm" onclick="openLiveSocialThread('CMP-901')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread">↗ THREAD</button>
+    <button class="btn-surface-sm" onclick="openEditAndReshareModal('CMP-901')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800;" data-tooltip="Edit post details and re-share to feed">EDIT & RE-SHARE</button>
+    <button class="btn-surface-sm" onclick="openLiveSocialThread('CMP-901')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800;" data-tooltip="Open live connected social thread">THREAD</button>
   </div>
 </td>
 
@@ -6356,8 +6390,8 @@ RESET
 
 <td>
   <div style="display: flex; gap: 4px; align-items: center;">
-    <button class="btn-surface-sm" onclick="openEditAndReshareModal('CMP-902')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: #0284C7; border-color: #0284C7;" data-tooltip="Edit post details and re-share to feed">✏️ EDIT & RE-SHARE</button>
-    <button class="btn-surface-sm" onclick="openLiveSocialThread('CMP-902')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread">↗ THREAD</button>
+    <button class="btn-surface-sm" onclick="openEditAndReshareModal('CMP-902')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800;" data-tooltip="Edit post details and re-share to feed">EDIT & RE-SHARE</button>
+    <button class="btn-surface-sm" onclick="openLiveSocialThread('CMP-902')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800;" data-tooltip="Open live connected social thread">THREAD</button>
   </div>
 </td>
 
@@ -7545,7 +7579,7 @@ VERIFIED EMPLOYER
   <div class="custom-alert-card" style="width: 480px; max-width: 95vw; text-align: left; gap: 1rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
       <div class="alert-card-title" style="color: var(--uthe-gold); font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
-        <span>✏️</span> EDIT & RE-SHARE SOCIAL POST
+        EDIT & RE-SHARE SOCIAL POST
       </div>
       <button onclick="closeEditAndReshareModal()" style="background: none; border: none; font-size: 1rem; color: #94A3B8; cursor: pointer; font-weight: 900;">✕</button>
     </div>
@@ -7593,7 +7627,7 @@ VERIFIED EMPLOYER
   <div class="custom-alert-card" style="width: 460px; max-width: 95vw; text-align: left; gap: 1rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
       <div class="alert-card-title" style="color: var(--uthe-gold); font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
-        <span>↗</span> OPEN LIVE CONNECTED SOCIAL THREAD
+        OPEN LIVE CONNECTED SOCIAL THREAD
       </div>
       <button onclick="closeSocialThreadPickerModal()" style="background: none; border: none; font-size: 1rem; color: #94A3B8; cursor: pointer; font-weight: 900;">✕</button>
     </div>
@@ -7607,8 +7641,8 @@ VERIFIED EMPLOYER
     </div>
 
     <div style="display: flex; gap: 0.5rem; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.25rem;">
-      <button class="btn-surface-sm" onclick="openAllConnectedSocialThreads()" style="height: 34px; padding: 0 0.85rem; font-size: 0.72rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);">
-        🚀 OPEN ALL CONNECTED THREADS
+      <button class="btn-surface-sm" onclick="openAllConnectedSocialThreads()" style="height: 34px; padding: 0 0.85rem; font-size: 0.72rem; font-weight: 800;">
+        OPEN ALL CONNECTED THREADS
       </button>
       <button class="btn-surface-sm" onclick="closeSocialThreadPickerModal()" style="height: 34px; padding: 0 1rem; font-size: 0.75rem;">
         CLOSE
@@ -9565,6 +9599,7 @@ async function publishJobLive() {
   renderActiveJobsTable();
 
   broadcastSyncEvent('JOB_PUBLISHED', { job: newJob, publisherId: (currentUser && (currentUser.id || currentUser.userId)) || 'local' });
+  openLiveSocialThread();
   showCustomModalAlert('Position Published Live', `Your position "${newJob.jobTitle}" is live and saved to your Active Listings.`);
 }
 
@@ -9854,18 +9889,15 @@ window.broadcastToConnectedChannels = function() {
       <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">LIVE BROADCAST</span></td>
       <td>
         <div style="display: flex; gap: 4px; align-items: center;">
-          <button class="btn-surface-sm" onclick="openEditAndReshareModal('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: #0284C7; border-color: #0284C7;" data-tooltip="Edit post details and re-share to feed">✏️ EDIT & RE-SHARE</button>
-          <button class="btn-surface-sm" onclick="openLiveSocialThread('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread options">↗ THREAD</button>
+          <button class="btn-surface-sm" onclick="openEditAndReshareModal('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800;" data-tooltip="Edit post details and re-share to feed">EDIT & RE-SHARE</button>
+          <button class="btn-surface-sm" onclick="openLiveSocialThread('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800;" data-tooltip="Open live connected social thread options">THREAD</button>
         </div>
       </td>
     `;
     tbody.prepend(tr);
   }
 
-  showCustomModalAlert(
-    '1-Click Live Social Share Launched',
-    `1-Click share window launched for your selected platform(s): ${channelDisplayNames}!\n\n📌 Remember: To update a live post later, use the "EDIT & RE-SHARE" button in Tab 2.`
-  );
+  openLiveSocialThread(campId);
 };
 
 // 1. CAMPAIGN RECIPIENT CAP (25 MAX)
@@ -9943,8 +9975,8 @@ window.dispatchCrmCampaign = function() {
       <td><span style="background:var(--status-mint-bg); color:#065F46; font-size:0.65rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px;">DISPATCHED</span></td>
       <td>
         <div style="display: flex; gap: 4px; align-items: center;">
-          <button class="btn-surface-sm" onclick="openEditAndReshareModal('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: #0284C7; border-color: #0284C7;" data-tooltip="Edit post details and re-share to feed">✏️ EDIT & RE-SHARE</button>
-          <button class="btn-surface-sm" onclick="openLiveSocialThread('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800; color: var(--uthe-gold); border-color: var(--uthe-gold);" data-tooltip="Open live connected social thread options">↗ THREAD</button>
+          <button class="btn-surface-sm" onclick="openEditAndReshareModal('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800;" data-tooltip="Edit post details and re-share to feed">EDIT & RE-SHARE</button>
+          <button class="btn-surface-sm" onclick="openLiveSocialThread('${campId}')" style="height: 26px; padding: 0 6px; font-size: 0.65rem; font-weight: 800;" data-tooltip="Open live connected social thread options">THREAD</button>
         </div>
       </td>
     `;
@@ -9952,24 +9984,11 @@ window.dispatchCrmCampaign = function() {
   }
 
   saveCrmSettings();
-
-  showCustomModalAlert(
-    'Outreach Dispatched & Logged',
-    `1-Click Live Social outreach launched for ${channelDisplay}.\n\nLogged campaign ${campId} for ${count} candidates (25 Max Batch).\n\n📌 Live Sync Notice: Use "EDIT & RE-SHARE" in your tracker to push post corrections to your feed.`
-  );
+  openLiveSocialThread(campId);
 };
 
 window.testSocialIntentShare = function() {
-  const selectedChannels = getSelectedSocialChannels();
-  const channelToTest = selectedChannels.length > 0 ? selectedChannels[0] : (document.getElementById('crm-template-select')?.value || 'linkedin');
-  const rawMessage = document.getElementById('crm-message-body').value;
-  const company = document.getElementById('prof-company-name')?.value || 'Quantum Retail Corp';
-  const renderedMessage = rawMessage
-    .replace(/{candidate_name}/g, 'Talent Lead')
-    .replace(/{job_title}/g, 'Career Opportunity')
-    .replace(/{company_name}/g, company);
-
-  trigger1ClickSocialPost(channelToTest, renderedMessage, 'https://jobs.utheversity.com');
+  openLiveSocialThread();
 };
 
 window.openEditAndReshareModal = function(campId) {
@@ -10091,7 +10110,7 @@ window.openLiveSocialThread = function(campId) {
         </div>
       </div>
       <button class="btn-surface-sm" onclick="window.open('${c.url}', '_blank', 'noopener,noreferrer')" style="height: 28px; padding: 0 0.75rem; font-size: 0.7rem; font-weight: 800; color: ${c.color}; border-color: ${c.color};">
-        VISIT FEED ↗
+        VISIT FEED
       </button>
     </div>
   `).join('');
