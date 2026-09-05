@@ -7122,6 +7122,7 @@ VERIFIED EMPLOYER
 
 <label data-tooltip="Official company legal name.">Organization Legal Name</label>
 
+<input type="text" id="prof-company" value="Quantum Retail Corp" data-tooltip="Employer name.">
 <input type="text" id="prof-company" placeholder="e.g. Quantum Retail Corp" value="" data-tooltip="Employer name.">
 
 </div>
@@ -7130,6 +7131,7 @@ VERIFIED EMPLOYER
 
 <label data-tooltip="Lead recruiter or talent acquisition manager name.">Contact Lead Name</label>
 
+<input type="text" id="prof-name" value="Quantum Talent Team" data-tooltip="Hiring manager name.">
 <input type="text" id="prof-name" placeholder="e.g. Jane Doe / Talent Lead" value="" data-tooltip="Hiring manager name.">
 
 </div>
@@ -7142,6 +7144,7 @@ VERIFIED EMPLOYER
 
         <div class="form-group">
           <label data-tooltip="Registered company email.">Work Email Address</label>
+          <input type="email" id="prof-email" value="hiring@quantumretail.com" data-tooltip="Work email address.">
           <input type="email" id="prof-email" placeholder="hiring@quantumretail.com" value="" data-tooltip="Work email address.">
         </div>
 
@@ -7149,6 +7152,7 @@ VERIFIED EMPLOYER
 
 <label data-tooltip="Contact phone number.">Contact Phone Number</label>
 
+<input type="tel" id="prof-phone" value="+1 (555) 019-2831" data-tooltip="Primary phone number.">
 <input type="tel" id="prof-phone" placeholder="+1 (555) 000-0000" value="" data-tooltip="Primary phone number.">
 
 </div>
@@ -8747,6 +8751,9 @@ function openModal(id) {
 }
 
 window.closeModal = function(id) {
+
+document.getElementById(id).style.display = 'none';
+
   const el = document.getElementById(id);
   if (el) el.style.display = 'none';
 };
@@ -11110,27 +11117,6 @@ showCustomModalAlert('Direct Message Sent', `Message dispatched to candidate inb
 // 3. PRICING PLANS & DYNAMIC PRICING CALCULATOR (BUILD FROM $0)
 
 let liveCmsPricing = {
-
-palMonthly: 0,
-
-starterMonthly: 99,
-
-growthMonthly: 299,
-
-proMonthly: 699,
-
-individualSocialAddon: 5.99,
-
-socialBundleAddon: 19.99,
-
-topSpotlight: 49,
-
-urgentBadge: 29,
-
-directMessages: 19,
-
-verifiedEmployer: 39
-
   palMonthly: 0,
   starterMonthly: 9.99,
   growthMonthly: 19.99,
@@ -11158,38 +11144,9 @@ window.selectBasePlan = function(planKey, price) {
     else if (planKey === 'pro') basePlanPrice = liveCmsPricing.proMonthly !== undefined ? liveCmsPricing.proMonthly : 34.99;
   }
 
-selectedBasePlan = planKey;
   document.querySelectorAll('.pricing-card').forEach(c => c.classList.remove('selected-plan'));
   const card = document.getElementById(`plan-card-${planKey}`);
   if (card) card.classList.add('selected-plan');
-
-if (price !== undefined) {
-
-basePlanPrice = price;
-
-} else {
-
-if (planKey === 'pal') basePlanPrice = liveCmsPricing.palMonthly || 0;
-
-else if (planKey === 'starter') basePlanPrice = liveCmsPricing.starterMonthly || 99;
-
-else if (planKey === 'growth') basePlanPrice = liveCmsPricing.growthMonthly || 299;
-
-else if (planKey === 'pro') basePlanPrice = liveCmsPricing.proMonthly || 699;
-
-}
-
-
-
-document.querySelectorAll('.pricing-card').forEach(c => c.classList.remove('selected-plan'));
-
-const card = document.getElementById(`plan-card-${planKey}`);
-
-if (card) card.classList.add('selected-plan');
-
-
-
-recalculateMembershipTotal();
 
   recalculateMembershipTotal();
 };
@@ -11647,6 +11604,7 @@ window.openAuthModal = function(initialMode = 'signup') {
     if (banner) banner.style.display = 'none';
   }
   
+  window.switchAuthTab(initialMode || 'login');
   if (typeof window.switchAuthTab === 'function') {
     window.switchAuthTab(initialMode || (currentUser ? 'login' : 'signup'));
   }
@@ -11664,6 +11622,7 @@ window.logoutRecruiter = function() {
     localStorage.removeItem('uthe_employer_logo');
     localStorage.removeItem('uthe_token');
     localStorage.removeItem('uthe_remember_device');
+    localStorage.removeItem('uthe_employer_logo');
     localStorage.removeItem('uthe_subscribed_plan');
     localStorage.removeItem('uthe_is_paid_plan');
     localStorage.removeItem('uthe_employer_jobs');
@@ -11695,12 +11654,14 @@ function checkRecruiterAuthAccess() {
     if (barrier) barrier.style.display = 'flex';
     if (mainWorkspace) {
       mainWorkspace.style.filter = 'blur(6px)';
+      mainWorkspace.style.pointerEvents = 'none';
       mainWorkspace.style.userSelect = 'none';
     }
   } else {
     if (barrier) barrier.style.display = 'none';
     if (mainWorkspace) {
       mainWorkspace.style.filter = 'none';
+      mainWorkspace.style.pointerEvents = 'auto';
       mainWorkspace.style.userSelect = 'auto';
     }
   }
