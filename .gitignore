@@ -7,5 +7,6 @@ yarn-error.log*
 # Environment and logs
 *.log
 .env
+smtp_config.json
 .DS_Store
 Thumbs.db
