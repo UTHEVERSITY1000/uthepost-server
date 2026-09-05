@@ -12,8 +12,13 @@ smtp_config.json
 Thumbs.db
 
 # Dynamic runtime and test run files
+data/listings/
+data/logs/
+data/messages/
+data/resumes/
 data/
 backup/
 test_resume.pdf
+backup/
 *.pdf
 
