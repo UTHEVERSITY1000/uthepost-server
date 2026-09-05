@@ -7829,6 +7829,89 @@ SAVE COMPANY LOGO
 
 
 <!-- AI CONTENT HELPER & SEO SEARCH OPTIMIZER MODAL -->
+<style>
+  .ai-helper-modal-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    width: 92vw;
+    max-width: 900px;
+    height: 88vh;
+    max-height: 720px;
+    padding: 1.2rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    border: 1.5px solid #0F172A;
+  }
+  .ai-helper-tabs-bar {
+    display: flex;
+    gap: 0.35rem;
+    border-bottom: 1.5px solid #E2E8F0;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.35rem;
+  }
+  .ai-helper-tab-btn {
+    background: transparent;
+    border: none;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #64748B;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+  }
+  .ai-helper-tab-btn.active {
+    background: #0F172A;
+    color: #FEBA27;
+  }
+  .ai-preset-chip {
+    background: #F1F5F9;
+    border: 1px solid #CBD5E1;
+    color: #334155;
+    font-size: 0.62rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .ai-preset-chip:hover {
+    background: #E2E8F0;
+    border-color: #94A3B8;
+    color: #0F172A;
+  }
+  .ai-preset-chip.active {
+    background: #FEBA27;
+    border-color: #D97706;
+    color: #0F172A;
+    box-shadow: 0 1px 3px rgba(217, 119, 6, 0.25);
+  }
+  .ai-gap-chip {
+    background: #FFFBEB;
+    border: 1px solid #FCD34D;
+    color: #92400E;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s ease;
+  }
+  .ai-gap-chip:hover {
+    background: #FEF3C7;
+    border-color: #F59E0B;
+  }
+  .ai-gap-chip.selected {
+    background: #ECFDF5;
+    border-color: #A7F3D0;
+    color: #065F46;
+  }
+</style>
 <div class="modal-overlay" id="modal-ai-content-helper" style="display: none;">
   <div class="ai-helper-modal-card">
     
@@ -9261,6 +9344,10 @@ const ROLE_PRESET_CATALOG = {
 };
 
 window.applyAiRolePreset = function(roleKey) {
+  document.querySelectorAll('.ai-preset-chip').forEach(btn => btn.classList.remove('active'));
+  const activePresetBtn = document.querySelector(`.ai-preset-chip[onclick*="'${roleKey}'"]`);
+  if (activePresetBtn) activePresetBtn.classList.add('active');
+
   const roleData = ROLE_PRESET_CATALOG[roleKey] || ROLE_PRESET_CATALOG.sales;
   const titleInput = document.getElementById('inp-title');
   const salaryInput = document.getElementById('inp-salary');
@@ -9369,16 +9456,36 @@ Qualifications:
   const defaultDesc = intent === 'bullet_points' ? localBullets : localNarrative;
 
   try {
+    const startTime = Date.now();
     const res = await fetch('/api/ai/content-helper', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, company, location, salary, description: desc, intent })
     });
     const data = await res.json();
+    
+    // Ensure minimal tactile feedback delay so user sees generating state
+    const elapsed = Date.now() - startTime;
+    if (elapsed < 250) {
+      await new Promise(r => setTimeout(r, 250 - elapsed));
+    }
+
     if (data && data.ok) {
       currentAiOptimizationResult = data;
       const descOutput = document.getElementById('ai-enhanced-desc-output');
-      if (descOutput) descOutput.value = data.enhancedDescription || defaultDesc;
+      if (descOutput) {
+        descOutput.value = data.enhancedDescription || defaultDesc;
+        descOutput.scrollTop = 0;
+        descOutput.style.transition = 'box-shadow 0.2s ease, border-color 0.2s ease';
+        descOutput.style.borderColor = '#FEBA27';
+        descOutput.style.boxShadow = '0 0 0 3px rgba(254, 186, 39, 0.4)';
+        setTimeout(() => {
+          if (descOutput) {
+            descOutput.style.borderColor = '#CBD5E1';
+            descOutput.style.boxShadow = 'none';
+          }
+        }, 700);
+      }
 
       // Update Gaps without icons
       const gapsContainer = document.getElementById('ai-topical-gaps-list');
