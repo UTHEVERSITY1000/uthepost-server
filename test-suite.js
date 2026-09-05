@@ -4252,12 +4252,16 @@ Director of Brand Marketing • New York, NY
     assert(!candidateHtml.includes('id="prof-cand-name" value="Marcus Vance"'), 'candidate.html removed hardcoded Marcus Vance from #prof-cand-name');
     assert(!candidateHtml.includes('id="candidateEmailInput" name="cand-email" placeholder="marcus.vance@example.com" value="marcus.vance@example.com"'), 'candidate.html removed hardcoded mock email from #candidateEmailInput');
     assert(!candidateHtml.includes('id="prof-cand-email" value="marcus.vance@example.com"'), 'candidate.html removed hardcoded mock email from #prof-cand-email');
+    assert(!candidateHtml.includes('Marcus Vance'), 'candidate.html contains zero Marcus Vance occurrences');
+    assert(!candidateHtml.includes('marcus.vance@example.com'), 'candidate.html contains zero mock email occurrences');
     assert(candidateHtml.includes('let currentApplicantId = null;'), 'candidate.html initializes currentApplicantId to null on unauthenticated visit');
     assert(candidateHtml.includes('let unreadCount = 0;'), 'candidate.html initializes unreadCount to 0 on unauthenticated visit');
 
     // 2. Candidate Portal Access Control & Anti-Leak Protection
     assert(candidateHtml.includes('window.openCandidateProfileModal = function()'), 'candidate.html defines window.openCandidateProfileModal');
     assert(candidateHtml.includes('window.openMessageDrawer = function(applicantId)'), 'candidate.html defines window.openMessageDrawer');
+    assert(candidateHtml.includes('function renderUnloggedPlaceholderDrawer()'), 'candidate.html defines renderUnloggedPlaceholderDrawer for unauthenticated visitors');
+    assert(candidateHtml.includes('Sign in or create an account to reply to recruiters...'), 'candidate.html sets clean placeholder in #recruiterReplyInput');
     assert(candidateHtml.includes('window.logoutCandidate = function()'), 'candidate.html defines window.logoutCandidate');
     assert(candidateHtml.includes('localStorage.removeItem(\'uthe_candidate_user\')') && candidateHtml.includes('localStorage.removeItem(\'uthe_candidate_profile\')'), 'candidate.html wipes all localStorage candidate keys on logout');
 

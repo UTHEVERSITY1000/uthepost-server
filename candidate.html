@@ -1939,7 +1939,7 @@
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
         </svg>
-        <span class="notif-counter-badge" id="notif-badge-count">1</span>
+        <span class="notif-counter-badge" id="notif-badge-count" style="display: none;">0</span>
       </button>
 
       <button class="btn-profile-header" onclick="openCandidateProfileModal()" data-tooltip="View and manage your resume and candidate details.">
@@ -2452,12 +2452,12 @@
       <div id="auth-form-body">
         <div class="form-group" id="auth-group-name" style="display:none;">
           <label>Full Name</label>
-          <input type="text" id="auth-name" placeholder="Marcus Vance">
+          <input type="text" id="auth-name" placeholder="e.g. John Doe">
         </div>
 
         <div class="form-group">
           <label>Email Address</label>
-          <input type="email" id="auth-email" placeholder="marcus.vance@example.com">
+          <input type="email" id="auth-email" placeholder="john.doe@example.com">
         </div>
 
         <div class="form-group" id="auth-group-pass">
@@ -2576,9 +2576,11 @@
     let currentUser = null;
     let authMode = 'login';
     let selectedJobId = 'JOB-101';
+    let currentApplicantId = 'APP-701';
     let currentApplicantId = null;
     let currentSearchFilter = '';
     let currentSearchQuery = '';
+    let unreadCount = 1;
     let unreadCount = 0;
 
     let jobsDatabase = [
@@ -2957,12 +2959,63 @@
     }
 
     // 1. NOTIFICATIONS ALERT & EXECUTIVE RECRUITER MESSAGE DRAWER
-    window.openMessageDrawer = function(applicantId) {
-      if (!currentUser && !applicantId && !currentApplicantId) {
-        openAuthModal('signup');
-        showCustomModalAlert('Candidate Sign-In Required', 'Please sign in or create an account to view your private recruiter messages and notifications.');
-        return;
+    function renderUnloggedPlaceholderDrawer() {
+      const listContainer = document.getElementById('recruiterThreadList');
+      const countEl = document.getElementById('candidate-thread-count');
+      const titleEl = document.getElementById('activeRecruiterTitle');
+      const chatContainer = document.getElementById('chatMessagesContainer');
+      const replyInput = document.getElementById('recruiterReplyInput');
+
+      if (countEl) countEl.textContent = '1 Recruiter (Preview)';
+      if (titleEl) titleEl.textContent = 'SAMPLE RECRUITER — CONVERSATION PREVIEW';
+
+      if (listContainer) {
+        listContainer.innerHTML = `
+          <div class="recruiter-thread-card active" style="cursor: pointer;" onclick="if(!currentUser) { openAuthModal('signup'); showCustomModalAlert('Sign In Required', 'Please sign in or create an account to start conversations with recruiters.'); }">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap: 4px;">
+              <div class="recruiter-card-company" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Quantum Talent (Example)</div>
+            </div>
+            <div class="recruiter-card-recruiter">Talent Acquisition Lead</div>
+            <div class="recruiter-card-role">Career Opportunity • <span style="color:#D4AF37; font-weight:800;">SAMPLE-PREVIEW</span></div>
+          </div>
+        `;
       }
+
+      if (chatContainer) {
+        chatContainer.innerHTML = `
+          <div class="chat-bubble-recruiter">
+            <div style="font-size:0.75rem; font-weight:800; margin-bottom:0.25rem; color:#D4AF37;">
+              Quantum Talent Acquisition (Example Recruiter)
+            </div>
+            <div style="line-height:1.5;">
+              Welcome to U-THEJOBS! When employers review your applications, your interview requests and direct messages will appear here in real time. Sign in or create an account to start conversations.
+            </div>
+            <div style="font-size:0.65rem; color:#64748b; margin-top:0.35rem; text-align:right;">
+              Sample Preview
+            </div>
+          </div>
+          <div class="chat-bubble-candidate">
+            <div style="font-size:0.75rem; font-weight:800; margin-bottom:0.25rem; color:#D4AF37;">
+              Candidate Response (Example)
+            </div>
+            <div style="line-height:1.5;">
+              Once signed in, you can respond with 1-Click Executive Quick Replies or confirm interview calendar availability.
+            </div>
+            <div style="font-size:0.65rem; color:#94a3b8; margin-top:0.35rem; text-align:right;">
+              Sample Preview
+            </div>
+          </div>
+        `;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+
+      if (replyInput) {
+        replyInput.placeholder = 'Sign in or create an account to reply to recruiters...';
+        replyInput.value = '';
+      }
+    }
+
+    window.openMessageDrawer = function(applicantId) {
       if (applicantId) {
         currentApplicantId = applicantId;
         activeThreadId = applicantId;
@@ -2972,6 +3025,12 @@
       unreadCount = 0;
       const badge = document.getElementById('notif-badge-count');
       if (badge) badge.style.display = 'none';
+
+      if (!currentUser) {
+        renderUnloggedPlaceholderDrawer();
+        return;
+      }
+
       if (typeof fetchMessages === 'function') {
         fetchMessages(applicantId || currentApplicantId || activeThreadId);
       }
@@ -3237,17 +3296,17 @@
 
         let filledAny = false;
 
-        if (contactInfo.name && nameInput && (!userManuallyEdited.name || !nameInput.value.trim() || nameInput.value === 'Marcus Vance')) {
+        if (contactInfo.name && nameInput && (!userManuallyEdited.name || !nameInput.value.trim())) {
           nameInput.value = contactInfo.name;
           filledAny = true;
         }
 
-        if (contactInfo.email && emailInput && (!userManuallyEdited.email || !emailInput.value.trim() || emailInput.value === 'marcus.vance@example.com')) {
+        if (contactInfo.email && emailInput && (!userManuallyEdited.email || !emailInput.value.trim())) {
           emailInput.value = contactInfo.email;
           filledAny = true;
         }
 
-        if (contactInfo.phone && phoneInput && (!userManuallyEdited.phone || !phoneInput.value.trim() || phoneInput.value === '+1 (555) 448-9102')) {
+        if (contactInfo.phone && phoneInput && (!userManuallyEdited.phone || !phoneInput.value.trim())) {
           phoneInput.value = contactInfo.phone;
           filledAny = true;
         }
@@ -3377,6 +3436,11 @@
     };
 
     window.selectQuickReply = function(text) {
+      if (!currentUser) {
+        openAuthModal('signup');
+        showCustomModalAlert('Sign In Required', 'Please sign in or create an account to use 1-click quick replies.');
+        return;
+      }
       const input = document.getElementById('recruiterReplyInput') || document.getElementById('cand-reply-input');
       if (input) {
         input.value = QUICK_RESPONSE_EXPANSIONS[text] || text;
@@ -3400,13 +3464,13 @@
         company: 'Quantum Retail Corp',
         recruiterName: 'Quantum Talent Acquisition',
         jobTitle: 'Sales Manager',
-        initialMessage: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
+        initialMessage: 'Hello! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
         messages: [
           {
             applicantId: 'APP-701',
             senderRole: 'recruiter',
             senderName: 'Quantum Talent Acquisition (Recruiter)',
-            text: 'Hello Marcus! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
+            text: 'Hello! We reviewed your profile and verified resume for the Sales Manager role. We would love to schedule a 30-minute introductory call this week.',
             timestamp: new Date().toISOString()
           }
         ]
@@ -3416,13 +3480,13 @@
         company: 'Apex Solutions Group',
         recruiterName: 'Apex Talent Acquisition',
         jobTitle: 'Assembly Line Worker',
-        initialMessage: 'Hi Marcus, your technical qualifications for our manufacturing opening look fantastic. When would be a great time for a brief screening?',
+        initialMessage: 'Hi! Your technical qualifications for our manufacturing opening look fantastic. When would be a great time for a brief screening?',
         messages: [
           {
             applicantId: 'APP-702',
             senderRole: 'recruiter',
             senderName: 'Apex Talent Acquisition (Recruiter)',
-            text: 'Hi Marcus, your technical qualifications for our manufacturing opening look fantastic. When would be a great time for a brief screening?',
+            text: 'Hi! Your technical qualifications for our manufacturing opening look fantastic. When would be a great time for a brief screening?',
             timestamp: new Date().toISOString()
           }
         ]
@@ -3432,13 +3496,13 @@
         company: 'Nordic Outfitters',
         recruiterName: 'Nordic HR Team',
         jobTitle: 'Retail Sales Associate',
-        initialMessage: 'Greetings Marcus, we received your application for Nordic Outfitters. We are actively interviewing candidates this week!',
+        initialMessage: 'Greetings! We received your application for Nordic Outfitters. We are actively interviewing candidates this week!',
         messages: [
           {
             applicantId: 'APP-703',
             senderRole: 'recruiter',
             senderName: 'Nordic HR Team (Recruiter)',
-            text: 'Greetings Marcus, we received your application for Nordic Outfitters. We are actively interviewing candidates this week!',
+            text: 'Greetings! We received your application for Nordic Outfitters. We are actively interviewing candidates this week!',
             timestamp: new Date().toISOString()
           }
         ]
@@ -3454,6 +3518,7 @@
     const selectedThreadIds = new Set();
 
     function handleThreadSelectChange(threadId, isChecked) {
+      if (!currentUser) return;
       if (isChecked) selectedThreadIds.add(threadId);
       else selectedThreadIds.delete(threadId);
       updateSelectedThreadsUI();
@@ -3461,6 +3526,7 @@
     window.handleThreadSelectChange = handleThreadSelectChange;
 
     function toggleSelectAllThreads(isChecked) {
+      if (!currentUser) return;
       const chks = document.querySelectorAll('.thread-select-chk');
       selectedThreadIds.clear();
       chks.forEach(c => {
@@ -3490,6 +3556,11 @@
     }
 
     function confirmDeleteSelectedThreads() {
+      if (!currentUser) {
+        openAuthModal('signup');
+        showCustomModalAlert('Sign In Required', 'Please sign in or create an account to manage recruiter conversations.');
+        return;
+      }
       const ids = Array.from(selectedThreadIds);
       if (ids.length === 0) return;
       showCustomModalConfirm('DELETE SELECTED RECRUITERS', `Are you sure you want to remove ${ids.length} selected recruiter conversation(s)?`, () => {
@@ -3618,6 +3689,11 @@
 
     // CANDIDATE INTERVIEW CALENDAR & TIME AVAILABILITY HANDLERS
     window.openCandidateScheduleModal = function() {
+      if (!currentUser) {
+        openAuthModal('signup');
+        showCustomModalAlert('Sign In Required', 'Please sign in or create an account to confirm interview availability.');
+        return;
+      }
       const modal = document.getElementById('schedule-picker-modal-candidate');
       if (modal) {
         modal.style.display = 'flex';
@@ -3636,6 +3712,11 @@
     };
 
     window.confirmCandidateScheduleAvailability = function() {
+      if (!currentUser) {
+        openAuthModal('signup');
+        showCustomModalAlert('Sign In Required', 'Please sign in or create an account to confirm interview availability.');
+        return;
+      }
       const dateVal = document.getElementById('cand-sched-date')?.value;
       const timeVal = document.getElementById('cand-sched-time')?.value || '10:30';
 
@@ -3738,6 +3819,12 @@
     };
 
     window.sendRecruiterReply = async function() {
+      if (!currentUser) {
+        openAuthModal('signup');
+        showCustomModalAlert('Sign In Required', 'Please sign in or create an account to message recruiters and respond to interview invites.');
+        return;
+      }
+
       const input = document.getElementById('recruiterReplyInput') || document.getElementById('cand-reply-input');
       const text = input ? input.value.trim() : '';
       if (!text) {
@@ -3761,7 +3848,7 @@
       }
       if (input) input.value = '';
 
-      const candidateName = (document.getElementById('prof-cand-name') && document.getElementById('prof-cand-name').value) || (document.getElementById('candidateNameInput') && document.getElementById('candidateNameInput').value) || 'Marcus Vance';
+      const candidateName = (document.getElementById('prof-cand-name') && document.getElementById('prof-cand-name').value) || (document.getElementById('candidateNameInput') && document.getElementById('candidateNameInput').value) || (currentUser ? currentUser.name : 'Candidate');
 
       const msgPayload = {
         id: `MSG-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -3941,6 +4028,37 @@
 
     function loadSavedCandidateProfile() {
       try {
+        const saved = localStorage.getItem('uthe_candidate_profile');
+        if (saved) {
+          const p = JSON.parse(saved);
+          if (p.name) {
+            const el = document.getElementById('prof-cand-name');
+            if (el) el.value = p.name;
+            const appName = document.getElementById('candidateNameInput') || document.getElementById('cand-name');
+            if (appName) appName.value = p.name;
+          }
+          if (p.email) {
+            const el = document.getElementById('prof-cand-email');
+            if (el) el.value = p.email;
+            const appEmail = document.getElementById('candidateEmailInput') || document.getElementById('cand-email');
+            if (appEmail) appEmail.value = p.email;
+          }
+          if (p.phone) {
+            const el = document.getElementById('prof-cand-phone');
+            if (el) el.value = p.phone;
+            const appPhone = document.getElementById('candidatePhoneInput') || document.getElementById('cand-phone');
+            if (appPhone) appPhone.value = p.phone;
+          }
+          if (p.type) {
+            const el = document.getElementById('prof-cand-type');
+            if (el) el.value = p.type;
+          }
+          if (p.bio) {
+            const el = document.getElementById('prof-cand-bio');
+            if (el) el.value = p.bio;
+          }
+        }
+
         const savedUser = localStorage.getItem('uthe_candidate_user');
         if (savedUser) {
           currentUser = JSON.parse(savedUser);
