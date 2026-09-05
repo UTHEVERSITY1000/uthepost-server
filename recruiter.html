@@ -3237,14 +3237,11 @@ color: var(--uthe-gold);
   background: rgba(15, 23, 42, 0.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 20000 !important;
   z-index: 200000000 !important;
   align-items: center;
   justify-content: center;
   padding: 1rem;
 }
-
-
 
 .custom-alert-card {
   background: #FFFFFF;
@@ -3257,22 +3254,6 @@ color: var(--uthe-gold);
   flex-direction: column;
   position: relative;
   z-index: 200000001 !important;
-
-background: #FFFFFF;
-
-border: 2px solid var(--uthe-gold);
-
-border-radius: 12px;
-
-width: 420px;
-
-max-width: 95%;
-
-padding: 1.5rem;
-
-display: flex;
-
-flex-direction: column;
 
 gap: 0.85rem;
 
@@ -8116,7 +8097,6 @@ SAVE COMPANY LOGO
 
 <label>Organization / Recruiter Name</label>
 
-<input type="text" id="auth-name" placeholder="Quantum Recruiting Lead">
 <input type="text" id="auth-name" placeholder="Quantum Recruiting Lead" onkeydown="if(event.key==='Enter') handleAuthSubmit()">
 
 </div>
@@ -8127,7 +8107,6 @@ SAVE COMPANY LOGO
 
 <label>Work Email</label>
 
-<input type="email" id="auth-email" placeholder="hiring@quantumretail.com">
 <input type="email" id="auth-email" placeholder="hiring@quantumretail.com" onkeydown="if(event.key==='Enter') handleAuthSubmit()">
 
 </div>
@@ -8140,7 +8119,6 @@ SAVE COMPANY LOGO
 
 <div class="password-wrap">
 
-<input type="password" id="auth-password" placeholder="••••••••••••" oninput="checkPassLength(this.value)">
 <input type="password" id="auth-password" placeholder="••••••••••••" oninput="checkPassLength(this.value)" onkeydown="if(event.key==='Enter') handleAuthSubmit()">
 
 <span class="password-toggle-icon" onclick="togglePassVisibility('auth-password')" style="cursor: pointer;">👁️</span>
@@ -8161,7 +8139,6 @@ SAVE COMPANY LOGO
 
 <label for="auth-remember-device" style="font-size: 0.72rem; font-weight: 700; color: var(--uthe-charcoal); cursor: pointer; margin: 0;">
 
-Remember My Device (Stay Signed In on jobs.utheversity.com)
 Remember My Device (Stay Signed In on post.utheversity.com)
 
 </label>
@@ -11600,9 +11577,6 @@ window.filterHowToGuideCards = function(query) {
   });
 };
 
-// Auth Handlers
-
-window.openAuthModal = function(initialMode = 'signup') {
 window.openAuthModal = function(initialMode = 'login') {
   const modal = document.getElementById('auth-modal');
   if (!modal) return;
@@ -11621,11 +11595,7 @@ window.openAuthModal = function(initialMode = 'login') {
   }
   
   window.switchAuthTab(initialMode || 'login');
-  if (typeof window.switchAuthTab === 'function') {
-    window.switchAuthTab(initialMode || (currentUser ? 'login' : 'signup'));
-  }
 };
-function openAuthModal(initialMode = 'signup') {
 function openAuthModal(initialMode = 'login') {
   window.openAuthModal(initialMode);
 }
@@ -11702,6 +11672,12 @@ document.addEventListener('click', function(e) {
     }
 
     const target = e.target.closest('button, a, input, select, textarea, .ai-gap-chip, .badge-tag, .btn-lock-recruiter-login, .btn-lock-recruiter-signup, .recruiter-tab-btn, .btn-primary, .btn-gold, .btn-table-action, #recruiter-main-workspace');
+    // Do not intercept modal contents or system header controls
+    if (e.target.closest('#auth-modal, #custom-modal-alert, #custom-modal-confirm, #how-to-guide-modal, #logo-modal, #btn-utheversity-home, #btn-help-guide, #btn-recruiter-notif, #btn-auth-status, #btn-drawer-auth, .btn-lock-recruiter-login, .btn-lock-recruiter-signup, .drawer-close, .btn-close-modal, .message-drawer-close')) {
+      return;
+    }
+
+    const target = e.target.closest('button, a, .ai-gap-chip, .badge-tag, .recruiter-tab-btn, .btn-primary, .btn-gold, .btn-table-action');
     if (target) {
       if (target.id === 'btn-auth-status' || target.id === 'btn-drawer-auth' || target.classList.contains('btn-lock-recruiter-login') || target.classList.contains('btn-lock-recruiter-signup')) {
         return;
@@ -11710,6 +11686,7 @@ document.addEventListener('click', function(e) {
         return;
       }
       if (!target.closest('#auth-modal') && !target.closest('#custom-modal-alert')) {
+      if (!target.getAttribute('onclick')) {
         e.preventDefault();
         e.stopPropagation();
         openAuthModal('signup');
@@ -11717,6 +11694,7 @@ document.addEventListener('click', function(e) {
     }
   }
 }, true);
+});
 
 window.switchAuthTab = function(mode) {
   authMode = mode;
