@@ -297,6 +297,9 @@ async function runTests() {
     assert(false, `Group 8 failed: ${err.message}`);
   }
 
+  // ----------------------------------------------------
+  // TEST GROUP 9: Dynamic Membership Calculation Sync with Live CMS
+  // ----------------------------------------------------
   console.log('\n[TEST GROUP 9] Dynamic Membership Calculation Sync with Live CMS');
   try {
     assert(recContent.includes('liveCmsPricing.socialBundleAddon') && recContent.includes('liveCmsPricing.individualSocialAddon'), 'recalculateMembershipTotal in recruiter.html dynamically uses liveCmsPricing');

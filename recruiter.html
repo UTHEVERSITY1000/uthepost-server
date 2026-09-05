@@ -6723,6 +6723,7 @@ RESET
 <div class="pricing-card selected-plan" id="plan-card-pal" onclick="selectBasePlan('pal', 0)">
   <div class="pricing-tier-name">u-thePAL</div>
   <div class="pricing-amount" id="price-pal" data-cms-key="price-pal">$0<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+  <div style="font-size: 0.72rem; color: #92400E; font-weight: 800; background: var(--uthe-gold-light); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--uthe-gold); width: fit-content;">$0.00/yr • 100% Free Forever</div>
   <p style="font-size: 0.78rem; color: var(--text-muted);">Launch hiring with zero upfront cost and direct candidate access.</p>
   <ul style="font-size: 0.74rem; color: var(--text-main); line-height: 1.6; list-style: none; display: flex; flex-direction: column; gap: 4px;">
     <li><strong style="color: var(--uthe-gold);">✓</strong> 1 Active Live Job Listing</li>
@@ -6738,8 +6739,11 @@ RESET
 </div>
 
 <!-- STARTER PLAN -->
+<div class="pricing-card" id="plan-card-starter" onclick="selectBasePlan('starter', 99)">
 <div class="pricing-card" id="plan-card-starter" onclick="selectBasePlan('starter', 9.99)">
   <div class="pricing-tier-name">STARTER</div>
+  <div class="pricing-amount" id="price-starter" data-cms-key="price-starter">$99<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+  <div style="font-size: 0.72rem; color: #92400E; font-weight: 800; background: var(--uthe-gold-light); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--uthe-gold); width: fit-content;">$79/mo billed annually ($948/yr • Save 20%)</div>
   <div class="pricing-amount" id="price-starter" data-cms-key="price-starter">$9.99<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
   <p style="font-size: 0.78rem; color: var(--text-muted);">Boutique hiring and early growth with dedicated candidate tracking.</p>
   <ul style="font-size: 0.74rem; color: var(--text-main); line-height: 1.6; list-style: none; display: flex; flex-direction: column; gap: 4px;">
@@ -6751,17 +6755,21 @@ RESET
     <li><strong style="color: var(--uthe-gold);">✓</strong> Candidate Profiles & PDF Resume Viewer</li>
     <li><strong style="color: var(--uthe-gold);">✓</strong> Verified Employer Badge Eligibility</li>
   </ul>
+  <button class="btn-surface-action" style="margin-top: auto;" onclick="event.stopPropagation(); selectBasePlan('starter', 99);" data-tooltip="Choose Starter $99/mo.">
   <button class="btn-surface-action" style="margin-top: auto;" onclick="event.stopPropagation(); selectBasePlan('starter', 9.99);" data-tooltip="Choose Starter $9.99/mo.">
     CHOOSE STARTER
   </button>
 </div>
 
 <!-- GROWTH -->
+<div class="pricing-card" id="plan-card-growth" onclick="selectBasePlan('growth', 299)">
 <div class="pricing-card" id="plan-card-growth" onclick="selectBasePlan('growth', 19.99)">
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <div class="pricing-tier-name">GROWTH</div>
     <span style="background:var(--uthe-gold); color:#000; font-size:0.6rem; font-weight:800; padding:0.15rem 0.4rem; border-radius:3px;">POPULAR</span>
   </div>
+  <div class="pricing-amount" id="price-growth" data-cms-key="price-growth">$299<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+  <div style="font-size: 0.72rem; color: #92400E; font-weight: 800; background: var(--uthe-gold-light); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--uthe-gold); width: fit-content;">$239/mo billed annually ($2,868/yr • Save 20%)</div>
   <div class="pricing-amount" id="price-growth" data-cms-key="price-growth">$19.99<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
   <p style="font-size: 0.78rem; color: var(--text-muted);">High-velocity hiring across networks with automated CRM syndication.</p>
   <ul style="font-size: 0.74rem; color: var(--text-main); line-height: 1.6; list-style: none; display: flex; flex-direction: column; gap: 4px;">
@@ -6773,14 +6781,18 @@ RESET
     <li><strong style="color: var(--uthe-gold);">✓</strong> AI Content Helper & SEO Search Optimizer</li>
     <li><strong style="color: var(--uthe-gold);">✓</strong> Top-of-Search Candidate Priority Ranking</li>
   </ul>
+  <button class="btn-gold-action" style="margin-top: auto;" onclick="event.stopPropagation(); selectBasePlan('growth', 299);" data-tooltip="Choose Growth $299/mo.">
   <button class="btn-gold-action" style="margin-top: auto;" onclick="event.stopPropagation(); selectBasePlan('growth', 19.99);" data-tooltip="Choose Growth $19.99/mo.">
     CHOOSE GROWTH
   </button>
 </div>
 
 <!-- PROFESSIONAL -->
+<div class="pricing-card" id="plan-card-pro" onclick="selectBasePlan('pro', 699)">
 <div class="pricing-card" id="plan-card-pro" onclick="selectBasePlan('pro', 34.99)">
   <div class="pricing-tier-name">PROFESSIONAL</div>
+  <div class="pricing-amount" id="price-pro" data-cms-key="price-pro">$699<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
+  <div style="font-size: 0.72rem; color: #92400E; font-weight: 800; background: var(--uthe-gold-light); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--uthe-gold); width: fit-content;">$559/mo billed annually ($6,708/yr • Save 20%)</div>
   <div class="pricing-amount" id="price-pro" data-cms-key="price-pro">$34.99<span style="font-size: 0.9rem; color: var(--text-muted);">/mo</span></div>
   <p style="font-size: 0.78rem; color: var(--text-muted);">Unlimited enterprise scale with 5-network syndication & priority candidate matching.</p>
   <ul style="font-size: 0.74rem; color: var(--text-main); line-height: 1.6; list-style: none; display: flex; flex-direction: column; gap: 4px;">
@@ -6792,6 +6804,7 @@ RESET
     <li><strong style="color: var(--uthe-gold);">✓</strong> Advanced Candidate Resume Directory & Search</li>
     <li><strong style="color: var(--uthe-gold);">✓</strong> Dedicated Account Representative</li>
   </ul>
+  <button class="btn-surface-action" style="margin-top: auto;" onclick="event.stopPropagation(); selectBasePlan('pro', 699);" data-tooltip="Choose Professional $699/mo.">
   <button class="btn-surface-action" style="margin-top: auto;" onclick="event.stopPropagation(); selectBasePlan('pro', 34.99);" data-tooltip="Choose Professional $34.99/mo.">
     CHOOSE PROFESSIONAL
   </button>
@@ -6822,6 +6835,7 @@ RESET
 <div class="dynamic-total-amount" id="calc-total-amount">$0.00<span style="font-size: 1rem; color: #94A3B8;">/mo</span></div>
 <div style="font-size: 0.78rem; color: #F59E0B; font-weight: 700; margin-top: 0.15rem;" id="calc-yearly-amount">$0.00/yr • 100% Free Forever</div>
 
+<button id="btn-activate-membership" style="background: #0075FF !important; color: #FFFFFF !important; border: 1.5px solid #0075FF !important; font-weight: 800; border-radius: 6px; padding: 0 1.25rem; cursor: pointer; height: 38px; font-size: 0.75rem; box-shadow: 0 2px 8px rgba(0, 117, 255, 0.4); transition: all 0.2s ease;" onclick="checkoutMembershipPlan()" data-tooltip="Activate chosen plan and add-ons.">
 <button id="btn-activate-membership" style="background: #0075FF !important; color: #FFFFFF !important; border: 1.5px solid #0075FF !important; font-weight: 800; border-radius: 6px; padding: 0 1.25rem; cursor: pointer; height: 38px; font-size: 0.75rem; box-shadow: 0 2px 8px rgba(0, 117, 255, 0.4); transition: all 0.2s ease; margin-top: 0.35rem;" onclick="checkoutMembershipPlan()" data-tooltip="Activate chosen plan and add-ons.">
 
 ACTIVATE MEMBERSHIP
@@ -7010,6 +7024,8 @@ ADD-ONS
 <div style="font-size: 0.75rem; color: var(--text-muted);">Pin your job posting at the top of candidate search results.</div>
 </div>
 <div style="display: flex; align-items: center; gap: 1rem;">
+<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-spotlight" data-cms-key="price-addon-spotlight">$49/mo</span>
+<label class="toggle-switch" data-tooltip="Toggle Top-of-Page Spotlight ($49/mo)">
 <span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-spotlight" data-cms-key="price-addon-spotlight">$50/mo</span>
 <label class="toggle-switch" data-tooltip="Toggle Top-of-Page Spotlight ($50/mo)">
 <input type="checkbox" id="toggle-addon-spotlight" onchange="recalculateMembershipTotal()">
@@ -7024,6 +7040,8 @@ ADD-ONS
 <div style="font-size: 0.75rem; color: var(--text-muted);">Highlight urgent open positions needing fast hire within 10 days with bright badge accents.</div>
 </div>
 <div style="display: flex; align-items: center; gap: 1rem;">
+<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-urgent" data-cms-key="price-addon-urgent">$29/mo</span>
+<label class="toggle-switch" data-tooltip="Toggle Urgent Hiring Badges (Within 10 Days - $29/mo)">
 <span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-urgent" data-cms-key="price-addon-urgent">$0/mo</span>
 <label class="toggle-switch" data-tooltip="Toggle Urgent Hiring Badges (Within 10 Days - $0/mo Included)">
 <input type="checkbox" id="toggle-addon-urgent" onchange="recalculateMembershipTotal()">
@@ -7038,6 +7056,8 @@ ADD-ONS
 <div style="font-size: 0.75rem; color: var(--text-muted);">Send direct interview invitations to candidate inboxes.</div>
 </div>
 <div style="display: flex; align-items: center; gap: 1rem;">
+<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-inmail" data-cms-key="price-addon-inmail">$19/mo</span>
+<label class="toggle-switch" data-tooltip="Toggle Direct Hiring InMail Messages ($19/mo)">
 <span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-inmail" data-cms-key="price-addon-inmail">$0/mo</span>
 <label class="toggle-switch" data-tooltip="Toggle Direct Hiring InMail Messages ($0/mo Included)">
 <input type="checkbox" id="toggle-addon-inmail" onchange="recalculateMembershipTotal()">
@@ -7052,6 +7072,8 @@ ADD-ONS
 <div style="font-size: 0.75rem; color: var(--text-muted);">Display official gold UTHEVERSITY emblem on company profile and job cards.</div>
 </div>
 <div style="display: flex; align-items: center; gap: 1rem;">
+<span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-verified" data-cms-key="price-addon-verified">$3/mo</span>
+<label class="toggle-switch" data-tooltip="Toggle Verified Employer Shield ($3/mo)">
 <span style="font-weight: 900; font-size: 0.9rem; color: var(--uthe-charcoal);" id="price-addon-verified" data-cms-key="price-addon-verified">$0/mo</span>
 <label class="toggle-switch" data-tooltip="Toggle Verified Employer Shield ($0/mo Included)">
 <input type="checkbox" id="toggle-addon-verified" onchange="recalculateMembershipTotal()">
@@ -7416,12 +7438,19 @@ VERIFIED EMPLOYER
           <div style="background: var(--card-subtle); border-radius: 6px; padding: 0.45rem 0.6rem;">
             <strong>Membership Tiers:</strong><br>
             • <em>u-thePAL ($0)</em>: Free single active posting via email.<br>
+            • <em>Starter ($99)</em>: 3 active jobs with board distribution.<br>
+            • <em>Growth ($299)</em>: 10 active jobs, multi-channel outreach.<br>
+            • <em>Pro ($699)</em>: Unlimited listings and priority network.
             • <em>Starter ($9.99/mo)</em>: 3 active jobs with board distribution.<br>
             • <em>Growth ($19.99/mo)</em>: 15 active jobs, multi-channel outreach.<br>
             • <em>Pro ($34.99/mo)</em>: Unlimited listings and priority network.
           </div>
           <div style="background: var(--card-subtle); border-radius: 6px; padding: 0.45rem 0.6rem;">
             <strong>High-Impact Add-Ons:</strong><br>
+            • <em>⭐ Top Spotlight ($49/mo)</em>: Pinned at #1 in search results.<br>
+            • <em>🔥 Urgent Badge ($29/mo)</em>: Rush candidate applications.<br>
+            • <em>💬 InMail Messages ($19/mo)</em>: Direct candidate outreach.<br>
+            • <em>🛡️ Verified Shield ($39/mo)</em>: Gold trust badge emblem.
             • <em>⭐ Top Spotlight ($50/mo)</em>: Pinned at #1 in search results.<br>
             • <em>🔥 Urgent Badge ($0/mo Included)</em>: Rush candidate applications.<br>
             • <em>💬 InMail Messages ($0/mo Included)</em>: Direct candidate outreach.<br>
@@ -9774,6 +9803,30 @@ window.toggleSpotlightPreviewBadge = function(show) {
 };
 
 async function publishJobLive() {
+  const currentPlan = (currentUser && currentUser.plan) || (typeof localStorage !== 'undefined' ? localStorage.getItem('uthe_subscribed_plan') : null) || 'pal';
+  const planLimits = {
+    pal: 1,
+    starter: 3,
+    growth: 15,
+    pro: Infinity
+  };
+  const maxAllowed = planLimits[currentPlan] !== undefined ? planLimits[currentPlan] : 1;
+
+  if (activeJobs && activeJobs.length >= maxAllowed) {
+    const planDisplayNames = {
+      pal: 'u-thePAL (1 active listing)',
+      starter: 'Starter (3 active listings)',
+      growth: 'Growth (15 active listings)',
+      pro: 'Professional (Unlimited listings)'
+    };
+    showCustomModalAlert(
+      'Job Listing Limit Reached',
+      `Your current ${planDisplayNames[currentPlan] || 'u-thePAL'} plan allows a maximum of ${maxAllowed} active job listing${maxAllowed > 1 ? 's' : ''}.\n\nPlease upgrade your membership plan to post additional positions live.`
+    );
+    setTimeout(() => { switchRecruiterTab('plans'); }, 1500);
+    return;
+  }
+
   const isUrgent = document.getElementById('urgentHiringCheckbox') ? document.getElementById('urgentHiringCheckbox').checked : true;
   const isSpotlight = (document.getElementById('chk-job-spotlight')?.checked || document.getElementById('toggle-addon-spotlight')?.checked) ?? true;
   const expLevel = document.getElementById('job-exp-level')?.value || document.getElementById('inp-seniority')?.value || 'Mid-Level (2-5 Years)';
@@ -11032,6 +11085,27 @@ showCustomModalAlert('Direct Message Sent', `Message dispatched to candidate inb
 // 3. PRICING PLANS & DYNAMIC PRICING CALCULATOR (BUILD FROM $0)
 
 let liveCmsPricing = {
+
+palMonthly: 0,
+
+starterMonthly: 99,
+
+growthMonthly: 299,
+
+proMonthly: 699,
+
+individualSocialAddon: 5.99,
+
+socialBundleAddon: 19.99,
+
+topSpotlight: 49,
+
+urgentBadge: 29,
+
+directMessages: 19,
+
+verifiedEmployer: 39
+
   palMonthly: 0,
   starterMonthly: 9.99,
   growthMonthly: 19.99,
@@ -11046,6 +11120,8 @@ let liveCmsPricing = {
   yearlyDiscountPct: 20
 };
 
+
+
 window.selectBasePlan = function(planKey, price) {
   selectedBasePlan = planKey;
   if (price !== undefined) {
@@ -11057,22 +11133,63 @@ window.selectBasePlan = function(planKey, price) {
     else if (planKey === 'pro') basePlanPrice = liveCmsPricing.proMonthly !== undefined ? liveCmsPricing.proMonthly : 34.99;
   }
 
+selectedBasePlan = planKey;
   document.querySelectorAll('.pricing-card').forEach(c => c.classList.remove('selected-plan'));
   const card = document.getElementById(`plan-card-${planKey}`);
   if (card) card.classList.add('selected-plan');
 
+if (price !== undefined) {
+
+basePlanPrice = price;
+
+} else {
+
+if (planKey === 'pal') basePlanPrice = liveCmsPricing.palMonthly || 0;
+
+else if (planKey === 'starter') basePlanPrice = liveCmsPricing.starterMonthly || 99;
+
+else if (planKey === 'growth') basePlanPrice = liveCmsPricing.growthMonthly || 299;
+
+else if (planKey === 'pro') basePlanPrice = liveCmsPricing.proMonthly || 699;
+
+}
+
+
+
+document.querySelectorAll('.pricing-card').forEach(c => c.classList.remove('selected-plan'));
+
+const card = document.getElementById(`plan-card-${planKey}`);
+
+if (card) card.classList.add('selected-plan');
+
+
+
+recalculateMembershipTotal();
+
   recalculateMembershipTotal();
 };
 
+
+
 window.toggleSocialBundle = function(isBundleChecked) {
+
+document.querySelectorAll('.social-channel-toggle').forEach(toggle => {
+
+toggle.checked = isBundleChecked;
+
+});
+
+recalculateMembershipTotal();
+
   document.querySelectorAll('.social-channel-toggle').forEach(toggle => {
     toggle.checked = isBundleChecked;
   });
   recalculateMembershipTotal();
 };
 
+
+
 window.recalculateMembershipTotal = function() {
-  // Sync base plan rate to live CMS if basePlan matches
   if (selectedBasePlan === 'pal') basePlanPrice = liveCmsPricing.palMonthly !== undefined ? liveCmsPricing.palMonthly : 0;
   else if (selectedBasePlan === 'starter') basePlanPrice = liveCmsPricing.starterMonthly !== undefined ? liveCmsPricing.starterMonthly : 9.99;
   else if (selectedBasePlan === 'growth') basePlanPrice = liveCmsPricing.growthMonthly !== undefined ? liveCmsPricing.growthMonthly : 19.99;
@@ -11163,30 +11280,52 @@ window.recalculateMembershipTotal = function() {
   }
 };
 
-
-
 window.checkoutMembershipPlan = function() {
-  const total = document.getElementById('calc-total-amount').textContent;
+  const totalEl = document.getElementById('calc-total-amount');
+  const total = totalEl ? totalEl.textContent : '$0.00';
   const numTotal = parseFloat(total.replace(/[^0-9.]/g, '')) || 0;
   const isPaid = selectedBasePlan !== 'pal' || numTotal > 0;
 
-  if (isPaid) {
+  if (!isPaid) {
     try {
-      localStorage.setItem('uthe_subscribed_plan', selectedBasePlan);
-      localStorage.setItem('uthe_is_paid_plan', 'true');
+      localStorage.setItem('uthe_subscribed_plan', 'pal');
+      localStorage.setItem('uthe_is_paid_plan', 'false');
     } catch (e) {}
     if (currentUser) {
-      currentUser.isPaid = true;
-      currentUser.plan = selectedBasePlan;
+      currentUser.isPaid = false;
+      currentUser.plan = 'pal';
     }
+    showCustomModalAlert('u-thePAL Activated (100% Free)', 'Your free u-thePAL tier is active! You have 1 active live job post, 1 direct InMail thread, instant PDF auto-routing, and pay-as-you-go flexibility.');
+    if (typeof renderResumeBoard === 'function') renderResumeBoard();
+    if (typeof renderActiveJobsTable === 'function') renderActiveJobsTable();
+    return;
   }
 
-  showCustomModalAlert('Membership Activated', `Your plan selection of ${total} is active with real-time add-on features and full candidate direct contact access enabled.`);
+  // Determine Checkout URL configured in Wix / Stripe settings via Admin
+  const wixCfg = liveCmsPricing.wixCheckout || {};
+  let checkoutUrl = wixCfg.plansUrl || 'https://www.utheversity.com/plans-pricing';
+  if (selectedBasePlan === 'starter' && wixCfg.starterUrl) checkoutUrl = wixCfg.starterUrl;
+  else if (selectedBasePlan === 'growth' && wixCfg.growthUrl) checkoutUrl = wixCfg.growthUrl;
+  else if (selectedBasePlan === 'pro' && wixCfg.proUrl) checkoutUrl = wixCfg.proUrl;
 
-  if (typeof renderResumeBoard === 'function') {
-    renderResumeBoard();
+  try {
+    localStorage.setItem('uthe_subscribed_plan', selectedBasePlan);
+    localStorage.setItem('uthe_is_paid_plan', 'true');
+  } catch (e) {}
+  if (currentUser) {
+    currentUser.isPaid = true;
+    currentUser.plan = selectedBasePlan;
   }
+
+  try {
+    window.open(checkoutUrl, '_blank');
+  } catch (e) {}
+  showCustomModalAlert('Checkout Initiated', `Opening secure payment gateway at:\n${checkoutUrl}\n\nComplete your checkout via Stripe, PayPal, Venmo, or Credit Card on UTHEVERSITY to finalize your membership.`);
+
+  if (typeof renderResumeBoard === 'function') renderResumeBoard();
+  if (typeof renderActiveJobsTable === 'function') renderActiveJobsTable();
 };
+
 
 
 
@@ -12438,10 +12577,14 @@ if (!config) return;
 
 
 
-if (config.pricing || config.addOns) {
+if (config.pricing || config.addOns || config.wixCheckout) {
   const pr = config.pricing || {};
   const ad = config.addOns || {};
+  const wx = config.wixCheckout || {};
   liveCmsPricing = { ...liveCmsPricing, ...pr, ...ad };
+  if (config.wixCheckout) {
+    liveCmsPricing.wixCheckout = { ...liveCmsPricing.wixCheckout, ...wx };
+  }
 
   // Update Plan Card Price Texts
   const palEl = document.getElementById('price-pal');

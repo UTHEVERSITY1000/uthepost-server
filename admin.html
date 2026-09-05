@@ -1475,21 +1475,25 @@
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
           <div class="form-group">
             <label>u-thePAL Monthly Price ($)</label>
+            <input type="number" id="cms-price-pal" value="0" data-tooltip="Free tier monthly price">
             <input type="number" step="0.01" id="cms-price-pal" value="0" data-tooltip="Free tier monthly price">
             <span style="font-size:0.58rem; color:var(--text-muted);">1 Active Post | Email Only</span>
           </div>
           <div class="form-group">
             <label>Starter Monthly Price ($)</label>
+            <input type="number" id="cms-price-starter" value="99" data-tooltip="Starter tier monthly price">
             <input type="number" step="0.01" id="cms-price-starter" value="9.99" data-tooltip="Starter tier monthly price">
             <span style="font-size:0.58rem; color:var(--text-muted);">3 Active Posts | Messaging | ATS</span>
           </div>
           <div class="form-group">
             <label>Growth Monthly Price ($)</label>
+            <input type="number" id="cms-price-growth" value="299" data-tooltip="Growth tier monthly price">
             <input type="number" step="0.01" id="cms-price-growth" value="19.99" data-tooltip="Growth tier monthly price">
             <span style="font-size:0.58rem; color:var(--text-muted);">15 Active Posts | 3 Social Sharing</span>
           </div>
           <div class="form-group">
             <label>Professional Monthly Price ($)</label>
+            <input type="number" id="cms-price-pro" value="699" data-tooltip="Professional tier monthly price">
             <input type="number" step="0.01" id="cms-price-pro" value="34.99" data-tooltip="Professional tier monthly price">
             <span style="font-size:0.58rem; color:var(--text-muted);">Unlimited Posts | Full Social Sharing</span>
           </div>
@@ -1547,6 +1551,33 @@
               </div>
             </div>
 
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-color); padding-top: 0.65rem; margin-top: 0.65rem;">
+          <div style="font-size: 0.68rem; font-weight: 800; color: var(--uthe-charcoal); text-transform: uppercase; margin-bottom: 0.35rem;">3. WIX / STRIPE CHECKOUT GATEWAY & PAYMENT URLS</div>
+          <div style="font-size: 0.62rem; color: var(--text-muted); margin-bottom: 0.5rem;">Connect your official Wix Pricing Plans page or direct Wix/Stripe payment links for seamless multi-option checkout (PayPal, Venmo, Cards, Stripe).</div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.65rem;">
+            <div class="form-group">
+              <label>Main Wix Plans Page URL</label>
+              <input type="text" id="cms-wix-plans-url" value="https://www.utheversity.com/plans-pricing" data-tooltip="General Wix Pricing Plans page URL">
+              <span style="font-size:0.58rem; color:var(--text-muted);">Default checkout page for plan activations.</span>
+            </div>
+            <div class="form-group">
+              <label>Starter Plan Wix Checkout URL (Optional)</label>
+              <input type="text" id="cms-wix-starter-url" placeholder="https://www.utheversity.com/plans-pricing" data-tooltip="Direct Wix checkout link for Starter plan">
+              <span style="font-size:0.58rem; color:var(--text-muted);">Direct link for Starter $9.99/mo plan.</span>
+            </div>
+            <div class="form-group">
+              <label>Growth Plan Wix Checkout URL (Optional)</label>
+              <input type="text" id="cms-wix-growth-url" placeholder="https://www.utheversity.com/plans-pricing" data-tooltip="Direct Wix checkout link for Growth plan">
+              <span style="font-size:0.58rem; color:var(--text-muted);">Direct link for Growth $19.99/mo plan.</span>
+            </div>
+            <div class="form-group">
+              <label>Professional Plan Wix Checkout URL (Optional)</label>
+              <input type="text" id="cms-wix-pro-url" placeholder="https://www.utheversity.com/plans-pricing" data-tooltip="Direct Wix checkout link for Professional plan">
+              <span style="font-size:0.58rem; color:var(--text-muted);">Direct link for Professional $34.99/mo plan.</span>
+            </div>
           </div>
         </div>
       </div>
@@ -2536,6 +2567,14 @@
         const verVal = pr.verifiedEmployer !== undefined ? pr.verifiedEmployer : ad.verifiedEmployer;
         if (verVal !== undefined && document.getElementById('cms-price-verified-shield')) document.getElementById('cms-price-verified-shield').value = verVal;
       }
+
+      if (config.wixCheckout) {
+        const w = config.wixCheckout || {};
+        if (w.plansUrl && document.getElementById('cms-wix-plans-url')) document.getElementById('cms-wix-plans-url').value = w.plansUrl;
+        if (w.starterUrl !== undefined && document.getElementById('cms-wix-starter-url')) document.getElementById('cms-wix-starter-url').value = w.starterUrl;
+        if (w.growthUrl !== undefined && document.getElementById('cms-wix-growth-url')) document.getElementById('cms-wix-growth-url').value = w.growthUrl;
+        if (w.proUrl !== undefined && document.getElementById('cms-wix-pro-url')) document.getElementById('cms-wix-pro-url').value = w.proUrl;
+      }
     }
 
     // 3. Save & Broadcast Functionality
@@ -2623,6 +2662,12 @@
           verifiedEmployer: getNum('cms-price-verified-shield', 0),
           individualSocial: getNum('cms-price-social-single', 5.99),
           socialBundle5: getNum('cms-price-social-bundle', 19.99)
+        },
+        wixCheckout: {
+          plansUrl: getVal('cms-wix-plans-url', 'https://www.utheversity.com/plans-pricing'),
+          starterUrl: getVal('cms-wix-starter-url', ''),
+          growthUrl: getVal('cms-wix-growth-url', ''),
+          proUrl: getVal('cms-wix-pro-url', '')
         }
       };
 

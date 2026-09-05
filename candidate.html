@@ -3977,6 +3977,7 @@
       if (modalEl) modalEl.style.display = 'none';
     }
 
+    // Auth Tabs & Handlers
     let activeResetToken = null;
 
     window.openSetNewPasswordModal = function(token, email) {
@@ -4163,6 +4164,10 @@
         }
 
         if (res.ok) {
+          showCustomModalAlert(
+            'PASSWORD RESET LINK DISPATCHED',
+            data.message || `A secure 30-minute password reset link has been dispatched to ${email}. Please check your inbox.`
+          );
           closeModal('auth-modal');
           const isLive = Boolean(data.smtpSent);
           if (isLive) {

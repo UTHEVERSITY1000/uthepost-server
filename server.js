@@ -432,6 +432,9 @@ let cmsConfig = {
   },
   pricing: {
     palMonthly: 0,
+    starterMonthly: 99,
+    growthMonthly: 299,
+    proMonthly: 699,
     starterMonthly: 9.99,
     growthMonthly: 19.99,
     proMonthly: 34.99,
@@ -446,6 +449,12 @@ let cmsConfig = {
     verifiedEmployer: 0,
     individualSocial: 5.99,
     socialBundle5: 19.99
+  },
+  wixCheckout: {
+    plansUrl: "https://www.utheversity.com/plans-pricing",
+    starterUrl: "",
+    growthUrl: "",
+    proUrl: ""
   },
   channels: {
     linkedin: { name: "LinkedIn InMail & Posts", enabled: true },
