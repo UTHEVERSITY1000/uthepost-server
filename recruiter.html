@@ -5136,6 +5136,15 @@ main, .main-content, .workspace-container, #job-studio-container {
   text-transform: uppercase;
   box-shadow: 0 1px 2px rgba(254, 186, 39, 0.12) !important;
 }
+.btn-ai-helper-trigger::after,
+.btn-ai-helper-trigger::before,
+#btn-open-ai-helper::after,
+#btn-open-ai-helper::before {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
 .btn-ai-helper-trigger:hover {
   background: #FEBA27 !important;
   color: #0F172A !important;
@@ -5589,8 +5598,8 @@ main, .main-content, .workspace-container, #job-studio-container {
 <div class="form-group">
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-  <label data-tooltip="Main responsibilities and role summary." style="margin: 0; font-weight: 800; font-size: 0.62rem; text-transform: uppercase;">Job Description & Key Responsibilities</label>
-  <button type="button" class="btn-ai-helper-trigger" id="btn-open-ai-helper" onclick="openAiContentHelperModal()" data-tooltip="AI Content Helper: Optimize for SEO, grade against competitors & generate high-ranking copy.">
+  <label style="margin: 0; font-weight: 800; font-size: 0.62rem; text-transform: uppercase;">Job Description & Key Responsibilities</label>
+  <button type="button" class="btn-ai-helper-trigger" id="btn-open-ai-helper" onclick="openAiContentHelperModal()" data-tooltip="AI Content Helper: Optimize for SEO, grade against competitors & generate high-ranking job descriptions.">
     AI CONTENT HELPER
     <span class="ai-grade-badge" id="card1-ai-grade">94/100</span>
   </button>
@@ -7702,7 +7711,7 @@ SAVE COMPANY LOGO
 
       <div style="display: flex; gap: 0.4rem;">
         <button type="button" class="btn-gold-action" id="btn-ai-gen-copy" style="flex: 1; height: 30px; font-size: 0.68rem; font-weight: 800;" onclick="triggerAiJobEnhance('enhance')">
-          GENERATE HIGH-RANKING COPY
+          GENERATE HIGH-RANKING DESCRIPTION
         </button>
         <button type="button" class="btn-surface-sm" id="btn-ai-gen-bullets" style="flex: 1; height: 30px; font-size: 0.68rem; font-weight: 800;" onclick="triggerAiJobEnhance('bullet_points')">
           STRUCTURE BULLET POINTS & PERKS
