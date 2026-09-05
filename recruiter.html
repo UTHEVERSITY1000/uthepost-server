@@ -1660,6 +1660,115 @@ color: var(--uthe-charcoal);
 }
 
 /* TAB 2 CRM OUTREACH, PUBLISHING, DISTRIBUTION & CAMPAIGN TRACKER ACTION BUTTONS */
+body.crm-theme-dark {
+  background-color: #0F172A !important;
+}
+
+body.crm-theme-dark main {
+  background-color: #0F172A !important;
+}
+
+#view-crm {
+  background-color: #0F172A !important;
+  color: #F8FAFC;
+}
+
+#view-crm .panel-card,
+#view-crm .standalone-social-belt,
+#view-crm .section-card {
+  background: #1E293B !important;
+  border: 1.5px solid #334155 !important;
+  color: #F8FAFC !important;
+}
+
+#view-crm .panel-title,
+#view-crm .cms-sub-box-title span,
+#view-crm #publish-header-text,
+#view-crm .panel-header span {
+  color: #FEBA27 !important;
+}
+
+#view-crm label {
+  color: #CBD5E1 !important;
+}
+
+#view-crm input:not([type="checkbox"]):not([type="radio"]),
+#view-crm select,
+#view-crm textarea {
+  background: #0F172A !important;
+  color: #F8FAFC !important;
+  border: 1.5px solid #334155 !important;
+}
+
+#view-crm input:not([type="checkbox"]):not([type="radio"]):focus,
+#view-crm select:focus,
+#view-crm textarea:focus {
+  border-color: #FEBA27 !important;
+  box-shadow: 0 0 0 3px rgba(254, 186, 39, 0.25) !important;
+}
+
+#view-crm #crm-channel-display {
+  background: #0B1120 !important;
+  color: #94A3B8 !important;
+}
+
+#view-crm .dist-channel-box {
+  background: #0F172A !important;
+  border: 1.5px solid #334155 !important;
+  color: #F8FAFC !important;
+}
+
+#view-crm .dist-channel-box.selected {
+  border-color: #FEBA27 !important;
+  background: #1E293B !important;
+}
+
+#view-crm .dist-channel-box strong {
+  color: #F8FAFC !important;
+}
+
+#view-crm .dist-channel-box small {
+  color: #94A3B8 !important;
+}
+
+#view-crm .campaign-tracker-table {
+  color: #F8FAFC !important;
+  border-color: #334155 !important;
+}
+
+#view-crm .campaign-tracker-table th {
+  background: #0F172A !important;
+  color: #FEBA27 !important;
+  border-bottom: 2px solid #334155 !important;
+}
+
+#view-crm .campaign-tracker-table td {
+  background: #1E293B !important;
+  color: #F8FAFC !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+#view-crm .campaign-tracker-table code {
+  background: #0F172A !important;
+  color: #FEBA27 !important;
+  border: 1px solid #334155 !important;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+#view-crm .crm-social-notice-card {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border-color: #FEBA27 !important;
+}
+
+#view-crm .crm-social-notice-card div {
+  color: #FDE68A !important;
+}
+
+#view-crm .crm-social-notice-card strong {
+  color: #FEBA27 !important;
+}
+
 #view-crm .crm-outreach-actions-row button,
 #view-crm .publishing-action-row button,
 #view-crm #btn-publish-post,
@@ -8442,6 +8551,12 @@ window.switchRecruiterTab = function(tabName) {
   if (target) {
     target.classList.add('active');
     target.style.display = 'block';
+  }
+
+  if (tabName === 'crm') {
+    document.body.classList.add('crm-theme-dark');
+  } else {
+    document.body.classList.remove('crm-theme-dark');
   }
 
   const tabs = { 'studio': 0, 'crm': 1, 'ats': 2, 'plans': 3, 'profile': 4, 'resumes': 5, 'help': 6, 'guide': 6 };
