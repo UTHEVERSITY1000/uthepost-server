@@ -11671,7 +11671,6 @@ document.addEventListener('click', function(e) {
       return;
     }
 
-    const target = e.target.closest('button, a, input, select, textarea, .ai-gap-chip, .badge-tag, .btn-lock-recruiter-login, .btn-lock-recruiter-signup, .recruiter-tab-btn, .btn-primary, .btn-gold, .btn-table-action, #recruiter-main-workspace');
     // Do not intercept modal contents or system header controls
     if (e.target.closest('#auth-modal, #custom-modal-alert, #custom-modal-confirm, #how-to-guide-modal, #logo-modal, #btn-utheversity-home, #btn-help-guide, #btn-recruiter-notif, #btn-auth-status, #btn-drawer-auth, .btn-lock-recruiter-login, .btn-lock-recruiter-signup, .drawer-close, .btn-close-modal, .message-drawer-close')) {
       return;
@@ -11679,21 +11678,12 @@ document.addEventListener('click', function(e) {
 
     const target = e.target.closest('button, a, .ai-gap-chip, .badge-tag, .recruiter-tab-btn, .btn-primary, .btn-gold, .btn-table-action');
     if (target) {
-      if (target.id === 'btn-auth-status' || target.id === 'btn-drawer-auth' || target.classList.contains('btn-lock-recruiter-login') || target.classList.contains('btn-lock-recruiter-signup')) {
-        return;
-      }
-      if (target.classList.contains('drawer-close') || target.classList.contains('btn-close-modal')) {
-        return;
-      }
-      if (!target.closest('#auth-modal') && !target.closest('#custom-modal-alert')) {
       if (!target.getAttribute('onclick')) {
         e.preventDefault();
-        e.stopPropagation();
         openAuthModal('signup');
       }
     }
   }
-}, true);
 });
 
 window.switchAuthTab = function(mode) {

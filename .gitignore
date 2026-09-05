@@ -10,3 +10,10 @@ yarn-error.log*
 smtp_config.json
 .DS_Store
 Thumbs.db
+
+# Dynamic runtime and test run files
+data/listings/
+data/logs/
+data/messages/
+data/resumes/
+test_resume.pdf
