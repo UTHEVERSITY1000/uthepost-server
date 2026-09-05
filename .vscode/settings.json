@@ -1,0 +1,14 @@
+﻿{
+  "git.autorefresh": true,
+  "git.autofetch": false,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/backup/**": true,
+    "**/data/listings/**": true,
+    "**/data/messages/**": true,
+    "**/data/resumes/**": true,
+    "**/data/logs/**": true
+  }
+}
