@@ -1619,13 +1619,85 @@
 
     /* Mobile Screen Specific Adjustments (<= 768px) */
     @media (max-width: 768px) {
+      /* TOP DECK MOBILE: HIDE CANDIDATE BOARD / LIVE BADGES TO RELOCATE & PIN LOGIN BUTTON */
+      .brand-badge {
+        display: none !important;
+      }
+
       header {
         padding: 0 0.5rem !important;
-        gap: 0.5rem !important;
+        gap: 0.35rem !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        height: 56px !important;
       }
-      
+
+      .brand-group {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.35rem !important;
+        flex-shrink: 0 !important;
+      }
+
       .brand-title {
-        font-size: 0.8rem !important;
+        font-size: 0.92rem !important;
+        font-weight: 900 !important;
+        letter-spacing: 1px !important;
+        white-space: nowrap !important;
+      }
+
+      .header-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.3rem !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* PINNED & FULLY VISIBLE LOGIN BUTTON ON MOBILE TOP DECK */
+      .btn-auth-header,
+      #btn-auth-status {
+        display: inline-flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: 34px !important;
+        min-height: 34px !important;
+        padding: 0 0.6rem !important;
+        font-size: 0.68rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.03em !important;
+        white-space: nowrap !important;
+        border-radius: 6px !important;
+        flex-shrink: 0 !important;
+      }
+
+      .btn-home-header {
+        height: 34px !important;
+        min-height: 34px !important;
+        padding: 0 0.45rem !important;
+        font-size: 0.65rem !important;
+      }
+      .btn-home-header span {
+        display: none !important;
+      }
+
+      .btn-profile-header {
+        height: 34px !important;
+        min-height: 34px !important;
+        padding: 0 0.45rem !important;
+        font-size: 0.65rem !important;
+      }
+      .btn-profile-header span {
+        display: none !important;
+      }
+
+      .btn-notif-header,
+      .btn-help-header {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+        padding: 0 !important;
       }
       
       main {
