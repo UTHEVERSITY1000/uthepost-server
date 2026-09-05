@@ -4170,6 +4170,72 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 110 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 111: STRICT PASSWORD ENFORCEMENT & 5-ATTEMPT AUTO-RESET SUITE
+  // =========================================================================
+  try {
+    console.log('\n--- GROUP 111: STRICT PASSWORD ENFORCEMENT & 5-ATTEMPT AUTO-RESET SUITE ---');
+
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+
+    // 1. Frontend Security Check - No Insecure Fallback Mock Sessions
+    assert(recruiterHtml.includes('Wrong username or password'), 'recruiter.html displays Wrong username or password alert');
+    assert(candidateHtml.includes('Wrong username or password'), 'candidate.html displays Wrong username or password alert');
+    assert(adminHtml.includes('Wrong username or password'), 'admin.html displays Wrong username or password alert');
+    assert(!recruiterHtml.includes("currentUser = { name: (name || email.split('@')[0]), email: email, role: 'recruiter' };"), 'recruiter.html removed insecure login fallback');
+    assert(!candidateHtml.includes("currentUser = { name: (name || email.split('@')[0]), email: email, role: 'candidate' };"), 'candidate.html removed insecure login fallback');
+
+    // 2. Server Password Verification & Wrong Password Response
+    const testLockedEmail = `user_security_${Date.now()}@testcompany.com`;
+    // Register user first
+    const createRes = await httpPost('/api/auth/register', {
+      email: testLockedEmail,
+      password: 'CorrectPass123!',
+      name: 'Security Test User',
+      role: 'employer'
+    });
+    assert(createRes.status === 201, 'Test user registered successfully for security verification');
+
+    // Attempt 1: Wrong Password
+    const attempt1 = await httpPost('/api/auth/login', {
+      email: testLockedEmail,
+      password: 'WrongPassword1!'
+    });
+    assert(attempt1.status === 401, 'Attempt 1 with wrong password returns HTTP 401');
+    assert(attempt1.data.error === 'Wrong username or password', 'Attempt 1 returns "Wrong username or password" error message');
+    assert(attempt1.data.attempts === 1, 'Attempt 1 tracks 1 failed attempt');
+    assert(attempt1.data.attemptsRemaining === 4, 'Attempt 1 indicates 4 remaining attempts');
+    assert(attempt1.data.resetDispatched === false, 'Attempt 1 does not dispatch reset email');
+
+    // Attempts 2, 3, 4: Wrong Password
+    await httpPost('/api/auth/login', { email: testLockedEmail, password: 'WrongPassword2!' });
+    await httpPost('/api/auth/login', { email: testLockedEmail, password: 'WrongPassword3!' });
+    const attempt4 = await httpPost('/api/auth/login', { email: testLockedEmail, password: 'WrongPassword4!' });
+    assert(attempt4.status === 401, 'Attempt 4 returns HTTP 401');
+    assert(attempt4.data.attemptsRemaining === 1, 'Attempt 4 indicates 1 remaining attempt');
+
+    // Attempt 5: Trigger Automatic Password Reset
+    const attempt5 = await httpPost('/api/auth/login', { email: testLockedEmail, password: 'WrongPassword5!' });
+    assert(attempt5.status === 401, 'Attempt 5 returns HTTP 401');
+    assert(attempt5.data.resetDispatched === true, 'Attempt 5 triggers automatic password reset (resetDispatched: true)');
+    assert(attempt5.data.message.includes('5 failed login attempts'), 'Attempt 5 alert explains 5 failed attempts reached');
+
+    // 3. Successful Login with Correct Password
+    const correctLoginRes = await httpPost('/api/auth/login', {
+      email: testLockedEmail,
+      password: 'CorrectPass123!'
+    });
+    assert(correctLoginRes.status === 200, 'Correct password login succeeds with HTTP 200');
+    assert(correctLoginRes.data.status === 'authenticated', 'Response status is authenticated');
+    assert(correctLoginRes.data.token && correctLoginRes.data.token.length > 20, 'Issues valid JWT token on successful login');
+
+  } catch (err) {
+    assert(false, `Group 111 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

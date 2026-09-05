@@ -11576,21 +11576,38 @@ window.handleAuthSubmit = async function() {
   }
 
   if (authMode === 'login') {
+    let res, data;
     try {
-      const res = await fetch('/api/auth/login', {
+      res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
-      if (res.ok && data.user) {
-        currentUser = data.user;
-      } else {
-        currentUser = { name: (name || email.split('@')[0]), email: email, role: 'recruiter' };
-      }
+      data = await res.json();
     } catch (e) {
-      currentUser = { name: (name || email.split('@')[0]), email: email, role: 'recruiter' };
+      showCustomModalAlert('CONNECTION ERROR', 'Unable to reach authentication server. Please check your network connection.');
+      return;
     }
+
+    if (!res.ok || !data.user) {
+      if (data && (data.resetDispatched || data.attempts >= 5)) {
+        showCustomModalAlert(
+          'ACCOUNT SECURITY ALERT',
+          '5 failed login attempts detected. For your security, an automatic password reset link has been dispatched to your email address.'
+        );
+      } else {
+        const attemptsMsg = data && data.attemptsRemaining !== undefined
+          ? ` (${data.attemptsRemaining} attempt${data.attemptsRemaining === 1 ? '' : 's'} remaining before automatic password reset).`
+          : '';
+        showCustomModalAlert(
+          'LOGIN FAILED',
+          `Wrong username or password.${attemptsMsg}`
+        );
+      }
+      return;
+    }
+
+    currentUser = data.user;
 
     if (rememberDevice) {
       try {

@@ -2359,7 +2359,17 @@
           document.getElementById('header-admin-identity').textContent = `${data.user.name.toUpperCase()} (${data.user.phone})`;
           showCustomModalAlert('Master Session Active', `Authenticated as ${data.user.name} (${data.user.email}).`);
         } else {
-          showCustomModalAlert('Authentication Failed', data.error || 'Invalid credentials.');
+          if (data && (data.resetDispatched || data.attempts >= 5)) {
+            showCustomModalAlert(
+              'Security Alert',
+              '5 failed login attempts reached. For your security, an automatic password reset email has been dispatched.'
+            );
+          } else {
+            const attemptsMsg = data && data.attemptsRemaining !== undefined
+              ? ` (${data.attemptsRemaining} attempt${data.attemptsRemaining === 1 ? '' : 's'} remaining before automatic password reset).`
+              : '';
+            showCustomModalAlert('Authentication Failed', `Wrong username or password.${attemptsMsg}`);
+          }
         }
       } catch (e) {
         showCustomModalAlert('Error', e.message);

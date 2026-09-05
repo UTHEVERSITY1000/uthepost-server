@@ -749,6 +749,7 @@ const EMAIL_LOG_FILE = path.join(DIRS.logs, 'emails.log');
 const EMAIL_JSON_LOG = path.join(DIRS.logs, 'log_emails.json');
 
 const resetTokensStore = new Map();
+const failedLoginAttemptsStore = new Map();
 
 function generatePasswordResetToken(email, userId) {
   const token = crypto.randomBytes(24).toString('hex');
@@ -2034,24 +2035,75 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/auth/login' && req.method === 'POST') {
     readBody((err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON body' });
-      const { email, password } = body;
-      if (!email || !password) return sendJson(400, { error: 'Email and password required' });
+      const { email, password } = body || {};
+      const normalizedEmail = (email || '').toLowerCase().trim();
 
-      let user = usersDatabase.find(u => u.email.toLowerCase() === email.toLowerCase().trim());
+      if (!normalizedEmail || !password) {
+        return sendJson(400, { error: 'Wrong username or password' });
+      }
+
+      let user = usersDatabase.find(u => (u.email || '').toLowerCase() === normalizedEmail);
       if (!user) {
         const allUsers = getAllAggregatedUsers();
-        user = allUsers.find(u => (u.email || '').toLowerCase().trim() === email.toLowerCase().trim());
-        if (user) usersDatabase.push(user);
+        user = allUsers.find(u => (u.email || '').toLowerCase().trim() === normalizedEmail);
+        if (user && !usersDatabase.some(u => (u.email || '').toLowerCase() === normalizedEmail)) {
+          usersDatabase.push(user);
+        }
       }
 
-      if (!user || !verifyPassword(password, user.passwordHash)) {
-        return sendJson(401, { error: 'Invalid email or password' });
+      const isPasswordValid = Boolean(user && user.passwordHash && verifyPassword(password, user.passwordHash));
+
+      if (!isPasswordValid) {
+        const currentAttempts = (failedLoginAttemptsStore.get(normalizedEmail) || 0) + 1;
+        failedLoginAttemptsStore.set(normalizedEmail, currentAttempts);
+
+        if (currentAttempts >= 5) {
+          failedLoginAttemptsStore.delete(normalizedEmail);
+          const targetUser = user || {
+            email: normalizedEmail,
+            name: normalizedEmail.split('@')[0],
+            fullName: normalizedEmail.split('@')[0],
+            userId: 'USR-AUTORESET-' + Date.now()
+          };
+          const resetToken = generatePasswordResetToken(targetUser.email, targetUser.userId || targetUser.id);
+          sendPasswordResetEmail(targetUser, resetToken);
+          writeSystemLog('AUTOMATIC_PASSWORD_RESET_MAX_ATTEMPTS', { email: normalizedEmail, attempts: currentAttempts });
+
+          return sendJson(401, {
+            error: 'Wrong username or password',
+            message: '5 failed login attempts detected. For your security, an automatic password reset email has been dispatched to your address.',
+            resetDispatched: true,
+            attempts: 5,
+            attemptsRemaining: 0
+          });
+        }
+
+        return sendJson(401, {
+          error: 'Wrong username or password',
+          message: `Wrong username or password. ${5 - currentAttempts} attempt(s) remaining before automatic password reset.`,
+          attempts: currentAttempts,
+          attemptsRemaining: 5 - currentAttempts,
+          resetDispatched: false
+        });
       }
+
+      // Successful password verification - clear failed attempt counter
+      failedLoginAttemptsStore.delete(normalizedEmail);
 
       writeSystemLog('USER_LOGIN', { userId: user.id || user.userId, email: user.email });
 
       const token = generateJwt({ userId: user.id || user.userId, role: user.role, email: user.email });
-      const safeUser = { id: user.id || user.userId, userId: user.id || user.userId, email: user.email, name: user.name || user.fullName, role: user.role, company: user.company, phone: user.phone, bio: user.bio };
+      const safeUser = {
+        id: user.id || user.userId,
+        userId: user.id || user.userId,
+        email: user.email,
+        name: user.name || user.fullName,
+        fullName: user.fullName || user.name,
+        role: user.role,
+        company: user.company,
+        phone: user.phone,
+        bio: user.bio
+      };
       const cookieHeader = `uthe_token=${token}; Domain=.utheversity.com; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800`;
 
       sendJson(200, { status: 'authenticated', user: safeUser, token }, { 'Set-Cookie': cookieHeader });
@@ -2132,6 +2184,7 @@ const server = http.createServer(async (req, res) => {
       else saveEmployerRecord(user);
 
       if (token) resetTokensStore.delete(token);
+      failedLoginAttemptsStore.delete(targetEmail);
 
       writeSystemLog('PASSWORD_RESET', { userId: user.id || user.userId, email: user.email });
 
