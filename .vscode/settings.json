@@ -1,14 +1,13 @@
-﻿{
-  "git.autorefresh": true,
+{
+  "git.autorefresh": false,
   "git.autofetch": false,
+  "git.decorations.enabled": false,
   "files.watcherExclude": {
-    "**/.git/objects/**": true,
-    "**/.git/subtree-cache/**": true,
+    "**/.git/**": true,
     "**/node_modules/**": true,
     "**/backup/**": true,
-    "**/data/listings/**": true,
-    "**/data/messages/**": true,
-    "**/data/resumes/**": true,
-    "**/data/logs/**": true
+    "**/data/**": true,
+    "**/*.log": true,
+    "**/*.pdf": true
   }
 }
