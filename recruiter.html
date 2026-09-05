@@ -5429,6 +5429,137 @@ main, .main-content, .workspace-container, #job-studio-container {
   font-family: inherit !important;
 }
 
+/* RECRUITER WORKSPACE IMMEDIATE LOCK & AUTHENTICATION BARRIER */
+.recruiter-auth-barrier {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.recruiter-lock-card {
+  background: #FFFFFF;
+  border: 2px solid var(--uthe-gold);
+  border-radius: 14px;
+  padding: 2.25rem 2rem;
+  max-width: 540px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 28px rgba(254, 186, 39, 0.35);
+  animation: fadeInScaleRecruiter 0.22s ease-out;
+}
+
+@keyframes fadeInScaleRecruiter {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.recruiter-lock-icon-badge {
+  width: 56px;
+  height: 56px;
+  background: #FFFBEB;
+  border: 2px solid var(--uthe-gold);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 0.85rem;
+  box-shadow: 0 0 14px rgba(254, 186, 39, 0.35);
+}
+
+.recruiter-lock-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #0F172A;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+
+.recruiter-lock-subtitle {
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.55;
+  margin: 0 0 1.35rem 0;
+}
+
+.recruiter-lock-action-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1.15rem;
+}
+
+.btn-lock-recruiter-login {
+  background: #0075FF;
+  color: #FFFFFF;
+  border: 1.5px solid #0075FF;
+  border-radius: 8px;
+  padding: 0.85rem 1.25rem;
+  font-size: 0.88rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 117, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.btn-lock-recruiter-login:hover {
+  background: #0060DF;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 117, 255, 0.5);
+}
+
+.btn-lock-recruiter-signup {
+  background: #0F172A;
+  color: var(--uthe-gold);
+  border: 1.5px solid #0F172A;
+  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+}
+
+.btn-lock-recruiter-signup:hover {
+  background: #1E293B;
+  border-color: var(--uthe-gold);
+}
+
+.recruiter-lock-perks-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  border-top: 1px solid #E2E8F0;
+  padding-top: 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748B;
+}
+
 </style>
 
 </head>
@@ -5528,11 +5659,34 @@ main, .main-content, .workspace-container, #job-studio-container {
     </div>
   </div>
 
-
+  <!-- RECRUITER WORKSPACE IMMEDIATE LOCK & AUTHENTICATION BARRIER OVERLAY -->
+  <div id="recruiter-auth-barrier" class="recruiter-auth-barrier" style="display: none;">
+    <div class="recruiter-lock-card">
+      <div class="recruiter-lock-icon-badge">🔒</div>
+      <h2 class="recruiter-lock-title">RECRUITER WORKSPACE LOCKED — EMPLOYER SIGN-IN REQUIRED</h2>
+      <p class="recruiter-lock-subtitle">
+        Access to the Job Studio, Omnichannel CRM syndication, Applicant Tracker System, Candidate Resume Search, and hiring packages is strictly reserved for verified employers and authorized recruiters.
+      </p>
+      <div class="recruiter-lock-action-row">
+        <button type="button" class="btn-lock-recruiter-login" onclick="openAuthModal('login')" data-tooltip="Sign in with your verified company work email">
+          SIGN IN TO WORKSPACE
+        </button>
+        <button type="button" class="btn-lock-recruiter-signup" onclick="openAuthModal('signup')" data-tooltip="Create a new recruiter account with company email">
+          CREATE EMPLOYER ACCOUNT
+        </button>
+      </div>
+      <div class="recruiter-lock-perks-list">
+        <span>✓ Multi-Platform Job Broadcasting</span>
+        <span>✓ Direct Candidate Messaging</span>
+        <span>✓ Verified Talent Resume Pool</span>
+        <span>✓ AI Content Helper & Search Optimizer</span>
+      </div>
+    </div>
+  </div>
 
 <!-- MAIN WORKSPACE VIEWS -->
 
-<main>
+<main id="recruiter-main-workspace">
 
 
 
@@ -8430,6 +8584,9 @@ window.switchRecruiterTab = function(tabName) {
   if (tabName === 'profile') {
     loadSavedEmployerProfile();
   }
+  if (typeof checkRecruiterAuthAccess === 'function') {
+    checkRecruiterAuthAccess();
+  }
 };
 
 
@@ -11284,11 +11441,36 @@ window.logoutRecruiter = function() {
   } catch (e) {}
   resetCompanyLogo();
   updateAuthHeaderUi();
+  checkRecruiterAuthAccess();
   const banner = document.getElementById('auth-active-session-banner');
   if (banner) banner.style.display = 'none';
   closeModal('auth-modal');
   showCustomModalAlert('Logged Out', 'You have been successfully logged out of the recruiter workspace.');
 };
+
+// RECRUITER WORKSPACE AUTHENTICATION & IMMEDIATE LOCK GATEKEEPER
+function checkRecruiterAuthAccess() {
+  const barrier = document.getElementById('recruiter-auth-barrier');
+  const mainWorkspace = document.getElementById('recruiter-main-workspace') || document.querySelector('main');
+  const isAuth = Boolean(currentUser && (currentUser.email || currentUser.id || currentUser.role || currentUser.name));
+
+  if (!isAuth) {
+    if (barrier) barrier.style.display = 'flex';
+    if (mainWorkspace) {
+      mainWorkspace.style.filter = 'blur(6px)';
+      mainWorkspace.style.pointerEvents = 'none';
+      mainWorkspace.style.userSelect = 'none';
+    }
+  } else {
+    if (barrier) barrier.style.display = 'none';
+    if (mainWorkspace) {
+      mainWorkspace.style.filter = 'none';
+      mainWorkspace.style.pointerEvents = 'auto';
+      mainWorkspace.style.userSelect = 'auto';
+    }
+  }
+}
+window.checkRecruiterAuthAccess = checkRecruiterAuthAccess;
 
 window.switchAuthTab = function(mode) {
   authMode = mode;
@@ -11424,6 +11606,7 @@ window.handleAuthSubmit = async function() {
 
     closeModal('auth-modal');
     updateAuthHeaderUi();
+    checkRecruiterAuthAccess();
     showCustomModalAlert('Welcome Back', `Logged in as ${currentUser.name}.`);
 
   } else if (authMode === 'signup') {
@@ -11462,6 +11645,7 @@ window.handleAuthSubmit = async function() {
 
     closeModal('auth-modal');
     updateAuthHeaderUi();
+    checkRecruiterAuthAccess();
     showCustomModalAlert('Account Created', 'Your recruiter studio account is now active.');
 
   } else if (authMode === 'reset') {
@@ -11512,6 +11696,8 @@ updateAuthHeaderUi();
 }
 
 } catch (e) {}
+
+checkRecruiterAuthAccess();
 
 }
 

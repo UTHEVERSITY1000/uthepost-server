@@ -4031,7 +4031,13 @@ Director of Brand Marketing • New York, NY
     assert(recruiterHtml.includes('z-index: 99999999 !important'), 'recruiter.html sets max z-index on #auth-modal');
     assert(recruiterHtml.includes('z-index: 100000000 !important'), 'recruiter.html sets max z-index on #auth-modal .modal-card');
 
-    // 2. JavaScript Auth Handlers
+    // 2. JavaScript Auth Handlers & Immediate Lock Gatekeeper
+    assert(recruiterHtml.includes('id="recruiter-auth-barrier"'), 'recruiter.html defines #recruiter-auth-barrier overlay');
+    assert(recruiterHtml.includes('RECRUITER WORKSPACE LOCKED'), 'recruiter.html displays clear workspace locked barrier title');
+    assert(recruiterHtml.includes('.recruiter-lock-card'), 'recruiter.html defines .recruiter-lock-card styling');
+    assert(recruiterHtml.includes('.btn-lock-recruiter-login'), 'recruiter.html includes .btn-lock-recruiter-login button');
+    assert(recruiterHtml.includes('.btn-lock-recruiter-signup'), 'recruiter.html includes .btn-lock-recruiter-signup button');
+    assert(recruiterHtml.includes('checkRecruiterAuthAccess'), 'recruiter.html implements checkRecruiterAuthAccess()');
     assert(recruiterHtml.includes('window.openAuthModal = function'), 'recruiter.html implements openAuthModal()');
     assert(recruiterHtml.includes('window.logoutRecruiter = function'), 'recruiter.html implements logoutRecruiter()');
     assert(recruiterHtml.includes('window.switchAuthTab = function'), 'recruiter.html implements switchAuthTab()');
