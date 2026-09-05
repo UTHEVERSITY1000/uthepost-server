@@ -11472,16 +11472,34 @@ function checkRecruiterAuthAccess() {
 }
 window.checkRecruiterAuthAccess = checkRecruiterAuthAccess;
 
+let activeResetToken = null;
+
+window.openSetNewPasswordModal = function(token, email) {
+  activeResetToken = token || '';
+  const emailEl = document.getElementById('auth-email');
+  if (emailEl && email) emailEl.value = email;
+  openAuthModal('set-password');
+};
+
 window.switchAuthTab = function(mode) {
   authMode = mode;
   document.querySelectorAll('#auth-modal .drawer-tab-btn').forEach(b => b.classList.remove('active'));
   const activeTab = document.getElementById(`tab-auth-${mode}`);
   if (activeTab) activeTab.classList.add('active');
 
+  const titleEl = document.getElementById('auth-modal-title');
   const nameGroup = document.getElementById('auth-group-name');
   const passGroup = document.getElementById('auth-group-pass');
   const rememberGroup = document.getElementById('auth-group-remember');
   const submitBtn = document.getElementById('auth-submit-btn');
+  const tabsRow = document.getElementById('auth-tabs-row');
+  const passLabel = passGroup ? passGroup.querySelector('label') : null;
+  const passInput = document.getElementById('auth-password');
+
+  if (titleEl) titleEl.textContent = 'RECRUITER AUTHENTICATION';
+  if (tabsRow) tabsRow.style.display = 'flex';
+  if (passLabel) passLabel.textContent = 'Password';
+  if (passInput) passInput.value = '';
 
   if (mode === 'signup') {
     if (nameGroup) nameGroup.style.display = 'flex';
@@ -11498,44 +11516,33 @@ window.switchAuthTab = function(mode) {
     if (passGroup) passGroup.style.display = 'none';
     if (rememberGroup) rememberGroup.style.display = 'none';
     if (submitBtn) submitBtn.textContent = 'SEND RESET LINK';
+  } else if (mode === 'set-password') {
+    if (titleEl) titleEl.textContent = 'CREATE NEW PASSWORD';
+    if (nameGroup) nameGroup.style.display = 'none';
+    if (passGroup) passGroup.style.display = 'flex';
+    if (rememberGroup) rememberGroup.style.display = 'none';
+    if (passLabel) passLabel.textContent = 'Enter New Password (min 8 characters)';
+    if (submitBtn) submitBtn.textContent = 'SAVE NEW PASSWORD & SIGN IN';
   }
 };
 
-
-
 function togglePassVisibility(id) {
-
-const input = document.getElementById(id);
-
-if (input) input.type = input.type === 'password' ? 'text' : 'password';
-
+  const input = document.getElementById(id);
+  if (input) input.type = input.type === 'password' ? 'text' : 'password';
 }
-
-
 
 function checkPassLength(val) {
+  const meter = document.getElementById('pass-meter-text');
+  if (!meter) return;
 
-const meter = document.getElementById('pass-meter-text');
-
-if (!meter) return;
-
-if (val.length >= 8) {
-
-meter.textContent = `✓ Strong password length (${val.length} chars)`;
-
-meter.style.color = '#065F46';
-
-} else {
-
-meter.textContent = `Minimum 8 characters required (${val.length}/8)`;
-
-meter.style.color = 'var(--text-muted)';
-
+  if (val.length >= 8) {
+    meter.textContent = `✓ Strong password length (${val.length} chars)`;
+    meter.style.color = '#065F46';
+  } else {
+    meter.textContent = `Minimum 8 characters required (${val.length}/8)`;
+    meter.style.color = 'var(--text-muted)';
+  }
 }
-
-}
-
-
 
 const DISALLOWED_PERSONAL_DOMAINS = [
   'gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'icloud.com', 'aol.com',
@@ -11680,13 +11687,56 @@ window.handleAuthSubmit = async function() {
     }
 
     if (res.ok) {
-      showCustomModalAlert(
-        'PASSWORD RESET LINK DISPATCHED',
-        data.message || `A secure 30-minute password reset link has been dispatched to ${email}. Please check your inbox.`
-      );
       closeModal('auth-modal');
+      const isLive = Boolean(data.smtpSent);
+      if (isLive) {
+        showCustomModalAlert(
+          'PASSWORD RESET LINK DISPATCHED',
+          data.message || `A secure 30-minute password reset link has been dispatched to ${email}. Please check your inbox.`
+        );
+      } else {
+        const token = data.token || '';
+        showCustomModalAlert(
+          'PASSWORD RESET READY',
+          `A secure 30-minute password reset link has been generated for ${email}. If your email server is in test mode, you can set your new password directly now.`
+        );
+        // Switch to set-password mode for instant seamless reset
+        setTimeout(() => {
+          openSetNewPasswordModal(token, email);
+        }, 1500);
+      }
     } else {
       showCustomModalAlert('RESET ERROR', data.error || 'Failed to dispatch password reset link.');
+    }
+
+  } else if (authMode === 'set-password') {
+    if (!password || password.length < 8) {
+      return showCustomModalAlert('PASSWORD REQUIRED', 'Password must be at least 8 characters long.');
+    }
+    let res, data;
+    try {
+      res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, token: activeResetToken, newPassword: password })
+      });
+      data = await res.json();
+    } catch (e) {
+      showCustomModalAlert('CONNECTION ERROR', 'Unable to reach authentication server.');
+      return;
+    }
+
+    if (res.ok) {
+      activeResetToken = null;
+      try {
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      } catch (e) {}
+      switchAuthTab('login');
+      showCustomModalAlert('PASSWORD UPDATED', 'Your new password has been set successfully! Please log in with your updated credentials.');
+    } else {
+      showCustomModalAlert('UPDATE FAILED', data.error || 'Failed to update password. Link may have expired.');
     }
   }
 };
@@ -12716,6 +12766,17 @@ closeCustomConfirm();
       if (e.target === guideModal) closeHowToGuideModal();
     });
   }
+
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const resetTokenParam = urlParams.get('resetToken') || urlParams.get('token');
+    const resetEmailParam = urlParams.get('email') || '';
+    if (resetTokenParam) {
+      setTimeout(() => {
+        openSetNewPasswordModal(resetTokenParam, resetEmailParam);
+      }, 350);
+    }
+  } catch (e) {}
 
 });
 

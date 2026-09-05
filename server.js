@@ -20,22 +20,82 @@ try {
   console.warn('[EMAIL ENGINE] Nodemailer load notice:', e.message);
 }
 
+// ----------------------------------------------------
+// AUTOMATIC ENVIRONMENT & SMTP CONFIG LOADER
+// ----------------------------------------------------
+function loadEnvAndSmtpConfig() {
+  const envPath = path.join(__dirname, '.env');
+  if (fs.existsSync(envPath)) {
+    try {
+      const lines = fs.readFileSync(envPath, 'utf8').split('\n');
+      lines.forEach(line => {
+        const trimmed = line.trim();
+        if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
+          const idx = trimmed.indexOf('=');
+          const k = trimmed.substring(0, idx).trim();
+          let v = trimmed.substring(idx + 1).trim();
+          if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+            v = v.slice(1, -1);
+          }
+          if (!process.env[k]) {
+            process.env[k] = v;
+          }
+        }
+      });
+    } catch (e) {}
+  }
+
+  const possibleSmtpConfigs = [
+    path.join(__dirname, 'smtp_config.json'),
+    path.join(__dirname, 'data', 'smtp_config.json')
+  ];
+
+  for (const cfgPath of possibleSmtpConfigs) {
+    if (fs.existsSync(cfgPath)) {
+      try {
+        const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+        if (cfg.SMTP_USER && !process.env.SMTP_USER) process.env.SMTP_USER = cfg.SMTP_USER;
+        if (cfg.SMTP_PASS && !process.env.SMTP_PASS) process.env.SMTP_PASS = cfg.SMTP_PASS;
+        if (cfg.SMTP_HOST && !process.env.SMTP_HOST) process.env.SMTP_HOST = cfg.SMTP_HOST;
+        if (cfg.SMTP_PORT && !process.env.SMTP_PORT) process.env.SMTP_PORT = String(cfg.SMTP_PORT);
+        if (cfg.FROM_EMAIL && !process.env.FROM_EMAIL) process.env.FROM_EMAIL = cfg.FROM_EMAIL;
+      } catch (e) {}
+    }
+  }
+}
+loadEnvAndSmtpConfig();
+
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'utheversity-professional-jwt-secret-key-2026-secure';
 
-// Helper function: Strictly enforce IPv4 socket connections and EHLO domain for Google SMTP Relay
+// Helper function: Strictly enforce IPv4 socket connections and EHLO domain for Google SMTP Relay & standard SMTP
 function getTransporter() {
   if (!nodemailer) return null;
+  loadEnvAndSmtpConfig();
   const smtpUser = process.env.SMTP_USER ? process.env.SMTP_USER.trim() : null;
   const smtpPass = process.env.SMTP_PASS ? process.env.SMTP_PASS.trim() : null;
   
   if (!smtpUser || !smtpPass) return null;
 
+  let host = process.env.SMTP_HOST ? process.env.SMTP_HOST.trim() : '';
+  let port = parseInt(process.env.SMTP_PORT) || 587;
+  let secure = process.env.SMTP_PORT === '465' || port === 465;
+
+  if (!host) {
+    if (smtpUser.includes('@gmail.com') || smtpUser.includes('utheversity.com')) {
+      host = 'smtp.gmail.com';
+      port = 465;
+      secure = true;
+    } else {
+      host = 'smtp-relay.gmail.com';
+    }
+  }
+
   return nodemailer.createTransport({
-    name: 'utheversity.com', // Forces valid EHLO domain greeting for Google Workspace Relay
-    host: process.env.SMTP_HOST || 'smtp-relay.gmail.com',
-    port: parseInt(process.env.SMTP_PORT) || 587,
-    secure: process.env.SMTP_PORT === '465',
+    name: 'utheversity.com', // Forces valid EHLO domain greeting
+    host: host,
+    port: port,
+    secure: secure,
     family: 4,
     lookup: (hostname, options, callback) => {
       dns.lookup(hostname, { family: 4 }, (err, address) => {
@@ -894,6 +954,28 @@ async function sendTransactionalEmail({ to, subject, html, text, type = 'GENERAL
     console.log(`[EMAIL ENGINE] Local fallback logged: ${type} -> ${to} ("${subject}")`);
   }
 
+  try {
+    let emailLogs = [];
+    if (fs.existsSync(EMAIL_JSON_LOG)) {
+      try {
+        emailLogs = JSON.parse(fs.readFileSync(EMAIL_JSON_LOG, 'utf8'));
+        if (!Array.isArray(emailLogs)) emailLogs = [];
+      } catch (e) {
+        emailLogs = [];
+      }
+    }
+    const idx = emailLogs.findIndex(e => e.id === emailRecord.id);
+    if (idx >= 0) {
+      emailLogs[idx] = emailRecord;
+    } else {
+      emailLogs.unshift(emailRecord);
+    }
+    if (emailLogs.length > 500) emailLogs = emailLogs.slice(0, 500);
+    fs.writeFileSync(EMAIL_JSON_LOG, JSON.stringify(emailLogs, null, 2), 'utf8');
+  } catch (err) {
+    console.error('[EMAIL JSON LOG UPDATE ERROR]', err.message);
+  }
+
   writeSystemLog('EMAIL_DISPATCHED', { to, subject, type, emailId: emailRecord.id, status: emailRecord.status });
   return emailRecord;
 }
@@ -931,8 +1013,8 @@ async function sendWelcomeEmail(user) {
 }
 
 // Template 2: Password Reset Email (30-Minute Security Token)
-async function sendPasswordResetEmail(user, token, tempPassword = null) {
-  const resetUrl = `https://jobs.utheversity.com/reset-password?token=${token}&email=${encodeURIComponent(user.email)}`;
+async function sendPasswordResetEmail(user, token, tempPassword = null, customResetUrl = null) {
+  const resetUrl = customResetUrl || `https://jobs.utheversity.com/reset-password?token=${token}&email=${encodeURIComponent(user.email)}`;
   const bodyContent = `
     <p>Hello <strong>${user.name || user.fullName || 'User'}</strong>,</p>
     <p>A request was submitted to reset the password for your UTHEVERSITY account (<strong>${user.email}</strong>).</p>
@@ -944,7 +1026,7 @@ async function sendPasswordResetEmail(user, token, tempPassword = null) {
     to: user.email,
     subject: 'Reset Your UTHEVERSITY Account Password',
     type: 'PASSWORD_RESET_REQUEST',
-    metadata: { userId: user.id || user.userId, token },
+    metadata: { userId: user.id || user.userId, token, resetUrl },
     html: buildBrandedEmailHtml({
       title: 'Password Reset Request',
       bodyContent,
@@ -1762,10 +1844,10 @@ function resolveTargetFileForHost(req, parsedUrl) {
   const pathname = parsedUrl.pathname;
   const cleanPath = pathname.toLowerCase().replace(/\/+$/, '');
 
-  if (cleanPath === '/recruiter' || cleanPath === '/recruiter.html' || cleanPath === '/post' || cleanPath === '/u-thepost' || cleanPath === '/u-thepost.html' || cleanPath === '/u-thepost-enterprise-edition.html' || cleanPath === '/u-thepost-dual link to u-thejobs.html' || cleanPath === '/u-thepost-dual link & mobile.html') {
+  if (cleanPath === '/recruiter' || cleanPath === '/recruiter.html' || cleanPath === '/post' || cleanPath === '/u-thepost' || cleanPath === '/u-thepost.html' || cleanPath === '/u-thepost-enterprise-edition.html' || cleanPath === '/u-thepost-dual link to u-thejobs.html' || cleanPath === '/u-thepost-dual link & mobile.html' || cleanPath === '/reset-password-recruiter') {
     return 'recruiter.html';
   }
-  if (cleanPath === '/candidate' || cleanPath === '/candidate.html' || cleanPath === '/jobs' || cleanPath === '/u-thejobs' || cleanPath === '/u-thejobs.html' || cleanPath === '/u-thejobs-enterprise-sync.html' || cleanPath === '/u-thejobs-dual link to u-thepost.html') {
+  if (cleanPath === '/candidate' || cleanPath === '/candidate.html' || cleanPath === '/jobs' || cleanPath === '/u-thejobs' || cleanPath === '/u-thejobs.html' || cleanPath === '/u-thejobs-enterprise-sync.html' || cleanPath === '/u-thejobs-dual link to u-thepost.html' || cleanPath === '/reset-password' || cleanPath === '/reset') {
     return 'candidate.html';
   }
   if (cleanPath === '/admin' || cleanPath === '/admin.html' || cleanPath === '/u-theadmin' || cleanPath === '/u-theadmin.html' || cleanPath === '/u-theadmin-master-suite.html') {
@@ -1993,7 +2075,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (pathname === '/api/auth/forgot-password' && req.method === 'POST') {
-    readBody((err, body) => {
+    readBody(async (err, body) => {
       if (err) return sendJson(400, { error: 'Invalid JSON body' });
       const email = (body.email || '').toLowerCase().trim();
       if (!email) return sendJson(400, { error: 'Email address is required' });
@@ -2003,20 +2085,39 @@ const server = http.createServer(async (req, res) => {
                  allUsers.find(u => (u.email || '').toLowerCase().trim() === email);
 
       if (!user) {
-        return sendJson(200, {
-          status: 'dispatched',
-          message: 'If the provided email is registered, a 30-minute password reset link has been dispatched.'
-        });
+        user = {
+          id: `USR-${Math.floor(100 + Math.random() * 900)}`,
+          userId: `USR-${Math.floor(100 + Math.random() * 900)}`,
+          email: email,
+          name: email.split('@')[0],
+          fullName: email.split('@')[0],
+          role: 'recruiter'
+        };
       }
 
       const resetToken = generatePasswordResetToken(user.email, user.userId || user.id);
-      sendPasswordResetEmail(user, resetToken);
-      writeSystemLog('FORGOT_PASSWORD_REQUESTED', { email: user.email, userId: user.userId || user.id });
+
+      const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:3000';
+      const protocol = req.headers['x-forwarded-proto'] || (host.includes('localhost') ? 'http' : 'https');
+      const origin = `${protocol}://${host}`;
+      const referer = (req.headers.referer || '').toLowerCase();
+      const isCandidate = referer.includes('candidate') || host.includes('jobs') || (user.role && user.role.toLowerCase() === 'candidate');
+      const portalPath = isCandidate ? '/candidate.html' : '/recruiter.html';
+      const resetUrl = `${origin}${portalPath}?resetToken=${resetToken}&email=${encodeURIComponent(user.email)}`;
+
+      const emailResult = await sendPasswordResetEmail(user, resetToken, null, resetUrl);
+      writeSystemLog('FORGOT_PASSWORD_REQUESTED', { email: user.email, userId: user.userId || user.id, resetUrl, emailResult });
+
+      const isSmtpSent = Boolean(emailResult && emailResult.status === 'sent');
 
       sendJson(200, {
         status: 'dispatched',
         token: resetToken,
-        message: `Password reset link dispatched to ${user.email}. Valid for 30 minutes.`
+        resetUrl: resetUrl,
+        smtpSent: isSmtpSent,
+        message: isSmtpSent
+          ? `Password reset link dispatched to ${user.email}. Valid for 30 minutes.`
+          : `Password reset link generated for ${user.email}. Valid for 30 minutes.`
       });
     });
     return;
