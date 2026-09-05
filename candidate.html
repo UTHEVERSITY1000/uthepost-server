@@ -2130,17 +2130,17 @@
 
       <div class="form-group">
         <label>Full Legal Name</label>
-        <input type="text" id="candidateNameInput" name="cand-name" placeholder="e.g. Marcus Vance" value="Marcus Vance">
+        <input type="text" id="candidateNameInput" name="cand-name" placeholder="e.g. John Doe" value="">
       </div>
 
       <div class="grid-2">
         <div class="form-group">
           <label>Email Address</label>
-          <input type="email" id="candidateEmailInput" name="cand-email" placeholder="marcus.vance@example.com" value="marcus.vance@example.com">
+          <input type="email" id="candidateEmailInput" name="cand-email" placeholder="john.doe@example.com" value="">
         </div>
         <div class="form-group">
           <label>Phone Number</label>
-          <input type="tel" id="candidatePhoneInput" name="cand-phone" placeholder="+1 (555) 019-2831" value="+1 (555) 448-9102">
+          <input type="tel" id="candidatePhoneInput" name="cand-phone" placeholder="+1 (555) 000-0000" value="">
         </div>
       </div>
 
@@ -2152,7 +2152,7 @@
           <button type="button" class="btn-choose-file" onclick="document.getElementById('cand-resume-file').click()" data-tooltip="Upload your resume in PDF format.">
             CHOOSE RESUME (.PDF ONLY)
           </button>
-          <span class="file-name-display" id="resume-file-name">Marcus_Vance_Resume_2026.pdf</span>
+          <span class="file-name-display" id="resume-file-name">No file chosen</span>
         </div>
         <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #0f172a; margin: 10px 0; cursor: pointer;">
           <input type="checkbox" id="autoFillConsentCheckbox" checked style="accent-color: #D4AF37; width: 16px; height: 16px;">
@@ -2176,13 +2176,13 @@
 
       <div class="form-group">
         <label data-cms-key="jobs-interview-title" data-tooltip="What do you want the employer to know to advance your resume?">Interview Request Title</label>
-        <input type="text" id="cand-interview-title" placeholder="e.g. Sales Manager / Retail Operations Lead" value="Experienced Sales Manager & Team Lead">
+        <input type="text" id="cand-interview-title" placeholder="e.g. Sales Manager / Retail Operations Lead" value="">
       </div>
 
       <!-- 4. INTERVIEW REQUEST MESSAGE TEXTAREA -->
       <div class="form-group">
         <label>Interview Request Message</label>
-        <textarea id="cand-summary" rows="4" placeholder="Quick About Me / Why Hire Me...">6+ years driving retail team leadership and revenue targets. Passionate about outstanding customer experience.</textarea>
+        <textarea id="cand-summary" rows="4" placeholder="Quick About Me / Why Hire Me..."></textarea>
       </div>
 
       <!-- SUBMIT BUTTON WITH TOOLTIP: DOUBLE CHECK CONTACT INFO ON RESUME -->
@@ -2401,18 +2401,18 @@
       <div class="grid-2">
         <div class="form-group">
           <label>Full Legal Name</label>
-          <input type="text" id="prof-cand-name" value="Marcus Vance">
+          <input type="text" id="prof-cand-name" placeholder="e.g. John Doe" value="">
         </div>
         <div class="form-group">
           <label>Preferred Email</label>
-          <input type="email" id="prof-cand-email" value="marcus.vance@example.com">
+          <input type="email" id="prof-cand-email" placeholder="john.doe@example.com" value="">
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
           <label>Phone Number</label>
-          <input type="tel" id="prof-cand-phone" value="+1 (555) 448-9102">
+          <input type="tel" id="prof-cand-phone" placeholder="+1 (555) 000-0000" value="">
         </div>
         <div class="form-group">
           <label>Desired Commitment</label>
@@ -2426,7 +2426,7 @@
 
       <div class="form-group">
         <label>Candidate Bio / Elevator Pitch</label>
-        <textarea id="prof-cand-bio" rows="3">Experienced Sales Manager specialized in team leadership, customer acquisition, and store operations.</textarea>
+        <textarea id="prof-cand-bio" rows="3" placeholder="Enter a brief summary of your professional background, skills, and target roles..."></textarea>
       </div>
 
       <button class="btn-submit-request" onclick="saveCandidateProfile()">
@@ -2576,10 +2576,10 @@
     let currentUser = null;
     let authMode = 'login';
     let selectedJobId = 'JOB-101';
-    let currentApplicantId = 'APP-701';
+    let currentApplicantId = null;
     let currentSearchFilter = '';
     let currentSearchQuery = '';
-    let unreadCount = 1;
+    let unreadCount = 0;
 
     let jobsDatabase = [
       {
@@ -2944,6 +2944,11 @@
     }
 
     window.openCandidateProfileModal = function() {
+      if (!currentUser) {
+        openAuthModal('signup');
+        showCustomModalAlert('Candidate Sign-In Required', 'Please sign up or log in to manage your private candidate profile and preferences.');
+        return;
+      }
       const modal = document.getElementById('profile-modal');
       if (modal) modal.style.display = 'flex';
     };
@@ -2953,6 +2958,11 @@
 
     // 1. NOTIFICATIONS ALERT & EXECUTIVE RECRUITER MESSAGE DRAWER
     window.openMessageDrawer = function(applicantId) {
+      if (!currentUser && !applicantId && !currentApplicantId) {
+        openAuthModal('signup');
+        showCustomModalAlert('Candidate Sign-In Required', 'Please sign in or create an account to view your private recruiter messages and notifications.');
+        return;
+      }
       if (applicantId) {
         currentApplicantId = applicantId;
         activeThreadId = applicantId;
@@ -3002,10 +3012,45 @@
 
     window.logoutCandidate = function() {
       currentUser = null;
+      currentApplicantId = null;
+      activeThreadId = null;
+      candidateThreads = {};
+      unreadCount = 0;
       try {
         localStorage.removeItem('uthe_candidate_user');
+        localStorage.removeItem('uthe_candidate_profile');
+        localStorage.removeItem('uthe_candidate_messages');
+        localStorage.removeItem('uthe_candidate_applications');
+        localStorage.removeItem('uthe_candidate_thread_messages');
+        localStorage.removeItem('uthe_candidate_deleted_threads');
+        localStorage.removeItem('uthe_token');
         localStorage.removeItem('uthe_remember_device');
       } catch (e) {}
+
+      // Clear input fields so no previous user info remains
+      const fieldsToClear = [
+        'prof-cand-name', 'prof-cand-email', 'prof-cand-phone', 'prof-cand-bio',
+        'candidateNameInput', 'candidateEmailInput', 'candidatePhoneInput',
+        'cand-interview-title', 'cand-summary'
+      ];
+      fieldsToClear.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      const fileDisplay = document.getElementById('resume-file-name');
+      if (fileDisplay) fileDisplay.textContent = 'No file chosen';
+
+      const badge = document.getElementById('notif-badge-count');
+      if (badge) {
+        badge.textContent = '0';
+        badge.style.display = 'none';
+      }
+
+      const list = document.getElementById('threads-list-body');
+      if (list) list.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.8rem;">Please sign in to view your messages.</div>';
+      const stream = document.getElementById('chat-messages-stream');
+      if (stream) stream.innerHTML = '';
+
       const authBtn = document.getElementById('btn-auth-status');
       if (authBtn) authBtn.textContent = 'LOGIN / SIGN UP';
       if (typeof checkCandidateAuthAccess === 'function') checkCandidateAuthAccess();
@@ -3896,37 +3941,6 @@
 
     function loadSavedCandidateProfile() {
       try {
-        const saved = localStorage.getItem('uthe_candidate_profile');
-        if (saved) {
-          const p = JSON.parse(saved);
-          if (p.name) {
-            const el = document.getElementById('prof-cand-name');
-            if (el) el.value = p.name;
-            const appName = document.getElementById('candidateNameInput') || document.getElementById('cand-name');
-            if (appName) appName.value = p.name;
-          }
-          if (p.email) {
-            const el = document.getElementById('prof-cand-email');
-            if (el) el.value = p.email;
-            const appEmail = document.getElementById('candidateEmailInput') || document.getElementById('cand-email');
-            if (appEmail) appEmail.value = p.email;
-          }
-          if (p.phone) {
-            const el = document.getElementById('prof-cand-phone');
-            if (el) el.value = p.phone;
-            const appPhone = document.getElementById('candidatePhoneInput') || document.getElementById('cand-phone');
-            if (appPhone) appPhone.value = p.phone;
-          }
-          if (p.type) {
-            const el = document.getElementById('prof-cand-type');
-            if (el) el.value = p.type;
-          }
-          if (p.bio) {
-            const el = document.getElementById('prof-cand-bio');
-            if (el) el.value = p.bio;
-          }
-        }
-
         const savedUser = localStorage.getItem('uthe_candidate_user');
         if (savedUser) {
           currentUser = JSON.parse(savedUser);
@@ -3934,6 +3948,50 @@
           if (authBtn && currentUser && currentUser.name) {
             authBtn.textContent = `${currentUser.name.toUpperCase()} (LOGOUT)`;
           }
+        }
+
+        if (currentUser) {
+          const saved = localStorage.getItem('uthe_candidate_profile');
+          if (saved) {
+            const p = JSON.parse(saved);
+            if (p.name) {
+              const el = document.getElementById('prof-cand-name');
+              if (el) el.value = p.name;
+              const appName = document.getElementById('candidateNameInput') || document.getElementById('cand-name');
+              if (appName) appName.value = p.name;
+            }
+            if (p.email) {
+              const el = document.getElementById('prof-cand-email');
+              if (el) el.value = p.email;
+              const appEmail = document.getElementById('candidateEmailInput') || document.getElementById('cand-email');
+              if (appEmail) appEmail.value = p.email;
+            }
+            if (p.phone) {
+              const el = document.getElementById('prof-cand-phone');
+              if (el) el.value = p.phone;
+              const appPhone = document.getElementById('candidatePhoneInput') || document.getElementById('cand-phone');
+              if (appPhone) appPhone.value = p.phone;
+            }
+            if (p.type) {
+              const el = document.getElementById('prof-cand-type');
+              if (el) el.value = p.type;
+            }
+            if (p.bio) {
+              const el = document.getElementById('prof-cand-bio');
+              if (el) el.value = p.bio;
+            }
+          }
+        } else {
+          // Clear inputs so unauthenticated visitors see clean placeholder instructions
+          const fieldsToClear = [
+            'prof-cand-name', 'prof-cand-email', 'prof-cand-phone', 'prof-cand-bio',
+            'candidateNameInput', 'candidateEmailInput', 'candidatePhoneInput',
+            'cand-interview-title', 'cand-summary'
+          ];
+          fieldsToClear.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+          });
         }
         checkCandidateAuthAccess();
       } catch (e) {}

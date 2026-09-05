@@ -4238,6 +4238,40 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 111 failed: ${err.message}`);
   }
 
+  // ================================================================
+  // GROUP 112: ZERO-LEAK PRIVACY, UNLOGGED STATE CONTAINMENT & VISITOR MODAL ACCESS SUITE
+  // ================================================================
+  console.log('\n--- GROUP 112: ZERO-LEAK PRIVACY, UNLOGGED STATE CONTAINMENT & VISITOR MODAL ACCESS SUITE ---');
+  try {
+    const candidateHtml = fs.readFileSync(path.join(__dirname, 'candidate.html'), 'utf8');
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+
+    // 1. Candidate Portal Mock Data Leak Prevention
+    assert(!candidateHtml.includes('id="candidateNameInput" name="cand-name" placeholder="e.g. Marcus Vance" value="Marcus Vance"'), 'candidate.html removed hardcoded Marcus Vance from #candidateNameInput');
+    assert(!candidateHtml.includes('id="prof-cand-name" value="Marcus Vance"'), 'candidate.html removed hardcoded Marcus Vance from #prof-cand-name');
+    assert(!candidateHtml.includes('id="candidateEmailInput" name="cand-email" placeholder="marcus.vance@example.com" value="marcus.vance@example.com"'), 'candidate.html removed hardcoded mock email from #candidateEmailInput');
+    assert(!candidateHtml.includes('id="prof-cand-email" value="marcus.vance@example.com"'), 'candidate.html removed hardcoded mock email from #prof-cand-email');
+    assert(candidateHtml.includes('let currentApplicantId = null;'), 'candidate.html initializes currentApplicantId to null on unauthenticated visit');
+    assert(candidateHtml.includes('let unreadCount = 0;'), 'candidate.html initializes unreadCount to 0 on unauthenticated visit');
+
+    // 2. Candidate Portal Access Control & Anti-Leak Protection
+    assert(candidateHtml.includes('window.openCandidateProfileModal = function()'), 'candidate.html defines window.openCandidateProfileModal');
+    assert(candidateHtml.includes('window.openMessageDrawer = function(applicantId)'), 'candidate.html defines window.openMessageDrawer');
+    assert(candidateHtml.includes('window.logoutCandidate = function()'), 'candidate.html defines window.logoutCandidate');
+    assert(candidateHtml.includes('localStorage.removeItem(\'uthe_candidate_user\')') && candidateHtml.includes('localStorage.removeItem(\'uthe_candidate_profile\')'), 'candidate.html wipes all localStorage candidate keys on logout');
+
+    // 3. Recruiter Portal Never-Dead Action Buttons & Modal Access
+    assert(recruiterHtml.includes('window.openModal = function(id)'), 'recruiter.html defines window.openModal');
+    assert(recruiterHtml.includes('window.openAuthModal = function(initialMode'), 'recruiter.html defines window.openAuthModal');
+    assert(recruiterHtml.includes('window.logoutRecruiter = function()'), 'recruiter.html defines window.logoutRecruiter');
+    assert(recruiterHtml.includes('localStorage.removeItem(\'uthe_employer_user\')') && recruiterHtml.includes('localStorage.removeItem(\'uthe_employer_profile\')'), 'recruiter.html wipes all localStorage employer keys on logout');
+    assert(recruiterHtml.includes('GLOBAL VISITOR ACTION CLICK INTERCEPTOR') || recruiterHtml.includes('openAuthModal(\'signup\')'), 'recruiter.html connects interactive visitor action click handling to openAuthModal');
+
+  } catch (err) {
+    assert(false, `Group 112 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

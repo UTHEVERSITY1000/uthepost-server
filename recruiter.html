@@ -7122,7 +7122,7 @@ VERIFIED EMPLOYER
 
 <label data-tooltip="Official company legal name.">Organization Legal Name</label>
 
-<input type="text" id="prof-company" value="Quantum Retail Corp" data-tooltip="Employer name.">
+<input type="text" id="prof-company" placeholder="e.g. Quantum Retail Corp" value="" data-tooltip="Employer name.">
 
 </div>
 
@@ -7130,7 +7130,7 @@ VERIFIED EMPLOYER
 
 <label data-tooltip="Lead recruiter or talent acquisition manager name.">Contact Lead Name</label>
 
-<input type="text" id="prof-name" value="Quantum Talent Team" data-tooltip="Hiring manager name.">
+<input type="text" id="prof-name" placeholder="e.g. Jane Doe / Talent Lead" value="" data-tooltip="Hiring manager name.">
 
 </div>
 
@@ -7142,14 +7142,14 @@ VERIFIED EMPLOYER
 
         <div class="form-group">
           <label data-tooltip="Registered company email.">Work Email Address</label>
-          <input type="email" id="prof-email" value="hiring@quantumretail.com" data-tooltip="Work email address.">
+          <input type="email" id="prof-email" placeholder="hiring@quantumretail.com" value="" data-tooltip="Work email address.">
         </div>
 
 <div class="form-group">
 
 <label data-tooltip="Contact phone number.">Contact Phone Number</label>
 
-<input type="tel" id="prof-phone" value="+1 (555) 019-2831" data-tooltip="Primary phone number.">
+<input type="tel" id="prof-phone" placeholder="+1 (555) 000-0000" value="" data-tooltip="Primary phone number.">
 
 </div>
 
@@ -8738,11 +8738,21 @@ document.getElementById('logo-modal').style.display = 'flex';
 
 
 
-window.closeModal = function(id) {
-
-document.getElementById(id).style.display = 'none';
-
+window.openModal = function(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'flex';
 };
+function openModal(id) {
+  window.openModal(id);
+}
+
+window.closeModal = function(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+};
+function closeModal(id) {
+  window.closeModal(id);
+}
 
 
 
@@ -9045,6 +9055,11 @@ function updateAiLiveGrade() {
 }
 
 window.openAiContentHelperModal = function() {
+  if (!currentUser) {
+    openAuthModal('signup');
+    showCustomModalAlert('Recruiter Sign-Up Required', 'Please create a free recruiter account or sign in to use the AI Content Helper.');
+    return;
+  }
   const modal = document.getElementById('modal-ai-content-helper');
   if (modal) modal.style.display = 'flex';
   updateAiLiveGrade();
@@ -9803,6 +9818,11 @@ window.toggleSpotlightPreviewBadge = function(show) {
 };
 
 async function publishJobLive() {
+  if (!currentUser) {
+    openAuthModal('signup');
+    showCustomModalAlert('Recruiter Sign-Up Required', 'Please create a free recruiter account or sign in to publish live job listings.');
+    return;
+  }
   const currentPlan = (currentUser && currentUser.plan) || (typeof localStorage !== 'undefined' ? localStorage.getItem('uthe_subscribed_plan') : null) || 'pal';
   const planLimits = {
     pal: 1,
@@ -10478,6 +10498,11 @@ function isPaidRecruiter() {
 window.isPaidRecruiter = isPaidRecruiter;
 
 function openUnlockContactModal(candidateName) {
+  if (!currentUser) {
+    openAuthModal('signup');
+    showCustomModalAlert('Recruiter Sign-Up Required', 'Please create a free recruiter account or sign in to unlock candidate contact details.');
+    return;
+  }
   const modal = document.getElementById('modal-unlock-contact');
   if (modal) modal.style.display = 'flex';
 }
@@ -11281,6 +11306,11 @@ window.recalculateMembershipTotal = function() {
 };
 
 window.checkoutMembershipPlan = function() {
+  if (!currentUser) {
+    openAuthModal('signup');
+    showCustomModalAlert('Recruiter Sign-Up Required', 'Please create a free recruiter account or sign in to select or activate your membership plan.');
+    return;
+  }
   const totalEl = document.getElementById('calc-total-amount');
   const total = totalEl ? totalEl.textContent : '$0.00';
   const numTotal = parseFloat(total.replace(/[^0-9.]/g, '')) || 0;
@@ -11600,7 +11630,7 @@ window.filterHowToGuideCards = function(query) {
 
 // Auth Handlers
 
-window.openAuthModal = function(initialMode) {
+window.openAuthModal = function(initialMode = 'signup') {
   const modal = document.getElementById('auth-modal');
   if (!modal) return;
   modal.style.display = 'flex';
@@ -11617,16 +11647,35 @@ window.openAuthModal = function(initialMode) {
     if (banner) banner.style.display = 'none';
   }
   
-  window.switchAuthTab(initialMode || 'login');
+  if (typeof window.switchAuthTab === 'function') {
+    window.switchAuthTab(initialMode || (currentUser ? 'login' : 'signup'));
+  }
 };
+function openAuthModal(initialMode = 'signup') {
+  window.openAuthModal(initialMode);
+}
 
 window.logoutRecruiter = function() {
   currentUser = null;
+  activeCandidateId = null;
   try {
     localStorage.removeItem('uthe_employer_user');
-    localStorage.removeItem('uthe_remember_device');
+    localStorage.removeItem('uthe_employer_profile');
     localStorage.removeItem('uthe_employer_logo');
+    localStorage.removeItem('uthe_token');
+    localStorage.removeItem('uthe_remember_device');
+    localStorage.removeItem('uthe_subscribed_plan');
+    localStorage.removeItem('uthe_is_paid_plan');
+    localStorage.removeItem('uthe_employer_jobs');
   } catch (e) {}
+
+  // Clear employer profile fields
+  const profFields = ['prof-company', 'prof-name', 'prof-email', 'prof-phone', 'prof-bio'];
+  profFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
   resetCompanyLogo();
   updateAuthHeaderUi();
   checkRecruiterAuthAccess();
@@ -11646,19 +11695,50 @@ function checkRecruiterAuthAccess() {
     if (barrier) barrier.style.display = 'flex';
     if (mainWorkspace) {
       mainWorkspace.style.filter = 'blur(6px)';
-      mainWorkspace.style.pointerEvents = 'none';
       mainWorkspace.style.userSelect = 'none';
     }
   } else {
     if (barrier) barrier.style.display = 'none';
     if (mainWorkspace) {
       mainWorkspace.style.filter = 'none';
-      mainWorkspace.style.pointerEvents = 'auto';
       mainWorkspace.style.userSelect = 'auto';
     }
   }
 }
 window.checkRecruiterAuthAccess = checkRecruiterAuthAccess;
+
+// GLOBAL VISITOR ACTION CLICK INTERCEPTOR (NEVER DEAD BUTTONS)
+document.addEventListener('click', function(e) {
+  if (!currentUser) {
+    const authModal = document.getElementById('auth-modal');
+    if (authModal && (authModal.style.display === 'flex' || window.getComputedStyle(authModal).display === 'flex')) {
+      return;
+    }
+    const customAlert = document.getElementById('custom-modal-alert');
+    if (customAlert && (customAlert.style.display === 'flex' || window.getComputedStyle(customAlert).display === 'flex')) {
+      return;
+    }
+    const howTo = document.getElementById('how-to-guide-modal');
+    if (howTo && (howTo.style.display === 'flex' || window.getComputedStyle(howTo).display === 'flex')) {
+      return;
+    }
+
+    const target = e.target.closest('button, a, input, select, textarea, .ai-gap-chip, .badge-tag, .btn-lock-recruiter-login, .btn-lock-recruiter-signup, .recruiter-tab-btn, .btn-primary, .btn-gold, .btn-table-action, #recruiter-main-workspace');
+    if (target) {
+      if (target.id === 'btn-auth-status' || target.id === 'btn-drawer-auth' || target.classList.contains('btn-lock-recruiter-login') || target.classList.contains('btn-lock-recruiter-signup')) {
+        return;
+      }
+      if (target.classList.contains('drawer-close') || target.classList.contains('btn-close-modal')) {
+        return;
+      }
+      if (!target.closest('#auth-modal') && !target.closest('#custom-modal-alert')) {
+        e.preventDefault();
+        e.stopPropagation();
+        openAuthModal('signup');
+      }
+    }
+  }
+}, true);
 
 window.switchAuthTab = function(mode) {
   authMode = mode;
@@ -12393,6 +12473,11 @@ function toggleSaveResume(resId) {
 window.toggleSaveResume = toggleSaveResume;
 
 function inviteCandidateFromSearch(resId, name, role) {
+  if (!currentUser) {
+    openAuthModal('signup');
+    showCustomModalAlert('Recruiter Sign-Up Required', 'Please create a free recruiter account or sign in to message and invite candidates.');
+    return;
+  }
   const appId = `APP-${resId.replace(/\D/g, '') || Math.floor(700 + Math.random() * 200)}`;
   if (!CANDIDATES_DATA[appId]) {
     CANDIDATES_DATA[appId] = {
