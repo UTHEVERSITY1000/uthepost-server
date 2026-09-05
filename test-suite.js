@@ -2852,6 +2852,7 @@ async function runTests() {
     // 1. Checkbox element presence & branding in recruiter auth-modal
     assert(recruiterHtml.includes('id="auth-remember-device"'), 'recruiter.html defines #auth-remember-device checkbox');
     assert(recruiterHtml.includes('Remember My Device') && recruiterHtml.includes('jobs.utheversity.com'), 'recruiter.html includes Remember My Device label mentioning jobs.utheversity.com');
+    assert(recruiterHtml.includes('Remember My Device') && recruiterHtml.includes('post.utheversity.com'), 'recruiter.html includes Remember My Device label mentioning post.utheversity.com');
 
     // 2. Persistent storage on login/signup
     assert(recruiterHtml.includes("localStorage.setItem('uthe_remember_device'") || recruiterHtml.includes('localStorage.setItem("uthe_remember_device"'), 'recruiter.html stores uthe_remember_device in localStorage');
