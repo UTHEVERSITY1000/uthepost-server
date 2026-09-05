@@ -3238,6 +3238,7 @@ color: var(--uthe-gold);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 20000 !important;
+  z-index: 200000000 !important;
   align-items: center;
   justify-content: center;
   padding: 1rem;
@@ -3246,6 +3247,16 @@ color: var(--uthe-gold);
 
 
 .custom-alert-card {
+  background: #FFFFFF;
+  border: 2px solid var(--uthe-gold);
+  border-radius: 12px;
+  width: 420px;
+  max-width: 95%;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 200000001 !important;
 
 background: #FFFFFF;
 
@@ -8106,6 +8117,7 @@ SAVE COMPANY LOGO
 <label>Organization / Recruiter Name</label>
 
 <input type="text" id="auth-name" placeholder="Quantum Recruiting Lead">
+<input type="text" id="auth-name" placeholder="Quantum Recruiting Lead" onkeydown="if(event.key==='Enter') handleAuthSubmit()">
 
 </div>
 
@@ -8116,6 +8128,7 @@ SAVE COMPANY LOGO
 <label>Work Email</label>
 
 <input type="email" id="auth-email" placeholder="hiring@quantumretail.com">
+<input type="email" id="auth-email" placeholder="hiring@quantumretail.com" onkeydown="if(event.key==='Enter') handleAuthSubmit()">
 
 </div>
 
@@ -8128,6 +8141,7 @@ SAVE COMPANY LOGO
 <div class="password-wrap">
 
 <input type="password" id="auth-password" placeholder="••••••••••••" oninput="checkPassLength(this.value)">
+<input type="password" id="auth-password" placeholder="••••••••••••" oninput="checkPassLength(this.value)" onkeydown="if(event.key==='Enter') handleAuthSubmit()">
 
 <span class="password-toggle-icon" onclick="togglePassVisibility('auth-password')" style="cursor: pointer;">👁️</span>
 
@@ -11589,6 +11603,7 @@ window.filterHowToGuideCards = function(query) {
 // Auth Handlers
 
 window.openAuthModal = function(initialMode = 'signup') {
+window.openAuthModal = function(initialMode = 'login') {
   const modal = document.getElementById('auth-modal');
   if (!modal) return;
   modal.style.display = 'flex';
@@ -11611,6 +11626,7 @@ window.openAuthModal = function(initialMode = 'signup') {
   }
 };
 function openAuthModal(initialMode = 'signup') {
+function openAuthModal(initialMode = 'login') {
   window.openAuthModal(initialMode);
 }
 
@@ -11749,6 +11765,8 @@ const meter = document.getElementById('pass-meter-text');
 
 if (!meter) return;
 
+
+
 if (val.length >= 8) {
 
 meter.textContent = `✓ Strong password length (${val.length} chars)`;
@@ -11793,6 +11811,7 @@ window.handleAuthSubmit = async function() {
   const rememberDevice = rememberEl ? rememberEl.checked : true;
 
   if (!email) return showCustomModalAlert('Missing Field', 'Please enter your work email.');
+  if (authMode !== 'reset' && !password) return showCustomModalAlert('Missing Field', 'Please enter your password.');
 
   if (authMode === 'signup') {
     const domain = (email.split('@')[1] || '').toLowerCase().trim();
