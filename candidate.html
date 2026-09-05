@@ -1189,30 +1189,17 @@
       transform: translateY(-1px);
     }
 
-    /* PLATFORM FOOTER & SECRET ADMIN ACCESS */
+    /* PLATFORM FOOTER */
     footer.platform-footer {
       background: #FFFFFF;
       border-top: 1px solid var(--border-color);
       padding: 0.75rem 1.25rem;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       font-size: 0.65rem;
       color: var(--text-muted);
       margin-top: auto;
-    }
-
-    .footer-secret-link {
-      color: #94A3B8;
-      text-decoration: none;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    .footer-secret-link:hover {
-      color: var(--uthe-gold);
     }
 
     /* SIGNATURE CUSTOM MODAL ALERT & CONFIRMATION */
@@ -2458,10 +2445,9 @@
     </div>
   </div>
 
-  <!-- PLATFORM FOOTER & SECRET ADMIN ACCESS -->
+  <!-- PLATFORM FOOTER -->
   <footer class="platform-footer">
     <span>&copy; 2026 UTHEVERSITY Inc. — Professional Career Network &bull; <a href="https://utheversity.com" class="footer-home-link" style="color: var(--uthe-gold); text-decoration: none; font-weight: 700;">Return to UTHEVERSITY Home Screen</a></span>
-    <span class="footer-secret-link" onclick="handleAdminShortcut()" data-tooltip="Master Governance Suite (Shortcut: Ctrl+Shift+A)">[ADMIN]</span>
   </footer>
 
   <!-- MOBILE BOTTOM STICKY BAR -->
@@ -4323,17 +4309,7 @@
       }
     }, 3000);
 
-    // Admin Shortcut Handler (Ctrl + Shift + A)
-    window.handleAdminShortcut = function() {
-      window.location.href = '/admin.html';
-    };
 
-    document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
-        e.preventDefault();
-        handleAdminShortcut();
-      }
-    });
 
     // Smart Tooltip Boundary Detection (< 60px from top viewport edge)
     function initSmartTooltipPositioning() {
