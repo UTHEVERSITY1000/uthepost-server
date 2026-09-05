@@ -432,18 +432,18 @@ let cmsConfig = {
   },
   pricing: {
     palMonthly: 0,
-    starterMonthly: 99,
-    growthMonthly: 299,
-    proMonthly: 699,
+    starterMonthly: 9.99,
+    growthMonthly: 19.99,
+    proMonthly: 34.99,
     yearlyDiscountPct: 20,
     individualSocialAddon: 5.99,
     socialBundleAddon: 19.99
   },
   addOns: {
-    topSpotlight: 49,
-    urgentBadge: 29,
-    directMessages: 19,
-    verifiedEmployer: 39,
+    topSpotlight: 50,
+    urgentBadge: 0,
+    directMessages: 0,
+    verifiedEmployer: 0,
     individualSocial: 5.99,
     socialBundle5: 19.99
   },

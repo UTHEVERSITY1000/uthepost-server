@@ -1475,22 +1475,22 @@
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
           <div class="form-group">
             <label>u-thePAL Monthly Price ($)</label>
-            <input type="number" id="cms-price-pal" value="0" data-tooltip="Free tier monthly price">
+            <input type="number" step="0.01" id="cms-price-pal" value="0" data-tooltip="Free tier monthly price">
             <span style="font-size:0.58rem; color:var(--text-muted);">1 Active Post | Email Only</span>
           </div>
           <div class="form-group">
             <label>Starter Monthly Price ($)</label>
-            <input type="number" id="cms-price-starter" value="99" data-tooltip="Starter tier monthly price">
+            <input type="number" step="0.01" id="cms-price-starter" value="9.99" data-tooltip="Starter tier monthly price">
             <span style="font-size:0.58rem; color:var(--text-muted);">3 Active Posts | Messaging | ATS</span>
           </div>
           <div class="form-group">
             <label>Growth Monthly Price ($)</label>
-            <input type="number" id="cms-price-growth" value="299" data-tooltip="Growth tier monthly price">
+            <input type="number" step="0.01" id="cms-price-growth" value="19.99" data-tooltip="Growth tier monthly price">
             <span style="font-size:0.58rem; color:var(--text-muted);">15 Active Posts | 3 Social Sharing</span>
           </div>
           <div class="form-group">
             <label>Professional Monthly Price ($)</label>
-            <input type="number" id="cms-price-pro" value="699" data-tooltip="Professional tier monthly price">
+            <input type="number" step="0.01" id="cms-price-pro" value="34.99" data-tooltip="Professional tier monthly price">
             <span style="font-size:0.58rem; color:var(--text-muted);">Unlimited Posts | Full Social Sharing</span>
           </div>
         </div>
@@ -1502,32 +1502,32 @@
             <div class="cms-sub-box" style="margin-bottom: 0;">
               <div class="form-group">
                 <label style="color: var(--uthe-charcoal); font-size: 0.65rem;">Top-of-Page Spotlight Placement ($/mo)</label>
-                <input type="number" id="cms-price-spotlight" value="49" data-tooltip="Pin your job posting at the top of candidate search results.">
-                <span style="font-size:0.58rem; color:var(--text-muted); line-height:1.3;">Pin your job posting at the top of candidate search results. ($49/mo)</span>
+                <input type="number" step="0.01" id="cms-price-spotlight" value="50" data-tooltip="Pin your job posting at the top of candidate search results.">
+                <span style="font-size:0.58rem; color:var(--text-muted); line-height:1.3;">Pin your job posting at the top of candidate search results. ($50/mo)</span>
               </div>
             </div>
 
             <div class="cms-sub-box" style="margin-bottom: 0;">
               <div class="form-group">
                 <label style="color: var(--uthe-charcoal); font-size: 0.65rem;">Urgent Hiring Badges ($/mo)</label>
-                <input type="number" id="cms-price-urgent" value="29" data-tooltip="Highlight urgent open positions with bright badge accents.">
-                <span style="font-size:0.58rem; color:var(--text-muted); line-height:1.3;">Highlight urgent open positions with bright badge accents. ($29/mo)</span>
+                <input type="number" step="0.01" id="cms-price-urgent" value="0" data-tooltip="Highlight urgent open positions with bright badge accents.">
+                <span style="font-size:0.58rem; color:var(--text-muted); line-height:1.3;">Highlight urgent open positions with bright badge accents. ($0/mo Included)</span>
               </div>
             </div>
 
             <div class="cms-sub-box" style="margin-bottom: 0;">
               <div class="form-group">
                 <label style="color: var(--uthe-charcoal); font-size: 0.65rem;">Direct Hiring Messages (Candidate InMail) ($/mo)</label>
-                <input type="number" id="cms-price-direct-msgs" value="19" data-tooltip="Send direct interview invitations to candidate inboxes.">
-                <span style="font-size:0.58rem; color:var(--text-muted); line-height:1.3;">Send direct interview invitations to candidate inboxes. ($19/mo)</span>
+                <input type="number" step="0.01" id="cms-price-direct-msgs" value="0" data-tooltip="Send direct interview invitations to candidate inboxes.">
+                <span style="font-size:0.58rem; color:var(--text-muted); line-height:1.3;">Send direct interview invitations to candidate inboxes. ($0/mo Included)</span>
               </div>
             </div>
 
             <div class="cms-sub-box" style="margin-bottom: 0;">
               <div class="form-group">
                 <label style="color: var(--uthe-charcoal); font-size: 0.65rem;">Verified Employer Shield ($)</label>
-                <input type="number" id="cms-price-verified-shield" value="3" data-tooltip="Display official gold UTHEVERSITY emblem on company profile and job cards.">
-                <span style="font-size:0.58rem; color:var(--text-muted); line-height:1.3;">Display official gold UTHEVERSITY emblem on company profile and job cards. ($3)</span>
+                <input type="number" step="0.01" id="cms-price-verified-shield" value="0" data-tooltip="Display official gold UTHEVERSITY emblem on company profile and job cards.">
+                <span style="font-size:0.58rem; color:var(--text-muted); line-height:1.3;">Display official gold UTHEVERSITY emblem on company profile and job cards. ($0 Included)</span>
               </div>
             </div>
 
@@ -2611,16 +2611,16 @@
           proMonthly: getNum('cms-price-pro'),
           individualSocialAddon: getNum('cms-price-social-single'),
           socialBundleAddon: getNum('cms-price-social-bundle'),
-          spotlightPrice: getNum('cms-price-spotlight', 49),
-          urgentBadge: getNum('cms-price-urgent', 29),
-          directMessages: getNum('cms-price-direct-msgs', 19),
-          verifiedEmployer: getNum('cms-price-verified-shield', 3)
+          spotlightPrice: getNum('cms-price-spotlight', 50),
+          urgentBadge: getNum('cms-price-urgent', 0),
+          directMessages: getNum('cms-price-direct-msgs', 0),
+          verifiedEmployer: getNum('cms-price-verified-shield', 0)
         },
         addOns: {
-          topSpotlight: getNum('cms-price-spotlight', 49),
-          urgentBadge: getNum('cms-price-urgent', 29),
-          directMessages: getNum('cms-price-direct-msgs', 19),
-          verifiedEmployer: getNum('cms-price-verified-shield', 3),
+          topSpotlight: getNum('cms-price-spotlight', 50),
+          urgentBadge: getNum('cms-price-urgent', 0),
+          directMessages: getNum('cms-price-direct-msgs', 0),
+          verifiedEmployer: getNum('cms-price-verified-shield', 0),
           individualSocial: getNum('cms-price-social-single', 5.99),
           socialBundle5: getNum('cms-price-social-bundle', 19.99)
         }

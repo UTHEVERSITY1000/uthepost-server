@@ -200,7 +200,7 @@ async function runTests() {
     const cmsUpdate = await httpPost('/api/cms/config', {
       postStudio: { card1Title: 'CUSTOM CARD 1 HEADER' },
       jobsBoard: { submitTooltip: 'DOUBLE CHECK CONTACT INFO ON RESUME' },
-      pricing: { palMonthly: 0, starterMonthly: 99, individualSocialAddon: 5.99, socialBundleAddon: 19.99 }
+      pricing: { palMonthly: 0, starterMonthly: 9.99, individualSocialAddon: 5.99, socialBundleAddon: 19.99 }
     }, adminHeaders);
     assert(cmsUpdate.status === 200, 'POST /api/cms/config successfully saved field-by-field updates');
     assert(cmsUpdate.data.config.postStudio.card1Title === 'CUSTOM CARD 1 HEADER', 'postStudio schema persisted');
@@ -297,13 +297,12 @@ async function runTests() {
     assert(false, `Group 8 failed: ${err.message}`);
   }
 
-  // ----------------------------------------------------
-  // TEST GROUP 9: Dynamic Membership Calculation Sync with Live CMS
-  // ----------------------------------------------------
   console.log('\n[TEST GROUP 9] Dynamic Membership Calculation Sync with Live CMS');
   try {
     assert(recContent.includes('liveCmsPricing.socialBundleAddon') && recContent.includes('liveCmsPricing.individualSocialAddon'), 'recalculateMembershipTotal in recruiter.html dynamically uses liveCmsPricing');
     assert(recContent.includes('BUILD FROM $0'), 'recruiter.html retains signature BUILD FROM $0 header');
+    assert(recContent.includes('id="calc-yearly-amount"'), 'recruiter.html defines #calc-yearly-amount for live annual calculations');
+    assert(recContent.includes('yearlyDiscountPct'), 'recalculateMembershipTotal computes dynamic annual calculations with discount');
   } catch (err) {
     assert(false, `Group 9 failed: ${err.message}`);
   }
@@ -601,9 +600,9 @@ async function runTests() {
           },
           pricing: {
             palMonthly: 0,
-            starterMonthly: 99,
-            growthMonthly: 299,
-            proMonthly: 699
+            starterMonthly: 9.99,
+            growthMonthly: 19.99,
+            proMonthly: 34.99
           }
         };
 
@@ -1377,18 +1376,18 @@ async function runTests() {
       body: JSON.stringify({
         pricing: {
           palMonthly: 0,
-          starterMonthly: 99,
-          growthMonthly: 299,
-          proMonthly: 699,
+          starterMonthly: 9.99,
+          growthMonthly: 19.99,
+          proMonthly: 34.99,
           individualSocialAddon: 5.99,
           socialBundleAddon: 19.99,
-          spotlightPrice: 49
+          spotlightPrice: 50
         }
       })
     });
     assert(testPostRes.status === 200, 'POST /api/cms/config with admin headers returns HTTP 200');
     const testPostData = await testPostRes.json();
-    assert(testPostData.config.pricing.spotlightPrice === 49, 'POST /api/cms/config persists spotlightPrice');
+    assert(testPostData.config.pricing.spotlightPrice === 50, 'POST /api/cms/config persists spotlightPrice');
 
   } catch (err) {
     assert(false, `Group 27 failed: ${err.message}`);
