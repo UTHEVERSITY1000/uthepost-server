@@ -1,5 +1,743 @@
 [
   {
+    "id": "RES-205",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-06T01:51:37.219Z"
+  },
+  {
+    "id": "RES-915",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-06T01:51:37.098Z"
+  },
+  {
+    "id": "APP-877",
+    "name": "Candidate_1788658956185",
+    "role": "Senior Full-Stack Engineer",
+    "email": "candidate_1788658956185@testcandidate.com",
+    "phone": "+1 (555) 987-6543",
+    "skills": [
+      "JavaScript",
+      "System Design",
+      "Communication"
+    ],
+    "bio": "Experienced software architect.",
+    "score": 87,
+    "resumeFile": "Candidate_1788658956185_Resume.pdf",
+    "uploadedAt": "2026-09-06T01:42:36.185Z"
+  },
+  {
+    "id": "RES-654",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-06T01:42:29.690Z"
+  },
+  {
+    "id": "RES-275",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-06T01:42:29.690Z"
+  },
+  {
+    "id": "RES-296",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-06T01:42:29.258Z"
+  },
+  {
+    "id": "APP-742",
+    "name": "Candidate_1788653806166",
+    "role": "Senior Full-Stack Engineer",
+    "email": "candidate_1788653806166@testcandidate.com",
+    "phone": "+1 (555) 987-6543",
+    "skills": [
+      "JavaScript",
+      "System Design",
+      "Communication"
+    ],
+    "bio": "Experienced software architect.",
+    "score": 89,
+    "resumeFile": "Candidate_1788653806166_Resume.pdf",
+    "uploadedAt": "2026-09-06T00:16:46.175Z"
+  },
+  {
+    "id": "RES-483",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-06T00:16:41.791Z"
+  },
+  {
+    "id": "RES-637",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-06T00:16:41.790Z"
+  },
+  {
+    "id": "RES-223",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-06T00:16:41.660Z"
+  },
+  {
+    "id": "APP-834",
+    "name": "Candidate_1788653316657",
+    "role": "Senior Full-Stack Engineer",
+    "email": "candidate_1788653316657@testcandidate.com",
+    "phone": "+1 (555) 987-6543",
+    "skills": [
+      "JavaScript",
+      "System Design",
+      "Communication"
+    ],
+    "bio": "Experienced software architect.",
+    "score": 89,
+    "resumeFile": "Candidate_1788653316657_Resume.pdf",
+    "uploadedAt": "2026-09-06T00:08:36.650Z"
+  },
+  {
+    "id": "RES-538",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-06T00:08:33.182Z"
+  },
+  {
+    "id": "APP-835",
+    "name": "Candidate_1788653297792",
+    "role": "Senior Full-Stack Engineer",
+    "email": "candidate_1788653297792@testcandidate.com",
+    "phone": "+1 (555) 987-6543",
+    "skills": [
+      "JavaScript",
+      "System Design",
+      "Communication"
+    ],
+    "bio": "Experienced software architect.",
+    "score": 95,
+    "resumeFile": "Candidate_1788653297792_Resume.pdf",
+    "uploadedAt": "2026-09-06T00:08:17.796Z"
+  },
+  {
+    "id": "RES-467",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-06T00:08:10.747Z"
+  },
+  {
+    "id": "RES-575",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-06T00:08:10.747Z"
+  },
+  {
+    "id": "RES-276",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-06T00:08:10.575Z"
+  },
+  {
+    "id": "APP-754",
+    "name": "Candidate_1788653263915",
+    "role": "Senior Full-Stack Engineer",
+    "email": "candidate_1788653263915@testcandidate.com",
+    "phone": "+1 (555) 987-6543",
+    "skills": [
+      "JavaScript",
+      "System Design",
+      "Communication"
+    ],
+    "bio": "Experienced software architect.",
+    "score": 92,
+    "resumeFile": "Candidate_1788653263915_Resume.pdf",
+    "uploadedAt": "2026-09-06T00:07:44.459Z"
+  },
+  {
+    "id": "RES-315",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-06T00:07:39.061Z"
+  },
+  {
+    "id": "RES-278",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-06T00:07:39.061Z"
+  },
+  {
+    "id": "RES-328",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-06T00:07:38.968Z"
+  },
+  {
+    "id": "APP-767",
+    "name": "Candidate_1788653212353",
+    "role": "Senior Full-Stack Engineer",
+    "email": "candidate_1788653212353@testcandidate.com",
+    "phone": "+1 (555) 987-6543",
+    "skills": [
+      "JavaScript",
+      "System Design",
+      "Communication"
+    ],
+    "bio": "Experienced software architect.",
+    "score": 86,
+    "resumeFile": "Candidate_1788653212353_Resume.pdf",
+    "uploadedAt": "2026-09-06T00:06:52.356Z"
+  },
+  {
+    "id": "RES-479",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-06T00:06:47.985Z"
+  },
+  {
+    "id": "RES-106",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-06T00:06:47.985Z"
+  },
+  {
+    "id": "RES-892",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-06T00:06:47.869Z"
+  },
+  {
+    "id": "RES-889",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-05T23:49:01.688Z"
+  },
+  {
+    "id": "RES-749",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-05T23:49:01.688Z"
+  },
+  {
+    "id": "RES-488",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-05T23:49:01.569Z"
+  },
+  {
+    "id": "APP-810",
+    "name": "Candidate_1788650743357",
+    "role": "Senior Full-Stack Engineer",
+    "email": "candidate_1788650743357@testcandidate.com",
+    "phone": "+1 (555) 987-6543",
+    "skills": [
+      "JavaScript",
+      "System Design",
+      "Communication"
+    ],
+    "bio": "Experienced software architect.",
+    "score": 97,
+    "resumeFile": "Candidate_1788650743357_Resume.pdf",
+    "uploadedAt": "2026-09-05T23:25:43.366Z"
+  },
+  {
+    "id": "RES-319",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-05T23:25:38.038Z"
+  },
+  {
+    "id": "RES-705",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-05T23:25:38.038Z"
+  },
+  {
+    "id": "APP-882",
+    "name": "Candidate_1788649364824",
+    "role": "Senior Full-Stack Engineer",
+    "email": "candidate_1788649364824@testcandidate.com",
+    "phone": "+1 (555) 987-6543",
+    "skills": [
+      "JavaScript",
+      "System Design",
+      "Communication"
+    ],
+    "bio": "Experienced software architect.",
+    "score": 93,
+    "resumeFile": "Candidate_1788649364824_Resume.pdf",
+    "uploadedAt": "2026-09-05T23:02:44.828Z"
+  },
+  {
+    "id": "RES-198",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-05T23:02:41.421Z"
+  },
+  {
+    "id": "RES-562",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-05T23:02:41.335Z"
+  },
+  {
+    "id": "APP-851",
+    "name": "Candidate_1788648698232",
+    "role": "Senior Full-Stack Engineer",
+    "email": "candidate_1788648698232@testcandidate.com",
+    "phone": "+1 (555) 987-6543",
+    "skills": [
+      "JavaScript",
+      "System Design",
+      "Communication"
+    ],
+    "bio": "Experienced software architect.",
+    "score": 87,
+    "resumeFile": "Candidate_1788648698232_Resume.pdf",
+    "uploadedAt": "2026-09-05T22:51:38.243Z"
+  },
+  {
+    "id": "RES-655",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-05T22:51:31.211Z"
+  },
+  {
+    "id": "RES-940",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-05T22:51:31.211Z"
+  },
+  {
+    "id": "RES-406",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-05T22:51:31.116Z"
+  },
+  {
+    "id": "APP-898",
+    "name": "Candidate_1788646190590",
+    "role": "Senior Full-Stack Engineer",
+    "email": "candidate_1788646190590@testcandidate.com",
+    "phone": "+1 (555) 987-6543",
+    "skills": [
+      "JavaScript",
+      "System Design",
+      "Communication"
+    ],
+    "bio": "Experienced software architect.",
+    "score": 87,
+    "resumeFile": "Candidate_1788646190590_Resume.pdf",
+    "uploadedAt": "2026-09-05T22:09:50.598Z"
+  },
+  {
+    "id": "RES-810",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
+    "phone": "",
+    "location": "Austin, TX",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 95,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-05T22:09:44.782Z"
+  },
+  {
+    "id": "RES-114",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
+    "phone": "",
+    "location": "Chicago, IL",
+    "workType": "Full-Time • Remote",
+    "experience": "3+ Years",
+    "score": 94,
+    "verified": true,
+    "skills": [
+      "Professional"
+    ],
+    "bio": "",
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-05T22:09:44.782Z"
+  },
+  {
+    "id": "RES-511",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
+    "phone": "",
+    "location": "New York, NY",
+    "workType": "Full-Time • Remote",
+    "experience": "7+ Years",
+    "score": 96,
+    "verified": true,
+    "skills": [
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
+    ],
+    "bio": "",
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-05T22:09:44.496Z"
+  },
+  {
     "id": "APP-847",
     "name": "Candidate_1788645767583",
     "role": "Senior Full-Stack Engineer",
@@ -1185,21 +1923,21 @@
   },
   {
     "id": "RES-670",
-    "name": "Bulk Cand Two",
-    "role": "Tech Lead",
-    "email": "bulk2@test.com",
+    "name": "Bulk Cand One",
+    "role": "Sales Lead",
+    "email": "bulk1@test.com",
     "phone": "",
-    "location": "Austin, TX",
+    "location": "Chicago, IL",
     "workType": "Full-Time • Remote",
     "experience": "3+ Years",
-    "score": 95,
+    "score": 94,
     "verified": true,
     "skills": [
       "Professional"
     ],
     "bio": "",
-    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
-    "updatedAt": "2026-09-05T07:20:45.176Z"
+    "resumeFile": "Bulk_Cand_One_Resume.pdf",
+    "updatedAt": "2026-09-05T23:02:41.421Z"
   },
   {
     "id": "RES-295",
@@ -1417,21 +2155,23 @@
   },
   {
     "id": "RES-316",
-    "name": "Bulk Cand Two",
-    "role": "Tech Lead",
-    "email": "bulk2@test.com",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
     "phone": "",
-    "location": "Austin, TX",
+    "location": "New York, NY",
     "workType": "Full-Time • Remote",
-    "experience": "3+ Years",
-    "score": 95,
+    "experience": "7+ Years",
+    "score": 96,
     "verified": true,
     "skills": [
-      "Professional"
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
     ],
     "bio": "",
-    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
-    "updatedAt": "2026-09-05T06:19:15.614Z"
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-06T00:08:33.081Z"
   },
   {
     "id": "RES-783",
@@ -2749,21 +3489,23 @@
   },
   {
     "id": "RES-430",
-    "name": "Bulk Cand Two",
-    "role": "Tech Lead",
-    "email": "bulk2@test.com",
+    "name": "Taylor Brooks",
+    "role": "Enterprise Account Executive",
+    "email": "taylor.brooks@example.com",
     "phone": "",
-    "location": "Austin, TX",
+    "location": "New York, NY",
     "workType": "Full-Time • Remote",
-    "experience": "3+ Years",
-    "score": 95,
+    "experience": "7+ Years",
+    "score": 96,
     "verified": true,
     "skills": [
-      "Professional"
+      "Enterprise SaaS",
+      "Solution Selling",
+      "B2B Sales"
     ],
     "bio": "",
-    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
-    "updatedAt": "2026-09-05T04:08:16.643Z"
+    "resumeFile": "Taylor_Brooks_Resume.pdf",
+    "updatedAt": "2026-09-05T23:25:37.880Z"
   },
   {
     "id": "RES-902",
@@ -2897,23 +3639,21 @@
   },
   {
     "id": "RES-633",
-    "name": "Taylor Brooks",
-    "role": "Enterprise Account Executive",
-    "email": "taylor.brooks@example.com",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
     "phone": "",
-    "location": "New York, NY",
+    "location": "Austin, TX",
     "workType": "Full-Time • Remote",
-    "experience": "7+ Years",
-    "score": 96,
+    "experience": "3+ Years",
+    "score": 95,
     "verified": true,
     "skills": [
-      "Enterprise SaaS",
-      "Solution Selling",
-      "B2B Sales"
+      "Professional"
     ],
     "bio": "",
-    "resumeFile": "Taylor_Brooks_Resume.pdf",
-    "updatedAt": "2026-09-04T17:49:54.414Z"
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-06T00:08:33.182Z"
   },
   {
     "id": "RES-578",
@@ -4031,23 +4771,21 @@
   },
   {
     "id": "RES-929",
-    "name": "Taylor Brooks",
-    "role": "Enterprise Account Executive",
-    "email": "taylor.brooks@example.com",
+    "name": "Bulk Cand Two",
+    "role": "Tech Lead",
+    "email": "bulk2@test.com",
     "phone": "",
-    "location": "New York, NY",
+    "location": "Austin, TX",
     "workType": "Full-Time • Remote",
-    "experience": "7+ Years",
-    "score": 96,
+    "experience": "3+ Years",
+    "score": 95,
     "verified": true,
     "skills": [
-      "Enterprise SaaS",
-      "Solution Selling",
-      "B2B Sales"
+      "Professional"
     ],
     "bio": "",
-    "resumeFile": "Taylor_Brooks_Resume.pdf",
-    "updatedAt": "2026-09-02T20:37:52.835Z"
+    "resumeFile": "Bulk_Cand_Two_Resume.pdf",
+    "updatedAt": "2026-09-06T01:51:37.219Z"
   },
   {
     "id": "RES-568",
@@ -4362,15 +5100,15 @@
     "updatedAt": "2026-09-02T17:19:40.759Z"
   },
   {
-    "id": "RES-6316",
+    "id": "RES-1243",
     "name": "Jacqueline Wright",
     "role": "Staff Systems Engineer",
     "email": "jacqueline.wright@talentlead.io",
-    "phone": "(555) 252-5589",
+    "phone": "(555) 544-8679",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "5+ Years",
-    "score": 95,
+    "score": 93,
     "verified": true,
     "skills": [
       "Go",
@@ -4388,7 +5126,7 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Jacqueline_Wright_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-05T22:02:45.618Z"
+    "updatedAt": "2026-09-06T01:51:41.112Z"
   },
   {
     "id": "RES-469",
@@ -4702,15 +5440,15 @@
     "updatedAt": "2026-09-02T06:02:00.321Z"
   },
   {
-    "id": "RES-1328",
+    "id": "RES-8764",
     "name": "Katarina Castellano",
     "role": "Staff Systems Engineer",
     "email": "katarina.castellano@talentlead.io",
-    "phone": "(555) 647-7814",
+    "phone": "(555) 505-4041",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "9+ Years",
-    "score": 95,
+    "score": 96,
     "verified": true,
     "skills": [
       "Go",
@@ -4728,18 +5466,18 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Katarina_Castellano_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-05T22:02:45.618Z"
+    "updatedAt": "2026-09-06T01:51:41.112Z"
   },
   {
-    "id": "RES-1591",
+    "id": "RES-8498",
     "name": "Derrick Mercer",
     "role": "Staff Systems Engineer",
     "email": "derrick.mercer@talentlead.io",
-    "phone": "(555) 417-3697",
+    "phone": "(555) 776-6465",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "8+ Years",
-    "score": 93,
+    "score": 96,
     "verified": true,
     "skills": [
       "Go",
@@ -4757,18 +5495,18 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Derrick_Mercer_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-05T22:02:45.618Z"
+    "updatedAt": "2026-09-06T01:51:41.112Z"
   },
   {
-    "id": "RES-6352",
+    "id": "RES-3352",
     "name": "Natalia Kensington",
     "role": "Staff Systems Engineer",
     "email": "natalia.kensington@talentlead.io",
-    "phone": "(555) 775-1650",
+    "phone": "(555) 865-6654",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "7+ Years",
-    "score": 97,
+    "score": 98,
     "verified": true,
     "skills": [
       "Go",
@@ -4786,18 +5524,18 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Natalia_Kensington_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-05T22:02:45.618Z"
+    "updatedAt": "2026-09-06T01:51:41.112Z"
   },
   {
-    "id": "RES-4681",
+    "id": "RES-8543",
     "name": "Harrison Vanguard",
     "role": "Staff Systems Engineer",
     "email": "harrison.vanguard@talentlead.io",
-    "phone": "(555) 847-4676",
+    "phone": "(555) 720-2902",
     "location": "Austin, Tx",
     "workType": "Full-Time • Verified",
     "experience": "6+ Years",
-    "score": 96,
+    "score": 92,
     "verified": true,
     "skills": [
       "Go",
@@ -4815,10 +5553,10 @@
     "education": "Associate Degree - Kaplan University",
     "resumeFile": "Harrison_Vanguard_Resume.pdf",
     "source": "VERIFIED_TALENT_NETWORK",
-    "updatedAt": "2026-09-05T22:02:45.618Z"
+    "updatedAt": "2026-09-06T01:51:41.112Z"
   },
   {
-    "id": "RES-851",
+    "id": "RES-793",
     "name": "Rachel Green",
     "role": "Director of Brand Marketing • New York, NY",
     "email": "rachel.green@fashionretail.com",
@@ -4826,17 +5564,17 @@
     "location": "New York, NY",
     "workType": "Full-Time • Hybrid",
     "experience": "6+ Years",
-    "score": 98,
+    "score": 92,
     "verified": true,
     "skills": [
       "SEO"
     ],
     "bio": "6+ years leading viral multi-channel campaigns, influencer partnerships, and SEO growth marketing.",
     "resumeFile": "Rachel_Green_Resume.pdf",
-    "updatedAt": "2026-09-05T22:02:45.171Z"
+    "updatedAt": "2026-09-06T01:51:40.300Z"
   },
   {
-    "id": "RES-856",
+    "id": "RES-269",
     "name": "Marcus Vance",
     "role": "Machine Learning Engineer",
     "email": "marcus.vance@talentscale.io",
@@ -4844,7 +5582,7 @@
     "location": "San Francisco, CA",
     "workType": "Full-Time • Hybrid",
     "experience": "8+ Years",
-    "score": 97,
+    "score": 92,
     "verified": true,
     "skills": [
       "Python",
@@ -4853,7 +5591,7 @@
     ],
     "bio": "Staff Machine Learning Engineer • San Francisco, CA",
     "resumeFile": "Marcus_Vance_Resume.pdf",
-    "updatedAt": "2026-09-05T22:02:45.170Z"
+    "updatedAt": "2026-09-06T01:51:40.298Z"
   },
   {
     "id": "RES-182",

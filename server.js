@@ -432,9 +432,6 @@ let cmsConfig = {
   },
   pricing: {
     palMonthly: 0,
-    starterMonthly: 99,
-    growthMonthly: 299,
-    proMonthly: 699,
     starterMonthly: 9.99,
     growthMonthly: 19.99,
     proMonthly: 34.99,
