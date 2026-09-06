@@ -2925,6 +2925,14 @@
         const statusText = isSuspended ? 'Suspended' : 'Active';
         const statusClass = isSuspended ? 'suspended' : 'active';
 
+        let subBadge = '';
+        if (user.cancelAtPeriodEnd) {
+          const expText = user.accessExpiresAt ? new Date(user.accessExpiresAt).toLocaleDateString() : 'Cycle End';
+          subBadge = `<div style="font-size: 0.65rem; color: #D97706; font-weight: 700; margin-top: 2px;">Canceling (${expText})</div>`;
+        } else if (user.retentionDiscountApplied) {
+          subBadge = `<div style="font-size: 0.65rem; color: #059669; font-weight: 700; margin-top: 2px;">50% Off Retention</div>`;
+        }
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><code>${uid}</code></td>
@@ -2932,7 +2940,7 @@
           <td>${email}</td>
           <td>${phone}</td>
           <td><span class="role-badge ${roleClass}">${role}</span></td>
-          <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+          <td><span class="status-badge ${statusClass}">${statusText}</span>${subBadge}</td>
           <td class="action-cells">
             <button onclick="editUser('${uid}')" data-tooltip="Edit user account details">EDIT</button>
             <button onclick="resetPassword('${uid}')" data-tooltip="Generate temporary secure password">RESET PW</button>

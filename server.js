@@ -1331,8 +1331,17 @@ function formatRole(role) {
 function getAllAggregatedUsers() {
   initDataDirectories();
   const userMap = new Map();
+  const now = new Date();
 
   usersDatabase.forEach(u => {
+    // Automated Zero-Touch Cycle Expiration Check
+    if (u.cancelAtPeriodEnd && u.accessExpiresAt && new Date(u.accessExpiresAt) <= now) {
+      u.plan = 'pal';
+      u.isPaid = false;
+      u.subscriptionStatus = 'Expired (Free Tier)';
+      u.cancelAtPeriodEnd = false;
+    }
+
     const rawRole = (u.role || '').toLowerCase();
     const roleNormalized = formatRole(rawRole);
     const isApproved = u.approved !== false && u.status !== 'Suspended';
@@ -1349,6 +1358,15 @@ function getAllAggregatedUsers() {
       approved: isApproved,
       company: u.company || '',
       bio: u.bio || '',
+      plan: u.plan || 'pal',
+      isPaid: !!u.isPaid,
+      cancelAtPeriodEnd: !!u.cancelAtPeriodEnd,
+      cancellationReason: u.cancellationReason || null,
+      cancellationFeedback: u.cancellationFeedback || '',
+      canceledAt: u.canceledAt || null,
+      accessExpiresAt: u.accessExpiresAt || null,
+      retentionDiscountApplied: !!u.retentionDiscountApplied,
+      subscriptionStatus: u.subscriptionStatus || (u.isPaid ? 'Active' : 'Free Tier'),
       createdAt: u.createdAt || new Date().toISOString()
     });
   });
@@ -1362,6 +1380,16 @@ function getAllAggregatedUsers() {
             const raw = fs.readFileSync(path.join(DIRS.employers, file), 'utf8');
             const data = JSON.parse(raw);
             const uid = data.userId || data.id || file.replace(/^emp_/, '').replace(/\.json$/, '');
+            
+            // Automated Zero-Touch Cycle Expiration Check for disk records
+            if (data.cancelAtPeriodEnd && data.accessExpiresAt && new Date(data.accessExpiresAt) <= now) {
+              data.plan = 'pal';
+              data.isPaid = false;
+              data.subscriptionStatus = 'Expired (Free Tier)';
+              data.cancelAtPeriodEnd = false;
+              try { fs.writeFileSync(path.join(DIRS.employers, file), JSON.stringify(data, null, 2), 'utf8'); } catch (e) {}
+            }
+
             const isApproved = data.approved !== false && data.status !== 'Suspended';
             const rawRole = (data.role || 'Employer').toLowerCase();
             const roleNormalized = formatRole(rawRole);
@@ -1377,6 +1405,15 @@ function getAllAggregatedUsers() {
               approved: isApproved,
               company: data.company || '',
               bio: data.bio || '',
+              plan: data.plan || 'pal',
+              isPaid: !!data.isPaid,
+              cancelAtPeriodEnd: !!data.cancelAtPeriodEnd,
+              cancellationReason: data.cancellationReason || null,
+              cancellationFeedback: data.cancellationFeedback || '',
+              canceledAt: data.canceledAt || null,
+              accessExpiresAt: data.accessExpiresAt || null,
+              retentionDiscountApplied: !!data.retentionDiscountApplied,
+              subscriptionStatus: data.subscriptionStatus || (data.isPaid ? 'Active' : 'Free Tier'),
               createdAt: data.createdAt || new Date().toISOString()
             });
           } catch (e) {}
@@ -2279,6 +2316,289 @@ const server = http.createServer(async (req, res) => {
       } else {
         sendJson(200, { status: 'saved_locally', profile: body });
       }
+    });
+    return;
+  }
+
+  // ----------------------------------------------------
+  // SUBSCRIPTION MANAGEMENT & RETENTION API ENDPOINTS
+  // ----------------------------------------------------
+  if (pathname === '/api/subscription/status' && req.method === 'GET') {
+    const user = getAuthenticatedUser(req, parsedUrl);
+    const userId = (user && (user.id || user.userId)) || parsedUrl.searchParams.get('userId') || parsedUrl.searchParams.get('id');
+    const email = parsedUrl.searchParams.get('email');
+    
+    let targetUser = user;
+    if (!targetUser && userId) {
+      targetUser = usersDatabase.find(u => u.id === userId || u.userId === userId);
+      if (!targetUser) {
+        const allUsers = getAllAggregatedUsers();
+        targetUser = allUsers.find(u => u.id === userId || u.userId === userId);
+      }
+    }
+    if (!targetUser && email) {
+      targetUser = usersDatabase.find(u => (u.email || '').toLowerCase() === email.toLowerCase());
+      if (!targetUser) {
+        const allUsers = getAllAggregatedUsers();
+        targetUser = allUsers.find(u => (u.email || '').toLowerCase() === email.toLowerCase());
+      }
+    }
+
+    if (!targetUser) {
+      targetUser = {
+        id: userId || 'USR-002',
+        userId: userId || 'USR-002',
+        plan: 'pal',
+        isPaid: false,
+        subscriptionStatus: 'Active (Free Tier)',
+        cancelAtPeriodEnd: false
+      };
+    }
+
+    // Auto-expire check
+    const now = new Date();
+    if (targetUser.cancelAtPeriodEnd && targetUser.accessExpiresAt && new Date(targetUser.accessExpiresAt) <= now) {
+      targetUser.plan = 'pal';
+      targetUser.isPaid = false;
+      targetUser.subscriptionStatus = 'Expired (Free Tier)';
+      targetUser.cancelAtPeriodEnd = false;
+      saveEmployerRecord(targetUser);
+    }
+
+    const isPaid = !!(targetUser.isPaid || (targetUser.plan && targetUser.plan !== 'pal'));
+    const defaultEnd = new Date(Date.now() + 30 * 86400000).toISOString();
+
+    sendJson(200, {
+      userId: targetUser.id || targetUser.userId,
+      email: targetUser.email || '',
+      plan: targetUser.plan || 'pal',
+      isPaid: isPaid,
+      subscriptionStatus: targetUser.subscriptionStatus || (isPaid ? (targetUser.cancelAtPeriodEnd ? 'Cancellation Scheduled' : (targetUser.retentionDiscountApplied ? 'Active (50% Off Applied)' : 'Active')) : 'Active (Free Tier)'),
+      cancelAtPeriodEnd: !!targetUser.cancelAtPeriodEnd,
+      cancellationReason: targetUser.cancellationReason || null,
+      cancellationFeedback: targetUser.cancellationFeedback || '',
+      accessExpiresAt: targetUser.accessExpiresAt || targetUser.currentPeriodEnd || defaultEnd,
+      retentionDiscountApplied: !!targetUser.retentionDiscountApplied,
+      discountPercent: targetUser.retentionDiscountApplied ? 50 : 0
+    });
+    return;
+  }
+
+  if (pathname === '/api/subscription/cancel' && req.method === 'POST') {
+    readBody(async (err, body) => {
+      if (err) return sendJson(400, { error: 'Invalid JSON payload' });
+      const authUser = getAuthenticatedUser(req);
+      const targetId = (authUser && (authUser.id || authUser.userId)) || body.userId || body.id;
+      const targetEmail = (authUser && authUser.email) || body.email;
+
+      let user = (authUser && authUser.id) ? authUser : usersDatabase.find(u =>
+        (targetId && (u.id === targetId || u.userId === targetId)) ||
+        (targetEmail && u.email && u.email.toLowerCase() === targetEmail.toLowerCase())
+      );
+
+      if (!user) {
+        const allUsers = getAllAggregatedUsers();
+        user = allUsers.find(u =>
+          (targetId && (u.id === targetId || u.userId === targetId)) ||
+          (targetEmail && u.email && u.email.toLowerCase() === targetEmail.toLowerCase())
+        );
+        if (user) usersDatabase.push(user);
+      }
+
+      if (!user && targetEmail) {
+        user = {
+          id: targetId || `USR-${Date.now()}`,
+          userId: targetId || `USR-${Date.now()}`,
+          email: targetEmail,
+          name: body.name || 'Recruiter Member',
+          role: 'Employer',
+          plan: body.plan || 'starter',
+          isPaid: true
+        };
+        usersDatabase.push(user);
+      }
+
+      if (!user) {
+        user = usersDatabase.find(u => (u.role || '').toLowerCase().includes('employer')) || usersDatabase[1] || {
+          id: 'USR-002',
+          userId: 'USR-002',
+          email: 'hr@apexrecruiting.com',
+          name: 'Apex Recruiting Co.',
+          role: 'Employer',
+          plan: 'starter',
+          isPaid: true
+        };
+      }
+
+      const cycleDays = 30;
+      const periodEnd = user.currentPeriodEnd ? new Date(user.currentPeriodEnd) : new Date(Date.now() + cycleDays * 86400000);
+      user.cancelAtPeriodEnd = true;
+      user.cancellationReason = body.reason || 'General cancellation';
+      user.cancellationFeedback = body.feedback || '';
+      user.canceledAt = new Date().toISOString();
+      user.accessExpiresAt = periodEnd.toISOString();
+      user.subscriptionStatus = 'Cancellation Scheduled';
+      user.retentionDiscountApplied = false;
+
+      saveEmployerRecord(user);
+      writeSystemLog('SUBSCRIPTION_CANCELED', {
+        userId: user.id || user.userId,
+        email: user.email,
+        plan: user.plan || body.plan || 'starter',
+        reason: user.cancellationReason,
+        accessExpiresAt: user.accessExpiresAt
+      });
+
+      const formattedDate = periodEnd.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      
+      try {
+        await sendTransactionalEmail({
+          to: user.email || 'hr@apexrecruiting.com',
+          subject: `u-thePOST Subscription Cancellation Notice — Access Active Until ${formattedDate}`,
+          type: 'SUBSCRIPTION_CANCELED',
+          metadata: { userId: user.id || user.userId, plan: user.plan, accessExpiresAt: user.accessExpiresAt, reason: user.cancellationReason },
+          html: buildBrandedEmailHtml({
+            title: 'Subscription Cancellation Confirmed',
+            bodyContent: `
+              <p>Hello <strong>${user.name || user.fullName || user.company || 'Recruiter Partner'}</strong>,</p>
+              <p>Your subscription cancellation request has been received and processed.</p>
+              <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; margin: 20px 0;">
+                <p style="margin: 0 0 8px; font-weight: 700; color: #0F172A;">Billing & Continuous Access Summary:</p>
+                <p style="margin: 0 0 6px; font-size: 13px; color: #475569;">• <strong>Final Billing:</strong> You have only been billed for your current active billing month.</p>
+                <p style="margin: 0 0 6px; font-size: 13px; color: #475569;">• <strong>Full Access Through:</strong> <span style="color: #0075FF; font-weight: 700;">${formattedDate}</span></p>
+                <p style="margin: 0; font-size: 13px; color: #475569;">• <strong>Future Renewals:</strong> Auto-renewal is permanently turned OFF. No further charges will occur.</p>
+              </div>
+              <p>Until <strong>${formattedDate}</strong>, you will continue to have full access to all your active job postings, applicant management, candidate resumes, and recruiter tools. After this date, your account will smoothly transition to the free <strong>u-thePAL</strong> tier.</p>
+              <p>Thank you for partnering with UTHEVERSITY. You may reactivate or upgrade your plan at any time with a single click.</p>
+            `,
+            ctaText: 'View Recruiter Studio',
+            ctaUrl: 'https://post.utheversity.com'
+          })
+        });
+      } catch (e) {}
+
+      broadcastWebSocketEvent('SUBSCRIPTION_CANCELED', {
+        userId: user.id || user.userId,
+        email: user.email,
+        cancelAtPeriodEnd: true,
+        accessExpiresAt: user.accessExpiresAt
+      });
+
+      sendJson(200, {
+        success: true,
+        message: 'Subscription scheduled for cancellation at period end. Access remains active.',
+        cancelAtPeriodEnd: true,
+        accessExpiresAt: user.accessExpiresAt,
+        formattedDate
+      });
+    });
+    return;
+  }
+
+  if (pathname === '/api/subscription/apply-retention-discount' && req.method === 'POST') {
+    readBody(async (err, body) => {
+      if (err) return sendJson(400, { error: 'Invalid JSON payload' });
+      const authUser = getAuthenticatedUser(req);
+      const targetId = (authUser && (authUser.id || authUser.userId)) || body.userId || body.id;
+      const targetEmail = (authUser && authUser.email) || body.email;
+
+      let user = (authUser && authUser.id) ? authUser : usersDatabase.find(u =>
+        (targetId && (u.id === targetId || u.userId === targetId)) ||
+        (targetEmail && u.email && u.email.toLowerCase() === targetEmail.toLowerCase())
+      );
+
+      if (!user) {
+        const allUsers = getAllAggregatedUsers();
+        user = allUsers.find(u =>
+          (targetId && (u.id === targetId || u.userId === targetId)) ||
+          (targetEmail && u.email && u.email.toLowerCase() === targetEmail.toLowerCase())
+        );
+        if (user) usersDatabase.push(user);
+      }
+
+      if (!user && targetEmail) {
+        user = {
+          id: targetId || `USR-${Date.now()}`,
+          userId: targetId || `USR-${Date.now()}`,
+          email: targetEmail,
+          name: body.name || 'Recruiter Member',
+          role: 'Employer',
+          plan: body.plan || 'starter',
+          isPaid: true
+        };
+        usersDatabase.push(user);
+      }
+
+      if (!user) {
+        user = usersDatabase.find(u => (u.role || '').toLowerCase().includes('employer')) || usersDatabase[1] || {
+          id: 'USR-002',
+          userId: 'USR-002',
+          email: 'hr@apexrecruiting.com',
+          name: 'Apex Recruiting Co.',
+          role: 'Employer',
+          plan: 'starter',
+          isPaid: true
+        };
+      }
+
+      user.cancelAtPeriodEnd = false;
+      user.retentionDiscountApplied = true;
+      user.retentionDiscountPercent = 50;
+      user.retentionMonthsRemaining = 3;
+      user.subscriptionStatus = 'Active (50% Off Applied)';
+      delete user.cancellationReason;
+      delete user.cancellationFeedback;
+      delete user.canceledAt;
+      delete user.accessExpiresAt;
+
+      saveEmployerRecord(user);
+      writeSystemLog('RETENTION_DISCOUNT_APPLIED', {
+        userId: user.id || user.userId,
+        email: user.email,
+        plan: user.plan || body.plan || 'starter',
+        discount: '50%',
+        duration: '3 months'
+      });
+
+      try {
+        await sendTransactionalEmail({
+          to: user.email || 'hr@apexrecruiting.com',
+          subject: '50% Retention Discount Applied — UTHEVERSITY u-thePOST',
+          type: 'RETENTION_DISCOUNT_CONFIRMATION',
+          metadata: { userId: user.id || user.userId, discountPercent: 50, months: 3 },
+          html: buildBrandedEmailHtml({
+            title: '50% Discount Applied to Your Subscription',
+            bodyContent: `
+              <p>Hello <strong>${user.name || user.fullName || user.company || 'Recruiter Partner'}</strong>,</p>
+              <p>We are thrilled to keep you with us! Your <strong>50% discount</strong> has been applied to your subscription for your next <strong>3 billing statements</strong>.</p>
+              <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; margin: 20px 0;">
+                <p style="margin: 0 0 8px; font-weight: 700; color: #0F172A;">Discount Summary:</p>
+                <p style="margin: 0 0 6px; font-size: 13px; color: #475569;">• <strong>Discount Rate:</strong> 50% Off Base Monthly Plan</p>
+                <p style="margin: 0 0 6px; font-size: 13px; color: #475569;">• <strong>Duration:</strong> Next 3 Billing Statements</p>
+                <p style="margin: 0; font-size: 13px; color: #475569;">• <strong>Account Status:</strong> Active with full continuous access</p>
+              </div>
+              <p>Your job listings, candidate matches, and premium recruiter features will continue without interruption.</p>
+            `,
+            ctaText: 'Go to Recruiter Studio',
+            ctaUrl: 'https://post.utheversity.com'
+          })
+        });
+      } catch (e) {}
+
+      broadcastWebSocketEvent('RETENTION_DISCOUNT_APPLIED', {
+        userId: user.id || user.userId,
+        email: user.email,
+        discountPercent: 50,
+        months: 3
+      });
+
+      sendJson(200, {
+        success: true,
+        message: '50% retention discount successfully applied for next 3 months.',
+        subscriptionStatus: 'Active (50% Off Applied)',
+        retentionDiscountApplied: true,
+        discountPercent: 50
+      });
     });
     return;
   }

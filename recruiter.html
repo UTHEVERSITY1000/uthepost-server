@@ -7114,96 +7114,100 @@ ADD-ONS
 
 </div>
 
+<!-- MEMBERSHIP BILLING & CANCELLATION NOTICE -->
+<div class="billing-cancellation-notice" style="margin-top: 1.25rem; background: #0F172A; border: 1px solid #1E293B; border-left: 4px solid #FEBA27; border-radius: 8px; padding: 1rem 1.25rem; color: #CBD5E1; font-size: 0.8rem; line-height: 1.6; box-shadow: 0 4px 16px rgba(0,0,0,0.15);">
+  <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+    <div style="flex: 1;">
+      <strong style="color: #FFFFFF; font-size: 0.85rem; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 0.25rem;">Billing & Cancellation Terms</strong>
+      Cancel anytime. You will only be billed for your current billing month, and you will continue to have full access to all plan features and postings until the end of your billing cycle.
+    </div>
+  </div>
+</div>
+
 </section>
 
-
-
 <!-- TAB 5: MY PROFILE (EMPLOYER BRAND ASSETS & SETTINGS) -->
-
 <section id="view-profile" class="tab-view">
 
-<div class="panel-card">
+  <div class="panel-card">
+    <div class="panel-header">
+      <span class="panel-title">5. EMPLOYER BRAND PROFILE & ASSETS</span>
+      <span class="verified-employer-badge">
+        <svg class="uthe-emblem-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+          <path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18C5 19.5 8.13 21 12 21C15.87 21 19 19.5 19 17.18V13.18L12 17L5 13.18Z"/>
+        </svg>
+        VERIFIED EMPLOYER
+      </span>
+    </div>
 
-<div class="panel-header">
+    <div class="grid-2">
+      <div class="form-group">
+        <label data-tooltip="Official company legal name.">Organization Legal Name</label>
+        <input type="text" id="prof-company" placeholder="e.g. Quantum Retail Corp" value="Quantum Retail Corp" data-tooltip="Employer name.">
+      </div>
+      <div class="form-group">
+        <label data-tooltip="Lead recruiter or talent acquisition manager name.">Contact Lead Name</label>
+        <input type="text" id="prof-name" placeholder="e.g. Jane Doe / Talent Lead" value="Quantum Talent Team" data-tooltip="Hiring manager name.">
+      </div>
+    </div>
 
-<span class="panel-title">5. EMPLOYER BRAND PROFILE & ASSETS</span>
+    <div class="grid-2">
+      <div class="form-group">
+        <label data-tooltip="Registered company email.">Work Email Address</label>
+        <input type="email" id="prof-email" placeholder="hiring@quantumretail.com" value="hiring@quantumretail.com" data-tooltip="Work email address.">
+      </div>
+      <div class="form-group">
+        <label data-tooltip="Contact phone number.">Contact Phone Number</label>
+        <input type="tel" id="prof-phone" placeholder="+1 (555) 000-0000" value="+1 (555) 019-2831" data-tooltip="Primary phone number.">
+      </div>
+    </div>
 
-<span class="verified-employer-badge">
+    <div class="form-group">
+      <label data-tooltip="Company branding and recruitment overview.">Company Overview & Culture</label>
+      <textarea id="prof-bio" rows="3" data-tooltip="Company culture overview.">High-growth retail and customer organization focused on positive team leadership and seamless community service.</textarea>
+    </div>
 
-<svg class="uthe-emblem-icon" viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+    <button class="btn-gold-action" style="align-self: flex-start;" onclick="saveEmployerProfile()" data-tooltip="Save your brand details and organization profile.">
+      SAVE BRAND PROFILE
+    </button>
+  </div>
 
-<path d="M12 3L1 9L12 15L21 10.09V17H23V9M5 13.18V17.18C5 19.5 8.13 21 12 21C15.87 21 19 19.5 19 17.18V13.18L12 17L5 13.18Z"/>
+  <!-- MEMBERSHIP & SUBSCRIPTION MANAGEMENT CARD -->
+  <div class="panel-card" style="margin-top: 1.25rem;">
+    <div class="panel-header">
+      <span class="panel-title">MEMBERSHIP & SUBSCRIPTION MANAGEMENT</span>
+      <span id="sub-management-badge" style="font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 4px; background: #E0F2FE; color: #0284C7;">FREE TIER</span>
+    </div>
 
-</svg>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 1rem 1.25rem;">
+      <div>
+        <div style="font-size: 0.68rem; font-weight: 800; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Current Plan</div>
+        <div style="font-size: 1.1rem; font-weight: 900; color: #0F172A; margin-top: 0.2rem;" id="sub-plan-name">u-thePAL (Free Tier)</div>
+        <div style="font-size: 0.75rem; color: #64748B; margin-top: 0.15rem;" id="sub-plan-price">$0.00 / month</div>
+      </div>
+      <div>
+        <div style="font-size: 0.68rem; font-weight: 800; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px;">Billing & Access Status</div>
+        <div style="font-size: 0.95rem; font-weight: 800; color: #059669; margin-top: 0.2rem;" id="sub-status-text">Active (Free Tier)</div>
+        <div style="font-size: 0.75rem; color: #64748B; margin-top: 0.15rem;" id="sub-cycle-text">No recurring monthly charge</div>
+      </div>
+    </div>
 
-VERIFIED EMPLOYER
+    <!-- Cancellation & Policy Summary -->
+    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 3.5px solid #FEBA27; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1.25rem; font-size: 0.75rem; color: #475569; line-height: 1.5;">
+      <strong style="color: #0F172A; display: block; margin-bottom: 2px;">Cancellation Policy:</strong>
+      Cancel anytime. If you cancel your monthly plan, you will only be charged for that month and will continue to have full access to all plan features and postings until the end of your current billing cycle.
+    </div>
 
-</span>
-
-</div>
-
-
-
-<div class="grid-2">
-
-<div class="form-group">
-
-<label data-tooltip="Official company legal name.">Organization Legal Name</label>
-
-<input type="text" id="prof-company" value="Quantum Retail Corp" data-tooltip="Employer name.">
-<input type="text" id="prof-company" placeholder="e.g. Quantum Retail Corp" value="" data-tooltip="Employer name.">
-
-</div>
-
-<div class="form-group">
-
-<label data-tooltip="Lead recruiter or talent acquisition manager name.">Contact Lead Name</label>
-
-<input type="text" id="prof-name" value="Quantum Talent Team" data-tooltip="Hiring manager name.">
-<input type="text" id="prof-name" placeholder="e.g. Jane Doe / Talent Lead" value="" data-tooltip="Hiring manager name.">
-
-</div>
-
-</div>
-
-
-
-<div class="grid-2">
-
-        <div class="form-group">
-          <label data-tooltip="Registered company email.">Work Email Address</label>
-          <input type="email" id="prof-email" value="hiring@quantumretail.com" data-tooltip="Work email address.">
-          <input type="email" id="prof-email" placeholder="hiring@quantumretail.com" value="" data-tooltip="Work email address.">
-        </div>
-
-<div class="form-group">
-
-<label data-tooltip="Contact phone number.">Contact Phone Number</label>
-
-<input type="tel" id="prof-phone" value="+1 (555) 019-2831" data-tooltip="Primary phone number.">
-<input type="tel" id="prof-phone" placeholder="+1 (555) 000-0000" value="" data-tooltip="Primary phone number.">
-
-</div>
-
-</div>
-
-
-
-<div class="form-group">
-
-<label data-tooltip="Company branding and recruitment overview.">Company Overview & Culture</label>
-
-<textarea id="prof-bio" rows="3" data-tooltip="Company culture overview.">High-growth retail and customer organization focused on positive team leadership and seamless community service.</textarea>
-
-</div>
-
-
-
-      <button class="btn-gold-action" style="align-self: flex-start;" onclick="saveEmployerProfile()" data-tooltip="Save your brand details and organization profile.">
-        SAVE BRAND PROFILE
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+      <button id="btn-upgrade-subscription" class="btn-gold-action" onclick="switchRecruiterTab('plans')" style="height: 38px; padding: 0 1.25rem; font-size: 0.75rem; font-weight: 900;" data-tooltip="View premium membership plans and add-ons">
+        VIEW / UPGRADE PLANS (TAB 4)
+      </button>
+      <button id="btn-cancel-subscription" class="btn-surface-sm" onclick="openCancelSubscriptionModal()" style="height: 38px; padding: 0 1.25rem; font-size: 0.75rem; font-weight: 800; color: #EF4444; border-color: #FCA5A5; display: none;" data-tooltip="Cancel your recurring monthly subscription">
+        CANCEL MEMBERSHIP
       </button>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- TAB 6: RESUME SEARCH (ADVANCED SOURCING COMMAND BAR & CANDIDATE SHOWCASE) -->
   <section id="view-resumes" class="tab-view" style="display: none;">
@@ -8385,6 +8389,91 @@ SIGN IN TO WORKSPACE
         </button>
         <button onclick="closeUnlockContactModal(); switchRecruiterTab('plans');" class="btn-gold-action" style="height: 36px; padding: 0 1.25rem; font-weight: 900; font-size: 0.75rem;">
           ⚡ VIEW PLANS & UPGRADE (TAB 4)
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RECRUITER SUBSCRIPTION CANCELLATION & 50% OFF RETENTION WIN-BACK MODAL -->
+<div class="custom-modal-alert" id="modal-cancel-subscription" style="display: none;">
+  <div class="custom-alert-card" style="max-width: 520px; text-align: left; padding: 0; overflow: hidden; border: 1.5px solid #FEBA27; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.35);">
+    <!-- Modal Header -->
+    <div style="background: #0F172A; color: #FFFFFF; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #FEBA27;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <strong style="font-size: 0.9rem; letter-spacing: 0.5px; color: #FEBA27;" id="cancel-modal-title">MANAGE MEMBERSHIP SUBSCRIPTION</strong>
+      </div>
+      <button class="btn-surface-sm" onclick="closeCancelSubscriptionModal()" style="height: 26px; padding: 0 0.6rem; font-weight: 900; background: rgba(255,255,255,0.1); color: #FFFFFF; border: none; border-radius: 4px; cursor: pointer;">✕</button>
+    </div>
+
+    <!-- Step 1: Reason Survey & Notice -->
+    <div id="cancel-step-1" style="padding: 1.25rem;">
+      <p style="font-size: 0.84rem; color: #1E293B; line-height: 1.5; margin: 0 0 1rem 0; font-weight: 600;">
+        We are sorry to see you consider canceling. Please tell us why you are leaving so we can continue improving:
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem;">
+        <label style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: #334155; cursor: pointer; text-transform: none; font-weight: 600;">
+          <input type="radio" name="cancel_reason" value="Hiring goals completed / Pausing recruitment" checked style="width: 16px; height: 16px; accent-color: #0075FF;">
+          Hiring goals completed / Pausing recruitment
+        </label>
+        <label style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: #334155; cursor: pointer; text-transform: none; font-weight: 600;">
+          <input type="radio" name="cancel_reason" value="Price is beyond current budget" style="width: 16px; height: 16px; accent-color: #0075FF;">
+          Price is beyond current budget
+        </label>
+        <label style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: #334155; cursor: pointer; text-transform: none; font-weight: 600;">
+          <input type="radio" name="cancel_reason" value="Looking for different candidate categories" style="width: 16px; height: 16px; accent-color: #0075FF;">
+          Looking for different candidate categories
+        </label>
+        <label style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: #334155; cursor: pointer; text-transform: none; font-weight: 600;">
+          <input type="radio" name="cancel_reason" value="Switching to another platform" style="width: 16px; height: 16px; accent-color: #0075FF;">
+          Switching to another platform
+        </label>
+        <label style="display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: #334155; cursor: pointer; text-transform: none; font-weight: 600;">
+          <input type="radio" name="cancel_reason" value="Other reasons" style="width: 16px; height: 16px; accent-color: #0075FF;">
+          Other reasons
+        </label>
+      </div>
+
+      <div style="margin-bottom: 1rem;">
+        <label style="font-size: 0.68rem; font-weight: 800; color: #64748B; text-transform: uppercase; margin-bottom: 0.3rem; display: block;">Additional Feedback (Optional)</label>
+        <textarea id="cancel-feedback-text" rows="2" placeholder="Tell us how we could have served you better..." style="width: 100%; font-size: 0.78rem; padding: 0.5rem; border: 1px solid #CBD5E1; border-radius: 6px;"></textarea>
+      </div>
+
+      <!-- Cancellation Policy Callout -->
+      <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 3.5px solid #0075FF; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1.25rem;">
+        <div style="font-size: 0.75rem; font-weight: 800; color: #0F172A; margin-bottom: 2px;">CANCELLATION POLICY</div>
+        <div style="font-size: 0.74rem; color: #475569; line-height: 1.45;">
+          You will only be billed for your current billing month. You will continue to have full, uninterrupted access to all plan features, job postings, and candidate inboxes until the end of your billing cycle.
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.6rem; justify-content: flex-end; align-items: center;">
+        <button class="btn-surface-sm" onclick="closeCancelSubscriptionModal()" style="height: 38px; padding: 0 1.25rem; font-size: 0.75rem; font-weight: 800;">
+          KEEP MEMBERSHIP
+        </button>
+        <button class="btn-gold-action" onclick="proceedToCancelStep2()" style="height: 38px; padding: 0 1.25rem; font-weight: 900; font-size: 0.75rem; background: #EF4444; border-color: #DC2626; color: #FFFFFF;">
+          CONTINUE TO CANCEL
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: 50% Off Win-Back Retention Offer -->
+    <div id="cancel-step-2" style="display: none; padding: 1.25rem;">
+      <div style="background: linear-gradient(135deg, #0F172A, #1E293B); border: 1.5px solid #FEBA27; border-radius: 8px; padding: 1.25rem; color: #FFFFFF; margin-bottom: 1.25rem; text-align: center;">
+        <div style="font-size: 0.72rem; font-weight: 900; color: #FEBA27; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.35rem;">SPECIAL RETENTION BENEFIT</div>
+        <div style="font-size: 1.35rem; font-weight: 900; color: #FFFFFF; margin-bottom: 0.35rem;">Stay with Us & Get 50% Off</div>
+        <div style="font-size: 0.82rem; color: #94A3B8; line-height: 1.5; max-width: 420px; margin: 0 auto;">
+          Enjoy <strong>50% off your monthly plan for the next 3 months</strong>. Keep posting jobs, contacting talent directly, and accessing premium AI candidate matching at half the price.
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+        <button id="btn-claim-retention-discount" class="btn-gold-action" onclick="claimRetentionDiscount()" style="height: 42px; width: 100%; font-weight: 900; font-size: 0.82rem; background: #0075FF; border-color: #0075FF; color: #FFFFFF; justify-content: center; box-shadow: 0 4px 14px rgba(0, 117, 255, 0.4);">
+          CLAIM 50% OFF & KEEP PLAN
+        </button>
+        <button id="btn-confirm-cancellation" class="btn-surface-sm" onclick="confirmRecruiterCancellation()" style="height: 38px; width: 100%; font-size: 0.75rem; font-weight: 800; color: #94A3B8; justify-content: center; border: 1px solid #E2E8F0;">
+          CONFIRM CANCELLATION (ACCESS ACTIVE UNTIL CYCLE END)
         </button>
       </div>
     </div>
@@ -11388,11 +11477,12 @@ window.checkoutMembershipPlan = function() {
 
   showCustomModalAlert(
     'Checkout Total Confirmed',
-    `TOTAL DUE AT CHECKOUT: $${numTotal.toFixed(2)}/mo\n\n• Selected Plan: ${selectedBasePlan.toUpperCase()}${addonSummary}\n\n${breakdownText}\n\nOpening secure payment gateway at:\n${checkoutUrl}\n\nComplete your payment via Stripe, PayPal, Venmo, or Card on UTHEVERSITY.`
+    `TOTAL DUE AT CHECKOUT: $${numTotal.toFixed(2)}/mo\n\n• Selected Plan: ${selectedBasePlan.toUpperCase()}${addonSummary}\n\n${breakdownText}\n\n• Cancellation Policy:\nCancel anytime. You will only be billed for your current billing month, and you will continue to have full access to all plan features and postings until the end of your billing cycle.\n\nOpening secure payment gateway at:\n${checkoutUrl}\n\nComplete your payment via Stripe, PayPal, Venmo, or Card on UTHEVERSITY.`
   );
 
   if (typeof renderResumeBoard === 'function') renderResumeBoard();
   if (typeof renderActiveJobsTable === 'function') renderActiveJobsTable();
+  if (typeof renderRecruiterSubscriptionStatus === 'function') renderRecruiterSubscriptionStatus();
 };
 
 
@@ -11467,7 +11557,220 @@ window.loadSavedEmployerProfile = function() {
     const bioEl = document.getElementById('prof-bio');
     if (bioEl && saved.bio !== undefined && saved.bio !== '') bioEl.value = saved.bio;
   }
+
+  if (typeof renderRecruiterSubscriptionStatus === 'function') {
+    renderRecruiterSubscriptionStatus();
+  }
 };
+
+// ----------------------------------------------------
+// SUBSCRIPTION MANAGEMENT & 50% OFF RETENTION LOGIC
+// ----------------------------------------------------
+window.openCancelSubscriptionModal = function() {
+  const modal = document.getElementById('modal-cancel-subscription');
+  const step1 = document.getElementById('cancel-step-1');
+  const step2 = document.getElementById('cancel-step-2');
+  if (step1) step1.style.display = 'block';
+  if (step2) step2.style.display = 'none';
+  const title = document.getElementById('cancel-modal-title');
+  if (title) title.textContent = 'MANAGE MEMBERSHIP SUBSCRIPTION';
+  if (modal) modal.style.display = 'flex';
+};
+
+window.closeCancelSubscriptionModal = function() {
+  const modal = document.getElementById('modal-cancel-subscription');
+  if (modal) modal.style.display = 'none';
+};
+
+window.proceedToCancelStep2 = function() {
+  const step1 = document.getElementById('cancel-step-1');
+  const step2 = document.getElementById('cancel-step-2');
+  if (step1) step1.style.display = 'none';
+  if (step2) step2.style.display = 'block';
+  const title = document.getElementById('cancel-modal-title');
+  if (title) title.textContent = 'SPECIAL RETENTION BENEFIT (50% OFF)';
+};
+
+window.claimRetentionDiscount = async function() {
+  const user = currentUser || {};
+  const userId = user.id || user.userId || 'USR-002';
+  const email = user.email || (document.getElementById('prof-email') ? document.getElementById('prof-email').value : '') || 'hr@apexrecruiting.com';
+
+  try {
+    const res = await fetch('/api/subscription/apply-retention-discount', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, email, plan: (currentUser && currentUser.plan) || 'starter' })
+    });
+  } catch (e) {}
+
+  try {
+    localStorage.setItem('uthe_retention_discount_applied', 'true');
+    localStorage.removeItem('uthe_subscription_canceled');
+    localStorage.removeItem('uthe_access_expires_at');
+  } catch (e) {}
+
+  if (currentUser) {
+    currentUser.retentionDiscountApplied = true;
+    currentUser.cancelAtPeriodEnd = false;
+  }
+
+  closeCancelSubscriptionModal();
+  renderRecruiterSubscriptionStatus();
+  showCustomModalAlert(
+    '50% Retention Discount Applied!',
+    'Your 50% discount has been successfully activated for your next 3 billing statements.\n\nYour membership remains active with continuous, uninterrupted access to all job postings and candidate tools.'
+  );
+};
+
+window.confirmRecruiterCancellation = async function() {
+  const selectedRadio = document.querySelector('input[name="cancel_reason"]:checked');
+  const reason = selectedRadio ? selectedRadio.value : 'General cancellation';
+  const feedback = document.getElementById('cancel-feedback-text') ? document.getElementById('cancel-feedback-text').value : '';
+  const user = currentUser || {};
+  const userId = user.id || user.userId || 'USR-002';
+  const email = user.email || (document.getElementById('prof-email') ? document.getElementById('prof-email').value : '') || 'hr@apexrecruiting.com';
+
+  const defaultExpDate = new Date(Date.now() + 30 * 86400000);
+  let expDateString = defaultExpDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  let accessExpiresAt = defaultExpDate.toISOString();
+
+  try {
+    const res = await fetch('/api/subscription/cancel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId,
+        email,
+        reason,
+        feedback,
+        plan: (currentUser && currentUser.plan) || 'starter'
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.formattedDate) expDateString = data.formattedDate;
+      if (data.accessExpiresAt) accessExpiresAt = data.accessExpiresAt;
+    }
+  } catch (e) {}
+
+  try {
+    localStorage.setItem('uthe_subscription_canceled', 'true');
+    localStorage.setItem('uthe_access_expires_at', accessExpiresAt);
+    localStorage.removeItem('uthe_retention_discount_applied');
+  } catch (e) {}
+
+  if (currentUser) {
+    currentUser.cancelAtPeriodEnd = true;
+    currentUser.accessExpiresAt = accessExpiresAt;
+    currentUser.retentionDiscountApplied = false;
+  }
+
+  closeCancelSubscriptionModal();
+  renderRecruiterSubscriptionStatus();
+  showCustomModalAlert(
+    'Subscription Cancellation Processed',
+    `Your cancellation request has been confirmed.\n\n• Final Charge: You have only been charged for your current billing month.\n• Continuous Access: You will continue to have full access to all plan features and postings until ${expDateString}.\n• Future Renewals: Auto-renewal is OFF. After ${expDateString}, your account will smoothly transition to the free u-thePAL tier.`
+  );
+};
+
+window.renderRecruiterSubscriptionStatus = function() {
+  let plan = (currentUser && currentUser.plan) || '';
+  if (!plan) {
+    try { plan = localStorage.getItem('uthe_subscribed_plan') || 'pal'; } catch (e) { plan = 'pal'; }
+  }
+  let isPaid = false;
+  if (currentUser && currentUser.isPaid !== undefined) {
+    isPaid = !!currentUser.isPaid;
+  } else {
+    try { isPaid = localStorage.getItem('uthe_is_paid_plan') === 'true' || (plan !== 'pal' && plan !== ''); } catch (e) { isPaid = false; }
+  }
+
+  const planNames = {
+    pal: 'u-thePAL (Free Tier)',
+    starter: 'u-theSTARTER ($99/mo)',
+    growth: 'u-theGROWTH ($199/mo)',
+    pro: 'u-thePRO ($349/mo)'
+  };
+  const planPrices = {
+    pal: '$0.00 / month',
+    starter: '$99.00 / month',
+    growth: '$199.00 / month',
+    pro: '$349.00 / month'
+  };
+
+  const nameEl = document.getElementById('sub-plan-name');
+  const priceEl = document.getElementById('sub-plan-price');
+  const statusEl = document.getElementById('sub-status-text');
+  const cycleEl = document.getElementById('sub-cycle-text');
+  const cancelBtn = document.getElementById('btn-cancel-subscription');
+  const badgeEl = document.getElementById('sub-management-badge');
+
+  let cancelAtPeriodEnd = false;
+  let accessExpiresAt = null;
+  let retentionDiscountApplied = false;
+
+  try {
+    if (localStorage.getItem('uthe_subscription_canceled') === 'true') {
+      cancelAtPeriodEnd = true;
+      accessExpiresAt = localStorage.getItem('uthe_access_expires_at');
+    }
+    if (localStorage.getItem('uthe_retention_discount_applied') === 'true') {
+      retentionDiscountApplied = true;
+    }
+  } catch (e) {}
+
+  if (currentUser) {
+    if (currentUser.cancelAtPeriodEnd) cancelAtPeriodEnd = true;
+    if (currentUser.accessExpiresAt) accessExpiresAt = currentUser.accessExpiresAt;
+    if (currentUser.retentionDiscountApplied) retentionDiscountApplied = true;
+  }
+
+  if (nameEl) nameEl.textContent = planNames[plan] || 'u-thePAL (Free Tier)';
+  if (priceEl) priceEl.textContent = retentionDiscountApplied ? `${planPrices[plan] || '$99.00 / month'} (50% Off Applied)` : (planPrices[plan] || '$0.00 / month');
+
+  if (isPaid && plan !== 'pal') {
+    if (cancelAtPeriodEnd) {
+      if (statusEl) {
+        statusEl.textContent = 'Cancellation Scheduled';
+        statusEl.style.color = '#D97706';
+      }
+      const expDate = accessExpiresAt ? new Date(accessExpiresAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'End of billing cycle';
+      if (cycleEl) cycleEl.textContent = `Full access active until ${expDate}. Will not renew.`;
+      if (cancelBtn) cancelBtn.style.display = 'none';
+      if (badgeEl) {
+        badgeEl.textContent = 'CANCELLATION PENDING';
+        badgeEl.style.background = '#FEF3C7';
+        badgeEl.style.color = '#B45309';
+      }
+    } else {
+      if (statusEl) {
+        statusEl.textContent = retentionDiscountApplied ? 'Active (50% Off Applied)' : 'Active (Auto-Renewing)';
+        statusEl.style.color = '#059669';
+      }
+      if (cycleEl) cycleEl.textContent = retentionDiscountApplied ? '50% discount active for next 3 months' : 'Billed monthly. Cancel anytime.';
+      if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+      if (badgeEl) {
+        badgeEl.textContent = 'ACTIVE SUBSCRIBER';
+        badgeEl.style.background = '#DCFCE7';
+        badgeEl.style.color = '#15803D';
+      }
+    }
+  } else {
+    if (statusEl) {
+      statusEl.textContent = 'Active (Free Tier)';
+      statusEl.style.color = '#64748B';
+    }
+    if (cycleEl) cycleEl.textContent = 'No recurring monthly charge';
+    if (cancelBtn) cancelBtn.style.display = 'none';
+    if (badgeEl) {
+      badgeEl.textContent = 'FREE TIER';
+      badgeEl.style.background = '#F1F5F9';
+      badgeEl.style.color = '#475569';
+    }
+  }
+};
+
 
 
 

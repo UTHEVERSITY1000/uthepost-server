@@ -4277,6 +4277,85 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 112 failed: ${err.message}`);
   }
 
+  // ============================================================
+  // GROUP 113: U-THEPOST SUBSCRIPTION CANCELLATION, NOTICE & 50% OFF RETENTION SUITE
+  // ============================================================
+  console.log('\n--- GROUP 113: U-THEPOST SUBSCRIPTION CANCELLATION, NOTICE & 50% OFF RETENTION SUITE ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    const serverJs = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
+
+    // 1. Static UI & Notice Verification
+    assert(recruiterHtml.includes('class="billing-cancellation-notice"'), 'recruiter.html includes .billing-cancellation-notice banner');
+    assert(recruiterHtml.includes('Cancel anytime. You will only be billed for your current billing month, and you will continue to have full access to all plan features and postings until the end of your billing cycle.'), 'recruiter.html displays plain-English cancellation notice in Tab 4');
+    assert(recruiterHtml.includes('Cancellation Policy:') && recruiterHtml.includes('Opening secure payment gateway at:'), 'recruiter.html checkout modal includes clear cancellation policy notice');
+
+    // 2. Recruiter Self-Serve Cancellation UI & Modal
+    assert(recruiterHtml.includes('id="btn-cancel-subscription"'), 'recruiter.html defines #btn-cancel-subscription button in Profile (Tab 5)');
+    assert(recruiterHtml.includes('id="modal-cancel-subscription"'), 'recruiter.html defines #modal-cancel-subscription modal');
+    assert(recruiterHtml.includes('id="cancel-step-1"'), 'recruiter.html defines Step 1 exit reason survey in cancellation modal');
+    assert(recruiterHtml.includes('id="cancel-step-2"'), 'recruiter.html defines Step 2 50% off retention win-back in cancellation modal');
+    assert(recruiterHtml.includes('id="btn-claim-retention-discount"'), 'recruiter.html defines #btn-claim-retention-discount button');
+    assert(recruiterHtml.includes('id="btn-confirm-cancellation"'), 'recruiter.html defines #btn-confirm-cancellation button');
+    assert(recruiterHtml.includes('window.openCancelSubscriptionModal'), 'recruiter.html defines window.openCancelSubscriptionModal');
+    assert(recruiterHtml.includes('window.proceedToCancelStep2'), 'recruiter.html defines window.proceedToCancelStep2');
+    assert(recruiterHtml.includes('window.claimRetentionDiscount'), 'recruiter.html defines window.claimRetentionDiscount');
+    assert(recruiterHtml.includes('window.confirmRecruiterCancellation'), 'recruiter.html defines window.confirmRecruiterCancellation');
+    assert(recruiterHtml.includes('window.renderRecruiterSubscriptionStatus'), 'recruiter.html defines window.renderRecruiterSubscriptionStatus');
+
+    // 3. Admin Governance Display
+    assert(adminHtml.includes('Canceling (') || adminHtml.includes('50% Off Retention'), 'admin.html displays cancellation and retention status badges');
+
+    // 4. API Endpoints: GET /api/subscription/status
+    const statusRes = await httpGet('/api/subscription/status?userId=USR-002');
+    assert(statusRes.status === 200, 'GET /api/subscription/status returns 200 OK');
+    assert(statusRes.data && statusRes.data.userId === 'USR-002', 'GET /api/subscription/status returns user subscription details');
+    assert(statusRes.data && statusRes.data.plan !== undefined, 'GET /api/subscription/status includes plan property');
+
+    // 5. API Endpoints: POST /api/subscription/apply-retention-discount
+    const discountRes = await httpPost('/api/subscription/apply-retention-discount', {
+      userId: 'USR-002',
+      email: 'hr@apexrecruiting.com',
+      plan: 'starter'
+    });
+    assert(discountRes.status === 200, 'POST /api/subscription/apply-retention-discount returns 200 OK');
+    assert(discountRes.data && discountRes.data.retentionDiscountApplied === true, 'Discount response confirms retentionDiscountApplied: true');
+    assert(discountRes.data && discountRes.data.discountPercent === 50, 'Discount response confirms discountPercent: 50');
+
+    // Verify discount email logged
+    const logsAfterDiscount = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'logs', 'log_emails.json'), 'utf8'));
+    const discountEmail = logsAfterDiscount.find(e => e.type === 'RETENTION_DISCOUNT_CONFIRMATION' && e.to === 'hr@apexrecruiting.com');
+    assert(!!discountEmail, 'RETENTION_DISCOUNT_CONFIRMATION email logged in log_emails.json');
+
+    // 6. API Endpoints: POST /api/subscription/cancel
+    const cancelRes = await httpPost('/api/subscription/cancel', {
+      userId: 'USR-002',
+      email: 'hr@apexrecruiting.com',
+      reason: 'Hiring goals completed / Pausing recruitment',
+      feedback: 'Great candidates hired quickly!',
+      plan: 'starter'
+    });
+    assert(cancelRes.status === 200, 'POST /api/subscription/cancel returns 200 OK');
+    assert(cancelRes.data && cancelRes.data.cancelAtPeriodEnd === true, 'Cancel response confirms cancelAtPeriodEnd: true');
+    assert(cancelRes.data && cancelRes.data.accessExpiresAt !== undefined, 'Cancel response includes accessExpiresAt end-of-period date');
+    assert(cancelRes.data && cancelRes.data.formattedDate !== undefined, 'Cancel response provides human-readable formattedDate');
+
+    // Verify cancellation confirmation email logged
+    const logsAfterCancel = JSON.parse(fs.readFileSync(path.join(__dirname, 'data', 'logs', 'log_emails.json'), 'utf8'));
+    const cancelEmail = logsAfterCancel.find(e => e.type === 'SUBSCRIPTION_CANCELED' && e.to === 'hr@apexrecruiting.com');
+    assert(!!cancelEmail, 'SUBSCRIPTION_CANCELED transactional email logged in log_emails.json');
+    assert(cancelEmail && cancelEmail.subject.includes('Cancellation Notice'), 'Cancellation email subject contains cancellation notice format');
+
+    // 7. Re-verify status reflects cancellation pending
+    const statusAfterCancel = await httpGet('/api/subscription/status?userId=USR-002');
+    assert(statusAfterCancel.data && statusAfterCancel.data.cancelAtPeriodEnd === true, 'GET /api/subscription/status verifies cancelAtPeriodEnd: true');
+    assert(statusAfterCancel.data && statusAfterCancel.data.cancellationReason === 'Hiring goals completed / Pausing recruitment', 'Status endpoint verifies saved cancellation reason');
+
+  } catch (err) {
+    assert(false, `Group 113 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');
