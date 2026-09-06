@@ -11255,6 +11255,15 @@ window.recalculateMembershipTotal = function() {
   const totalEl = document.getElementById('calc-total-amount');
   if (totalEl) totalEl.innerHTML = `$${monthlyTotal.toFixed(2)}<span style="font-size: 1rem; color: #94A3B8;">/mo</span>`;
 
+  const btnActivate = document.getElementById('btn-activate-membership');
+  if (btnActivate) {
+    if (monthlyTotal === 0) {
+      btnActivate.textContent = 'ACTIVATE MEMBERSHIP';
+    } else {
+      btnActivate.textContent = `ACTIVATE MEMBERSHIP — $${monthlyTotal.toFixed(2)}/MO`;
+    }
+  }
+
   const yearlyEl = document.getElementById('calc-yearly-amount');
   if (yearlyEl) {
     if (monthlyTotal === 0) {
@@ -11286,6 +11295,7 @@ window.checkoutMembershipPlan = function() {
     try {
       localStorage.setItem('uthe_subscribed_plan', 'pal');
       localStorage.setItem('uthe_is_paid_plan', 'false');
+      localStorage.setItem('uthe_plan_total', '0.00');
     } catch (e) {}
     if (currentUser) {
       currentUser.isPaid = false;
@@ -11311,23 +11321,63 @@ window.checkoutMembershipPlan = function() {
   else if (selectedBasePlan === 'growth') checkoutUrl = (wixCfg && wixCfg.growthUrl) || DEFAULT_CHECKOUT_URLS.growthUrl;
   else if (selectedBasePlan === 'pro') checkoutUrl = (wixCfg && wixCfg.proUrl) || DEFAULT_CHECKOUT_URLS.proUrl;
 
+  // Gather selected add-on details for itemized billing
+  let addonItems = [];
+  const bundleChecked = document.getElementById('toggle-social-bundle') ? document.getElementById('toggle-social-bundle').checked : false;
+  const individualSocials = document.querySelectorAll('.social-channel-toggle:checked');
+  if (bundleChecked) {
+    const rate = liveCmsPricing.socialBundleAddon !== undefined ? liveCmsPricing.socialBundleAddon : 19.99;
+    addonItems.push(`5-Channel Social Bundle ($${rate.toFixed(2)}/mo)`);
+  } else if (individualSocials.length > 0) {
+    const singleRate = liveCmsPricing.individualSocialAddon !== undefined ? liveCmsPricing.individualSocialAddon : 5.99;
+    addonItems.push(`${individualSocials.length} Social Channels ($${(individualSocials.length * singleRate).toFixed(2)}/mo)`);
+  }
+  if (document.getElementById('toggle-addon-spotlight')?.checked) {
+    const rate = liveCmsPricing.spotlightPrice !== undefined ? liveCmsPricing.spotlightPrice : (liveCmsPricing.topSpotlight || 49);
+    addonItems.push(`Top-of-Page Spotlight ($${rate}/mo)`);
+  }
+  if (document.getElementById('toggle-addon-urgent')?.checked) {
+    const rate = liveCmsPricing.urgentBadge !== undefined ? liveCmsPricing.urgentBadge : 29;
+    addonItems.push(`Urgent Hiring Badges ($${rate}/mo)`);
+  }
+  if (document.getElementById('toggle-addon-inmail')?.checked) {
+    const rate = liveCmsPricing.directMessages !== undefined ? liveCmsPricing.directMessages : 19;
+    addonItems.push(`Direct Candidate InMail ($${rate}/mo)`);
+  }
+  if (document.getElementById('toggle-addon-verified')?.checked) {
+    const rate = liveCmsPricing.verifiedEmployer !== undefined ? liveCmsPricing.verifiedEmployer : 3;
+    addonItems.push(`Verified Employer Shield ($${rate}/mo)`);
+  }
+
+  // If user selected add-ons, append total and itemized parameters so payment gateway receives the full price
+  if (addonItems.length > 0) {
+    const joiner = checkoutUrl.includes('?') ? '&' : '?';
+    checkoutUrl = `${checkoutUrl}${joiner}total=${numTotal.toFixed(2)}&plan=${encodeURIComponent(selectedBasePlan)}&addons=${encodeURIComponent(addonItems.join('; '))}`;
+  }
+
   try {
     localStorage.setItem('uthe_subscribed_plan', selectedBasePlan);
     localStorage.setItem('uthe_is_paid_plan', 'true');
-    localStorage.setItem('uthe_plan_total', numTotal.toString());
+    localStorage.setItem('uthe_plan_total', numTotal.toFixed(2));
+    localStorage.setItem('uthe_selected_addons', JSON.stringify(addonItems));
   } catch (e) {}
   if (currentUser) {
     currentUser.isPaid = true;
     currentUser.plan = selectedBasePlan;
   }
 
+  const addonSummary = addonItems.length > 0 ? `\n• Add-Ons:\n  - ${addonItems.join('\n  - ')}` : '\n• Add-Ons: None';
   const breakdownEl = document.getElementById('calc-breakdown-text');
   const breakdownText = breakdownEl ? breakdownEl.textContent : '';
 
   try {
     window.open(checkoutUrl, '_blank');
   } catch (e) {}
-  showCustomModalAlert('Checkout Initiated', `Total: $${numTotal.toFixed(2)}/mo\n${breakdownText}\n\nOpening secure payment gateway at:\n${checkoutUrl}\n\nComplete your checkout via Stripe, PayPal, Venmo, or Credit Card on UTHEVERSITY to finalize your membership.`);
+
+  showCustomModalAlert(
+    'Checkout Total Confirmed',
+    `TOTAL DUE AT CHECKOUT: $${numTotal.toFixed(2)}/mo\n\n• Selected Plan: ${selectedBasePlan.toUpperCase()}${addonSummary}\n\n${breakdownText}\n\nOpening secure payment gateway at:\n${checkoutUrl}\n\nComplete your payment via Stripe, PayPal, Venmo, or Card on UTHEVERSITY.`
+  );
 
   if (typeof renderResumeBoard === 'function') renderResumeBoard();
   if (typeof renderActiveJobsTable === 'function') renderActiveJobsTable();

@@ -1,5 +1,308 @@
 [
   {
+    "id": "EML-614167",
+    "to": "user_security_1788665029987@testcompany.com",
+    "from": "contact@utheversity.com",
+    "subject": "Reset Your UTHEVERSITY Account Password",
+    "type": "PASSWORD_RESET_REQUEST",
+    "metadata": {
+      "userId": "USR-616",
+      "token": "b9e25a0376695a92f1a06060f645b7da4558eb7802709644",
+      "resetUrl": "https://jobs.utheversity.com/reset-password?token=b9e25a0376695a92f1a06060f645b7da4558eb7802709644&email=user_security_1788665029987%40testcompany.com"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:50.503Z"
+  },
+  {
+    "id": "EML-910875",
+    "to": "user_security_1788665029987@testcompany.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-616",
+      "role": "employer"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:50.102Z"
+  },
+  {
+    "id": "EML-509315",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "New Candidate Application: Candidate_1788665029007 for Senior Full-Stack Engineer",
+    "type": "NEW_APPLICANT_ALERT_RECRUITER",
+    "metadata": {
+      "applicantId": "APP-864",
+      "jobId": "JOB-101",
+      "candidateEmail": "candidate_1788665029007@testcandidate.com",
+      "resumeUrl": "https://post.utheversity.com/data/resumes/Candidate_1788665029007_Resume.pdf?unlocked=1&source=email"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:49.819Z",
+    "messageId": "<52f7e68d-8326-edcb-ae82-b04d9c6789df@utheversity.com>"
+  },
+  {
+    "id": "EML-353405",
+    "to": "candidate_1788665029007@testcandidate.com",
+    "from": "contact@utheversity.com",
+    "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
+    "type": "APPLICATION_RECEIPT_CANDIDATE",
+    "metadata": {
+      "applicantId": "APP-864",
+      "jobId": "JOB-101",
+      "resumeUrl": "https://jobs.utheversity.com/data/resumes/Candidate_1788665029007_Resume.pdf?unlocked=1&source=email"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:49.444Z"
+  },
+  {
+    "id": "EML-836557",
+    "to": "recruiter_1788665026082@techglobaltalent.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-824",
+      "role": "recruiter"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:46.252Z"
+  },
+  {
+    "id": "EML-981907",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Quantum Retail Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-6592",
+      "applicantId": "APP-701",
+      "senderRole": "candidate"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:45.273Z",
+    "messageId": "<bdba34de-8683-f599-9822-e2b0bae67367@utheversity.com>"
+  },
+  {
+    "id": "EML-610037",
+    "to": "candidate@domain.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from UTHEVERSITY Global Inc.",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-5817",
+      "applicantId": "APP-766",
+      "senderRole": "recruiter"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:41.447Z"
+  },
+  {
+    "id": "EML-320685",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "u-theADMIN — Live Transactional Email System Test",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": true,
+      "verifyError": null
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:38.425Z",
+    "messageId": "<813e0980-6d24-7231-9365-bf1de30eb6ba@utheversity.com>"
+  },
+  {
+    "id": "EML-829594",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "u-theADMIN — Live Transactional Email System Test",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": true,
+      "verifyError": null
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:36.300Z",
+    "messageId": "<2695527b-d280-5174-656e-ec30d005c5d8@utheversity.com>"
+  },
+  {
+    "id": "EML-326712",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "u-theADMIN — Live Transactional Email System Test",
+    "type": "DIAGNOSTIC_TEST_EMAIL",
+    "metadata": {
+      "targetEmail": "contact@utheversity.com",
+      "isVerified": true,
+      "verifyError": null
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:33.322Z",
+    "messageId": "<90bbee47-1a37-f15f-a54d-088deddfda9d@utheversity.com>"
+  },
+  {
+    "id": "EML-466526",
+    "to": "candidate.applicant.1788665011829@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Quantum Technologies Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-5509",
+      "applicantId": "APP-877",
+      "senderRole": "recruiter"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:32.328Z",
+    "messageId": "<a1c7b48d-0985-e51b-e94c-21b41d445d7f@utheversity.com>"
+  },
+  {
+    "id": "EML-224374",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
+    "type": "NEW_APPLICANT_ALERT_RECRUITER",
+    "metadata": {
+      "applicantId": "APP-877",
+      "jobId": "JOB-101",
+      "candidateEmail": "candidate.applicant.1788665011829@utheversity.com",
+      "resumeUrl": "https://post.utheversity.com/data/resumes/Morgan_Sterling_Resume.pdf?unlocked=1&source=email"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:32.065Z",
+    "messageId": "<b42b2bfa-5967-a29f-840c-a8432b15ff74@utheversity.com>"
+  },
+  {
+    "id": "EML-516059",
+    "to": "candidate.applicant.1788665011829@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
+    "type": "APPLICATION_RECEIPT_CANDIDATE",
+    "metadata": {
+      "applicantId": "APP-877",
+      "jobId": "JOB-101",
+      "resumeUrl": "https://jobs.utheversity.com/data/resumes/Morgan_Sterling_Resume.pdf?unlocked=1&source=email"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:31.926Z",
+    "messageId": "<a3f4276a-d2a6-cf66-5193-321befe07675@utheversity.com>"
+  },
+  {
+    "id": "EML-661402",
+    "to": "test.welcome.1788665008434@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Your UTHEVERSITY Password Has Been Updated",
+    "type": "PASSWORD_RESET_CONFIRMATION",
+    "metadata": {},
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:31.669Z",
+    "messageId": "<16dd8c03-a9f3-cbb8-95c1-e5e55268ce34@utheversity.com>"
+  },
+  {
+    "id": "EML-223161",
+    "to": "test.welcome.1788665008434@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Reset Your UTHEVERSITY Account Password",
+    "type": "PASSWORD_RESET_REQUEST",
+    "metadata": {
+      "userId": "USR-799",
+      "token": "b2af5691bdd8b1e2c793fd8195decf0ea3e1babb04525c20",
+      "resetUrl": "http://localhost:3000/candidate.html?resetToken=b2af5691bdd8b1e2c793fd8195decf0ea3e1babb04525c20&email=test.welcome.1788665008434%40utheversity.com"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:29.078Z",
+    "messageId": "<37606dd9-0ca1-9a53-3338-fe62d68a35d3@utheversity.com>"
+  },
+  {
+    "id": "EML-792838",
+    "to": "test.welcome.1788665008434@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-799",
+      "role": "candidate"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:28.785Z",
+    "messageId": "<54c9cb62-c9af-8a8d-4d35-1ab9e95b888c@utheversity.com>"
+  },
+  {
+    "id": "EML-840659",
+    "to": "jordan.rivera@email.com",
+    "from": "contact@utheversity.com",
+    "subject": "Reset Your UTHEVERSITY Account Password",
+    "type": "PASSWORD_RESET_REQUEST",
+    "metadata": {
+      "userId": "USR-003",
+      "token": "52fe4e3c4634c13b3f14153f79f46ef1bea119e5bf0a72d2",
+      "resetUrl": "https://jobs.utheversity.com/reset-password?token=52fe4e3c4634c13b3f14153f79f46ef1bea119e5bf0a72d2&email=jordan.rivera%40email.com"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:27.491Z",
+    "messageId": "<d184bc16-e40c-177d-a082-6e1b5e7e83c4@utheversity.com>"
+  },
+  {
+    "id": "EML-310325",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "You have a new message from Persistent Systems Corp",
+    "type": "NEW_DIRECT_MESSAGE_ALERT",
+    "metadata": {
+      "messageId": "MSG-4551",
+      "applicantId": "APP-805",
+      "senderRole": "candidate"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:25.884Z",
+    "messageId": "<03c9ba46-ec6e-74d2-d134-def2d9723a7d@utheversity.com>"
+  },
+  {
+    "id": "EML-849806",
+    "to": "contact@utheversity.com",
+    "from": "contact@utheversity.com",
+    "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1788665003983",
+    "type": "NEW_APPLICANT_ALERT_RECRUITER",
+    "metadata": {
+      "applicantId": "APP-805",
+      "jobId": "JOB-1788665003983",
+      "candidateEmail": "jane.doe@example.com",
+      "resumeUrl": "https://post.utheversity.com/data/resumes/Jane_Doe_Resume_2026.pdf?unlocked=1&source=email"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:25.316Z",
+    "messageId": "<61f5db32-cdc8-9409-7ad9-7ced6c9ac40b@utheversity.com>"
+  },
+  {
+    "id": "EML-184149",
+    "to": "jane.doe@example.com",
+    "from": "contact@utheversity.com",
+    "subject": "Application Received: Senior Lead Architect 1788665003983 at Persistent Systems Corp",
+    "type": "APPLICATION_RECEIPT_CANDIDATE",
+    "metadata": {
+      "applicantId": "APP-805",
+      "jobId": "JOB-1788665003983",
+      "resumeUrl": "https://jobs.utheversity.com/data/resumes/Jane_Doe_Resume_2026.pdf?unlocked=1&source=email"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:24.926Z"
+  },
+  {
+    "id": "EML-219629",
+    "to": "test.candidate.1788665003270@domain.com",
+    "from": "contact@utheversity.com",
+    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
+    "type": "WELCOME_USER",
+    "metadata": {
+      "userId": "USR-607",
+      "role": "candidate"
+    },
+    "status": "sent",
+    "timestamp": "2026-09-06T03:23:23.354Z"
+  },
+  {
     "id": "EML-445878",
     "to": "user_security_1788664026344@testcompany.com",
     "from": "contact@utheversity.com",
@@ -6914,308 +7217,5 @@
     "status": "sent",
     "timestamp": "2026-09-05T20:16:52.960Z",
     "messageId": "<8a55d98a-3c1f-9452-254a-49030b71d86b@utheversity.com>"
-  },
-  {
-    "id": "EML-576463",
-    "to": "test.welcome.1788639408144@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Your UTHEVERSITY Password Has Been Updated",
-    "type": "PASSWORD_RESET_CONFIRMATION",
-    "metadata": {},
-    "status": "sent",
-    "timestamp": "2026-09-05T20:16:52.595Z",
-    "messageId": "<e6f44e96-474f-d66f-7c5a-68045860b3c6@utheversity.com>"
-  },
-  {
-    "id": "EML-117105",
-    "to": "test.welcome.1788639408144@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Reset Your UTHEVERSITY Account Password",
-    "type": "PASSWORD_RESET_REQUEST",
-    "metadata": {
-      "userId": "USR-601",
-      "token": "e2c09415ec387b924b6db8db58d874f189dc5ebf9d0cf765",
-      "resetUrl": "http://localhost:3000/candidate.html?resetToken=e2c09415ec387b924b6db8db58d874f189dc5ebf9d0cf765&email=test.welcome.1788639408144%40utheversity.com"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T20:16:49.373Z",
-    "messageId": "<3ae69c68-16bc-7c07-a375-6fe5a473b7f0@utheversity.com>"
-  },
-  {
-    "id": "EML-808418",
-    "to": "test.welcome.1788639408144@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
-    "type": "WELCOME_USER",
-    "metadata": {
-      "userId": "USR-601",
-      "role": "candidate"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T20:16:48.321Z",
-    "messageId": "<ef1d3ae9-9802-3e42-c1a8-7c35656c7600@utheversity.com>"
-  },
-  {
-    "id": "EML-889724",
-    "to": "jordan.rivera@email.com",
-    "from": "contact@utheversity.com",
-    "subject": "Reset Your UTHEVERSITY Account Password",
-    "type": "PASSWORD_RESET_REQUEST",
-    "metadata": {
-      "userId": "USR-003",
-      "token": "f01b2138246aa6c7260ce663de1661a7d72bd56546585018",
-      "resetUrl": "https://jobs.utheversity.com/reset-password?token=f01b2138246aa6c7260ce663de1661a7d72bd56546585018&email=jordan.rivera%40email.com"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T20:16:47.673Z",
-    "messageId": "<30a2e6a1-51ae-8142-f1b2-9fb8291fc414@utheversity.com>"
-  },
-  {
-    "id": "EML-310274",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from Persistent Systems Corp",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-2477",
-      "applicantId": "APP-842",
-      "senderRole": "candidate"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T20:16:46.233Z",
-    "messageId": "<536f2de3-63ab-7e72-4108-1d00f45444dd@utheversity.com>"
-  },
-  {
-    "id": "EML-574184",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "New Candidate Application: Jane Doe for Senior Lead Architect 1788639404806",
-    "type": "NEW_APPLICANT_ALERT_RECRUITER",
-    "metadata": {
-      "applicantId": "APP-842",
-      "jobId": "JOB-1788639404806",
-      "candidateEmail": "jane.doe@example.com",
-      "resumeUrl": "https://post.utheversity.com/data/resumes/Jane_Doe_Resume_2026.pdf?unlocked=1&source=email"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T20:16:45.889Z",
-    "messageId": "<27ce14ec-4167-eb4d-c310-9f79f078e43e@utheversity.com>"
-  },
-  {
-    "id": "EML-914584",
-    "to": "jane.doe@example.com",
-    "from": "contact@utheversity.com",
-    "subject": "Application Received: Senior Lead Architect 1788639404806 at Persistent Systems Corp",
-    "type": "APPLICATION_RECEIPT_CANDIDATE",
-    "metadata": {
-      "applicantId": "APP-842",
-      "jobId": "JOB-1788639404806",
-      "resumeUrl": "https://jobs.utheversity.com/data/resumes/Jane_Doe_Resume_2026.pdf?unlocked=1&source=email"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T20:16:45.501Z"
-  },
-  {
-    "id": "EML-477989",
-    "to": "test.candidate.1788639403923@domain.com",
-    "from": "contact@utheversity.com",
-    "subject": "Welcome to UTHEVERSITY — Your Candidate Professional Account is Active",
-    "type": "WELCOME_USER",
-    "metadata": {
-      "userId": "USR-500",
-      "role": "candidate"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T20:16:44.189Z"
-  },
-  {
-    "id": "EML-431782",
-    "to": "user_security_1788638372956@testcompany.com",
-    "from": "contact@utheversity.com",
-    "subject": "Reset Your UTHEVERSITY Account Password",
-    "type": "PASSWORD_RESET_REQUEST",
-    "metadata": {
-      "userId": "USR-560",
-      "token": "b02b48246bcd2d9a284d44a6c7417bee23d499f13786ef27",
-      "resetUrl": "https://jobs.utheversity.com/reset-password?token=b02b48246bcd2d9a284d44a6c7417bee23d499f13786ef27&email=user_security_1788638372956%40testcompany.com"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:33.625Z"
-  },
-  {
-    "id": "EML-230144",
-    "to": "user_security_1788638372956@testcompany.com",
-    "from": "contact@utheversity.com",
-    "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
-    "type": "WELCOME_USER",
-    "metadata": {
-      "userId": "USR-560",
-      "role": "employer"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:33.114Z"
-  },
-  {
-    "id": "EML-331750",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "New Candidate Application: Candidate_1788638372165 for Senior Full-Stack Engineer",
-    "type": "NEW_APPLICANT_ALERT_RECRUITER",
-    "metadata": {
-      "applicantId": "APP-815",
-      "jobId": "JOB-101",
-      "candidateEmail": "candidate_1788638372165@testcandidate.com",
-      "resumeUrl": "https://post.utheversity.com/data/resumes/Candidate_1788638372165_Resume.pdf?unlocked=1&source=email"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:32.723Z",
-    "messageId": "<cfa3966c-caa6-35f0-da6a-d4484f342a15@utheversity.com>"
-  },
-  {
-    "id": "EML-862009",
-    "to": "candidate_1788638372165@testcandidate.com",
-    "from": "contact@utheversity.com",
-    "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
-    "type": "APPLICATION_RECEIPT_CANDIDATE",
-    "metadata": {
-      "applicantId": "APP-815",
-      "jobId": "JOB-101",
-      "resumeUrl": "https://jobs.utheversity.com/data/resumes/Candidate_1788638372165_Resume.pdf?unlocked=1&source=email"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:32.352Z"
-  },
-  {
-    "id": "EML-373855",
-    "to": "recruiter_1788638368154@techglobaltalent.com",
-    "from": "contact@utheversity.com",
-    "subject": "Welcome to UTHEVERSITY — Your Employer Recruiter Account is Active",
-    "type": "WELCOME_USER",
-    "metadata": {
-      "userId": "USR-821",
-      "role": "recruiter"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:28.314Z"
-  },
-  {
-    "id": "EML-167907",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from Quantum Retail Corp",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-3082",
-      "applicantId": "APP-701",
-      "senderRole": "candidate"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:26.815Z",
-    "messageId": "<283b0e3e-4952-a98e-9812-9866e0d93d0d@utheversity.com>"
-  },
-  {
-    "id": "EML-900123",
-    "to": "candidate@domain.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from UTHEVERSITY Global Inc.",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-6778",
-      "applicantId": "APP-766",
-      "senderRole": "recruiter"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:22.712Z"
-  },
-  {
-    "id": "EML-356696",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "u-theADMIN — Live Transactional Email System Test",
-    "type": "DIAGNOSTIC_TEST_EMAIL",
-    "metadata": {
-      "targetEmail": "contact@utheversity.com",
-      "isVerified": true,
-      "verifyError": null
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:19.577Z",
-    "messageId": "<d1a98e83-8171-e874-7445-b40c12429f5f@utheversity.com>"
-  },
-  {
-    "id": "EML-101305",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "u-theADMIN — Live Transactional Email System Test",
-    "type": "DIAGNOSTIC_TEST_EMAIL",
-    "metadata": {
-      "targetEmail": "contact@utheversity.com",
-      "isVerified": true,
-      "verifyError": null
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:16.972Z",
-    "messageId": "<ce97ba4f-7097-ff9c-4c5e-a5508077d3d7@utheversity.com>"
-  },
-  {
-    "id": "EML-137668",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "u-theADMIN — Live Transactional Email System Test",
-    "type": "DIAGNOSTIC_TEST_EMAIL",
-    "metadata": {
-      "targetEmail": "contact@utheversity.com",
-      "isVerified": true,
-      "verifyError": null
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:13.088Z",
-    "messageId": "<c06f3ef7-24fb-1d5e-49ca-41823aa947d4@utheversity.com>"
-  },
-  {
-    "id": "EML-227160",
-    "to": "candidate.applicant.1788638351044@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "You have a new message from Quantum Technologies Corp",
-    "type": "NEW_DIRECT_MESSAGE_ALERT",
-    "metadata": {
-      "messageId": "MSG-4971",
-      "applicantId": "APP-738",
-      "senderRole": "recruiter"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:11.792Z",
-    "messageId": "<05f2478f-2b96-15d8-2aaf-3c67bb130478@utheversity.com>"
-  },
-  {
-    "id": "EML-892734",
-    "to": "contact@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "New Candidate Application: Morgan Sterling for Senior Full-Stack Engineer",
-    "type": "NEW_APPLICANT_ALERT_RECRUITER",
-    "metadata": {
-      "applicantId": "APP-738",
-      "jobId": "JOB-101",
-      "candidateEmail": "candidate.applicant.1788638351044@utheversity.com",
-      "resumeUrl": "https://post.utheversity.com/data/resumes/Morgan_Sterling_Resume.pdf?unlocked=1&source=email"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:11.334Z",
-    "messageId": "<18ccc17b-f06e-f7c8-f3d4-5d51fbefd7e0@utheversity.com>"
-  },
-  {
-    "id": "EML-684211",
-    "to": "candidate.applicant.1788638351044@utheversity.com",
-    "from": "contact@utheversity.com",
-    "subject": "Application Received: Senior Full-Stack Engineer at Quantum Technologies Corp",
-    "type": "APPLICATION_RECEIPT_CANDIDATE",
-    "metadata": {
-      "applicantId": "APP-738",
-      "jobId": "JOB-101",
-      "resumeUrl": "https://jobs.utheversity.com/data/resumes/Morgan_Sterling_Resume.pdf?unlocked=1&source=email"
-    },
-    "status": "sent",
-    "timestamp": "2026-09-05T19:59:11.142Z",
-    "messageId": "<e4187ed7-06b6-62fa-f414-c77ffef186a0@utheversity.com>"
   }
 ]
