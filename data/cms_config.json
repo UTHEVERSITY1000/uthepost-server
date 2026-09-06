@@ -119,5 +119,15 @@
       "name": "Instagram Stories Showcase",
       "enabled": true
     }
+  },
+  "announcement": {
+    "enabled": true,
+    "badge": "LIMITED-TIME BETA SPECIAL",
+    "headline": "ALL CURRENT & FUTURE ADD-ONS ARE FREE FOR LIFE",
+    "subtext": "Subscribe to any plan today to lock in complete lifetime access to all current and future executive add-ons and hiring features at zero cost. This exclusive Beta advantage is available for a limited time only—choose your plan now to secure your permanent free add-ons.",
+    "btnText": "CHOOSE A PLAN",
+    "cutoffLimit": 1000,
+    "paidPlansCount": 0,
+    "autoArchived": false
   }
 }

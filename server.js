@@ -464,6 +464,16 @@ let cmsConfig = {
     x: { name: "X / Twitter Executive Stream", enabled: true },
     facebook: { name: "Facebook Business Network", enabled: true },
     instagram: { name: "Instagram Stories Showcase", enabled: true }
+  },
+  announcement: {
+    enabled: true,
+    badge: "LIMITED-TIME BETA SPECIAL",
+    headline: "ALL CURRENT & FUTURE ADD-ONS ARE FREE FOR LIFE",
+    subtext: "Subscribe to any plan today to lock in complete lifetime access to all current and future executive add-ons and hiring features at zero cost. This exclusive Beta advantage is available for a limited time only—choose your plan now to secure your permanent free add-ons.",
+    btnText: "CHOOSE A PLAN",
+    cutoffLimit: 1000,
+    paidPlansCount: 0,
+    autoArchived: false
   }
 };
 
@@ -2424,6 +2434,8 @@ const server = http.createServer(async (req, res) => {
       if (body.pricing) cmsConfig.pricing = { ...cmsConfig.pricing, ...body.pricing };
       if (body.addOns) cmsConfig.addOns = { ...cmsConfig.addOns, ...body.addOns };
       if (body.channels) cmsConfig.channels = { ...cmsConfig.channels, ...body.channels };
+      if (body.wixCheckout) cmsConfig.wixCheckout = { ...cmsConfig.wixCheckout, ...body.wixCheckout };
+      if (body.announcement) cmsConfig.announcement = { ...cmsConfig.announcement, ...body.announcement };
 
       // Update disk storage
       saveCmsConfig();

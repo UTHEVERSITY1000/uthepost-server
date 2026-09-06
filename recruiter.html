@@ -6703,7 +6703,19 @@ RESET
 
 <section id="view-plans" class="tab-view plans-matrix-section">
 
-
+<!-- SLEEK EXECUTIVE BETA ANNOUNCEMENT BANNER -->
+<div id="beta-announcement-banner" class="beta-promo-banner" style="display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); border: 1px solid rgba(229, 168, 0, 0.35); border-radius: 8px; padding: 1.15rem 1.4rem; margin-bottom: 1.25rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); flex-wrap: wrap; gap: 1rem;">
+  <div style="flex: 1; min-width: 280px;">
+    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem;">
+      <span id="banner-badge-text" style="background: rgba(229, 168, 0, 0.12); color: #FEBA27; border: 1px solid rgba(229, 168, 0, 0.35); font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px;">LIMITED-TIME BETA SPECIAL</span>
+    </div>
+    <div id="banner-headline-text" style="color: #FFFFFF; font-size: 1.05rem; font-weight: 900; letter-spacing: 0.3px; text-transform: uppercase; line-height: 1.35; margin-bottom: 0.35rem;">ALL CURRENT &amp; FUTURE ADD-ONS ARE FREE FOR LIFE</div>
+    <p id="banner-subtext-text" style="color: #CBD5E1; font-size: 0.80rem; line-height: 1.55; margin: 0; font-weight: 400;">Subscribe to any plan today to lock in complete lifetime access to all current and future executive add-ons and hiring features at zero cost. This exclusive Beta advantage is available for a limited time only—choose your plan now to secure your permanent free add-ons.</p>
+  </div>
+  <div style="display: flex; align-items: center; gap: 0.75rem;">
+    <button id="banner-action-btn" onclick="document.querySelector('.pricing-grid').scrollIntoView({ behavior: 'smooth' });" style="background: #0075FF; color: #FFFFFF; border: 1.5px solid #0075FF; font-weight: 800; font-size: 0.75rem; letter-spacing: 0.8px; text-transform: uppercase; padding: 0 1.25rem; height: 38px; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 10px rgba(0, 117, 255, 0.35); transition: all 0.2s ease; white-space: nowrap;">CHOOSE A PLAN</button>
+  </div>
+</div>
 
 <!-- BASE PLANS -->
 
@@ -12762,6 +12774,26 @@ if (config.labels) {
   if (config.labels.postTitle) {
     const el = document.getElementById('cms-brand-title');
     if (el) el.textContent = config.labels.postTitle;
+  }
+}
+
+if (config.announcement) {
+  const an = config.announcement;
+  const bannerEl = document.getElementById('beta-announcement-banner');
+  if (bannerEl) {
+    if (an.enabled === false || an.autoArchived === true) {
+      bannerEl.style.display = 'none';
+    } else {
+      bannerEl.style.display = 'flex';
+      const bBadge = document.getElementById('banner-badge-text');
+      if (bBadge && an.badge) bBadge.textContent = an.badge;
+      const bHead = document.getElementById('banner-headline-text');
+      if (bHead && an.headline) bHead.textContent = an.headline;
+      const bSub = document.getElementById('banner-subtext-text');
+      if (bSub && an.subtext) bSub.textContent = an.subtext;
+      const bBtn = document.getElementById('banner-action-btn');
+      if (bBtn && an.btnText) bBtn.textContent = an.btnText;
+    }
   }
 }
 

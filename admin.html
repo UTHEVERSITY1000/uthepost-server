@@ -1585,6 +1585,71 @@
             </div>
           </div>
         </div>
+
+        <!-- SECTION 4: BETA PROMOTIONAL ANNOUNCEMENT BANNER -->
+        <div style="border-top: 1px solid var(--border-color); padding-top: 0.65rem; margin-top: 0.65rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 0.4rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <div style="font-size: 0.68rem; font-weight: 800; color: var(--uthe-charcoal); text-transform: uppercase;">4. BETA PROMOTIONAL ANNOUNCEMENT BANNER (FREE FOR LIFE ADD-ONS)</div>
+              <span id="cms-announcement-status-pill" style="font-size: 0.58rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: #E8F8F0; color: #008738; font-family: 'JetBrains Mono', monospace;">ACTIVE</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <button class="btn-surface-sm" id="btn-delete-announcement" onclick="deleteAnnouncementBanner()" style="height: 24px; font-size: 0.60rem; padding: 0 0.55rem; font-weight: 700; border-radius: 4px; color: var(--danger-red); border: 1px solid #FECACA; background: #FEF2F2;" data-tooltip="Completely remove / delete promotional banner from live site">
+                DELETE / REMOVE BANNER
+              </button>
+              <button class="btn-gold-sm" id="btn-save-announcement" onclick="saveAnnouncementCms()" style="height: 24px; font-size: 0.60rem; padding: 0 0.65rem; font-weight: 800; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; background: #FEBA27; color: #0F172A; border: 1px solid #D97706; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.12);" data-tooltip="Save and broadcast announcement banner updates live">
+                SAVE ANNOUNCEMENT
+              </button>
+            </div>
+          </div>
+          <div style="font-size: 0.62rem; color: var(--text-muted); margin-bottom: 0.5rem;">Control the limited-time Beta announcement banner shown on Tab 4 (Performance & Plans). Behind the scenes, the system automatically removes the banner once 1,000 paid plans are claimed.</div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.65rem;">
+            <div class="cms-sub-box" style="margin-bottom: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                <label style="color: var(--uthe-charcoal); font-size: 0.65rem; font-weight: 700;">Show / Enable Announcement Banner</label>
+                <label class="toggle-switch" data-tooltip="Toggle live announcement banner visibility">
+                  <input type="checkbox" id="cms-announcement-enabled" checked onchange="toggleAnnouncementLive(this.checked)">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="form-group" style="margin-bottom: 0.4rem;">
+                <label>Pill Badge Tag</label>
+                <input type="text" id="cms-announcement-badge" value="LIMITED-TIME BETA SPECIAL" data-tooltip="Small header pill badge text">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label>Action Button Text</label>
+                <input type="text" id="cms-announcement-btn" value="CHOOSE A PLAN" data-tooltip="Banner CTA button text">
+              </div>
+            </div>
+
+            <div class="cms-sub-box" style="margin-bottom: 0;">
+              <div class="form-group" style="margin-bottom: 0.4rem;">
+                <label>Headline Title</label>
+                <input type="text" id="cms-announcement-headline" value="ALL CURRENT &amp; FUTURE ADD-ONS ARE FREE FOR LIFE" data-tooltip="Bold main promotional headline">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label>Subtext Description</label>
+                <textarea id="cms-announcement-subtext" rows="2" style="font-size: 0.72rem; padding: 6px;" data-tooltip="Detailed promotional copy explaining the limited-time free for life add-ons offer">Subscribe to any plan today to lock in complete lifetime access to all current and future executive add-ons and hiring features at zero cost. This exclusive Beta advantage is available for a limited time only—choose your plan now to secure your permanent free add-ons.</textarea>
+              </div>
+            </div>
+
+            <div class="cms-sub-box" style="margin-bottom: 0; background: #F8FAFC; border: 1px dashed var(--border-strong);">
+              <div style="font-size: 0.62rem; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 0.35rem;">Confidential Backend Milestone &amp; Cutoff</div>
+              <div style="font-size: 0.60rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.4rem;">Confidential tracking visible only to Admin. When paid plan subscriptions reach the cutoff limit, the promotional banner is automatically archived.</div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+                <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                  <label>Automatic Cutoff Limit (Plans)</label>
+                  <input type="number" id="cms-announcement-cutoff" value="1000" data-tooltip="Milestone threshold that triggers auto-archive">
+                </div>
+                <div style="text-align: right; font-family: 'JetBrains Mono', monospace;">
+                  <div style="font-size: 0.58rem; color: var(--text-muted);">SUBSCRIBED:</div>
+                  <div id="cms-announcement-counter" style="font-size: 0.85rem; font-weight: 800; color: #0075FF;">0 / 1000</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -2580,6 +2645,47 @@
         if (w.growthUrl !== undefined && document.getElementById('cms-wix-growth-url')) document.getElementById('cms-wix-growth-url').value = w.growthUrl;
         if (w.proUrl !== undefined && document.getElementById('cms-wix-pro-url')) document.getElementById('cms-wix-pro-url').value = w.proUrl;
       }
+
+      if (config.announcement) {
+        const an = config.announcement;
+        if (document.getElementById('cms-announcement-enabled')) {
+          document.getElementById('cms-announcement-enabled').checked = an.enabled !== false && an.autoArchived !== true;
+        }
+        if (an.badge !== undefined && document.getElementById('cms-announcement-badge')) {
+          document.getElementById('cms-announcement-badge').value = an.badge;
+        }
+        if (an.headline !== undefined && document.getElementById('cms-announcement-headline')) {
+          document.getElementById('cms-announcement-headline').value = an.headline;
+        }
+        if (an.subtext !== undefined && document.getElementById('cms-announcement-subtext')) {
+          document.getElementById('cms-announcement-subtext').value = an.subtext;
+        }
+        if (an.btnText !== undefined && document.getElementById('cms-announcement-btn')) {
+          document.getElementById('cms-announcement-btn').value = an.btnText;
+        }
+        if (an.cutoffLimit !== undefined && document.getElementById('cms-announcement-cutoff')) {
+          document.getElementById('cms-announcement-cutoff').value = an.cutoffLimit;
+        }
+        if (document.getElementById('cms-announcement-counter')) {
+          document.getElementById('cms-announcement-counter').textContent = `${an.paidPlansCount || 0} / ${an.cutoffLimit || 1000}`;
+        }
+        const pill = document.getElementById('cms-announcement-status-pill');
+        if (pill) {
+          if (an.autoArchived) {
+            pill.textContent = 'AUTO-ARCHIVED (1,000 REACHED)';
+            pill.style.background = '#FEF3C7';
+            pill.style.color = '#92400E';
+          } else if (an.enabled === false) {
+            pill.textContent = 'HIDDEN / OFF';
+            pill.style.background = '#F1F5F9';
+            pill.style.color = '#64748B';
+          } else {
+            pill.textContent = 'ACTIVE';
+            pill.style.background = '#E8F8F0';
+            pill.style.color = '#008738';
+          }
+        }
+      }
     }
 
     // 3. Save & Broadcast Functionality
@@ -2673,6 +2779,14 @@
           starterUrl: getVal('cms-wix-starter-url', ''),
           growthUrl: getVal('cms-wix-growth-url', ''),
           proUrl: getVal('cms-wix-pro-url', '')
+        },
+        announcement: {
+          enabled: document.getElementById('cms-announcement-enabled') ? document.getElementById('cms-announcement-enabled').checked : true,
+          badge: getVal('cms-announcement-badge', 'LIMITED-TIME BETA SPECIAL'),
+          headline: getVal('cms-announcement-headline', 'ALL CURRENT & FUTURE ADD-ONS ARE FREE FOR LIFE'),
+          subtext: getVal('cms-announcement-subtext', 'Subscribe to any plan today to lock in complete lifetime access to all current and future executive add-ons and hiring features at zero cost. This exclusive Beta advantage is available for a limited time only—choose your plan now to secure your permanent free add-ons.'),
+          btnText: getVal('cms-announcement-btn', 'CHOOSE A PLAN'),
+          cutoffLimit: getNum('cms-announcement-cutoff', 1000)
         }
       };
 
@@ -2703,6 +2817,35 @@
     };
 
     window.saveWixCheckoutUrls = async function() {
+      await window.saveAndBroadcastCms();
+    };
+
+    window.saveAnnouncementCms = async function() {
+      await window.saveAndBroadcastCms();
+      showCustomModalAlert('Announcement Saved', 'Promotional announcement banner settings have been saved and broadcast live across U-THEPOST.');
+    };
+
+    window.deleteAnnouncementBanner = async function() {
+      if (document.getElementById('cms-announcement-enabled')) {
+        document.getElementById('cms-announcement-enabled').checked = false;
+      }
+      await window.saveAndBroadcastCms();
+      const pill = document.getElementById('cms-announcement-status-pill');
+      if (pill) {
+        pill.textContent = 'REMOVED / OFF';
+        pill.style.background = '#FEE2E2';
+        pill.style.color = '#B91C1C';
+      }
+      showCustomModalAlert('Banner Removed', 'The Beta promotional announcement banner has been turned off and removed from public view.');
+    };
+
+    window.toggleAnnouncementLive = async function(isEnabled) {
+      const pill = document.getElementById('cms-announcement-status-pill');
+      if (pill) {
+        pill.textContent = isEnabled ? 'ACTIVE' : 'HIDDEN / OFF';
+        pill.style.background = isEnabled ? '#E8F8F0' : '#F1F5F9';
+        pill.style.color = isEnabled ? '#008738' : '#64748B';
+      }
       await window.saveAndBroadcastCms();
     };
 
