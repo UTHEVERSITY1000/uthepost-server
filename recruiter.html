@@ -11304,12 +11304,19 @@ window.checkoutMembershipPlan = function() {
     return;
   }
 
+  const DEFAULT_CHECKOUT_URLS = {
+    plansUrl: 'https://www.utheversity.com/plans-pricing',
+    starterUrl: 'https://www.utheversity.com/checkout?checkoutId=ca727402-3c18-4096-b897-a8d27b707708&disableContinueShopping=true',
+    growthUrl: 'https://www.utheversity.com/checkout?checkoutId=ca727402-c704-4137-b05c-294332d56d00&disableContinueShopping=true',
+    proUrl: 'https://www.utheversity.com/checkout?checkoutId=ca727402-c097-4f63-b75e-2385ccf0b80c&disableContinueShopping=true'
+  };
+
   // Determine Checkout URL configured in Wix / Stripe settings via Admin
   const wixCfg = liveCmsPricing.wixCheckout || {};
-  let checkoutUrl = wixCfg.plansUrl || 'https://www.utheversity.com/plans-pricing';
-  if (selectedBasePlan === 'starter' && wixCfg.starterUrl) checkoutUrl = wixCfg.starterUrl;
-  else if (selectedBasePlan === 'growth' && wixCfg.growthUrl) checkoutUrl = wixCfg.growthUrl;
-  else if (selectedBasePlan === 'pro' && wixCfg.proUrl) checkoutUrl = wixCfg.proUrl;
+  let checkoutUrl = (wixCfg && wixCfg.plansUrl) || DEFAULT_CHECKOUT_URLS.plansUrl;
+  if (selectedBasePlan === 'starter') checkoutUrl = (wixCfg && wixCfg.starterUrl) || DEFAULT_CHECKOUT_URLS.starterUrl;
+  else if (selectedBasePlan === 'growth') checkoutUrl = (wixCfg && wixCfg.growthUrl) || DEFAULT_CHECKOUT_URLS.growthUrl;
+  else if (selectedBasePlan === 'pro') checkoutUrl = (wixCfg && wixCfg.proUrl) || DEFAULT_CHECKOUT_URLS.proUrl;
 
   try {
     localStorage.setItem('uthe_subscribed_plan', selectedBasePlan);
