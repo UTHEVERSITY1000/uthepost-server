@@ -4356,6 +4356,94 @@ Director of Brand Marketing • New York, NY
     assert(false, `Group 113 failed: ${err.message}`);
   }
 
+  // =========================================================================
+  // GROUP 114: U-THEPOST PLAN INCLUSIONS RESTORATION, SOCIAL CHANNELS, ANNUAL BILLING SWITCHER & WIX ANNUAL PAYMENT URLS
+  // =========================================================================
+  console.log('\n--- GROUP 114: U-THEPOST PLAN INCLUSIONS RESTORATION, SOCIAL CHANNELS, ANNUAL BILLING & WIX CHECKOUT ---');
+  try {
+    const recruiterHtml = fs.readFileSync(path.join(__dirname, 'recruiter.html'), 'utf8');
+    const adminHtml = fs.readFileSync(path.join(__dirname, 'admin.html'), 'utf8');
+    const cmsConfig = JSON.parse(fs.readFileSync(path.join(__dirname, 'cms_config.json'), 'utf8'));
+
+    // 1. Verify Restored Plan Card Inclusions in recruiter.html
+    assert(recruiterHtml.includes('plan-card-pal'), 'recruiter.html contains u-thePAL plan card');
+    assert(recruiterHtml.includes('1 Direct Candidate InMail Thread ($0.00 Included)'), 'u-thePAL includes 1 Direct Candidate InMail Thread ($0.00 Included)');
+    assert(recruiterHtml.includes('Instant PDF Auto-Fill Routing ($0.00 Included)'), 'u-thePAL includes Instant PDF Auto-Fill Routing ($0.00 Included)');
+    assert(recruiterHtml.includes('Direct Recruiter Email Alerts ($0.00 Included)'), 'u-thePAL includes Direct Recruiter Email Alerts ($0.00 Included)');
+    assert(recruiterHtml.includes('Standard Applicant Review ($0.00 Included)'), 'u-thePAL includes Standard Applicant Review ($0.00 Included)');
+    assert(recruiterHtml.includes('Pay-As-You-Go Add-On Flexibility'), 'u-thePAL includes Pay-As-You-Go Add-On Flexibility');
+
+    // Starter Plan Inclusions & Social Channels (2 connected social channels)
+    assert(recruiterHtml.includes('plan-card-starter'), 'recruiter.html contains STARTER plan card');
+    assert(recruiterHtml.includes('All u-thePAL $0.00 Features Included'), 'Starter card includes All u-thePAL $0.00 Features Included');
+    assert(recruiterHtml.includes('3 Active Live Job Listings'), 'Starter card includes 3 Active Live Job Listings');
+    assert(recruiterHtml.includes('3 Direct Candidate InMail Threads'), 'Starter card includes 3 Direct Candidate InMail Threads');
+    assert(recruiterHtml.includes('2 Connected Social Channels of Choice'), 'Starter card explicitly lists 2 Connected Social Channels of Choice');
+    assert(recruiterHtml.includes('Full Recruiter Applicant Tracking (ATS)'), 'Starter card includes Full Recruiter Applicant Tracking (ATS)');
+    assert(recruiterHtml.includes('Candidate Profiles & PDF Resume Viewer'), 'Starter card includes Candidate Profiles & PDF Resume Viewer');
+    assert(recruiterHtml.includes('Verified Employer Badge Eligibility'), 'Starter card includes Verified Employer Badge Eligibility');
+
+    // Growth Plan Inclusions & Social Channels (3 connected social channels)
+    assert(recruiterHtml.includes('plan-card-growth'), 'recruiter.html contains GROWTH plan card');
+    assert(recruiterHtml.includes('All Starter Plan Features Included'), 'Growth card includes All Starter Plan Features Included');
+    assert(recruiterHtml.includes('15 Active Live Job Listings'), 'Growth card includes 15 Active Live Job Listings');
+    assert(recruiterHtml.includes('15 Direct Candidate InMail Threads'), 'Growth card includes 15 Direct Candidate InMail Threads');
+    assert(recruiterHtml.includes('3 Connected Social Channels of Choice'), 'Growth card explicitly lists 3 Connected Social Channels of Choice');
+    assert(recruiterHtml.includes('CRM Outreach & Campaign Date Tracker'), 'Growth card includes CRM Outreach & Campaign Date Tracker');
+    assert(recruiterHtml.includes('AI Content Helper & SEO Search Optimizer'), 'Growth card includes AI Content Helper & SEO Search Optimizer');
+    assert(recruiterHtml.includes('Top-of-Search Candidate Priority Ranking'), 'Growth card includes Top-of-Search Candidate Priority Ranking');
+
+    // Professional Plan Inclusions & Social Channels (All 5 connected social channels)
+    assert(recruiterHtml.includes('plan-card-pro'), 'recruiter.html contains PROFESSIONAL plan card');
+    assert(recruiterHtml.includes('All Growth Plan Features Included'), 'Professional card includes All Growth Plan Features Included');
+    assert(recruiterHtml.includes('UNLIMITED Active Live Job Listings'), 'Professional card includes UNLIMITED Active Live Job Listings');
+    assert(recruiterHtml.includes('UNLIMITED Direct Candidate InMail Threads'), 'Professional card includes UNLIMITED Direct Candidate InMail Threads');
+    assert(recruiterHtml.includes('All 5 Connected Social Channels Included'), 'Professional card explicitly lists All 5 Connected Social Channels Included');
+    assert(recruiterHtml.includes('TOP SPOTLIGHT Placement Included'), 'Professional card includes TOP SPOTLIGHT Placement Included');
+    assert(recruiterHtml.includes('Advanced Candidate Resume Directory & Search'), 'Professional card includes Advanced Candidate Resume Directory & Search');
+    assert(recruiterHtml.includes('Dedicated Priority Support & Fast-Track Moderation'), 'Professional card includes Dedicated Priority Support & Fast-Track Moderation');
+
+    // 2. Verify Monthly vs Annual Billing Switcher in recruiter.html
+    assert(recruiterHtml.includes('id="btn-billing-monthly"'), 'recruiter.html includes Monthly Billing switcher button');
+    assert(recruiterHtml.includes('id="btn-billing-annual"'), 'recruiter.html includes Annual Billing switcher button');
+    assert(recruiterHtml.includes('SAVE 20%'), 'Annual billing switcher highlights SAVE 20% discount');
+    assert(recruiterHtml.includes('badge-starter-annual'), 'Starter card has annual discount badge');
+    assert(recruiterHtml.includes('badge-growth-annual'), 'Growth card has annual discount badge');
+    assert(recruiterHtml.includes('badge-pro-annual'), 'Professional card has annual discount badge');
+
+    // 3. Verify JavaScript Logic for Billing Cycle & Checkout Routing
+    assert(recruiterHtml.includes('setBillingCycle'), 'recruiter.html defines window.setBillingCycle');
+    assert(recruiterHtml.includes('selectedBillingInterval'), 'recruiter.html tracks selectedBillingInterval');
+    assert(recruiterHtml.includes('annualStarterUrl'), 'recruiter.html checkoutMembershipPlan routes to annualStarterUrl');
+    assert(recruiterHtml.includes('annualGrowthUrl'), 'recruiter.html checkoutMembershipPlan routes to annualGrowthUrl');
+    assert(recruiterHtml.includes('annualProUrl'), 'recruiter.html checkoutMembershipPlan routes to annualProUrl');
+    assert(recruiterHtml.includes('annualPlansUrl'), 'recruiter.html checkoutMembershipPlan routes to annualPlansUrl');
+
+    // 4. Verify Admin Panel Section 3 Wix Annual Payment URLs
+    assert(adminHtml.includes('id="cms-wix-plans-url"'), 'admin.html includes Main Wix Plans Page URL (Monthly) input');
+    assert(adminHtml.includes('id="cms-wix-annual-plans-url"'), 'admin.html includes Main Wix Plans Page URL (Annual) input');
+    assert(adminHtml.includes('id="cms-wix-starter-url"'), 'admin.html includes Starter Monthly Checkout URL input');
+    assert(adminHtml.includes('id="cms-wix-annual-starter-url"'), 'admin.html includes Starter Annual Checkout URL input');
+    assert(adminHtml.includes('id="cms-wix-growth-url"'), 'admin.html includes Growth Monthly Checkout URL input');
+    assert(adminHtml.includes('id="cms-wix-annual-growth-url"'), 'admin.html includes Growth Annual Checkout URL input');
+    assert(adminHtml.includes('id="cms-wix-pro-url"'), 'admin.html includes Professional Monthly Checkout URL input');
+    assert(adminHtml.includes('id="cms-wix-annual-pro-url"'), 'admin.html includes Professional Annual Checkout URL input');
+
+    // 5. Verify cms_config.json Wix Checkout Gateway Data
+    assert(cmsConfig.wixCheckout !== undefined, 'cms_config.json contains wixCheckout section');
+    assert(cmsConfig.wixCheckout.plansUrl !== undefined, 'wixCheckout has plansUrl');
+    assert(cmsConfig.wixCheckout.annualPlansUrl !== undefined, 'wixCheckout has annualPlansUrl');
+    assert(cmsConfig.wixCheckout.starterUrl !== undefined, 'wixCheckout has starterUrl');
+    assert(cmsConfig.wixCheckout.annualStarterUrl !== undefined, 'wixCheckout has annualStarterUrl');
+    assert(cmsConfig.wixCheckout.growthUrl !== undefined, 'wixCheckout has growthUrl');
+    assert(cmsConfig.wixCheckout.annualGrowthUrl !== undefined, 'wixCheckout has annualGrowthUrl');
+    assert(cmsConfig.wixCheckout.proUrl !== undefined, 'wixCheckout has proUrl');
+    assert(cmsConfig.wixCheckout.annualProUrl !== undefined, 'wixCheckout has annualProUrl');
+
+  } catch (err) {
+    assert(false, `Group 114 failed: ${err.message}`);
+  }
+
   console.log('\n================================================================');
   console.log(`TEST SUITE SUMMARY: ${passed} PASSED / ${failed} FAILED`);
   console.log('================================================================');

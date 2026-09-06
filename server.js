@@ -453,9 +453,13 @@ let cmsConfig = {
   },
   wixCheckout: {
     plansUrl: "https://www.utheversity.com/plans-pricing",
+    annualPlansUrl: "https://www.utheversity.com/plans-pricing",
     starterUrl: "https://www.utheversity.com/checkout?checkoutId=ca727402-3c18-4096-b897-a8d27b707708&disableContinueShopping=true",
+    annualStarterUrl: "https://www.utheversity.com/checkout?checkoutId=ca727402-3c18-4096-b897-a8d27b707708&disableContinueShopping=true",
     growthUrl: "https://www.utheversity.com/checkout?checkoutId=ca727402-c704-4137-b05c-294332d56d00&disableContinueShopping=true",
-    proUrl: "https://www.utheversity.com/checkout?checkoutId=ca727402-c097-4f63-b75e-2385ccf0b80c&disableContinueShopping=true"
+    annualGrowthUrl: "https://www.utheversity.com/checkout?checkoutId=ca727402-c704-4137-b05c-294332d56d00&disableContinueShopping=true",
+    proUrl: "https://www.utheversity.com/checkout?checkoutId=ca727402-c097-4f63-b75e-2385ccf0b80c&disableContinueShopping=true",
+    annualProUrl: "https://www.utheversity.com/checkout?checkoutId=ca727402-c097-4f63-b75e-2385ccf0b80c&disableContinueShopping=true"
   },
   channels: {
     linkedin: { name: "LinkedIn InMail & Posts", enabled: true },
