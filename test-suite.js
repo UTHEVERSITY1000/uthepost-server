@@ -4435,10 +4435,13 @@ Director of Brand Marketing • New York, NY
     assert(cmsConfig.wixCheckout.annualPlansUrl !== undefined, 'wixCheckout has annualPlansUrl');
     assert(cmsConfig.wixCheckout.starterUrl !== undefined, 'wixCheckout has starterUrl');
     assert(cmsConfig.wixCheckout.annualStarterUrl !== undefined, 'wixCheckout has annualStarterUrl');
+    assert(cmsConfig.wixCheckout.annualStarterUrl.includes('ca727402-73ca-45a2-9701-c659fc548252'), 'annualStarterUrl contains exact Starter annual checkout ID');
     assert(cmsConfig.wixCheckout.growthUrl !== undefined, 'wixCheckout has growthUrl');
     assert(cmsConfig.wixCheckout.annualGrowthUrl !== undefined, 'wixCheckout has annualGrowthUrl');
+    assert(cmsConfig.wixCheckout.annualGrowthUrl.includes('ca727402-6932-4074-8fab-85f6fd11a37b'), 'annualGrowthUrl contains exact Growth annual checkout ID');
     assert(cmsConfig.wixCheckout.proUrl !== undefined, 'wixCheckout has proUrl');
     assert(cmsConfig.wixCheckout.annualProUrl !== undefined, 'wixCheckout has annualProUrl');
+    assert(cmsConfig.wixCheckout.annualProUrl.includes('ca727402-5bcc-4356-b678-69371ed0403f'), 'annualProUrl contains exact Professional annual checkout ID');
 
   } catch (err) {
     assert(false, `Group 114 failed: ${err.message}`);
