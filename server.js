@@ -437,13 +437,17 @@ let cmsConfig = {
     proMonthly: 34.99,
     yearlyDiscountPct: 20,
     individualSocialAddon: 5.99,
-    socialBundleAddon: 19.99
+    socialBundleAddon: 19.99,
+    spotlightPrice: 49,
+    urgentBadge: 29,
+    directMessages: 19,
+    verifiedEmployer: 3
   },
   addOns: {
-    topSpotlight: 50,
-    urgentBadge: 0,
-    directMessages: 0,
-    verifiedEmployer: 0,
+    topSpotlight: 49,
+    urgentBadge: 29,
+    directMessages: 19,
+    verifiedEmployer: 3,
     individualSocial: 5.99,
     socialBundle5: 19.99
   },

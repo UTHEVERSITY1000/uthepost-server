@@ -11132,11 +11132,11 @@ let liveCmsPricing = {
   proMonthly: 34.99,
   individualSocialAddon: 5.99,
   socialBundleAddon: 19.99,
-  topSpotlight: 50,
-  spotlightPrice: 50,
-  urgentBadge: 0,
-  directMessages: 0,
-  verifiedEmployer: 0,
+  topSpotlight: 49,
+  spotlightPrice: 49,
+  urgentBadge: 29,
+  directMessages: 19,
+  verifiedEmployer: 3,
   yearlyDiscountPct: 20
 };
 
@@ -11210,7 +11210,7 @@ window.recalculateMembershipTotal = function() {
 
   const spotEl = document.getElementById('toggle-addon-spotlight');
   if (spotEl && spotEl.checked) {
-    const rate = liveCmsPricing.spotlightPrice !== undefined ? liveCmsPricing.spotlightPrice : (liveCmsPricing.topSpotlight !== undefined ? liveCmsPricing.topSpotlight : 50);
+    const rate = liveCmsPricing.spotlightPrice !== undefined ? liveCmsPricing.spotlightPrice : (liveCmsPricing.topSpotlight !== undefined ? liveCmsPricing.topSpotlight : 49);
     total += rate;
     addonCount++;
     addonDetails.push(`Spotlight ($${rate})`);
@@ -11218,7 +11218,7 @@ window.recalculateMembershipTotal = function() {
 
   const urgEl = document.getElementById('toggle-addon-urgent');
   if (urgEl && urgEl.checked) {
-    const rate = liveCmsPricing.urgentBadge !== undefined ? liveCmsPricing.urgentBadge : 0;
+    const rate = liveCmsPricing.urgentBadge !== undefined ? liveCmsPricing.urgentBadge : 29;
     total += rate;
     addonCount++;
     addonDetails.push(`Urgent Badges ($${rate})`);
@@ -11226,7 +11226,7 @@ window.recalculateMembershipTotal = function() {
 
   const msgEl = document.getElementById('toggle-addon-inmail');
   if (msgEl && msgEl.checked) {
-    const rate = liveCmsPricing.directMessages !== undefined ? liveCmsPricing.directMessages : 0;
+    const rate = liveCmsPricing.directMessages !== undefined ? liveCmsPricing.directMessages : 19;
     total += rate;
     addonCount++;
     addonDetails.push(`InMail Messages ($${rate})`);
@@ -11234,7 +11234,7 @@ window.recalculateMembershipTotal = function() {
 
   const verEl = document.getElementById('toggle-addon-verified');
   if (verEl && verEl.checked) {
-    const rate = liveCmsPricing.verifiedEmployer !== undefined ? liveCmsPricing.verifiedEmployer : 0;
+    const rate = liveCmsPricing.verifiedEmployer !== undefined ? liveCmsPricing.verifiedEmployer : 3;
     total += rate;
     addonCount++;
     addonDetails.push(`Verified Shield ($${rate})`);
@@ -11314,16 +11314,20 @@ window.checkoutMembershipPlan = function() {
   try {
     localStorage.setItem('uthe_subscribed_plan', selectedBasePlan);
     localStorage.setItem('uthe_is_paid_plan', 'true');
+    localStorage.setItem('uthe_plan_total', numTotal.toString());
   } catch (e) {}
   if (currentUser) {
     currentUser.isPaid = true;
     currentUser.plan = selectedBasePlan;
   }
 
+  const breakdownEl = document.getElementById('calc-breakdown-text');
+  const breakdownText = breakdownEl ? breakdownEl.textContent : '';
+
   try {
     window.open(checkoutUrl, '_blank');
   } catch (e) {}
-  showCustomModalAlert('Checkout Initiated', `Opening secure payment gateway at:\n${checkoutUrl}\n\nComplete your checkout via Stripe, PayPal, Venmo, or Credit Card on UTHEVERSITY to finalize your membership.`);
+  showCustomModalAlert('Checkout Initiated', `Total: $${numTotal.toFixed(2)}/mo\n${breakdownText}\n\nOpening secure payment gateway at:\n${checkoutUrl}\n\nComplete your checkout via Stripe, PayPal, Venmo, or Credit Card on UTHEVERSITY to finalize your membership.`);
 
   if (typeof renderResumeBoard === 'function') renderResumeBoard();
   if (typeof renderActiveJobsTable === 'function') renderActiveJobsTable();
@@ -12666,10 +12670,10 @@ if (config.pricing || config.addOns || config.wixCheckout) {
   if (subPricing) subPricing.textContent = `$${singleRate} each OR 5-Channel Bundle for $${bundleRate}/mo`;
 
   // Update Feature Add-On Price Tags in Tab 4
-  const spotRate = pr.spotlightPrice !== undefined ? pr.spotlightPrice : (pr.topSpotlight !== undefined ? pr.topSpotlight : (ad.topSpotlight !== undefined ? ad.topSpotlight : 50));
-  const urgRate = pr.urgentBadge !== undefined ? pr.urgentBadge : (ad.urgentBadge !== undefined ? ad.urgentBadge : 0);
-  const inmailRate = pr.directMessages !== undefined ? pr.directMessages : (ad.directMessages !== undefined ? ad.directMessages : 0);
-  const verRate = pr.verifiedEmployer !== undefined ? pr.verifiedEmployer : (ad.verifiedEmployer !== undefined ? ad.verifiedEmployer : 0);
+  const spotRate = pr.spotlightPrice !== undefined ? pr.spotlightPrice : (pr.topSpotlight !== undefined ? pr.topSpotlight : (ad.topSpotlight !== undefined ? ad.topSpotlight : 49));
+  const urgRate = pr.urgentBadge !== undefined ? pr.urgentBadge : (ad.urgentBadge !== undefined ? ad.urgentBadge : 29);
+  const inmailRate = pr.directMessages !== undefined ? pr.directMessages : (ad.directMessages !== undefined ? ad.directMessages : 19);
+  const verRate = pr.verifiedEmployer !== undefined ? pr.verifiedEmployer : (ad.verifiedEmployer !== undefined ? ad.verifiedEmployer : 3);
 
   const spotLabel = document.getElementById('price-addon-spotlight');
   if (spotLabel) spotLabel.textContent = `$${spotRate}/mo`;
